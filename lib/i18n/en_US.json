@@ -1,0 +1,15 @@
+{
+    "_comment1" : "Módulo de Login",
+    "emailField": "E-mail",
+    "senhaField": "Senha",
+    "textButton": "Entrar",
+    "erroValidacaoEmailVazio": "Insira um endereço de email",
+    "ErroValidacaoEmailInvalido": "Insira um endereço de email válido",
+    "erroValidacaoSenhaVazio": "O campo senha não pode ficar vazio",
+    "ErroValidacaoSenhaInvalido": "A senha tem que ter pelo menos 6 caracteres",
+    "textTextButton": "Esqueci a senha",
+    "textTextButton2": "Registrar",
+    "_comment2" : "Módulo de Cadastro",
+    "titlePageCadastro1": "Registrar",
+    "titlePageCadastro2": "Conta"
+}

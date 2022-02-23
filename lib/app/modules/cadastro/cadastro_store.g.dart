@@ -1,0 +1,380 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'cadastro_store.dart';
+
+// **************************************************************************
+// StoreGenerator
+// **************************************************************************
+
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+
+mixin _$CadastroStore on _CadastroStoreBase, Store {
+  final _$nomeAtom = Atom(name: '_CadastroStoreBase.nome');
+
+  @override
+  TextEditingController get nome {
+    _$nomeAtom.reportRead();
+    return super.nome;
+  }
+
+  @override
+  set nome(TextEditingController value) {
+    _$nomeAtom.reportWrite(value, super.nome, () {
+      super.nome = value;
+    });
+  }
+
+  final _$sobrenomeAtom = Atom(name: '_CadastroStoreBase.sobrenome');
+
+  @override
+  TextEditingController get sobrenome {
+    _$sobrenomeAtom.reportRead();
+    return super.sobrenome;
+  }
+
+  @override
+  set sobrenome(TextEditingController value) {
+    _$sobrenomeAtom.reportWrite(value, super.sobrenome, () {
+      super.sobrenome = value;
+    });
+  }
+
+  final _$cepAtom = Atom(name: '_CadastroStoreBase.cep');
+
+  @override
+  TextEditingController get cep {
+    _$cepAtom.reportRead();
+    return super.cep;
+  }
+
+  @override
+  set cep(TextEditingController value) {
+    _$cepAtom.reportWrite(value, super.cep, () {
+      super.cep = value;
+    });
+  }
+
+  final _$logradouroAtom = Atom(name: '_CadastroStoreBase.logradouro');
+
+  @override
+  TextEditingController get logradouro {
+    _$logradouroAtom.reportRead();
+    return super.logradouro;
+  }
+
+  @override
+  set logradouro(TextEditingController value) {
+    _$logradouroAtom.reportWrite(value, super.logradouro, () {
+      super.logradouro = value;
+    });
+  }
+
+  final _$complementoAtom = Atom(name: '_CadastroStoreBase.complemento');
+
+  @override
+  TextEditingController get complemento {
+    _$complementoAtom.reportRead();
+    return super.complemento;
+  }
+
+  @override
+  set complemento(TextEditingController value) {
+    _$complementoAtom.reportWrite(value, super.complemento, () {
+      super.complemento = value;
+    });
+  }
+
+  final _$bairroAtom = Atom(name: '_CadastroStoreBase.bairro');
+
+  @override
+  TextEditingController get bairro {
+    _$bairroAtom.reportRead();
+    return super.bairro;
+  }
+
+  @override
+  set bairro(TextEditingController value) {
+    _$bairroAtom.reportWrite(value, super.bairro, () {
+      super.bairro = value;
+    });
+  }
+
+  final _$cidadeAtom = Atom(name: '_CadastroStoreBase.cidade');
+
+  @override
+  TextEditingController get cidade {
+    _$cidadeAtom.reportRead();
+    return super.cidade;
+  }
+
+  @override
+  set cidade(TextEditingController value) {
+    _$cidadeAtom.reportWrite(value, super.cidade, () {
+      super.cidade = value;
+    });
+  }
+
+  final _$estadoAtom = Atom(name: '_CadastroStoreBase.estado');
+
+  @override
+  TextEditingController get estado {
+    _$estadoAtom.reportRead();
+    return super.estado;
+  }
+
+  @override
+  set estado(TextEditingController value) {
+    _$estadoAtom.reportWrite(value, super.estado, () {
+      super.estado = value;
+    });
+  }
+
+  final _$paisAtom = Atom(name: '_CadastroStoreBase.pais');
+
+  @override
+  TextEditingController get pais {
+    _$paisAtom.reportRead();
+    return super.pais;
+  }
+
+  @override
+  set pais(TextEditingController value) {
+    _$paisAtom.reportWrite(value, super.pais, () {
+      super.pais = value;
+    });
+  }
+
+  final _$emailAtom = Atom(name: '_CadastroStoreBase.email');
+
+  @override
+  TextEditingController get email {
+    _$emailAtom.reportRead();
+    return super.email;
+  }
+
+  @override
+  set email(TextEditingController value) {
+    _$emailAtom.reportWrite(value, super.email, () {
+      super.email = value;
+    });
+  }
+
+  final _$senhaAtom = Atom(name: '_CadastroStoreBase.senha');
+
+  @override
+  TextEditingController get senha {
+    _$senhaAtom.reportRead();
+    return super.senha;
+  }
+
+  @override
+  set senha(TextEditingController value) {
+    _$senhaAtom.reportWrite(value, super.senha, () {
+      super.senha = value;
+    });
+  }
+
+  final _$responseCEPAtom = Atom(name: '_CadastroStoreBase.responseCEP');
+
+  @override
+  String? get responseCEP {
+    _$responseCEPAtom.reportRead();
+    return super.responseCEP;
+  }
+
+  @override
+  set responseCEP(String? value) {
+    _$responseCEPAtom.reportWrite(value, super.responseCEP, () {
+      super.responseCEP = value;
+    });
+  }
+
+  final _$isObscureAtom = Atom(name: '_CadastroStoreBase.isObscure');
+
+  @override
+  bool get isObscure {
+    _$isObscureAtom.reportRead();
+    return super.isObscure;
+  }
+
+  @override
+  set isObscure(bool value) {
+    _$isObscureAtom.reportWrite(value, super.isObscure, () {
+      super.isObscure = value;
+    });
+  }
+
+  final _$primeiroDigitoAtom = Atom(name: '_CadastroStoreBase.primeiroDigito');
+
+  @override
+  TextEditingController get primeiroDigito {
+    _$primeiroDigitoAtom.reportRead();
+    return super.primeiroDigito;
+  }
+
+  @override
+  set primeiroDigito(TextEditingController value) {
+    _$primeiroDigitoAtom.reportWrite(value, super.primeiroDigito, () {
+      super.primeiroDigito = value;
+    });
+  }
+
+  final _$segundoDigitoAtom = Atom(name: '_CadastroStoreBase.segundoDigito');
+
+  @override
+  TextEditingController get segundoDigito {
+    _$segundoDigitoAtom.reportRead();
+    return super.segundoDigito;
+  }
+
+  @override
+  set segundoDigito(TextEditingController value) {
+    _$segundoDigitoAtom.reportWrite(value, super.segundoDigito, () {
+      super.segundoDigito = value;
+    });
+  }
+
+  final _$terceiroDigitoAtom = Atom(name: '_CadastroStoreBase.terceiroDigito');
+
+  @override
+  TextEditingController get terceiroDigito {
+    _$terceiroDigitoAtom.reportRead();
+    return super.terceiroDigito;
+  }
+
+  @override
+  set terceiroDigito(TextEditingController value) {
+    _$terceiroDigitoAtom.reportWrite(value, super.terceiroDigito, () {
+      super.terceiroDigito = value;
+    });
+  }
+
+  final _$quartoDigitoAtom = Atom(name: '_CadastroStoreBase.quartoDigito');
+
+  @override
+  TextEditingController get quartoDigito {
+    _$quartoDigitoAtom.reportRead();
+    return super.quartoDigito;
+  }
+
+  @override
+  set quartoDigito(TextEditingController value) {
+    _$quartoDigitoAtom.reportWrite(value, super.quartoDigito, () {
+      super.quartoDigito = value;
+    });
+  }
+
+  final _$codeAtom = Atom(name: '_CadastroStoreBase.code');
+
+  @override
+  String? get code {
+    _$codeAtom.reportRead();
+    return super.code;
+  }
+
+  @override
+  set code(String? value) {
+    _$codeAtom.reportWrite(value, super.code, () {
+      super.code = value;
+    });
+  }
+
+  final _$codigoGeradoAtom = Atom(name: '_CadastroStoreBase.codigoGerado');
+
+  @override
+  String get codigoGerado {
+    _$codigoGeradoAtom.reportRead();
+    return super.codigoGerado;
+  }
+
+  @override
+  set codigoGerado(String value) {
+    _$codigoGeradoAtom.reportWrite(value, super.codigoGerado, () {
+      super.codigoGerado = value;
+    });
+  }
+
+  final _$buscaCEPAsyncAction = AsyncAction('_CadastroStoreBase.buscaCEP');
+
+  @override
+  Future<String> buscaCEP() {
+    return _$buscaCEPAsyncAction.run(() => super.buscaCEP());
+  }
+
+  final _$verificaEmailAsyncAction =
+      AsyncAction('_CadastroStoreBase.verificaEmail');
+
+  @override
+  Future verificaEmail() {
+    return _$verificaEmailAsyncAction.run(() => super.verificaEmail());
+  }
+
+  final _$cadastraUserAsyncAction =
+      AsyncAction('_CadastroStoreBase.cadastraUser');
+
+  @override
+  Future cadastraUser() {
+    return _$cadastraUserAsyncAction.run(() => super.cadastraUser());
+  }
+
+  final _$_CadastroStoreBaseActionController =
+      ActionController(name: '_CadastroStoreBase');
+
+  @override
+  dynamic gerarCodigo() {
+    final _$actionInfo = _$_CadastroStoreBaseActionController.startAction(
+        name: '_CadastroStoreBase.gerarCodigo');
+    try {
+      return super.gerarCodigo();
+    } finally {
+      _$_CadastroStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic verificaCodigo() {
+    final _$actionInfo = _$_CadastroStoreBaseActionController.startAction(
+        name: '_CadastroStoreBase.verificaCodigo');
+    try {
+      return super.verificaCodigo();
+    } finally {
+      _$_CadastroStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic toggleObscure() {
+    final _$actionInfo = _$_CadastroStoreBaseActionController.startAction(
+        name: '_CadastroStoreBase.toggleObscure');
+    try {
+      return super.toggleObscure();
+    } finally {
+      _$_CadastroStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  String toString() {
+    return '''
+nome: ${nome},
+sobrenome: ${sobrenome},
+cep: ${cep},
+logradouro: ${logradouro},
+complemento: ${complemento},
+bairro: ${bairro},
+cidade: ${cidade},
+estado: ${estado},
+pais: ${pais},
+email: ${email},
+senha: ${senha},
+responseCEP: ${responseCEP},
+isObscure: ${isObscure},
+primeiroDigito: ${primeiroDigito},
+segundoDigito: ${segundoDigito},
+terceiroDigito: ${terceiroDigito},
+quartoDigito: ${quartoDigito},
+code: ${code},
+codigoGerado: ${codigoGerado}
+    ''';
+  }
+}
