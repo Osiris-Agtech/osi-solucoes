@@ -138,7 +138,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                         padding: EdgeInsets.only(left: size.width * 0.05),
                         child: const Text(
                           "Minha Conta",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
                     ],
@@ -160,7 +160,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                         padding: EdgeInsets.only(left: size.width * 0.05),
                         child: const Text(
                           "Tornar Premium",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
                     ],
@@ -188,7 +188,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                         padding: EdgeInsets.only(left: size.width * 0.05),
                         child: const Text(
                           "Sobre",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
                     ],
@@ -212,7 +212,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                         padding: EdgeInsets.only(left: size.width * 0.05),
                         child: const Text(
                           "Sair",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
                     ],
@@ -237,6 +237,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
   }
 
   Widget home(BuildContext context, Size size) {
+    size = MediaQuery.of(context).size;
     return Observer(builder: (_) {
       return AnimatedPositioned(
         duration: duration,
@@ -245,6 +246,10 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         left: store.isCollapsed ? 0 : 0.76 * size.width,
         right: store.isCollapsed ? 0 : -.8 * size.width,
         child: Container(
+          constraints: const BoxConstraints(
+            minWidth: 256,
+            minHeight: 600,
+          ),
           height: store.isCollapsed ? size.height : size.height * 0.8,
           width: store.isCollapsed ? size.width : size.width * 0.8,
           decoration: BoxDecoration(
@@ -387,15 +392,20 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 crossAxisCount: 2,
                 children: [
                   gridItems(
-                      context, size, "Setores", Icons.layers_outlined, true),
+                      context, size, "Setores", Icons.layers_outlined, true,
+                      path: "Setores"),
                   gridItems(context, size, "Reservatórios",
-                      Icons.layers_outlined, false),
+                      Icons.layers_outlined, false,
+                      path: "Reservatorios"),
                   gridItems(context, size, "Caderno de Campo",
-                      Icons.layers_outlined, true),
+                      Icons.layers_outlined, true,
+                      path: "CadernoCampo"),
                   gridItems(
-                      context, size, "Receitas", Icons.layers_outlined, false),
+                      context, size, "Receitas", Icons.layers_outlined, false,
+                      path: "Receitas"),
                   gridItems(
-                      context, size, "Ajustes", Icons.layers_outlined, true),
+                      context, size, "Ajustes", Icons.layers_outlined, true,
+                      path: "Ajuste"),
                   gridItems(
                       context, size, "Chat", Icons.layers_outlined, false),
                 ],
@@ -435,8 +445,9 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
     );
   }
 
-  Widget gridItems(BuildContext context, Size size, String title, IconData icon,
-      bool isLeft) {
+  Widget gridItems(
+      BuildContext context, Size size, String title, IconData icon, bool isLeft,
+      {String? path}) {
     return Padding(
       padding: isLeft
           ? EdgeInsets.only(left: size.width * 0.07)
@@ -452,37 +463,39 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
             ),
           ],
         ),
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          elevation: 2,
-          child: Column(
-            children: [
-              Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                      padding: EdgeInsets.only(
-                          right: size.width * 0.05, top: size.height * 0.02),
-                      child: Icon(
-                        icon,
-                        size: 25,
-                      ))),
-              Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: title == "Caderno de Campo"
-                        ? EdgeInsets.only(
-                            left: size.width * 0.032, top: size.height * 0.05)
-                        : EdgeInsets.only(
-                            left: size.width * 0.032, top: size.height * 0.077),
-                    child: Text(title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        )),
-                  )),
-            ],
+        child: InkWell(
+          onTap: () {
+            Modular.to.navigate("/Tab/$path");
+          },
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            elevation: 2,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                        padding: const EdgeInsets.only(right: 22, top: 22),
+                        child: Icon(
+                          icon,
+                          size: 25,
+                        ))),
+                const Spacer(),
+                Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12, bottom: 20),
+                      child: Text(title,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          )),
+                    )),
+              ],
+            ),
           ),
         ),
       ),

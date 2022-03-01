@@ -5,6 +5,7 @@ import 'package:localization/localization.dart';
 import 'package:osi_solucoes/app//modules/login/login_store.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/app/constants.dart';
+import 'package:rive/rive.dart';
 
 class LoginPage extends StatefulWidget {
   final String title;
@@ -81,6 +82,8 @@ class LoginPageState extends State<LoginPage> {
                           width: size.width * .7,
                           height: 45,
                           child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: kPrimaryColor),
                               child: Text(
                                 "textButton".i18n(),
                                 style: const TextStyle(
@@ -123,8 +126,12 @@ class LoginPageState extends State<LoginPage> {
                           top: size.height * 0.08, right: size.width * 0.056),
                       alignment: Alignment.bottomRight,
                       child: InkWell(
+                        hoverColor: Colors.transparent,
+                        splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
-                        onTap: () => Modular.to.pushNamed("/Cadastro/"),
+                        onTap: () async {
+                          Modular.to.pushNamed("/Cadastro/");
+                        },
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.end,
