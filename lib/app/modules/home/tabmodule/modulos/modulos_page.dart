@@ -6,7 +6,9 @@ import 'package:osi_solucoes/app/constants.dart';
 
 class ModulosPage extends StatefulWidget {
   final String title;
-  const ModulosPage({Key? key, this.title = 'ModulosPage'}) : super(key: key);
+  final int page;
+  const ModulosPage({Key? key, this.title = 'ModulosPage', this.page = 0})
+      : super(key: key);
   @override
   ModulosPageState createState() => ModulosPageState();
 }
@@ -32,7 +34,7 @@ class ModulosPageState extends State<ModulosPage> {
               } else if (id == 3) {
                 Modular.to.navigate('/Tab/Receitas');
               } else if (id == 4) {
-                Modular.to.pushNamed('/Tab/Ajuste');
+                Modular.to.navigate('/Tab/Ajuste');
               }
             },
             currentIndex: store.pageviewController,

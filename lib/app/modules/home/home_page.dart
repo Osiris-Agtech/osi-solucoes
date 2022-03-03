@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:osi_solucoes/app/constants.dart';
 import 'package:osi_solucoes/app/modules/home/home_store.dart';
+import 'package:osi_solucoes/app/modules/home/tabmodule/modulos/modulos_store.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -14,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends ModularState<HomePage, HomeStore> {
+  final ModulosStore modulosStore = Modular.get();
   final Duration duration = const Duration(milliseconds: 200);
   @override
   Widget build(BuildContext context) {
@@ -405,7 +407,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                       path: "Receitas"),
                   gridItems(
                       context, size, "Ajustes", Icons.layers_outlined, true,
-                      path: "Ajuste"),
+                      path: "Ajuste", id: 4),
                   gridItems(
                       context, size, "Chat", Icons.layers_outlined, false),
                 ],
@@ -447,7 +449,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
 
   Widget gridItems(
       BuildContext context, Size size, String title, IconData icon, bool isLeft,
-      {String? path}) {
+      {String? path, int? id}) {
     return Padding(
       padding: isLeft
           ? EdgeInsets.only(left: size.width * 0.07)
@@ -464,8 +466,9 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
           ],
         ),
         child: InkWell(
-          onTap: () {
-            Modular.to.navigate("/Tab/$path");
+          onTap: () async {
+            await modulosStore.setPageViewController(id!);
+            Modular.to.pushNamed("/Tab/$path/");
           },
           child: Card(
             shape: RoundedRectangleBorder(
@@ -501,4 +504,9 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
       ),
     );
   }
+}
+
+class Argumentos {
+  final int page;
+  Argumentos(this.page);
 }

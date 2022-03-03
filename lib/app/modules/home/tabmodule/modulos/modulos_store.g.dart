@@ -25,30 +25,15 @@ mixin _$ModulosStore on _ModulosStoreBase, Store {
     });
   }
 
-  final _$valueAtom = Atom(name: '_ModulosStoreBase.value');
-
-  @override
-  int get value {
-    _$valueAtom.reportRead();
-    return super.value;
-  }
-
-  @override
-  set value(int value) {
-    _$valueAtom.reportWrite(value, super.value, () {
-      super.value = value;
-    });
-  }
-
   final _$_ModulosStoreBaseActionController =
       ActionController(name: '_ModulosStoreBase');
 
   @override
-  void increment() {
+  dynamic setPageViewController(int id) {
     final _$actionInfo = _$_ModulosStoreBaseActionController.startAction(
-        name: '_ModulosStoreBase.increment');
+        name: '_ModulosStoreBase.setPageViewController');
     try {
-      return super.increment();
+      return super.setPageViewController(id);
     } finally {
       _$_ModulosStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -57,8 +42,7 @@ mixin _$ModulosStore on _ModulosStoreBase, Store {
   @override
   String toString() {
     return '''
-pageviewController: ${pageviewController},
-value: ${value}
+pageviewController: ${pageviewController}
     ''';
   }
 }

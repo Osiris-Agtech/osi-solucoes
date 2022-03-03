@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'cadernoCampo_store.dart';
+part of 'caderno_campo_store.dart';
 
 // **************************************************************************
 // StoreGenerator

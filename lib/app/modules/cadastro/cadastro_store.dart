@@ -68,7 +68,6 @@ abstract class _CadastroStoreBase with Store {
     for (var i = 0; i < 4; i++) {
       codigoGerado += rng.nextInt(9).toString();
     }
-    print(codigoGerado);
     return codigoGerado;
   }
 

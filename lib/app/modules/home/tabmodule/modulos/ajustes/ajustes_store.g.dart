@@ -9,18 +9,109 @@ part of 'ajustes_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AjustesStore on _AjustesStoreBase, Store {
-  final _$valueAtom = Atom(name: '_AjustesStoreBase.value');
+  final _$selectedItemAtom = Atom(name: '_AjustesStoreBase.selectedItem');
 
   @override
-  int get value {
-    _$valueAtom.reportRead();
-    return super.value;
+  int get selectedItem {
+    _$selectedItemAtom.reportRead();
+    return super.selectedItem;
   }
 
   @override
-  set value(int value) {
-    _$valueAtom.reportWrite(value, super.value, () {
-      super.value = value;
+  set selectedItem(int value) {
+    _$selectedItemAtom.reportWrite(value, super.selectedItem, () {
+      super.selectedItem = value;
+    });
+  }
+
+  final _$quantityListAtom = Atom(name: '_AjustesStoreBase.quantityList');
+
+  @override
+  List<int> get quantityList {
+    _$quantityListAtom.reportRead();
+    return super.quantityList;
+  }
+
+  @override
+  set quantityList(List<int> value) {
+    _$quantityListAtom.reportWrite(value, super.quantityList, () {
+      super.quantityList = value;
+    });
+  }
+
+  final _$cEletricoAtualAtom = Atom(name: '_AjustesStoreBase.cEletricoAtual');
+
+  @override
+  TextEditingController get cEletricoAtual {
+    _$cEletricoAtualAtom.reportRead();
+    return super.cEletricoAtual;
+  }
+
+  @override
+  set cEletricoAtual(TextEditingController value) {
+    _$cEletricoAtualAtom.reportWrite(value, super.cEletricoAtual, () {
+      super.cEletricoAtual = value;
+    });
+  }
+
+  final _$cEletricoDesejadoAtom =
+      Atom(name: '_AjustesStoreBase.cEletricoDesejado');
+
+  @override
+  TextEditingController get cEletricoDesejado {
+    _$cEletricoDesejadoAtom.reportRead();
+    return super.cEletricoDesejado;
+  }
+
+  @override
+  set cEletricoDesejado(TextEditingController value) {
+    _$cEletricoDesejadoAtom.reportWrite(value, super.cEletricoDesejado, () {
+      super.cEletricoDesejado = value;
+    });
+  }
+
+  final _$volumeAtualAtom = Atom(name: '_AjustesStoreBase.volumeAtual');
+
+  @override
+  TextEditingController get volumeAtual {
+    _$volumeAtualAtom.reportRead();
+    return super.volumeAtual;
+  }
+
+  @override
+  set volumeAtual(TextEditingController value) {
+    _$volumeAtualAtom.reportWrite(value, super.volumeAtual, () {
+      super.volumeAtual = value;
+    });
+  }
+
+  final _$volumeDesejadoAtom = Atom(name: '_AjustesStoreBase.volumeDesejado');
+
+  @override
+  TextEditingController get volumeDesejado {
+    _$volumeDesejadoAtom.reportRead();
+    return super.volumeDesejado;
+  }
+
+  @override
+  set volumeDesejado(TextEditingController value) {
+    _$volumeDesejadoAtom.reportWrite(value, super.volumeDesejado, () {
+      super.volumeDesejado = value;
+    });
+  }
+
+  final _$pHAtom = Atom(name: '_AjustesStoreBase.pH');
+
+  @override
+  TextEditingController get pH {
+    _$pHAtom.reportRead();
+    return super.pH;
+  }
+
+  @override
+  set pH(TextEditingController value) {
+    _$pHAtom.reportWrite(value, super.pH, () {
+      super.pH = value;
     });
   }
 
@@ -28,11 +119,11 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
       ActionController(name: '_AjustesStoreBase');
 
   @override
-  void increment() {
+  dynamic newValueItem(int newValue) {
     final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.increment');
+        name: '_AjustesStoreBase.newValueItem');
     try {
-      return super.increment();
+      return super.newValueItem(newValue);
     } finally {
       _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -41,7 +132,13 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
   @override
   String toString() {
     return '''
-value: ${value}
+selectedItem: ${selectedItem},
+quantityList: ${quantityList},
+cEletricoAtual: ${cEletricoAtual},
+cEletricoDesejado: ${cEletricoDesejado},
+volumeAtual: ${volumeAtual},
+volumeDesejado: ${volumeDesejado},
+pH: ${pH}
     ''';
   }
 }
