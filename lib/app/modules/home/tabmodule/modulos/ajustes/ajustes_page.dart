@@ -3,8 +3,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/app/constants.dart';
+import 'package:osi_solucoes/app/modules/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/app/modules/home/tabmodule/modulos/ajustes/ajustes_store.dart';
-import 'package:osi_solucoes/app/modules/home/tabmodule/modulos/modulos_store.dart';
 
 class AjustesPage extends StatefulWidget {
   final String title;
@@ -19,8 +19,6 @@ class AjustesPageState extends State<AjustesPage> {
 
   @override
   Widget build(BuildContext context) {
-    // modulosStore.setPageViewController(4);
-    // print(modulosStore.pageviewController);
     return SafeArea(
       child: Scaffold(
         backgroundColor: kSecondBackgroundColor,
@@ -35,49 +33,10 @@ class AjustesPageState extends State<AjustesPage> {
               automaticallyImplyLeading: true,
               forceElevated: true,
               elevation: 1,
-              flexibleSpace: Padding(
-                padding: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.088,
-                    top: MediaQuery.of(context).size.width * 0.024),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      IconButton(
-                        hoverColor: Colors.transparent,
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        padding: EdgeInsets.zero,
-                        alignment: Alignment.centerLeft,
-                        onPressed: () {
-                          Modular.to.pushNamedAndRemoveUntil(
-                              "/Home", ModalRoute.withName('/'));
-                        },
-                        icon: const Icon(Icons.arrow_back),
-                        color: kPrimaryColor,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.013,
-                            top: MediaQuery.of(context).size.height * 0.002),
-                        child: const Text(
-                          "Ajustes",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.003,
-                            left: MediaQuery.of(context).size.width * 0.013),
-                        child: const Text(
-                          "Selecione e ajuste seu reservatório",
-                          style: TextStyle(color: Colors.black54, fontSize: 13),
-                        ),
-                      ),
-                    ]),
+              flexibleSpace: const TopAppBar(
+                path: "/Home/",
+                namePage: "Ajustes",
+                subtitle: "Selecione e ajuste seu reservatório",
               ),
               bottom: PreferredSize(
                 child: Container(
@@ -504,7 +463,9 @@ class ButtonWidget extends StatelessWidget {
               'Calcular',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Modular.to.pushReplacementNamed("/resultadoAjuste/");
+            },
           ),
         ),
       ],

@@ -506,7 +506,4 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
   }
 }
 
-class Argumentos {
-  final int page;
-  Argumentos(this.page);
-}
+

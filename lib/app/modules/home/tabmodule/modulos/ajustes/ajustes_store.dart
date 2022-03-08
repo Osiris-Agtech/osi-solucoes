@@ -10,7 +10,7 @@ abstract class _AjustesStoreBase with Store {
   int selectedItem = 1;
 
   @observable
-  List<int> quantityList = List<int>.generate(100, (int i) => i);
+  List<int> quantityList = List<int>.generate(50, (int i) => i);
 
   @action
   newValueItem(int newValue) => selectedItem = newValue;

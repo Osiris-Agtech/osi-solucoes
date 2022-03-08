@@ -5,7 +5,6 @@ import 'package:localization/localization.dart';
 import 'package:osi_solucoes/app//modules/login/login_store.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/app/constants.dart';
-import 'package:rive/rive.dart';
 
 class LoginPage extends StatefulWidget {
   final String title;

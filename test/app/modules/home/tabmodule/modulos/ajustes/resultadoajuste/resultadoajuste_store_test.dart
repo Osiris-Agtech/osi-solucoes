@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:osi_solucoes/app//modules/perfil/perfil_store.dart';
+import 'package:osi_solucoes/app//modules/home/tabmodule/modulos/ajustes/resultadoajuste/resultadoajuste_store.dart';
  
 void main() {
-  late PerfilStore store;
+  late ResultadoajusteStore store;
 
   setUpAll(() {
-    store = PerfilStore();
+    store = ResultadoajusteStore();
   });
 
   test('increment count', () async {
