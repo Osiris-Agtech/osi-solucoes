@@ -25,14 +25,14 @@ class CadastroPageState extends State<CadastroPage> {
     var size = MediaQuery.of(context).size;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
+        statusBarColor: kBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
       ),
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: kBackgroundColor,
           appBar: AppBar(
-            backgroundColor: Colors.white,
+            backgroundColor: kBackgroundColor,
             leading: Builder(builder: (_) {
               return Padding(
                 padding: EdgeInsets.only(left: size.width * 0.07),

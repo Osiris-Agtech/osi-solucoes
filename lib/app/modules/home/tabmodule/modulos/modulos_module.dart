@@ -19,7 +19,7 @@ class ModulosModule extends Module {
       '/',
       child: (_, args) => const ModulosPage(),
       children: [
-        ModuleRoute('/Ajuste', module: AjustesModule()),
+        ModuleRoute('/Ajustes', module: AjustesModule()),
         ModuleRoute('/CadernoCampo', module: CadernoCampoModule()),
         ModuleRoute('/Receitas', module: ReceitasModule()),
         ModuleRoute('/Reservatorios', module: ReservatoriosModule()),

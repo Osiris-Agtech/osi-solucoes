@@ -12,4 +12,7 @@ abstract class _ResultadoajusteStoreBase with Store {
   void increment() {
     value++;
   } 
+
+  int fatorConcentracao = 300;
+
 }

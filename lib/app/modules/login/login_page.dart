@@ -23,12 +23,12 @@ class LoginPageState extends State<LoginPage> {
     var size = MediaQuery.of(context).size;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Color.fromRGBO(245, 245, 245, 1),
+        statusBarColor: kSecondBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
       ),
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: const Color.fromRGBO(245, 245, 245, 1),
+          backgroundColor: kSecondBackgroundColor,
           body: SingleChildScrollView(
             child: Form(
               key: formKey,

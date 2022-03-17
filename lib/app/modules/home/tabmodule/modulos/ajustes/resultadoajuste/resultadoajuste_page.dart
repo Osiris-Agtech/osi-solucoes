@@ -160,7 +160,7 @@ showConfirmDialog(BuildContext context) {
                                 const Duration(milliseconds: 1400));
                             Navigator.pop(context);
                             Modular.to.popUntil(ModalRoute.withName('/Home'));
-                            Modular.to.pushReplacementNamed("/Tab/Ajuste/");
+                            Modular.to.pushReplacementNamed("/Tab/Ajustes/");
                           },
                         ),
                       ),
@@ -429,7 +429,7 @@ class AppBarCustom extends StatelessWidget {
           forceElevated: true,
           elevation: 1,
           flexibleSpace: const TopAppBar(
-            path: "/Tab/Ajuste/",
+            path: "/Tab/Ajustes/",
             namePage: "Resultado\n Ajuste",
           ),
           bottom: TabBar(
@@ -526,7 +526,7 @@ class TabFertilizantes extends StatelessWidget {
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.009),
               child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.43,
+                height: MediaQuery.of(context).size.height * 0.4,
                 child: Card(
                   color: const Color(0xffF5F5F5),
                   child: Scrollbar(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:localization/localization.dart';
 import 'package:osi_solucoes/app/constants.dart';
 
 class TopAppBar extends StatelessWidget {
@@ -55,9 +56,9 @@ class TopAppBar extends StatelessWidget {
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.003,
                     left: MediaQuery.of(context).size.width * 0.013),
-                child: const Text(
-                  "Selecione e ajuste seu reservatório",
-                  style: TextStyle(color: Colors.black54, fontSize: 13),
+                child: Text(
+                  "subtitleTopAppBar".i18n(),
+                  style: const TextStyle(color: Colors.black54, fontSize: 13),
                 ),
               )
             else

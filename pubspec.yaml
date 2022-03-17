@@ -46,6 +46,7 @@ dependencies:
   graphql: ^5.0.0-nullsafety.1
   http: ^0.13.4
   json_serializable: ^6.1.4
+  json_annotation: ^4.4.0
   search_cep: ^4.0.0+1
   dartz: ^0.10.1
   shared_preferences: ^2.0.13

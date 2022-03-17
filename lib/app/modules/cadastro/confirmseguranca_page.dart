@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:localization/localization.dart';
+import 'package:osi_solucoes/app/constants.dart';
 import 'package:rive/rive.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/app/modules/cadastro/cadastro_store.dart';
@@ -23,14 +24,14 @@ class ConfirmsegurancaPageState extends State<ConfirmsegurancaPage> {
     var size = MediaQuery.of(context).size;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
+        statusBarColor: kBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
       ),
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: kBackgroundColor,
           appBar: AppBar(
-            backgroundColor: Colors.white,
+            backgroundColor: kBackgroundColor,
             leading: Builder(builder: (_) {
               return Padding(
                 padding: EdgeInsets.only(left: size.width * 0.07),
@@ -42,7 +43,7 @@ class ConfirmsegurancaPageState extends State<ConfirmsegurancaPage> {
                     Icons.arrow_back,
                     size: 30,
                   ),
-                  color: Colors.green,
+                  color: kPrimaryColor,
                 ),
               );
             }),
