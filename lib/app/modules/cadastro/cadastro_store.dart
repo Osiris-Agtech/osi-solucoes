@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:localization/localization.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/app/models/usuario_model.dart';
 import 'package:osi_solucoes/app/modules/cadastro/repositories/cadastro_repository.dart';
@@ -68,7 +69,6 @@ abstract class _CadastroStoreBase with Store {
     for (var i = 0; i < 4; i++) {
       codigoGerado += rng.nextInt(9).toString();
     }
-    print(codigoGerado);
     return codigoGerado;
   }
 
@@ -147,7 +147,7 @@ abstract class _CadastroStoreBase with Store {
 
       return "sucesso";
     } catch (e) {
-      return "Erro ao efetuar o cadastro. Por favor, tente novamente.";
+      return "cadastroInvalido".i18n();
     }
   }
 }

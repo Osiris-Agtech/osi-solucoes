@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
-import 'package:osi_solucoes/app/modules/home/tabmodule/modulos/caderno_campo/cadernoCampo_store.dart';
+import 'package:osi_solucoes/app/modules/home/tabmodule/modulos/caderno_campo/caderno_campo_store.dart';
 
 class CadernoCampoPage extends StatefulWidget {
   final String title;

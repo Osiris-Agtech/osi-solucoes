@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:localization/localization.dart';
 import 'package:osi_solucoes/app/constants.dart';
 import 'package:osi_solucoes/app/modules/home/home_store.dart';
+import 'package:osi_solucoes/app/modules/home/tabmodule/modulos/modulos_store.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -14,6 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends ModularState<HomePage, HomeStore> {
+  final ModulosStore modulosStore = Modular.get();
   final Duration duration = const Duration(milliseconds: 200);
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
+        statusBarColor: kBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
       ),
       child: SafeArea(
@@ -70,7 +73,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                     },
                     icon: const Icon(
                       Icons.close,
-                      color: Colors.white,
+                      color: kBackgroundColor,
                       size: 24,
                     )),
               ),
@@ -132,13 +135,13 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                     children: [
                       const Icon(
                         Icons.settings_outlined,
-                        color: Colors.white,
+                        color: kBackgroundColor,
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.05),
-                        child: const Text(
-                          "Minha Conta",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        child: Text(
+                          "itemMenu1".i18n(),
+                          style: const TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
                     ],
@@ -154,13 +157,13 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                     children: [
                       const Icon(
                         Icons.star_outline_outlined,
-                        color: Colors.white,
+                        color: kBackgroundColor,
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.05),
-                        child: const Text(
-                          "Tornar Premium",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        child:  Text(
+                          "itemMenu2".i18n(),
+                          style: const TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
                     ],
@@ -182,13 +185,13 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                     children: [
                       const Icon(
                         Icons.info_outline,
-                        color: Colors.white,
+                        color: kBackgroundColor,
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.05),
-                        child: const Text(
-                          "Sobre",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        child:  Text(
+                          "itemMenu3".i18n(),
+                          style: const TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
                     ],
@@ -206,13 +209,13 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                     children: [
                       const Icon(
                         Icons.open_in_new_outlined,
-                        color: Colors.white,
+                        color: kBackgroundColor,
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.05),
-                        child: const Text(
-                          "Sair",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        child:  Text(
+                          "itemMenu4".i18n(),
+                          style: const TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
                     ],
@@ -224,9 +227,9 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                     left: sizeWidth * 0.14,
                     bottom: size.height * 0.02,
                     top: size.height * 0.11),
-                child: const Text(
-                  "Versão 2.0.0",
-                  style: TextStyle(color: Colors.white, fontSize: 14),
+                child: Text(
+                  "versao".i18n(),
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
                 ),
               ),
             ],
@@ -262,7 +265,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
             physics: const BouncingScrollPhysics(),
             slivers: [
               SliverAppBar(
-                backgroundColor: Colors.white,
+                backgroundColor: kBackgroundColor,
                 forceElevated: true,
                 elevation: 1,
                 pinned: true,
@@ -372,14 +375,14 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        firstItems(context, size, "Gerenciar",
+                        firstItems(context, size, "card1Home".i18n(),
                             Icons.business_center_outlined),
-                        firstItems(context, size, "Relatório",
+                        firstItems(context, size, "card2Home".i18n(),
                             Icons.content_paste_outlined),
-                        firstItems(context, size, "Inventário",
+                        firstItems(context, size, "card3Home".i18n(),
                             Icons.inventory_2_outlined),
                         firstItems(
-                            context, size, "Mais", Icons.more_horiz_outlined),
+                            context, size, "card4Home".i18n(), Icons.more_horiz_outlined),
                       ],
                     ),
                   ),
@@ -392,22 +395,22 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 crossAxisCount: 2,
                 children: [
                   gridItems(
-                      context, size, "Setores", Icons.layers_outlined, true,
+                      context, size, "card5Home".i18n(), Icons.layers_outlined, true,
                       path: "Setores"),
-                  gridItems(context, size, "Reservatórios",
+                  gridItems(context, size, "card6Home".i18n(),
                       Icons.layers_outlined, false,
                       path: "Reservatorios"),
-                  gridItems(context, size, "Caderno de Campo",
+                  gridItems(context, size, "card7Home".i18n(),
                       Icons.layers_outlined, true,
                       path: "CadernoCampo"),
                   gridItems(
-                      context, size, "Receitas", Icons.layers_outlined, false,
+                      context, size, "card8Home".i18n(), Icons.layers_outlined, false,
                       path: "Receitas"),
                   gridItems(
-                      context, size, "Ajustes", Icons.layers_outlined, true,
-                      path: "Ajuste"),
+                      context, size, "card9Home".i18n(), Icons.layers_outlined, true,
+                      path: "Ajustes", id: 4),
                   gridItems(
-                      context, size, "Chat", Icons.layers_outlined, false),
+                      context, size, "card10Home".i18n(), Icons.layers_outlined, false),
                 ],
               )
             ],
@@ -432,7 +435,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
           ),
           height: 50,
           width: 50,
-          child: Icon(icon, color: Colors.white),
+          child: Icon(icon, color: kBackgroundColor),
         ),
         Padding(
           padding: EdgeInsets.only(top: size.height * 0.009),
@@ -447,7 +450,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
 
   Widget gridItems(
       BuildContext context, Size size, String title, IconData icon, bool isLeft,
-      {String? path}) {
+      {String? path, int? id}) {
     return Padding(
       padding: isLeft
           ? EdgeInsets.only(left: size.width * 0.07)
@@ -464,8 +467,9 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
           ],
         ),
         child: InkWell(
-          onTap: () {
-            Modular.to.navigate("/Tab/$path");
+          onTap: () async {
+            // await modulosStore.setPageViewController(id!);
+            Modular.to.pushNamed("/Tab/$path/");
           },
           child: Card(
             shape: RoundedRectangleBorder(
@@ -502,3 +506,5 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
     );
   }
 }
+
+

@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:osi_solucoes/app/modules/cadastro/cadastro_module.dart';
 import 'package:osi_solucoes/app/modules/home/home_module.dart';
+import 'package:osi_solucoes/app/modules/home/tabmodule/modulos/ajustes/resultadoajuste/resultadoajuste_module.dart';
 import 'package:osi_solucoes/app/modules/home/tabmodule/modulos/modulos_module.dart';
 import 'package:osi_solucoes/app/modules/login/login_module.dart';
 
@@ -17,5 +18,8 @@ class AppModule extends Module {
         module: HomeModule(), transition: TransitionType.rightToLeft),
     ModuleRoute("/Tab",
         module: ModulosModule(), transition: TransitionType.rightToLeft),
+    ModuleRoute('/resultadoAjuste',
+        module: ResultadoajusteModule(),
+        transition: TransitionType.rightToLeft),
   ];
 }

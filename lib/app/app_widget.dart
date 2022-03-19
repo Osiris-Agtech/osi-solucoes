@@ -11,11 +11,9 @@ class AppWidget extends StatelessWidget {
     LocalJsonLocalization.delegate.directories = ['lib/i18n'];
     return MaterialApp.router(
       localizationsDelegates: [
-        // delegate from flutter_localization
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
-        // delegate from localization package.
         LocalJsonLocalization.delegate,
       ],
       supportedLocales: const [

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:localization/localization.dart';
 import 'package:mobx/mobx.dart';
 
 import 'package:osi_solucoes/app/modules/login/repositories/login_repository.dart';
@@ -28,9 +29,9 @@ abstract class _LoginStoreBase with Store {
   vertificaLogin(String email) async {
     try {
       // var response = await loginRepository.buscaUser(email);
-      return "sucesso";
+      return "loginValido".i18n();
     } catch (e) {
-      return "E-mail ou senha inválidos";
+      return "loginInvalido".i18n();
     }
   }
 

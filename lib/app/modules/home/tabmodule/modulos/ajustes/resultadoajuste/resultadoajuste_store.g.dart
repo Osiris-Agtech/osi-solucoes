@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'caderno_campo_store.dart';
+part of 'resultadoajuste_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,8 +8,8 @@ part of 'caderno_campo_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
-  final _$valueAtom = Atom(name: '_CadernoCampoStoreBase.value');
+mixin _$ResultadoajusteStore on _ResultadoajusteStoreBase, Store {
+  final _$valueAtom = Atom(name: '_ResultadoajusteStoreBase.value');
 
   @override
   int get value {
@@ -24,17 +24,17 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
-  final _$_CadernoCampoStoreBaseActionController =
-      ActionController(name: '_CadernoCampoStoreBase');
+  final _$_ResultadoajusteStoreBaseActionController =
+      ActionController(name: '_ResultadoajusteStoreBase');
 
   @override
   void increment() {
-    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
-        name: '_CadernoCampoStoreBase.increment');
+    final _$actionInfo = _$_ResultadoajusteStoreBaseActionController
+        .startAction(name: '_ResultadoajusteStoreBase.increment');
     try {
       return super.increment();
     } finally {
-      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+      _$_ResultadoajusteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
