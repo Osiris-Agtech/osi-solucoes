@@ -11,6 +11,7 @@ ThemeData lightThemeData(BuildContext context) {
     cardColor: kCardColor,
     iconTheme: const IconThemeData(color: kContentColorLightTheme),
     textTheme: const TextTheme(bodyText1: TextStyle(fontFamily: "Montserrat")),
+   
     // GoogleFonts.interTextTheme(Theme.of(context).textTheme)
     //     .apply(bodyColor: kContentColorLightTheme),
     // colorScheme: ColorScheme.light(

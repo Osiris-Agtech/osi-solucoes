@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:osi_solucoes/app/modules/cadastro/cadastro_module.dart';
-import 'package:osi_solucoes/app/modules/cadastro/confirmseguranca_page.dart';
 import 'package:osi_solucoes/app/modules/home/home_module.dart';
+import 'package:osi_solucoes/app/modules/home/tabmodule/modulos/modulos_module.dart';
 import 'package:osi_solucoes/app/modules/login/login_module.dart';
 
 class AppModule extends Module {
@@ -15,5 +15,7 @@ class AppModule extends Module {
         module: CadastroModule(), transition: TransitionType.rightToLeft),
     ModuleRoute("/Home",
         module: HomeModule(), transition: TransitionType.rightToLeft),
+    ModuleRoute("/Tab",
+        module: ModulosModule(), transition: TransitionType.rightToLeft),
   ];
 }

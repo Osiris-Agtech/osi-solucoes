@@ -44,7 +44,7 @@ class CadastroPageState extends State<CadastroPage> {
                     Icons.arrow_back,
                     size: 30,
                   ),
-                  color: Colors.green,
+                  color: kPrimaryColor,
                 ),
               );
             }),
@@ -235,6 +235,8 @@ class CadastroPageState extends State<CadastroPage> {
                             width: size.width * .7,
                             height: 45,
                             child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: kPrimaryColor),
                               child: Text(
                                 "TextButtonConfirmar".i18n(),
                                 style: const TextStyle(

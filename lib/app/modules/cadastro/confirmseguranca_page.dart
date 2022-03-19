@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:localization/localization.dart';
-
+import 'package:rive/rive.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/app/modules/cadastro/cadastro_store.dart';
 
@@ -218,9 +218,11 @@ class ConfirmsegurancaPageState extends State<ConfirmsegurancaPage> {
                               await Future.delayed(const Duration(seconds: 2));
                               res == "sucesso"
                                   ? {
+                                      showDoneAnimation(context),
+                                      await Future.delayed(
+                                          const Duration(milliseconds: 1300)),
                                       Modular.to
                                           .popUntil(ModalRoute.withName("/")),
-                                      Modular.to.canPop(),
                                       Modular.to.pushReplacementNamed("/Home/"),
                                     }
                                   : {
@@ -230,7 +232,7 @@ class ConfirmsegurancaPageState extends State<ConfirmsegurancaPage> {
                                       Navigator.pop(context),
                                       Navigator.pop(context),
                                     };
-                            }
+                            } else {}
                           },
                         ),
                       ),
@@ -262,6 +264,21 @@ class ConfirmsegurancaPageState extends State<ConfirmsegurancaPage> {
       context: context,
       builder: (BuildContext context) {
         return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  showDoneAnimation(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return const Center(
+            child: SizedBox(
+                height: 250,
+                width: 250,
+                child:
+                    RiveAnimation.asset("assets/animation/doneAnimation.riv")));
       },
     );
   }
