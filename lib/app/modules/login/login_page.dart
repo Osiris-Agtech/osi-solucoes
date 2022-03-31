@@ -223,10 +223,13 @@ class LoginPageState extends State<LoginPage> {
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: kDefaultPadding * 1.25,
-                vertical: kDefaultPadding * .4),
+            padding: const EdgeInsets.only(
+                top: kDefaultPadding * 0.7,
+                bottom: kDefaultPadding * 0.15,
+                left: kDefaultPadding * 1.25,
+                right: kDefaultPadding * 1.25),
             child: TextFormField(
+              cursorHeight: 15,
               focusNode: !isSenha ? emailNode : senhaNode,
               validator: !isSenha
                   ? (value) {
@@ -290,7 +293,7 @@ class LoginPageState extends State<LoginPage> {
                           return IconButton(
                               highlightColor: Colors.transparent,
                               splashColor: Colors.transparent,
-                              padding: const EdgeInsets.only(top: 25),
+                              padding: const EdgeInsets.only(top: 15),
                               onPressed: () {
                                 function!();
                               },
