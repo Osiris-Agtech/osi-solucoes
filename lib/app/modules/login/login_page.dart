@@ -18,9 +18,11 @@ class LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
   final FocusNode emailNode = FocusNode();
   final FocusNode senhaNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: kSecondBackgroundColor,
@@ -29,25 +31,33 @@ class LoginPageState extends State<LoginPage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: kSecondBackgroundColor,
-          body: SingleChildScrollView(
+          body: Container(
+            height: size.height,
+            width: size.width,
             child: Form(
               key: formKey,
               child: Stack(children: [
                 Column(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: size.height * 0.13),
-                      child: SizedBox(
-                        child: Image.asset(
-                          "assets/images/osiris-logo.png",
-                          width: size.width * 0.42,
-                        ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(),
+                    ),
+                    SizedBox(
+                      child: Image.asset(
+                        "assets/images/osiris-logo.png",
+                        width: size.width * 0.42,
+                        // height: size.height * 0.082,
                       ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(),
                     ),
                     Observer(builder: (_) {
                       return Padding(
                         padding: EdgeInsets.only(
-                            top: size.height * 0.1,
+                            // top: size.height * 0.09,
                             left: size.width * 0.06,
                             right: size.width * 0.06),
                         child: formFieldLogin(
@@ -63,7 +73,7 @@ class LoginPageState extends State<LoginPage> {
                       builder: (_) {
                         return Padding(
                             padding: EdgeInsets.only(
-                                top: size.height * 0.02,
+                                top: 20,
                                 left: size.width * 0.06,
                                 right: size.width * 0.06),
                             child: formFieldLogin(
@@ -76,7 +86,7 @@ class LoginPageState extends State<LoginPage> {
                       },
                     ),
                     Padding(
-                        padding: EdgeInsets.only(top: size.height * .04),
+                        padding: EdgeInsets.only(top: size.height * .041),
                         child: SizedBox(
                           width: size.width * .7,
                           height: 45,
@@ -86,7 +96,8 @@ class LoginPageState extends State<LoginPage> {
                               child: Text(
                                 "textButton".i18n(),
                                 style: const TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.w600),
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w600),
                               ),
                               onPressed: () async {
                                 if (formKey.currentState!.validate()) {
@@ -108,7 +119,7 @@ class LoginPageState extends State<LoginPage> {
                               }),
                         )),
                     Padding(
-                      padding: EdgeInsets.only(top: size.height * .015),
+                      padding: EdgeInsets.only(top: size.height * .03),
                       child: TextButton(
                         child: Text(
                           "textTextButton".i18n(),
@@ -120,33 +131,48 @@ class LoginPageState extends State<LoginPage> {
                         onPressed: () {},
                       ),
                     ),
+                    Expanded(
+                      flex: 2,
+                      child: Container(),
+                    ),
                     Container(
                       padding: EdgeInsets.only(
-                          top: size.height * 0.08, right: size.width * 0.056),
+                          // top: size.height * 0.06,
+                          // bottom: size.height * 0.06,
+                          right: size.width * 0.056),
                       alignment: Alignment.bottomRight,
-                      child: InkWell(
-                        hoverColor: Colors.transparent,
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () async {
-                          Modular.to.pushNamed("/Cadastro/");
-                        },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text("textTextButton2".i18n(),
-                                style: const TextStyle(
-                                    fontSize: 24,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w600)),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: kPrimaryColor,
-                            )
-                          ],
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            hoverColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () async {
+                              Modular.to.pushNamed("/Cadastro/");
+                            },
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text("textTextButton2".i18n(),
+                                    style: const TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w600)),
+                                const Icon(
+                                  Icons.chevron_right,
+                                  color: kPrimaryColor,
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(),
                     ),
                   ],
                 ),
