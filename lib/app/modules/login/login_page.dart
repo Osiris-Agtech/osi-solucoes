@@ -31,96 +31,96 @@ class LoginPageState extends State<LoginPage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: kSecondBackgroundColor,
-          body: Container(
-            height: size.height,
-            width: size.width,
-            child: Form(
-              key: formKey,
-              child: Stack(children: [
-                Column(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Container(),
-                    ),
-                    SizedBox(
-                      child: Image.asset(
-                        "assets/images/osiris-logo.png",
-                        width: size.width * 0.42,
-                        // height: size.height * 0.082,
+          body: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: SizedBox(
+              height: size.height - MediaQuery.of(context).viewPadding.top,
+              width: size.width,
+              child: Form(
+                key: formKey,
+                child: Stack(children: [
+                  Column(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Container(),
                       ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(),
-                    ),
-                    Observer(builder: (_) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                            // top: size.height * 0.09,
-                            left: size.width * 0.06,
-                            right: size.width * 0.06),
-                        child: formFieldLogin(
-                          controllerText: store.email,
-                          labelText: 'emailField'.i18n(),
-                          isSenha: false,
-                          function: () {},
-                          isObscure: false,
+                      SizedBox(
+                        child: Image.asset(
+                          "assets/images/osiris-logo.png",
+                          width: size.width * 0.42,
+                          // height: size.height * 0.082,
                         ),
-                      );
-                    }),
-                    Observer(
-                      builder: (_) {
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Container(),
+                      ),
+                      Observer(builder: (_) {
                         return Padding(
-                            padding: EdgeInsets.only(
-                                top: 20,
-                                left: size.width * 0.06,
-                                right: size.width * 0.06),
-                            child: formFieldLogin(
-                              controllerText: store.senha,
-                              labelText: 'senhaField'.i18n(),
-                              isSenha: true,
-                              function: store.toggleObscure,
-                              isObscure: store.isObscure,
-                            ));
-                      },
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(top: size.height * .041),
-                        child: SizedBox(
-                          width: size.width * .7,
-                          height: 45,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: kPrimaryColor),
-                              child: Text(
-                                "textButton".i18n(),
-                                style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              onPressed: () async {
-                                if (formKey.currentState!.validate()) {
-                                  showCircularProgressIndicator(context);
-                                  String response = await store
-                                      .vertificaLogin(store.email.text);
-                                  await Future.delayed(
-                                      const Duration(seconds: 2));
-                                  if (response == "sucesso") {
-                                    Modular.to.pushReplacementNamed("/Home/");
-                                  } else {
-                                    showLoaderDialog(context, response);
+                          padding: EdgeInsets.only(
+                              // top: size.height * 0.09,
+                              left: size.width * 0.06,
+                              right: size.width * 0.06),
+                          child: formFieldLogin(
+                            controllerText: store.email,
+                            labelText: 'emailField'.i18n(),
+                            isSenha: false,
+                            function: () {},
+                            isObscure: false,
+                          ),
+                        );
+                      }),
+                      Observer(
+                        builder: (_) {
+                          return Padding(
+                              padding: EdgeInsets.only(
+                                  top: 20,
+                                  left: size.width * 0.06,
+                                  right: size.width * 0.06),
+                              child: formFieldLogin(
+                                controllerText: store.senha,
+                                labelText: 'senhaField'.i18n(),
+                                isSenha: true,
+                                function: store.toggleObscure,
+                                isObscure: store.isObscure,
+                              ));
+                        },
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(top: size.height * .041),
+                          child: SizedBox(
+                            width: size.width * .7,
+                            height: 45,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: kPrimaryColor),
+                                child: Text(
+                                  "textButton".i18n(),
+                                  style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                onPressed: () async {
+                                  if (formKey.currentState!.validate()) {
+                                    showCircularProgressIndicator(context);
+                                    String response = await store
+                                        .vertificaLogin(store.email.text);
                                     await Future.delayed(
                                         const Duration(seconds: 2));
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  }
-                                } else {}
-                              }),
-                        )),
-                    Padding(
-                      padding: EdgeInsets.only(top: size.height * .03),
-                      child: TextButton(
+                                    if (response == "sucesso") {
+                                      Modular.to.pushReplacementNamed("/Home/");
+                                    } else {
+                                      showLoaderDialog(context, response);
+                                      await Future.delayed(
+                                          const Duration(seconds: 2));
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    }
+                                  } else {}
+                                }),
+                          )),
+                      TextButton(
                         child: Text(
                           "textTextButton".i18n(),
                           style: const TextStyle(
@@ -130,53 +130,53 @@ class LoginPageState extends State<LoginPage> {
                         ),
                         onPressed: () {},
                       ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Container(),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(
-                          // top: size.height * 0.06,
-                          // bottom: size.height * 0.06,
-                          right: size.width * 0.056),
-                      alignment: Alignment.bottomRight,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          InkWell(
-                            hoverColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () async {
-                              Modular.to.pushNamed("/Cadastro/");
-                            },
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text("textTextButton2".i18n(),
-                                    style: const TextStyle(
-                                        fontSize: 24,
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w600)),
-                                const Icon(
-                                  Icons.chevron_right,
-                                  color: kPrimaryColor,
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
+                      Expanded(
+                        flex: 3,
+                        child: Container(),
                       ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(),
-                    ),
-                  ],
-                ),
-              ]),
+                      Container(
+                        padding: EdgeInsets.only(
+                            // top: size.height * 0.06,
+                            // bottom: size.height * 0.06,
+                            right: size.width * 0.056),
+                        alignment: Alignment.bottomRight,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            InkWell(
+                              hoverColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                Modular.to.pushNamed("/Cadastro/");
+                              },
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text("textTextButton2".i18n(),
+                                      style: const TextStyle(
+                                          fontSize: 24,
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w600)),
+                                  const Icon(
+                                    Icons.chevron_right,
+                                    color: kPrimaryColor,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Container(),
+                      ),
+                    ],
+                  ),
+                ]),
+              ),
             ),
           ),
         ),
