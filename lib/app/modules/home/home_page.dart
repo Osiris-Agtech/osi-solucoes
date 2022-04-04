@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/app/constants.dart';
+import 'package:osi_solucoes/app/modules/home/components/home_page_header.dart';
 import 'package:osi_solucoes/app/modules/home/home_store.dart';
 import 'package:osi_solucoes/app/modules/home/tabmodule/modulos/modulos_store.dart';
 
@@ -141,7 +143,8 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                         padding: EdgeInsets.only(left: size.width * 0.05),
                         child: Text(
                           "itemMenu1".i18n(),
-                          style: const TextStyle(color: Colors.white, fontSize: 20),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 20),
                         ),
                       ),
                     ],
@@ -161,9 +164,10 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.05),
-                        child:  Text(
+                        child: Text(
                           "itemMenu2".i18n(),
-                          style: const TextStyle(color: Colors.white, fontSize: 20),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 20),
                         ),
                       ),
                     ],
@@ -189,9 +193,10 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.05),
-                        child:  Text(
+                        child: Text(
                           "itemMenu3".i18n(),
-                          style: const TextStyle(color: Colors.white, fontSize: 20),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 20),
                         ),
                       ),
                     ],
@@ -213,9 +218,10 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.05),
-                        child:  Text(
+                        child: Text(
                           "itemMenu4".i18n(),
-                          style: const TextStyle(color: Colors.white, fontSize: 20),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 20),
                         ),
                       ),
                     ],
@@ -264,109 +270,13 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
           child: CustomScrollView(
             physics: const BouncingScrollPhysics(),
             slivers: [
-              SliverAppBar(
-                backgroundColor: kBackgroundColor,
-                forceElevated: true,
-                elevation: 1,
+              // sliverAppBarWidget(size),
+              const SliverPersistentHeader(
                 pinned: true,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    bottom: const Radius.circular(30),
-                    top: Radius.circular(store.isCollapsed ? 0 : 30),
-                  ),
-                ),
-                expandedHeight: size.height * 0.28,
-                collapsedHeight: 65,
-                toolbarHeight: 50,
-                bottom: PreferredSize(
-                  child: Divider(
-                    color: Colors.black,
-                    height: 21,
-                    thickness: 1.5,
-                    indent: size.width * 0.39,
-                    endIndent: size.width * 0.39,
-                  ),
-                  preferredSize: const Size(double.infinity, 3),
-                ),
-                title: Image.asset(
-                  "assets/images/osiris-logo.png",
-                  height: 30,
-                ),
-                centerTitle: true,
-                leading: IconButton(
-                  onPressed: () => store.setIsCollaped(),
-                  icon: const Icon(Icons.grid_view_outlined),
-                  color: Colors.black,
-                ),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15, right: 25),
-                    child: Stack(children: [
-                      const Icon(
-                        Icons.notifications_outlined,
-                        color: Colors.black,
-                      ),
-                      store.isNotified
-                          ? Positioned(
-                              top: 0,
-                              right: 0,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(6),
-                                  color: Colors.red,
-                                ),
-                                height: 12,
-                                width: 12,
-                              ),
-                            )
-                          : Container()
-                    ]),
-                  )
-                ],
-                flexibleSpace: Padding(
-                  padding: const EdgeInsets.only(top: 50),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: size.height * 0.03),
-                          child: const CircleAvatar(
-                            backgroundColor: kPrimaryColor,
-                            child: Icon(
-                              Icons.person,
-                              color: kBackgroundColor,
-                              size: 25,
-                            ),
-                            minRadius: 25,
-                          ),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(top: size.height * 0.014),
-                            child: const Text(
-                              "Hidrogood",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 28,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600),
-                            )),
-                        Padding(
-                            padding: EdgeInsets.only(top: size.height * 0.003),
-                            child: const Text(
-                              "Administrador",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                              ),
-                            )),
-                      ],
-                    ),
-                  ),
-                ),
+                delegate: MyHeaderDelegate(),
               ),
               SliverFixedExtentList(
-                itemExtent: size.height * 0.17,
+                itemExtent: 120, //size.height * 0.17,
                 delegate: SliverChildListDelegate([
                   Padding(
                     padding: EdgeInsets.symmetric(
@@ -381,8 +291,8 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                             Icons.content_paste_outlined),
                         firstItems(context, size, "card3Home".i18n(),
                             Icons.inventory_2_outlined),
-                        firstItems(
-                            context, size, "card4Home".i18n(), Icons.more_horiz_outlined),
+                        firstItems(context, size, "card4Home".i18n(),
+                            Icons.more_horiz_outlined),
                       ],
                     ),
                   ),
@@ -394,8 +304,8 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 childAspectRatio: 10 / 8,
                 crossAxisCount: 2,
                 children: [
-                  gridItems(
-                      context, size, "card5Home".i18n(), Icons.layers_outlined, true,
+                  gridItems(context, size, "card5Home".i18n(),
+                      Icons.layers_outlined, true,
                       path: "Setores"),
                   gridItems(context, size, "card6Home".i18n(),
                       Icons.layers_outlined, false,
@@ -403,14 +313,14 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                   gridItems(context, size, "card7Home".i18n(),
                       Icons.layers_outlined, true,
                       path: "CadernoCampo"),
-                  gridItems(
-                      context, size, "card8Home".i18n(), Icons.layers_outlined, false,
+                  gridItems(context, size, "card8Home".i18n(),
+                      Icons.layers_outlined, false,
                       path: "Receitas"),
-                  gridItems(
-                      context, size, "card9Home".i18n(), Icons.layers_outlined, true,
+                  gridItems(context, size, "card9Home".i18n(),
+                      Icons.layers_outlined, true,
                       path: "Ajustes", id: 4),
-                  gridItems(
-                      context, size, "card10Home".i18n(), Icons.layers_outlined, false),
+                  gridItems(context, size, "card10Home".i18n(),
+                      Icons.layers_outlined, false),
                 ],
               )
             ],
@@ -418,6 +328,110 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         ),
       );
     });
+  }
+
+  SliverAppBar sliverAppBarWidget(Size size) {
+    return SliverAppBar(
+      backgroundColor: kBackgroundColor,
+      forceElevated: true,
+      elevation: 1,
+      pinned: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          bottom: const Radius.circular(30),
+          top: Radius.circular(store.isCollapsed ? 0 : 30),
+        ),
+      ),
+      expandedHeight: size.height * 0.28,
+      collapsedHeight: 65,
+      toolbarHeight: 50,
+      bottom: PreferredSize(
+        child: Divider(
+          color: Colors.black,
+          height: 21,
+          thickness: 1.5,
+          indent: size.width * 0.39,
+          endIndent: size.width * 0.39,
+        ),
+        preferredSize: const Size(double.infinity, 3),
+      ),
+      title: Image.asset(
+        "assets/images/osiris-logo.png",
+        height: 30,
+      ),
+      centerTitle: true,
+      leading: IconButton(
+        onPressed: () => store.setIsCollaped(),
+        icon: const Icon(Icons.grid_view_outlined),
+        color: Colors.black,
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(top: 15, right: 25),
+          child: Stack(children: [
+            const Icon(
+              Icons.notifications_outlined,
+              color: Colors.black,
+            ),
+            store.isNotified
+                ? Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        color: Colors.red,
+                      ),
+                      height: 12,
+                      width: 12,
+                    ),
+                  )
+                : Container()
+          ]),
+        )
+      ],
+      flexibleSpace: Padding(
+        padding: const EdgeInsets.only(top: 50),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: size.height * 0.03),
+                child: const CircleAvatar(
+                  backgroundColor: kPrimaryColor,
+                  child: Icon(
+                    Icons.person,
+                    color: kBackgroundColor,
+                    size: 25,
+                  ),
+                  minRadius: 25,
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(top: size.height * 0.014),
+                  child: const Text(
+                    "Hidrogood",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 28,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600),
+                  )),
+              Padding(
+                  padding: EdgeInsets.only(top: size.height * 0.003),
+                  child: const Text(
+                    "Administrador",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget firstItems(
@@ -492,11 +506,13 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                     alignment: Alignment.bottomLeft,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 12, bottom: 20),
-                      child: Text(title,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          )),
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     )),
               ],
             ),
@@ -507,4 +523,206 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
   }
 }
 
+class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
+  const MyHeaderDelegate();
 
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    final HomeStore store = Modular.get<HomeStore>();
+    final progress = shrinkOffset / maxExtent;
+    return Material(
+      elevation: 2,
+      borderRadius: const BorderRadius.only(
+        bottomLeft: Radius.circular(30),
+        bottomRight: Radius.circular(30),
+        topLeft: Radius.zero,
+        topRight: Radius.zero,
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+          topLeft: Radius.zero,
+          topRight: Radius.zero,
+        ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            const ColoredBox(
+              color: Colors.white,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 10.0,
+                left: 10,
+              ),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: IconButton(
+                  icon: SvgPicture.asset('assets/icons/grid.svg'),
+                  onPressed: () => store.setIsCollaped(),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 25.0,
+                right: 20,
+              ),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    const Icon(
+                      Icons.notifications_outlined,
+                      color: Colors.black,
+                    ),
+                    store.isNotified
+                        ? Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: Colors.red,
+                              ),
+                              height: 12,
+                              width: 12,
+                            ),
+                          )
+                        : Container()
+                  ],
+                ),
+              ),
+            ),
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 150),
+              opacity: (1 - progress * 1.5) < 0 ? 0 : 1 - progress * 1.5,
+              child: Align(
+                alignment: const Alignment(0, -0.8),
+                child: Image.asset(
+                  "assets/images/osiris-logo.png",
+                  height: 35,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 100),
+              padding: EdgeInsets.lerp(
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                const EdgeInsets.only(bottom: 16),
+                progress,
+              ),
+              alignment: Alignment.lerp(
+                const Alignment(0, -0.2),
+                Alignment.bottomCenter,
+                progress,
+              ),
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 150),
+                opacity: (1 - progress * 1.5) < 0 ? 0 : 1 - progress * 1.5,
+                child: const CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
+                  radius: 30,
+                ),
+              ),
+            ),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 100),
+              padding: EdgeInsets.lerp(
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                const EdgeInsets.only(bottom: 16),
+                progress,
+              ),
+              alignment: Alignment.lerp(
+                const Alignment(0, 0.5),
+                Alignment.bottomCenter,
+                progress,
+              ),
+              child: const Text(
+                'Hidrogood',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w600,
+                ),
+                // style: TextStyle.lerp(
+                //   Theme.of(context)
+                //       .textTheme
+                //       .headline4
+                //       ?.copyWith(color: Colors.black),
+                //   Theme.of(context)
+                //       .textTheme
+                //       .headline5
+                //       ?.copyWith(color: Colors.black),
+                //   progress,
+                // ),
+              ),
+            ),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 100),
+              padding: EdgeInsets.lerp(
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                const EdgeInsets.only(bottom: 16),
+                progress,
+              ),
+              alignment: Alignment.lerp(
+                const Alignment(0, 0.8),
+                Alignment.bottomCenter,
+                progress,
+              ),
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 150),
+                opacity: (1 - progress * 2) < 0 ? 0 : 1 - progress * 2,
+                child: const Text(
+                  'Administrador',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 100),
+              alignment: Alignment.lerp(
+                const Alignment(0, 0.9),
+                Alignment.bottomCenter,
+                progress,
+              ),
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 150),
+                opacity: (1 - progress * 2) < 0 ? 0 : 1 - progress * 2,
+                child: Container(
+                  height: 2,
+                  width: 80, // MediaQuery.of(context).size.width * .8,
+                  // color: const Color(0xFF767676),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(2)),
+                    color: Color(0xFF767676),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 240;
+
+  @override
+  double get minExtent => 70;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      true;
+}

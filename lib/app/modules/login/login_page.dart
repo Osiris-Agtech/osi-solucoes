@@ -42,7 +42,7 @@ class LoginPageState extends State<LoginPage> {
                   Column(
                     children: [
                       Expanded(
-                        flex: 2,
+                        flex: 3,
                         child: Container(),
                       ),
                       SizedBox(
@@ -224,7 +224,7 @@ class LoginPageState extends State<LoginPage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Padding(
             padding: const EdgeInsets.only(
-                top: kDefaultPadding * 0.7,
+                top: kDefaultPadding * 0.5,
                 bottom: kDefaultPadding * 0.15,
                 left: kDefaultPadding * 1.25,
                 right: kDefaultPadding * 1.25),
