@@ -52,6 +52,7 @@ dependencies:
   shared_preferences: ^2.0.13
   rive: ^0.8.1
   ff_navigation_bar: ^0.1.5
+  flutter_svg: ^1.0.3
   
 
 
@@ -88,6 +89,7 @@ flutter:
     - assets/images/
     - lib/i18n/
     - assets/animation/
+    - assets/icons/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
