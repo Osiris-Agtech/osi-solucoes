@@ -82,15 +82,14 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               ),
               Padding(
                 padding: EdgeInsets.only(right: (sizeWidth * 0.33)),
-                child: const CircleAvatar(
-                  backgroundColor: kPrimaryColor,
-                  child: Icon(
-                    Icons.person,
-                    color: kBackgroundColor,
-                    size: 25,
-                  ),
-                  minRadius: 32.5,
+                child: const Center(
+                  child:  CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
+                      radius: 32.5,
+                    ),
                 ),
+                
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -136,8 +135,9 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                   onTap: () {},
                   child: Row(
                     children: [
-                      const Icon(
-                        Icons.settings_outlined,
+                       IconButton(icon:
+                        SvgPicture.asset("assets/icons/settings_icon.svg"),
+                        onPressed: (){},
                         color: kBackgroundColor,
                       ),
                       Padding(
@@ -159,8 +159,9 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                   onTap: () {},
                   child: Row(
                     children: [
-                      const Icon(
-                        Icons.star_outline_outlined,
+                      IconButton(icon:
+                        SvgPicture.asset("assets/icons/hexagon_icon.svg"),
+                        onPressed: (){},
                         color: kBackgroundColor,
                       ),
                       Padding(
@@ -189,8 +190,9 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                   onTap: () {},
                   child: Row(
                     children: [
-                      const Icon(
-                        Icons.info_outline,
+                      IconButton(icon:
+                        SvgPicture.asset("assets/icons/info_icon.svg"),
+                        onPressed: (){},
                         color: kBackgroundColor,
                       ),
                       Padding(
@@ -214,8 +216,9 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                   },
                   child: Row(
                     children: [
-                      const Icon(
-                        Icons.open_in_new_outlined,
+                      IconButton(icon:
+                        SvgPicture.asset("assets/icons/external_link_icon.svg"),
+                        onPressed: (){},
                         color: kBackgroundColor,
                       ),
                       Padding(
@@ -234,8 +237,6 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               Padding(
                 padding: EdgeInsets.only(
                     left: sizeWidth * 0.14,
-                    // bottom: size.height * 0.02,
-                    // top: size.height * 0.11
                     ),
                 child: Text(
                   "versao".i18n(),
@@ -519,7 +520,10 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
+                          
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.clip,
                       ),
                     )),
               ],
@@ -588,7 +592,7 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                   children: [
                     IconButton(
                       icon: SvgPicture.asset(
-                          "assets/icons/notification_icon.svg"),
+                          "assets/icons/notification_off_icon.svg"),
                       onPressed: () {},
                       color: Colors.black,
                     ),
@@ -706,17 +710,13 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                 Alignment.bottomCenter,
                 progress,
               ),
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 150),
-                opacity: (1 - progress * 2) < 0 ? 0 : 1 - progress * 2,
-                child: Container(
-                  height: 2,
-                  width: 80, // MediaQuery.of(context).size.width * .8,
-                  // color: const Color(0xFF767676),
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(2)),
-                    color: Color(0xFF767676),
-                  ),
+              child: Container(
+                height: 3,
+                width: 80, // MediaQuery.of(context).size.width * .8,
+                // color: const Color(0xFF767676),
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(2)),
+                  color: Color(0xFF767676),
                 ),
               ),
             ),
