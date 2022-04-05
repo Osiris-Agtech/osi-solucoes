@@ -113,6 +113,7 @@ class AjustesPageState extends State<AjustesPage> {
                           style: TextStyle(
                               fontSize: 16,
                               fontStyle: FontStyle.italic,
+                              color: Color(0xB2333333),
                               fontWeight: FontWeight.w600),
                         ),
                       ),
@@ -144,11 +145,15 @@ class AjustesPageState extends State<AjustesPage> {
                                         children: const [
                                           Text(
                                             "C. Elétrico ",
-                                            style: TextStyle(fontSize: 14),
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontStyle: FontStyle.italic,
+                                            ),
                                           ),
                                           Text("Atual",
                                               style: TextStyle(
                                                   fontSize: 14,
+                                                  fontStyle: FontStyle.italic,
                                                   fontWeight: FontWeight.bold))
                                         ],
                                       ),
@@ -189,11 +194,15 @@ class AjustesPageState extends State<AjustesPage> {
                                         children: const [
                                           Text(
                                             "C. Elétrico ",
-                                            style: TextStyle(fontSize: 14),
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontStyle: FontStyle.italic,
+                                            ),
                                           ),
                                           Text("Desejado",
                                               style: TextStyle(
                                                   fontSize: 14,
+                                                  fontStyle: FontStyle.italic,
                                                   fontWeight: FontWeight.bold))
                                         ],
                                       ),
@@ -244,11 +253,15 @@ class AjustesPageState extends State<AjustesPage> {
                                           children: const [
                                             Text(
                                               "Volume ",
-                                              style: TextStyle(fontSize: 14),
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontStyle: FontStyle.italic,
+                                              ),
                                             ),
                                             Text("Atual",
                                                 style: TextStyle(
                                                     fontSize: 14,
+                                                    fontStyle: FontStyle.italic,
                                                     fontWeight:
                                                         FontWeight.bold))
                                           ],
@@ -290,11 +303,15 @@ class AjustesPageState extends State<AjustesPage> {
                                           children: const [
                                             Text(
                                               "Volume ",
-                                              style: TextStyle(fontSize: 14),
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontStyle: FontStyle.italic,
+                                              ),
                                             ),
                                             Text("Desejado",
                                                 style: TextStyle(
                                                     fontSize: 14,
+                                                    fontStyle: FontStyle.italic,
                                                     fontWeight:
                                                         FontWeight.bold))
                                           ],
@@ -357,10 +374,14 @@ class AjustesPageState extends State<AjustesPage> {
                                 Row(
                                   children: const [
                                     Text("Registrar ",
-                                        style: TextStyle(fontSize: 14)),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontStyle: FontStyle.italic,
+                                        )),
                                     Text("PH",
                                         style: TextStyle(
                                             fontSize: 14,
+                                            fontStyle: FontStyle.italic,
                                             fontWeight: FontWeight.bold)),
                                   ],
                                 ),
@@ -379,6 +400,7 @@ class AjustesPageState extends State<AjustesPage> {
                                         hintText: "8.4",
                                         hintStyle: TextStyle(
                                           fontWeight: FontWeight.w100,
+                                          fontStyle: FontStyle.italic,
                                           color: Colors.black38,
                                         )),
                                   ),
@@ -390,7 +412,8 @@ class AjustesPageState extends State<AjustesPage> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.01),
+                            top: MediaQuery.of(context).size.height * 0.01,
+                            bottom: 75),
                         child: Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -409,10 +432,14 @@ class AjustesPageState extends State<AjustesPage> {
                                 Row(
                                   children: const [
                                     Text("Registrar ",
-                                        style: TextStyle(fontSize: 14)),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontStyle: FontStyle.italic,
+                                        )),
                                     Text("Temperatura",
                                         style: TextStyle(
                                             fontSize: 14,
+                                            fontStyle: FontStyle.italic,
                                             fontWeight: FontWeight.bold)),
                                   ],
                                 ),
@@ -430,7 +457,12 @@ class AjustesPageState extends State<AjustesPage> {
                                                 alignment:
                                                     AlignmentDirectional.center,
                                                 value: e,
-                                                child: Text("$e ºC"),
+                                                child: Text(
+                                                  "$e ºC",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
                                               ))
                                           .toList(),
                                       onChanged: (int? newValue) {
