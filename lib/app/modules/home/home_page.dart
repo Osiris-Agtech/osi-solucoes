@@ -67,7 +67,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               Expanded(flex: 1, child: Container()),
               Padding(
                 padding: EdgeInsets.only(
-                    // top: sizeHeight * .088, 
+                    // top: sizeHeight * .088,
                     left: sizeWidth * 0.02),
                 child: IconButton(
                     alignment: Alignment.centerLeft,
@@ -83,13 +83,12 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               Padding(
                 padding: EdgeInsets.only(right: (sizeWidth * 0.33)),
                 child: const Center(
-                  child:  CircleAvatar(
+                  child: CircleAvatar(
                     backgroundImage: NetworkImage(
                         'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
-                      radius: 32.5,
-                    ),
+                    radius: 32.5,
+                  ),
                 ),
-                
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -129,19 +128,20 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               Expanded(flex: 1, child: Container()),
               Padding(
                 padding: EdgeInsets.only(
-                    // top: size.height * 0.05, 
+                    // top: size.height * 0.05,
                     left: sizeWidth * 0.122),
                 child: InkWell(
                   onTap: () {},
                   child: Row(
                     children: [
-                       IconButton(icon:
-                        SvgPicture.asset("assets/icons/settings_icon.svg"),
-                        onPressed: (){},
+                      IconButton(
+                        icon:
+                            SvgPicture.asset("assets/icons/settings_icon.svg"),
+                        onPressed: () {},
                         color: kBackgroundColor,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.05),
+                        padding: EdgeInsets.only(left: size.width * 0.02),
                         child: Text(
                           "itemMenu1".i18n(),
                           style: const TextStyle(
@@ -159,13 +159,13 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                   onTap: () {},
                   child: Row(
                     children: [
-                      IconButton(icon:
-                        SvgPicture.asset("assets/icons/hexagon_icon.svg"),
-                        onPressed: (){},
+                      IconButton(
+                        icon: SvgPicture.asset("assets/icons/hexagon_icon.svg"),
+                        onPressed: () {},
                         color: kBackgroundColor,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.05),
+                        padding: EdgeInsets.only(left: size.width * 0.02),
                         child: Text(
                           "itemMenu2".i18n(),
                           style: const TextStyle(
@@ -182,21 +182,20 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               ),
               Expanded(flex: 1, child: Container()),
               Padding(
-                padding: EdgeInsets.only(
-                    left: sizeWidth * 0.122
+                padding: EdgeInsets.only(left: sizeWidth * 0.122
                     // , top: size.height * 0.05
                     ),
                 child: InkWell(
                   onTap: () {},
                   child: Row(
                     children: [
-                      IconButton(icon:
-                        SvgPicture.asset("assets/icons/info_icon.svg"),
-                        onPressed: (){},
+                      IconButton(
+                        icon: SvgPicture.asset("assets/icons/info_icon.svg"),
+                        onPressed: () {},
                         color: kBackgroundColor,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.05),
+                        padding: EdgeInsets.only(left: size.width * 0.02),
                         child: Text(
                           "itemMenu3".i18n(),
                           style: const TextStyle(
@@ -216,13 +215,14 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                   },
                   child: Row(
                     children: [
-                      IconButton(icon:
-                        SvgPicture.asset("assets/icons/external_link_icon.svg"),
-                        onPressed: (){},
+                      IconButton(
+                        icon: SvgPicture.asset(
+                            "assets/icons/external_link_icon.svg"),
+                        onPressed: () {},
                         color: kBackgroundColor,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.05),
+                        padding: EdgeInsets.only(left: size.width * 0.02),
                         child: Text(
                           "itemMenu4".i18n(),
                           style: const TextStyle(
@@ -236,8 +236,8 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               Expanded(flex: 2, child: Container()),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeWidth * 0.14,
-                    ),
+                  left: sizeWidth * 0.14,
+                ),
                 child: Text(
                   "versao".i18n(),
                   style: const TextStyle(color: Colors.white, fontSize: 14),
@@ -507,8 +507,12 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                     child: Padding(
                         padding: const EdgeInsets.only(right: 10, top: 10),
                         child: IconButton(
-                          icon: SvgPicture.asset(icon, height: 25, width: 25,),
-                            onPressed: (){},
+                          icon: SvgPicture.asset(
+                            icon,
+                            height: 25,
+                            width: 25,
+                          ),
+                          onPressed: () {},
                         ))),
                 const Spacer(),
                 Align(
@@ -520,7 +524,6 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.clip,
@@ -707,7 +710,7 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
               duration: const Duration(milliseconds: 100),
               alignment: Alignment.lerp(
                 const Alignment(0, 0.9),
-                Alignment.bottomCenter,
+                const Alignment(0, 0.9),
                 progress,
               ),
               child: Container(
