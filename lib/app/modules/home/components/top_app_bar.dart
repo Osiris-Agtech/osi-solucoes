@@ -20,8 +20,9 @@ class TopAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-          left: MediaQuery.of(context).size.width * 0.088,
-          top: MediaQuery.of(context).size.width * 0.024),
+        left: MediaQuery.of(context).size.width * 0.088,
+        // top: MediaQuery.of(context).size.width * 0.024
+      ),
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -41,8 +42,9 @@ class TopAppBar extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.013,
-                  top: MediaQuery.of(context).size.height * 0.002),
+                left: MediaQuery.of(context).size.width * 0.013,
+                // top: MediaQuery.of(context).size.height * 0.002
+              ),
               child: Text(
                 namePage,
                 style: const TextStyle(
@@ -54,11 +56,14 @@ class TopAppBar extends StatelessWidget {
             if (subtitle != null)
               Padding(
                 padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.003,
+                    // top: MediaQuery.of(context).size.height * 0.003,
                     left: MediaQuery.of(context).size.width * 0.013),
                 child: Text(
                   "subtitleTopAppBar".i18n(),
-                  style: const TextStyle(color: Colors.black54, fontSize: 13),
+                  style: const TextStyle(
+                      color: Color(0xff707070),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
                 ),
               )
             else
