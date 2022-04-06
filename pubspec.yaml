@@ -52,6 +52,7 @@ dependencies:
   shared_preferences: ^2.0.13
   rive: ^0.8.1
   ff_navigation_bar: ^0.1.5
+  dropdown_search: ^2.0.1
   
 
 

@@ -1,7 +1,8 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:osi_solucoes/app/constants.dart';
 import 'package:osi_solucoes/app/modules/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/app/modules/home/tabmodule/modulos/ajustes/ajustes_store.dart';
@@ -26,7 +27,9 @@ class AjustesPageState extends State<AjustesPage> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 18.0),
           child: FloatingActionButton.extended(
-            onPressed: () {},
+            onPressed: () {
+              Modular.to.navigate("/resultadoAjuste/");
+            },
             backgroundColor: kPrimaryColor,
             label: const Text(
               'Calcular',
@@ -40,8 +43,7 @@ class AjustesPageState extends State<AjustesPage> {
             SliverAppBar(
               pinned: true,
               backgroundColor: Colors.white,
-              toolbarHeight: 165,
-//              collapsedHeight: MediaQuery.of(context).size.height * 0.14,
+              toolbarHeight: 175,
               floating: true,
               automaticallyImplyLeading: true,
               forceElevated: true,
@@ -54,42 +56,62 @@ class AjustesPageState extends State<AjustesPage> {
                     namePage: "Ajustes",
                     subtitle: "Selecione e ajuste seu reservatório",
                   ),
-                  Expanded(flex: 1, child: Container()),
-                  Container(
-                    color: const Color(0xFFF8F8F6),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.width * 0.04,
-                        vertical: MediaQuery.of(context).size.height * 0.005),
-                    child: TextFormField(
-                        textAlignVertical: TextAlignVertical.top,
-                        textAlign: TextAlign.start,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.zero,
-                          isDense: true,
-                          border: InputBorder.none,
-                          prefixIcon: IconButton(
-                            padding: EdgeInsets.only(
-                                left:
-                                    MediaQuery.of(context).size.width * 0.034),
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.search,
-                              size: 20,
-                            ),
-                          ),
-                          labelText: "Buscar Reservatório...",
-                          labelStyle: const TextStyle(fontSize: 18),
-                          suffixIcon: IconButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.arrow_drop_down,
-                              size: 36,
-                            ),
-                            color: kPrimaryColor,
-                          ),
-                        )),
+                  const SizedBox(
+                    height: 30,
                   ),
+                  Container(
+                      height: 50,
+                      color: const Color(0xFFF8F8F6),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.04,
+                      ),
+                      child: DropdownSearch<String>(
+                        isFilteredOnline: true,
+                        mode: Mode.MENU,
+                        showSelectedItems: true,
+                        items: store.listaReservatorios,
+                        dropDownButton: const Icon(Icons.arrow_drop_down,
+                            size: 40, color: kPrimaryColor),
+                        dropdownSearchDecoration: InputDecoration(
+                          alignLabelWithHint: true,
+                          hintText: "Buscar Reservatório...",
+                          prefixIcon: SvgPicture.asset(
+                            "assets/icons/reservatorio_icon.svg",
+                          ),
+                        ),
+                        onChanged: print,
+                        showSearchBox: true,
+                      )
+                      // TextFormField(
+                      //     textAlignVertical: TextAlignVertical.center,
+                      //     textAlign: TextAlign.start,
+                      //     decoration: InputDecoration(
+                      //       contentPadding: EdgeInsets.zero,
+                      //       isDense: true,
+                      //       border: InputBorder.none,
+                      //       prefixIcon: IconButton(
+                      //         padding: EdgeInsets.only(
+                      //             left:
+                      //                 MediaQuery.of(context).size.width * 0.034),
+                      //         onPressed: () {},
+                      //         icon: const Icon(
+                      //           Icons.search,
+                      //           size: 25,
+                      //         ),
+                      //       ),
+                      //       hintText: "Buscar Reservatório...",
+                      //       hintStyle: const TextStyle(fontSize: 16),
+                      //       suffixIcon: IconButton(
+                      //         padding: EdgeInsets.zero,
+                      //         onPressed: () {},
+                      //         icon: const Icon(
+                      //           Icons.arrow_drop_down,
+                      //           size: 36,
+                      //         ),
+                      //         color: kPrimaryColor,
+                      //       ),
+                      //     )),
+                      ),
                 ],
               ),
             ),
@@ -343,13 +365,14 @@ class AjustesPageState extends State<AjustesPage> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.013,
+                            top: MediaQuery.of(context).size.height * 0.03,
                             left: MediaQuery.of(context).size.width * 0.015),
                         child: const Text(
                           'Opcional',
                           style: TextStyle(
                               fontSize: 16,
                               fontStyle: FontStyle.italic,
+                              color: Color(0xB2333333),
                               fontWeight: FontWeight.w600),
                         ),
                       ),

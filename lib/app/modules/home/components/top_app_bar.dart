@@ -20,8 +20,9 @@ class TopAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-          left: MediaQuery.of(context).size.width * 0.088,
-          top: MediaQuery.of(context).size.width * 0.024),
+        left: MediaQuery.of(context).size.width * 0.088,
+        // top: MediaQuery.of(context).size.width * 0.02
+      ),
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -41,8 +42,9 @@ class TopAppBar extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.013,
-                  top: MediaQuery.of(context).size.height * 0.002),
+                left: MediaQuery.of(context).size.width * 0.013,
+                // top: MediaQuery.of(context).size.height * 0.002
+              ),
               child: Text(
                 namePage,
                 style: const TextStyle(

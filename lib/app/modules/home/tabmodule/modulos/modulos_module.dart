@@ -19,7 +19,8 @@ class ModulosModule extends Module {
       '/',
       child: (_, args) => const ModulosPage(),
       children: [
-        ModuleRoute('/Ajustes', module: AjustesModule()),
+        ModuleRoute('/Ajustes',
+            module: AjustesModule(), transition: TransitionType.rightToLeft),
         ModuleRoute('/CadernoCampo', module: CadernoCampoModule()),
         ModuleRoute('/Receitas', module: ReceitasModule()),
         ModuleRoute('/Reservatorios', module: ReservatoriosModule()),

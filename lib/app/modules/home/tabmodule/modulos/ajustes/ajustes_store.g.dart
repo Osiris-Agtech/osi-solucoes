@@ -115,6 +115,21 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
+  final _$reservatorioAtom = Atom(name: '_AjustesStoreBase.reservatorio');
+
+  @override
+  TextEditingController get reservatorio {
+    _$reservatorioAtom.reportRead();
+    return super.reservatorio;
+  }
+
+  @override
+  set reservatorio(TextEditingController value) {
+    _$reservatorioAtom.reportWrite(value, super.reservatorio, () {
+      super.reservatorio = value;
+    });
+  }
+
   final _$_AjustesStoreBaseActionController =
       ActionController(name: '_AjustesStoreBase');
 
@@ -138,7 +153,8 @@ cEletricoAtual: ${cEletricoAtual},
 cEletricoDesejado: ${cEletricoDesejado},
 volumeAtual: ${volumeAtual},
 volumeDesejado: ${volumeDesejado},
-pH: ${pH}
+pH: ${pH},
+reservatorio: ${reservatorio}
     ''';
   }
 }
