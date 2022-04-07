@@ -27,6 +27,14 @@ abstract class _AjustesStoreBase with Store {
   TextEditingController pH = TextEditingController();
   @observable
   TextEditingController reservatorio = TextEditingController();
+  @observable
+  bool errorDropDown = false;
+
+  @action
+  setReservatorio(String value) => reservatorio.text = value;
+
+  @action
+  setErrorDropDown(bool value) => errorDropDown = value;
 
   List<String> listaReservatorios = [
     "UFMT",
