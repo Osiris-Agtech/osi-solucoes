@@ -48,8 +48,7 @@ class ResultadoajustePageState extends State<ResultadoajustePage>
               ];
             },
             body: Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.24),
+              padding: const EdgeInsets.only(top: 195),
               child: Column(
                 children: [
                   Expanded(
@@ -304,7 +303,7 @@ class TabSolucaoConcentrada extends StatelessWidget {
                           fontWeight: FontWeight.normal,
                           fontStyle: FontStyle.italic,
                           fontSize: 14,
-                          color: Color(0x54333333),
+                          color: Color(0xB2333333),
                         ),
                       ),
                       Text(
@@ -313,7 +312,7 @@ class TabSolucaoConcentrada extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic,
                           fontSize: 14,
-                          color: Color(0x54333333),
+                          color: Color(0xB2333333),
                         ),
                       ),
                     ],
@@ -423,8 +422,7 @@ class AppBarCustom extends StatelessWidget {
         handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
         sliver: SliverAppBar(
           backgroundColor: Colors.white,
-          toolbarHeight: MediaQuery.of(context).size.height * 0.17,
-          collapsedHeight: MediaQuery.of(context).size.height * 0.17,
+          toolbarHeight: 140,
           pinned: true,
           forceElevated: true,
           elevation: 1,
@@ -436,7 +434,7 @@ class AppBarCustom extends StatelessWidget {
               controller: tabController,
               unselectedLabelColor: const Color(0xFF929292),
               unselectedLabelStyle:
-                  const TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
+                  const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
               labelStyle:
                   const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               labelColor: kPrimaryColor,
