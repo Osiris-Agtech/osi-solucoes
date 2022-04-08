@@ -14,6 +14,6 @@ class AjustesModule extends Module {
     ChildRoute('/', child: (_, args) => const AjustesPage()),
     ModuleRoute('/resultadoAjuste',
         module: ResultadoajusteModule(),
-        transition: TransitionType.rightToLeft),
+        transition: TransitionType.leftToRight),
   ];
 }

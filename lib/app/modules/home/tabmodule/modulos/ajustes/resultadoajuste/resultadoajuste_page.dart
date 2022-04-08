@@ -37,7 +37,7 @@ class ResultadoajustePageState extends State<ResultadoajustePage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        primary: false,
+        primary: true,
         body: DefaultTabController(
           length: tabController.length,
           child: NestedScrollView(

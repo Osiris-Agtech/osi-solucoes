@@ -130,21 +130,6 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$errorDropDownAtom = Atom(name: '_AjustesStoreBase.errorDropDown');
-
-  @override
-  bool get errorDropDown {
-    _$errorDropDownAtom.reportRead();
-    return super.errorDropDown;
-  }
-
-  @override
-  set errorDropDown(bool value) {
-    _$errorDropDownAtom.reportWrite(value, super.errorDropDown, () {
-      super.errorDropDown = value;
-    });
-  }
-
   final _$_AjustesStoreBaseActionController =
       ActionController(name: '_AjustesStoreBase');
 
@@ -171,17 +156,6 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
   }
 
   @override
-  dynamic setErrorDropDown(bool value) {
-    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.setErrorDropDown');
-    try {
-      return super.setErrorDropDown(value);
-    } finally {
-      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 selectedItem: ${selectedItem},
@@ -191,8 +165,7 @@ cEletricoDesejado: ${cEletricoDesejado},
 volumeAtual: ${volumeAtual},
 volumeDesejado: ${volumeDesejado},
 pH: ${pH},
-reservatorio: ${reservatorio},
-errorDropDown: ${errorDropDown}
+reservatorio: ${reservatorio}
     ''';
   }
 }

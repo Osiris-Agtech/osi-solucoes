@@ -19,8 +19,21 @@ class AjustesPageState extends State<AjustesPage> {
   final AjustesStore store = Modular.get();
   final formKey = GlobalKey<FormState>();
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
+
+  @override
+  void dispose() {
+    super.dispose();
+    Modular.dispose<AjustesStore>();
+  }
+
   @override
   Widget build(BuildContext context) {
+    const snackBar = SnackBar(
+        backgroundColor: Colors.white,
+        content: Text(
+          "Campo 'Buscar Reservatório...' obrigatório!",
+          style: TextStyle(color: kErrorColor),
+        ));
     return SafeArea(
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -30,11 +43,8 @@ class AjustesPageState extends State<AjustesPage> {
           child: FloatingActionButton.extended(
             onPressed: () {
               store.reservatorio.text.isNotEmpty
-                  ? {
-                      store.setErrorDropDown(false),
-                      Modular.to.pushNamed("/resultadoAjuste/")
-                    }
-                  : store.setErrorDropDown(true);
+                  ? {Modular.to.navigate("/resultadoAjuste/")}
+                  : ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
             backgroundColor: kPrimaryColor,
             label: const Text(
@@ -64,88 +74,47 @@ class AjustesPageState extends State<AjustesPage> {
                       namePage: "Ajustes",
                       subtitle: "Selecione e ajuste seu reservatório",
                     ),
-                    Observer(builder: (_) {
-                      return SizedBox(
-                        height: store.errorDropDown ? 20 : 30,
-                      );
-                    }),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     Container(
                         height: 50,
                         color: const Color(0xFFF8F8F6),
                         padding: EdgeInsets.symmetric(
                           horizontal: MediaQuery.of(context).size.width * 0.04,
                         ),
-                        child: Observer(builder: (_) {
-                          return DropdownSearch<String>(
-                            key: dropDownKey,
-                            autoValidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: (data) =>
-                                data == null ? "Campo Necessário" : null,
-                            mode: Mode.MENU,
-                            showSelectedItems: true,
-                            items: store.listaReservatorios,
-                            dropDownButton: const Icon(
-                              Icons.arrow_drop_down,
-                              size: 30,
-                              color: kPrimaryColor,
-                            ),
-                            dropdownSearchDecoration: InputDecoration(
-                              border: InputBorder.none,
-                              prefixIconConstraints: const BoxConstraints(
-                                  maxHeight: 50, maxWidth: 50),
-                              contentPadding: const EdgeInsets.only(top: 15),
-                              alignLabelWithHint: true,
-                              hintText: "Buscar Reservatório...",
-                              errorText: store.errorDropDown
-                                  ? "Escolha um reservatório"
-                                  : null,
-                              prefixIcon: Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 5.0, left: 10),
-                                child: SvgPicture.asset(
-                                  "assets/icons/reservatorio_icon.svg",
-                                ),
+                        child: DropdownSearch<String>(
+                          key: dropDownKey,
+                          mode: Mode.MENU,
+                          showSelectedItems: true,
+                          items: store.listaReservatorios,
+                          dropDownButton: const Icon(
+                            Icons.arrow_drop_down,
+                            size: 30,
+                            color: kPrimaryColor,
+                          ),
+                          dropdownSearchDecoration: InputDecoration(
+                            border: InputBorder.none,
+                            prefixIconConstraints: const BoxConstraints(
+                                maxHeight: 50, maxWidth: 50),
+                            contentPadding: const EdgeInsets.only(top: 15),
+                            alignLabelWithHint: true,
+                            hintText: "Buscar Reservatório...",
+                            prefixIcon: Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 5.0, left: 10),
+                              child: SvgPicture.asset(
+                                "assets/icons/reservatorio_icon.svg",
                               ),
                             ),
-                            onChanged: (data) {
-                              print;
-                              store.setReservatorio(data!);
-                            },
-                            showSearchBox: true,
-                            showAsSuffixIcons: true,
-                          );
-                        })
-                        // TextFormField(
-                        //     textAlignVertical: TextAlignVertical.center,
-                        //     textAlign: TextAlign.start,
-                        //     decoration: InputDecoration(
-                        //       contentPadding: EdgeInsets.zero,
-                        //       isDense: true,
-                        //       border: InputBorder.none,
-                        //       prefixIcon: IconButton(
-                        //         padding: EdgeInsets.only(
-                        //             left:
-                        //                 MediaQuery.of(context).size.width * 0.034),
-                        //         onPressed: () {},
-                        //         icon: const Icon(
-                        //           Icons.search,
-                        //           size: 25,
-                        //         ),
-                        //       ),
-                        //       hintText: "Buscar Reservatório...",
-                        //       hintStyle: const TextStyle(fontSize: 16),
-                        //       suffixIcon: IconButton(
-                        //         padding: EdgeInsets.zero,
-                        //         onPressed: () {},
-                        //         icon: const Icon(
-                        //           Icons.arrow_drop_down,
-                        //           size: 36,
-                        //         ),
-                        //         color: kPrimaryColor,
-                        //       ),
-                        //     )),
-                        ),
+                          ),
+                          onChanged: (data) {
+                            print;
+                            store.setReservatorio(data!);
+                          },
+                          showSearchBox: true,
+                          showAsSuffixIcons: true,
+                        )),
                   ],
                 ),
               ),
