@@ -74,29 +74,19 @@ class ResultadoajustePageState extends State<ResultadoajustePage>
 }
 
 showConfirmDialog(BuildContext context) {
-  showDialog(
-    barrierDismissible: true,
-    useSafeArea: false,
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25), topRight: Radius.circular(25)),
-        ),
-        alignment: Alignment.bottomCenter,
-        contentPadding: EdgeInsets.zero,
-        insetPadding: EdgeInsets.zero,
-        content: Container(
-            height: MediaQuery.of(context).size.height * 0.35,
+  showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+            height: MediaQuery.of(context).size.height * 0.5,
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(
               color: Colors.white,
             ),
             margin: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height * 0.040,
-              left: MediaQuery.of(context).size.width * 0.08,
-              right: MediaQuery.of(context).size.width * 0.08,
+              top: 33,
+              left: 40,
+              right: 40,
             ),
             child: Column(
               children: [
@@ -124,73 +114,205 @@ showConfirmDialog(BuildContext context) {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.033,
-                  ),
-                  child: const Text(
-                    'Caso registre, o ajuste ficará salvo no caderno de campo',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.normal,
-                        color: Color(0xB2333333)),
+                Expanded(
+                  child: Container(),
+                  flex: 3,
+                ),
+                const Text(
+                  'Caso registre, o ajuste ficará salvo no caderno de campo',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xB2333333)),
+                ),
+                Expanded(
+                  child: Container(),
+                  flex: 4,
+                ),
+                Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * .69,
+                    height: 30,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(primary: kPrimaryColor),
+                      child: const Text(
+                        "Sim",
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w600),
+                      ),
+                      onPressed: () async {
+                        showDoneAnimation(context);
+                        await Future.delayed(
+                            const Duration(milliseconds: 1400));
+                        Navigator.pop(context);
+                        Modular.to.popUntil(ModalRoute.withName('/Home'));
+                        Modular.to.pushReplacementNamed("/Tab/Ajustes/");
+                      },
+                    ),
                   ),
                 ),
                 Padding(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * .03,
-                        bottom: MediaQuery.of(context).size.width * 0.01),
-                    child: Center(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * .69,
-                        height: 30,
-                        child: ElevatedButton(
-                          style:
-                              ElevatedButton.styleFrom(primary: kPrimaryColor),
-                          child: const Text(
-                            "Sim",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w600),
-                          ),
-                          onPressed: () async {
-                            showDoneAnimation(context);
-                            await Future.delayed(
-                                const Duration(milliseconds: 1400));
-                            Navigator.pop(context);
-                            Modular.to.popUntil(ModalRoute.withName('/Home'));
-                            Modular.to.pushReplacementNamed("/Tab/Ajustes/");
-                          },
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * .001,
+                      bottom: MediaQuery.of(context).size.width * 0.01),
+                  child: Center(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * .69,
+                      height: 30,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          "Não",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xff767676)),
                         ),
                       ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * .001,
-                        bottom: MediaQuery.of(context).size.width * 0.01),
-                    child: Center(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * .69,
-                        height: 30,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text(
-                            "Não",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xff767676)),
-                          ),
-                        ),
-                      ),
-                    )),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(),
+                  flex: 5,
+                ),
               ],
-            )),
-      );
-    },
-  );
+            ));
+      });
+
+  // showDialog(
+  //   barrierDismissible: true,
+  //   useSafeArea: false,
+  //   context: context,
+  //   builder: (BuildContext context) {
+  //     return AlertDialog(
+  //       shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.only(
+  //             topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+  //       ),
+  //       alignment: Alignment.bottomCenter,
+  //       contentPadding: EdgeInsets.zero,
+  //       insetPadding: EdgeInsets.zero,
+  //       content: Container(
+  //           height: MediaQuery.of(context).size.height * 0.4,
+  //           width: MediaQuery.of(context).size.width,
+  //           decoration: const BoxDecoration(
+  //             color: Colors.white,
+  //           ),
+  //           margin: EdgeInsets.only(
+  //             top: MediaQuery.of(context).size.height * 0.040,
+  //             left: MediaQuery.of(context).size.width * 0.08,
+  //             right: MediaQuery.of(context).size.width * 0.08,
+  //           ),
+  //           child: Column(
+  //             children: [
+  //               RichText(
+  //                 textAlign: TextAlign.center,
+  //                 text: const TextSpan(
+  //                   text: 'Deseja ',
+  //                   style: TextStyle(
+  //                       fontSize: 28,
+  //                       fontWeight: FontWeight.bold,
+  //                       color: Colors.black),
+  //                   children: <TextSpan>[
+  //                     TextSpan(
+  //                         text: 'registrar',
+  //                         style: TextStyle(
+  //                             fontWeight: FontWeight.bold,
+  //                             color: kPrimaryColor)),
+  //                     TextSpan(
+  //                       text: ' o ajuste?',
+  //                       style: TextStyle(
+  //                           fontSize: 28,
+  //                           fontWeight: FontWeight.bold,
+  //                           color: Colors.black),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //               Expanded(
+  //                 child: Container(),
+  //                 flex: 1,
+  //               ),
+  //               Padding(
+  //                 padding: EdgeInsets.only(
+  //                   top: MediaQuery.of(context).size.height * 0.033,
+  //                 ),
+  //                 child: const Text(
+  //                   'Caso registre, o ajuste ficará salvo no caderno de campo',
+  //                   textAlign: TextAlign.center,
+  //                   style: TextStyle(
+  //                       fontSize: 18,
+  //                       fontWeight: FontWeight.normal,
+  //                       color: Color(0xB2333333)),
+  //                 ),
+  //               ),
+  //               Expanded(
+  //                 child: Container(),
+  //                 flex: 1,
+  //               ),
+  //               Padding(
+  //                   padding: EdgeInsets.only(
+  //                       // top: MediaQuery.of(context).size.height * .03,
+  //                       bottom: MediaQuery.of(context).size.width * 0.01),
+  //                   child: Center(
+  //                     child: SizedBox(
+  //                       width: MediaQuery.of(context).size.width * .69,
+  //                       height: 30,
+  //                       child: ElevatedButton(
+  //                         style:
+  //                             ElevatedButton.styleFrom(primary: kPrimaryColor),
+  //                         child: const Text(
+  //                           "Sim",
+  //                           style: TextStyle(
+  //                               fontSize: 14, fontWeight: FontWeight.w600),
+  //                         ),
+  //                         onPressed: () async {
+  //                           showDoneAnimation(context);
+  //                           await Future.delayed(
+  //                               const Duration(milliseconds: 1400));
+  //                           Navigator.pop(context);
+  //                           Modular.to.popUntil(ModalRoute.withName('/Home'));
+  //                           Modular.to.pushReplacementNamed("/Tab/Ajustes/");
+  //                         },
+  //                       ),
+  //                     ),
+  //                   )),
+  //               Padding(
+  //                 padding: EdgeInsets.only(
+  //                     top: MediaQuery.of(context).size.height * .001,
+  //                     bottom: MediaQuery.of(context).size.width * 0.01),
+  //                 child: Center(
+  //                   child: SizedBox(
+  //                     width: MediaQuery.of(context).size.width * .69,
+  //                     height: 30,
+  //                     child: TextButton(
+  //                       onPressed: () {
+  //                         Navigator.of(context).pop();
+  //                       },
+  //                       child: const Text(
+  //                         "Não",
+  //                         style: TextStyle(
+  //                             fontSize: 14,
+  //                             fontWeight: FontWeight.w600,
+  //                             color: Color(0xff767676)),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //               Expanded(
+  //                 child: Container(),
+  //                 flex: 5,
+  //               ),
+  //             ],
+  //           )),
+  //     );
+  //   },
+  //);
 }
 
 showDoneAnimation(BuildContext context) {
@@ -524,7 +646,7 @@ class TabFertilizantes extends StatelessWidget {
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.009),
               child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.4,
+                height: MediaQuery.of(context).size.height * 0.38,
                 child: Card(
                   color: const Color(0xffF5F5F5),
                   child: Scrollbar(
