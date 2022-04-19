@@ -35,6 +35,7 @@ class ResultadoajustePageState extends State<ResultadoajustePage>
 
   @override
   Widget build(BuildContext context) {
+    print(MediaQuery.of(context).size.height);
     return SafeArea(
       child: Scaffold(
         primary: true,
@@ -48,7 +49,7 @@ class ResultadoajustePageState extends State<ResultadoajustePage>
               ];
             },
             body: Padding(
-              padding: const EdgeInsets.only(top: 195),
+              padding: const EdgeInsets.only(top: 175),
               child: Column(
                 children: [
                   Expanded(
@@ -76,6 +77,11 @@ class ResultadoajustePageState extends State<ResultadoajustePage>
 showConfirmDialog(BuildContext context) {
   showModalBottomSheet(
       context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
       builder: (BuildContext context) {
         return Container(
             height: MediaQuery.of(context).size.height * 0.5,
@@ -83,7 +89,7 @@ showConfirmDialog(BuildContext context) {
             decoration: const BoxDecoration(
               color: Colors.white,
             ),
-            margin: EdgeInsets.only(
+            padding: const EdgeInsets.only(
               top: 33,
               left: 40,
               right: 40,
@@ -544,7 +550,7 @@ class AppBarCustom extends StatelessWidget {
         handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
         sliver: SliverAppBar(
           backgroundColor: Colors.white,
-          toolbarHeight: 140,
+          toolbarHeight: 120,
           pinned: true,
           forceElevated: true,
           elevation: 1,
@@ -642,62 +648,62 @@ class TabFertilizantes extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
+          Flexible(
+            child: Padding(
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.009),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.38,
-                child: Card(
-                  color: const Color(0xffF5F5F5),
-                  child: Scrollbar(
-                    isAlwaysShown: true,
-                    controller: scrollController1,
-                    radius: const Radius.circular(12),
-                    child: ListView.builder(
-                      primary: false,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.width * 0.089,
-                        vertical: MediaQuery.of(context).size.height * 0.018,
-                      ),
-                      physics: const BouncingScrollPhysics(),
-                      controller: scrollController1,
-                      shrinkWrap: true,
-                      itemCount: 20,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              top: index != 0
-                                  ? MediaQuery.of(context).size.height * 0.018
-                                  : 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                  flex: 6,
-                                  child: Text(
-                                    "Fertilizante #$index",
-                                  )),
-                              Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "${27 * index}",
-                                    textAlign: TextAlign.end,
-                                  )),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.05),
-                                child: const Text("g"),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+              child: Card(
+                color: const Color(0xffF5F5F5),
+                child: Scrollbar(
+                  isAlwaysShown: true,
+                  controller: scrollController1,
+                  radius: const Radius.circular(12),
+                  child: ListView.builder(
+                    primary: false,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.089,
+                      vertical: MediaQuery.of(context).size.height * 0.018,
                     ),
+                    physics: const BouncingScrollPhysics(),
+                    controller: scrollController1,
+                    shrinkWrap: true,
+                    itemCount: 2,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            top: index != 0
+                                ? MediaQuery.of(context).size.height * 0.018
+                                : 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                                flex: 5,
+                                child: Text(
+                                  "Fertilizante #$index",
+                                )),
+                            Expanded(
+                                flex: 1,
+                                child: Text(
+                                  "${27 * index}",
+                                  textAlign: TextAlign.end,
+                                )),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.05),
+                              child: const Text("g"),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
-              )),
+              ),
+            ),
+          ),
         ],
       ),
     );
