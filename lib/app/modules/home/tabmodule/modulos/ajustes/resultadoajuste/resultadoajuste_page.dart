@@ -83,7 +83,7 @@ showConfirmDialog(BuildContext context) {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       builder: (BuildContext context) {
         return Container(
-            height: MediaQuery.of(context).size.height * 0.5,
+            height: MediaQuery.of(context).size.height * 0.45,
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -514,12 +514,13 @@ class ButtonCompleted extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
         padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * .03,
-            bottom: MediaQuery.of(context).size.width * 0.043),
+          top: 15, //MediaQuery.of(context).size.height * .03,
+          bottom: 25, //MediaQuery.of(context).size.width * 0.043,
+        ),
         child: Center(
           child: SizedBox(
             width: MediaQuery.of(context).size.width * .69,
-            height: 50,
+            height: 40,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(primary: kPrimaryColor),
               child: const Text(
@@ -666,7 +667,7 @@ class TabFertilizantes extends StatelessWidget {
                     physics: const BouncingScrollPhysics(),
                     controller: scrollController1,
                     shrinkWrap: true,
-                    itemCount: 2,
+                    itemCount: 8,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.only(
