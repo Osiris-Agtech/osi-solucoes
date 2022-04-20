@@ -323,6 +323,7 @@ showConfirmDialog(BuildContext context) {
 showDoneAnimation(BuildContext context) {
   showDialog(
     barrierDismissible: false,
+    barrierColor: Colors.white,
     context: context,
     builder: (BuildContext context) {
       return const Center(
