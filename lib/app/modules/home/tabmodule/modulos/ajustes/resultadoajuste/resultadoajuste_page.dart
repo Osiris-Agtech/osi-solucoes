@@ -35,7 +35,6 @@ class ResultadoajustePageState extends State<ResultadoajustePage>
 
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.height);
     return SafeArea(
       child: Scaffold(
         primary: true,
@@ -160,7 +159,7 @@ showConfirmDialog(BuildContext context) {
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * .001,
+                      top: 10,
                       bottom: MediaQuery.of(context).size.width * 0.01),
                   child: Center(
                     child: SizedBox(
@@ -183,7 +182,7 @@ showConfirmDialog(BuildContext context) {
                 ),
                 Expanded(
                   child: Container(),
-                  flex: 5,
+                  flex: 4,
                 ),
               ],
             ));
@@ -520,12 +519,12 @@ class ButtonCompleted extends StatelessWidget {
         child: Center(
           child: SizedBox(
             width: MediaQuery.of(context).size.width * .69,
-            height: 30,
+            height: 50,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(primary: kPrimaryColor),
               child: const Text(
                 "Concluir",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               onPressed: () {
                 showConfirmDialog(context);
