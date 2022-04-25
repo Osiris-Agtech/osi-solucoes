@@ -514,7 +514,7 @@ class ButtonCompleted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           top: 15, //MediaQuery.of(context).size.height * .03,
           bottom: 25, //MediaQuery.of(context).size.width * 0.043,
         ),
