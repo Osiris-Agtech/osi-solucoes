@@ -28,8 +28,7 @@ abstract class _LoginStoreBase with Store {
   @action
   vertificaLogin() async {
     try {
-      var response = await loginRepository.login(email.text, senha.text, "");
-      print(response);
+      await loginRepository.login(email.text, senha.text, "");
       return "loginValido".i18n();
     } catch (e) {
       return "loginInvalido".i18n();

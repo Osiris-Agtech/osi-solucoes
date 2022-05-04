@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:graphql/client.dart';
 import 'package:osi_solucoes/app/models/usuario/usuario_model.dart';
 
@@ -5,7 +7,7 @@ import 'login_repository_interface.dart';
 
 class LoginRepository implements ILoginRepository {
   final HttpLink _httpLink = HttpLink(
-    "http://ec8b-2804-d59-4228-b100-64c4-f7a4-ef61-50ae.ngrok.io",
+    "http://7647-177-202-190-226.ngrok.io",
   );
 
   final _authLink = AuthLink(
@@ -116,11 +118,12 @@ class LoginRepository implements ILoginRepository {
     final QueryResult result = await client.query(options);
 
     if (!result.hasException) {
-      print(result.data!['usuarios']);
-      Usuario usuario = result.data!['usuarios'].map((item) {
-        print(item);
-        return Usuario.fromJson(item);
-      });
+      List? usuario = result.data?['usuarios']
+          ?.map((item) => Usuario.fromJson(item))
+          .toList();
+      if (usuario == null || usuario.isEmpty) {
+        throw Exception("Usuário não encontrado");
+      }
       return usuario;
     } else {
       throw Exception(result.exception);
