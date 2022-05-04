@@ -16,6 +16,7 @@ Future<void> main() async {
     // final data = {
     //   "login": {"status": 200, "token": "qwerty123321"}
     // };
+    // ignore: unused_local_variable
     const String readRepositories = r'''
       query LoginByEmail($email: String!) {
         login(email: $email) {
@@ -26,7 +27,7 @@ Future<void> main() async {
     ''';
 
     Future<Usuario> data() async {
-     final Usuario usuario = Usuario(nome: "Gustavo");
+      final Usuario usuario = Usuario(nome: "Gustavo");
       return usuario;
     }
 

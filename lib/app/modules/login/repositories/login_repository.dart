@@ -13,12 +13,14 @@ class LoginRepository implements ILoginRepository {
 
   @override
   Future<Usuario> buscaUser(String email) async {
+    // ignore: unused_local_variable
     Usuario user = Usuario();
     // return "sucesso";
     // return "sucesso";
-    
+
     AuthLink _authLink =
         AuthLink(getToken: () async => "authController.usuario.token");
+    // ignore: unused_local_variable
     Link _link = _authLink.concat(_authLink);
 
     const String readRepositories = r'''

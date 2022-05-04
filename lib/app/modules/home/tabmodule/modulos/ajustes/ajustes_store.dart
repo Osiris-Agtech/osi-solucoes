@@ -25,4 +25,15 @@ abstract class _AjustesStoreBase with Store {
   TextEditingController volumeDesejado = TextEditingController();
   @observable
   TextEditingController pH = TextEditingController();
+  @observable
+  TextEditingController reservatorio = TextEditingController();
+
+  @action
+  setReservatorio(String value) => reservatorio.text = value;
+
+  List<String> listaReservatorios = [
+    "UFMT",
+    "IC-UFMT",
+    "Osiris",
+  ];
 }
