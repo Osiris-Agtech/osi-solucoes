@@ -58,8 +58,8 @@ mixin _$LoginStore on _LoginStoreBase, Store {
       AsyncAction('_LoginStoreBase.vertificaLogin');
 
   @override
-  Future vertificaLogin(String email) {
-    return _$vertificaLoginAsyncAction.run(() => super.vertificaLogin(email));
+  Future vertificaLogin() {
+    return _$vertificaLoginAsyncAction.run(() => super.vertificaLogin());
   }
 
   final _$testaUserAsyncAction = AsyncAction('_LoginStoreBase.testaUser');

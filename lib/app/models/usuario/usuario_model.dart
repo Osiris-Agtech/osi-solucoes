@@ -1,4 +1,8 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:json_annotation/json_annotation.dart';
+import 'package:osi_solucoes/app/models/conectaConta/conectaConta_model.dart';
+import 'package:osi_solucoes/app/models/pessoa/pessoa_model.dart';
 
 part 'usuario_model.g.dart';
 
@@ -9,34 +13,38 @@ class Usuario {
   @JsonKey(required: false, disallowNullValue: false)
   String? nome;
   @JsonKey(required: false, disallowNullValue: false)
-  String? sobrenome;
-  @JsonKey(required: false, disallowNullValue: false)
-  String? logradouro;
-  @JsonKey(required: false, disallowNullValue: false)
-  String? complemento;
-  @JsonKey(required: false, disallowNullValue: false)
-  String? bairro;
-  @JsonKey(required: false, disallowNullValue: false)
-  String? cidade;
-
-  @JsonKey(required: false, disallowNullValue: false)
-  String? estado;
-  @JsonKey(required: false, disallowNullValue: false)
-  String? pais;
-  @JsonKey(required: false, disallowNullValue: false)
   String? email;
+  @JsonKey(required: false, disallowNullValue: false)
+  String? senha;
+  @JsonKey(required: false, disallowNullValue: false)
+  String? cod_acesso;
+  @JsonKey(required: false, disallowNullValue: false)
+  bool? acesso_externo;
+  @JsonKey(required: false, disallowNullValue: false)
+  bool? ativo;
+  @JsonKey(required: false, disallowNullValue: false)
+  DateTime? created_at;
+  @JsonKey(required: false, disallowNullValue: false)
+  Pessoa? pessoa;
+  // @JsonKey(required: false, disallowNullValue: false)
+  // List<Log>? logs;
+  // @JsonKey(required: false, disallowNullValue: false)
+  // List<Lotes_Atividades>? atividades;
+  @JsonKey(required: false, disallowNullValue: false)
+  List<ConectaConta>? contas;
 
-  Usuario(
-      {this.id,
-      this.nome,
-      this.sobrenome,
-      this.logradouro,
-      this.complemento,
-      this.bairro,
-      this.cidade,
-      this.estado,
-      this.pais,
-      this.email});
+  Usuario({
+    this.id,
+    this.nome,
+    this.email,
+    this.senha,
+    this.cod_acesso,
+    this.acesso_externo,
+    this.ativo,
+    this.created_at,
+    this.pessoa,
+    this.contas,
+  });
 
   factory Usuario.fromJson(Map<String, dynamic> json) =>
       _$UsuarioFromJson(json);

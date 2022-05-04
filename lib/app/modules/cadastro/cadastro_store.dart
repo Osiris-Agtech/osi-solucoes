@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:localization/localization.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/app/models/usuario_model.dart';
+import 'package:osi_solucoes/app/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/app/modules/cadastro/repositories/cadastro_repository.dart';
 import 'package:search_cep/search_cep.dart';
 
@@ -132,18 +132,18 @@ abstract class _CadastroStoreBase with Store {
   @action
   cadastraUser() async {
     try {
-      Usuario user = Usuario(
-        nome: nome.text,
-        sobrenome: sobrenome.text,
-        logradouro: logradouro.text,
-        complemento: complemento.text,
-        bairro: bairro.text,
-        cidade: cidade.text,
-        estado: estado.text,
-        pais: pais.text,
-      );
+      // Usuario user = Usuario(
+      //   nome: nome.text,
+      //   sobrenome: sobrenome.text,
+      //   logradouro: logradouro.text,
+      //   complemento: complemento.text,
+      //   bairro: bairro.text,
+      //   cidade: cidade.text,
+      //   estado: estado.text,
+      //   pais: pais.text,
+      // );
 
-      String res = await repository.cadastraUser(user);
+      // String res = await repository.cadastraUser(user);
 
       return "sucesso";
     } catch (e) {

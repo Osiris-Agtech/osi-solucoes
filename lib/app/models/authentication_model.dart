@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:osi_solucoes/app/models/usuario_model.dart';
+import 'package:osi_solucoes/app/models/usuario/usuario_model.dart';
 
 part 'authentication_model.g.dart';
 

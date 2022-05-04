@@ -1,4 +1,4 @@
-import 'package:osi_solucoes/app/models/usuario_model.dart';
+import 'package:osi_solucoes/app/models/usuario/usuario_model.dart';
 
 import 'cadastro_repository_interface.dart';
 

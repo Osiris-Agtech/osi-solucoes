@@ -1,25 +1,26 @@
 import 'package:graphql/client.dart';
-import 'package:osi_solucoes/app/models/usuario_model.dart';
+import 'package:osi_solucoes/app/models/usuario/usuario_model.dart';
 
 import 'login_repository_interface.dart';
 
 class LoginRepository implements ILoginRepository {
-  final GraphQLClient client = GraphQLClient(
-    cache: GraphQLCache(),
-    link: HttpLink(""),
+  final HttpLink _httpLink = HttpLink(
+    "http://ec8b-2804-d59-4228-b100-64c4-f7a4-ef61-50ae.ngrok.io",
   );
 
+  final _authLink = AuthLink(
+    getToken: () async => 'Bearer \$YOUR_PERSONAL_ACCESS_TOKEN',
+  );
   // LoginRepository(this.client);
 
   @override
   Future<Usuario> buscaUser(String email) async {
-    Usuario user = Usuario();
-    // return "sucesso";
-    // return "sucesso";
-    
-    AuthLink _authLink =
-        AuthLink(getToken: () async => "authController.usuario.token");
-    Link _link = _authLink.concat(_authLink);
+    Link _link = _authLink.concat(_httpLink);
+
+    final GraphQLClient client = GraphQLClient(
+      cache: GraphQLCache(),
+      link: _link,
+    );
 
     const String readRepositories = r'''
       query BuscarCulturaByUser($userID: Int!) {
@@ -44,6 +45,83 @@ class LoginRepository implements ILoginRepository {
     if (!result.hasException) {
       return result.data!['login'].map((item) => Usuario.fromJson(item))
           as Usuario;
+    } else {
+      throw Exception(result.exception);
+    }
+  }
+
+  @override
+  Future login(String email, String senha, String codigo) async {
+    Link _link = _authLink.concat(_httpLink);
+
+    final GraphQLClient client = GraphQLClient(
+      cache: GraphQLCache(),
+      link: _link,
+    );
+
+    const String readRepositories = r'''
+      query BuscarUsuarios($senha: String!, $email: String, $codigo: String) {
+        usuarios(where: {
+          OR: [
+            {
+              AND: [
+                {
+                  email: {
+                    equals: $email
+                  },
+                  senha: {
+                    equals: $senha
+                  }
+                }
+              ]
+            },
+            {
+              AND: [
+                {
+                  cod_acesso: {
+                    equals: $codigo
+                  },
+                  senha: {
+                    equals: $senha
+                  }
+                }
+              ]
+            }
+          ] 
+        }) {
+          nome
+            contas {
+              conta {
+                nome
+              }
+              cargo {
+                cargo
+              }
+            }
+        }
+      }
+    ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'email': email,
+        'codigo': codigo,
+        'senha': senha,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      print(result.data!['usuarios']);
+      Usuario usuario = result.data!['usuarios'].map((item) {
+        print(item);
+        return Usuario.fromJson(item);
+      });
+      return usuario;
     } else {
       throw Exception(result.exception);
     }

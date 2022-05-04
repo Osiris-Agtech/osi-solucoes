@@ -91,8 +91,8 @@ class LoginPageState extends State<LoginPage> {
                               onPressed: () async {
                                 if (formKey.currentState!.validate()) {
                                   showCircularProgressIndicator(context);
-                                  String response = await store
-                                      .vertificaLogin(store.email.text);
+                                  String response =
+                                      await store.vertificaLogin();
                                   await Future.delayed(
                                       const Duration(seconds: 2));
                                   if (response == "sucesso") {
@@ -240,8 +240,7 @@ class LoginPageState extends State<LoginPage> {
                   formKey.currentState!.validate();
                   if (formKey.currentState!.validate()) {
                     showCircularProgressIndicator(context);
-                    String response =
-                        await store.vertificaLogin(store.email.text);
+                    String response = await store.vertificaLogin();
                     await Future.delayed(const Duration(seconds: 2));
                     if (response == "sucesso") {
                       Modular.to.pushReplacementNamed("/Home/");
