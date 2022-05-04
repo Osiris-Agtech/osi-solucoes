@@ -24,19 +24,23 @@ class ModulosPageState extends State<ModulosPage> {
       bottomNavigationBar: Observer(
         builder: (_) {
           return BottomNavigationBar(
-            selectedLabelStyle:  const TextStyle(
-                                        color: Colors.black, fontSize: 10,
-                                        overflow: TextOverflow.clip,leadingDistribution: TextLeadingDistribution.even,
-                                      ),
-            unselectedLabelStyle: const TextStyle(fontSize: 8, overflow: TextOverflow.ellipsis, 
-            leadingDistribution: TextLeadingDistribution.proportional),
+            selectedLabelStyle: const TextStyle(
+              color: Colors.black,
+              fontSize: 10,
+              overflow: TextOverflow.clip,
+              leadingDistribution: TextLeadingDistribution.even,
+            ),
+            unselectedLabelStyle: const TextStyle(
+                fontSize: 8,
+                overflow: TextOverflow.ellipsis,
+                leadingDistribution: TextLeadingDistribution.proportional),
             fixedColor: Colors.black,
             type: BottomNavigationBarType.fixed,
             showSelectedLabels: true,
             onTap: (id) {
               store.pageviewController = id;
               if (id == 0) {
-                Modular.to.navigate('/Tab/Setores/');
+                Modular.to.navigate('/Tab/AreaCultivo/');
               } else if (id == 1) {
                 Modular.to.navigate('/Tab/Reservatorios/');
               } else if (id == 2) {
@@ -54,31 +58,31 @@ class ModulosPageState extends State<ModulosPage> {
                   Icons.layers_outlined,
                   color: kPrimaryColor,
                 ),
-                tooltip: "Setores",
+                tooltip: "Área de Cultivo",
                 label: 'card5Home'.i18n(),
               ),
-               BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: const Icon(
                   Icons.format_align_justify_outlined,
                   color: kPrimaryColor,
                 ),
                 label: 'card6Home'.i18n(),
               ),
-               BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: const Icon(
                   Icons.filter_none,
                   color: kPrimaryColor,
                 ),
                 label: 'card7Home'.i18n(),
               ),
-               BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: const Icon(
                   Icons.drive_file_rename_outline_sharp,
                   color: kPrimaryColor,
                 ),
                 label: 'card8Home'.i18n(),
               ),
-               BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: const Icon(
                   Icons.history_edu_outlined,
                   color: kPrimaryColor,

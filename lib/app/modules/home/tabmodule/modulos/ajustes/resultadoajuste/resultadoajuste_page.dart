@@ -37,7 +37,7 @@ class ResultadoajustePageState extends State<ResultadoajustePage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        primary: false,
+        primary: true,
         body: DefaultTabController(
           length: tabController.length,
           child: NestedScrollView(
@@ -48,8 +48,7 @@ class ResultadoajustePageState extends State<ResultadoajustePage>
               ];
             },
             body: Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.24),
+              padding: const EdgeInsets.only(top: 175),
               child: Column(
                 children: [
                   Expanded(
@@ -75,29 +74,24 @@ class ResultadoajustePageState extends State<ResultadoajustePage>
 }
 
 showConfirmDialog(BuildContext context) {
-  showDialog(
-    barrierDismissible: true,
-    useSafeArea: false,
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25), topRight: Radius.circular(25)),
-        ),
-        alignment: Alignment.bottomCenter,
-        contentPadding: EdgeInsets.zero,
-        insetPadding: EdgeInsets.zero,
-        content: Container(
-            height: MediaQuery.of(context).size.height * 0.35,
+  showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      builder: (BuildContext context) {
+        return Container(
+            height: MediaQuery.of(context).size.height * 0.45,
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(
               color: Colors.white,
             ),
-            margin: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height * 0.040,
-              left: MediaQuery.of(context).size.width * 0.08,
-              right: MediaQuery.of(context).size.width * 0.08,
+            padding: const EdgeInsets.only(
+              top: 33,
+              left: 40,
+              right: 40,
             ),
             child: Column(
               children: [
@@ -125,78 +119,211 @@ showConfirmDialog(BuildContext context) {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.033,
-                  ),
-                  child: const Text(
-                    'Caso registre, o ajuste ficará salvo no caderno de campo',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.normal,
-                        color: Color(0xB2333333)),
+                Expanded(
+                  child: Container(),
+                  flex: 3,
+                ),
+                const Text(
+                  'Caso registre, o ajuste ficará salvo no caderno de campo',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xB2333333)),
+                ),
+                Expanded(
+                  child: Container(),
+                  flex: 4,
+                ),
+                Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * .69,
+                    height: 30,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(primary: kPrimaryColor),
+                      child: const Text(
+                        "Sim",
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w600),
+                      ),
+                      onPressed: () async {
+                        showDoneAnimation(context);
+                        await Future.delayed(
+                            const Duration(milliseconds: 1400));
+                        Navigator.pop(context);
+                        Modular.to.popUntil(ModalRoute.withName('/Home'));
+                        Modular.to.pushReplacementNamed("/Tab/Ajustes/");
+                      },
+                    ),
                   ),
                 ),
                 Padding(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * .03,
-                        bottom: MediaQuery.of(context).size.width * 0.01),
-                    child: Center(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * .69,
-                        height: 30,
-                        child: ElevatedButton(
-                          style:
-                              ElevatedButton.styleFrom(primary: kPrimaryColor),
-                          child: const Text(
-                            "Sim",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w600),
-                          ),
-                          onPressed: () async {
-                            showDoneAnimation(context);
-                            await Future.delayed(
-                                const Duration(milliseconds: 1400));
-                            Navigator.pop(context);
-                            Modular.to.popUntil(ModalRoute.withName('/Home'));
-                            Modular.to.pushReplacementNamed("/Tab/Ajustes/");
-                          },
+                  padding: EdgeInsets.only(
+                      top: 10,
+                      bottom: MediaQuery.of(context).size.width * 0.01),
+                  child: Center(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * .69,
+                      height: 30,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          "Não",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xff767676)),
                         ),
                       ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * .001,
-                        bottom: MediaQuery.of(context).size.width * 0.01),
-                    child: Center(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * .69,
-                        height: 30,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text(
-                            "Não",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xff767676)),
-                          ),
-                        ),
-                      ),
-                    )),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(),
+                  flex: 4,
+                ),
               ],
-            )),
-      );
-    },
-  );
+            ));
+      });
+
+  // showDialog(
+  //   barrierDismissible: true,
+  //   useSafeArea: false,
+  //   context: context,
+  //   builder: (BuildContext context) {
+  //     return AlertDialog(
+  //       shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.only(
+  //             topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+  //       ),
+  //       alignment: Alignment.bottomCenter,
+  //       contentPadding: EdgeInsets.zero,
+  //       insetPadding: EdgeInsets.zero,
+  //       content: Container(
+  //           height: MediaQuery.of(context).size.height * 0.4,
+  //           width: MediaQuery.of(context).size.width,
+  //           decoration: const BoxDecoration(
+  //             color: Colors.white,
+  //           ),
+  //           margin: EdgeInsets.only(
+  //             top: MediaQuery.of(context).size.height * 0.040,
+  //             left: MediaQuery.of(context).size.width * 0.08,
+  //             right: MediaQuery.of(context).size.width * 0.08,
+  //           ),
+  //           child: Column(
+  //             children: [
+  //               RichText(
+  //                 textAlign: TextAlign.center,
+  //                 text: const TextSpan(
+  //                   text: 'Deseja ',
+  //                   style: TextStyle(
+  //                       fontSize: 28,
+  //                       fontWeight: FontWeight.bold,
+  //                       color: Colors.black),
+  //                   children: <TextSpan>[
+  //                     TextSpan(
+  //                         text: 'registrar',
+  //                         style: TextStyle(
+  //                             fontWeight: FontWeight.bold,
+  //                             color: kPrimaryColor)),
+  //                     TextSpan(
+  //                       text: ' o ajuste?',
+  //                       style: TextStyle(
+  //                           fontSize: 28,
+  //                           fontWeight: FontWeight.bold,
+  //                           color: Colors.black),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //               Expanded(
+  //                 child: Container(),
+  //                 flex: 1,
+  //               ),
+  //               Padding(
+  //                 padding: EdgeInsets.only(
+  //                   top: MediaQuery.of(context).size.height * 0.033,
+  //                 ),
+  //                 child: const Text(
+  //                   'Caso registre, o ajuste ficará salvo no caderno de campo',
+  //                   textAlign: TextAlign.center,
+  //                   style: TextStyle(
+  //                       fontSize: 18,
+  //                       fontWeight: FontWeight.normal,
+  //                       color: Color(0xB2333333)),
+  //                 ),
+  //               ),
+  //               Expanded(
+  //                 child: Container(),
+  //                 flex: 1,
+  //               ),
+  //               Padding(
+  //                   padding: EdgeInsets.only(
+  //                       // top: MediaQuery.of(context).size.height * .03,
+  //                       bottom: MediaQuery.of(context).size.width * 0.01),
+  //                   child: Center(
+  //                     child: SizedBox(
+  //                       width: MediaQuery.of(context).size.width * .69,
+  //                       height: 30,
+  //                       child: ElevatedButton(
+  //                         style:
+  //                             ElevatedButton.styleFrom(primary: kPrimaryColor),
+  //                         child: const Text(
+  //                           "Sim",
+  //                           style: TextStyle(
+  //                               fontSize: 14, fontWeight: FontWeight.w600),
+  //                         ),
+  //                         onPressed: () async {
+  //                           showDoneAnimation(context);
+  //                           await Future.delayed(
+  //                               const Duration(milliseconds: 1400));
+  //                           Navigator.pop(context);
+  //                           Modular.to.popUntil(ModalRoute.withName('/Home'));
+  //                           Modular.to.pushReplacementNamed("/Tab/Ajustes/");
+  //                         },
+  //                       ),
+  //                     ),
+  //                   )),
+  //               Padding(
+  //                 padding: EdgeInsets.only(
+  //                     top: MediaQuery.of(context).size.height * .001,
+  //                     bottom: MediaQuery.of(context).size.width * 0.01),
+  //                 child: Center(
+  //                   child: SizedBox(
+  //                     width: MediaQuery.of(context).size.width * .69,
+  //                     height: 30,
+  //                     child: TextButton(
+  //                       onPressed: () {
+  //                         Navigator.of(context).pop();
+  //                       },
+  //                       child: const Text(
+  //                         "Não",
+  //                         style: TextStyle(
+  //                             fontSize: 14,
+  //                             fontWeight: FontWeight.w600,
+  //                             color: Color(0xff767676)),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //               Expanded(
+  //                 child: Container(),
+  //                 flex: 5,
+  //               ),
+  //             ],
+  //           )),
+  //     );
+  //   },
+  //);
 }
 
 showDoneAnimation(BuildContext context) {
   showDialog(
     barrierDismissible: false,
+    barrierColor: Colors.white,
     context: context,
     builder: (BuildContext context) {
       return const Center(
@@ -304,7 +431,7 @@ class TabSolucaoConcentrada extends StatelessWidget {
                           fontWeight: FontWeight.normal,
                           fontStyle: FontStyle.italic,
                           fontSize: 14,
-                          color: Color(0x54333333),
+                          color: Color(0xB2333333),
                         ),
                       ),
                       Text(
@@ -313,7 +440,7 @@ class TabSolucaoConcentrada extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic,
                           fontSize: 14,
-                          color: Color(0x54333333),
+                          color: Color(0xB2333333),
                         ),
                       ),
                     ],
@@ -387,18 +514,19 @@ class ButtonCompleted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * .03,
-            bottom: MediaQuery.of(context).size.width * 0.043),
+        padding: const EdgeInsets.only(
+          top: 15, //MediaQuery.of(context).size.height * .03,
+          bottom: 25, //MediaQuery.of(context).size.width * 0.043,
+        ),
         child: Center(
           child: SizedBox(
             width: MediaQuery.of(context).size.width * .69,
-            height: 30,
+            height: 40,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(primary: kPrimaryColor),
               child: const Text(
                 "Concluir",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               onPressed: () {
                 showConfirmDialog(context);
@@ -423,8 +551,7 @@ class AppBarCustom extends StatelessWidget {
         handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
         sliver: SliverAppBar(
           backgroundColor: Colors.white,
-          toolbarHeight: MediaQuery.of(context).size.height * 0.17,
-          collapsedHeight: MediaQuery.of(context).size.height * 0.17,
+          toolbarHeight: 120,
           pinned: true,
           forceElevated: true,
           elevation: 1,
@@ -436,7 +563,7 @@ class AppBarCustom extends StatelessWidget {
               controller: tabController,
               unselectedLabelColor: const Color(0xFF929292),
               unselectedLabelStyle:
-                  const TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
+                  const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
               labelStyle:
                   const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               labelColor: kPrimaryColor,
@@ -522,62 +649,62 @@ class TabFertilizantes extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
+          Flexible(
+            child: Padding(
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.009),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.4,
-                child: Card(
-                  color: const Color(0xffF5F5F5),
-                  child: Scrollbar(
-                    isAlwaysShown: true,
-                    controller: scrollController1,
-                    radius: const Radius.circular(12),
-                    child: ListView.builder(
-                      primary: false,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.width * 0.089,
-                        vertical: MediaQuery.of(context).size.height * 0.018,
-                      ),
-                      physics: const BouncingScrollPhysics(),
-                      controller: scrollController1,
-                      shrinkWrap: true,
-                      itemCount: 20,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              top: index != 0
-                                  ? MediaQuery.of(context).size.height * 0.018
-                                  : 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                  flex: 6,
-                                  child: Text(
-                                    "Fertilizante #$index",
-                                  )),
-                              Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "${27 * index}",
-                                    textAlign: TextAlign.end,
-                                  )),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.05),
-                                child: const Text("g"),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+              child: Card(
+                color: const Color(0xffF5F5F5),
+                child: Scrollbar(
+                  isAlwaysShown: true,
+                  controller: scrollController1,
+                  radius: const Radius.circular(12),
+                  child: ListView.builder(
+                    primary: false,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.089,
+                      vertical: MediaQuery.of(context).size.height * 0.018,
                     ),
+                    physics: const BouncingScrollPhysics(),
+                    controller: scrollController1,
+                    shrinkWrap: true,
+                    itemCount: 8,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            top: index != 0
+                                ? MediaQuery.of(context).size.height * 0.018
+                                : 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                                flex: 5,
+                                child: Text(
+                                  "Fertilizante #$index",
+                                )),
+                            Expanded(
+                                flex: 1,
+                                child: Text(
+                                  "${27 * index}",
+                                  textAlign: TextAlign.end,
+                                )),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.05),
+                              child: const Text("g"),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
-              )),
+              ),
+            ),
+          ),
         ],
       ),
     );

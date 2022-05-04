@@ -121,6 +121,7 @@ abstract class _CadastroStoreBase with Store {
   @action
   verificaEmail() async {
     try {
+      // ignore: unused_local_variable
       String response = await repository.verificaUser(email.text);
 
       return "sucesso";

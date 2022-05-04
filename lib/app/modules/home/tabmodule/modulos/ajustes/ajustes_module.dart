@@ -12,5 +12,8 @@ class AjustesModule extends Module {
   @override
   final List<ModularRoute> routes = [
     ChildRoute('/', child: (_, args) => const AjustesPage()),
+    ModuleRoute('/resultadoAjuste',
+        module: ResultadoajusteModule(),
+        transition: TransitionType.leftToRight),
   ];
 }
