@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: file_names
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:osi_solucoes/app/models/cargo/cargo_model.dart';

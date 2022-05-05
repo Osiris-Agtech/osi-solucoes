@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:localization/localization.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/app/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/app/modules/cadastro/repositories/cadastro_repository.dart';
 import 'package:search_cep/search_cep.dart';
 
@@ -14,7 +13,7 @@ part 'cadastro_store.g.dart';
 class CadastroStore = _CadastroStoreBase with _$CadastroStore;
 
 abstract class _CadastroStoreBase with Store {
-  final repository = Modular.get<CadastroRepository>();
+  late CadastroRepository repository = Modular.get<CadastroRepository>();
   @observable
   TextEditingController nome = TextEditingController();
   @observable

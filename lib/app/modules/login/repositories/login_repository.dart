@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:graphql/client.dart';
 import 'package:osi_solucoes/app/models/usuario/usuario_model.dart';
 
@@ -7,7 +5,7 @@ import 'login_repository_interface.dart';
 
 class LoginRepository implements ILoginRepository {
   final HttpLink _httpLink = HttpLink(
-    "http://7647-177-202-190-226.ngrok.io",
+    "http://10f2-2804-d59-425d-7e00-e1a6-adc0-746-b69d.ngrok.io",
   );
 
   final _authLink = AuthLink(

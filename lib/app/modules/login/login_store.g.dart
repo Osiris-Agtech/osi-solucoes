@@ -54,19 +54,11 @@ mixin _$LoginStore on _LoginStoreBase, Store {
     });
   }
 
-  final _$vertificaLoginAsyncAction =
-      AsyncAction('_LoginStoreBase.vertificaLogin');
+  final _$loginAsyncAction = AsyncAction('_LoginStoreBase.login');
 
   @override
-  Future vertificaLogin() {
-    return _$vertificaLoginAsyncAction.run(() => super.vertificaLogin());
-  }
-
-  final _$testaUserAsyncAction = AsyncAction('_LoginStoreBase.testaUser');
-
-  @override
-  Future testaUser(String email) {
-    return _$testaUserAsyncAction.run(() => super.testaUser(email));
+  Future login() {
+    return _$loginAsyncAction.run(() => super.login());
   }
 
   final _$_LoginStoreBaseActionController =

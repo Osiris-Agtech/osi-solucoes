@@ -12,14 +12,19 @@ class AppModule extends Module {
   @override
   final List<ModularRoute> routes = [
     ModuleRoute(Modular.initialRoute, module: LoginModule()),
-    ModuleRoute("/Cadastro",
-        module: CadastroModule(), transition: TransitionType.rightToLeft),
+    ModuleRoute(
+      "/Cadastro",
+      module: CadastroModule(),
+      transition: TransitionType.rightToLeft,
+    ),
     ModuleRoute("/Home",
         module: HomeModule(), transition: TransitionType.rightToLeft),
     ModuleRoute("/Tab",
         module: ModulosModule(), transition: TransitionType.rightToLeft),
-    ModuleRoute('/resultadoAjuste',
-        module: ResultadoajusteModule(),
-        transition: TransitionType.rightToLeft),
+    ModuleRoute(
+      '/resultadoAjuste',
+      module: ResultadoajusteModule(),
+      transition: TransitionType.rightToLeft,
+    ),
   ];
 }

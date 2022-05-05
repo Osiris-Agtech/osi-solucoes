@@ -32,5 +32,4 @@ void main() {
     store.toggleObscure();
     expect(store.isObscure, equals(false));
   });
-
 }

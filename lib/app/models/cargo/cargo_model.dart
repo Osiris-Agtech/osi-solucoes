@@ -2,7 +2,6 @@
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:osi_solucoes/app/models/conectaConta/conectaConta_model.dart';
-import 'package:osi_solucoes/app/models/usuario/usuario_model.dart';
 
 part 'cargo_model.g.dart';
 

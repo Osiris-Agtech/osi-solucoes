@@ -31,151 +31,164 @@ class LoginPageState extends State<LoginPage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: kSecondBackgroundColor,
-          body: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: SizedBox(
-              height: size.height - MediaQuery.of(context).viewPadding.top,
-              width: size.width,
-              child: Form(
-                key: formKey,
-                child: Stack(children: [
-                  Column(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Container(),
-                      ),
-                      SizedBox(
-                        child: Image.asset(
-                          "assets/images/osiris-logo.png",
-                          width: size.width * 0.42,
-                          // height: size.height * 0.082,
+          body: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            onVerticalDragCancel: () => FocusScope.of(context).unfocus(),
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: SizedBox(
+                height: size.height - MediaQuery.of(context).viewPadding.top,
+                width: size.width,
+                child: Form(
+                  key: formKey,
+                  child: Stack(children: [
+                    Column(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Container(),
                         ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(),
-                      ),
-                      Observer(builder: (_) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              // top: size.height * 0.09,
-                              left: size.width * 0.06,
-                              right: size.width * 0.06),
-                          child: formFieldLogin(
-                            controllerText: store.email,
-                            labelText: 'emailField'.i18n(),
-                            isSenha: false,
-                            function: () {},
-                            isObscure: false,
+                        SizedBox(
+                          child: Image.asset(
+                            "assets/images/osiris-logo.png",
+                            width: size.width * 0.42,
+                            // height: size.height * 0.082,
                           ),
-                        );
-                      }),
-                      Observer(
-                        builder: (_) {
-                          return Padding(
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(),
+                        ),
+                        Observer(
+                          builder: (_) {
+                            return Padding(
                               padding: EdgeInsets.only(
-                                  top: 20,
-                                  left: size.width * 0.06,
-                                  right: size.width * 0.06),
+                                // top: size.height * 0.09,
+                                left: size.width * 0.06,
+                                right: size.width * 0.06,
+                              ),
+                              child: formFieldLogin(
+                                controllerText: store.email,
+                                labelText: 'emailField'.i18n(),
+                                isSenha: false,
+                                function: () {},
+                                isObscure: false,
+                              ),
+                            );
+                          },
+                        ),
+                        Observer(
+                          builder: (_) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                top: 20,
+                                left: size.width * 0.06,
+                                right: size.width * 0.06,
+                              ),
                               child: formFieldLogin(
                                 controllerText: store.senha,
                                 labelText: 'senhaField'.i18n(),
                                 isSenha: true,
                                 function: store.toggleObscure,
                                 isObscure: store.isObscure,
-                              ));
-                        },
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(top: size.height * .041),
-                          child: SizedBox(
-                            width: size.width * .7,
-                            height: 45,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    primary: kPrimaryColor),
-                                child: Text(
-                                  "textButton".i18n(),
-                                  style: const TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                onPressed: () async {
-                                  if (formKey.currentState!.validate()) {
-                                    showCircularProgressIndicator(context);
-                                    String response =
-                                        await store.vertificaLogin();
-                                    await Future.delayed(
-                                        const Duration(seconds: 2));
-                                    if (response == "sucesso") {
-                                      Modular.to.pushReplacementNamed("/Home/");
-                                    } else {
-                                      showLoaderDialog(context, response);
+                              ),
+                            );
+                          },
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(top: size.height * .041),
+                            child: SizedBox(
+                              width: size.width * .7,
+                              height: 45,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      primary: kPrimaryColor),
+                                  child: Text(
+                                    "textButton".i18n(),
+                                    style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  onPressed: () async {
+                                    if (formKey.currentState!.validate()) {
+                                      showCircularProgressIndicator(context);
+                                      String response = await store.login();
                                       await Future.delayed(
                                           const Duration(seconds: 2));
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                    }
-                                  } else {}
-                                }),
-                          )),
-                      TextButton(
-                        child: Text(
-                          "textTextButton".i18n(),
-                          style: const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600),
+                                      if (response == "sucesso") {
+                                        Modular.to
+                                            .pushReplacementNamed("/Home/");
+                                      } else {
+                                        showLoaderDialog(context, response);
+                                        await Future.delayed(
+                                            const Duration(seconds: 3));
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      }
+                                    } else {}
+                                  }),
+                            )),
+                        TextButton(
+                          child: Text(
+                            "textTextButton".i18n(),
+                            style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          onPressed: () {},
                         ),
-                        onPressed: () {},
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Container(),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(
-                            // top: size.height * 0.06,
-                            // bottom: size.height * 0.06,
-                            right: size.width * 0.056),
-                        alignment: Alignment.bottomRight,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            InkWell(
-                              hoverColor: Colors.transparent,
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () async {
-                                Modular.to.pushNamed("/Cadastro/");
-                              },
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text("textTextButton2".i18n(),
+                        Expanded(
+                          flex: 3,
+                          child: Container(),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                              // top: size.height * 0.06,
+                              // bottom: size.height * 0.06,
+                              right: size.width * 0.056),
+                          alignment: Alignment.bottomRight,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                hoverColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () async {
+                                  Modular.to.pushNamed("/Cadastro/");
+                                },
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "textTextButton2".i18n(),
                                       style: const TextStyle(
-                                          fontSize: 24,
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.w600)),
-                                  const Icon(
-                                    Icons.chevron_right,
-                                    color: kPrimaryColor,
-                                  )
-                                ],
+                                        fontSize: 24,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const Icon(
+                                      Icons.chevron_right,
+                                      color: kPrimaryColor,
+                                      size: 32,
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(),
-                      ),
-                    ],
-                  ),
-                ]),
+                        Expanded(
+                          flex: 2,
+                          child: Container(),
+                        ),
+                      ],
+                    ),
+                  ]),
+                ),
               ),
             ),
           ),
@@ -219,77 +232,64 @@ class LoginPageState extends State<LoginPage> {
     bool? isObscure,
   }) {
     return SizedBox(
-      height: 100,
+      height: 80,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: Padding(
+        child: Center(
+          child: Padding(
             padding: const EdgeInsets.only(
-                top: kDefaultPadding * 0.5,
-                bottom: kDefaultPadding * 0.15,
-                left: kDefaultPadding * 1.25,
-                right: kDefaultPadding * 1.25),
-            child: TextFormField(
-              cursorHeight: 15,
-              focusNode: !isSenha ? emailNode : senhaNode,
-              validator: !isSenha
-                  ? (value) {
-                      if (value!.isEmpty) {
-                        return "erroValidacaoEmailVazio".i18n();
-                      } else {
-                        String pattern =
-                            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                        RegExp regex = RegExp(pattern);
-                        if (!regex.hasMatch(value)) {
-                          return "ErroValidacaoEmailInvalido".i18n();
-                        } else {
-                          return null;
-                        }
-                      }
-                    }
-                  : (value) {
-                      if (value!.isEmpty) {
-                        return "erroValidacaoSenhaVazio".i18n();
-                      } else if (value.length < 6) {
-                        return "ErroValidacaoSenhaInvalido".i18n();
-                      }
-                      return null;
-                    },
-              cursorColor: Colors.grey,
-              controller: controllerText,
-              textInputAction:
-                  isSenha ? TextInputAction.done : TextInputAction.next,
-              keyboardType:
-                  isSenha ? TextInputType.text : TextInputType.emailAddress,
-              obscureText: isSenha ? store.isObscure : false,
-              onEditingComplete: () async {
-                if (!isSenha) {
-                  emailNode.nextFocus();
-                } else {
-                  senhaNode.unfocus();
-                  formKey.currentState!.validate();
-                  if (formKey.currentState!.validate()) {
-                    showCircularProgressIndicator(context);
-                    String response = await store.vertificaLogin();
-                    await Future.delayed(const Duration(seconds: 2));
-                    if (response == "sucesso") {
-                      Modular.to.pushReplacementNamed("/Home/");
-                    } else {
-                      showLoaderDialog(context, response);
+              // top: kDefaultPadding * 0.5,
+              // bottom: kDefaultPadding * 0.5,
+              left: kDefaultPadding * 1.25,
+              right: kDefaultPadding * 1.25,
+            ),
+            child: SizedBox(
+              height: 80,
+              child: TextFormField(
+                cursorHeight: 20,
+                focusNode: !isSenha ? emailNode : senhaNode,
+                validator: (value) => !isSenha
+                    ? store.validateEmail(value)
+                    : store.validateSenha(value),
+                cursorColor: Colors.grey,
+                controller: controllerText,
+                textInputAction:
+                    isSenha ? TextInputAction.done : TextInputAction.next,
+                keyboardType:
+                    isSenha ? TextInputType.text : TextInputType.emailAddress,
+                obscureText: isSenha ? store.isObscure : false,
+                onEditingComplete: () async {
+                  if (!isSenha) {
+                    emailNode.nextFocus();
+                  } else {
+                    senhaNode.unfocus();
+                    formKey.currentState!.validate();
+                    if (formKey.currentState!.validate()) {
+                      showCircularProgressIndicator(context);
+                      String response = await store.login();
                       await Future.delayed(const Duration(seconds: 2));
-                      Navigator.pop(context);
-                      Navigator.pop(context);
+                      if (response == "sucesso") {
+                        Modular.to.pushReplacementNamed("/Home/");
+                      } else {
+                        showLoaderDialog(context, response);
+                        await Future.delayed(const Duration(seconds: 2));
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      }
                     }
                   }
-                }
-              },
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(top: 15),
-                alignLabelWithHint: false,
-                labelText: labelText,
-                suffixIcon: isSenha
-                    ? Observer(
-                        builder: (_) {
-                          return IconButton(
+                },
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(top: 16),
+                  alignLabelWithHint: true,
+                  labelText: labelText,
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  labelStyle: const TextStyle(fontSize: 16),
+                  errorStyle: const TextStyle(fontSize: 10, height: 0.6),
+                  suffixIcon: isSenha
+                      ? Observer(
+                          builder: (_) {
+                            return IconButton(
                               highlightColor: Colors.transparent,
                               splashColor: Colors.transparent,
                               padding: const EdgeInsets.only(top: 15),
@@ -298,12 +298,16 @@ class LoginPageState extends State<LoginPage> {
                               },
                               icon: store.isObscure
                                   ? const Icon(Icons.visibility)
-                                  : const Icon(Icons.visibility_off));
-                        },
-                      )
-                    : null,
+                                  : const Icon(Icons.visibility_off),
+                            );
+                          },
+                        )
+                      : null,
+                ),
               ),
-            )),
+            ),
+          ),
+        ),
       ),
     );
   }
