@@ -32,3 +32,15 @@
 `git checkout -b feat/OSI-3`: Criar nova branch localmente;
 
 `git fetch`: Buscar as alterações e sincroniza o que você possui no repositório local com o repositório remoto;
+
+**Tipo de ramificação**
+
+O fluxo de trabalho da ramificação de recursos pressupõe um repositório central (`main`), e a ramificação principal representa o histórico oficial do projeto. Em vez de fazer o commit direto na ramificação principal `main`, os desenvolvedores criam uma nova ramificação sempre que começam a trabalhar em um novo recurso. As ramificações dos recursos deve ter nome descritivo, seguindo este padrão:  `feat/OSI-numero_do_board`. As branches podem ser classificadas em:
+
+`feat`: é usada para adicionar uma nova funcionalidade;
+
+`fix`: é usada para corrigir algum bug;
+
+`refactor`: se trata de alguma refatoração ou atualização de biblioteca.
+
+ A ideia é dar um objetivo claro e bastante focado a cada ramificação.
