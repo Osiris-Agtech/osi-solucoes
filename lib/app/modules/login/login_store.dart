@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:localization/localization.dart';
@@ -29,17 +28,14 @@ abstract class _LoginStoreBase with Store {
   @action
   login() async {
     try {
-      var response = await loginRepository.login(email.text, senha.text, "");
-      if (kDebugMode) {
-        print(response);
-      }
+      await loginRepository.login(email.text, senha.text, "");
       return "loginValido".i18n();
     } catch (e) {
       return "loginInvalido".i18n();
     }
   }
 
-  validateEmail(String? value) async {
+  validateEmail(String? value) {
     if (value!.isEmpty) {
       return "erroValidacaoEmailVazio".i18n();
     } else {
@@ -56,7 +52,7 @@ abstract class _LoginStoreBase with Store {
     }
   }
 
-  validateSenha(String? value) async {
+  validateSenha(String? value) {
     if (value!.isEmpty) {
       return "erroValidacaoSenhaVazio".i18n();
     } else if (value.length < 6) {

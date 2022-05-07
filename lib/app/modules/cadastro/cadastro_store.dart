@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:localization/localization.dart';
 import 'package:mobx/mobx.dart';
+import 'package:osi_solucoes/app/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/app/modules/cadastro/repositories/cadastro_repository.dart';
 import 'package:search_cep/search_cep.dart';
 
@@ -32,6 +33,10 @@ abstract class _CadastroStoreBase with Store {
   TextEditingController estado = TextEditingController();
   @observable
   TextEditingController pais = TextEditingController();
+  @observable
+  TextEditingController telefone = TextEditingController();
+  @observable
+  TextEditingController cnpjConta = TextEditingController();
   @observable
   TextEditingController email = TextEditingController();
   @observable
@@ -72,6 +77,16 @@ abstract class _CadastroStoreBase with Store {
   }
 
   @action
+  enviarCodigoEmail() async {
+    try {
+      await repository.enviarEmail(codigoGerado, email.text, nome.text);
+      return "sucesso";
+    } catch (e) {
+      return "Erro ao enviar e-mail.";
+    }
+  }
+
+  @action
   verificaCodigo() {
     code = primeiroDigito.text +
         segundoDigito.text +
@@ -81,7 +96,6 @@ abstract class _CadastroStoreBase with Store {
       return true;
     }
     return false;
-    // return true;
   }
 
   @action
@@ -96,23 +110,25 @@ abstract class _CadastroStoreBase with Store {
     final infoCepJSON = await viaCepSearchCep.searchInfoByCep(
         cep: cep.text.replaceAll(".", '').replaceAll("-", ""));
     if (infoCepJSON.isRight()) {
-      Right(infoCepJSON).value.map((r) => {
-            logradouro.text = r.logradouro!,
-            complemento.text = r.complemento!,
-            bairro.text = r.bairro!,
-            cidade.text = r.localidade!,
-            estado.text = r.uf!,
-            pais.text = "Brasil",
-          });
+      Right(infoCepJSON).value.map(
+            (r) => {
+              logradouro.text = r.logradouro ?? '',
+              complemento.text = r.complemento ?? '',
+              bairro.text = r.bairro ?? '',
+              cidade.text = r.localidade ?? '',
+              estado.text = r.uf ?? '',
+              pais.text = "Brasil",
+            },
+          );
       responseCEP = "sucess";
       return "Sucess";
     } else {
       responseCEP = "Erro";
-      logradouro.clear();
-      complemento.clear();
-      bairro.clear();
-      cidade.clear();
-      estado.clear();
+      // logradouro.clear();
+      // complemento.clear();
+      // bairro.clear();
+      // cidade.clear();
+      // estado.clear();
       return "Error";
     }
   }
@@ -120,9 +136,7 @@ abstract class _CadastroStoreBase with Store {
   @action
   verificaEmail() async {
     try {
-      // ignore: unused_local_variable
-      String response = await repository.verificaUser(email.text);
-
+      await repository.verificaUser(email.text);
       return "sucesso";
     } catch (e) {
       return "E-mail ja cadastrado.";
@@ -132,19 +146,23 @@ abstract class _CadastroStoreBase with Store {
   @action
   cadastraUser() async {
     try {
-      // Usuario user = Usuario(
-      //   nome: nome.text,
-      //   sobrenome: sobrenome.text,
-      //   logradouro: logradouro.text,
-      //   complemento: complemento.text,
-      //   bairro: bairro.text,
-      //   cidade: cidade.text,
-      //   estado: estado.text,
-      //   pais: pais.text,
-      // );
-
-      // String res = await repository.cadastraUser(user);
-
+      Usuario usuario = await repository.cadastraConta(
+        nome: nome.text,
+        sobrenome: sobrenome.text,
+        email: email.text,
+        senha: senha.text,
+        endereco: logradouro.text,
+        bairro: bairro.text,
+        cidade: cidade.text,
+        telefone: telefone.text,
+        imagem: "",
+        cep: cep.text,
+        estado: estado.text,
+        pais: pais.text,
+        complemento: complemento.text,
+        imagemConta: "",
+        cnpjConta: cnpjConta.text,
+      );
       return "sucesso";
     } catch (e) {
       return "cadastroInvalido".i18n();

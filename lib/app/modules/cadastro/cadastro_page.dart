@@ -35,10 +35,11 @@ class CadastroPageState extends State<CadastroPage> {
             backgroundColor: kBackgroundColor,
             leading: Builder(builder: (_) {
               return Padding(
-                padding: EdgeInsets.only(left: size.width * 0.07),
+                padding: const EdgeInsets.only(left: 16), // size.width * 0.07
                 child: IconButton(
                   splashColor: Colors.transparent,
                   hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
                   onPressed: () => Modular.to.pop(),
                   icon: const Icon(
                     Icons.arrow_back,
@@ -115,32 +116,34 @@ class CadastroPageState extends State<CadastroPage> {
                         return Padding(
                           padding: EdgeInsets.only(
                               top: size.height * 0.016,
-                              left: size.width * 0.13,
-                              right: size.width * 0.13),
+                              left: size.width * 0.1,
+                              right: size.width * 0.1),
                           child: formCadastro(
-                              controller: store.nome,
-                              labelText: "formNome".i18n()),
+                            controller: store.nome,
+                            labelText: "formNome".i18n(),
+                          ),
                         );
                       }),
                       Observer(builder: (_) {
                         return Padding(
                           padding: EdgeInsets.only(
                               top: size.height * 0.02,
-                              left: size.width * 0.13,
-                              right: size.width * 0.13),
+                              left: size.width * 0.1,
+                              right: size.width * 0.1),
                           child: formCadastro(
-                              controller: store.sobrenome,
-                              labelText: "formSobrenome".i18n()),
+                            controller: store.sobrenome,
+                            labelText: "formSobrenome".i18n(),
+                          ),
                         );
                       }),
                       Observer(builder: (_) {
                         return Padding(
                           padding: EdgeInsets.only(
                               top: size.height * 0.02,
-                              left: size.width * 0.13,
-                              right: size.width * 0.13),
+                              left: size.width * 0.1,
+                              right: size.width * 0.1),
                           child: formCadastro(
-                              controller: store.sobrenome,
+                              controller: store.telefone,
                               labelText: "Telefone"),
                         );
                       }),
@@ -148,81 +151,98 @@ class CadastroPageState extends State<CadastroPage> {
                         return Padding(
                           padding: EdgeInsets.only(
                             top: size.height * 0.02,
-                            left: size.width * 0.13,
-                            right: size.width * 0.13,
+                            left: size.width * 0.1,
+                            right: size.width * 0.1,
                           ),
                           child: formCadastro(
-                              controller: store.cep,
-                              labelText: "formCEP".i18n()),
+                            controller: store.cep,
+                            labelText: "formCEP".i18n(),
+                            opcional: true,
+                          ),
                         );
                       }),
                       Observer(builder: (_) {
                         return Padding(
                           padding: EdgeInsets.only(
                               top: size.height * 0.02,
-                              left: size.width * 0.13,
-                              right: size.width * 0.13),
+                              left: size.width * 0.1,
+                              right: size.width * 0.1),
                           child: formCadastro(
-                              controller: store.logradouro,
-                              labelText: "formLogradouro".i18n()),
+                            controller: store.logradouro,
+                            labelText: "formLogradouro".i18n(),
+                            opcional: true,
+                          ),
                         );
                       }),
                       Observer(builder: (_) {
                         return Padding(
                           padding: EdgeInsets.only(
                               top: size.height * 0.02,
-                              left: size.width * 0.13,
-                              right: size.width * 0.13),
+                              left: size.width * 0.1,
+                              right: size.width * 0.1),
                           child: formCadastro(
-                              controller: store.complemento,
-                              labelText: "formComplemento".i18n()),
+                            controller: store.complemento,
+                            labelText: "formComplemento".i18n(),
+                            opcional: true,
+                          ),
                         );
                       }),
                       Observer(builder: (_) {
                         return Padding(
                           padding: EdgeInsets.only(
                               top: size.height * 0.02,
-                              left: size.width * 0.13,
-                              right: size.width * 0.13),
+                              left: size.width * 0.1,
+                              right: size.width * 0.1),
                           child: formCadastro(
-                              controller: store.bairro,
-                              labelText: "formBairro".i18n()),
+                            controller: store.bairro,
+                            labelText: "formBairro".i18n(),
+                            opcional: true,
+                          ),
                         );
                       }),
                       Observer(builder: (_) {
                         return Padding(
                           padding: EdgeInsets.only(
                               top: size.height * 0.02,
-                              left: size.width * 0.13,
-                              right: size.width * 0.13),
+                              left: size.width * 0.1,
+                              right: size.width * 0.1),
                           child: formCadastro(
-                              controller: store.cidade,
-                              labelText: "formCidade".i18n()),
+                            controller: store.cidade,
+                            labelText: "formCidade".i18n(),
+                            opcional: true,
+                          ),
                         );
                       }),
                       Observer(builder: (_) {
                         return Padding(
                           padding: EdgeInsets.only(
                               top: size.height * 0.02,
-                              left: size.width * 0.13,
-                              right: size.width * 0.13),
+                              left: size.width * 0.1,
+                              right: size.width * 0.1),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SizedBox(
                                 width: size.width * 0.34,
                                 child: formCadastro(
-                                    controller: store.estado,
-                                    labelText: "formEstado".i18n()),
+                                  controller: store.estado,
+                                  labelText: "formEstado".i18n(),
+                                  opcional: true,
+                                ),
                               ),
-                              Container(
+                              Expanded(
+                                child: Container(
                                   padding: EdgeInsets.only(
                                     left: size.height * 0.02,
                                   ),
-                                  width: size.width * 0.4,
+                                  // width: size.width * 0.5,
                                   child: formCadastro(
-                                      controller: store.pais,
-                                      labelText: "formPais".i18n())),
+                                    controller: store.pais,
+                                    labelText: "formPais".i18n(),
+                                    opcional: true,
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         );
@@ -230,8 +250,8 @@ class CadastroPageState extends State<CadastroPage> {
                       Padding(
                         padding: EdgeInsets.only(
                             top: size.height * 0.02,
-                            left: size.width * 0.13,
-                            right: size.width * 0.13),
+                            left: size.width * 0.1,
+                            right: size.width * 0.1),
                         child: formCadastro(
                             controller: store.email,
                             labelText: "formEmail".i18n()),
@@ -239,8 +259,8 @@ class CadastroPageState extends State<CadastroPage> {
                       Padding(
                           padding: EdgeInsets.only(
                               top: size.height * 0.02,
-                              left: size.width * 0.13,
-                              right: size.width * 0.13),
+                              left: size.width * 0.1,
+                              right: size.width * 0.1),
                           child: Observer(
                             builder: (_) {
                               return formCadastro(
@@ -265,7 +285,7 @@ class CadastroPageState extends State<CadastroPage> {
                                       fontWeight: FontWeight.w600),
                                 ),
                                 onPressed: () async {
-                                  if (!formKey.currentState!.validate()) {
+                                  if (formKey.currentState!.validate()) {
                                     showCircularProgressIndicator(context);
                                     String response =
                                         await store.verificaEmail();
@@ -273,9 +293,19 @@ class CadastroPageState extends State<CadastroPage> {
                                         const Duration(seconds: 2));
                                     if (response == "sucesso") {
                                       store.gerarCodigo();
-                                      Navigator.pop(context);
-                                      Modular.to
-                                          .pushNamed("/Cadastro/Confirma");
+                                      var response2 =
+                                          await store.enviarCodigoEmail();
+                                      if (response2 == "sucesso") {
+                                        Navigator.pop(context);
+                                        Modular.to
+                                            .pushNamed("/Cadastro/Confirma");
+                                      } else {
+                                        showErrorDialog(context, response2);
+                                        await Future.delayed(
+                                            const Duration(seconds: 2));
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      }
                                     } else {
                                       showErrorDialog(context, response);
                                       await Future.delayed(
@@ -302,22 +332,32 @@ class CadastroPageState extends State<CadastroPage> {
   String pattern =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 
-  TextFormField formCadastro(
-      {required TextEditingController controller, required String labelText}) {
+  TextFormField formCadastro({
+    required TextEditingController controller,
+    required String labelText,
+    bool? opcional,
+  }) {
     return TextFormField(
       validator: (value) {
+        print(labelText + ":  ");
+        print(value);
+        if (opcional != null) {
+          print("  opcional NOT NULL");
+          return null;
+        }
+
         if (value!.isEmpty) {
           return "erroValidacaoCampoVazio".i18n();
-        } else if (labelText == "labelTextConsult2".i18n()) {
+        }
+        if (labelText == "labelTextConsult2".i18n()) {
           RegExp regex = RegExp(pattern);
           if (!regex.hasMatch(value)) {
             return "ErroValidacaoEmailInvalido".i18n();
           } else {
             return null;
           }
-        } else {
-          return null;
         }
+        return null;
       },
       cursorColor: Colors.grey,
       controller: controller,
@@ -328,7 +368,9 @@ class CadastroPageState extends State<CadastroPage> {
           ? TextInputType.emailAddress
           : labelText == "labelTextConsult3".i18n()
               ? TextInputType.number
-              : TextInputType.text,
+              : labelText == "Telefone"
+                  ? TextInputType.phone
+                  : TextInputType.text,
       textCapitalization: labelText != "labelTextConsult2".i18n() ||
               labelText != "labelTextConsult1".i18n()
           ? TextCapitalization.words
@@ -338,9 +380,9 @@ class CadastroPageState extends State<CadastroPage> {
           focusNode.unfocus();
           formKey.currentState!.validate();
         } else if (labelText == "labelTextConsult3".i18n()) {
-          var result = await store.buscaCEP();
-          // ignore: avoid_print
-          print(result);
+          showCircularProgressIndicator(context);
+          await store.buscaCEP();
+          Navigator.pop(context);
           focusNode.unfocus();
         } else {
           focusNode.nextFocus();
@@ -352,9 +394,11 @@ class CadastroPageState extends State<CadastroPage> {
               CepInputFormatter(),
             ]
           : null,
-      obscureText: labelText == "labelTextConsult1".i18n() && store.isObscure
-          ? true
-          : false,
+      obscureText: labelText != "labelTextConsult1".i18n()
+          ? false
+          : store.isObscure
+              ? false
+              : true,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.only(top: 15),
         alignLabelWithHint: false,
@@ -362,22 +406,32 @@ class CadastroPageState extends State<CadastroPage> {
         labelStyle: const TextStyle(
           fontSize: 16,
         ),
+        suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
         suffixIcon: labelText == "labelTextConsult1".i18n()
             ? Observer(
                 builder: (_) {
                   return IconButton(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      padding: const EdgeInsets.only(top: 15),
-                      onPressed: () {
-                        store.toggleObscure();
-                      },
-                      icon: store.isObscure
-                          ? const Icon(Icons.visibility)
-                          : const Icon(Icons.visibility_off));
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    padding: const EdgeInsets.only(top: 20),
+                    onPressed: () {
+                      store.toggleObscure();
+                    },
+                    icon: store.isObscure
+                        ? const Icon(Icons.visibility_off)
+                        : const Icon(Icons.visibility),
+                  );
                 },
               )
-            : null,
+            : opcional != null
+                ? const Text(
+                    "(Opcional)",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.black26,
+                    ),
+                  )
+                : null,
       ),
     );
   }

@@ -144,6 +144,36 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
+  final _$telefoneAtom = Atom(name: '_CadastroStoreBase.telefone');
+
+  @override
+  TextEditingController get telefone {
+    _$telefoneAtom.reportRead();
+    return super.telefone;
+  }
+
+  @override
+  set telefone(TextEditingController value) {
+    _$telefoneAtom.reportWrite(value, super.telefone, () {
+      super.telefone = value;
+    });
+  }
+
+  final _$cnpjContaAtom = Atom(name: '_CadastroStoreBase.cnpjConta');
+
+  @override
+  TextEditingController get cnpjConta {
+    _$cnpjContaAtom.reportRead();
+    return super.cnpjConta;
+  }
+
+  @override
+  set cnpjConta(TextEditingController value) {
+    _$cnpjContaAtom.reportWrite(value, super.cnpjConta, () {
+      super.cnpjConta = value;
+    });
+  }
+
   final _$emailAtom = Atom(name: '_CadastroStoreBase.email');
 
   @override
@@ -294,6 +324,14 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
+  final _$enviarCodigoEmailAsyncAction =
+      AsyncAction('_CadastroStoreBase.enviarCodigoEmail');
+
+  @override
+  Future enviarCodigoEmail() {
+    return _$enviarCodigoEmailAsyncAction.run(() => super.enviarCodigoEmail());
+  }
+
   final _$buscaCEPAsyncAction = AsyncAction('_CadastroStoreBase.buscaCEP');
 
   @override
@@ -365,6 +403,8 @@ bairro: ${bairro},
 cidade: ${cidade},
 estado: ${estado},
 pais: ${pais},
+telefone: ${telefone},
+cnpjConta: ${cnpjConta},
 email: ${email},
 senha: ${senha},
 responseCEP: ${responseCEP},

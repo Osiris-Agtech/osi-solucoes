@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends ModularState<HomePage, HomeStore> {
   final ModulosStore modulosStore = Modular.get();
-  final Duration duration = const Duration(milliseconds: 200);
+  final Duration duration = const Duration(milliseconds: 300);
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -257,7 +257,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
       return AnimatedPositioned(
         duration: duration,
         top: store.isCollapsed ? 0 : size.height * 0.1,
-        bottom: store.isCollapsed ? 0 : 0.2 * size.width,
+        bottom: store.isCollapsed ? 0 : 0.1 * size.height,
         left: store.isCollapsed ? 0 : 0.76 * size.width,
         right: store.isCollapsed ? 0 : -.8 * size.width,
         child: Container(

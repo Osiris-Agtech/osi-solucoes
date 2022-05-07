@@ -280,9 +280,11 @@ class LoginPageState extends State<LoginPage> {
                   }
                 },
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(top: 16),
-                  alignLabelWithHint: true,
-                  labelText: labelText,
+                  contentPadding: isSenha
+                      ? const EdgeInsets.only(top: 22)
+                      : const EdgeInsets.only(top: 18),
+                  alignLabelWithHint: false,
+                  hintText: labelText,
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   labelStyle: const TextStyle(fontSize: 16),
                   errorStyle: const TextStyle(fontSize: 10, height: 0.6),
