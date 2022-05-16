@@ -5,6 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:localization/localization.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/app/app_controller.dart';
+import 'package:osi_solucoes/app/models/usuario/usuario_model.dart';
 
 import 'package:osi_solucoes/app/modules/login/repositories/login_repository.dart';
 
@@ -23,6 +24,9 @@ abstract class _LoginStoreBase with Store {
   TextEditingController senha = TextEditingController();
 
   @observable
+  List<Usuario> userList = [];
+
+  @observable
   bool isObscure = true;
 
   @action
@@ -38,6 +42,10 @@ abstract class _LoginStoreBase with Store {
     } catch (e) {
       return "loginInvalido".i18n();
     }
+    userList = users as List<Usuario>;
+    print(userList.length);
+    if (users[0].contas!.length > 1) return "multiple";
+
     appController.setUser(users[0]);
     return "loginValido".i18n();
   }

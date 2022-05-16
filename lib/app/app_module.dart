@@ -20,10 +20,16 @@ class AppModule extends Module {
       module: CadastroModule(),
       transition: TransitionType.rightToLeft,
     ),
-    ModuleRoute("/Home",
-        module: HomeModule(), transition: TransitionType.rightToLeft),
-    ModuleRoute("/Tab",
-        module: ModulosModule(), transition: TransitionType.rightToLeft),
+    ModuleRoute(
+      "/Home",
+      module: HomeModule(),
+      transition: TransitionType.rightToLeft,
+    ),
+    ModuleRoute(
+      "/Tab",
+      module: ModulosModule(),
+      transition: TransitionType.rightToLeft,
+    ),
     ModuleRoute(
       '/resultadoAjuste',
       module: ResultadoajusteModule(),

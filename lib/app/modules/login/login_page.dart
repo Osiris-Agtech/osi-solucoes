@@ -96,38 +96,40 @@ class LoginPageState extends State<LoginPage> {
                           },
                         ),
                         Padding(
-                            padding: EdgeInsets.only(top: size.height * .041),
-                            child: SizedBox(
-                              width: size.width * .7,
-                              height: 45,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      primary: kPrimaryColor),
-                                  child: Text(
-                                    "textButton".i18n(),
-                                    style: const TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  onPressed: () async {
-                                    if (formKey.currentState!.validate()) {
-                                      showCircularProgressIndicator(context);
-                                      String response = await store.login();
-                                      await Future.delayed(
-                                          const Duration(seconds: 2));
-                                      if (response == "sucesso") {
-                                        Modular.to
-                                            .pushReplacementNamed("/Home/");
-                                      } else {
-                                        showLoaderDialog(context, response);
-                                        await Future.delayed(
-                                            const Duration(seconds: 3));
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                      }
-                                    } else {}
-                                  }),
-                            )),
+                          padding: EdgeInsets.only(top: size.height * .041),
+                          child: SizedBox(
+                            width: size.width * .7,
+                            height: 45,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: kPrimaryColor),
+                              child: Text(
+                                "textButton".i18n(),
+                                style: const TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.w600),
+                              ),
+                              onPressed: () async {
+                                if (formKey.currentState!.validate()) {
+                                  showCircularProgressIndicator(context);
+                                  String response = await store.login();
+                                  await Future.delayed(
+                                      const Duration(seconds: 2));
+                                  if (response == "sucesso") {
+                                    Modular.to.pushReplacementNamed("/Home/");
+                                  } else if (response == "multiple") {
+                                    Modular.to.pushNamed("/MultiAccounts/");
+                                  } else {
+                                    showLoaderDialog(context, response);
+                                    await Future.delayed(
+                                        const Duration(seconds: 3));
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  }
+                                }
+                              },
+                            ),
+                          ),
+                        ),
                         TextButton(
                           child: Text(
                             "textTextButton".i18n(),

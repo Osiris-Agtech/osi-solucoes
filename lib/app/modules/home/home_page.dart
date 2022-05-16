@@ -229,7 +229,15 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 padding: EdgeInsets.only(
                     left: sizeWidth * 0.122, top: size.height * 0.02),
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const Center(child: CircularProgressIndicator());
+                      },
+                    );
+                    await Future.delayed(const Duration(seconds: 2));
                     Modular.to.pushReplacementNamed(Modular.initialRoute);
                   },
                   child: Row(

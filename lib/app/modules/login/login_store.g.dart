@@ -39,6 +39,21 @@ mixin _$LoginStore on _LoginStoreBase, Store {
     });
   }
 
+  final _$userListAtom = Atom(name: '_LoginStoreBase.userList');
+
+  @override
+  List<Usuario> get userList {
+    _$userListAtom.reportRead();
+    return super.userList;
+  }
+
+  @override
+  set userList(List<Usuario> value) {
+    _$userListAtom.reportWrite(value, super.userList, () {
+      super.userList = value;
+    });
+  }
+
   final _$isObscureAtom = Atom(name: '_LoginStoreBase.isObscure');
 
   @override
@@ -80,6 +95,7 @@ mixin _$LoginStore on _LoginStoreBase, Store {
     return '''
 email: ${email},
 senha: ${senha},
+userList: ${userList},
 isObscure: ${isObscure}
     ''';
   }

@@ -5,7 +5,7 @@ import 'login_repository_interface.dart';
 
 class LoginRepository implements ILoginRepository {
   final HttpLink _httpLink = HttpLink(
-    "http://8465-2804-d59-4201-c900-dcf7-c6a6-e112-a719.ngrok.io",
+    "http://90aa-2804-d59-42d7-9900-c910-56d6-319c-2f73.ngrok.io",
   );
 
   final _authLink = AuthLink(
