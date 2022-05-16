@@ -10,7 +10,7 @@
     "textTextButton": "Esqueci a senha",
     "textTextButton2": "Registrar",
     "loginValido": "sucesso",
-    "loginInvalido": "E-mail ou senha inválidos",
+    "loginInvalido": "E-mail / Senha inválidos ou Erro de Conexão",
     "_comment2": "Módulo de Cadastro",
     "titlePageCadastro1": "Registrar",
     "titlePageCadastro2": "Pessoa",

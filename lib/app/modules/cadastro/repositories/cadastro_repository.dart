@@ -9,7 +9,7 @@ import 'cadastro_repository_interface.dart';
 
 class CadastroRepository implements ICadastroRepository {
   final HttpLink _httpLink = HttpLink(
-    "http://1f6f-2804-d59-425d-7e00-24d8-2d48-20fa-ad97.ngrok.io",
+    "http://8465-2804-d59-4201-c900-dcf7-c6a6-e112-a719.ngrok.io",
   );
 
   final _authLink = AuthLink(
@@ -45,6 +45,7 @@ class CadastroRepository implements ICadastroRepository {
       mutation CreateUserAccount($nome: String!, $sobrenome: String!, $nivelConta: String!, $email: String!, $senha: String!, $endereco: String, $bairro: String, $cidade: String, $telefone: String, $imagem: String, $cep: String, $estado: String, $pais: String, $complemento: String, $imagemConta: String, $cnpjConta: String) {
         createUserAccount(nome: $nome, sobrenome: $sobrenome, nivelConta: $nivelConta, email: $email, senha: $senha, endereco: $endereco, bairro: $bairro, cidade: $cidade, telefone: $telefone, imagem: $imagem, cep: $cep, estado: $estado, pais: $pais, complemento: $complemento, imagemConta: $imagemConta, cnpjConta: $cnpjConta) {
           email
+          nome
           pessoa {
             nome
             sobrenome

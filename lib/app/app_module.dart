@@ -1,4 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:osi_solucoes/app/app_controller.dart';
 import 'package:osi_solucoes/app/modules/cadastro/cadastro_module.dart';
 import 'package:osi_solucoes/app/modules/home/home_module.dart';
 import 'package:osi_solucoes/app/modules/home/tabmodule/modulos/ajustes/resultadoajuste/resultadoajuste_module.dart';
@@ -7,7 +8,9 @@ import 'package:osi_solucoes/app/modules/login/login_module.dart';
 
 class AppModule extends Module {
   @override
-  final List<Bind> binds = [];
+  final List<Bind> binds = [
+    Bind.lazySingleton((i) => AppController()),
+  ];
 
   @override
   final List<ModularRoute> routes = [

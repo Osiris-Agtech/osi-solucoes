@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:math';
 
 import 'package:dartz/dartz.dart';
@@ -5,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:localization/localization.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/app/models/usuario/usuario_model.dart';
+import 'package:osi_solucoes/app/app_controller.dart';
 import 'package:osi_solucoes/app/modules/cadastro/repositories/cadastro_repository.dart';
 import 'package:search_cep/search_cep.dart';
 
@@ -15,6 +17,8 @@ class CadastroStore = _CadastroStoreBase with _$CadastroStore;
 
 abstract class _CadastroStoreBase with Store {
   late CadastroRepository repository = Modular.get<CadastroRepository>();
+  late AppController appController = Modular.get();
+
   @observable
   TextEditingController nome = TextEditingController();
   @observable
@@ -145,8 +149,9 @@ abstract class _CadastroStoreBase with Store {
 
   @action
   cadastraUser() async {
+    late var usuario;
     try {
-      Usuario usuario = await repository.cadastraConta(
+      usuario = await repository.cadastraConta(
         nome: nome.text,
         sobrenome: sobrenome.text,
         email: email.text,
@@ -163,9 +168,10 @@ abstract class _CadastroStoreBase with Store {
         imagemConta: "",
         cnpjConta: cnpjConta.text,
       );
-      return "sucesso";
     } catch (e) {
       return "cadastroInvalido".i18n();
     }
+    appController.setUser(usuario);
+    return "sucesso";
   }
 }

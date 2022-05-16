@@ -19,10 +19,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends ModularState<HomePage, HomeStore> {
   final ModulosStore modulosStore = Modular.get();
   final Duration duration = const Duration(milliseconds: 300);
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: kBackgroundColor,
@@ -64,11 +64,12 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(flex: 1, child: Container()),
+              // Expanded(flex: 1, child: Container()),
               Padding(
                 padding: EdgeInsets.only(
-                    // top: sizeHeight * .088,
-                    left: sizeWidth * 0.02),
+                  top: 30,
+                  left: sizeWidth * 0.02,
+                ),
                 child: IconButton(
                     alignment: Alignment.centerLeft,
                     onPressed: () {
@@ -81,7 +82,10 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                     )),
               ),
               Padding(
-                padding: EdgeInsets.only(right: (sizeWidth * 0.33)),
+                padding: EdgeInsets.only(
+                  right: (sizeWidth * 0.33),
+                  bottom: 10,
+                ),
                 child: const Center(
                   child: CircleAvatar(
                     backgroundImage: NetworkImage(
@@ -95,14 +99,17 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(right: size.width * 0.24),
-                    child: const Text(
-                      "Hidrogood",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600),
-                    ),
+                    child: Observer(builder: (_) {
+                      return Text(
+                        store.appController.usuario.contas?[0].conta?.nome ??
+                            "...",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 30,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600),
+                      );
+                    }),
                   )
                 ],
               ),
@@ -110,22 +117,29 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                      padding: EdgeInsets.only(
-                          top: size.height * 0.003, right: size.width * 0.24),
-                      child: const Text(
-                        "Administrador",
-                        style: TextStyle(
+                    padding: EdgeInsets.only(
+                      top: size.height * 0.003,
+                      right: size.width * 0.24,
+                      bottom: 10,
+                    ),
+                    child: Observer(builder: (_) {
+                      return Text(
+                        store.appController.usuario.contas?[0].cargo?.cargo ??
+                            "...",
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Colors.white,
                         ),
-                      )),
+                      );
+                    }),
+                  ),
                 ],
               ),
-              Expanded(flex: 1, child: Container()),
+              // Expanded(flex: 1, child: Container()),
               const Divider(
                 color: Color(0xFF9F9F9F),
               ),
-              Expanded(flex: 1, child: Container()),
+              // Expanded(flex: 1, child: Container()),
               Padding(
                 padding: EdgeInsets.only(
                     // top: size.height * 0.05,
@@ -135,17 +149,18 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                   child: Row(
                     children: [
                       IconButton(
-                        icon:
-                            SvgPicture.asset("assets/icons/settings_icon.svg"),
+                        icon: SvgPicture.asset(
+                          "assets/icons/settings_icon.svg",
+                          color: kBackgroundColor.withOpacity(.8),
+                        ),
                         onPressed: () {},
-                        color: kBackgroundColor,
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.02),
                         child: Text(
                           "itemMenu1".i18n(),
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 20),
+                              color: Colors.white, fontSize: 18),
                         ),
                       ),
                     ],
@@ -154,33 +169,35 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeWidth * 0.122, top: size.height * 0.05),
+                    left: sizeWidth * 0.122, top: size.height * 0.02),
                 child: InkWell(
                   onTap: () {},
                   child: Row(
                     children: [
                       IconButton(
-                        icon: SvgPicture.asset("assets/icons/hexagon_icon.svg"),
+                        icon: SvgPicture.asset(
+                          "assets/icons/hexagon_icon.svg",
+                          color: kBackgroundColor.withOpacity(.8),
+                        ),
                         onPressed: () {},
-                        color: kBackgroundColor,
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.02),
                         child: Text(
                           "itemMenu2".i18n(),
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 20),
+                              color: Colors.white, fontSize: 18),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              Expanded(flex: 1, child: Container()),
+              // Expanded(flex: 1, child: Container()),
               const Divider(
                 color: Color(0xFF9F9F9F),
               ),
-              Expanded(flex: 1, child: Container()),
+              // Expanded(flex: 1, child: Container()),
               Padding(
                 padding: EdgeInsets.only(left: sizeWidth * 0.122
                     // , top: size.height * 0.05
@@ -190,16 +207,18 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                   child: Row(
                     children: [
                       IconButton(
-                        icon: SvgPicture.asset("assets/icons/info_icon.svg"),
+                        icon: SvgPicture.asset(
+                          "assets/icons/info_icon.svg",
+                          color: kBackgroundColor.withOpacity(.8),
+                        ),
                         onPressed: () {},
-                        color: kBackgroundColor,
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.02),
                         child: Text(
                           "itemMenu3".i18n(),
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 20),
+                              color: Colors.white, fontSize: 18),
                         ),
                       ),
                     ],
@@ -208,7 +227,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeWidth * 0.122, top: size.height * 0.046),
+                    left: sizeWidth * 0.122, top: size.height * 0.02),
                 child: InkWell(
                   onTap: () {
                     Modular.to.pushReplacementNamed(Modular.initialRoute);
@@ -217,16 +236,17 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                     children: [
                       IconButton(
                         icon: SvgPicture.asset(
-                            "assets/icons/external_link_icon.svg"),
+                          "assets/icons/external_link_icon.svg",
+                          color: kBackgroundColor.withOpacity(.8),
+                        ),
                         onPressed: () {},
-                        color: kBackgroundColor,
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.02),
                         child: Text(
                           "itemMenu4".i18n(),
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 20),
+                              color: Colors.white, fontSize: 18),
                         ),
                       ),
                     ],
@@ -374,26 +394,31 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
       actions: [
         Padding(
           padding: const EdgeInsets.only(top: 15, right: 25),
-          child: Stack(children: [
-            const Icon(
-              Icons.notifications_outlined,
-              color: Colors.black,
-            ),
-            store.isNotified
-                ? Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        color: Colors.red,
-                      ),
-                      height: 12,
-                      width: 12,
-                    ),
-                  )
-                : Container()
-          ]),
+          child: Observer(builder: (_) {
+            return InkWell(
+              onTap: () => store.toggleNotified(),
+              child: Stack(children: [
+                const Icon(
+                  Icons.notifications_outlined,
+                  color: Colors.black,
+                ),
+                store.isNotified
+                    ? Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            color: Colors.red,
+                          ),
+                          height: 12,
+                          width: 12,
+                        ),
+                      )
+                    : Container()
+              ]),
+            );
+          }),
         )
       ],
       flexibleSpace: Padding(
@@ -415,24 +440,30 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               ),
               Padding(
                   padding: EdgeInsets.only(top: size.height * 0.014),
-                  child: const Text(
-                    "Hidrogood",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 28,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600),
-                  )),
+                  child: Observer(builder: (_) {
+                    return Text(
+                      store.appController.usuario.contas?[0].conta?.nome ??
+                          "...",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 28,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600),
+                    );
+                  })),
               Padding(
                   padding: EdgeInsets.only(top: size.height * 0.003),
-                  child: const Text(
-                    "Administrador",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  )),
+                  child: Observer(builder: (_) {
+                    return Text(
+                      store.appController.usuario.contas?[0].cargo?.cargo ??
+                          "...",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    );
+                  })),
             ],
           ),
         ),
@@ -663,24 +694,26 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                 Alignment.bottomCenter,
                 progress,
               ),
-              child: const Text(
-                'Hidrogood',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w600,
-                ),
-                // style: TextStyle.lerp(
-                //   Theme.of(context)
-                //       .textTheme
-                //       .headline4
-                //       ?.copyWith(color: Colors.black),
-                //   Theme.of(context)
-                //       .textTheme
-                //       .headline5
-                //       ?.copyWith(color: Colors.black),
-                //   progress,
-                // ),
-              ),
+              child: Observer(builder: (_) {
+                return Text(
+                  store.appController.usuario.contas?[0].conta?.nome ?? "...",
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  // style: TextStyle.lerp(
+                  //   Theme.of(context)
+                  //       .textTheme
+                  //       .headline4
+                  //       ?.copyWith(color: Colors.black),
+                  //   Theme.of(context)
+                  //       .textTheme
+                  //       .headline5
+                  //       ?.copyWith(color: Colors.black),
+                  //   progress,
+                  // ),
+                );
+              }),
             ),
             AnimatedContainer(
               duration: const Duration(milliseconds: 100),
@@ -697,20 +730,23 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
               child: AnimatedOpacity(
                 duration: const Duration(milliseconds: 150),
                 opacity: (1 - progress * 2) < 0 ? 0 : 1 - progress * 2,
-                child: const Text(
-                  'Administrador',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                child: Observer(builder: (_) {
+                  return Text(
+                    store.appController.usuario.contas?[0].cargo?.cargo ??
+                        "...",
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  );
+                }),
               ),
             ),
             AnimatedContainer(
               duration: const Duration(milliseconds: 100),
               alignment: Alignment.lerp(
-                const Alignment(0, 0.9),
-                const Alignment(0, 0.9),
+                const Alignment(0, 0.85),
+                const Alignment(0, 0.8),
                 progress,
               ),
               child: Container(

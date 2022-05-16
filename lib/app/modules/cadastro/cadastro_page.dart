@@ -383,7 +383,7 @@ class CadastroPageState extends State<CadastroPage> {
           showCircularProgressIndicator(context);
           await store.buscaCEP();
           Navigator.pop(context);
-          focusNode.unfocus();
+          focusNode.nextFocus();
         } else {
           focusNode.nextFocus();
         }
