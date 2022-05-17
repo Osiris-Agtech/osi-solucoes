@@ -16,7 +16,10 @@ class LoginModule extends Module {
     ChildRoute('/', child: (_, args) => const LoginPage()),
     ChildRoute(
       '/MultiAccounts/',
-      child: (_, args) => const MultiAccountsPage(),
+      child: (_, args) => MultiAccountsPage(
+        user: args.data,
+      ),
+      transition: TransitionType.rightToLeftWithFade,
     ),
   ];
 }

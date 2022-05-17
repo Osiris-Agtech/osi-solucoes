@@ -1,4 +1,6 @@
+import 'package:osi_solucoes/app/models/usuario/usuario_model.dart';
+
 abstract class ILoginRepository {
   Future buscaUser(String email);
-  Future login(String email, String senha, String codigo);
+  Future<List<Usuario>> login(String email, String senha, String codigo);
 }

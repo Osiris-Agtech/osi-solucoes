@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -20,6 +22,52 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
   final ModulosStore modulosStore = Modular.get();
   final Duration duration = const Duration(milliseconds: 300);
 
+  Future<bool> exitApp() async {
+    showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        // title: const Text(
+        //   'Warning',
+        //   textAlign: TextAlign.center,
+        // ),
+        content: Text(
+          'Tem certeza que deseja fechar o APP ?',
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.black.withOpacity(.75),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        actions: [
+          TextButton(
+            style: TextButton.styleFrom(primary: Colors.grey),
+            onPressed: () async {
+              exit(0); // kill app
+            },
+            child: const Text(
+              'Sim',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(c, false),
+            child: const Text(
+              'Não',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -29,14 +77,17 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         statusBarIconBrightness: Brightness.dark,
       ),
       child: SafeArea(
-        child: Scaffold(
-            backgroundColor: kSecondBackgroundColor,
-            body: Stack(
-              children: [
-                menu(context, size),
-                home(context, size),
-              ],
-            )),
+        child: WillPopScope(
+          onWillPop: () => exitApp(),
+          child: Scaffold(
+              backgroundColor: kSecondBackgroundColor,
+              body: Stack(
+                children: [
+                  menu(context, size),
+                  home(context, size),
+                ],
+              )),
+        ),
       ),
     );
   }
@@ -105,9 +156,10 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                             "...",
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontSize: 30,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600),
+                          fontSize: 30,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
                       );
                     }),
                   )
@@ -557,15 +609,19 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 Align(
                     alignment: Alignment.bottomLeft,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 12, bottom: 20),
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        bottom: 20,
+                        right: 16,
+                      ),
                       child: Text(
                         title,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                         maxLines: 2,
-                        overflow: TextOverflow.clip,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     )),
               ],

@@ -5,6 +5,7 @@ import 'package:osi_solucoes/app/modules/home/home_module.dart';
 import 'package:osi_solucoes/app/modules/home/tabmodule/modulos/ajustes/resultadoajuste/resultadoajuste_module.dart';
 import 'package:osi_solucoes/app/modules/home/tabmodule/modulos/modulos_module.dart';
 import 'package:osi_solucoes/app/modules/login/login_module.dart';
+import 'package:osi_solucoes/app/splash_page.dart';
 
 class AppModule extends Module {
   @override
@@ -14,7 +15,12 @@ class AppModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ModuleRoute(Modular.initialRoute, module: LoginModule()),
+    ChildRoute(Modular.initialRoute, child: (_, args) => const SplashPage()),
+    ModuleRoute(
+      "/Login",
+      module: LoginModule(),
+      transition: TransitionType.rightToLeftWithFade,
+    ),
     ModuleRoute(
       "/Cadastro",
       module: CadastroModule(),

@@ -42,9 +42,8 @@ abstract class _LoginStoreBase with Store {
     } catch (e) {
       return "loginInvalido".i18n();
     }
-    userList = users as List<Usuario>;
-    print(userList.length);
-    if (users[0].contas!.length > 1) return "multiple";
+    userList = List.from(users);
+    if (userList[0].contas!.length > 1) return "multiple";
 
     appController.setUser(users[0]);
     return "loginValido".i18n();

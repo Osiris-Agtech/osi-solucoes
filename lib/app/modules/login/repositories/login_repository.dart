@@ -5,7 +5,7 @@ import 'login_repository_interface.dart';
 
 class LoginRepository implements ILoginRepository {
   final HttpLink _httpLink = HttpLink(
-    "http://90aa-2804-d59-42d7-9900-c910-56d6-319c-2f73.ngrok.io",
+    "http://7ad9-2804-d59-42d7-9900-1ce4-3250-890f-bc75.ngrok.io",
   );
 
   final _authLink = AuthLink(
@@ -51,7 +51,7 @@ class LoginRepository implements ILoginRepository {
   }
 
   @override
-  Future login(String email, String senha, String codigo) async {
+  Future<List<Usuario>> login(String email, String senha, String codigo) async {
     Link _link = _authLink.concat(_httpLink);
 
     final GraphQLClient client = GraphQLClient(
@@ -122,7 +122,9 @@ class LoginRepository implements ILoginRepository {
       if (usuario == null || usuario.isEmpty) {
         throw Exception("Usuário não encontrado");
       }
-      return usuario;
+
+      List<Usuario> users = usuario.cast<Usuario>();
+      return users;
     } else {
       throw Exception(result.exception);
     }
