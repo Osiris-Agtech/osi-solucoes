@@ -17,7 +17,8 @@ class LoginModule extends Module {
     ChildRoute(
       '/MultiAccounts/',
       child: (_, args) => MultiAccountsPage(
-        user: args.data,
+        user: args.data['user'],
+        isLoggedIn: args.data['isLoggedIn'],
       ),
       transition: TransitionType.rightToLeftWithFade,
     ),

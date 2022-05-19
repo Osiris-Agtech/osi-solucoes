@@ -32,6 +32,8 @@ class Usuario {
   // List<Lotes_Atividades>? atividades;
   @JsonKey(required: false, disallowNullValue: false)
   List<ConectaConta>? contas;
+  @JsonKey(required: false, disallowNullValue: false)
+  ConectaConta? selected_conta;
 
   Usuario({
     this.id,
@@ -44,6 +46,7 @@ class Usuario {
     this.created_at,
     this.pessoa,
     this.contas,
+    this.selected_conta,
   });
 
   factory Usuario.fromJson(Map<String, dynamic> json) =>

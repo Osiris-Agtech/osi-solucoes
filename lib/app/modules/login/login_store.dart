@@ -38,7 +38,7 @@ abstract class _LoginStoreBase with Store {
   login() async {
     var users;
     try {
-      users = await loginRepository.login(email.text, senha.text, "");
+      users = await loginRepository.login(email.text, senha.text, email.text);
     } catch (e) {
       return "loginInvalido".i18n();
     }
@@ -46,6 +46,7 @@ abstract class _LoginStoreBase with Store {
     if (userList[0].contas!.length > 1) return "multiple";
 
     appController.setUser(users[0]);
+    appController.usuario.selected_conta = userList[0].contas![0];
     return "loginValido".i18n();
   }
 

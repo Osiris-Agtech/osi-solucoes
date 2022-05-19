@@ -7,7 +7,10 @@ import 'package:osi_solucoes/app/models/usuario/usuario_model.dart';
 
 class MultiAccountsPage extends StatefulWidget {
   final Usuario user;
-  const MultiAccountsPage({Key? key, required this.user}) : super(key: key);
+  final bool isLoggedIn;
+  const MultiAccountsPage(
+      {Key? key, required this.user, required this.isLoggedIn})
+      : super(key: key);
 
   @override
   State<MultiAccountsPage> createState() => _MultiAccountsPageState();
@@ -38,8 +41,14 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
                   splashColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  onPressed: () => Modular.to
-                      .pop(), //Modular.to.pushReplacementNamed("/Login/"),
+                  onPressed: () {
+                    if (widget.isLoggedIn) {
+                      Modular.to.pop();
+                      Navigator.pop(context);
+                    } else {
+                      Modular.to.pushReplacementNamed("/Login/");
+                    }
+                  },
                   icon: const Icon(
                     Icons.arrow_back,
                     size: 30,
@@ -123,9 +132,8 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
                                       onTap: () async {
                                         showCircularProgressIndicator(context);
                                         appController.usuario = widget.user;
-                                        appController.usuario.contas?.clear();
-                                        appController.usuario.contas
-                                            ?.add(conta);
+                                        appController.usuario.selected_conta =
+                                            conta;
                                         await Future.delayed(
                                             const Duration(seconds: 2));
                                         Navigator.pop(context);

@@ -20,6 +20,13 @@ class LoginPageState extends State<LoginPage> {
   final FocusNode senhaNode = FocusNode();
 
   @override
+  void dispose() {
+    super.dispose();
+    store.email.clear();
+    store.senha.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
@@ -120,9 +127,12 @@ class LoginPageState extends State<LoginPage> {
                                     if (response == "sucesso") {
                                       Modular.to.pushReplacementNamed("/Home/");
                                     } else if (response == "multiple") {
-                                      Modular.to.pushNamed(
+                                      Modular.to.pushReplacementNamed(
                                         "/Login/MultiAccounts/",
-                                        arguments: store.userList[0],
+                                        arguments: {
+                                          "user": store.userList[0],
+                                          "isLoggedIn": false,
+                                        },
                                       );
                                     } else {
                                       showLoaderDialog(context, response);
@@ -281,9 +291,12 @@ class LoginPageState extends State<LoginPage> {
                       if (response == "sucesso") {
                         Modular.to.pushReplacementNamed("/Home/");
                       } else if (response == "multiple") {
-                        Modular.to.pushNamed(
+                        Modular.to.pushReplacementNamed(
                           "/Login/MultiAccounts/",
-                          arguments: store.userList[0],
+                          arguments: {
+                            "user": store.userList[0],
+                            "isLoggedIn": false,
+                          },
                         );
                       } else {
                         showLoaderDialog(context, response);

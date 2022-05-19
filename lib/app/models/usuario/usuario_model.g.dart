@@ -23,6 +23,10 @@ Usuario _$UsuarioFromJson(Map<String, dynamic> json) => Usuario(
       contas: (json['contas'] as List<dynamic>?)
           ?.map((e) => ConectaConta.fromJson(e as Map<String, dynamic>))
           .toList(),
+      selected_conta: json['selected_conta'] == null
+          ? null
+          : ConectaConta.fromJson(
+              json['selected_conta'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$UsuarioToJson(Usuario instance) => <String, dynamic>{
@@ -36,4 +40,5 @@ Map<String, dynamic> _$UsuarioToJson(Usuario instance) => <String, dynamic>{
       'created_at': instance.created_at?.toIso8601String(),
       'pessoa': instance.pessoa?.toJson(),
       'contas': instance.contas?.map((e) => e.toJson()).toList(),
+      'selected_conta': instance.selected_conta?.toJson(),
     };

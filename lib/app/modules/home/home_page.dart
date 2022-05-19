@@ -80,13 +80,14 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         child: WillPopScope(
           onWillPop: () => exitApp(),
           child: Scaffold(
-              backgroundColor: kSecondBackgroundColor,
-              body: Stack(
-                children: [
-                  menu(context, size),
-                  home(context, size),
-                ],
-              )),
+            backgroundColor: kSecondBackgroundColor,
+            body: Stack(
+              children: [
+                menu(context, size),
+                home(context, size),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -122,15 +123,16 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                   left: sizeWidth * 0.02,
                 ),
                 child: IconButton(
-                    alignment: Alignment.centerLeft,
-                    onPressed: () {
-                      store.setIsCollaped();
-                    },
-                    icon: const Icon(
-                      Icons.close,
-                      color: kBackgroundColor,
-                      size: 24,
-                    )),
+                  alignment: Alignment.centerLeft,
+                  onPressed: () {
+                    store.setIsCollaped();
+                  },
+                  icon: const Icon(
+                    Icons.close,
+                    color: kBackgroundColor,
+                    size: 24,
+                  ),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(
@@ -152,7 +154,8 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                     padding: EdgeInsets.only(right: size.width * 0.24),
                     child: Observer(builder: (_) {
                       return Text(
-                        store.appController.usuario.contas?[0].conta?.nome ??
+                        store.appController.usuario.selected_conta?.conta
+                                ?.nome ??
                             "...",
                         textAlign: TextAlign.center,
                         style: const TextStyle(
@@ -178,9 +181,10 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                       return Text(
                         store.appController.usuario.contas?[0].cargo?.cargo ??
                             "...",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
-                          color: Colors.white,
+                          color: Colors.white.withOpacity(.8),
+                          fontStyle: FontStyle.italic,
                         ),
                       );
                     }),
@@ -188,8 +192,8 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 ],
               ),
               // Expanded(flex: 1, child: Container()),
-              const Divider(
-                color: Color(0xFF9F9F9F),
+              Divider(
+                color: const Color(0xFF9F9F9F).withOpacity(.4),
               ),
               // Expanded(flex: 1, child: Container()),
               Padding(
@@ -212,7 +216,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                         child: Text(
                           "itemMenu1".i18n(),
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 18),
+                              color: Colors.white, fontSize: 16),
                         ),
                       ),
                     ],
@@ -238,18 +242,63 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                         child: Text(
                           "itemMenu2".i18n(),
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 18),
+                              color: Colors.white, fontSize: 16),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              // Expanded(flex: 1, child: Container()),
-              const Divider(
-                color: Color(0xFF9F9F9F),
+              Observer(builder: (_) {
+                if (store.appController.usuario.contas!.length < 2) {
+                  return Container();
+                }
+                return Padding(
+                  padding: EdgeInsets.only(
+                      left: sizeWidth * 0.122, top: size.height * 0.02),
+                  child: InkWell(
+                    onTap: () async {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        },
+                      );
+                      await Future.delayed(const Duration(seconds: 1));
+                      Modular.to.pushNamed(
+                        "/Login/MultiAccounts/",
+                        arguments: {
+                          "user": store.appController.usuario,
+                          "isLoggedIn": true,
+                        },
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.published_with_changes,
+                            color: Colors.white.withOpacity(.8),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: size.width * 0.02),
+                          child: const Text(
+                            "Trocar Conta",
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+              Divider(
+                color: const Color(0xFF9F9F9F).withOpacity(.4),
               ),
-              // Expanded(flex: 1, child: Container()),
               Padding(
                 padding: EdgeInsets.only(left: sizeWidth * 0.122
                     // , top: size.height * 0.05
@@ -270,7 +319,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                         child: Text(
                           "itemMenu3".i18n(),
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 18),
+                              color: Colors.white, fontSize: 16),
                         ),
                       ),
                     ],
@@ -306,14 +355,14 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                         child: Text(
                           "itemMenu4".i18n(),
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 18),
+                              color: Colors.white, fontSize: 16),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              Expanded(flex: 2, child: Container()),
+              const Spacer(),
               Padding(
                 padding: EdgeInsets.only(
                   left: sizeWidth * 0.14,
@@ -457,26 +506,28 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
           child: Observer(builder: (_) {
             return InkWell(
               onTap: () => store.toggleNotified(),
-              child: Stack(children: [
-                const Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.black,
-                ),
-                store.isNotified
-                    ? Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: Colors.red,
+              child: Stack(
+                children: [
+                  const Icon(
+                    Icons.notifications_outlined,
+                    color: Colors.black,
+                  ),
+                  store.isNotified
+                      ? Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: Colors.red,
+                            ),
+                            height: 12,
+                            width: 12,
                           ),
-                          height: 12,
-                          width: 12,
-                        ),
-                      )
-                    : Container()
-              ]),
+                        )
+                      : Container()
+                ],
+              ),
             );
           }),
         )
@@ -499,10 +550,11 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 ),
               ),
               Padding(
-                  padding: EdgeInsets.only(top: size.height * 0.014),
-                  child: Observer(builder: (_) {
+                padding: EdgeInsets.only(top: size.height * 0.014),
+                child: Observer(
+                  builder: (_) {
                     return Text(
-                      store.appController.usuario.contas?[0].conta?.nome ??
+                      store.appController.usuario.selected_conta?.conta?.nome ??
                           "...",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
@@ -510,10 +562,13 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                           color: Colors.black,
                           fontWeight: FontWeight.w600),
                     );
-                  })),
+                  },
+                ),
+              ),
               Padding(
-                  padding: EdgeInsets.only(top: size.height * 0.003),
-                  child: Observer(builder: (_) {
+                padding: EdgeInsets.only(top: size.height * 0.003),
+                child: Observer(
+                  builder: (_) {
                     return Text(
                       store.appController.usuario.contas?[0].cargo?.cargo ??
                           "...",
@@ -523,7 +578,9 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                         color: Colors.black,
                       ),
                     );
-                  })),
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -594,36 +651,40 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                        padding: const EdgeInsets.only(right: 10, top: 10),
-                        child: IconButton(
-                          icon: SvgPicture.asset(
-                            icon,
-                            height: 25,
-                            width: 25,
-                          ),
-                          onPressed: () {},
-                        ))),
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10, top: 10),
+                    child: IconButton(
+                      icon: SvgPicture.asset(
+                        icon,
+                        height: 25,
+                        width: 25,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
+                ),
                 const Spacer(),
                 Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        bottom: 20,
-                        right: 16,
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 16,
+                      bottom: 20,
+                      right: 16,
+                    ),
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black.withOpacity(.7),
                       ),
-                      child: Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    )),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -674,7 +735,9 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                 alignment: Alignment.topLeft,
                 child: IconButton(
                   icon: SvgPicture.asset('assets/icons/grid.svg'),
-                  onPressed: () => store.setIsCollaped(),
+                  onPressed: () {
+                    store.setIsCollaped();
+                  },
                 ),
               ),
             ),
@@ -712,18 +775,6 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                 ),
               ),
             ),
-            // AnimatedOpacity(
-            //   duration: const Duration(milliseconds: 150),
-            //   opacity: (1 - progress * 1.5) < 0 ? 0 : 1 - progress * 1.5,
-            //   child: Align(
-            //     alignment: const Alignment(0, -0.8),
-            //     child: Image.asset(
-            //       "assets/images/osiris-logo.png",
-            //       height: 35,
-            //       fit: BoxFit.cover,
-            //     ),
-            //   ),
-            // ),
             AnimatedContainer(
               duration: const Duration(milliseconds: 100),
               padding: EdgeInsets.lerp(
@@ -760,22 +811,12 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
               ),
               child: Observer(builder: (_) {
                 return Text(
-                  store.appController.usuario.contas?[0].conta?.nome ?? "...",
+                  store.appController.usuario.selected_conta?.conta?.nome ??
+                      "...",
                   style: const TextStyle(
-                    fontSize: 28,
+                    fontSize: 24,
                     fontWeight: FontWeight.w600,
                   ),
-                  // style: TextStyle.lerp(
-                  //   Theme.of(context)
-                  //       .textTheme
-                  //       .headline4
-                  //       ?.copyWith(color: Colors.black),
-                  //   Theme.of(context)
-                  //       .textTheme
-                  //       .headline5
-                  //       ?.copyWith(color: Colors.black),
-                  //   progress,
-                  // ),
                 );
               }),
             ),
@@ -798,9 +839,11 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                   return Text(
                     store.appController.usuario.contas?[0].cargo?.cargo ??
                         "...",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
+                      color: Colors.black.withOpacity(.7),
+                      fontStyle: FontStyle.italic,
                     ),
                   );
                 }),
