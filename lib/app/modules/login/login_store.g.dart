@@ -39,6 +39,21 @@ mixin _$LoginStore on _LoginStoreBase, Store {
     });
   }
 
+  final _$userListAtom = Atom(name: '_LoginStoreBase.userList');
+
+  @override
+  List<Usuario> get userList {
+    _$userListAtom.reportRead();
+    return super.userList;
+  }
+
+  @override
+  set userList(List<Usuario> value) {
+    _$userListAtom.reportWrite(value, super.userList, () {
+      super.userList = value;
+    });
+  }
+
   final _$isObscureAtom = Atom(name: '_LoginStoreBase.isObscure');
 
   @override
@@ -54,19 +69,11 @@ mixin _$LoginStore on _LoginStoreBase, Store {
     });
   }
 
-  final _$vertificaLoginAsyncAction =
-      AsyncAction('_LoginStoreBase.vertificaLogin');
+  final _$loginAsyncAction = AsyncAction('_LoginStoreBase.login');
 
   @override
-  Future vertificaLogin(String email) {
-    return _$vertificaLoginAsyncAction.run(() => super.vertificaLogin(email));
-  }
-
-  final _$testaUserAsyncAction = AsyncAction('_LoginStoreBase.testaUser');
-
-  @override
-  Future testaUser(String email) {
-    return _$testaUserAsyncAction.run(() => super.testaUser(email));
+  Future login() {
+    return _$loginAsyncAction.run(() => super.login());
   }
 
   final _$_LoginStoreBaseActionController =
@@ -88,6 +95,7 @@ mixin _$LoginStore on _LoginStoreBase, Store {
     return '''
 email: ${email},
 senha: ${senha},
+userList: ${userList},
 isObscure: ${isObscure}
     ''';
   }

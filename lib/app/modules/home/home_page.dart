@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -18,25 +20,75 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends ModularState<HomePage, HomeStore> {
   final ModulosStore modulosStore = Modular.get();
-  final Duration duration = const Duration(milliseconds: 200);
+  final Duration duration = const Duration(milliseconds: 300);
+
+  Future<bool> exitApp() async {
+    showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        // title: const Text(
+        //   'Warning',
+        //   textAlign: TextAlign.center,
+        // ),
+        content: Text(
+          'Tem certeza que deseja fechar o APP ?',
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.black.withOpacity(.75),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        actions: [
+          TextButton(
+            style: TextButton.styleFrom(primary: Colors.grey),
+            onPressed: () async {
+              exit(0); // kill app
+            },
+            child: const Text(
+              'Sim',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(c, false),
+            child: const Text(
+              'Não',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: kBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
       ),
       child: SafeArea(
-        child: Scaffold(
+        child: WillPopScope(
+          onWillPop: () => exitApp(),
+          child: Scaffold(
             backgroundColor: kSecondBackgroundColor,
             body: Stack(
               children: [
                 menu(context, size),
                 home(context, size),
               ],
-            )),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -64,24 +116,29 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(flex: 1, child: Container()),
+              // Expanded(flex: 1, child: Container()),
               Padding(
                 padding: EdgeInsets.only(
-                    // top: sizeHeight * .088,
-                    left: sizeWidth * 0.02),
+                  top: 30,
+                  left: sizeWidth * 0.02,
+                ),
                 child: IconButton(
-                    alignment: Alignment.centerLeft,
-                    onPressed: () {
-                      store.setIsCollaped();
-                    },
-                    icon: const Icon(
-                      Icons.close,
-                      color: kBackgroundColor,
-                      size: 24,
-                    )),
+                  alignment: Alignment.centerLeft,
+                  onPressed: () {
+                    store.setIsCollaped();
+                  },
+                  icon: const Icon(
+                    Icons.close,
+                    color: kBackgroundColor,
+                    size: 24,
+                  ),
+                ),
               ),
               Padding(
-                padding: EdgeInsets.only(right: (sizeWidth * 0.33)),
+                padding: EdgeInsets.only(
+                  right: (sizeWidth * 0.33),
+                  bottom: 10,
+                ),
                 child: const Center(
                   child: CircleAvatar(
                     backgroundImage: NetworkImage(
@@ -95,14 +152,19 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(right: size.width * 0.24),
-                    child: const Text(
-                      "Hidrogood",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
+                    child: Observer(builder: (_) {
+                      return Text(
+                        store.appController.usuario.selected_conta?.conta
+                                ?.nome ??
+                            "...",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
                           fontSize: 30,
                           color: Colors.white,
-                          fontWeight: FontWeight.w600),
-                    ),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    }),
                   )
                 ],
               ),
@@ -110,22 +172,30 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                      padding: EdgeInsets.only(
-                          top: size.height * 0.003, right: size.width * 0.24),
-                      child: const Text(
-                        "Administrador",
+                    padding: EdgeInsets.only(
+                      top: size.height * 0.003,
+                      right: size.width * 0.24,
+                      bottom: 10,
+                    ),
+                    child: Observer(builder: (_) {
+                      return Text(
+                        store.appController.usuario.contas?[0].cargo?.cargo ??
+                            "...",
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.white,
+                          color: Colors.white.withOpacity(.8),
+                          fontStyle: FontStyle.italic,
                         ),
-                      )),
+                      );
+                    }),
+                  ),
                 ],
               ),
-              Expanded(flex: 1, child: Container()),
-              const Divider(
-                color: Color(0xFF9F9F9F),
+              // Expanded(flex: 1, child: Container()),
+              Divider(
+                color: const Color(0xFF9F9F9F).withOpacity(.4),
               ),
-              Expanded(flex: 1, child: Container()),
+              // Expanded(flex: 1, child: Container()),
               Padding(
                 padding: EdgeInsets.only(
                     // top: size.height * 0.05,
@@ -135,17 +205,18 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                   child: Row(
                     children: [
                       IconButton(
-                        icon:
-                            SvgPicture.asset("assets/icons/settings_icon.svg"),
+                        icon: SvgPicture.asset(
+                          "assets/icons/settings_icon.svg",
+                          color: kBackgroundColor.withOpacity(.8),
+                        ),
                         onPressed: () {},
-                        color: kBackgroundColor,
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.02),
                         child: Text(
                           "itemMenu1".i18n(),
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 20),
+                              color: Colors.white, fontSize: 16),
                         ),
                       ),
                     ],
@@ -154,33 +225,80 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeWidth * 0.122, top: size.height * 0.05),
+                    left: sizeWidth * 0.122, top: size.height * 0.02),
                 child: InkWell(
                   onTap: () {},
                   child: Row(
                     children: [
                       IconButton(
-                        icon: SvgPicture.asset("assets/icons/hexagon_icon.svg"),
+                        icon: SvgPicture.asset(
+                          "assets/icons/hexagon_icon.svg",
+                          color: kBackgroundColor.withOpacity(.8),
+                        ),
                         onPressed: () {},
-                        color: kBackgroundColor,
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.02),
                         child: Text(
                           "itemMenu2".i18n(),
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 20),
+                              color: Colors.white, fontSize: 16),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              Expanded(flex: 1, child: Container()),
-              const Divider(
-                color: Color(0xFF9F9F9F),
+              Observer(builder: (_) {
+                if (store.appController.usuario.contas!.length < 2) {
+                  return Container();
+                }
+                return Padding(
+                  padding: EdgeInsets.only(
+                      left: sizeWidth * 0.122, top: size.height * 0.02),
+                  child: InkWell(
+                    onTap: () async {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        },
+                      );
+                      await Future.delayed(const Duration(seconds: 1));
+                      Modular.to.pushNamed(
+                        "/Login/MultiAccounts/",
+                        arguments: {
+                          "user": store.appController.usuario,
+                          "isLoggedIn": true,
+                        },
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.published_with_changes,
+                            color: Colors.white.withOpacity(.8),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: size.width * 0.02),
+                          child: const Text(
+                            "Trocar Conta",
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+              Divider(
+                color: const Color(0xFF9F9F9F).withOpacity(.4),
               ),
-              Expanded(flex: 1, child: Container()),
               Padding(
                 padding: EdgeInsets.only(left: sizeWidth * 0.122
                     // , top: size.height * 0.05
@@ -190,16 +308,18 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                   child: Row(
                     children: [
                       IconButton(
-                        icon: SvgPicture.asset("assets/icons/info_icon.svg"),
+                        icon: SvgPicture.asset(
+                          "assets/icons/info_icon.svg",
+                          color: kBackgroundColor.withOpacity(.8),
+                        ),
                         onPressed: () {},
-                        color: kBackgroundColor,
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.02),
                         child: Text(
                           "itemMenu3".i18n(),
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 20),
+                              color: Colors.white, fontSize: 16),
                         ),
                       ),
                     ],
@@ -208,32 +328,41 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeWidth * 0.122, top: size.height * 0.046),
+                    left: sizeWidth * 0.122, top: size.height * 0.02),
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const Center(child: CircularProgressIndicator());
+                      },
+                    );
+                    await Future.delayed(const Duration(seconds: 2));
                     Modular.to.pushReplacementNamed(Modular.initialRoute);
                   },
                   child: Row(
                     children: [
                       IconButton(
                         icon: SvgPicture.asset(
-                            "assets/icons/external_link_icon.svg"),
+                          "assets/icons/external_link_icon.svg",
+                          color: kBackgroundColor.withOpacity(.8),
+                        ),
                         onPressed: () {},
-                        color: kBackgroundColor,
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: size.width * 0.02),
                         child: Text(
                           "itemMenu4".i18n(),
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 20),
+                              color: Colors.white, fontSize: 16),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              Expanded(flex: 2, child: Container()),
+              const Spacer(),
               Padding(
                 padding: EdgeInsets.only(
                   left: sizeWidth * 0.14,
@@ -257,7 +386,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
       return AnimatedPositioned(
         duration: duration,
         top: store.isCollapsed ? 0 : size.height * 0.1,
-        bottom: store.isCollapsed ? 0 : 0.2 * size.width,
+        bottom: store.isCollapsed ? 0 : 0.1 * size.height,
         left: store.isCollapsed ? 0 : 0.76 * size.width,
         right: store.isCollapsed ? 0 : -.8 * size.width,
         child: Container(
@@ -374,26 +503,33 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
       actions: [
         Padding(
           padding: const EdgeInsets.only(top: 15, right: 25),
-          child: Stack(children: [
-            const Icon(
-              Icons.notifications_outlined,
-              color: Colors.black,
-            ),
-            store.isNotified
-                ? Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        color: Colors.red,
-                      ),
-                      height: 12,
-                      width: 12,
-                    ),
-                  )
-                : Container()
-          ]),
+          child: Observer(builder: (_) {
+            return InkWell(
+              onTap: () => store.toggleNotified(),
+              child: Stack(
+                children: [
+                  const Icon(
+                    Icons.notifications_outlined,
+                    color: Colors.black,
+                  ),
+                  store.isNotified
+                      ? Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: Colors.red,
+                            ),
+                            height: 12,
+                            width: 12,
+                          ),
+                        )
+                      : Container()
+                ],
+              ),
+            );
+          }),
         )
       ],
       flexibleSpace: Padding(
@@ -414,25 +550,37 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 ),
               ),
               Padding(
-                  padding: EdgeInsets.only(top: size.height * 0.014),
-                  child: const Text(
-                    "Hidrogood",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 28,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600),
-                  )),
+                padding: EdgeInsets.only(top: size.height * 0.014),
+                child: Observer(
+                  builder: (_) {
+                    return Text(
+                      store.appController.usuario.selected_conta?.conta?.nome ??
+                          "...",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 28,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600),
+                    );
+                  },
+                ),
+              ),
               Padding(
-                  padding: EdgeInsets.only(top: size.height * 0.003),
-                  child: const Text(
-                    "Administrador",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  )),
+                padding: EdgeInsets.only(top: size.height * 0.003),
+                child: Observer(
+                  builder: (_) {
+                    return Text(
+                      store.appController.usuario.contas?[0].cargo?.cargo ??
+                          "...",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -503,32 +651,40 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                        padding: const EdgeInsets.only(right: 10, top: 10),
-                        child: IconButton(
-                          icon: SvgPicture.asset(
-                            icon,
-                            height: 25,
-                            width: 25,
-                          ),
-                          onPressed: () {},
-                        ))),
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10, top: 10),
+                    child: IconButton(
+                      icon: SvgPicture.asset(
+                        icon,
+                        height: 25,
+                        width: 25,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
+                ),
                 const Spacer(),
                 Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 12, bottom: 20),
-                      child: Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.clip,
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 16,
+                      bottom: 20,
+                      right: 16,
+                    ),
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black.withOpacity(.7),
                       ),
-                    )),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -579,7 +735,9 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                 alignment: Alignment.topLeft,
                 child: IconButton(
                   icon: SvgPicture.asset('assets/icons/grid.svg'),
-                  onPressed: () => store.setIsCollaped(),
+                  onPressed: () {
+                    store.setIsCollaped();
+                  },
                 ),
               ),
             ),
@@ -617,18 +775,6 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                 ),
               ),
             ),
-            // AnimatedOpacity(
-            //   duration: const Duration(milliseconds: 150),
-            //   opacity: (1 - progress * 1.5) < 0 ? 0 : 1 - progress * 1.5,
-            //   child: Align(
-            //     alignment: const Alignment(0, -0.8),
-            //     child: Image.asset(
-            //       "assets/images/osiris-logo.png",
-            //       height: 35,
-            //       fit: BoxFit.cover,
-            //     ),
-            //   ),
-            // ),
             AnimatedContainer(
               duration: const Duration(milliseconds: 100),
               padding: EdgeInsets.lerp(
@@ -663,24 +809,16 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                 Alignment.bottomCenter,
                 progress,
               ),
-              child: const Text(
-                'Hidrogood',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w600,
-                ),
-                // style: TextStyle.lerp(
-                //   Theme.of(context)
-                //       .textTheme
-                //       .headline4
-                //       ?.copyWith(color: Colors.black),
-                //   Theme.of(context)
-                //       .textTheme
-                //       .headline5
-                //       ?.copyWith(color: Colors.black),
-                //   progress,
-                // ),
-              ),
+              child: Observer(builder: (_) {
+                return Text(
+                  store.appController.usuario.selected_conta?.conta?.nome ??
+                      "...",
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                  ),
+                );
+              }),
             ),
             AnimatedContainer(
               duration: const Duration(milliseconds: 100),
@@ -697,20 +835,25 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
               child: AnimatedOpacity(
                 duration: const Duration(milliseconds: 150),
                 opacity: (1 - progress * 2) < 0 ? 0 : 1 - progress * 2,
-                child: const Text(
-                  'Administrador',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                child: Observer(builder: (_) {
+                  return Text(
+                    store.appController.usuario.contas?[0].cargo?.cargo ??
+                        "...",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black.withOpacity(.7),
+                      fontStyle: FontStyle.italic,
+                    ),
+                  );
+                }),
               ),
             ),
             AnimatedContainer(
               duration: const Duration(milliseconds: 100),
               alignment: Alignment.lerp(
-                const Alignment(0, 0.9),
-                const Alignment(0, 0.9),
+                const Alignment(0, 0.85),
+                const Alignment(0, 0.8),
                 progress,
               ),
               child: Container(

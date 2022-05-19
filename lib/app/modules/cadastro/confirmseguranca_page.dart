@@ -34,10 +34,11 @@ class ConfirmsegurancaPageState extends State<ConfirmsegurancaPage> {
             backgroundColor: kBackgroundColor,
             leading: Builder(builder: (_) {
               return Padding(
-                padding: EdgeInsets.only(left: size.width * 0.07),
+                padding: const EdgeInsets.only(left: 8),
                 child: IconButton(
                   splashColor: Colors.transparent,
                   hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
                   onPressed: () => Modular.to.pop(),
                   icon: const Icon(
                     Icons.arrow_back,
@@ -187,11 +188,19 @@ class ConfirmsegurancaPageState extends State<ConfirmsegurancaPage> {
                             fontFamily: "MontSerrat "),
                         children: <TextSpan>[
                           TextSpan(
-                              text: " " + 'confirmaText4'.i18n(),
-                              style: const TextStyle(
-                                  color: Color(0xFF1C5EC1), fontSize: 12),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {}),
+                            text: " " + 'confirmaText4'.i18n(),
+                            style: const TextStyle(
+                                color: Color(0xFF1C5EC1), fontSize: 12),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                showCircularProgressIndicator(context);
+                                await store.enviarCodigoEmail();
+                                await Future.delayed(
+                                  const Duration(seconds: 1),
+                                );
+                                Navigator.pop(context);
+                              },
+                          ),
                           TextSpan(
                             text: '\n' + "confirmaText5".i18n(),
                             style: const TextStyle(
@@ -201,56 +210,56 @@ class ConfirmsegurancaPageState extends State<ConfirmsegurancaPage> {
                   ),
                 ),
                 Padding(
-                    padding: EdgeInsets.only(top: size.height * .094),
-                    child: Center(
-                      child: SizedBox(
-                        width: size.width * .7,
-                        height: 45,
-                        child: ElevatedButton(
-                          child: Text(
-                            "TextButtonConfirmar".i18n(),
-                            style: const TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.w600),
-                          ),
-                          onPressed: () async {
-                            if (store.verificaCodigo()) {
-                              showCircularProgressIndicator(context);
-                              String res = await store.cadastraUser();
-                              await Future.delayed(const Duration(seconds: 2));
-                              res == "sucesso"
-                                  ? {
-                                      showDoneAnimation(context),
-                                      await Future.delayed(
-                                          const Duration(milliseconds: 1300)),
-                                      Modular.to
-                                          .popUntil(ModalRoute.withName("/")),
-                                      Modular.to.pushReplacementNamed("/Home/"),
-                                    }
-                                  : {
-                                      showErrorDialog(context, res),
-                                      await Future.delayed(
-                                          const Duration(seconds: 2)),
-                                      Navigator.pop(context),
-                                      Navigator.pop(context),
-                                    };
-                            } else {}
-                          },
+                  padding: EdgeInsets.only(top: size.height * .08),
+                  child: Center(
+                    child: SizedBox(
+                      width: size.width * .7,
+                      height: 45,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(primary: kPrimaryColor),
+                        child: Text(
+                          "TextButtonConfirmar".i18n(),
+                          style: const TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.w600),
                         ),
+                        onPressed: () async {
+                          if (store.verificaCodigo()) {
+                            showCircularProgressIndicator(context);
+                            String res = await store.cadastraUser();
+                            await Future.delayed(const Duration(seconds: 2));
+                            res == "sucesso"
+                                ? {
+                                    showDoneAnimation(context),
+                                    await Future.delayed(
+                                        const Duration(milliseconds: 1400)),
+                                    Modular.to
+                                        .popUntil(ModalRoute.withName("/")),
+                                    Modular.to.pushReplacementNamed("/Home/"),
+                                  }
+                                : {
+                                    showErrorDialog(context, res),
+                                    await Future.delayed(
+                                        const Duration(seconds: 2)),
+                                    Navigator.pop(context),
+                                    Navigator.pop(context),
+                                  };
+                          } else {
+                            showErrorDialog(context, "Código Incorreto");
+                          }
+                        },
                       ),
-                    )),
-                Padding(
-                  padding: EdgeInsets.only(top: size.height * 0.01),
-                  child: TextButton(
-                      onPressed: () {
-                        Modular.to.pushNamedAndRemoveUntil(
-                            "/", ModalRoute.withName('/'));
-                      },
-                      child: Text(
-                        "confirmaText6".i18n(),
-                        style:
-                            const TextStyle(fontSize: 14, color: Colors.grey),
-                      )),
+                    ),
+                  ),
                 ),
+                TextButton(
+                    onPressed: () {
+                      Modular.to.pushNamedAndRemoveUntil(
+                          "/", ModalRoute.withName('/'));
+                    },
+                    child: Text(
+                      "confirmaText6".i18n(),
+                      style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    )),
               ],
             ),
           ),
@@ -272,6 +281,7 @@ class ConfirmsegurancaPageState extends State<ConfirmsegurancaPage> {
   showDoneAnimation(BuildContext context) {
     showDialog(
       barrierDismissible: false,
+      barrierColor: Colors.white,
       context: context,
       builder: (BuildContext context) {
         return const Center(
