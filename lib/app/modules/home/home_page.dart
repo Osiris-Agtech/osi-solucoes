@@ -179,7 +179,8 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                     ),
                     child: Observer(builder: (_) {
                       return Text(
-                        store.appController.usuario.contas?[0].cargo?.cargo ??
+                        store.appController.usuario.selected_conta?.cargo
+                                ?.cargo ??
                             "...",
                         style: TextStyle(
                           fontSize: 16,
@@ -570,7 +571,8 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 child: Observer(
                   builder: (_) {
                     return Text(
-                      store.appController.usuario.contas?[0].cargo?.cargo ??
+                      store.appController.usuario.selected_conta?.cargo
+                              ?.cargo ??
                           "...",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
@@ -837,7 +839,7 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                 opacity: (1 - progress * 2) < 0 ? 0 : 1 - progress * 2,
                 child: Observer(builder: (_) {
                   return Text(
-                    store.appController.usuario.contas?[0].cargo?.cargo ??
+                    store.appController.usuario.selected_conta?.cargo?.cargo ??
                         "...",
                     style: TextStyle(
                       fontSize: 18,
