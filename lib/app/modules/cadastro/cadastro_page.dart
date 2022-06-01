@@ -339,10 +339,7 @@ class CadastroPageState extends State<CadastroPage> {
   }) {
     return TextFormField(
       validator: (value) {
-        print(labelText + ":  ");
-        print(value);
         if (opcional != null) {
-          print("  opcional NOT NULL");
           return null;
         }
 

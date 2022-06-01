@@ -6,6 +6,7 @@ import 'package:osi_solucoes/app//modules/login/login_store.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/app/constants.dart';
 import 'package:osi_solucoes/app/modules/login/components/forgotPassword.dart';
+import 'package:osi_solucoes/app/modules/login/components/loadingDialog.dart';
 import 'package:osi_solucoes/app/modules/login/components/loginButton.dart';
 import 'package:osi_solucoes/app/modules/login/components/registrarButton.dart';
 
@@ -139,33 +140,6 @@ class LoginPageState extends State<LoginPage> {
     return Expanded(
       flex: flex,
       child: Container(),
-    );
-  }
-
-  showCircularProgressIndicator(BuildContext context) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-  }
-
-  showLoaderDialog(BuildContext context, String error) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return Center(
-          child: AlertDialog(
-            content: Text(
-              error,
-              textAlign: TextAlign.center,
-            ),
-          ),
-        );
-      },
     );
   }
 

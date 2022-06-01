@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/app/constants.dart';
+import 'package:osi_solucoes/app/modules/login/components/loadingDialog.dart';
 import 'package:osi_solucoes/app/modules/login/login_store.dart';
 
 loginButton(
