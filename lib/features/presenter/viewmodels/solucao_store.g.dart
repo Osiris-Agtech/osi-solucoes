@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'receitas_store.dart';
+part of 'solucao_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,7 +8,7 @@ part of 'receitas_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$ReceitasStore on _ReceitasStoreBase, Store {
+mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   final _$valueAtom = Atom(name: '_ReceitasStoreBase.value');
 
   @override

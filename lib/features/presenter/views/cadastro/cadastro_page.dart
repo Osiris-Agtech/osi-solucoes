@@ -1,11 +1,13 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 // import 'package:osi_solucoes/app//modules/cadastro/cadastro_store.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/cadastro/confirmseguranca_page.dart';
 
 import '../../viewmodels/cadastro_store.dart';
 
@@ -17,7 +19,8 @@ class CadastroPage extends StatefulWidget {
 }
 
 class CadastroPageState extends State<CadastroPage> {
-  final CadastroStore store = Modular.get<CadastroStore>();
+  // final CadastroStore store = Modular.get<CadastroStore>();
+  CadastroStore store = GetIt.I<CadastroStore>();
   final FocusScopeNode focusNode = FocusScopeNode();
   final formKey = GlobalKey<FormState>();
 
@@ -41,7 +44,7 @@ class CadastroPageState extends State<CadastroPage> {
                   splashColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  onPressed: () => Modular.to.pop(),
+                  onPressed: () => Get.back(), // Modular.to.pop(),
                   icon: const Icon(
                     Icons.arrow_back,
                     size: 30,
@@ -298,8 +301,10 @@ class CadastroPageState extends State<CadastroPage> {
                                           await store.enviarCodigoEmail();
                                       if (response2 == "sucesso") {
                                         Navigator.pop(context);
-                                        Modular.to
-                                            .pushNamed("/Cadastro/Confirma");
+                                        Get.to(() =>
+                                            const ConfirmaSegurancaPage());
+                                        // Modular.to
+                                        //     .pushNamed("/Cadastro/Confirma");
                                       } else {
                                         showErrorDialog(context, response2);
                                         await Future.delayed(

@@ -1,8 +1,14 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/ajuste/ajustes_page.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/area_cultivo_page.dart';
+import 'package:osi_solucoes/features/presenter/views/caderno_campo/caderno_campo_page.dart';
+import 'package:osi_solucoes/features/presenter/views/reservatorio/reservatorios_page.dart';
+import 'package:osi_solucoes/features/presenter/views/solucao/solucao_page.dart';
 
 import '../../viewmodels/modulos_store.dart';
 
@@ -16,7 +22,8 @@ class ModulosPage extends StatefulWidget {
 }
 
 class ModulosPageState extends State<ModulosPage> {
-  final ModulosStore store = Modular.get();
+  // final ModulosStore store = Modular.get();
+  ModulosStore store = GetIt.I<ModulosStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,15 +48,20 @@ class ModulosPageState extends State<ModulosPage> {
             onTap: (id) {
               store.pageviewController = id;
               if (id == 0) {
-                Modular.to.navigate('/Tab/AreaCultivo/');
+                Get.to(() => const AreaCultivoPage());
+                // Modular.to.navigate('/Tab/AreaCultivo/');
               } else if (id == 1) {
-                Modular.to.navigate('/Tab/Reservatorios/');
+                Get.to(() => const ReservatoriosPage());
+                // Modular.to.navigate('/Tab/Reservatorios/');
               } else if (id == 2) {
-                Modular.to.navigate('/Tab/CadernoCampo/');
+                Get.to(() => const CadernoCampoPage());
+                // Modular.to.navigate('/Tab/CadernoCampo/');
               } else if (id == 3) {
-                Modular.to.navigate('/Tab/Receitas/');
+                Get.to(() => const SolucaoPage());
+                // Modular.to.navigate('/Tab/Receitas/');
               } else if (id == 4) {
-                Modular.to.navigate('/Tab/Ajustes/');
+                Get.to(() => const AjustesPage());
+                // Modular.to.navigate('/Tab/Ajustes/');
               }
             },
             currentIndex: store.pageviewController,

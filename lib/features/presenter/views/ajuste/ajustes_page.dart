@@ -1,9 +1,11 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/ajuste/resultadoajuste_page.dart';
 
 import '../../viewmodels/ajustes_store.dart';
 import '../home/components/top_app_bar.dart';
@@ -17,15 +19,10 @@ class AjustesPage extends StatefulWidget {
 
 class AjustesPageState extends State<AjustesPage> {
   // final ModulosStore modulosStore = Modular.get();
-  final AjustesStore store = Modular.get();
+  // final AjustesStore store = Modular.get();
+  AjustesStore store = GetIt.I<AjustesStore>();
   final formKey = GlobalKey<FormState>();
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
-
-  @override
-  void dispose() {
-    super.dispose();
-    Modular.dispose<AjustesStore>();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +41,7 @@ class AjustesPageState extends State<AjustesPage> {
           child: FloatingActionButton.extended(
             onPressed: () {
               store.reservatorio.text.isNotEmpty
-                  ? {Modular.to.navigate("/resultadoAjuste/")}
+                  ? Get.to(() => const ResultadoajustePage())
                   : ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
             backgroundColor: kPrimaryColor,
@@ -556,7 +553,8 @@ class ButtonWidget extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             onPressed: () {
-              Modular.to.pushReplacementNamed("/resultadoAjuste/");
+              Get.to(() => const ResultadoajustePage());
+              // Modular.to.pushReplacementNamed("/resultadoAjuste/");
             },
           ),
         ),

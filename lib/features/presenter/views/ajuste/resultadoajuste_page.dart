@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/ajuste/ajustes_page.dart';
 import 'package:rive/rive.dart';
 
 import '../home/components/top_app_bar.dart';
@@ -152,8 +153,9 @@ showConfirmDialog(BuildContext context) {
                         await Future.delayed(
                             const Duration(milliseconds: 1400));
                         Navigator.pop(context);
-                        Modular.to.popUntil(ModalRoute.withName('/Home'));
-                        Modular.to.pushReplacementNamed("/Tab/Ajustes/");
+                        Get.to(() => const AjustesPage());
+                        // Modular.to.popUntil(ModalRoute.withName('/Home'));
+                        // Modular.to.pushReplacementNamed("/Tab/Ajustes/");
                       },
                     ),
                   ),

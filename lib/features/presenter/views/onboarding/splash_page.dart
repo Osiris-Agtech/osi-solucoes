@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/login/login_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -14,7 +15,8 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
-      Modular.to.pushReplacementNamed("/Login/");
+      Get.to(() => const LoginPage());
+      // Modular.to.pushReplacementNamed("/Login/");
     });
   }
 

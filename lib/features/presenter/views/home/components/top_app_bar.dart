@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
 
 class TopAppBar extends StatelessWidget {
   const TopAppBar({
@@ -34,8 +35,9 @@ class TopAppBar extends StatelessWidget {
               padding: EdgeInsets.zero,
               alignment: Alignment.centerLeft,
               onPressed: () {
-                Modular.to
-                    .pushNamedAndRemoveUntil(path!, ModalRoute.withName('/'));
+                Get.off(() => const SplashPage());
+                // Modular.to
+                //     .pushNamedAndRemoveUntil(path!, ModalRoute.withName('/'));
               },
               icon: const Icon(Icons.arrow_back),
               color: kPrimaryColor,

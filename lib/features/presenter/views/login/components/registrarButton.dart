@@ -1,9 +1,10 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/cadastro/cadastro_page.dart';
 
 registrarButton(Size size) {
   return Container(
@@ -20,7 +21,8 @@ registrarButton(Size size) {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           onTap: () async {
-            Modular.to.pushNamed("/Cadastro/");
+            Get.to(() => const CadastroPage());
+            // Modular.to.pushNamed("/Cadastro/");
           },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,

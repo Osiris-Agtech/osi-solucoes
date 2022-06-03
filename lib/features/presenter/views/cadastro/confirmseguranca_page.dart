@@ -1,24 +1,28 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
 import 'package:rive/rive.dart';
 import 'package:flutter/material.dart';
 
+import '../../routes/routes.dart';
 import '../../viewmodels/cadastro_store.dart';
 
-class ConfirmsegurancaPage extends StatefulWidget {
+class ConfirmaSegurancaPage extends StatefulWidget {
   final String title;
-  const ConfirmsegurancaPage({Key? key, this.title = 'ConfirmaPage'})
+  const ConfirmaSegurancaPage({Key? key, this.title = 'ConfirmaPage'})
       : super(key: key);
   @override
-  ConfirmsegurancaPageState createState() => ConfirmsegurancaPageState();
+  ConfirmaSegurancaPageState createState() => ConfirmaSegurancaPageState();
 }
 
-class ConfirmsegurancaPageState extends State<ConfirmsegurancaPage> {
+class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
   final FocusScopeNode focusNode = FocusScopeNode();
-  final store = Modular.get<CadastroStore>();
+  // final store = Modular.get<CadastroStore>();
+  CadastroStore store = GetIt.I<CadastroStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +44,7 @@ class ConfirmsegurancaPageState extends State<ConfirmsegurancaPage> {
                   splashColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  onPressed: () => Modular.to.pop(),
+                  onPressed: () => Get.back(), // Modular.to.pop(),
                   icon: const Icon(
                     Icons.arrow_back,
                     size: 30,
@@ -233,9 +237,16 @@ class ConfirmsegurancaPageState extends State<ConfirmsegurancaPage> {
                                     showDoneAnimation(context),
                                     await Future.delayed(
                                         const Duration(milliseconds: 1400)),
-                                    Modular.to
-                                        .popUntil(ModalRoute.withName("/")),
-                                    Modular.to.pushReplacementNamed("/Home/"),
+                                    Get.offUntil(
+                                      GetPageRoute(
+                                          page: () => const SplashPage()),
+                                      (route) =>
+                                          (route as GetPageRoute).routeName ==
+                                          Routes.homePage,
+                                    ),
+                                    // Modular.to
+                                    //     .popUntil(ModalRoute.withName("/")),
+                                    // Modular.to.pushReplacementNamed("/Home/"),
                                   }
                                 : {
                                     showErrorDialog(context, res),
@@ -254,8 +265,9 @@ class ConfirmsegurancaPageState extends State<ConfirmsegurancaPage> {
                 ),
                 TextButton(
                     onPressed: () {
-                      Modular.to.pushNamedAndRemoveUntil(
-                          "/", ModalRoute.withName('/'));
+                      Get.off(() => const SplashPage());
+                      // Modular.to.pushNamedAndRemoveUntil(
+                      //     "/", ModalRoute.withName('/'));
                     },
                     child: Text(
                       "confirmaText6".i18n(),

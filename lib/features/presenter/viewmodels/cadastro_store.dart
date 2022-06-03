@@ -4,10 +4,10 @@ import 'dart:math';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/app_controller.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:search_cep/search_cep.dart';
 
 import '../../data/repositories/cadastro/cadastro_repository.dart';
@@ -17,8 +17,10 @@ part 'cadastro_store.g.dart';
 class CadastroStore = _CadastroStoreBase with _$CadastroStore;
 
 abstract class _CadastroStoreBase with Store {
-  late CadastroRepository repository = Modular.get<CadastroRepository>();
-  late AppController appController = Modular.get();
+  // late CadastroRepository repository = Modular.get<CadastroRepository>();
+  // late AppController appController = Modular.get();
+  CadastroRepository repository = GetIt.I<CadastroRepository>();
+  AuthController authController = GetIt.I<AuthController>();
 
   @observable
   TextEditingController nome = TextEditingController();
@@ -172,7 +174,7 @@ abstract class _CadastroStoreBase with Store {
     } catch (e) {
       return "cadastroInvalido".i18n();
     }
-    appController.setUser(usuario);
+    authController.setUser(usuario);
     return "sucesso";
   }
 }

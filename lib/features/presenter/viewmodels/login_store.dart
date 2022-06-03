@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/app_controller.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
 import '../../data/repositories/login/login_repository.dart';
 import '../models/usuario/usuario_model.dart';
@@ -14,8 +14,10 @@ part 'login_store.g.dart';
 class LoginStore = _LoginStoreBase with _$LoginStore;
 
 abstract class _LoginStoreBase with Store {
-  late LoginRepository loginRepository = Modular.get();
-  late AppController appController = Modular.get();
+  // late LoginRepository loginRepository = Modular.get();
+  // late AppController appController = Modular.get();
+  LoginRepository loginRepository = GetIt.I<LoginRepository>();
+  AuthController authController = GetIt.I<AuthController>();
 
   @observable
   TextEditingController email = TextEditingController();
@@ -45,8 +47,8 @@ abstract class _LoginStoreBase with Store {
     userList = List.from(users);
     if (userList[0].contas!.length > 1) return "multiple";
 
-    appController.setUser(users[0]);
-    appController.usuario.selected_conta = userList[0].contas![0];
+    authController.setUser(users[0]);
+    authController.usuario.selected_conta = userList[0].contas![0];
     return "loginValido".i18n();
   }
 

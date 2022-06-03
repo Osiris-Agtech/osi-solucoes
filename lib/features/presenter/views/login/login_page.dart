@@ -1,11 +1,15 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 
+import '../../routes/routes.dart';
 import '../../viewmodels/login_store.dart';
+import '../home/home_page.dart';
 import 'components/forgotPassword.dart';
 import 'components/loadingDialog.dart';
 import 'components/loginButton.dart';
@@ -19,7 +23,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  final LoginStore store = Modular.get<LoginStore>();
+  // final LoginStore store = Modular.get<LoginStore>();
+  LoginStore store = GetIt.I<LoginStore>();
   final formKey = GlobalKey<FormState>();
   final FocusNode emailNode = FocusNode();
   final FocusNode senhaNode = FocusNode();
@@ -189,15 +194,27 @@ class LoginPageState extends State<LoginPage> {
                       String response = await store.login();
                       await Future.delayed(const Duration(seconds: 2));
                       if (response == "sucesso") {
-                        Modular.to.pushReplacementNamed("/Home/");
-                      } else if (response == "multiple") {
-                        Modular.to.pushReplacementNamed(
-                          "/Login/MultiAccounts/",
-                          arguments: {
-                            "user": store.userList[0],
-                            "isLoggedIn": false,
-                          },
+                        Get.offUntil(
+                          GetPageRoute(page: () => const HomePage()),
+                          (route) =>
+                              (route as GetPageRoute).routeName ==
+                              Routes.homePage,
                         );
+                        // Modular.to.pushReplacementNamed("/Home/");
+                      } else if (response == "multiple") {
+                        Get.to(
+                          () => MultiAccountsPage(
+                            user: store.userList[0],
+                            isLoggedIn: false,
+                          ),
+                        );
+                        // Modular.to.pushReplacementNamed(
+                        //   "/Login/MultiAccounts/",
+                        //   arguments: {
+                        //     "user": store.userList[0],
+                        //     "isLoggedIn": false,
+                        //   },
+                        // );
                       } else {
                         showLoaderDialog(context, response);
                         await Future.delayed(const Duration(seconds: 2));

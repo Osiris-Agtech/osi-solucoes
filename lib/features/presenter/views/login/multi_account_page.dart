@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/login/login_page.dart';
+import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
 
 import '../../models/usuario/usuario_model.dart';
-import '../../viewmodels/app_controller.dart';
+import '../../viewmodels/auth_controller.dart';
 
 class MultiAccountsPage extends StatefulWidget {
   final Usuario user;
@@ -18,7 +21,8 @@ class MultiAccountsPage extends StatefulWidget {
 }
 
 class _MultiAccountsPageState extends State<MultiAccountsPage> {
-  final appController = Modular.get<AppController>();
+  // final appController = Modular.get<AppController>();
+  AuthController authController = GetIt.I<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +48,11 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
                   highlightColor: Colors.transparent,
                   onPressed: () {
                     if (widget.isLoggedIn) {
-                      Modular.to.pop();
+                      Get.back();
                       Navigator.pop(context);
                     } else {
-                      Modular.to.pushReplacementNamed("/Login/");
+                      Get.to(() => const LoginPage());
+                      // Modular.to.pushReplacementNamed("/Login/");
                     }
                   },
                   icon: const Icon(
@@ -132,14 +137,15 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
                                       borderRadius: BorderRadius.circular(10),
                                       onTap: () async {
                                         showCircularProgressIndicator(context);
-                                        appController.usuario = widget.user;
-                                        appController.usuario.selected_conta =
+                                        authController.usuario = widget.user;
+                                        authController.usuario.selected_conta =
                                             conta;
                                         await Future.delayed(
                                             const Duration(seconds: 2));
                                         Navigator.pop(context);
-                                        Modular.to.pushNamedAndRemoveUntil(
-                                            "/Home/", ModalRoute.withName('/'));
+                                        Get.off(() => const SplashPage());
+                                        // Modular.to.pushNamedAndRemoveUntil(
+                                        //     "/Home/", ModalRoute.withName('/'));
                                       },
                                       child: SizedBox(
                                         width:

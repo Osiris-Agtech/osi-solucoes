@@ -1,12 +1,14 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/home/home_page.dart';
 import 'package:osi_solucoes/features/presenter/views/login/components/loadingDialog.dart';
 
 import '../../../viewmodels/login_store.dart';
+import '../multi_account_page.dart';
 
 loginButton(
   Size size,
@@ -31,15 +33,22 @@ loginButton(
             String response = await store.login();
             await Future.delayed(const Duration(seconds: 2));
             if (response == "sucesso") {
-              Modular.to.pushReplacementNamed("/Home/");
+              Get.to(() => const HomePage());
+              // Modular.to.pushReplacementNamed("/Home/");
             } else if (response == "multiple") {
-              Modular.to.pushReplacementNamed(
-                "/Login/MultiAccounts/",
-                arguments: {
-                  "user": store.userList[0],
-                  "isLoggedIn": false,
-                },
+              Get.to(
+                () => MultiAccountsPage(
+                  user: store.userList[0],
+                  isLoggedIn: false,
+                ),
               );
+              // Modular.to.pushReplacementNamed(
+              //   "/Login/MultiAccounts/",
+              //   arguments: {
+              //     "user": store.userList[0],
+              //     "isLoggedIn": false,
+              //   },
+              // );
             } else {
               showLoaderDialog(context, response);
               await Future.delayed(const Duration(seconds: 3));

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:get/get.dart';
 
-void main() {
+import 'core/inject/inject.dart';
+import 'features/presenter/routes/app_pages.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initInject();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.transparent,
@@ -22,8 +27,8 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    LocalJsonLocalization.delegate.directories = ['lib/i18n'];
-    return MaterialApp.router(
+    LocalJsonLocalization.delegate.directories = ['lib/core/constants/i18n'];
+    return GetMaterialApp(
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -38,8 +43,9 @@ class AppWidget extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Slidy',
       theme: ThemeData(primarySwatch: Colors.green, fontFamily: "Montserrat"),
-      routeInformationParser: Modular.routeInformationParser,
-      routerDelegate: Modular.routerDelegate,
+      getPages: AppPages.routes,
+      // routeInformationParser: , //Modular.routeInformationParser,
+      // routerDelegate: , //Modular.routerDelegate,
     );
   }
 }

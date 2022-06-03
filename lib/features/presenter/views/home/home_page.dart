@@ -3,13 +3,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
+import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
 
 import '../../viewmodels/home_store.dart';
-import '../../viewmodels/modulos_store.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -19,8 +21,9 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends ModularState<HomePage, HomeStore> {
-  final ModulosStore modulosStore = Modular.get();
+class _HomePageState extends State<HomePage> {
+  // final ModulosStore modulosStore = Modular.get();
+  HomeStore store = GetIt.I<HomeStore>();
   final Duration duration = const Duration(milliseconds: 300);
 
   Future<bool> exitApp() async {
@@ -269,13 +272,19 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                         },
                       );
                       await Future.delayed(const Duration(seconds: 1));
-                      Modular.to.pushNamed(
-                        "/Login/MultiAccounts/",
-                        arguments: {
-                          "user": store.appController.usuario,
-                          "isLoggedIn": true,
-                        },
+                      Get.to(
+                        () => MultiAccountsPage(
+                          isLoggedIn: true,
+                          user: store.appController.usuario,
+                        ),
                       );
+                      // Modular.to.pushNamed(
+                      //   "/Login/MultiAccounts/",
+                      //   arguments: {
+                      //     "user": store.appController.usuario,
+                      //     "isLoggedIn": true,
+                      //   },
+                      // );
                     },
                     child: Row(
                       children: [
@@ -341,7 +350,8 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                       },
                     );
                     await Future.delayed(const Duration(seconds: 2));
-                    Modular.to.pushReplacementNamed(Modular.initialRoute);
+                    Get.off(() => const SplashPage());
+                    // Modular.to.pushReplacementNamed(Modular.initialRoute);
                   },
                   child: Row(
                     children: [
@@ -643,7 +653,8 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         child: InkWell(
           onTap: () async {
             // await modulosStore.setPageViewController(id!);
-            Modular.to.pushNamed("/Tab/$path/");
+            // Get.to(() => const HomeView());
+            // Modular.to.pushNamed("/Tab/$path/");
           },
           child: Card(
             shape: RoundedRectangleBorder(
@@ -706,7 +717,8 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    final HomeStore store = Modular.get<HomeStore>();
+    // final HomeStore store = Modular.get<HomeStore>();
+    HomeStore store = GetIt.I<HomeStore>();
     final progress = shrinkOffset / maxExtent;
     return Material(
       elevation: 2,
