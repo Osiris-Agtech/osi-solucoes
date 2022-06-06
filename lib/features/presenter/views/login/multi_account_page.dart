@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/home/home_page.dart';
 import 'package:osi_solucoes/features/presenter/views/login/login_page.dart';
-import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
 
 import '../../models/usuario/usuario_model.dart';
 import '../../viewmodels/auth_controller.dart';
@@ -143,7 +143,7 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
                                         await Future.delayed(
                                             const Duration(seconds: 2));
                                         Navigator.pop(context);
-                                        Get.off(() => const SplashPage());
+                                        Get.off(() => const HomePage());
                                         // Modular.to.pushNamedAndRemoveUntil(
                                         //     "/Home/", ModalRoute.withName('/'));
                                       },

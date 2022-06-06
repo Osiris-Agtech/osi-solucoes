@@ -9,7 +9,7 @@ part of 'auth_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AuthController on _AuthControllerBase, Store {
-  final _$usuarioAtom = Atom(name: '_AppControllerBase.usuario');
+  final _$usuarioAtom = Atom(name: '_AuthControllerBase.usuario');
 
   @override
   Usuario get usuario {
@@ -24,17 +24,17 @@ mixin _$AuthController on _AuthControllerBase, Store {
     });
   }
 
-  final _$_AppControllerBaseActionController =
-      ActionController(name: '_AppControllerBase');
+  final _$_AuthControllerBaseActionController =
+      ActionController(name: '_AuthControllerBase');
 
   @override
   dynamic setUser(Usuario user) {
-    final _$actionInfo = _$_AppControllerBaseActionController.startAction(
-        name: '_AppControllerBase.setUser');
+    final _$actionInfo = _$_AuthControllerBaseActionController.startAction(
+        name: '_AuthControllerBase.setUser');
     try {
       return super.setUser(user);
     } finally {
-      _$_AppControllerBaseActionController.endAction(_$actionInfo);
+      _$_AuthControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 

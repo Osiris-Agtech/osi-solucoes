@@ -8,10 +8,12 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/home/modulos_page.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
 
 import '../../viewmodels/home_store.dart';
+import '../../viewmodels/modulos_store.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -22,7 +24,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // final ModulosStore modulosStore = Modular.get();
+  ModulosStore modulosStore = GetIt.I<ModulosStore>();
   HomeStore store = GetIt.I<HomeStore>();
   final Duration duration = const Duration(milliseconds: 300);
 
@@ -158,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.only(right: size.width * 0.24),
                     child: Observer(builder: (_) {
                       return Text(
-                        store.appController.usuario.selected_conta?.conta
+                        store.authController.usuario.selected_conta?.conta
                                 ?.nome ??
                             "...",
                         textAlign: TextAlign.center,
@@ -183,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: Observer(builder: (_) {
                       return Text(
-                        store.appController.usuario.selected_conta?.cargo
+                        store.authController.usuario.selected_conta?.cargo
                                 ?.cargo ??
                             "...",
                         style: TextStyle(
@@ -255,7 +257,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Observer(builder: (_) {
-                if (store.appController.usuario.contas!.length < 2) {
+                if (store.authController.usuario.contas!.length < 2) {
                   return Container();
                 }
                 return Padding(
@@ -275,7 +277,7 @@ class _HomePageState extends State<HomePage> {
                       Get.to(
                         () => MultiAccountsPage(
                           isLoggedIn: true,
-                          user: store.appController.usuario,
+                          user: store.authController.usuario,
                         ),
                       );
                       // Modular.to.pushNamed(
@@ -450,23 +452,53 @@ class _HomePageState extends State<HomePage> {
                 childAspectRatio: 10 / 8,
                 crossAxisCount: 2,
                 children: [
-                  gridItems(context, size, "card5Home".i18n(),
-                      "assets/icons/cultivo_icon.svg", true,
-                      path: "Setores"),
-                  gridItems(context, size, "card6Home".i18n(),
-                      "assets/icons/reservatorio_icon.svg", false,
-                      path: "Reservatorios"),
-                  gridItems(context, size, "card7Home".i18n(),
-                      "assets/icons/caderno_campo_icon.svg", true,
-                      path: "CadernoCampo"),
-                  gridItems(context, size, "card8Home".i18n(),
-                      "assets/icons/solucoes_nutritivas_icon.svg", false,
-                      path: "Receitas"),
+                  gridItems(
+                    context,
+                    size,
+                    "card5Home".i18n(),
+                    "assets/icons/cultivo_icon.svg",
+                    true,
+                    path: "Setores",
+                    id: 0,
+                  ),
+                  gridItems(
+                    context,
+                    size,
+                    "card6Home".i18n(),
+                    "assets/icons/reservatorio_icon.svg",
+                    false,
+                    path: "Reservatorios",
+                    id: 1,
+                  ),
+                  gridItems(
+                    context,
+                    size,
+                    "card7Home".i18n(),
+                    "assets/icons/caderno_campo_icon.svg",
+                    true,
+                    path: "CadernoCampo",
+                    id: 2,
+                  ),
+                  gridItems(
+                    context,
+                    size,
+                    "card8Home".i18n(),
+                    "assets/icons/solucoes_nutritivas_icon.svg",
+                    false,
+                    path: "Receitas",
+                    id: 3,
+                  ),
                   gridItems(context, size, "card9Home".i18n(),
                       "assets/icons/ajustes_icon.svg", true,
                       path: "Ajustes", id: 4),
-                  gridItems(context, size, "card10Home".i18n(),
-                      "assets/icons/chat_icon.svg", false),
+                  gridItems(
+                    context,
+                    size,
+                    "card10Home".i18n(),
+                    "assets/icons/chat_icon.svg",
+                    false,
+                    id: 5,
+                  ),
                   const SizedBox(),
                 ],
               ),
@@ -566,7 +598,8 @@ class _HomePageState extends State<HomePage> {
                 child: Observer(
                   builder: (_) {
                     return Text(
-                      store.appController.usuario.selected_conta?.conta?.nome ??
+                      store.authController.usuario.selected_conta?.conta
+                              ?.nome ??
                           "...",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
@@ -582,7 +615,7 @@ class _HomePageState extends State<HomePage> {
                 child: Observer(
                   builder: (_) {
                     return Text(
-                      store.appController.usuario.selected_conta?.cargo
+                      store.authController.usuario.selected_conta?.cargo
                               ?.cargo ??
                           "...",
                       textAlign: TextAlign.center,
@@ -634,7 +667,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget gridItems(
       BuildContext context, Size size, String title, String icon, bool isLeft,
-      {String? path, int? id}) {
+      {String? path, required int id}) {
     return Padding(
       padding: isLeft
           ? EdgeInsets.only(left: size.width * 0.07)
@@ -652,6 +685,13 @@ class _HomePageState extends State<HomePage> {
         ),
         child: InkWell(
           onTap: () async {
+            if (id != 5) {
+              modulosStore.setPageViewController(id);
+              Get.to(
+                const ModulosPage(),
+                transition: Transition.rightToLeft,
+              );
+            }
             // await modulosStore.setPageViewController(id!);
             // Get.to(() => const HomeView());
             // Modular.to.pushNamed("/Tab/$path/");
@@ -821,12 +861,12 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
               ),
               alignment: Alignment.lerp(
                 const Alignment(0, 0.45),
-                Alignment.bottomCenter,
+                const Alignment(0, 0.5),
                 progress,
               ),
               child: Observer(builder: (_) {
                 return Text(
-                  store.appController.usuario.selected_conta?.conta?.nome ??
+                  store.authController.usuario.selected_conta?.conta?.nome ??
                       "...",
                   style: const TextStyle(
                     fontSize: 24,
@@ -852,7 +892,7 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                 opacity: (1 - progress * 2) < 0 ? 0 : 1 - progress * 2,
                 child: Observer(builder: (_) {
                   return Text(
-                    store.appController.usuario.selected_conta?.cargo?.cargo ??
+                    store.authController.usuario.selected_conta?.cargo?.cargo ??
                         "...",
                     style: TextStyle(
                       fontSize: 18,
@@ -868,13 +908,12 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
               duration: const Duration(milliseconds: 100),
               alignment: Alignment.lerp(
                 const Alignment(0, 0.85),
-                const Alignment(0, 0.8),
+                const Alignment(0, 0.7),
                 progress,
               ),
               child: Container(
                 height: 3,
-                width: 80, // MediaQuery.of(context).size.width * .8,
-                // color: const Color(0xFF767676),
+                width: 80,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(2)),
                   color: Color(0xFF767676),

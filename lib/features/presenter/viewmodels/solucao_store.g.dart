@@ -9,7 +9,7 @@ part of 'solucao_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$SolucaoStore on _SolucaoStoreBase, Store {
-  final _$valueAtom = Atom(name: '_ReceitasStoreBase.value');
+  final _$valueAtom = Atom(name: '_SolucaoStoreBase.value');
 
   @override
   int get value {
@@ -24,17 +24,17 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$_ReceitasStoreBaseActionController =
-      ActionController(name: '_ReceitasStoreBase');
+  final _$_SolucaoStoreBaseActionController =
+      ActionController(name: '_SolucaoStoreBase');
 
   @override
   void increment() {
-    final _$actionInfo = _$_ReceitasStoreBaseActionController.startAction(
-        name: '_ReceitasStoreBase.increment');
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.increment');
     try {
       return super.increment();
     } finally {
-      _$_ReceitasStoreBaseActionController.endAction(_$actionInfo);
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

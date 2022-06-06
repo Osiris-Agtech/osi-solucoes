@@ -16,8 +16,8 @@ class LoginStore = _LoginStoreBase with _$LoginStore;
 abstract class _LoginStoreBase with Store {
   // late LoginRepository loginRepository = Modular.get();
   // late AppController appController = Modular.get();
-  LoginRepository loginRepository = GetIt.I<LoginRepository>();
-  AuthController authController = GetIt.I<AuthController>();
+  final LoginRepository loginRepository = GetIt.I<LoginRepository>();
+  final AuthController authController = GetIt.I<AuthController>();
 
   @observable
   TextEditingController email = TextEditingController();

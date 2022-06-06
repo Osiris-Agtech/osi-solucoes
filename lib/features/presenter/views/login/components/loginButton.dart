@@ -15,7 +15,7 @@ loginButton(
   GlobalKey<FormState> formKey,
   LoginStore store,
   BuildContext context,
-) async {
+) {
   return Padding(
     padding: EdgeInsets.only(top: size.height * .041),
     child: SizedBox(

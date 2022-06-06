@@ -24,7 +24,7 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   // final LoginStore store = Modular.get<LoginStore>();
-  LoginStore store = GetIt.I<LoginStore>();
+  final LoginStore store = GetIt.I<LoginStore>();
   final formKey = GlobalKey<FormState>();
   final FocusNode emailNode = FocusNode();
   final FocusNode senhaNode = FocusNode();
@@ -50,40 +50,36 @@ class LoginPageState extends State<LoginPage> {
           onWillPop: () async => false,
           child: Scaffold(
             backgroundColor: kSecondBackgroundColor,
-            body: _body(context, size),
-          ),
-        ),
-      ),
-    );
-  }
-
-  _body(BuildContext context, Size size) async {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      onVerticalDragCancel: () => FocusScope.of(context).unfocus(),
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: SizedBox(
-          height: size.height - MediaQuery.of(context).viewPadding.top,
-          width: size.width,
-          child: Form(
-            key: formKey,
-            child: Stack(children: [
-              Column(
-                children: [
-                  _expanded(flex: 3),
-                  _logo(size),
-                  _expanded(flex: 2),
-                  _formEmail(size),
-                  _formSenha(size),
-                  await loginButton(size, formKey, store, context),
-                  forgotPassword(),
-                  _expanded(flex: 3),
-                  registrarButton(size),
-                  _expanded(flex: 2),
-                ],
+            body: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              onVerticalDragCancel: () => FocusScope.of(context).unfocus(),
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: SizedBox(
+                  height: size.height - MediaQuery.of(context).viewPadding.top,
+                  width: size.width,
+                  child: Form(
+                    key: formKey,
+                    child: Stack(children: [
+                      Column(
+                        children: [
+                          _expanded(flex: 3),
+                          _logo(size),
+                          _expanded(flex: 2),
+                          _formEmail(size),
+                          _formSenha(size),
+                          loginButton(size, formKey, store, context),
+                          forgotPassword(),
+                          _expanded(flex: 3),
+                          registrarButton(size),
+                          _expanded(flex: 2),
+                        ],
+                      ),
+                    ]),
+                  ),
+                ),
               ),
-            ]),
+            ),
           ),
         ),
       ),
