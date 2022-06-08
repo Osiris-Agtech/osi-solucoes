@@ -7,6 +7,7 @@ import 'package:localization/localization.dart';
 // import 'package:osi_solucoes/app//modules/cadastro/cadastro_store.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/presenter/views/cadastro/confirmseguranca_page.dart';
 
 import '../../viewmodels/cadastro_store.dart';
@@ -29,14 +30,14 @@ class CadastroPageState extends State<CadastroPage> {
     var size = MediaQuery.of(context).size;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: kBackgroundColor,
+        statusBarColor: Constants.kBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
       ),
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: kBackgroundColor,
+          backgroundColor: Constants.kBackgroundColor,
           appBar: AppBar(
-            backgroundColor: kBackgroundColor,
+            backgroundColor: Constants.kBackgroundColor,
             leading: Builder(builder: (_) {
               return Padding(
                 padding: const EdgeInsets.only(left: 16), // size.width * 0.07
@@ -49,7 +50,7 @@ class CadastroPageState extends State<CadastroPage> {
                     Icons.arrow_back,
                     size: 30,
                   ),
-                  color: kPrimaryColor,
+                  color: Constants.kPrimaryColor,
                 ),
               );
             }),
@@ -92,10 +93,10 @@ class CadastroPageState extends State<CadastroPage> {
                           child: Stack(
                             children: [
                               const CircleAvatar(
-                                backgroundColor: kPrimaryColor,
+                                backgroundColor: Constants.kPrimaryColor,
                                 child: Icon(
                                   Icons.person,
-                                  color: kBackgroundColor,
+                                  color: Constants.kBackgroundColor,
                                   size: 50,
                                 ),
                                 minRadius: 45,
@@ -107,7 +108,8 @@ class CadastroPageState extends State<CadastroPage> {
                                   borderRadius: BorderRadius.circular(50),
                                   elevation: 3,
                                   child: const CircleAvatar(
-                                    backgroundColor: kSecondBackgroundColor,
+                                    backgroundColor:
+                                        Constants.kSecondBackgroundColor,
                                     child: Icon(Icons.edit_outlined),
                                   ),
                                 ),
@@ -281,7 +283,7 @@ class CadastroPageState extends State<CadastroPage> {
                               height: 45,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    primary: kPrimaryColor),
+                                    primary: Constants.kPrimaryColor),
                                 child: Text(
                                   "TextButtonConfirmar".i18n(),
                                   style: const TextStyle(
@@ -295,7 +297,8 @@ class CadastroPageState extends State<CadastroPage> {
                                         await store.verificaEmail();
                                     await Future.delayed(
                                         const Duration(seconds: 2));
-                                    if (response == "sucesso") {
+                                    if (response ==
+                                        FailureMessage.userNotFoundMessage) {
                                       store.gerarCodigo();
                                       var response2 =
                                           await store.enviarCodigoEmail();

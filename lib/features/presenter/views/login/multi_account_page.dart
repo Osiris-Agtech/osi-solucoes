@@ -28,14 +28,14 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: kBackgroundColor,
+        statusBarColor: Constants.kBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
       ),
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: kBackgroundColor,
+          backgroundColor: Constants.kBackgroundColor,
           appBar: AppBar(
-            backgroundColor: kBackgroundColor,
+            backgroundColor: Constants.kBackgroundColor,
             leading: Builder(builder: (_) {
               return Padding(
                 padding: const EdgeInsets.only(
@@ -59,7 +59,7 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
                     Icons.arrow_back,
                     size: 30,
                   ),
-                  color: kPrimaryColor,
+                  color: Constants.kPrimaryColor,
                 ),
               );
             }),
@@ -106,9 +106,10 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
                 Expanded(
                   flex: 2,
                   child: Center(
-                    child: Container(
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
                       decoration: BoxDecoration(
-                        color: kSecondBackgroundColor,
+                        color: Constants.kSecondBackgroundColor,
                         borderRadius: BorderRadius.circular(24),
                       ),
                       width: double.infinity,

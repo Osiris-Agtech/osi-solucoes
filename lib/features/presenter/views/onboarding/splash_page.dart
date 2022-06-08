@@ -25,7 +25,7 @@ class _SplashPageState extends State<SplashPage> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      color: kBackgroundColor,
+      color: Constants.kBackgroundColor,
       child: Center(
         child: Image.asset(
           "assets/images/osiris-logo.png",

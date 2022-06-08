@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/cadastrar_resevatorio_page.dart';
 
 import '../views/ajuste/ajustes_page.dart';
 import '../views/ajuste/resultadoajuste_page.dart';
@@ -9,7 +10,7 @@ import '../views/cadastro/cadastro_page.dart';
 import '../views/cadastro/confirmseguranca_page.dart';
 import '../views/caderno_campo/caderno_campo_page.dart';
 import '../views/home/home_page.dart';
-import '../views/home/modulos_page.dart';
+import '../views/modulos/modulos_page.dart';
 import '../views/login/login_page.dart';
 import '../views/login/multi_account_page.dart';
 import '../views/onboarding/splash_page.dart';
@@ -42,6 +43,9 @@ class AppPages {
     GetPage(name: Routes.splashPage, page: () => const SplashPage()),
     GetPage(
         name: Routes.reservatoriosPage, page: () => const ReservatoriosPage()),
+    GetPage(
+        name: Routes.cadastrarReservatoriosPage,
+        page: () => const CadastrarReservatorioPage()),
     GetPage(name: Routes.solucaoPage, page: () => const SolucaoPage()),
   ];
 }

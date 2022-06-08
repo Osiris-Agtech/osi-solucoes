@@ -38,17 +38,30 @@ abstract class _LoginStoreBase with Store {
 
   @action
   login() async {
-    var users;
-    try {
-      users = await loginRepository.login(email.text, senha.text, email.text);
-    } catch (e) {
+    bool isValidLogin = false;
+    bool isMultipleAccount = false;
+
+    var users = await loginRepository.login(email.text, senha.text, email.text);
+
+    users.fold(
+      (err) {
+        isValidLogin = false;
+      }, // ifLeft callback
+      (data) {
+        userList = List.from(data);
+        if (userList[0].contas!.length > 1) isMultipleAccount = true;
+
+        authController.setUser(data[0]);
+        authController.usuario.selected_conta = userList[0].contas![0];
+        isValidLogin = true;
+      },
+    ); // ifRight callback
+
+    if (!isValidLogin) {
       return "loginInvalido".i18n();
     }
-    userList = List.from(users);
-    if (userList[0].contas!.length > 1) return "multiple";
+    if (isMultipleAccount) return "multiple";
 
-    authController.setUser(users[0]);
-    authController.usuario.selected_conta = userList[0].contas![0];
     return "loginValido".i18n();
   }
 

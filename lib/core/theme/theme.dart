@@ -4,12 +4,12 @@ import '../constants/constants.dart';
 
 ThemeData lightThemeData(BuildContext context) {
   return ThemeData.light().copyWith(
-    primaryColor: kPrimaryColor,
+    primaryColor: Constants.kPrimaryColor,
     scaffoldBackgroundColor: Colors.white,
     backgroundColor: Colors.white,
     appBarTheme: appBarTheme,
-    cardColor: kCardColor,
-    iconTheme: const IconThemeData(color: kContentColorLightTheme),
+    cardColor: Constants.kCardColor,
+    iconTheme: const IconThemeData(color: Constants.kContentColorLightTheme),
     textTheme: const TextTheme(bodyText1: TextStyle(fontFamily: "Montserrat")),
 
     // GoogleFonts.interTextTheme(Theme.of(context).textTheme)
@@ -21,9 +21,9 @@ ThemeData lightThemeData(BuildContext context) {
     // ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
-      selectedItemColor: kContentColorLightTheme.withOpacity(0.7),
-      unselectedItemColor: kContentColorLightTheme.withOpacity(0.32),
-      selectedIconTheme: const IconThemeData(color: kPrimaryColor),
+      selectedItemColor: Constants.kContentColorLightTheme.withOpacity(0.7),
+      unselectedItemColor: Constants.kContentColorLightTheme.withOpacity(0.32),
+      selectedIconTheme: const IconThemeData(color: Constants.kPrimaryColor),
       showUnselectedLabels: true,
     ),
   );

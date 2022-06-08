@@ -7,7 +7,7 @@ class AjustesStore = _AjustesStoreBase with _$AjustesStore;
 
 abstract class _AjustesStoreBase with Store {
   @observable
-  int selectedItem = 1;
+  int selectedItem = 26;
 
   @observable
   List<int> quantityList = List<int>.generate(50, (int i) => i);
@@ -30,6 +30,16 @@ abstract class _AjustesStoreBase with Store {
 
   @action
   setReservatorio(String value) => reservatorio.text = value;
+
+  @action
+  clearAll() {
+    cEletricoAtual.clear();
+    cEletricoDesejado.clear();
+    volumeAtual.clear();
+    volumeDesejado.clear();
+    pH.clear();
+    reservatorio.clear();
+  }
 
   List<String> listaReservatorios = [
     "UFMT",

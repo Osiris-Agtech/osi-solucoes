@@ -156,6 +156,17 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
   }
 
   @override
+  dynamic clearAll() {
+    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
+        name: '_AjustesStoreBase.clearAll');
+    try {
+      return super.clearAll();
+    } finally {
+      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 selectedItem: ${selectedItem},

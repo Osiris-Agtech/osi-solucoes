@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/features/data/datasources/login/login_datasource.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 
 import '../../features/data/repositories/cadastro/cadastro_repository.dart';
@@ -26,9 +27,14 @@ Future<void> initInject() async {
   sl.registerLazySingleton<ConnectivityService>(
       () => ConnectivityServiceImpl(connectivity: sl()));
 
+  //datasource
+  sl.registerLazySingleton<ILoginDatasource>(() => LoginDatasource());
+
   //repositories
-  sl.registerLazySingleton<CadastroRepository>(() => CadastroRepository());
-  sl.registerLazySingleton<LoginRepository>(() => LoginRepository());
+  sl.registerLazySingleton<CadastroRepository>(
+      () => CadastroRepository(datasource: sl()));
+  sl.registerLazySingleton<LoginRepository>(
+      () => LoginRepository(datasource: sl()));
 
   //viewmodels
   sl.registerLazySingleton<AjustesStore>(() => AjustesStore());

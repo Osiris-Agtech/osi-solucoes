@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/views/ajuste/ajustes_page.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/ajustes_store.dart';
 import 'package:rive/rive.dart';
 
 import '../home/components/top_app_bar.dart';
@@ -76,6 +77,7 @@ class ResultadoajustePageState extends State<ResultadoajustePage>
 }
 
 showConfirmDialog(BuildContext context) {
+  final AjustesStore store = GetIt.I<AjustesStore>();
   showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -110,7 +112,7 @@ showConfirmDialog(BuildContext context) {
                           text: 'registrar',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: kPrimaryColor)),
+                              color: Constants.kPrimaryColor)),
                       TextSpan(
                         text: ' o ajuste?',
                         style: TextStyle(
@@ -142,7 +144,8 @@ showConfirmDialog(BuildContext context) {
                     width: MediaQuery.of(context).size.width * .69,
                     height: 30,
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: kPrimaryColor),
+                      style: ElevatedButton.styleFrom(
+                          primary: Constants.kPrimaryColor),
                       child: const Text(
                         "Sim",
                         style: TextStyle(
@@ -151,9 +154,10 @@ showConfirmDialog(BuildContext context) {
                       onPressed: () async {
                         showDoneAnimation(context);
                         await Future.delayed(
-                            const Duration(milliseconds: 1400));
+                            const Duration(milliseconds: 1500));
                         Navigator.pop(context);
-                        Get.to(() => const AjustesPage());
+                        store.clearAll();
+                        Get.close(2);
                         // Modular.to.popUntil(ModalRoute.withName('/Home'));
                         // Modular.to.pushReplacementNamed("/Tab/Ajustes/");
                       },
@@ -170,7 +174,8 @@ showConfirmDialog(BuildContext context) {
                       height: 30,
                       child: TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          store.clearAll();
+                          Get.close(2);
                         },
                         child: const Text(
                           "Não",
@@ -517,26 +522,27 @@ class ButtonCompleted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(
-          top: 15, //MediaQuery.of(context).size.height * .03,
-          bottom: 25, //MediaQuery.of(context).size.width * 0.043,
-        ),
-        child: Center(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * .69,
-            height: 40,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: kPrimaryColor),
-              child: const Text(
-                "Concluir",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-              ),
-              onPressed: () {
-                showConfirmDialog(context);
-              },
+      padding: const EdgeInsets.only(
+        top: 15, //MediaQuery.of(context).size.height * .03,
+        bottom: 25, //MediaQuery.of(context).size.width * 0.043,
+      ),
+      child: Center(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * .69,
+          height: 40,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(primary: Constants.kPrimaryColor),
+            child: const Text(
+              "Concluir",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
+            onPressed: () {
+              showConfirmDialog(context);
+            },
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 
@@ -569,7 +575,7 @@ class AppBarCustom extends StatelessWidget {
                   const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
               labelStyle:
                   const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              labelColor: kPrimaryColor,
+              labelColor: Constants.kPrimaryColor,
               tabs: const [
                 Tab(text: "Fertilizantes"),
                 Tab(

@@ -29,14 +29,14 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
     var size = MediaQuery.of(context).size;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: kBackgroundColor,
+        statusBarColor: Constants.kBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
       ),
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: kBackgroundColor,
+          backgroundColor: Constants.kBackgroundColor,
           appBar: AppBar(
-            backgroundColor: kBackgroundColor,
+            backgroundColor: Constants.kBackgroundColor,
             leading: Builder(builder: (_) {
               return Padding(
                 padding: const EdgeInsets.only(left: 8),
@@ -49,7 +49,7 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
                     Icons.arrow_back,
                     size: 30,
                   ),
-                  color: kPrimaryColor,
+                  color: Constants.kPrimaryColor,
                 ),
               );
             }),
@@ -221,7 +221,8 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
                       width: size.width * .7,
                       height: 45,
                       child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(primary: kPrimaryColor),
+                        style: ElevatedButton.styleFrom(
+                            primary: Constants.kPrimaryColor),
                         child: Text(
                           "TextButtonConfirmar".i18n(),
                           style: const TextStyle(

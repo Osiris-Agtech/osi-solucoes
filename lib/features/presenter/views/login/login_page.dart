@@ -42,14 +42,14 @@ class LoginPageState extends State<LoginPage> {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: kSecondBackgroundColor,
+        statusBarColor: Constants.kSecondBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
       ),
       child: SafeArea(
         child: WillPopScope(
           onWillPop: () async => false,
           child: Scaffold(
-            backgroundColor: kSecondBackgroundColor,
+            backgroundColor: Constants.kSecondBackgroundColor,
             body: GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),
               onVerticalDragCancel: () => FocusScope.of(context).unfocus(),
@@ -161,8 +161,8 @@ class LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.only(
               // top: kDefaultPadding * 0.5,
               // bottom: kDefaultPadding * 0.5,
-              left: kDefaultPadding * 1.25,
-              right: kDefaultPadding * 1.25,
+              left: Constants.kDefaultPadding * 1.25,
+              right: Constants.kDefaultPadding * 1.25,
             ),
             child: SizedBox(
               height: 80,
@@ -190,12 +190,13 @@ class LoginPageState extends State<LoginPage> {
                       String response = await store.login();
                       await Future.delayed(const Duration(seconds: 2));
                       if (response == "sucesso") {
-                        Get.offUntil(
-                          GetPageRoute(page: () => const HomePage()),
-                          (route) =>
-                              (route as GetPageRoute).routeName ==
-                              Routes.homePage,
-                        );
+                        Get.offAll(const HomePage());
+                        // Get.offUntil(
+                        //   GetPageRoute(page: () => const HomePage()),
+                        //   (route) =>
+                        //       (route as GetPageRoute).routeName ==
+                        //       Routes.homePage,
+                        // );
                         // Modular.to.pushReplacementNamed("/Home/");
                       } else if (response == "multiple") {
                         Get.to(

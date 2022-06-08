@@ -85,12 +85,15 @@ abstract class _CadastroStoreBase with Store {
 
   @action
   enviarCodigoEmail() async {
-    try {
-      await repository.enviarEmail(codigoGerado, email.text, nome.text);
-      return "sucesso";
-    } catch (e) {
-      return "Erro ao enviar e-mail.";
-    }
+    String strReturn = "";
+    var response =
+        await repository.enviarEmail(codigoGerado, email.text, nome.text);
+
+    response.fold(
+      (l) => strReturn = l.message,
+      (r) => strReturn = "sucesso",
+    );
+    return strReturn;
   }
 
   @action
@@ -142,12 +145,14 @@ abstract class _CadastroStoreBase with Store {
 
   @action
   verificaEmail() async {
-    try {
-      await repository.verificaUser(email.text);
-      return "sucesso";
-    } catch (e) {
-      return "E-mail ja cadastrado.";
-    }
+    String strReturn = "";
+    var response = await repository.verificaUser(email.text);
+
+    response.fold(
+      (l) => strReturn = l.message,
+      (r) => strReturn = "E-mail ja cadastrado.",
+    );
+    return strReturn;
   }
 
   @action

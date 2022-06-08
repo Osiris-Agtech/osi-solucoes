@@ -30,21 +30,24 @@ class AjustesPageState extends State<AjustesPage> {
         backgroundColor: Colors.white,
         content: Text(
           "Campo 'Buscar Reservatório...' obrigatório!",
-          style: TextStyle(color: kErrorColor),
+          style: TextStyle(color: Constants.kErrorColor),
         ));
     return SafeArea(
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        backgroundColor: kSecondBackgroundColor,
+        backgroundColor: Constants.kSecondBackgroundColor,
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 18.0),
           child: FloatingActionButton.extended(
             onPressed: () {
               store.reservatorio.text.isNotEmpty
-                  ? Get.to(() => const ResultadoajustePage())
+                  ? Get.to(
+                      () => const ResultadoajustePage(),
+                      transition: Transition.rightToLeft,
+                    )
                   : ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
-            backgroundColor: kPrimaryColor,
+            backgroundColor: Constants.kPrimaryColor,
             label: const Text(
               'Calcular',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
@@ -89,7 +92,7 @@ class AjustesPageState extends State<AjustesPage> {
                           dropDownButton: const Icon(
                             Icons.arrow_drop_down,
                             size: 30,
-                            color: kPrimaryColor,
+                            color: Constants.kPrimaryColor,
                           ),
                           dropdownSearchDecoration: InputDecoration(
                             border: InputBorder.none,
@@ -205,7 +208,7 @@ class AjustesPageState extends State<AjustesPage> {
                                       child: Icon(
                                         Icons.arrow_forward_ios,
                                         size: 20,
-                                        color: kPrimaryColor,
+                                        color: Constants.kPrimaryColor,
                                       ),
                                     )),
                                     Column(
@@ -318,7 +321,7 @@ class AjustesPageState extends State<AjustesPage> {
                                         child: Icon(
                                           Icons.arrow_forward_ios,
                                           size: 20,
-                                          color: kPrimaryColor,
+                                          color: Constants.kPrimaryColor,
                                         ),
                                       )),
                                       Column(
@@ -484,7 +487,8 @@ class AjustesPageState extends State<AjustesPage> {
                                     child: Observer(builder: (_) {
                                       return DropdownButton<int>(
                                         isExpanded: true,
-                                        iconEnabledColor: kPrimaryColor,
+                                        iconEnabledColor:
+                                            Constants.kPrimaryColor,
                                         value: store.selectedItem,
                                         items: store.quantityList
                                             .map((int e) =>
@@ -546,14 +550,17 @@ class ButtonWidget extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24)),
-              primary: kPrimaryColor,
+              primary: Constants.kPrimaryColor,
             ),
             child: const Text(
               'Calcular',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             onPressed: () {
-              Get.to(() => const ResultadoajustePage());
+              Get.to(
+                () => const ResultadoajustePage(),
+                transition: Transition.rightToLeft,
+              );
               // Modular.to.pushReplacementNamed("/resultadoAjuste/");
             },
           ),

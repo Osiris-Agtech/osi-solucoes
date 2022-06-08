@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../core/constants/constants.dart';
 import '../../viewmodels/caderno_campo_store.dart';
 
 class CadernoCampoPage extends StatefulWidget {
@@ -22,7 +23,7 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
         title: Text(widget.title),
       ),
       body: Container(
-        color: Colors.red,
+        color: Constants.kBackgroundColor,
       ),
     );
   }

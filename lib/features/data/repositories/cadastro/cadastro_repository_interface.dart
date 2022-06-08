@@ -1,3 +1,7 @@
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/errors/failure.dart';
+
 abstract class ICadastroRepository {
   Future verificaUser(String email);
   Future cadastraConta({
@@ -17,6 +21,6 @@ abstract class ICadastroRepository {
     String? imagemConta,
     String? cnpjConta,
   });
-  Future buscarPorCEP(String cep);
-  Future enviarEmail(String codigo, String email, String nome);
+  Future<Either<Failure, String>> enviarEmail(
+      String codigo, String email, String nome);
 }

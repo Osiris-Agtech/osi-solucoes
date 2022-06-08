@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/core/constants/constants.dart';
 import '../../viewmodels/area_cultivo_store.dart';
 
 class AreaCultivoPage extends StatefulWidget {
@@ -21,7 +22,7 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
         title: Text(widget.title),
       ),
       body: Container(
-        color: Colors.red,
+        color: Constants.kBackgroundColor,
       ),
     );
   }

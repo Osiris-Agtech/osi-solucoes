@@ -12,5 +12,6 @@ abstract class Routes {
   static const multiAccountsPage = "/multiAccountsPage";
   static const splashPage = "/splashPage";
   static const reservatoriosPage = "/reservatoriosPage";
+  static const cadastrarReservatoriosPage = "/cadastrarReservatoriosPage";
   static const solucaoPage = "/solucaoPage";
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../core/constants/constants.dart';
 import '../../viewmodels/solucao_store.dart';
 
 class SolucaoPage extends StatefulWidget {
@@ -21,7 +22,7 @@ class SolucaoPageState extends State<SolucaoPage> {
         title: Text(widget.title),
       ),
       body: Container(
-        color: Colors.red,
+        color: Constants.kBackgroundColor,
       ),
     );
   }

@@ -22,7 +22,7 @@ loginButton(
       width: size.width * .7,
       height: 45,
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(primary: kPrimaryColor),
+        style: ElevatedButton.styleFrom(primary: Constants.kPrimaryColor),
         child: Text(
           "textButton".i18n(),
           style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),

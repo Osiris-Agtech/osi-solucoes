@@ -38,7 +38,7 @@ registrarButton(Size size) {
               ),
               const Icon(
                 Icons.chevron_right,
-                color: kPrimaryColor,
+                color: Constants.kPrimaryColor,
                 size: 32,
               )
             ],

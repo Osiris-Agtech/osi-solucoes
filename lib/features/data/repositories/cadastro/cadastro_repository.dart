@@ -1,20 +1,15 @@
-import 'dart:collection';
+import 'package:dartz/dartz.dart';
 
-import 'package:graphql/client.dart';
-import 'package:http/http.dart' as http;
-
-import '../../../presenter/models/resultadoCEP/resultadoCEP_model.dart';
+import '../../../../core/errors/failure.dart';
 import '../../../presenter/models/usuario/usuario_model.dart';
+import '../../datasources/cadastro/cadastro_datasource.dart';
 import 'cadastro_repository_interface.dart';
 
 class CadastroRepository implements ICadastroRepository {
-  final HttpLink _httpLink = HttpLink(
-    "http://8465-2804-d59-4201-c900-dcf7-c6a6-e112-a719.ngrok.io",
-  );
-
-  final _authLink = AuthLink(
-    getToken: () async => 'Bearer \$YOUR_PERSONAL_ACCESS_TOKEN',
-  );
+  final ICadastroConta datasource;
+  CadastroRepository({
+    required this.datasource,
+  });
 
   @override
   Future cadastraConta({
@@ -34,183 +29,39 @@ class CadastroRepository implements ICadastroRepository {
     String? imagemConta,
     String? cnpjConta,
   }) async {
-    Link _link = _authLink.concat(_httpLink);
-
-    final GraphQLClient client = GraphQLClient(
-      cache: GraphQLCache(),
-      link: _link,
+    var result = await datasource.cadastraConta(
+      nome: nome,
+      sobrenome: sobrenome,
+      email: email,
+      senha: senha,
+      endereco: endereco,
+      bairro: bairro,
+      cidade: cidade,
+      telefone: telefone,
+      imagem: imagem,
+      cep: cep,
+      estado: estado,
+      pais: pais,
+      complemento: complemento,
+      imagemConta: imagemConta,
+      cnpjConta: cnpjConta,
     );
 
-    const String readRepositories = r'''
-      mutation CreateUserAccount($nome: String!, $sobrenome: String!, $nivelConta: String!, $email: String!, $senha: String!, $endereco: String, $bairro: String, $cidade: String, $telefone: String, $imagem: String, $cep: String, $estado: String, $pais: String, $complemento: String, $imagemConta: String, $cnpjConta: String) {
-        createUserAccount(nome: $nome, sobrenome: $sobrenome, nivelConta: $nivelConta, email: $email, senha: $senha, endereco: $endereco, bairro: $bairro, cidade: $cidade, telefone: $telefone, imagem: $imagem, cep: $cep, estado: $estado, pais: $pais, complemento: $complemento, imagemConta: $imagemConta, cnpjConta: $cnpjConta) {
-          email
-          nome
-          pessoa {
-            nome
-            sobrenome
-            localizacao {
-              endereco
-              cidade
-            }
-          }
-          contas {
-            conta {
-              nome
-              nivel
-            }
-            cargo {
-              cargo
-            }
-          }
-        }
-      }
-    ''';
-
-    final MutationOptions? options;
-
-    options = MutationOptions(
-      document: gql(readRepositories),
-      variables: <String, dynamic>{
-        "nome": nome,
-        "sobrenome": sobrenome,
-        "endereco": endereco,
-        "bairro": bairro,
-        "cidade": cidade,
-        "nivelConta": "1", // Conta nível 1 por padrão
-        "telefone": telefone,
-        "imagem": imagem,
-        "cep": cep,
-        "estado": estado,
-        "pais": pais,
-        "complemento": complemento,
-        "imagemConta": imagemConta,
-        "cnpjConta": cnpjConta,
-        "email": email,
-        "senha": senha,
-      },
-    );
-
-    final QueryResult result = await client.mutate(options);
-
-    if (!result.hasException) {
-      try {
-        Map<String, dynamic> map =
-            HashMap.from(result.data?['createUserAccount']);
-        Usuario? usuario = Usuario.fromJson(map);
-        return usuario;
-      } catch (e) {
-        throw Exception("Erro ao cadastrar");
-      }
-    } else {
-      throw Exception(result.exception);
-    }
+    return result;
   }
 
   @override
-  Future verificaUser(String email) async {
-    Link _link = _authLink.concat(_httpLink);
+  Future<Either<Failure, List<Usuario>>> verificaUser(String email) async {
+    var result = await datasource.verificaUser(email);
 
-    final GraphQLClient client = GraphQLClient(
-      cache: GraphQLCache(),
-      link: _link,
-    );
-
-    const String readRepositories = r'''
-      query BuscarConta($email: String!) {
-        usuarios(where: {
-          email: {
-            equals: $email,
-          },
-          ativo: {
-            equals: true,
-          },
-          acesso_externo: {
-            equals: false,
-          }
-        }) {
-          nome
-          contas {
-            conta {
-              nome
-            }
-          }
-        }
-      }
-    ''';
-
-    final QueryOptions? options;
-
-    options = QueryOptions(
-      document: gql(readRepositories),
-      variables: <String, dynamic>{
-        "email": email,
-      },
-    );
-
-    final QueryResult result = await client.query(options);
-
-    if (!result.hasException) {
-      List? usuarios = result.data?['usuarios']
-          ?.map((item) => Usuario.fromJson(item))
-          .toList();
-      if (usuarios != null && usuarios.isNotEmpty) {
-        throw Exception("Usuário já existe");
-      }
-      return "Usuário não existe";
-    } else {
-      throw Exception(result.exception);
-    }
+    return result;
   }
 
   @override
-  Future<ResultCep> buscarPorCEP(String cep) async {
-    final response =
-        await http.get(Uri.https('viacep.com.br', '/ws/$cep/json/'));
-    if (response.statusCode == 200) {
-      return ResultCep.fromJson(response.body);
-    } else {
-      throw Exception('Requisição inválida!');
-    }
-  }
+  Future<Either<Failure, String>> enviarEmail(
+      String codigo, String email, String nome) async {
+    var result = await datasource.enviarEmail(codigo, email, nome);
 
-  @override
-  Future enviarEmail(String codigo, String email, String nome) async {
-    Link _link = _authLink.concat(_httpLink);
-
-    final GraphQLClient client = GraphQLClient(
-      cache: GraphQLCache(),
-      link: _link,
-    );
-
-    const String readRepositories = r'''
-      mutation SendEmail($email: String!, $subject: String!, $html: String!) {
-        sendEmail(email: $email, subject: $subject, html: $html)
-      }
-    ''';
-
-    final MutationOptions? options;
-
-    options = MutationOptions(
-      document: gql(readRepositories),
-      variables: <String, dynamic>{
-        "email": email,
-        "subject": "Código de Segurança",
-        "html":
-            "Olá $nome, insira este código no aplicativo para validar seu e-mail: $codigo",
-      },
-    );
-
-    final QueryResult result = await client.mutate(options);
-
-    if (!result.hasException) {
-      var response = result.data?['sendEmail'];
-      if (response == null) {
-        throw Exception("Erro ao enviar");
-      }
-      return response;
-    } else {
-      throw Exception(result.exception);
-    }
+    return result;
   }
 }

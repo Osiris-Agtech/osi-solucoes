@@ -39,7 +39,7 @@ class CustomAnimatedBottomBar extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: kBackgroundColor,
+        color: Constants.kBackgroundColor,
         boxShadow: [
           if (showElevation)
             const BoxShadow(
@@ -118,46 +118,39 @@ class _ItemWidget extends StatelessWidget {
           child: Container(
             width: isSelected ? 130 : 50,
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Column(
-                  children: [
-                    IconTheme(
-                      data: IconThemeData(
-                        size: iconSize,
-                        color: isSelected
-                            ? item.activeColor.withOpacity(1)
-                            : item.inactiveColor ?? item.activeColor,
-                      ),
-                      child: item.icon,
-                    ),
-                    if (isSelected)
-                      DefaultTextStyle.merge(
-                        style: TextStyle(
-                          color: item.activeColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        maxLines: 1,
-                        textAlign: item.textAlign,
-                        child: item.title,
-                      ),
-                    if (isSelected)
-                      Expanded(
-                        child: Container(
-                          height: 5,
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24),
-                            color: item.activeColor,
-                          ),
-                        ),
-                      ),
-                  ],
+            child: Column(
+              children: [
+                IconTheme(
+                  data: IconThemeData(
+                    size: iconSize,
+                    color: isSelected
+                        ? item.activeColor.withOpacity(1)
+                        : item.inactiveColor ?? item.activeColor,
+                  ),
+                  child: item.icon,
                 ),
+                if (isSelected)
+                  DefaultTextStyle.merge(
+                    style: TextStyle(
+                      color: item.activeColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 1,
+                    textAlign: item.textAlign,
+                    child: item.title,
+                  ),
+                if (isSelected)
+                  Expanded(
+                    child: Container(
+                      height: 5,
+                      width: isSelected ? 100 : 40,
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        color: item.activeColor,
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

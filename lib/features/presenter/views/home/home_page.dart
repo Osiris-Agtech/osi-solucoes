@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/views/home/modulos_page.dart';
+import 'package:osi_solucoes/features/presenter/views/modulos/modulos_page.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
 
@@ -79,14 +79,14 @@ class _HomePageState extends State<HomePage> {
     final size = MediaQuery.of(context).size;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: kBackgroundColor,
+        statusBarColor: Constants.kBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
       ),
       child: SafeArea(
         child: WillPopScope(
           onWillPop: () => exitApp(),
           child: Scaffold(
-            backgroundColor: kSecondBackgroundColor,
+            backgroundColor: Constants.kSecondBackgroundColor,
             body: Stack(
               children: [
                 menu(context, size),
@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   icon: const Icon(
                     Icons.close,
-                    color: kBackgroundColor,
+                    color: Constants.kBackgroundColor,
                     size: 24,
                   ),
                 ),
@@ -214,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                       IconButton(
                         icon: SvgPicture.asset(
                           "assets/icons/settings_icon.svg",
-                          color: kBackgroundColor.withOpacity(.8),
+                          color: Constants.kBackgroundColor.withOpacity(.8),
                         ),
                         onPressed: () {},
                       ),
@@ -240,7 +240,7 @@ class _HomePageState extends State<HomePage> {
                       IconButton(
                         icon: SvgPicture.asset(
                           "assets/icons/hexagon_icon.svg",
-                          color: kBackgroundColor.withOpacity(.8),
+                          color: Constants.kBackgroundColor.withOpacity(.8),
                         ),
                         onPressed: () {},
                       ),
@@ -323,7 +323,7 @@ class _HomePageState extends State<HomePage> {
                       IconButton(
                         icon: SvgPicture.asset(
                           "assets/icons/info_icon.svg",
-                          color: kBackgroundColor.withOpacity(.8),
+                          color: Constants.kBackgroundColor.withOpacity(.8),
                         ),
                         onPressed: () {},
                       ),
@@ -360,7 +360,7 @@ class _HomePageState extends State<HomePage> {
                       IconButton(
                         icon: SvgPicture.asset(
                           "assets/icons/external_link_icon.svg",
-                          color: kBackgroundColor.withOpacity(.8),
+                          color: Constants.kBackgroundColor.withOpacity(.8),
                         ),
                         onPressed: () {},
                       ),
@@ -414,7 +414,7 @@ class _HomePageState extends State<HomePage> {
             borderRadius: store.isCollapsed
                 ? BorderRadius.circular(0)
                 : BorderRadius.circular(30),
-            color: kSecondBackgroundColor,
+            color: Constants.kSecondBackgroundColor,
           ),
           child: CustomScrollView(
             physics: const BouncingScrollPhysics(),
@@ -511,7 +511,7 @@ class _HomePageState extends State<HomePage> {
 
   SliverAppBar sliverAppBarWidget(Size size) {
     return SliverAppBar(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: Constants.kBackgroundColor,
       forceElevated: true,
       elevation: 1,
       pinned: true,
@@ -584,10 +584,10 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: EdgeInsets.only(top: size.height * 0.03),
                 child: const CircleAvatar(
-                  backgroundColor: kPrimaryColor,
+                  backgroundColor: Constants.kPrimaryColor,
                   child: Icon(
                     Icons.person,
-                    color: kBackgroundColor,
+                    color: Constants.kBackgroundColor,
                     size: 25,
                   ),
                   minRadius: 25,
@@ -652,7 +652,7 @@ class _HomePageState extends State<HomePage> {
           child: IconButton(
               icon: SvgPicture.asset(icon),
               onPressed: () {},
-              color: kBackgroundColor),
+              color: Constants.kBackgroundColor),
         ),
         Padding(
           padding: EdgeInsets.only(top: size.height * 0.009),
@@ -688,7 +688,7 @@ class _HomePageState extends State<HomePage> {
             if (id != 5) {
               modulosStore.setPageViewController(id);
               Get.to(
-                const ModulosPage(),
+                () => const ModulosPage(),
                 transition: Transition.rightToLeft,
               );
             }
