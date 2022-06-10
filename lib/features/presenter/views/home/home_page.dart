@@ -763,15 +763,15 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
     return Material(
       elevation: 2,
       borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(30),
-        bottomRight: Radius.circular(30),
+        bottomLeft: Radius.circular(45),
+        bottomRight: Radius.circular(45),
         topLeft: Radius.zero,
         topRight: Radius.zero,
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
+          bottomLeft: Radius.circular(45),
+          bottomRight: Radius.circular(45),
           topLeft: Radius.zero,
           topRight: Radius.zero,
         ),
