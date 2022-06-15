@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/data/datasources/login/login_datasource.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 
+import '../../features/data/datasources/cadastro/cadastro_datasource.dart';
 import '../../features/data/repositories/cadastro/cadastro_repository.dart';
 import '../../features/data/repositories/login/login_repository.dart';
 import '../../features/presenter/viewmodels/ajustes_store.dart';
@@ -28,6 +29,7 @@ Future<void> initInject() async {
       () => ConnectivityServiceImpl(connectivity: sl()));
 
   //datasource
+  sl.registerLazySingleton<ICadastroConta>(() => CadastroConta());
   sl.registerLazySingleton<ILoginDatasource>(() => LoginDatasource());
 
   //repositories

@@ -8,8 +8,8 @@ import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dar
 import 'package:rive/rive.dart';
 import 'package:flutter/material.dart';
 
-import '../../routes/routes.dart';
 import '../../viewmodels/cadastro_store.dart';
+import '../home/home_page.dart';
 
 class ConfirmaSegurancaPage extends StatefulWidget {
   final String title;
@@ -238,16 +238,7 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
                                     showDoneAnimation(context),
                                     await Future.delayed(
                                         const Duration(milliseconds: 1400)),
-                                    Get.offUntil(
-                                      GetPageRoute(
-                                          page: () => const SplashPage()),
-                                      (route) =>
-                                          (route as GetPageRoute).routeName ==
-                                          Routes.homePage,
-                                    ),
-                                    // Modular.to
-                                    //     .popUntil(ModalRoute.withName("/")),
-                                    // Modular.to.pushReplacementNamed("/Home/"),
+                                    Get.offAll(() => const HomePage()),
                                   }
                                 : {
                                     showErrorDialog(context, res),
@@ -266,9 +257,7 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
                 ),
                 TextButton(
                     onPressed: () {
-                      Get.off(() => const SplashPage());
-                      // Modular.to.pushNamedAndRemoveUntil(
-                      //     "/", ModalRoute.withName('/'));
+                      Get.offAll(() => const SplashPage());
                     },
                     child: Text(
                       "confirmaText6".i18n(),

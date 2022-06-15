@@ -8,10 +8,13 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/presenter/views/modulos/modulos_page.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
 
+import '../../../../core/services/local_storage.dart';
+import '../../viewmodels/auth_controller.dart';
 import '../../viewmodels/home_store.dart';
 import '../../viewmodels/modulos_store.dart';
 
@@ -24,6 +27,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final AuthController authController = GetIt.I<AuthController>();
   ModulosStore modulosStore = GetIt.I<ModulosStore>();
   HomeStore store = GetIt.I<HomeStore>();
   final Duration duration = const Duration(milliseconds: 300);
@@ -351,9 +355,9 @@ class _HomePageState extends State<HomePage> {
                         return const Center(child: CircularProgressIndicator());
                       },
                     );
+                    await LocalStorage().deleteUser();
                     await Future.delayed(const Duration(seconds: 2));
-                    Get.off(() => const SplashPage());
-                    // Modular.to.pushReplacementNamed(Modular.initialRoute);
+                    Get.offAll(() => const SplashPage());
                   },
                   child: Row(
                     children: [
@@ -685,16 +689,15 @@ class _HomePageState extends State<HomePage> {
         ),
         child: InkWell(
           onTap: () async {
-            if (id != 5) {
+            if (authController.isDevelop && id != 5) {
               modulosStore.setPageViewController(id);
               Get.to(
                 () => const ModulosPage(),
                 transition: Transition.rightToLeft,
               );
+            } else {
+              toastError(message: "Acesso negado a funcionalidade");
             }
-            // await modulosStore.setPageViewController(id!);
-            // Get.to(() => const HomeView());
-            // Modular.to.pushNamed("/Tab/$path/");
           },
           child: Card(
             shape: RoundedRectangleBorder(

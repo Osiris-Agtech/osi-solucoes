@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 import '../../viewmodels/login_store.dart';
 import '../home/home_page.dart';
@@ -21,7 +22,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  // final LoginStore store = Modular.get<LoginStore>();
+  final AuthController authController = GetIt.I<AuthController>();
   final LoginStore store = GetIt.I<LoginStore>();
   final formKey = GlobalKey<FormState>();
   final FocusNode emailNode = FocusNode();
@@ -127,11 +128,16 @@ class LoginPageState extends State<LoginPage> {
   }
 
   _logo(Size size) {
-    return SizedBox(
-      child: Image.asset(
-        "assets/images/osiris-logo.png",
-        width: size.width * 0.42,
-        // height: size.height * 0.082,
+    return InkWell(
+      highlightColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      onTap: () => authController.setIsDevelop(),
+      child: SizedBox(
+        child: Image.asset(
+          "assets/images/osiris-logo.png",
+          width: size.width * 0.42,
+          // height: size.height * 0.082,
+        ),
       ),
     );
   }
@@ -188,28 +194,16 @@ class LoginPageState extends State<LoginPage> {
                       String response = await store.login();
                       await Future.delayed(const Duration(seconds: 2));
                       if (response == "sucesso") {
-                        Get.offAll(const HomePage());
-                        // Get.offUntil(
-                        //   GetPageRoute(page: () => const HomePage()),
-                        //   (route) =>
-                        //       (route as GetPageRoute).routeName ==
-                        //       Routes.homePage,
-                        // );
-                        // Modular.to.pushReplacementNamed("/Home/");
+                        store.clearFields();
+                        Get.offAll(() => const HomePage());
                       } else if (response == "multiple") {
+                        store.clearFields();
                         Get.to(
                           () => MultiAccountsPage(
                             user: store.userList[0],
                             isLoggedIn: false,
                           ),
                         );
-                        // Modular.to.pushReplacementNamed(
-                        //   "/Login/MultiAccounts/",
-                        //   arguments: {
-                        //     "user": store.userList[0],
-                        //     "isLoggedIn": false,
-                        //   },
-                        // );
                       } else {
                         showLoaderDialog(context, response);
                         await Future.delayed(const Duration(seconds: 2));

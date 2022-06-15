@@ -6,6 +6,7 @@ import 'package:localization/localization.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
+import '../../../core/services/local_storage.dart';
 import '../../data/repositories/login/login_repository.dart';
 import '../models/usuario/usuario_model.dart';
 
@@ -37,6 +38,12 @@ abstract class _LoginStoreBase with Store {
   }
 
   @action
+  clearFields() {
+    email.clear();
+    senha.clear();
+  }
+
+  @action
   login() async {
     bool isValidLogin = false;
     bool isMultipleAccount = false;
@@ -47,13 +54,19 @@ abstract class _LoginStoreBase with Store {
       (err) {
         isValidLogin = false;
       }, // ifLeft callback
-      (data) {
+      (data) async {
         userList = List.from(data);
-        if (userList[0].contas!.length > 1) isMultipleAccount = true;
+        isValidLogin = true;
 
         authController.setUser(data[0]);
-        authController.usuario.selected_conta = userList[0].contas![0];
-        isValidLogin = true;
+
+        if (userList[0].contas!.length > 1) {
+          isMultipleAccount = true;
+        } else {
+          authController.usuario.selected_conta = userList[0].contas![0];
+        }
+
+        await LocalStorage().storageUser(data[0]);
       },
     ); // ifRight callback
 

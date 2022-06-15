@@ -24,6 +24,36 @@ mixin _$AuthController on _AuthControllerBase, Store {
     });
   }
 
+  final _$isDevelopAtom = Atom(name: '_AuthControllerBase.isDevelop');
+
+  @override
+  bool get isDevelop {
+    _$isDevelopAtom.reportRead();
+    return super.isDevelop;
+  }
+
+  @override
+  set isDevelop(bool value) {
+    _$isDevelopAtom.reportWrite(value, super.isDevelop, () {
+      super.isDevelop = value;
+    });
+  }
+
+  final _$developCountAtom = Atom(name: '_AuthControllerBase.developCount');
+
+  @override
+  int get developCount {
+    _$developCountAtom.reportRead();
+    return super.developCount;
+  }
+
+  @override
+  set developCount(int value) {
+    _$developCountAtom.reportWrite(value, super.developCount, () {
+      super.developCount = value;
+    });
+  }
+
   final _$_AuthControllerBaseActionController =
       ActionController(name: '_AuthControllerBase');
 
@@ -39,9 +69,22 @@ mixin _$AuthController on _AuthControllerBase, Store {
   }
 
   @override
+  dynamic setIsDevelop() {
+    final _$actionInfo = _$_AuthControllerBaseActionController.startAction(
+        name: '_AuthControllerBase.setIsDevelop');
+    try {
+      return super.setIsDevelop();
+    } finally {
+      _$_AuthControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-usuario: ${usuario}
+usuario: ${usuario},
+isDevelop: ${isDevelop},
+developCount: ${developCount}
     ''';
   }
 }

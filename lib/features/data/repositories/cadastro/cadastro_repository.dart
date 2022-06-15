@@ -12,7 +12,7 @@ class CadastroRepository implements ICadastroRepository {
   });
 
   @override
-  Future cadastraConta({
+  Future<Either<Failure, Usuario>> cadastraConta({
     required String nome,
     required String sobrenome,
     required String email,

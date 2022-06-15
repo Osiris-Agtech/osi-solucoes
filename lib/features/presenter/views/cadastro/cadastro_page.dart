@@ -378,7 +378,8 @@ class CadastroPageState extends State<CadastroPage> {
                   ? TextInputType.phone
                   : TextInputType.text,
       textCapitalization: labelText != "labelTextConsult2".i18n() ||
-              labelText != "labelTextConsult1".i18n()
+              labelText != "labelTextConsult1".i18n() ||
+              labelText != "formEmail".i18n()
           ? TextCapitalization.words
           : TextCapitalization.none,
       onEditingComplete: () async {

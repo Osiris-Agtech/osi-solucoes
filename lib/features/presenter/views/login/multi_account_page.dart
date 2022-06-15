@@ -144,9 +144,7 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
                                         await Future.delayed(
                                             const Duration(seconds: 2));
                                         Navigator.pop(context);
-                                        Get.off(() => const HomePage());
-                                        // Modular.to.pushNamedAndRemoveUntil(
-                                        //     "/Home/", ModalRoute.withName('/'));
+                                        Get.offAll(() => const HomePage());
                                       },
                                       child: SizedBox(
                                         width:

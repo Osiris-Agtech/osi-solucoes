@@ -21,7 +21,10 @@ registrarButton(Size size) {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           onTap: () async {
-            Get.to(() => const CadastroPage());
+            Get.to(
+              () => const CadastroPage(),
+              transition: Transition.rightToLeft,
+            );
             // Modular.to.pushNamed("/Cadastro/");
           },
           child: Row(
