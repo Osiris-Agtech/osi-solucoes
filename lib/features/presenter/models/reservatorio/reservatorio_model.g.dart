@@ -7,12 +7,26 @@ part of 'reservatorio_model.dart';
 // **************************************************************************
 
 Reservatorio _$ReservatorioFromJson(Map<String, dynamic> json) => Reservatorio(
-      reservatorio: json['reservatorio'] as String?,
-      isSelected: json['isSelected'] as bool?,
+      id: json['id'] as int?,
+      nome: json['nome'] as String?,
+      volume: (json['volume'] as num?)?.toDouble(),
+      created_at: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      conta: json['conta'] == null
+          ? null
+          : Conta.fromJson(json['conta'] as Map<String, dynamic>),
+      solucao: json['solucao'] == null
+          ? null
+          : SolucaoNutritiva.fromJson(json['solucao'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ReservatorioToJson(Reservatorio instance) =>
     <String, dynamic>{
-      'reservatorio': instance.reservatorio,
-      'isSelected': instance.isSelected,
+      'id': instance.id,
+      'nome': instance.nome,
+      'volume': instance.volume,
+      'created_at': instance.created_at?.toIso8601String(),
+      'conta': instance.conta?.toJson(),
+      'solucao': instance.solucao?.toJson(),
     };

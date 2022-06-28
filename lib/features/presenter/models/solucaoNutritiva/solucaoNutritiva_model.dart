@@ -1,41 +1,37 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
+import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 
-part 'reservatorio_model.g.dart';
+part 'solucaoNutritiva_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class Reservatorio {
+class SolucaoNutritiva {
   @JsonKey(required: false, disallowNullValue: false)
   int? id;
   @JsonKey(required: false, disallowNullValue: false)
   String? nome;
   @JsonKey(required: false, disallowNullValue: false)
-  double? volume;
+  double? c_eletrica;
   @JsonKey(required: false, disallowNullValue: false)
   DateTime? created_at;
   @JsonKey(required: false, disallowNullValue: false)
-  Conta? conta;
-  @JsonKey(required: false, disallowNullValue: false)
-  SolucaoNutritiva? solucao;
+  List<Reservatorio>? reservatorios;
   // @JsonKey(required: false, disallowNullValue: false)
-  // List<Lote>? lotes;
+  // List<SolucaoConta>? solucoes_contas;
   // @JsonKey(required: false, disallowNullValue: false)
-  // List<Setor>? setores;
+  // List<SolucaoFertilizanteConcentrada>? solucoes_fertilizantes_concentradas;
 
-  Reservatorio({
+  SolucaoNutritiva({
     this.id,
     this.nome,
-    this.volume,
+    this.c_eletrica,
     this.created_at,
-    this.conta,
-    this.solucao,
+    this.reservatorios,
   });
 
-  factory Reservatorio.fromJson(Map<String, dynamic> json) =>
-      _$ReservatorioFromJson(json);
+  factory SolucaoNutritiva.fromJson(Map<String, dynamic> json) =>
+      _$SolucaoNutritivaFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ReservatorioToJson(this);
+  Map<String, dynamic> toJson() => _$SolucaoNutritivaToJson(this);
 }

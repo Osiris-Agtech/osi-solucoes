@@ -2,7 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 
 import '../../../../../core/constants/constants.dart';
@@ -21,6 +23,12 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
   ReservatoriosStore store = GetIt.I<ReservatoriosStore>();
   CarouselController carouselController = CarouselController();
   CarouselController controlerPages = CarouselController();
+
+  @override
+  void dispose() {
+    store.limparNovoReservatorio();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,73 +75,96 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
                   height: 20,
                 ),
                 InkWell(
-                  child: ListTile(
-                    leading: const Icon(Icons.label),
-                    title: const Text(
-                      'Nome',
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.normal),
-                    ),
-                    trailing: const Text(
-                      'Preencher',
-                      style: TextStyle(
-                          color: Constants.kPrimaryColor,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    onTap: () {
-                      bottomSheet(context, 0);
-                      // showConfirmDialog(context);
-                    },
-                  ),
+                  child: Observer(builder: (_) {
+                    return ListTile(
+                      leading: const Icon(Icons.label),
+                      title: const Text(
+                        'Nome',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.normal),
+                      ),
+                      trailing: store.novoReservatorioName.text.isNotEmpty
+                          ? Text(
+                              store.novoReservatorioName.text,
+                              style: const TextStyle(
+                                  color: Constants.kPrimaryColor,
+                                  fontWeight: FontWeight.w600),
+                            )
+                          : const Text(
+                              "Preencher",
+                              style: TextStyle(
+                                  color: Constants.kPrimaryColor,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                      onTap: () {
+                        bottomSheet(context, 0);
+                        // showConfirmDialog(context);
+                      },
+                    );
+                  }),
                 ),
                 const Divider(),
                 InkWell(
-                  child: ListTile(
-                    leading: const Icon(Icons.waves),
-                    title: const Text(
-                      'Volume',
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.normal),
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Text(
-                          '2000 Litros',
-                          style: TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Icon(
-                          Icons.chevron_right,
-                          color: Constants.kPrimaryColor,
-                        )
-                      ],
-                    ),
-                    onTap: () {
-                      bottomSheet(context, 1);
-                    },
-                  ),
+                  child: Observer(builder: (_) {
+                    return ListTile(
+                      leading: const Icon(Icons.waves),
+                      title: const Text(
+                        'Volume',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.normal),
+                      ),
+                      trailing: store.novoReservatorioVolume.text.isNotEmpty
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  store.novoReservatorioVolume.text + " Litros",
+                                  style: const TextStyle(
+                                      color: Constants.kPrimaryColor,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                const Icon(
+                                  Icons.chevron_right,
+                                  color: Constants.kPrimaryColor,
+                                )
+                              ],
+                            )
+                          : const Text(
+                              "Preencher",
+                              style: TextStyle(
+                                  color: Constants.kPrimaryColor,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                      onTap: () {
+                        bottomSheet(context, 1);
+                      },
+                    );
+                  }),
                 ),
                 const Divider(),
                 InkWell(
-                  child: ListTile(
-                    leading: const Icon(Icons.invert_colors),
-                    title: const Text(
-                      'Solução Nutritiva',
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.normal),
-                    ),
-                    trailing: const Text(
-                      'Furlani',
-                      style: TextStyle(
-                          color: Constants.kPrimaryColor,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    onTap: () {
-                      bottomSheet(context, 2);
-                    },
-                  ),
+                  child: Observer(builder: (_) {
+                    return ListTile(
+                      leading: const Icon(Icons.invert_colors),
+                      title: const Text(
+                        'Solução Nutritiva',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.normal),
+                      ),
+                      trailing: store.isSolucaoNutritivaValid
+                          ? Text(
+                              store.solucaoNutritiva.nome ?? "",
+                              style: const TextStyle(
+                                color: Constants.kPrimaryColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            )
+                          : null,
+                      onTap: () {
+                        bottomSheet(context, 2);
+                      },
+                    );
+                  }),
                 ),
                 const Divider(),
                 Expanded(child: Container()),
@@ -337,12 +368,16 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
           Padding(
             padding: const EdgeInsets.only(top: 30),
             child: TextFormField(
-                decoration: const InputDecoration(
-                    hintText: 'EX. Reservatório Central',
-                    hintStyle: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.normal,
-                        fontStyle: FontStyle.italic))),
+              controller: store.novoReservatorioName,
+              decoration: const InputDecoration(
+                hintText: 'EX. Reservatório Central',
+                hintStyle: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.normal,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
           ),
           Expanded(
             child: Container(),
@@ -392,13 +427,18 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
           Padding(
             padding: const EdgeInsets.only(top: 30),
             child: TextFormField(
-                decoration: const InputDecoration(
-                    suffixText: 'Litros',
-                    hintText: 'EX. 2500',
-                    hintStyle: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.normal,
-                        fontStyle: FontStyle.italic))),
+              keyboardType: TextInputType.number,
+              controller: store.novoReservatorioVolume,
+              decoration: const InputDecoration(
+                suffixText: 'Litros',
+                hintText: 'EX. 2500',
+                hintStyle: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.normal,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
           ),
           Expanded(
             child: Container(),
@@ -454,12 +494,15 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
           ),
           const Padding(
             padding: EdgeInsets.only(top: 25, left: 20),
-            child: Text('Todas as Receitas Cadastradas',
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Color(0xff6F6464),
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w600)),
+            child: Text(
+              'Todas as Receitas Cadastradas',
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xff6F6464),
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
           Expanded(
             child: Padding(
@@ -527,169 +570,199 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
   Widget receitaDetalhe(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.9,
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20, left: 20),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () => controlerPages.previousPage(),
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                      size: 28,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20, left: 20),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () => controlerPages.previousPage(),
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    size: 28,
+                  ),
+                  color: Constants.kPrimaryColor,
+                ),
+              ],
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 10, left: 30),
+            child: Text(
+              'Furlani',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 10, left: 30, bottom: 20),
+            child: Text(
+              'C. elétrica: 1.8 S.m/mm2',
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xff6F6464),
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Text(
+                              'Fertilizantes',
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              'quantidade/Litro',
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ...[
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                      ].map(
+                        (fertilizante) => Text(fertilizante.nome ?? ''),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 20, right: 20),
+                        child: Text(
+                          'Relação de Nutrientes',
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      ...[
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                      ].map(
+                        (fertilizante) => const ListTile(
+                          title: Text('k/n'),
+                          trailing: Text('0.8'),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Text(
+                              'Teor de Nutrientes',
+                              style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            Text(
+                              'mg/Litro',
+                              style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ...[
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                        Fertilizante(nome: "fertilizante 1"),
+                      ].map(
+                        (fertilizante) => const ListTile(
+                          title: Text('k/n'),
+                          trailing: Text('1.5'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16.0, bottom: 30.0),
+                    child: SizedBox(
+                      height: 40,
+                      width: 140,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          primary: Constants.kPrimaryColor,
+                        ),
+                        child: Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Text(
+                                'Selecionar',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Icon(Icons.chevron_right)
+                            ],
+                          ),
+                        ),
+                        onPressed: () {
+                          store.setSolucaoNutritiva(store.solucaoTest);
+                          Navigator.pop(context);
+                        },
+                      ),
                     ),
-                    color: Constants.kPrimaryColor,
                   ),
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 20, left: 30),
-              child: Text(
-                'Furlani',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 10, left: 30, bottom: 20),
-              child: Text('C. elétrica: 1.8 S.m/mm2',
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xff6F6464),
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w600)),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    'Fertilizantes',
-                    style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  Text('quantidade/Litro',
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w600))
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 200,
-              width: double.infinity,
-              child: Card(
-                  child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListView.builder(
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: 15,
-                        itemBuilder: (context, index) {
-                          return const Text('data');
-                        }),
-                  ],
                 ),
-              )),
+              ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: Text(
-                'Relação de Nutrientes',
-                style: TextStyle(
-                    fontStyle: FontStyle.italic, fontWeight: FontWeight.w600),
-              ),
-            ),
-            SizedBox(
-              height: 200,
-              width: double.infinity,
-              child: Card(
-                  child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListView.builder(
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: 15,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: const [
-                              ListTile(
-                                title: Text('k/n'),
-                                trailing: Text('0.8'),
-                              ),
-                              Divider()
-                            ],
-                          );
-                        }),
-                  ],
-                ),
-              )),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    'Teor de Nutrientes',
-                    style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    'mg/Litro',
-                    style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 200,
-              width: double.infinity,
-              child: Card(
-                  child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListView.builder(
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: 15,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: const [
-                              ListTile(
-                                title: Text('k/n'),
-                                trailing: Text('0.8'),
-                              ),
-                              Divider()
-                            ],
-                          );
-                        }),
-                  ],
-                ),
-              )),
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
