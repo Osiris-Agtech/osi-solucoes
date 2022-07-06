@@ -13,7 +13,7 @@ class Reservatorio {
   @JsonKey(required: false, disallowNullValue: false)
   String? nome;
   @JsonKey(required: false, disallowNullValue: false)
-  double? volume;
+  String? volume;
   @JsonKey(required: false, disallowNullValue: false)
   DateTime? created_at;
   @JsonKey(required: false, disallowNullValue: false)

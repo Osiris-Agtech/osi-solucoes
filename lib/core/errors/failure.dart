@@ -18,4 +18,5 @@ class FailureMessage {
   static const internalErrorMessage = 'Erro interno';
   static const cepErrorMessage = 'Requisição inválida!';
   static const senEmailErrorMessage = 'Falha ao enviar e-mail';
+  static const emptyListMessage = 'Lista Vazia';
 }

@@ -113,15 +113,15 @@ class CardEstufa extends StatelessWidget {
                       Text("# ${estufa.id}",
                           style: const TextStyle(fontSize: 12)),
                       const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5.0),
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: SvgPicture.asset(
-                              "assets/icons/settings_black_icon.svg"),
-                          color: Colors.black,
-                        ),
-                      )
+                      // Padding(
+                      //   padding: const EdgeInsets.only(right: 5.0),
+                      //   child: IconButton(
+                      //     onPressed: () {},
+                      //     icon: SvgPicture.asset(
+                      //         "assets/icons/settings_black_icon.svg"),
+                      //     color: Colors.black,
+                      //   ),
+                      // )
                     ],
                   ),
                 ),

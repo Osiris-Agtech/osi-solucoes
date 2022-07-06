@@ -50,12 +50,15 @@ class LoginDatasource implements ILoginDatasource {
               }
             ] 
           }) {
+            id
             nome
               contas {
                 conta {
+                  id
                   nome
                 }
                 cargo {
+                  id
                   cargo
                 }
               }

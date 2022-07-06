@@ -9,6 +9,88 @@ part of 'reservatorios_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
+  final _$isSolucaoListLoadingAtom =
+      Atom(name: '_ReservatoriosStoreBase.isSolucaoListLoading');
+
+  @override
+  bool get isSolucaoListLoading {
+    _$isSolucaoListLoadingAtom.reportRead();
+    return super.isSolucaoListLoading;
+  }
+
+  @override
+  set isSolucaoListLoading(bool value) {
+    _$isSolucaoListLoadingAtom.reportWrite(value, super.isSolucaoListLoading,
+        () {
+      super.isSolucaoListLoading = value;
+    });
+  }
+
+  final _$isReservatorioListLoadingAtom =
+      Atom(name: '_ReservatoriosStoreBase.isReservatorioListLoading');
+
+  @override
+  bool get isReservatorioListLoading {
+    _$isReservatorioListLoadingAtom.reportRead();
+    return super.isReservatorioListLoading;
+  }
+
+  @override
+  set isReservatorioListLoading(bool value) {
+    _$isReservatorioListLoadingAtom
+        .reportWrite(value, super.isReservatorioListLoading, () {
+      super.isReservatorioListLoading = value;
+    });
+  }
+
+  final _$isNovoReservatorioLoadingAtom =
+      Atom(name: '_ReservatoriosStoreBase.isNovoReservatorioLoading');
+
+  @override
+  bool get isNovoReservatorioLoading {
+    _$isNovoReservatorioLoadingAtom.reportRead();
+    return super.isNovoReservatorioLoading;
+  }
+
+  @override
+  set isNovoReservatorioLoading(bool value) {
+    _$isNovoReservatorioLoadingAtom
+        .reportWrite(value, super.isNovoReservatorioLoading, () {
+      super.isNovoReservatorioLoading = value;
+    });
+  }
+
+  final _$solucaoListAtom = Atom(name: '_ReservatoriosStoreBase.solucaoList');
+
+  @override
+  List<SolucaoNutritiva> get solucaoList {
+    _$solucaoListAtom.reportRead();
+    return super.solucaoList;
+  }
+
+  @override
+  set solucaoList(List<SolucaoNutritiva> value) {
+    _$solucaoListAtom.reportWrite(value, super.solucaoList, () {
+      super.solucaoList = value;
+    });
+  }
+
+  final _$reservatorioListAtom =
+      Atom(name: '_ReservatoriosStoreBase.reservatorioList');
+
+  @override
+  List<Reservatorio> get reservatorioList {
+    _$reservatorioListAtom.reportRead();
+    return super.reservatorioList;
+  }
+
+  @override
+  set reservatorioList(List<Reservatorio> value) {
+    _$reservatorioListAtom.reportWrite(value, super.reservatorioList, () {
+      super.reservatorioList = value;
+    });
+  }
+
   final _$novoReservatorioAtom =
       Atom(name: '_ReservatoriosStoreBase.novoReservatorio');
 
@@ -92,8 +174,60 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
     });
   }
 
+  final _$dotIndicatorAtom = Atom(name: '_ReservatoriosStoreBase.dotIndicator');
+
+  @override
+  int get dotIndicator {
+    _$dotIndicatorAtom.reportRead();
+    return super.dotIndicator;
+  }
+
+  @override
+  set dotIndicator(int value) {
+    _$dotIndicatorAtom.reportWrite(value, super.dotIndicator, () {
+      super.dotIndicator = value;
+    });
+  }
+
+  final _$buscarReservatoriosAsyncAction =
+      AsyncAction('_ReservatoriosStoreBase.buscarReservatorios');
+
+  @override
+  Future buscarReservatorios() {
+    return _$buscarReservatoriosAsyncAction
+        .run(() => super.buscarReservatorios());
+  }
+
+  final _$buscarSolucoesAsyncAction =
+      AsyncAction('_ReservatoriosStoreBase.buscarSolucoes');
+
+  @override
+  Future buscarSolucoes() {
+    return _$buscarSolucoesAsyncAction.run(() => super.buscarSolucoes());
+  }
+
+  final _$registrarReservatorioAsyncAction =
+      AsyncAction('_ReservatoriosStoreBase.registrarReservatorio');
+
+  @override
+  Future registrarReservatorio() {
+    return _$registrarReservatorioAsyncAction
+        .run(() => super.registrarReservatorio());
+  }
+
   final _$_ReservatoriosStoreBaseActionController =
       ActionController(name: '_ReservatoriosStoreBase');
+
+  @override
+  dynamic setDotIndicator(int value) {
+    final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
+        name: '_ReservatoriosStoreBase.setDotIndicator');
+    try {
+      return super.setDotIndicator(value);
+    } finally {
+      _$_ReservatoriosStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic setSolucaoNutritiva(SolucaoNutritiva solucao) {
@@ -107,13 +241,30 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
   }
 
   @override
+  dynamic limparNovoReservatorio() {
+    final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
+        name: '_ReservatoriosStoreBase.limparNovoReservatorio');
+    try {
+      return super.limparNovoReservatorio();
+    } finally {
+      _$_ReservatoriosStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
+isSolucaoListLoading: ${isSolucaoListLoading},
+isReservatorioListLoading: ${isReservatorioListLoading},
+isNovoReservatorioLoading: ${isNovoReservatorioLoading},
+solucaoList: ${solucaoList},
+reservatorioList: ${reservatorioList},
 novoReservatorio: ${novoReservatorio},
 solucaoNutritiva: ${solucaoNutritiva},
 isSolucaoNutritivaValid: ${isSolucaoNutritivaValid},
 novoReservatorioName: ${novoReservatorioName},
-novoReservatorioVolume: ${novoReservatorioVolume}
+novoReservatorioVolume: ${novoReservatorioVolume},
+dotIndicator: ${dotIndicator}
     ''';
   }
 }

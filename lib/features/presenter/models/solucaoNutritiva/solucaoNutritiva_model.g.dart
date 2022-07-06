@@ -10,7 +10,7 @@ SolucaoNutritiva _$SolucaoNutritivaFromJson(Map<String, dynamic> json) =>
     SolucaoNutritiva(
       id: json['id'] as int?,
       nome: json['nome'] as String?,
-      c_eletrica: (json['c_eletrica'] as num?)?.toDouble(),
+      c_eletrica: json['c_eletrica'] as String?,
       created_at: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),

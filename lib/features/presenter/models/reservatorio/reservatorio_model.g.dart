@@ -9,7 +9,7 @@ part of 'reservatorio_model.dart';
 Reservatorio _$ReservatorioFromJson(Map<String, dynamic> json) => Reservatorio(
       id: json['id'] as int?,
       nome: json['nome'] as String?,
-      volume: (json['volume'] as num?)?.toDouble(),
+      volume: json['volume'] as String?,
       created_at: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),

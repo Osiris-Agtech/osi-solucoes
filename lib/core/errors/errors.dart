@@ -73,3 +73,9 @@ class ErrorCEP implements Failure {
   final String message;
   ErrorCEP({required this.message});
 }
+
+class ErrorReservatorio implements Failure {
+  @override
+  final String message;
+  ErrorReservatorio({required this.message});
+}

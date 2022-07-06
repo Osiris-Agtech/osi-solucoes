@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -17,7 +18,6 @@ class ReservatoriosPage extends StatefulWidget {
 }
 
 class ReservatoriosPageState extends State<ReservatoriosPage> {
-  // final ReservatoriosStore store = Modular.get();
   ReservatoriosStore store = GetIt.I<ReservatoriosStore>();
 
   @override
@@ -91,53 +91,76 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
                 ),
               ),
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return Card(
-                    elevation: 1,
-                    margin: const EdgeInsets.only(left: 20, right: 20, top: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ListView.builder(
-                      primary: false,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.width * 0.05,
-                        vertical: MediaQuery.of(context).size.height * 0.01,
+            Observer(builder: (_) {
+              // if (store.isReservatorioListLoading) {
+              //   return const Center(
+              //     child: CircularProgressIndicator(
+              //       strokeWidth: 1,
+              //     ),
+              //   );
+              // }
+              // if (store.reservatorioList.isEmpty) {
+              //   return const Center(
+              //     child: Text(
+              //       'Não há reservatórios\ncadastrados em sua conta',
+              //       style: TextStyle(
+              //         fontSize: 14,
+              //         color: Color(0xff6F6464),
+              //         fontStyle: FontStyle.italic,
+              //         fontWeight: FontWeight.w800,
+              //       ),
+              //     ),
+              //   );
+              // }
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                        top: 10,
+                        left: 10,
+                        right: 10,
                       ),
-                      physics: const BouncingScrollPhysics(),
-                      controller: ScrollController(),
-                      shrinkWrap: true,
-                      itemCount: 1,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              top: index != 0
-                                  ? MediaQuery.of(context).size.height * 0.018
-                                  : 0),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0,
+                            vertical: 15.0,
+                          ),
                           child: Row(
                             children: [
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    IconButton(
-                                      icon: SvgPicture.asset(
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 10.0,
+                                        bottom: 5.0,
+                                      ),
+                                      child: SvgPicture.asset(
                                           'assets/icons/reservatorio_icon.svg'),
-                                      onPressed: null,
                                     ),
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 10),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 10.0,
+                                        bottom: 5.0,
+                                      ),
                                       child: Text(
-                                        "Reservatório 1",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600),
+                                        store.reservatorioList[index].nome ??
+                                            "---",
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(10),
+                                      padding: const EdgeInsets.only(left: 10),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
@@ -152,7 +175,7 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
                                           Padding(
                                             padding: EdgeInsets.only(left: 5),
                                             child: Text(
-                                              "9 Ativos",
+                                              "0 Ativos",
                                               style: TextStyle(
                                                 color: Constants.kPrimaryColor,
                                                 fontSize: 14,
@@ -166,29 +189,21 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
                                   ],
                                 ),
                               ),
-                              Expanded(
-                                flex: 1,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: const [
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 20,
-                                      color: Constants.kPrimaryColor,
-                                    ),
-                                  ],
-                                ),
+                              const Icon(
+                                Icons.arrow_forward_ios,
+                                size: 20,
+                                color: Constants.kPrimaryColor,
                               ),
                             ],
                           ),
-                        );
-                      },
-                    ),
-                  );
-                },
-                childCount: 1000, // 1000 list items
-              ),
-            ),
+                        ),
+                      ),
+                    );
+                  },
+                  childCount: store.reservatorioList.length,
+                ),
+              );
+            }),
           ],
         ),
         floatingActionButton: FloatingActionButton(
