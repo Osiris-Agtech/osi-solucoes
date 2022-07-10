@@ -127,8 +127,10 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
                     )
                   : const Text(
                       "Salvar",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
               onPressed: () => store.registrarReservatorio(),
             );
@@ -148,17 +150,28 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
           trailing: store.novoReservatorioName.text.isNotEmpty
-              ? Text(
-                  store.novoReservatorioName.text,
-                  style: const TextStyle(
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      store.novoReservatorioName.text,
+                      style: const TextStyle(
+                        color: Constants.kPrimaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Icon(
+                      Icons.chevron_right,
                       color: Constants.kPrimaryColor,
-                      fontWeight: FontWeight.w600),
+                    ),
+                  ],
                 )
               : const Text(
                   "Preencher",
                   style: TextStyle(
-                      color: Constants.kPrimaryColor,
-                      fontWeight: FontWeight.w600),
+                    color: Constants.kPrimaryColor,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
           onTap: () {
             store.setDotIndicator(0);
@@ -198,8 +211,9 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
               : const Text(
                   "Preencher",
                   style: TextStyle(
-                      color: Constants.kPrimaryColor,
-                      fontWeight: FontWeight.w600),
+                    color: Constants.kPrimaryColor,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
           onTap: () {
             store.setDotIndicator(1);

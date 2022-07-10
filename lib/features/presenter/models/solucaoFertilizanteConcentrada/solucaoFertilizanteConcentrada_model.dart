@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoConcentrada/solucaoConcentrada_model.dart';
@@ -10,6 +12,8 @@ class SolucaoFertilizanteConcentrada {
   @JsonKey(required: false, disallowNullValue: false)
   int? id;
   @JsonKey(required: false, disallowNullValue: false)
+  String? quantidade;
+  @JsonKey(required: false, disallowNullValue: false)
   SolucaoConcentrada? concentrada;
   @JsonKey(required: false, disallowNullValue: false)
   Fertilizante? fertilizante;
@@ -18,6 +22,7 @@ class SolucaoFertilizanteConcentrada {
 
   SolucaoFertilizanteConcentrada({
     this.id,
+    this.quantidade,
     this.concentrada,
     this.fertilizante,
     this.solucao,

@@ -101,6 +101,7 @@ class ModulosPageState extends State<ModulosPage> {
             selectedItemColor: Constants.kContentColorLightTheme,
             unselectedItemColor: Constants.kContentColorLightTheme,
             backgroundColor: Colors.white,
+            // fixedColor: Colors.white,
             elevation: 8,
             currentIndex: store.pageviewController,
             onTap: (int index) => store.setPageViewController(index),

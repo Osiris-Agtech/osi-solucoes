@@ -6,6 +6,7 @@ import '../../../../core/errors/failure.dart';
 
 abstract class IReservatorioRepository {
   Future<Either<Failure, List<SolucaoNutritiva>>> buscarSolucoes(int contaId);
+  Future<Either<Failure, SolucaoNutritiva>> detalhesSolucao(int solucaoId);
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(int contaId);
   Future<Either<Failure, Reservatorio>> registrarReservatorio(
       Reservatorio novoReservatorio);

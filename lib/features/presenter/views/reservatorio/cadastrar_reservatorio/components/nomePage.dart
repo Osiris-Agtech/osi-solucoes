@@ -38,6 +38,12 @@ Container nomePage(BuildContext context, ReservatoriosStore store) {
           padding: const EdgeInsets.only(top: 30),
           child: TextFormField(
             controller: store.novoReservatorioName,
+            textCapitalization: TextCapitalization.words,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.normal,
+              fontStyle: FontStyle.italic,
+            ),
             decoration: const InputDecoration(
               hintText: 'EX. Reservatório Central',
               hintStyle: TextStyle(
@@ -48,9 +54,7 @@ Container nomePage(BuildContext context, ReservatoriosStore store) {
             ),
           ),
         ),
-        Expanded(
-          child: Container(),
-        ),
+        const Spacer(),
       ],
     ),
   );

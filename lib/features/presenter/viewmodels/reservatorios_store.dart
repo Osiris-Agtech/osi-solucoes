@@ -18,13 +18,8 @@ abstract class _ReservatoriosStoreBase with Store {
   AuthController authController = GetIt.I<AuthController>();
 // ------------------------ NOVO RESERVATÓRIO ----------------------------------
 
-  SolucaoNutritiva solucaoTest = SolucaoNutritiva(
-    id: 1,
-    nome: "Furlani",
-    c_eletrica: "1.8",
-    created_at: DateTime.now(),
-    reservatorios: [],
-  );
+  @observable
+  SolucaoNutritiva? solucaoDetalhes;
 
   @observable
   bool isSolucaoListLoading = false;
@@ -36,7 +31,11 @@ abstract class _ReservatoriosStoreBase with Store {
   bool isNovoReservatorioLoading = false;
 
   @observable
-  List<SolucaoNutritiva> solucaoList = [];
+  bool isDetalhesSolucaoLoading = false;
+
+  @observable
+  ObservableList<SolucaoNutritiva> solucaoList =
+      ObservableList<SolucaoNutritiva>.of([]);
 
   @observable
   List<Reservatorio> reservatorioList = [];
@@ -57,20 +56,51 @@ abstract class _ReservatoriosStoreBase with Store {
   TextEditingController novoReservatorioVolume = TextEditingController();
 
   @observable
+  TextEditingController pesquisarReceita = TextEditingController();
+
+  @observable
   int dotIndicator = 1;
+
+  @computed
+  List<SolucaoNutritiva> get getSolucaoNutritivaList =>
+      solucaoList.where((element) {
+        if (pesquisarReceita.text.isEmpty) return true;
+        print(pesquisarReceita.text);
+        return element.nome!.contains(pesquisarReceita.text);
+      }).toList();
 
   @action
   setDotIndicator(int value) {
     if (value >= 0 && value <= 2) {
       dotIndicator = value;
-      print(dotIndicator);
     }
+  }
+
+  @action
+  setSolucaoDetalhes(SolucaoNutritiva solucao) async {
+    solucaoDetalhes = solucao;
+
+    isDetalhesSolucaoLoading = true;
+
+    var detalhes = await reservatorioRepository.detalhesSolucao(solucao.id!);
+    detalhes.fold(
+      (l) => toastError(message: l.message),
+      (r) => solucaoDetalhes = r,
+    );
+
+    isDetalhesSolucaoLoading = false;
   }
 
   @action
   setSolucaoNutritiva(SolucaoNutritiva solucao) {
     solucaoNutritiva = solucao;
     isSolucaoNutritivaValid = true;
+  }
+
+  @action
+  desvincularSolucaoNutritiva() {
+    solucaoNutritiva = SolucaoNutritiva();
+    isSolucaoNutritivaValid = false;
   }
 
   @action
@@ -82,15 +112,11 @@ abstract class _ReservatoriosStoreBase with Store {
 
     reservatorios.fold(
       (err) {
-        print("FALHOU");
+        reservatorioList = List.from([]);
+        toastError(message: err.message);
       },
       (data) async {
         reservatorioList = List.from(data);
-        reservatorioList.add(data[0]);
-        reservatorioList.add(data[0]);
-        reservatorioList.add(data[0]);
-        reservatorioList.add(data[0]);
-        reservatorioList.add(data[0]);
         reservatorioList = List.from(reservatorioList);
       },
     );
@@ -107,10 +133,11 @@ abstract class _ReservatoriosStoreBase with Store {
 
     solucoes.fold(
       (err) {
-        print("FALHOU");
+        solucaoList = ObservableList.of([]);
+        toastError(message: err.message);
       },
       (data) async {
-        solucaoList = List.from(data);
+        solucaoList = ObservableList.of(data);
       },
     );
 

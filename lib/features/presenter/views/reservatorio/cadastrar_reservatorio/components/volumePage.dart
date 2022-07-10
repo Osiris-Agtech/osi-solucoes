@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 
@@ -49,6 +50,14 @@ Container volumePage(BuildContext context, ReservatoriosStore store) {
           child: TextFormField(
             keyboardType: TextInputType.number,
             controller: store.novoReservatorioVolume,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly
+            ],
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.normal,
+              fontStyle: FontStyle.italic,
+            ),
             decoration: const InputDecoration(
               suffixText: 'Litros',
               hintText: 'EX. 2500',

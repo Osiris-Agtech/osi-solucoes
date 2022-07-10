@@ -10,6 +10,7 @@ SolucaoFertilizanteConcentrada _$SolucaoFertilizanteConcentradaFromJson(
         Map<String, dynamic> json) =>
     SolucaoFertilizanteConcentrada(
       id: json['id'] as int?,
+      quantidade: json['quantidade'] as String?,
       concentrada: json['concentrada'] == null
           ? null
           : SolucaoConcentrada.fromJson(
@@ -26,6 +27,7 @@ Map<String, dynamic> _$SolucaoFertilizanteConcentradaToJson(
         SolucaoFertilizanteConcentrada instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'quantidade': instance.quantidade,
       'concentrada': instance.concentrada?.toJson(),
       'fertilizante': instance.fertilizante?.toJson(),
       'solucao': instance.solucao?.toJson(),

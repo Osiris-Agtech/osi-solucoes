@@ -10,6 +10,8 @@ import '../../../../core/errors/errors.dart';
 abstract class IReservatorioDatasource {
   Future<Either<Failure, List<SolucaoNutritiva>>> buscarSolucoes(
       {required int contaId});
+  Future<Either<Failure, SolucaoNutritiva>> detalhesSolucao(
+      {required int solucaoId});
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(
       {required int contaId});
   Future<Either<Failure, Reservatorio>> registrarReservatorio(
@@ -68,6 +70,60 @@ class ReservatorioDatasource implements IReservatorioDatasource {
       return Right(solucoesList);
     } else {
       return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SolucaoNutritiva>> detalhesSolucao(
+      {required int solucaoId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+        query SNutritiva($id: Int!) {
+          sNutritiva(where: {
+            id: $id
+          }) {
+            nome
+            c_eletrica
+            solucoes_contas {
+              conta {
+                nome
+              }
+            }
+            solucoes_fertilizantes_concentradas {
+              quantidade
+              fertilizante {
+                nome
+                fertilizantes_nutrientes {
+                  teor_nutriente
+                  nutriente {
+                    nome
+                  }
+                }
+              }
+            }
+          }
+        }
+      ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'id': solucaoId,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      SolucaoNutritiva? solucao =
+          SolucaoNutritiva.fromJson(result.data?['sNutritiva']);
+
+      return Right(solucao);
+    } else {
+      return Left(ErrorReservatorio(message: FailureMessage.errorInfoMessage));
     }
   }
 
@@ -185,7 +241,8 @@ class ReservatorioDatasource implements IReservatorioDatasource {
 
       return Right(reservatorio);
     } else {
-      return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
+      return Left(ErrorReservatorio(
+          message: FailureMessage.errorNovoReservatorioMessage));
     }
   }
 }

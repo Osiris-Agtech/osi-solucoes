@@ -43,20 +43,23 @@ Widget receitaPage(BuildContext context, CarouselController controlerPages) {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 15, right: 20, left: 20),
-          child: TextFormField(
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              hintText: 'Pesquisar',
-              hintStyle: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.normal,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ),
-        ),
+        // Observer(builder: (_) {
+        //   return Padding(
+        //     padding: const EdgeInsets.only(top: 15, right: 20, left: 20),
+        //     child: TextFormField(
+        //       controller: store.pesquisarReceita,
+        //       decoration: const InputDecoration(
+        //         prefixIcon: Icon(Icons.search),
+        //         hintText: 'Pesquisar',
+        //         hintStyle: TextStyle(
+        //           fontSize: 24,
+        //           fontWeight: FontWeight.normal,
+        //           fontStyle: FontStyle.italic,
+        //         ),
+        //       ),
+        //     ),
+        //   );
+        // }),
         const Padding(
           padding: EdgeInsets.only(top: 15, left: 20),
           child: Text(
@@ -127,6 +130,7 @@ Widget receitaPage(BuildContext context, CarouselController controlerPages) {
                             color: Constants.kPrimaryColor,
                           ),
                           onTap: () {
+                            store.setSolucaoDetalhes(store.solucaoList[index]);
                             controlerPages.nextPage();
                           },
                         ),

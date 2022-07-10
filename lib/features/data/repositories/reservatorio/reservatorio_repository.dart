@@ -20,6 +20,14 @@ class ReservatorioRepository implements IReservatorioRepository {
   }
 
   @override
+  Future<Either<Failure, SolucaoNutritiva>> detalhesSolucao(
+      int solucaoId) async {
+    var result = await datasource.detalhesSolucao(solucaoId: solucaoId);
+
+    return result;
+  }
+
+  @override
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(
       int contaId) async {
     var result = await datasource.buscarReservatorios(contaId: contaId);

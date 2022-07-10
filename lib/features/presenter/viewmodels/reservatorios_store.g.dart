@@ -9,6 +9,31 @@ part of 'reservatorios_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
+  Computed<List<SolucaoNutritiva>>? _$getSolucaoNutritivaListComputed;
+
+  @override
+  List<SolucaoNutritiva> get getSolucaoNutritivaList =>
+      (_$getSolucaoNutritivaListComputed ??= Computed<List<SolucaoNutritiva>>(
+              () => super.getSolucaoNutritivaList,
+              name: '_ReservatoriosStoreBase.getSolucaoNutritivaList'))
+          .value;
+
+  final _$solucaoDetalhesAtom =
+      Atom(name: '_ReservatoriosStoreBase.solucaoDetalhes');
+
+  @override
+  SolucaoNutritiva? get solucaoDetalhes {
+    _$solucaoDetalhesAtom.reportRead();
+    return super.solucaoDetalhes;
+  }
+
+  @override
+  set solucaoDetalhes(SolucaoNutritiva? value) {
+    _$solucaoDetalhesAtom.reportWrite(value, super.solucaoDetalhes, () {
+      super.solucaoDetalhes = value;
+    });
+  }
+
   final _$isSolucaoListLoadingAtom =
       Atom(name: '_ReservatoriosStoreBase.isSolucaoListLoading');
 
@@ -60,16 +85,33 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
     });
   }
 
+  final _$isDetalhesSolucaoLoadingAtom =
+      Atom(name: '_ReservatoriosStoreBase.isDetalhesSolucaoLoading');
+
+  @override
+  bool get isDetalhesSolucaoLoading {
+    _$isDetalhesSolucaoLoadingAtom.reportRead();
+    return super.isDetalhesSolucaoLoading;
+  }
+
+  @override
+  set isDetalhesSolucaoLoading(bool value) {
+    _$isDetalhesSolucaoLoadingAtom
+        .reportWrite(value, super.isDetalhesSolucaoLoading, () {
+      super.isDetalhesSolucaoLoading = value;
+    });
+  }
+
   final _$solucaoListAtom = Atom(name: '_ReservatoriosStoreBase.solucaoList');
 
   @override
-  List<SolucaoNutritiva> get solucaoList {
+  ObservableList<SolucaoNutritiva> get solucaoList {
     _$solucaoListAtom.reportRead();
     return super.solucaoList;
   }
 
   @override
-  set solucaoList(List<SolucaoNutritiva> value) {
+  set solucaoList(ObservableList<SolucaoNutritiva> value) {
     _$solucaoListAtom.reportWrite(value, super.solucaoList, () {
       super.solucaoList = value;
     });
@@ -174,6 +216,22 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
     });
   }
 
+  final _$pesquisarReceitaAtom =
+      Atom(name: '_ReservatoriosStoreBase.pesquisarReceita');
+
+  @override
+  TextEditingController get pesquisarReceita {
+    _$pesquisarReceitaAtom.reportRead();
+    return super.pesquisarReceita;
+  }
+
+  @override
+  set pesquisarReceita(TextEditingController value) {
+    _$pesquisarReceitaAtom.reportWrite(value, super.pesquisarReceita, () {
+      super.pesquisarReceita = value;
+    });
+  }
+
   final _$dotIndicatorAtom = Atom(name: '_ReservatoriosStoreBase.dotIndicator');
 
   @override
@@ -187,6 +245,15 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
     _$dotIndicatorAtom.reportWrite(value, super.dotIndicator, () {
       super.dotIndicator = value;
     });
+  }
+
+  final _$setSolucaoDetalhesAsyncAction =
+      AsyncAction('_ReservatoriosStoreBase.setSolucaoDetalhes');
+
+  @override
+  Future setSolucaoDetalhes(SolucaoNutritiva solucao) {
+    return _$setSolucaoDetalhesAsyncAction
+        .run(() => super.setSolucaoDetalhes(solucao));
   }
 
   final _$buscarReservatoriosAsyncAction =
@@ -241,6 +308,17 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
   }
 
   @override
+  dynamic desvincularSolucaoNutritiva() {
+    final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
+        name: '_ReservatoriosStoreBase.desvincularSolucaoNutritiva');
+    try {
+      return super.desvincularSolucaoNutritiva();
+    } finally {
+      _$_ReservatoriosStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic limparNovoReservatorio() {
     final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
         name: '_ReservatoriosStoreBase.limparNovoReservatorio');
@@ -254,9 +332,11 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
   @override
   String toString() {
     return '''
+solucaoDetalhes: ${solucaoDetalhes},
 isSolucaoListLoading: ${isSolucaoListLoading},
 isReservatorioListLoading: ${isReservatorioListLoading},
 isNovoReservatorioLoading: ${isNovoReservatorioLoading},
+isDetalhesSolucaoLoading: ${isDetalhesSolucaoLoading},
 solucaoList: ${solucaoList},
 reservatorioList: ${reservatorioList},
 novoReservatorio: ${novoReservatorio},
@@ -264,7 +344,9 @@ solucaoNutritiva: ${solucaoNutritiva},
 isSolucaoNutritivaValid: ${isSolucaoNutritivaValid},
 novoReservatorioName: ${novoReservatorioName},
 novoReservatorioVolume: ${novoReservatorioVolume},
-dotIndicator: ${dotIndicator}
+pesquisarReceita: ${pesquisarReceita},
+dotIndicator: ${dotIndicator},
+getSolucaoNutritivaList: ${getSolucaoNutritivaList}
     ''';
   }
 }

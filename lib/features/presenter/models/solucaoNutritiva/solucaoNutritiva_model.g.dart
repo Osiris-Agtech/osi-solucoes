@@ -17,7 +17,15 @@ SolucaoNutritiva _$SolucaoNutritivaFromJson(Map<String, dynamic> json) =>
       reservatorios: (json['reservatorios'] as List<dynamic>?)
           ?.map((e) => Reservatorio.fromJson(e as Map<String, dynamic>))
           .toList(),
-    );
+    )
+      ..solucoes_contas = (json['solucoes_contas'] as List<dynamic>?)
+          ?.map((e) => SolucaoConta.fromJson(e as Map<String, dynamic>))
+          .toList()
+      ..solucoes_fertilizantes_concentradas =
+          (json['solucoes_fertilizantes_concentradas'] as List<dynamic>?)
+              ?.map((e) => SolucaoFertilizanteConcentrada.fromJson(
+                  e as Map<String, dynamic>))
+              .toList();
 
 Map<String, dynamic> _$SolucaoNutritivaToJson(SolucaoNutritiva instance) =>
     <String, dynamic>{
@@ -26,4 +34,10 @@ Map<String, dynamic> _$SolucaoNutritivaToJson(SolucaoNutritiva instance) =>
       'c_eletrica': instance.c_eletrica,
       'created_at': instance.created_at?.toIso8601String(),
       'reservatorios': instance.reservatorios?.map((e) => e.toJson()).toList(),
+      'solucoes_contas':
+          instance.solucoes_contas?.map((e) => e.toJson()).toList(),
+      'solucoes_fertilizantes_concentradas': instance
+          .solucoes_fertilizantes_concentradas
+          ?.map((e) => e.toJson())
+          .toList(),
     };
