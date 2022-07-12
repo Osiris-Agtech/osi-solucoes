@@ -97,7 +97,9 @@ class ReservatorioDatasource implements IReservatorioDatasource {
                 fertilizantes_nutrientes {
                   teor_nutriente
                   nutriente {
+                    id
                     nome
+                    sigla
                   }
                 }
               }

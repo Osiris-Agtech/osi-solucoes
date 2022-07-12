@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 
 part 'fertilizante_model.g.dart';
@@ -19,8 +20,8 @@ class Fertilizante {
   double? solubilidade;
   @JsonKey(required: false, disallowNullValue: false)
   DateTime? created_at;
-  // @JsonKey(required: false, disallowNullValue: false)
-  // List<FertilizanteNutriente>? fertilizantes_nutrientes;
+  @JsonKey(required: false, disallowNullValue: false)
+  List<FertilizanteNutriente>? fertilizantes_nutrientes;
   @JsonKey(required: false, disallowNullValue: false)
   List<SolucaoFertilizanteConcentrada>? solucoes_fertilizantes_concentradas;
 

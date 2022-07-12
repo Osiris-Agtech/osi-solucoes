@@ -239,7 +239,7 @@ class appBar extends StatelessWidget {
           backgroundColor: Colors.white,
           toolbarHeight: store.dropDownValue == "Data" ? 200 : 175,
           floating: true,
-          automaticallyImplyLeading: true,
+          automaticallyImplyLeading: false,
           forceElevated: true,
           elevation: 1,
           flexibleSpace: Column(

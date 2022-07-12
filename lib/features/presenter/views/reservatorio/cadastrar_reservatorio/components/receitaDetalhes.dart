@@ -4,7 +4,8 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
+import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
+import 'package:osi_solucoes/features/presenter/models/relacaoNutriente/relacaoNutriente_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 
@@ -95,7 +96,7 @@ Widget receitaDetalhe(BuildContext context, CarouselController controlerPages,
                       delegate: SliverChildListDelegate(
                         [
                           Padding(
-                            padding: const EdgeInsets.only(top: 25),
+                            padding: const EdgeInsets.only(top: 30),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: const [
@@ -141,7 +142,7 @@ Widget receitaDetalhe(BuildContext context, CarouselController controlerPages,
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(vertical: 20.0),
                                   child: Text(
-                                    'Não há reservatórios\ncadastrados em sua conta',
+                                    'Não há fertilizantes\ncadastrados nesta solução nutritiva',
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Color(0xff6F6464),
@@ -166,11 +167,17 @@ Widget receitaDetalhe(BuildContext context, CarouselController controlerPages,
                                 return ListTile(
                                   dense: true,
                                   title: Text(item?.fertilizante?.nome ?? ''),
-                                  trailing: Text('${item?.quantidade} mg/L'),
+                                  trailing: Text(
+                                      '${item?.quantidade?.replaceAll(".", ",")} g/L'),
                                 );
                               },
                             );
                           }),
+                          const Divider(
+                            indent: 5,
+                            endIndent: 5,
+                            thickness: 1,
+                          ),
                           const SizedBox(
                             height: 20,
                           ),
@@ -180,17 +187,43 @@ Widget receitaDetalhe(BuildContext context, CarouselController controlerPages,
                                 fontStyle: FontStyle.italic,
                                 fontWeight: FontWeight.w600),
                           ),
-                          ...[
-                            Fertilizante(nome: "fertilizante 1"),
-                            Fertilizante(nome: "fertilizante 1"),
-                            Fertilizante(nome: "fertilizante 1"),
-                            Fertilizante(nome: "fertilizante 1"),
-                            Fertilizante(nome: "fertilizante 1"),
-                          ].map(
-                            (fertilizante) => const ListTile(
-                              title: Text('k/n'),
-                              trailing: Text('0.8'),
-                            ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Observer(builder: (_) {
+                            if (store.isDetalhesSolucaoLoading) {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 1,
+                                  ),
+                                ),
+                              );
+                            }
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: store.relacaoNutrientes.length,
+                              itemBuilder: (context, index) {
+                                RelacaoNutriente? item =
+                                    store.relacaoNutrientes[index];
+                                return ListTile(
+                                  dense: true,
+                                  title: Text(item.relacao),
+                                  trailing: Text(
+                                    item.valor
+                                        .toStringAsFixed(2)
+                                        .replaceAll(".", ","),
+                                  ),
+                                );
+                              },
+                            );
+                          }),
+                          const Divider(
+                            indent: 5,
+                            endIndent: 5,
+                            thickness: 1,
                           ),
                           const SizedBox(
                             height: 20,
@@ -212,19 +245,39 @@ Widget receitaDetalhe(BuildContext context, CarouselController controlerPages,
                               ),
                             ],
                           ),
-                          ...[
-                            Fertilizante(nome: "fertilizante 1"),
-                            Fertilizante(nome: "fertilizante 1"),
-                            Fertilizante(nome: "fertilizante 1"),
-                            Fertilizante(nome: "fertilizante 1"),
-                            Fertilizante(nome: "fertilizante 1"),
-                            Fertilizante(nome: "fertilizante 1"),
-                          ].map(
-                            (fertilizante) => const ListTile(
-                              title: Text('k/n'),
-                              trailing: Text('1.5'),
-                            ),
+                          const SizedBox(
+                            height: 20,
                           ),
+                          Observer(builder: (_) {
+                            if (store.isDetalhesSolucaoLoading) {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 1,
+                                  ),
+                                ),
+                              );
+                            }
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: store.teorNutrientes.length,
+                              itemBuilder: (context, index) {
+                                FertilizanteNutriente? item =
+                                    store.teorNutrientes[index];
+                                return ListTile(
+                                  dense: true,
+                                  title: Text(item.nutriente?.nome ?? ''),
+                                  trailing: Text(
+                                      double.parse(item.teor_nutriente!)
+                                              .toStringAsFixed(2)
+                                              .replaceAll(".", ",") +
+                                          ' mg/L'),
+                                );
+                              },
+                            );
+                          }),
                         ],
                       ),
                     ),

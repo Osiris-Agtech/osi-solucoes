@@ -71,7 +71,7 @@ class AjustesPageState extends State<AjustesPage> {
                   backgroundColor: Colors.white,
                   toolbarHeight: 175,
                   floating: true,
-                  automaticallyImplyLeading: true,
+                  automaticallyImplyLeading: false,
                   forceElevated: true,
                   elevation: 1,
                   flexibleSpace: Column(

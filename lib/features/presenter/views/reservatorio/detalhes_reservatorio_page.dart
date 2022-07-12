@@ -22,7 +22,7 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
               toolbarHeight: 120, //MediaQuery.of(context).size.height * 0.17,
               // collapsedHeight: 200, //MediaQuery.of(context).size.height * 0.17,
               floating: true,
-              automaticallyImplyLeading: true,
+              automaticallyImplyLeading: false,
               forceElevated: true,
               elevation: 0,
               flexibleSpace: TopAppBar(

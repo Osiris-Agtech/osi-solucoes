@@ -9,31 +9,6 @@ part of 'reservatorios_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
-  Computed<List<SolucaoNutritiva>>? _$getSolucaoNutritivaListComputed;
-
-  @override
-  List<SolucaoNutritiva> get getSolucaoNutritivaList =>
-      (_$getSolucaoNutritivaListComputed ??= Computed<List<SolucaoNutritiva>>(
-              () => super.getSolucaoNutritivaList,
-              name: '_ReservatoriosStoreBase.getSolucaoNutritivaList'))
-          .value;
-
-  final _$solucaoDetalhesAtom =
-      Atom(name: '_ReservatoriosStoreBase.solucaoDetalhes');
-
-  @override
-  SolucaoNutritiva? get solucaoDetalhes {
-    _$solucaoDetalhesAtom.reportRead();
-    return super.solucaoDetalhes;
-  }
-
-  @override
-  set solucaoDetalhes(SolucaoNutritiva? value) {
-    _$solucaoDetalhesAtom.reportWrite(value, super.solucaoDetalhes, () {
-      super.solucaoDetalhes = value;
-    });
-  }
-
   final _$isSolucaoListLoadingAtom =
       Atom(name: '_ReservatoriosStoreBase.isSolucaoListLoading');
 
@@ -99,6 +74,54 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
     _$isDetalhesSolucaoLoadingAtom
         .reportWrite(value, super.isDetalhesSolucaoLoading, () {
       super.isDetalhesSolucaoLoading = value;
+    });
+  }
+
+  final _$solucaoDetalhesAtom =
+      Atom(name: '_ReservatoriosStoreBase.solucaoDetalhes');
+
+  @override
+  SolucaoNutritiva? get solucaoDetalhes {
+    _$solucaoDetalhesAtom.reportRead();
+    return super.solucaoDetalhes;
+  }
+
+  @override
+  set solucaoDetalhes(SolucaoNutritiva? value) {
+    _$solucaoDetalhesAtom.reportWrite(value, super.solucaoDetalhes, () {
+      super.solucaoDetalhes = value;
+    });
+  }
+
+  final _$teorNutrientesAtom =
+      Atom(name: '_ReservatoriosStoreBase.teorNutrientes');
+
+  @override
+  List<FertilizanteNutriente> get teorNutrientes {
+    _$teorNutrientesAtom.reportRead();
+    return super.teorNutrientes;
+  }
+
+  @override
+  set teorNutrientes(List<FertilizanteNutriente> value) {
+    _$teorNutrientesAtom.reportWrite(value, super.teorNutrientes, () {
+      super.teorNutrientes = value;
+    });
+  }
+
+  final _$relacaoNutrientesAtom =
+      Atom(name: '_ReservatoriosStoreBase.relacaoNutrientes');
+
+  @override
+  List<RelacaoNutriente> get relacaoNutrientes {
+    _$relacaoNutrientesAtom.reportRead();
+    return super.relacaoNutrientes;
+  }
+
+  @override
+  set relacaoNutrientes(List<RelacaoNutriente> value) {
+    _$relacaoNutrientesAtom.reportWrite(value, super.relacaoNutrientes, () {
+      super.relacaoNutrientes = value;
     });
   }
 
@@ -332,11 +355,13 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
   @override
   String toString() {
     return '''
-solucaoDetalhes: ${solucaoDetalhes},
 isSolucaoListLoading: ${isSolucaoListLoading},
 isReservatorioListLoading: ${isReservatorioListLoading},
 isNovoReservatorioLoading: ${isNovoReservatorioLoading},
 isDetalhesSolucaoLoading: ${isDetalhesSolucaoLoading},
+solucaoDetalhes: ${solucaoDetalhes},
+teorNutrientes: ${teorNutrientes},
+relacaoNutrientes: ${relacaoNutrientes},
 solucaoList: ${solucaoList},
 reservatorioList: ${reservatorioList},
 novoReservatorio: ${novoReservatorio},
@@ -345,8 +370,7 @@ isSolucaoNutritivaValid: ${isSolucaoNutritivaValid},
 novoReservatorioName: ${novoReservatorioName},
 novoReservatorioVolume: ${novoReservatorioVolume},
 pesquisarReceita: ${pesquisarReceita},
-dotIndicator: ${dotIndicator},
-getSolucaoNutritivaList: ${getSolucaoNutritivaList}
+dotIndicator: ${dotIndicator}
     ''';
   }
 }

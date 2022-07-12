@@ -20,7 +20,10 @@ Fertilizante _$FertilizanteFromJson(Map<String, dynamic> json) => Fertilizante(
               ?.map((e) => SolucaoFertilizanteConcentrada.fromJson(
                   e as Map<String, dynamic>))
               .toList(),
-    );
+    )..fertilizantes_nutrientes = (json['fertilizantes_nutrientes']
+            as List<dynamic>?)
+        ?.map((e) => FertilizanteNutriente.fromJson(e as Map<String, dynamic>))
+        .toList();
 
 Map<String, dynamic> _$FertilizanteToJson(Fertilizante instance) =>
     <String, dynamic>{
@@ -30,6 +33,8 @@ Map<String, dynamic> _$FertilizanteToJson(Fertilizante instance) =>
       'compatibilidade': instance.compatibilidade,
       'solubilidade': instance.solubilidade,
       'created_at': instance.created_at?.toIso8601String(),
+      'fertilizantes_nutrientes':
+          instance.fertilizantes_nutrientes?.map((e) => e.toJson()).toList(),
       'solucoes_fertilizantes_concentradas': instance
           .solucoes_fertilizantes_concentradas
           ?.map((e) => e.toJson())

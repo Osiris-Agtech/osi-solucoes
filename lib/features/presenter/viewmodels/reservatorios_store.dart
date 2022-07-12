@@ -4,6 +4,8 @@ import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/reservatorio/reservatorio_repository.dart';
+import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
+import 'package:osi_solucoes/features/presenter/models/relacaoNutriente/relacaoNutriente_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
@@ -19,9 +21,6 @@ abstract class _ReservatoriosStoreBase with Store {
 // ------------------------ NOVO RESERVATÓRIO ----------------------------------
 
   @observable
-  SolucaoNutritiva? solucaoDetalhes;
-
-  @observable
   bool isSolucaoListLoading = false;
 
   @observable
@@ -32,6 +31,15 @@ abstract class _ReservatoriosStoreBase with Store {
 
   @observable
   bool isDetalhesSolucaoLoading = false;
+
+  @observable
+  SolucaoNutritiva? solucaoDetalhes;
+
+  @observable
+  List<FertilizanteNutriente> teorNutrientes = [];
+
+  @observable
+  List<RelacaoNutriente> relacaoNutrientes = [];
 
   @observable
   ObservableList<SolucaoNutritiva> solucaoList =
@@ -61,13 +69,13 @@ abstract class _ReservatoriosStoreBase with Store {
   @observable
   int dotIndicator = 1;
 
-  @computed
-  List<SolucaoNutritiva> get getSolucaoNutritivaList =>
-      solucaoList.where((element) {
-        if (pesquisarReceita.text.isEmpty) return true;
-        print(pesquisarReceita.text);
-        return element.nome!.contains(pesquisarReceita.text);
-      }).toList();
+  // @computed
+  // List<SolucaoNutritiva> get getSolucaoNutritivaList =>
+  //     solucaoList.where((element) {
+  //       if (pesquisarReceita.text.isEmpty) return true;
+  //       print(pesquisarReceita.text);
+  //       return element.nome!.contains(pesquisarReceita.text);
+  //     }).toList();
 
   @action
   setDotIndicator(int value) {
@@ -83,9 +91,119 @@ abstract class _ReservatoriosStoreBase with Store {
     isDetalhesSolucaoLoading = true;
 
     var detalhes = await reservatorioRepository.detalhesSolucao(solucao.id!);
+
+    teorNutrientes.clear();
+    relacaoNutrientes.clear();
+
     detalhes.fold(
       (l) => toastError(message: l.message),
-      (r) => solucaoDetalhes = r,
+      (r) {
+        solucaoDetalhes = r;
+
+        // ADICIONA À LISTA "teorNutrientes" TODOS OS NUTRIENTES UTILIZADOS NA SOLUÇÃO NUTRITIVA
+        solucaoDetalhes?.solucoes_fertilizantes_concentradas
+            ?.forEach((element) {
+          element.fertilizante?.fertilizantes_nutrientes?.forEach((nutriente) {
+            int index = -1;
+
+            for (var i = 0; i < teorNutrientes.length; i++) {
+              if (teorNutrientes[i].nutriente?.id == nutriente.nutriente?.id) {
+                index = i;
+              }
+            }
+
+            if (index == -1) {
+              teorNutrientes.add(nutriente);
+            } else {
+              teorNutrientes[index].teor_nutriente =
+                  (double.parse(teorNutrientes[index].teor_nutriente!) +
+                          double.parse(nutriente.teor_nutriente!))
+                      .toString();
+            }
+          });
+        });
+
+        // RELAÇÃO NUTRIENTE
+        var k = teorNutrientes.firstWhere(
+          (element) => element.nutriente?.sigla == "K",
+          orElse: () => FertilizanteNutriente(),
+        );
+        var n = teorNutrientes.firstWhere(
+          (element) => element.nutriente?.sigla == "N",
+          orElse: () => FertilizanteNutriente(),
+        );
+        var ca = teorNutrientes.firstWhere(
+          (element) => element.nutriente?.sigla == "Ca",
+          orElse: () => FertilizanteNutriente(),
+        );
+        var mg = teorNutrientes.firstWhere(
+          (element) => element.nutriente?.sigla == "Mg",
+          orElse: () => FertilizanteNutriente(),
+        );
+        var no3 = teorNutrientes.firstWhere(
+          (element) => element.nutriente?.sigla == "NO3",
+          orElse: () => FertilizanteNutriente(),
+        );
+        var nh4 = teorNutrientes.firstWhere(
+          (element) => element.nutriente?.sigla == "NH4",
+          orElse: () => FertilizanteNutriente(),
+        );
+
+        // K/N
+        if (k.nutriente != null && n.nutriente != null) {
+          relacaoNutrientes.add(
+            RelacaoNutriente(
+              relacao: "K/N",
+              valor: double.parse(k.teor_nutriente!) /
+                  double.parse(n.teor_nutriente!),
+            ),
+          );
+        }
+
+        // Ca/Mg
+        if (ca.nutriente != null && mg.nutriente != null) {
+          relacaoNutrientes.add(
+            RelacaoNutriente(
+              relacao: "Ca/Mg",
+              valor: double.parse(ca.teor_nutriente!) /
+                  double.parse(mg.teor_nutriente!),
+            ),
+          );
+        }
+
+        // K/Mg
+        if (k.nutriente != null && mg.nutriente != null) {
+          relacaoNutrientes.add(
+            RelacaoNutriente(
+              relacao: "K/Mg",
+              valor: double.parse(k.teor_nutriente!) /
+                  double.parse(mg.teor_nutriente!),
+            ),
+          );
+        }
+
+        // K/Ca
+        if (k.nutriente != null && ca.nutriente != null) {
+          relacaoNutrientes.add(
+            RelacaoNutriente(
+              relacao: "K/Ca",
+              valor: double.parse(k.teor_nutriente!) /
+                  double.parse(ca.teor_nutriente!),
+            ),
+          );
+        }
+
+        // NO3/NH4
+        if (no3.nutriente != null && nh4.nutriente != null) {
+          relacaoNutrientes.add(
+            RelacaoNutriente(
+              relacao: "NO3/NH4",
+              valor: double.parse(no3.teor_nutriente!) /
+                  double.parse(nh4.teor_nutriente!),
+            ),
+          );
+        }
+      },
     );
 
     isDetalhesSolucaoLoading = false;
