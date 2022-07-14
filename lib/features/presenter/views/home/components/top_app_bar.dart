@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 
 class TopAppBar extends StatelessWidget {
@@ -59,7 +58,7 @@ class TopAppBar extends StatelessWidget {
                   top: MediaQuery.of(context).size.height * 0.003,
                   left: MediaQuery.of(context).size.width * 0.013),
               child: Text(
-                "subtitleTopAppBar".i18n(),
+                subtitle!,
                 style: const TextStyle(
                   color: Color(0xff707070),
                   fontSize: 14,
