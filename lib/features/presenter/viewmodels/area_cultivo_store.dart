@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 part 'area_cultivo_store.g.dart';
@@ -31,4 +32,15 @@ abstract class _AreaCultivoStoreBase with Store {
   void increment() {
     value++;
   }
+
+  //####################### CADASTRAR AREA DE CULTIVO ##########################
+
+  @observable
+  bool isNovaAreaLoading = false;
+
+  @observable
+  TextEditingController novaAreaName = TextEditingController();
+
+  @observable
+  TextEditingController novaAreaDescricao = TextEditingController();
 }

@@ -1,0 +1,213 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
+
+class CadastrarAreaCultivo extends StatefulWidget {
+  const CadastrarAreaCultivo({Key? key}) : super(key: key);
+
+  @override
+  State<CadastrarAreaCultivo> createState() => _CadastrarAreaCultivoState();
+}
+
+class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
+  AreaCultivoStore store = GetIt.I<AreaCultivoStore>();
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Constants.kBackgroundColor,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+      child: SafeArea(
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: appBar(),
+          backgroundColor: Constants.kBackgroundColor,
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                titulo(),
+                subtitulo(),
+                const SizedBox(height: 20),
+                nome(context),
+                const Divider(),
+                volume(context),
+                const Divider(),
+                // solucaoNutritiva(context),
+                // const Divider(),
+                Expanded(child: Container()),
+                saveButton(size),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding subtitulo() {
+    return const Padding(
+      padding: EdgeInsets.only(top: 10, left: 20),
+      child: Text(
+        'Cadastrar Informações',
+        style: TextStyle(
+          fontSize: 14,
+          color: Color(0xff6F6464),
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  Padding titulo() {
+    return const Padding(
+      padding: EdgeInsets.only(
+        left: 20,
+        right: 10,
+      ),
+      child: Text(
+        'Criar Nova Área de Cultivo',
+        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+
+  AppBar appBar() {
+    return AppBar(
+      backgroundColor: Constants.kBackgroundColor,
+      elevation: 0,
+      leading: const BackButton(
+        color: Constants.kPrimaryColor,
+      ),
+    );
+  }
+
+  Padding saveButton(Size size) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 30),
+      child: Center(
+        child: SizedBox(
+          width: size.width * .8,
+          height: 40,
+          child: Observer(builder: (_) {
+            return ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Constants.kPrimaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              child: store.isNovaAreaLoading
+                  ? const CircularProgressIndicator(
+                      color: Colors.white,
+                    )
+                  : const Text(
+                      "Salvar",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+              onPressed: null, //store.registrarReservatorio(),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  InkWell nome(BuildContext context) {
+    return InkWell(
+      child: Observer(builder: (_) {
+        return ListTile(
+          leading: const Icon(Icons.label),
+          title: const Text(
+            'Nome',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+          ),
+          trailing: store.novaAreaName.text.isNotEmpty
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      store.novaAreaName.text,
+                      style: const TextStyle(
+                        color: Constants.kPrimaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: Constants.kPrimaryColor,
+                    ),
+                  ],
+                )
+              : const Text(
+                  "Preencher",
+                  style: TextStyle(
+                    color: Constants.kPrimaryColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+          onTap: () {
+            // store.setDotIndicator(0);
+            // bottomSheet(context, controlerPages, carouselController, store);
+            // showConfirmDialog(context);
+          },
+        );
+      }),
+    );
+  }
+
+  InkWell volume(BuildContext context) {
+    return InkWell(
+      child: Observer(builder: (_) {
+        return ListTile(
+          leading: const Icon(Icons.waves),
+          title: const Text(
+            'Volume',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+          ),
+          trailing: store.novaAreaDescricao.text.isNotEmpty
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      store.novaAreaDescricao.text,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: Constants.kPrimaryColor,
+                    )
+                  ],
+                )
+              : const Text(
+                  "Preencher",
+                  style: TextStyle(
+                    color: Constants.kPrimaryColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+          onTap: () {
+            // store.setDotIndicator(1);
+            // bottomSheet(context, controlerPages, carouselController, store);
+          },
+        );
+      }),
+    );
+  }
+}

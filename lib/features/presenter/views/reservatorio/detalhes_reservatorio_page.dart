@@ -1,6 +1,11 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 
 class DetalhesReservatorio extends StatefulWidget {
@@ -11,7 +16,9 @@ class DetalhesReservatorio extends StatefulWidget {
 }
 
 class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
+  ReservatoriosStore store = GetIt.I<ReservatoriosStore>();
   final ScrollController _scrollController = ScrollController();
+  CarouselController carouselController = CarouselController();
 
   @override
   Widget build(BuildContext context) {
@@ -136,23 +143,89 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              height: 200,
-                              margin: const EdgeInsets.only(left: 20, right: 5),
-                              decoration: BoxDecoration(
-                                color: Constants.kSecondBackgroundColor,
-                                borderRadius: BorderRadius.circular(10),
+                      CarouselSlider(
+                        carouselController: carouselController,
+                        options: CarouselOptions(
+                          initialPage: 0,
+                          enableInfiniteScroll: false,
+                          height: 200,
+                          viewportFraction: 1.0,
+                          enlargeCenterPage: false,
+                          scrollPhysics: const BouncingScrollPhysics(),
+                          onPageChanged: (value, carouselReason) =>
+                              store.setIndexDotDetalhe(value * 1.0),
+                        ),
+                        items: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  height: 200,
+                                  margin:
+                                      const EdgeInsets.only(left: 20, right: 5),
+                                  decoration: BoxDecoration(
+                                    color: Constants.kSecondBackgroundColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
                               ),
-                            ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10.0),
+                                child: InkWell(
+                                  onTap: () =>
+                                      carouselController.animateToPage(1),
+                                  child:
+                                      const Icon(Icons.chevron_right_rounded),
+                                ),
+                              ),
+                            ],
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(right: 10.0),
-                            child: Icon(Icons.chevron_right_rounded),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: InkWell(
+                                  onTap: () =>
+                                      carouselController.animateToPage(0),
+                                  child: const Icon(Icons.chevron_left_rounded),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  height: 200,
+                                  margin:
+                                      const EdgeInsets.only(left: 5, right: 20),
+                                  decoration: BoxDecoration(
+                                    color: Constants.kSecondBackgroundColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Center(
+                        child: Observer(builder: (_) {
+                          return DotsIndicator(
+                            dotsCount: 2,
+                            position: store.indexDotDetalhe,
+                            decorator: DotsDecorator(
+                              size: const Size.square(9.0),
+                              activeSize: const Size(18.0, 9.0),
+                              color: Constants.kSecondBackgroundColor,
+                              activeColor: Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(.7),
+                              activeShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                            ),
+                          );
+                        }),
                       ),
                       const SizedBox(
                         height: 20,

@@ -9,6 +9,22 @@ part of 'reservatorios_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
+  final _$indexDotDetalheAtom =
+      Atom(name: '_ReservatoriosStoreBase.indexDotDetalhe');
+
+  @override
+  double get indexDotDetalhe {
+    _$indexDotDetalheAtom.reportRead();
+    return super.indexDotDetalhe;
+  }
+
+  @override
+  set indexDotDetalhe(double value) {
+    _$indexDotDetalheAtom.reportWrite(value, super.indexDotDetalhe, () {
+      super.indexDotDetalhe = value;
+    });
+  }
+
   final _$isSolucaoListLoadingAtom =
       Atom(name: '_ReservatoriosStoreBase.isSolucaoListLoading');
 
@@ -309,6 +325,17 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
       ActionController(name: '_ReservatoriosStoreBase');
 
   @override
+  dynamic setIndexDotDetalhe(double value) {
+    final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
+        name: '_ReservatoriosStoreBase.setIndexDotDetalhe');
+    try {
+      return super.setIndexDotDetalhe(value);
+    } finally {
+      _$_ReservatoriosStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setDotIndicator(int value) {
     final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
         name: '_ReservatoriosStoreBase.setDotIndicator');
@@ -355,6 +382,7 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
   @override
   String toString() {
     return '''
+indexDotDetalhe: ${indexDotDetalhe},
 isSolucaoListLoading: ${isSolucaoListLoading},
 isReservatorioListLoading: ${isReservatorioListLoading},
 isNovoReservatorioLoading: ${isNovoReservatorioLoading},

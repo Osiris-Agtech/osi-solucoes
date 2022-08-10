@@ -18,7 +18,14 @@ abstract class _ReservatoriosStoreBase with Store {
   ReservatorioRepository reservatorioRepository =
       GetIt.I<ReservatorioRepository>();
   AuthController authController = GetIt.I<AuthController>();
-// ------------------------ NOVO RESERVATÓRIO ----------------------------------
+
+  @observable
+  double indexDotDetalhe = 0.0;
+
+  @action
+  setIndexDotDetalhe(double value) => indexDotDetalhe = value;
+
+// ######################## NOVO RESERVATÓRIO ##################################
 
   @observable
   bool isSolucaoListLoading = false;
