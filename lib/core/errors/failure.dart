@@ -18,4 +18,8 @@ class FailureMessage {
   static const internalErrorMessage = 'Erro interno';
   static const cepErrorMessage = 'Requisição inválida!';
   static const senEmailErrorMessage = 'Falha ao enviar e-mail';
+  static const emptyListMessage = 'Lista Vazia';
+  static const errorInfoMessage = 'Falha ao carregar as informações';
+  static const errorNovoReservatorioMessage =
+      'Falha ao cadastrar, verifique se os campos estão preenchidos';
 }

@@ -3,6 +3,7 @@ abstract class Routes {
   static const ajustesPage = "/ajustesPage";
   static const resultadoajustePage = "/resultadoajustePage";
   static const areaCultivoPage = "/areaCultivoPage";
+  static const cadastrarAreaCultivoPage = "/cadastrarAreaCultivoPage";
   static const cadastroPage = "/cadastroPage";
   static const confirmsegurancaPage = "/confirmsegurancaPage";
   static const cadernoCampoPage = "/cadernoCampoPage";

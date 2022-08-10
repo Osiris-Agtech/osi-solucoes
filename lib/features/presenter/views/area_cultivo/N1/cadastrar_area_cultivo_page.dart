@@ -1,33 +1,19 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/bottomSheet.dart';
+import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 
-import '../../../../../core/constants/constants.dart';
+class CadastrarAreaCultivo extends StatefulWidget {
+  const CadastrarAreaCultivo({Key? key}) : super(key: key);
 
-class CadastrarReservatorioPage extends StatefulWidget {
-  final String title;
-  const CadastrarReservatorioPage(
-      {Key? key, this.title = 'CadastrarReservatorioPage'})
-      : super(key: key);
   @override
-  CadastrarReservatorioPageState createState() =>
-      CadastrarReservatorioPageState();
+  State<CadastrarAreaCultivo> createState() => _CadastrarAreaCultivoState();
 }
 
-class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
-  ReservatoriosStore store = GetIt.I<ReservatoriosStore>();
-  CarouselController carouselController = CarouselController();
-  CarouselController controlerPages = CarouselController();
-
-  @override
-  void dispose() {
-    store.limparNovoReservatorio();
-    super.dispose();
-  }
+class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
+  AreaCultivoStore store = GetIt.I<AreaCultivoStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +42,8 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
                 const Divider(),
                 volume(context),
                 const Divider(),
-                solucaoNutritiva(context),
-                const Divider(),
+                // solucaoNutritiva(context),
+                // const Divider(),
                 Expanded(child: Container()),
                 saveButton(size),
               ],
@@ -90,7 +76,7 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
         right: 10,
       ),
       child: Text(
-        'Novo Reservatório',
+        'Criar Nova Área de Cultivo',
         style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
       ),
     );
@@ -121,7 +107,7 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              child: store.isNovoReservatorioLoading
+              child: store.isNovaAreaLoading
                   ? const CircularProgressIndicator(
                       color: Colors.white,
                     )
@@ -132,7 +118,7 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-              onPressed: () => store.registrarReservatorio(),
+              onPressed: null, //store.registrarReservatorio(),
             );
           }),
         ),
@@ -149,12 +135,12 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
             'Nome',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
-          trailing: store.novoReservatorioName.text.isNotEmpty
+          trailing: store.novaAreaName.text.isNotEmpty
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      store.novoReservatorioName.text,
+                      store.novaAreaName.text,
                       style: const TextStyle(
                         color: Constants.kPrimaryColor,
                         fontWeight: FontWeight.w600,
@@ -174,8 +160,8 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
                   ),
                 ),
           onTap: () {
-            store.setDotIndicator(0);
-            bottomSheet(context, controlerPages, carouselController, store);
+            // store.setDotIndicator(0);
+            // bottomSheet(context, controlerPages, carouselController, store);
             // showConfirmDialog(context);
           },
         );
@@ -192,12 +178,13 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
             'Volume',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
-          trailing: store.novoReservatorioVolume.text.isNotEmpty
+          trailing: store.novaAreaDescricao.text.isNotEmpty
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      store.novoReservatorioVolume.text + " Litros",
+                      store.novaAreaDescricao.text,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                           color: Constants.kPrimaryColor,
                           fontWeight: FontWeight.w600),
@@ -216,36 +203,8 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
                   ),
                 ),
           onTap: () {
-            store.setDotIndicator(1);
-            bottomSheet(context, controlerPages, carouselController, store);
-          },
-        );
-      }),
-    );
-  }
-
-  InkWell solucaoNutritiva(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          leading: const Icon(Icons.invert_colors),
-          title: const Text(
-            'Solução Nutritiva',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
-          trailing: store.isSolucaoNutritivaValid
-              ? Text(
-                  store.solucaoNutritiva.nome ?? "",
-                  style: const TextStyle(
-                    color: Constants.kPrimaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                )
-              : null,
-          onTap: () {
-            store.buscarSolucoes();
-            store.setDotIndicator(2);
-            bottomSheet(context, controlerPages, carouselController, store);
+            // store.setDotIndicator(1);
+            // bottomSheet(context, controlerPages, carouselController, store);
           },
         );
       }),

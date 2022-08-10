@@ -1,6 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/data/datasources/login/login_datasource.dart';
+import 'package:osi_solucoes/features/data/datasources/reservatorio/reservatorio_datasource.dart';
+import 'package:osi_solucoes/features/data/repositories/reservatorio/reservatorio_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 
 import '../../features/data/datasources/cadastro/cadastro_datasource.dart';
@@ -31,12 +33,16 @@ Future<void> initInject() async {
   //datasource
   sl.registerLazySingleton<ICadastroConta>(() => CadastroConta());
   sl.registerLazySingleton<ILoginDatasource>(() => LoginDatasource());
+  sl.registerLazySingleton<IReservatorioDatasource>(
+      () => ReservatorioDatasource());
 
   //repositories
   sl.registerLazySingleton<CadastroRepository>(
       () => CadastroRepository(datasource: sl()));
   sl.registerLazySingleton<LoginRepository>(
       () => LoginRepository(datasource: sl()));
+  sl.registerLazySingleton<ReservatorioRepository>(
+      () => ReservatorioRepository(datasource: sl()));
 
   //viewmodels
   sl.registerLazySingleton<AjustesStore>(() => AjustesStore());

@@ -5,7 +5,7 @@ import 'package:localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/views/ajuste/ajustes_page.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/area_cultivo_page.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/area_cultivo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/caderno_campo/caderno_campo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/reservatorios_page.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/solucao_page.dart';
@@ -101,6 +101,7 @@ class ModulosPageState extends State<ModulosPage> {
             selectedItemColor: Constants.kContentColorLightTheme,
             unselectedItemColor: Constants.kContentColorLightTheme,
             backgroundColor: Colors.white,
+            // fixedColor: Colors.white,
             elevation: 8,
             currentIndex: store.pageviewController,
             onTap: (int index) => store.setPageViewController(index),

@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import '../../models/estufa/estufa_model.dart';
-import '../../viewmodels/area_cultivo_store.dart';
-import '../home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
+import '../../../models/estufa/estufa_model.dart';
+import '../../../viewmodels/area_cultivo_store.dart';
+import '../../home/components/top_app_bar.dart';
 
 class AreaCultivoPage extends StatefulWidget {
   final String title;
@@ -113,15 +116,15 @@ class CardEstufa extends StatelessWidget {
                       Text("# ${estufa.id}",
                           style: const TextStyle(fontSize: 12)),
                       const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5.0),
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: SvgPicture.asset(
-                              "assets/icons/settings_black_icon.svg"),
-                          color: Colors.black,
-                        ),
-                      )
+                      // Padding(
+                      //   padding: const EdgeInsets.only(right: 5.0),
+                      //   child: IconButton(
+                      //     onPressed: () {},
+                      //     icon: SvgPicture.asset(
+                      //         "assets/icons/settings_black_icon.svg"),
+                      //     color: Colors.black,
+                      //   ),
+                      // )
                     ],
                   ),
                 ),
@@ -194,26 +197,35 @@ class NewFloactingButton extends StatelessWidget {
         iconTheme: const IconThemeData(size: 35),
         children: [
           SpeedDialChild(
-              child: Image.asset(
-                "assets/icons/hydroponic2_icon.png",
-                height: 70,
-              ),
-              label: "Novo Lote",
-              labelStyle: const TextStyle(fontSize: 18)),
+            child: Image.asset(
+              "assets/icons/hydroponic2_icon.png",
+              height: 70,
+            ),
+            label: "Novo Lote",
+            labelStyle: const TextStyle(fontSize: 18),
+            onTap: () {},
+          ),
           SpeedDialChild(
-              child: Image.asset(
-                "assets/icons/hydroponic1_icon.png",
-                height: 70,
-              ),
-              label: "Novo Setor",
-              labelStyle: const TextStyle(fontSize: 18)),
+            child: Image.asset(
+              "assets/icons/hydroponic1_icon.png",
+              height: 70,
+            ),
+            label: "Novo Setor",
+            labelStyle: const TextStyle(fontSize: 18),
+            onTap: () {},
+          ),
           SpeedDialChild(
-              child: Image.asset(
-                "assets/icons/greenhouse1_icon.png",
-                height: 100,
-              ),
-              label: "Nova Área",
-              labelStyle: const TextStyle(fontSize: 18)),
+            child: Image.asset(
+              "assets/icons/greenhouse1_icon.png",
+              height: 100,
+            ),
+            label: "Nova Área",
+            labelStyle: const TextStyle(fontSize: 18),
+            onTap: () => Get.to(
+              () => const CadastrarAreaCultivo(),
+              transition: Transition.rightToLeft,
+            ),
+          ),
         ],
       ),
     );
@@ -239,7 +251,7 @@ class appBar extends StatelessWidget {
           backgroundColor: Colors.white,
           toolbarHeight: store.dropDownValue == "Data" ? 200 : 175,
           floating: true,
-          automaticallyImplyLeading: true,
+          automaticallyImplyLeading: false,
           forceElevated: true,
           elevation: 1,
           flexibleSpace: Column(

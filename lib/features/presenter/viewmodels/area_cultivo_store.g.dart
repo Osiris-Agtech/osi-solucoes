@@ -69,6 +69,53 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
+  final _$isNovaAreaLoadingAtom =
+      Atom(name: '_AreaCultivoStoreBase.isNovaAreaLoading');
+
+  @override
+  bool get isNovaAreaLoading {
+    _$isNovaAreaLoadingAtom.reportRead();
+    return super.isNovaAreaLoading;
+  }
+
+  @override
+  set isNovaAreaLoading(bool value) {
+    _$isNovaAreaLoadingAtom.reportWrite(value, super.isNovaAreaLoading, () {
+      super.isNovaAreaLoading = value;
+    });
+  }
+
+  final _$novaAreaNameAtom = Atom(name: '_AreaCultivoStoreBase.novaAreaName');
+
+  @override
+  TextEditingController get novaAreaName {
+    _$novaAreaNameAtom.reportRead();
+    return super.novaAreaName;
+  }
+
+  @override
+  set novaAreaName(TextEditingController value) {
+    _$novaAreaNameAtom.reportWrite(value, super.novaAreaName, () {
+      super.novaAreaName = value;
+    });
+  }
+
+  final _$novaAreaDescricaoAtom =
+      Atom(name: '_AreaCultivoStoreBase.novaAreaDescricao');
+
+  @override
+  TextEditingController get novaAreaDescricao {
+    _$novaAreaDescricaoAtom.reportRead();
+    return super.novaAreaDescricao;
+  }
+
+  @override
+  set novaAreaDescricao(TextEditingController value) {
+    _$novaAreaDescricaoAtom.reportWrite(value, super.novaAreaDescricao, () {
+      super.novaAreaDescricao = value;
+    });
+  }
+
   final _$_AreaCultivoStoreBaseActionController =
       ActionController(name: '_AreaCultivoStoreBase');
 
@@ -122,7 +169,10 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
 dropDownValue: ${dropDownValue},
 data2: ${data2},
 data1: ${data1},
-value: ${value}
+value: ${value},
+isNovaAreaLoading: ${isNovaAreaLoading},
+novaAreaName: ${novaAreaName},
+novaAreaDescricao: ${novaAreaDescricao}
     ''';
   }
 }
