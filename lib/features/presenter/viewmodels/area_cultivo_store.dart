@@ -43,4 +43,14 @@ abstract class _AreaCultivoStoreBase with Store {
 
   @observable
   TextEditingController novaAreaDescricao = TextEditingController();
+
+  @observable
+  int dotIndicator = 1;
+
+  @action
+  setDotIndicator(int value) {
+    if (value >= 0 && value <= 2) {
+      dotIndicator = value;
+    }
+  }
 }

@@ -116,6 +116,21 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
+  final _$dotIndicatorAtom = Atom(name: '_AreaCultivoStoreBase.dotIndicator');
+
+  @override
+  int get dotIndicator {
+    _$dotIndicatorAtom.reportRead();
+    return super.dotIndicator;
+  }
+
+  @override
+  set dotIndicator(int value) {
+    _$dotIndicatorAtom.reportWrite(value, super.dotIndicator, () {
+      super.dotIndicator = value;
+    });
+  }
+
   final _$_AreaCultivoStoreBaseActionController =
       ActionController(name: '_AreaCultivoStoreBase');
 
@@ -164,6 +179,17 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
   }
 
   @override
+  dynamic setDotIndicator(int value) {
+    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
+        name: '_AreaCultivoStoreBase.setDotIndicator');
+    try {
+      return super.setDotIndicator(value);
+    } finally {
+      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 dropDownValue: ${dropDownValue},
@@ -172,7 +198,8 @@ data1: ${data1},
 value: ${value},
 isNovaAreaLoading: ${isNovaAreaLoading},
 novaAreaName: ${novaAreaName},
-novaAreaDescricao: ${novaAreaDescricao}
+novaAreaDescricao: ${novaAreaDescricao},
+dotIndicator: ${dotIndicator}
     ''';
   }
 }
