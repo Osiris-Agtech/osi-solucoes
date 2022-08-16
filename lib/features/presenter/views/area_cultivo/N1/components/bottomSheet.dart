@@ -33,7 +33,7 @@ Future<void> bottomSheet(
           scrollPhysics: const NeverScrollableScrollPhysics(),
         ),
         items: [
-          pagesNewReservatorio(
+          pagesNovaAreaCultivo(
               context, store, carouselController, controlerPages),
         ],
       );

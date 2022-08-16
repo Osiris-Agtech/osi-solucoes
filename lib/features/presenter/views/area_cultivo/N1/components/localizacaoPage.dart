@@ -35,6 +35,16 @@ Widget localizacaoPage(BuildContext context, AreaCultivoStore store) {
             ),
           ),
         ),
+        Expanded(
+            child: Padding(
+          padding: const EdgeInsets.only(top: 120, bottom: 50),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: const Color(0xffF5F5F5),
+            ),
+          ),
+        ))
       ],
     ),
   );

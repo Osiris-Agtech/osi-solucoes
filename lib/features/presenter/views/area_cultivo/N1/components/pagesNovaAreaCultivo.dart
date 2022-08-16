@@ -4,13 +4,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components/nomePage.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components/localizacaoPage.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components/novaLocalizacaoPage.dart';
 
-SizedBox pagesNewReservatorio(BuildContext context, AreaCultivoStore store,
+SizedBox pagesNovaAreaCultivo(BuildContext context, AreaCultivoStore store,
     CarouselController carouselController, CarouselController controlerPages) {
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
@@ -33,7 +34,7 @@ SizedBox pagesNewReservatorio(BuildContext context, AreaCultivoStore store,
               ),
               Observer(builder: (_) {
                 return DotsIndicator(
-                  dotsCount: 3,
+                  dotsCount: 2,
                   position: store.dotIndicator * 1.0,
                   decorator: DotsDecorator(
                     size: const Size.square(9.0),
@@ -64,7 +65,6 @@ SizedBox pagesNewReservatorio(BuildContext context, AreaCultivoStore store,
             items: [
               nomePage(context, store),
               localizacaoPage(context, store),
-              novaLocalizacaoPage(context, store),
             ],
           );
         }),
@@ -106,36 +106,8 @@ SizedBox pagesNewReservatorio(BuildContext context, AreaCultivoStore store,
                   );
                 }),
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24)),
-                  primary: Constants.kPrimaryColor,
-                ),
-                child: Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Text(
-                        'Avançar',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600),
-                      ),
-                      Icon(Icons.chevron_right)
-                    ],
-                  ),
-                ),
-                onPressed: () {
-                  if (store.dotIndicator == 2) {
-                    Navigator.pop(context);
-                  } else {
-                    store.setDotIndicator(store.dotIndicator + 1);
-                    carouselController.nextPage(
-                      duration: const Duration(milliseconds: 400),
-                      curve: Curves.easeIn,
-                    );
-                  }
-                },
+              NextStepButton(
+                carouselController: carouselController,
               ),
             ],
           ),
@@ -143,4 +115,55 @@ SizedBox pagesNewReservatorio(BuildContext context, AreaCultivoStore store,
       ],
     ),
   );
+}
+
+class NextStepButton extends StatefulWidget {
+  final CarouselController carouselController;
+  const NextStepButton({Key? key, required this.carouselController})
+      : super(key: key);
+
+  @override
+  State<NextStepButton> createState() => _NextStepButtonState();
+}
+
+class _NextStepButtonState extends State<NextStepButton> {
+  AreaCultivoStore store = GetIt.I<AreaCultivoStore>();
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        primary: Constants.kPrimaryColor,
+      ),
+      child: Center(
+        child: Observer(builder: (_) {
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              store.dotIndicator == 1 ? const Icon(Icons.add) : Container(),
+              Text(
+                store.dotIndicator == 0 ? 'Avançar' : "Novo",
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+              store.dotIndicator == 0
+                  ? const Icon(Icons.chevron_right)
+                  : Container(),
+            ],
+          );
+        }),
+      ),
+      onPressed: () {
+        if (store.dotIndicator == 1) {
+        } else {
+          store.setDotIndicator(store.dotIndicator + 1);
+          widget.carouselController.nextPage(
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeIn,
+          );
+        }
+      },
+    );
+  }
 }

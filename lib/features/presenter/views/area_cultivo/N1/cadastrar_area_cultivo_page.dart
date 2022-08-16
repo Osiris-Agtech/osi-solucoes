@@ -20,6 +20,12 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
   CarouselController controlerPages = CarouselController();
 
   @override
+  void initState() {
+    super.initState();
+    store.setShowTextFormField(false);
+  }
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
@@ -57,7 +63,16 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
                       borderRadius: BorderRadius.circular(10),
                       color: const Color(0xffF5F5F5),
                     ),
-                    child: Container(width: 400, child: botaoDescricao()),
+                    child: Observer(builder: (_) {
+                      return SizedBox(
+                        width: double.infinity,
+                        child: store.novaAreaDescricao.text.isEmpty &&
+                                !store.showTextFormField
+                            ? botaoDescricao()
+                            : TextFormField(
+                                controller: store.novaAreaDescricao),
+                      );
+                    }),
                   ),
                 )),
                 saveButton(size),
@@ -69,7 +84,7 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
     );
   }
 
-  Padding subtitulo() {
+  Widget subtitulo() {
     return const Padding(
       padding: EdgeInsets.only(top: 10, left: 20),
       child: Text(
@@ -84,7 +99,7 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
     );
   }
 
-  Padding titulo() {
+  Widget titulo() {
     return const Padding(
       padding: EdgeInsets.only(
         left: 20,
@@ -176,9 +191,7 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
                 ),
           onTap: () {
             store.setDotIndicator(0);
-            // store.setDotIndicator(0);
             bottomSheet(context, controlerPages, carouselController, store);
-            // showConfirmDialog(context);
           },
         );
       }),
@@ -213,8 +226,7 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
           onTap: () {
-            store.setDotIndicator(2);
-            bottomSheet(context, controlerPages, carouselController, store);
+            // bottomSheet(context, controlerPages, carouselController, store);
           },
         );
       }),
@@ -229,7 +241,9 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              store.setShowTextFormField(true);
+            },
             icon: const Icon(
               Icons.add,
               color: Colors.green,

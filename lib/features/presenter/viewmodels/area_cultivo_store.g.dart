@@ -85,6 +85,22 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
+  final _$showTextFormFieldAtom =
+      Atom(name: '_AreaCultivoStoreBase.showTextFormField');
+
+  @override
+  bool get showTextFormField {
+    _$showTextFormFieldAtom.reportRead();
+    return super.showTextFormField;
+  }
+
+  @override
+  set showTextFormField(bool value) {
+    _$showTextFormFieldAtom.reportWrite(value, super.showTextFormField, () {
+      super.showTextFormField = value;
+    });
+  }
+
   final _$novaAreaNameAtom = Atom(name: '_AreaCultivoStoreBase.novaAreaName');
 
   @override
@@ -190,6 +206,17 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
   }
 
   @override
+  dynamic setShowTextFormField(bool value) {
+    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
+        name: '_AreaCultivoStoreBase.setShowTextFormField');
+    try {
+      return super.setShowTextFormField(value);
+    } finally {
+      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 dropDownValue: ${dropDownValue},
@@ -197,6 +224,7 @@ data2: ${data2},
 data1: ${data1},
 value: ${value},
 isNovaAreaLoading: ${isNovaAreaLoading},
+showTextFormField: ${showTextFormField},
 novaAreaName: ${novaAreaName},
 novaAreaDescricao: ${novaAreaDescricao},
 dotIndicator: ${dotIndicator}

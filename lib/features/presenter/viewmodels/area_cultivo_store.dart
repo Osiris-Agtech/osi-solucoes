@@ -39,6 +39,9 @@ abstract class _AreaCultivoStoreBase with Store {
   bool isNovaAreaLoading = false;
 
   @observable
+  bool showTextFormField = false;
+
+  @observable
   TextEditingController novaAreaName = TextEditingController();
 
   @observable
@@ -49,8 +52,13 @@ abstract class _AreaCultivoStoreBase with Store {
 
   @action
   setDotIndicator(int value) {
-    if (value >= 0 && value <= 2) {
+    if (value >= 0 && value <= 1) {
       dotIndicator = value;
     }
+  }
+
+  @action
+  setShowTextFormField(bool value) {
+    showTextFormField = value;
   }
 }
