@@ -108,6 +108,7 @@ SizedBox pagesNovaAreaCultivo(BuildContext context, AreaCultivoStore store,
               ),
               NextStepButton(
                 carouselController: carouselController,
+                controlerPages: controlerPages,
               ),
             ],
           ),
@@ -119,7 +120,11 @@ SizedBox pagesNovaAreaCultivo(BuildContext context, AreaCultivoStore store,
 
 class NextStepButton extends StatefulWidget {
   final CarouselController carouselController;
-  const NextStepButton({Key? key, required this.carouselController})
+  final CarouselController controlerPages;
+  const NextStepButton(
+      {Key? key,
+      required this.carouselController,
+      required this.controlerPages})
       : super(key: key);
 
   @override
@@ -156,6 +161,7 @@ class _NextStepButtonState extends State<NextStepButton> {
       ),
       onPressed: () {
         if (store.dotIndicator == 1) {
+          widget.controlerPages.nextPage();
         } else {
           store.setDotIndicator(store.dotIndicator + 1);
           widget.carouselController.nextPage(

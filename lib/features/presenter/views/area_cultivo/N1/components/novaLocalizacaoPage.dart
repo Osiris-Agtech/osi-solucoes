@@ -1,8 +1,10 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 
-Container novaLocalizacaoPage(BuildContext context, AreaCultivoStore store) {
+Container novaLocalizacaoPage(BuildContext context,
+    CarouselController controlerPages, AreaCultivoStore store) {
   return Container(
     height: MediaQuery.of(context).size.height * 0.9,
     margin: EdgeInsets.only(
@@ -43,7 +45,7 @@ Container novaLocalizacaoPage(BuildContext context, AreaCultivoStore store) {
               fontStyle: FontStyle.italic,
             ),
             decoration: const InputDecoration(
-              hintText: 'EX. Estufa UFMT',
+              hintText: 'baubau',
               hintStyle: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.normal,

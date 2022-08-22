@@ -69,8 +69,15 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
                         child: store.novaAreaDescricao.text.isEmpty &&
                                 !store.showTextFormField
                             ? botaoDescricao()
-                            : TextFormField(
-                                controller: store.novaAreaDescricao),
+                            : Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: TextFormField(
+                                    autofocus: true,
+                                    maxLines: 20,
+                                    decoration: const InputDecoration(
+                                        border: InputBorder.none),
+                                    controller: store.novaAreaDescricao),
+                              ),
                       );
                     }),
                   ),
@@ -203,6 +210,10 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
       child: Observer(builder: (_) {
         return ListTile(
           leading: const Icon(Icons.location_on),
+          trailing: const Icon(
+            Icons.chevron_right,
+            color: Constants.kPrimaryColor,
+          ),
           title: const Text(
             'Localização',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
