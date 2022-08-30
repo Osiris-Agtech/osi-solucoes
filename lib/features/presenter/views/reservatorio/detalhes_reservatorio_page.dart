@@ -420,7 +420,7 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                                 ),
                               ),
                               trailing: Text(
-                                'xx\nplantas',
+                                '--\nplantas',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Constants.kContentColorLightTheme

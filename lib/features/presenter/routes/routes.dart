@@ -15,4 +15,5 @@ abstract class Routes {
   static const reservatoriosPage = "/reservatoriosPage";
   static const cadastrarReservatoriosPage = "/cadastrarReservatoriosPage";
   static const solucaoPage = "/solucaoPage";
+  static const setorPage = "/setorPage";
 }

@@ -9,21 +9,20 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/setor_page.dart';
 import '../../../models/estufa/estufa_model.dart';
 import '../../../viewmodels/area_cultivo_store.dart';
 import '../../home/components/top_app_bar.dart';
 
 class AreaCultivoPage extends StatefulWidget {
-  final String title;
-  const AreaCultivoPage({Key? key, this.title = 'AreaCultivoPage'})
-      : super(key: key);
+  const AreaCultivoPage({Key? key}) : super(key: key);
   @override
   AreaCultivoPageState createState() => AreaCultivoPageState();
 }
 
 class AreaCultivoPageState extends State<AreaCultivoPage> {
-  // final AreaCultivoStore store = Modular.get();
   AreaCultivoStore store = GetIt.I<AreaCultivoStore>();
 
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
@@ -73,13 +72,30 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
   }
 }
 
-class CardEstufa extends StatelessWidget {
+class CardEstufa extends StatefulWidget {
   const CardEstufa({Key? key, required this.estufa}) : super(key: key);
   final Estufa estufa;
 
   @override
+  State<CardEstufa> createState() => _CardEstufaState();
+}
+
+class _CardEstufaState extends State<CardEstufa> {
+  SetorStore setorStore = GetIt.I<SetorStore>();
+
+  @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return InkWell(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      onTap: () {
+        setorStore.setAreaSelecionada(widget.estufa);
+        Get.to(
+          () => const SetorPage(),
+          transition: Transition.rightToLeftWithFade,
+        );
+      },
+      child: SizedBox(
         height: 190,
         child: Card(
           elevation: 2,
@@ -113,7 +129,7 @@ class CardEstufa extends StatelessWidget {
                           onPressed: null,
                         ),
                       ),
-                      Text("# ${estufa.id}",
+                      Text("# ${widget.estufa.id}",
                           style: const TextStyle(fontSize: 12)),
                       const Spacer(),
                       // Padding(
@@ -131,7 +147,7 @@ class CardEstufa extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 25.0),
                   child: Text(
-                    estufa.nome!,
+                    widget.estufa.nome!,
                     style: const TextStyle(fontSize: 22),
                   ),
                 ),
@@ -146,7 +162,7 @@ class CardEstufa extends StatelessWidget {
                       SizedBox(
                         width: 190,
                         child: Text(
-                          estufa.endereco!,
+                          widget.estufa.endereco!,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontSize: 12),
@@ -166,14 +182,16 @@ class CardEstufa extends StatelessWidget {
                 ),
                 Padding(
                     padding: const EdgeInsets.only(left: 55),
-                    child: Text("${estufa.setores} Setores")),
+                    child: Text("${widget.estufa.setores} Setores")),
                 Padding(
                     padding: const EdgeInsets.only(left: 55),
-                    child: Text("${estufa.lotes} Lotes")),
+                    child: Text("${widget.estufa.lotes} Lotes")),
               ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 
