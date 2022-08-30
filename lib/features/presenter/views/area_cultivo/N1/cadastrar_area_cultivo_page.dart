@@ -207,40 +207,36 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
 
   InkWell localizacao(BuildContext context) {
     return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          leading: const Icon(Icons.location_on),
-          trailing: const Icon(
-            Icons.chevron_right,
-            color: Constants.kPrimaryColor,
-          ),
-          title: const Text(
-            'Localização',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
-          onTap: () {
-            store.setDotIndicator(1);
-            bottomSheet(context, controlerPages, carouselController, store);
-          },
-        );
-      }),
+      child: ListTile(
+        leading: const Icon(Icons.location_on),
+        trailing: const Icon(
+          Icons.chevron_right,
+          color: Constants.kPrimaryColor,
+        ),
+        title: const Text(
+          'Localização',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+        ),
+        onTap: () {
+          store.setDotIndicator(1);
+          bottomSheet(context, controlerPages, carouselController, store);
+        },
+      ),
     );
   }
 
   InkWell descricao(BuildContext context) {
     return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          leading: const Icon(Icons.description),
-          title: const Text(
-            'Descrição',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
-          onTap: () {
-            // bottomSheet(context, controlerPages, carouselController, store);
-          },
-        );
-      }),
+      child: ListTile(
+        leading: const Icon(Icons.description),
+        title: const Text(
+          'Descrição',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+        ),
+        onTap: () {
+          // bottomSheet(context, controlerPages, carouselController, store);
+        },
+      ),
     );
   }
 
