@@ -36,6 +36,15 @@ class ReservatorioRepository implements IReservatorioRepository {
   }
 
   @override
+  Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
+      int reservatorioId) async {
+    var result = await datasource.buscarReservatorioDetalhes(
+        reservatorioId: reservatorioId);
+
+    return result;
+  }
+
+  @override
   Future<Either<Failure, Reservatorio>> registrarReservatorio(
       Reservatorio novoReservatorio) async {
     var result = await datasource.registrarReservatorio(

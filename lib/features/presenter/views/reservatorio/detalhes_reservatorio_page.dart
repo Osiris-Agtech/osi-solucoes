@@ -21,6 +21,12 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
   CarouselController carouselController = CarouselController();
 
   @override
+  void initState() {
+    super.initState();
+    store.buscarReservatorioDetalhes();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -32,21 +38,24 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: [
-                const SliverAppBar(
-                  backgroundColor: Colors.white,
-                  toolbarHeight:
-                      120, //MediaQuery.of(context).size.height * 0.17,
-                  // collapsedHeight: 200, //MediaQuery.of(context).size.height * 0.17,
-                  floating: false,
-                  automaticallyImplyLeading: false,
-                  forceElevated: true,
-                  elevation: 0,
-                  flexibleSpace: TopAppBar(
-                    path: "",
-                    namePage: "Reservatório 1",
-                    subtitle: "Volume: 2000 litros",
-                  ),
-                ),
+                Observer(builder: (_) {
+                  return SliverAppBar(
+                    backgroundColor: Colors.white,
+                    toolbarHeight:
+                        120, //MediaQuery.of(context).size.height * 0.17,
+                    // collapsedHeight: 200, //MediaQuery.of(context).size.height * 0.17,
+                    floating: false,
+                    automaticallyImplyLeading: false,
+                    forceElevated: true,
+                    elevation: 0,
+                    flexibleSpace: TopAppBar(
+                      path: "",
+                      namePage: store.reservatorioDetalhes.nome ?? "...",
+                      subtitle:
+                          "Volume: ${store.reservatorioDetalhes.volume ?? "..."} litros",
+                    ),
+                  );
+                }),
                 SliverList(
                   delegate: SliverChildListDelegate(
                     [
@@ -167,6 +176,68 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                                     color: Constants.kSecondBackgroundColor,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
+                                  child: ListView(
+                                    shrinkWrap: true,
+                                    physics: const BouncingScrollPhysics(),
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            16.0, 16.0, 16.0, 16.0),
+                                        child: Text(
+                                          'Solução Nutritiva',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Constants
+                                                .kContentColorLightTheme,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: Observer(builder: (_) {
+                                          if (store
+                                              .solucaoNutritivaList.isEmpty) {
+                                            return const Padding(
+                                              padding:
+                                                  EdgeInsets.only(top: 16.0),
+                                              child: Center(
+                                                child: Text(
+                                                  "Não contém solução nutritiva cadastrada",
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          return ListView.builder(
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            itemCount: store
+                                                .solucaoNutritivaList.length,
+                                            itemBuilder: (context, index) {
+                                              return ListTile(
+                                                dense: true,
+                                                visualDensity:
+                                                    const VisualDensity(
+                                                        horizontal: 0,
+                                                        vertical: -4),
+                                                title: Text(store
+                                                        .solucaoNutritivaList[
+                                                            index]
+                                                        .fertilizante
+                                                        ?.nome ??
+                                                    "..."),
+                                                trailing: Text(
+                                                    "${store.solucaoNutritivaList[index].quantidade} mg/L"),
+                                              );
+                                            },
+                                          );
+                                        }),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               Padding(
@@ -198,6 +269,68 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                                   decoration: BoxDecoration(
                                     color: Constants.kSecondBackgroundColor,
                                     borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: ListView(
+                                    shrinkWrap: true,
+                                    physics: const BouncingScrollPhysics(),
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            16.0, 16.0, 16.0, 16.0),
+                                        child: Text(
+                                          'Solução Concentrada',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Constants
+                                                .kContentColorLightTheme,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: Observer(builder: (_) {
+                                          if (store
+                                              .solucaoConcentradaList.isEmpty) {
+                                            return const Padding(
+                                              padding:
+                                                  EdgeInsets.only(top: 16.0),
+                                              child: Center(
+                                                child: Text(
+                                                  "Não contém solução concentrada cadastrada",
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          return ListView.builder(
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            itemCount: store
+                                                .solucaoConcentradaList.length,
+                                            itemBuilder: (context, index) {
+                                              return ListTile(
+                                                dense: true,
+                                                visualDensity:
+                                                    const VisualDensity(
+                                                        horizontal: 0,
+                                                        vertical: -4),
+                                                title: Text(store
+                                                        .solucaoConcentradaList[
+                                                            index]
+                                                        .concentrada
+                                                        ?.nome ??
+                                                    "..."),
+                                                trailing: Text(
+                                                    "${store.solucaoConcentradaList[index].quantidade} mg/L"),
+                                              );
+                                            },
+                                          );
+                                        }),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -244,46 +377,62 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                       const SizedBox(
                         height: 10,
                       ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            dense: true,
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 20),
-                            title: Text(
-                              'Cultivo #$index',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Constants.kContentColorLightTheme
-                                    .withOpacity(.8),
-                                fontWeight: FontWeight.bold,
+                      Observer(builder: (_) {
+                        if (store.reservatorioDetalhes.lotes == null ||
+                            store.reservatorioDetalhes.lotes!.isEmpty) {
+                          return const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Center(
+                              child: Text(
+                                "Não contém lotes vinculados a este reservatório",
+                                textAlign: TextAlign.center,
                               ),
-                            ),
-                            subtitle: Text(
-                              'Setor #1',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Constants.kContentColorLightTheme
-                                    .withOpacity(.7),
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                            trailing: Text(
-                              '25\nplantas',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Constants.kContentColorLightTheme
-                                    .withOpacity(.7),
-                                fontWeight: FontWeight.normal,
-                              ),
-                              textAlign: TextAlign.center,
                             ),
                           );
-                        },
-                      ),
+                        }
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:
+                              store.reservatorioDetalhes.lotes?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              dense: true,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              title: Text(
+                                store.reservatorioDetalhes.lotes![index].nome ??
+                                    "...",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Constants.kContentColorLightTheme
+                                      .withOpacity(.8),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                'Setor #1',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Constants.kContentColorLightTheme
+                                      .withOpacity(.7),
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                              trailing: Text(
+                                '--\nplantas',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Constants.kContentColorLightTheme
+                                      .withOpacity(.7),
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            );
+                          },
+                        );
+                      }),
                     ],
                   ),
                 ),

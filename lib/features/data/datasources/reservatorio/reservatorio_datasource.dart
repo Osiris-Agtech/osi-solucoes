@@ -14,6 +14,8 @@ abstract class IReservatorioDatasource {
       {required int solucaoId});
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(
       {required int contaId});
+  Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
+      {required int reservatorioId});
   Future<Either<Failure, Reservatorio>> registrarReservatorio(
       {required Reservatorio novoReservatorio});
 }
@@ -181,6 +183,65 @@ class ReservatorioDatasource implements IReservatorioDatasource {
 
       List<Reservatorio> reservatoriosList = reservatorios.cast<Reservatorio>();
       return Right(reservatoriosList);
+    } else {
+      return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
+      {required int reservatorioId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+        query Reservatorio($reservatorioId: Int) {
+          reservatorio(
+            where: {
+              id: $reservatorioId
+            },
+          ) {
+            id
+            nome
+            volume
+            created_at
+            lotes {
+              id
+              nome
+              plantas_colhidas
+            }
+            solucao {
+              solucoes_fertilizantes_concentradas {
+                id
+                fertilizante {
+                  nome
+                }
+                quantidade
+                concentrada {
+                  id
+                  nome
+                  fator_concentracao
+                }
+              }
+            }
+          }
+        }
+      ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'reservatorioId': reservatorioId,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      Reservatorio reservatorio =
+          Reservatorio.fromJson(result.data?['reservatorio']);
+      return Right(reservatorio);
     } else {
       return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
     }

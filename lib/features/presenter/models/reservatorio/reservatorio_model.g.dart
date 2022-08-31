@@ -19,7 +19,9 @@ Reservatorio _$ReservatorioFromJson(Map<String, dynamic> json) => Reservatorio(
       solucao: json['solucao'] == null
           ? null
           : SolucaoNutritiva.fromJson(json['solucao'] as Map<String, dynamic>),
-    );
+    )..lotes = (json['lotes'] as List<dynamic>?)
+        ?.map((e) => Lote.fromJson(e as Map<String, dynamic>))
+        .toList();
 
 Map<String, dynamic> _$ReservatorioToJson(Reservatorio instance) =>
     <String, dynamic>{
@@ -29,4 +31,5 @@ Map<String, dynamic> _$ReservatorioToJson(Reservatorio instance) =>
       'created_at': instance.created_at?.toIso8601String(),
       'conta': instance.conta?.toJson(),
       'solucao': instance.solucao?.toJson(),
+      'lotes': instance.lotes?.map((e) => e.toJson()).toList(),
     };

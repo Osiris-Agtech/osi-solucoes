@@ -15,10 +15,13 @@ Padding reservatorioItem(int index, ReservatoriosStore store) {
       right: 10,
     ),
     child: GestureDetector(
-      onTap: () => Get.to(
-        () => const DetalhesReservatorio(),
-        transition: Transition.rightToLeft,
-      ),
+      onTap: () {
+        store.setReservatorioDetalhes(index);
+        Get.to(
+          () => const DetalhesReservatorio(),
+          transition: Transition.rightToLeft,
+        );
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),

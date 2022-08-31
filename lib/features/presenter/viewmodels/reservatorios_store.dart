@@ -7,6 +7,7 @@ import 'package:osi_solucoes/features/data/repositories/reservatorio/reservatori
 import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
 import 'package:osi_solucoes/features/presenter/models/relacaoNutriente/relacaoNutriente_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
+import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
@@ -19,11 +20,57 @@ abstract class _ReservatoriosStoreBase with Store {
       GetIt.I<ReservatorioRepository>();
   AuthController authController = GetIt.I<AuthController>();
 
+// ###################### RESERVATÓRIO DETALHES ################################
+
+  @observable
+  Reservatorio reservatorioDetalhes = Reservatorio();
+
+  @observable
+  List<SolucaoFertilizanteConcentrada> solucaoNutritivaList = [];
+
+  @observable
+  List<SolucaoFertilizanteConcentrada> solucaoConcentradaList = [];
+
   @observable
   double indexDotDetalhe = 0.0;
 
   @action
   setIndexDotDetalhe(double value) => indexDotDetalhe = value;
+
+  @action
+  setReservatorioDetalhes(int index) {
+    reservatorioDetalhes = reservatorioList[index];
+  }
+
+  @action
+  buscarReservatorioDetalhes() async {
+    var reservatorios = await reservatorioRepository
+        .buscarReservatorioDetalhes(reservatorioDetalhes.id!);
+
+    reservatorios.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        reservatorioDetalhes = data;
+        solucaoNutritivaList = [];
+        solucaoConcentradaList = [];
+        reservatorioDetalhes.solucao?.solucoes_fertilizantes_concentradas
+            ?.forEach(
+          (element) {
+            if (element.concentrada == null) {
+              solucaoNutritivaList.add(element);
+            } else {
+              solucaoConcentradaList.add(element);
+            }
+          },
+        );
+      },
+    );
+
+    solucaoNutritivaList = List.from(solucaoNutritivaList);
+    solucaoConcentradaList = List.from(solucaoConcentradaList);
+  }
 
 // ######################## NOVO RESERVATÓRIO ##################################
 

@@ -2,6 +2,7 @@
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
+import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 
 part 'reservatorio_model.g.dart';
@@ -20,8 +21,8 @@ class Reservatorio {
   Conta? conta;
   @JsonKey(required: false, disallowNullValue: false)
   SolucaoNutritiva? solucao;
-  // @JsonKey(required: false, disallowNullValue: false)
-  // List<Lote>? lotes;
+  @JsonKey(required: false, disallowNullValue: false)
+  List<Lote>? lotes;
   // @JsonKey(required: false, disallowNullValue: false)
   // List<Setor>? setores;
 

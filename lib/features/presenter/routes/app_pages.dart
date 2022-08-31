@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/setor_page.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/cadastrar_resevatorio_page.dart';
 
 import '../views/ajuste/ajustes_page.dart';
@@ -25,6 +26,7 @@ class AppPages {
         name: Routes.resultadoajustePage,
         page: () => const ResultadoajustePage()),
     GetPage(name: Routes.areaCultivoPage, page: () => const AreaCultivoPage()),
+    GetPage(name: Routes.setorPage, page: () => const SetorPage()),
     GetPage(
         name: Routes.cadastrarAreaCultivoPage,
         page: () => const CadastrarAreaCultivo()),
