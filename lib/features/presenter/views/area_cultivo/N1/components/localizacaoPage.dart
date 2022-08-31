@@ -13,7 +13,7 @@ Widget localizacaoPage(BuildContext context, AreaCultivoStore store) {
           child: RichText(
             textAlign: TextAlign.start,
             text: const TextSpan(
-              text: 'Qual localização sua           ',
+              text: 'Qual localização sua\n',
               style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -37,7 +37,7 @@ Widget localizacaoPage(BuildContext context, AreaCultivoStore store) {
         ),
         Expanded(
             child: Padding(
-          padding: const EdgeInsets.only(top: 120, bottom: 50),
+          padding: const EdgeInsets.only(top: 50, bottom: 50),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),

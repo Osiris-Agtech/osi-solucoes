@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
+import 'package:osi_solucoes/features/data/repositories/area/area_repository.dart';
+
+import '../../../core/utils/toast.dart';
+import '../models/localizacao/localizacao_model.dart';
 
 part 'area_cultivo_store.g.dart';
 
@@ -42,13 +47,85 @@ abstract class _AreaCultivoStoreBase with Store {
   bool showTextFormField = false;
 
   @observable
+  int dotIndicator = 1;
+
+  @observable
+  List<Localizacao> localizacaoList = [];
+
+  @observable
+  Localizacao localizacaoSelecionada = Localizacao();
+
+  @observable
   TextEditingController novaAreaName = TextEditingController();
 
   @observable
   TextEditingController novaAreaDescricao = TextEditingController();
 
   @observable
-  int dotIndicator = 1;
+  TextEditingController cep = TextEditingController();
+
+  @observable
+  TextEditingController endereco = TextEditingController();
+
+  @observable
+  TextEditingController bairro = TextEditingController();
+
+  @observable
+  TextEditingController cidade = TextEditingController();
+
+  @observable
+  TextEditingController numero = TextEditingController();
+
+  @observable
+  TextEditingController complemento = TextEditingController();
+
+  @observable
+  TextEditingController pais = TextEditingController();
+
+  @observable
+  TextEditingController estado = TextEditingController();
+
+  @action
+  cadastrarNovaLocalizacao(BuildContext context) async {
+    AreaRepository areaRepository = GetIt.I<AreaRepository>();
+
+    Localizacao localizacao = Localizacao(
+        cep: cep.text,
+        endereco: endereco.text,
+        bairro: bairro.text,
+        cidade: cidade.text,
+        pais: pais.text,
+        estado: estado.text,
+        complemento: complemento.text);
+
+    var localizaoResult =
+        await areaRepository.cadastrarLocalizacao(localizacao);
+
+    localizaoResult.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        localizacaoList.add(data);
+        localizacaoSelecionada = data;
+        localizacaoList = List.from(localizacaoList);
+
+        Navigator.pop(context);
+        limparLocalizacao();
+      },
+    );
+  }
+
+  @action
+  limparLocalizacao() {
+    cep.clear();
+    endereco.clear();
+    bairro.clear();
+    cidade.clear();
+    numero.clear();
+    pais.clear();
+    complemento.clear();
+  }
 
   @action
   setDotIndicator(int value) {
@@ -60,5 +137,10 @@ abstract class _AreaCultivoStoreBase with Store {
   @action
   setShowTextFormField(bool value) {
     showTextFormField = value;
+  }
+
+  @action
+  alterarNome(String name) {
+    novaAreaName = TextEditingController(text: name);
   }
 }

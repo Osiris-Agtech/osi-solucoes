@@ -35,7 +35,8 @@ Container nomePage(BuildContext context, AreaCultivoStore store) {
         Padding(
           padding: const EdgeInsets.only(top: 30),
           child: TextFormField(
-            //controller: store.novoReservatorioName,
+            // controller: store.novaAreaName,
+            initialValue: store.novaAreaName.text,
             textCapitalization: TextCapitalization.words,
             style: const TextStyle(
               fontSize: 24,
@@ -50,6 +51,7 @@ Container nomePage(BuildContext context, AreaCultivoStore store) {
                 fontStyle: FontStyle.italic,
               ),
             ),
+            onChanged: (String value) => store.alterarNome(value),
           ),
         ),
         const Spacer(),

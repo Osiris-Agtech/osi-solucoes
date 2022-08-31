@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 
@@ -29,7 +30,7 @@ Widget novaLocalizacaoPage(BuildContext context,
           RichText(
             textAlign: TextAlign.start,
             text: const TextSpan(
-              text: 'Cadastrar nova   ',
+              text: 'Cadastrar nova\n',
               style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -46,57 +47,63 @@ Widget novaLocalizacaoPage(BuildContext context,
           const SizedBox(
             height: 20,
           ),
-          TextFormField(
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.normal,
-              fontStyle: FontStyle.italic,
-            ),
-            decoration: const InputDecoration(
-                hintText: 'EX.78010-000',
-                hintStyle: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.normal,
-                  fontStyle: FontStyle.italic,
-                ),
-                labelText: 'Cep'),
-          ),
-          TextFormField(
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.normal,
-              fontStyle: FontStyle.italic,
-            ),
-            decoration: const InputDecoration(
-                hintText: 'EX.Rua Florianópolis',
-                hintStyle: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.normal,
-                  fontStyle: FontStyle.italic,
-                ),
-                labelText: 'Endereço'),
-          ),
+          Observer(builder: (_) {
+            return TextFormField(
+              controller: store.cep,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.normal,
+                fontStyle: FontStyle.italic,
+              ),
+              decoration: const InputDecoration(
+                  hintStyle: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  labelText: 'Cep'),
+            );
+          }),
+          Observer(builder: (_) {
+            return TextFormField(
+              controller: store.endereco,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.normal,
+                fontStyle: FontStyle.italic,
+              ),
+              decoration: const InputDecoration(
+                  hintStyle: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  labelText: 'Endereço'),
+            );
+          }),
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.9,
             child: Row(
               children: [
                 Expanded(
                   flex: 4,
-                  child: TextFormField(
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.normal,
-                      fontStyle: FontStyle.italic,
-                    ),
-                    decoration: const InputDecoration(
-                        hintText: 'EX.Centro',
-                        hintStyle: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.normal,
-                          fontStyle: FontStyle.italic,
-                        ),
-                        labelText: 'Bairro'),
-                  ),
+                  child: Observer(builder: (_) {
+                    return TextFormField(
+                      controller: store.bairro,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.normal,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      decoration: const InputDecoration(
+                          hintStyle: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.normal,
+                            fontStyle: FontStyle.italic,
+                          ),
+                          labelText: 'Bairro'),
+                    );
+                  }),
                 ),
                 const SizedBox(
                   width: 10,
@@ -104,56 +111,62 @@ Widget novaLocalizacaoPage(BuildContext context,
                 Expanded(
                   flex: 2,
                   child: Center(
-                    child: TextFormField(
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.normal,
-                        fontStyle: FontStyle.italic,
-                      ),
-                      decoration: const InputDecoration(
-                          hintText: 'EX.14',
-                          hintStyle: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.normal,
-                            fontStyle: FontStyle.italic,
-                          ),
-                          labelText: 'Número'),
-                    ),
+                    child: Observer(builder: (_) {
+                      return TextFormField(
+                        controller: store.numero,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.normal,
+                          fontStyle: FontStyle.italic,
+                        ),
+                        decoration: const InputDecoration(
+                            hintStyle: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.normal,
+                              fontStyle: FontStyle.italic,
+                            ),
+                            labelText: 'Número'),
+                      );
+                    }),
                   ),
                 ),
               ],
             ),
           ),
-          TextFormField(
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.normal,
-              fontStyle: FontStyle.italic,
-            ),
-            decoration: const InputDecoration(
-                hintText: 'EX.Juscimeira',
-                hintStyle: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.normal,
-                  fontStyle: FontStyle.italic,
-                ),
-                labelText: 'Cidade'),
-          ),
-          TextFormField(
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.normal,
-              fontStyle: FontStyle.italic,
-            ),
-            decoration: const InputDecoration(
-                hintText: 'Opcional',
-                hintStyle: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.normal,
-                  fontStyle: FontStyle.italic,
-                ),
-                labelText: 'Complemento'),
-          ),
+          Observer(builder: (_) {
+            return TextFormField(
+              controller: store.cidade,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.normal,
+                fontStyle: FontStyle.italic,
+              ),
+              decoration: const InputDecoration(
+                  hintStyle: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  labelText: 'Cidade'),
+            );
+          }),
+          Observer(builder: (_) {
+            return TextFormField(
+              controller: store.complemento,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.normal,
+                fontStyle: FontStyle.italic,
+              ),
+              decoration: const InputDecoration(
+                  hintStyle: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  labelText: 'Complemento'),
+            );
+          }),
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -175,25 +188,29 @@ Widget novaLocalizacaoPage(BuildContext context,
                 ),
               ),
               ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24)),
-                    primary: Constants.kPrimaryColor,
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  onPressed: () {},
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Text(
-                        'Cadastrar',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600),
-                      ),
-                      Icon(Icons.chevron_right_outlined),
-                    ],
-                  ))
+                  primary: Constants.kPrimaryColor,
+                ),
+                onPressed: () {
+                  store.cadastrarNovaLocalizacao(context);
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text(
+                      'Cadastrar',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    ),
+                    Icon(Icons.chevron_right_outlined),
+                  ],
+                ),
+              ),
             ],
-          )
+          ),
         ],
       ),
     ),

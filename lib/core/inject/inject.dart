@@ -8,7 +8,9 @@ import 'package:osi_solucoes/features/data/repositories/setor/setor_repository.d
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 
+import '../../features/data/datasources/area/area_datasource.dart';
 import '../../features/data/datasources/cadastro/cadastro_datasource.dart';
+import '../../features/data/repositories/area/area_repository.dart';
 import '../../features/data/repositories/cadastro/cadastro_repository.dart';
 import '../../features/data/repositories/login/login_repository.dart';
 import '../../features/presenter/viewmodels/ajustes_store.dart';
@@ -39,6 +41,7 @@ Future<void> initInject() async {
   sl.registerLazySingleton<IReservatorioDatasource>(
       () => ReservatorioDatasource());
   sl.registerLazySingleton<ISetorDatasource>(() => SetorDatasource());
+  sl.registerLazySingleton<IAreaDatasource>(() => AreaDatasource());
 
   //repositories
   sl.registerLazySingleton<CadastroRepository>(
@@ -49,6 +52,8 @@ Future<void> initInject() async {
       () => ReservatorioRepository(datasource: sl()));
   sl.registerLazySingleton<SetorRepository>(
       () => SetorRepository(datasource: sl()));
+  sl.registerLazySingleton<AreaRepository>(
+      () => AreaRepository(datasource: sl()));
 
   //viewmodels
   sl.registerLazySingleton<AjustesStore>(() => AjustesStore());

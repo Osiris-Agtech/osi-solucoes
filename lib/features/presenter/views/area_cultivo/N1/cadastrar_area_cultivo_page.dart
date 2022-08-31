@@ -173,21 +173,28 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
           trailing: store.novaAreaName.text.isNotEmpty
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      store.novaAreaName.text,
-                      style: const TextStyle(
-                        color: Constants.kPrimaryColor,
-                        fontWeight: FontWeight.w600,
+              ? SizedBox(
+                  width: 100,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 76,
+                        child: Text(
+                          store.novaAreaName.text,
+                          style: const TextStyle(
+                            color: Constants.kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
-                    const Icon(
-                      Icons.chevron_right,
-                      color: Constants.kPrimaryColor,
-                    ),
-                  ],
+                      const Icon(
+                        Icons.chevron_right,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  ),
                 )
               : const Text(
                   "Preencher",
@@ -207,21 +214,47 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
 
   InkWell localizacao(BuildContext context) {
     return InkWell(
-      child: ListTile(
-        leading: const Icon(Icons.location_on),
-        trailing: const Icon(
-          Icons.chevron_right,
-          color: Constants.kPrimaryColor,
-        ),
-        title: const Text(
-          'Localização',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-        ),
-        onTap: () {
-          store.setDotIndicator(1);
-          bottomSheet(context, controlerPages, carouselController, store);
-        },
-      ),
+      child: Observer(builder: (_) {
+        return ListTile(
+          leading: const Icon(Icons.location_on),
+          trailing: store.localizacaoSelecionada.endereco != null &&
+                  store.localizacaoSelecionada.endereco!.isNotEmpty
+              ? SizedBox(
+                  width: 100,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 76,
+                        child: Text(
+                          store.localizacaoSelecionada.endereco!,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Constants.kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  ),
+                )
+              : const Icon(
+                  Icons.chevron_right,
+                  color: Constants.kPrimaryColor,
+                ),
+          title: const Text(
+            'Localização',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+          ),
+          onTap: () {
+            store.setDotIndicator(1);
+            bottomSheet(context, controlerPages, carouselController, store);
+          },
+        );
+      }),
     );
   }
 
