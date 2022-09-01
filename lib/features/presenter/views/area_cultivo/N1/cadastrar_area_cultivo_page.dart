@@ -26,6 +26,12 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
   }
 
   @override
+  void dispose() {
+    store.limparTudo();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
@@ -56,32 +62,36 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
                 // solucaoNutritiva(context),
                 // const Divider(),
                 Expanded(
-                    child: Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 20),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: const Color(0xffF5F5F5),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 20),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: const Color(0xffF5F5F5),
+                      ),
+                      child: Observer(
+                        builder: (_) {
+                          return SizedBox(
+                            width: double.infinity,
+                            child: store.novaAreaDescricao.text.isEmpty &&
+                                    !store.showTextFormField
+                                ? botaoDescricao()
+                                : Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: TextFormField(
+                                      autofocus: true,
+                                      maxLines: 20,
+                                      decoration: const InputDecoration(
+                                          border: InputBorder.none),
+                                      controller: store.novaAreaDescricao,
+                                    ),
+                                  ),
+                          );
+                        },
+                      ),
                     ),
-                    child: Observer(builder: (_) {
-                      return SizedBox(
-                        width: double.infinity,
-                        child: store.novaAreaDescricao.text.isEmpty &&
-                                !store.showTextFormField
-                            ? botaoDescricao()
-                            : Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: TextFormField(
-                                    autofocus: true,
-                                    maxLines: 20,
-                                    decoration: const InputDecoration(
-                                        border: InputBorder.none),
-                                    controller: store.novaAreaDescricao),
-                              ),
-                      );
-                    }),
                   ),
-                )),
+                ),
                 saveButton(size),
               ],
             ),

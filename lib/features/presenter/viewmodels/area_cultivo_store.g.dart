@@ -368,6 +368,17 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
   }
 
   @override
+  dynamic limparTudo() {
+    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
+        name: '_AreaCultivoStoreBase.limparTudo');
+    try {
+      return super.limparTudo();
+    } finally {
+      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setDotIndicator(int value) {
     final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
         name: '_AreaCultivoStoreBase.setDotIndicator');

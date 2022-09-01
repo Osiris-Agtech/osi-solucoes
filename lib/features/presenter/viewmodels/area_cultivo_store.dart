@@ -128,6 +128,15 @@ abstract class _AreaCultivoStoreBase with Store {
   }
 
   @action
+  limparTudo() {
+    novaAreaName.clear();
+    novaAreaDescricao.clear();
+    limparLocalizacao();
+    localizacaoList.clear();
+    localizacaoSelecionada = Localizacao();
+  }
+
+  @action
   setDotIndicator(int value) {
     if (value >= 0 && value <= 1) {
       dotIndicator = value;
