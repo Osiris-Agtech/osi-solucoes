@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/features/data/repositories/area/area_repository.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
 import '../../../core/utils/toast.dart';
 import '../models/localizacao/localizacao_model.dart';
@@ -112,6 +113,24 @@ abstract class _AreaCultivoStoreBase with Store {
 
         Navigator.pop(context);
         limparLocalizacao();
+      },
+    );
+  }
+
+  @action
+  buscarLocalizacao() async {
+    AreaRepository areaRepository = GetIt.I<AreaRepository>();
+    AuthController authController = GetIt.I<AuthController>();
+
+    var localizaoListResult =
+        await areaRepository.buscarLocalizacao(authController.usuario.id!);
+
+    localizaoListResult.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        print(data);
       },
     );
   }

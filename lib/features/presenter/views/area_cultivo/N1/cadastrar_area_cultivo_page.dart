@@ -22,6 +22,7 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
   @override
   void initState() {
     super.initState();
+    store.buscarLocalizacao();
     store.setShowTextFormField(false);
   }
 

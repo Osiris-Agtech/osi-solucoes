@@ -309,6 +309,14 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
         .run(() => super.cadastrarNovaLocalizacao(context));
   }
 
+  final _$buscarLocalizacaoAsyncAction =
+      AsyncAction('_AreaCultivoStoreBase.buscarLocalizacao');
+
+  @override
+  Future buscarLocalizacao() {
+    return _$buscarLocalizacaoAsyncAction.run(() => super.buscarLocalizacao());
+  }
+
   final _$_AreaCultivoStoreBaseActionController =
       ActionController(name: '_AreaCultivoStoreBase');
 

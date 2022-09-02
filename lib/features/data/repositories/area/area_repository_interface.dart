@@ -6,4 +6,5 @@ import '../../../../core/errors/failure.dart';
 abstract class IAreaRepository {
   Future<Either<Failure, Localizacao>> cadastrarLocalizacao(
       Localizacao localizacao);
+  Future<Either<Failure, List<Localizacao>>> buscarLocalizacao(int userId);
 }
