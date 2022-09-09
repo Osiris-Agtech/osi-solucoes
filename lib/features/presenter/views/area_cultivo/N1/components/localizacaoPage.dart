@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
@@ -106,7 +108,10 @@ ListView showList(AreaCultivoStore store) {
               Icons.chevron_right,
               color: Constants.kPrimaryColor,
             ),
-            onTap: () {},
+            onTap: () {
+              store.setLocalizacaoSelecionada(index);
+              Navigator.pop(context);
+            },
           ),
         ),
       );

@@ -15,11 +15,12 @@ Localizacao _$LocalizacaoFromJson(Map<String, dynamic> json) => Localizacao(
           : DateTime.parse(json['created_at'] as String),
       bairro: json['bairro'] as String?,
       cidade: json['cidade'] as String?,
+      numero: json['numero'] as String?,
       estado: json['estado'] as String?,
       pais: json['pais'] as String?,
       complemento: json['complemento'] as String?,
     )..areas = (json['areas'] as List<dynamic>?)
-        ?.map((e) => Estufa.fromJson(e as Map<String, dynamic>))
+        ?.map((e) => Area.fromJson(e as Map<String, dynamic>))
         .toList();
 
 Map<String, dynamic> _$LocalizacaoToJson(Localizacao instance) =>
@@ -29,6 +30,7 @@ Map<String, dynamic> _$LocalizacaoToJson(Localizacao instance) =>
       'endereco': instance.endereco,
       'bairro': instance.bairro,
       'cidade': instance.cidade,
+      'numero': instance.numero,
       'estado': instance.estado,
       'pais': instance.pais,
       'complemento': instance.complemento,

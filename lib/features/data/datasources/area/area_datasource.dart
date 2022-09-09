@@ -9,7 +9,7 @@ import '../../../../core/errors/errors.dart';
 abstract class IAreaDatasource {
   Future<Either<Failure, Localizacao>> cadastrarLocalizacao(
       {required Localizacao localizacao});
-  Future<Either<Failure, List<Localizacao>>> buscarLocalizacao(
+  Future<Either<Failure, List<Localizacao>>> buscarLocalizacoes(
       {required int contaId});
 }
 
@@ -76,34 +76,27 @@ class AreaDatasource implements IAreaDatasource {
   }
 
   @override
-  Future<Either<Failure, List<Localizacao>>> buscarLocalizacao(
+  Future<Either<Failure, List<Localizacao>>> buscarLocalizacoes(
       {required int contaId}) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     const String readRepositories = r'''
-        query CreateOneLocalizacao ($cep: String!, $endereco: String!, $bairro: String!, $cidade: String!, $pais: String!, $estado: String!, $complemento: String) {
-          createOneLocalizacao(data: {
-            cep: $cep,
-            endereco: $endereco,
-            bairro: $bairro,
-            cidade: $cidade,
-            pais: $pais,
-            estado: $estado,
-            complemento: $complemento,
-          }) {
+        query Localizacaos($contaId: Int!) {
+          localizacaos(where: {
+              conta: {
+                id: {
+                  equals: $contaId
+                }
+              }
+            }) {
             id
-            cep
             endereco
+            numero
             bairro
-            pais
-            estado
-            complemento
             cidade
+            estado
             areas {
               nome
-              conta {
-                nome
-              }
             }
           }
         }
@@ -114,16 +107,19 @@ class AreaDatasource implements IAreaDatasource {
     options = QueryOptions(
       document: gql(readRepositories),
       variables: <String, dynamic>{
-        'id': contaId,
+        'contaId': contaId,
       },
     );
 
     final QueryResult result = await client.query(options);
 
     if (!result.hasException) {
-      List<Localizacao>? localizacaoResult = [];
+      List localizacaoResult = result.data?['localizacaos']
+          ?.map((item) => Localizacao.fromJson(item))
+          .toList();
 
-      return Right(localizacaoResult);
+      List<Localizacao> localizacaoList = localizacaoResult.cast<Localizacao>();
+      return Right(localizacaoList);
     } else {
       return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
     }

@@ -8,11 +8,11 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/setor_page.dart';
-import '../../../models/estufa/estufa_model.dart';
 import '../../../viewmodels/area_cultivo_store.dart';
 import '../../home/components/top_app_bar.dart';
 
@@ -50,17 +50,17 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      return listaEstufas.isEmpty
+                      return listAreas.isEmpty
                           ? Container()
                           : Padding(
                               padding: const EdgeInsets.only(
                                   left: 16.0, right: 16, top: 10),
                               child: CardEstufa(
-                                estufa: listaEstufas[index],
+                                area: listAreas[index],
                               ),
                             );
                     },
-                    childCount: listaEstufas.length,
+                    childCount: listAreas.length,
                   ),
                 ),
               ],
@@ -73,8 +73,8 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
 }
 
 class CardEstufa extends StatefulWidget {
-  const CardEstufa({Key? key, required this.estufa}) : super(key: key);
-  final Estufa estufa;
+  const CardEstufa({Key? key, required this.area}) : super(key: key);
+  final Area area;
 
   @override
   State<CardEstufa> createState() => _CardEstufaState();
@@ -89,7 +89,7 @@ class _CardEstufaState extends State<CardEstufa> {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        setorStore.setAreaSelecionada(widget.estufa);
+        setorStore.setAreaSelecionada(widget.area);
         Get.to(
           () => const SetorPage(),
           transition: Transition.rightToLeftWithFade,
@@ -129,7 +129,7 @@ class _CardEstufaState extends State<CardEstufa> {
                           onPressed: null,
                         ),
                       ),
-                      Text("# ${widget.estufa.id}",
+                      Text("# ${widget.area.id}",
                           style: const TextStyle(fontSize: 12)),
                       const Spacer(),
                       // Padding(
@@ -147,7 +147,7 @@ class _CardEstufaState extends State<CardEstufa> {
                 Padding(
                   padding: const EdgeInsets.only(left: 25.0),
                   child: Text(
-                    widget.estufa.nome!,
+                    widget.area.nome!,
                     style: const TextStyle(fontSize: 22),
                   ),
                 ),
@@ -162,7 +162,7 @@ class _CardEstufaState extends State<CardEstufa> {
                       SizedBox(
                         width: 190,
                         child: Text(
-                          widget.estufa.endereco!,
+                          widget.area.localizacao?.endereco ?? "",
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontSize: 12),
@@ -181,11 +181,13 @@ class _CardEstufaState extends State<CardEstufa> {
                   ),
                 ),
                 Padding(
-                    padding: const EdgeInsets.only(left: 55),
-                    child: Text("${widget.estufa.setores} Setores")),
+                  padding: const EdgeInsets.only(left: 55),
+                  child: Text("${widget.area.setores} Setores"),
+                ),
                 Padding(
-                    padding: const EdgeInsets.only(left: 55),
-                    child: Text("${widget.estufa.lotes} Lotes")),
+                  padding: const EdgeInsets.only(left: 55),
+                  child: Text("${widget.area.setores?.length ?? 0} Setores"),
+                ),
               ],
             ),
           ),

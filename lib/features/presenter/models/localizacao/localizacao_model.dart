@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:osi_solucoes/features/presenter/models/estufa/estufa_model.dart';
+import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 
 part 'localizacao_model.g.dart';
 
@@ -23,6 +23,9 @@ class Localizacao {
   String? cidade;
 
   @JsonKey(required: false, disallowNullValue: false)
+  String? numero;
+
+  @JsonKey(required: false, disallowNullValue: false)
   String? estado;
 
   @JsonKey(required: false, disallowNullValue: false)
@@ -35,7 +38,7 @@ class Localizacao {
   DateTime? created_at;
 
   @JsonKey(required: false, disallowNullValue: false)
-  List<Estufa>? areas;
+  List<Area>? areas;
 
   Localizacao({
     this.id,
@@ -44,6 +47,7 @@ class Localizacao {
     this.created_at,
     this.bairro,
     this.cidade,
+    this.numero,
     this.estado,
     this.pais,
     this.complemento,

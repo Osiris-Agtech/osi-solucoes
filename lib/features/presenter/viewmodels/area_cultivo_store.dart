@@ -39,7 +39,7 @@ abstract class _AreaCultivoStoreBase with Store {
     value++;
   }
 
-  //####################### CADASTRAR AREA DE CULTIVO ##########################
+  //####################### START CADASTRAR AREA DE CULTIVO ##########################
 
   @observable
   bool isNovaAreaLoading = false;
@@ -118,22 +118,26 @@ abstract class _AreaCultivoStoreBase with Store {
   }
 
   @action
-  buscarLocalizacao() async {
+  buscarLocalizacoes() async {
     AreaRepository areaRepository = GetIt.I<AreaRepository>();
     AuthController authController = GetIt.I<AuthController>();
 
-    var localizaoListResult =
-        await areaRepository.buscarLocalizacao(authController.usuario.id!);
+    var localizaoListResult = await areaRepository
+        .buscarLocalizacoes(authController.usuario.selected_conta!.conta!.id!);
 
     localizaoListResult.fold(
       (err) {
         toastError(message: err.message);
       },
       (data) async {
-        print(data);
+        localizacaoList = List.from(data);
       },
     );
   }
+
+  @action
+  setLocalizacaoSelecionada(int index) =>
+      localizacaoSelecionada = localizacaoList[index];
 
   @action
   limparLocalizacao() {
@@ -144,15 +148,6 @@ abstract class _AreaCultivoStoreBase with Store {
     numero.clear();
     pais.clear();
     complemento.clear();
-  }
-
-  @action
-  limparTudo() {
-    novaAreaName.clear();
-    novaAreaDescricao.clear();
-    limparLocalizacao();
-    localizacaoList.clear();
-    localizacaoSelecionada = Localizacao();
   }
 
   @action
@@ -170,5 +165,16 @@ abstract class _AreaCultivoStoreBase with Store {
   @action
   alterarNome(String name) {
     novaAreaName = TextEditingController(text: name);
+  }
+
+  //####################### END CADASTRAR AREA DE CULTIVO ##########################
+
+  @action
+  limparTudo() {
+    novaAreaName.clear();
+    novaAreaDescricao.clear();
+    limparLocalizacao();
+    localizacaoList.clear();
+    localizacaoSelecionada = Localizacao();
   }
 }

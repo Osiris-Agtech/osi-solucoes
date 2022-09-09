@@ -22,7 +22,7 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
   @override
   void initState() {
     super.initState();
-    store.buscarLocalizacao();
+    store.buscarLocalizacoes();
     store.setShowTextFormField(false);
   }
 
@@ -188,11 +188,13 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
                   width: 100,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       SizedBox(
                         width: 76,
                         child: Text(
                           store.novaAreaName.text,
+                          textAlign: TextAlign.end,
                           style: const TextStyle(
                             color: Constants.kPrimaryColor,
                             fontWeight: FontWeight.w600,
@@ -233,12 +235,15 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
               ? SizedBox(
                   width: 100,
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       SizedBox(
                         width: 76,
                         child: Text(
                           store.localizacaoSelecionada.endereco!,
                           overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
                           style: const TextStyle(
                             color: Constants.kPrimaryColor,
                             fontWeight: FontWeight.w600,

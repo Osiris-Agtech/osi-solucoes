@@ -15,7 +15,7 @@ Setor _$SetorFromJson(Map<String, dynamic> json) => Setor(
           : DateTime.parse(json['created_at'] as String),
       area: json['area'] == null
           ? null
-          : Estufa.fromJson(json['area'] as Map<String, dynamic>),
+          : Area.fromJson(json['area'] as Map<String, dynamic>),
       reservatorio: json['reservatorio'] == null
           ? null
           : Reservatorio.fromJson(json['reservatorio'] as Map<String, dynamic>),

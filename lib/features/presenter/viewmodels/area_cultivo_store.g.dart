@@ -309,12 +309,13 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
         .run(() => super.cadastrarNovaLocalizacao(context));
   }
 
-  final _$buscarLocalizacaoAsyncAction =
-      AsyncAction('_AreaCultivoStoreBase.buscarLocalizacao');
+  final _$buscarLocalizacoesAsyncAction =
+      AsyncAction('_AreaCultivoStoreBase.buscarLocalizacoes');
 
   @override
-  Future buscarLocalizacao() {
-    return _$buscarLocalizacaoAsyncAction.run(() => super.buscarLocalizacao());
+  Future buscarLocalizacoes() {
+    return _$buscarLocalizacoesAsyncAction
+        .run(() => super.buscarLocalizacoes());
   }
 
   final _$_AreaCultivoStoreBaseActionController =
@@ -365,22 +366,22 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
   }
 
   @override
-  dynamic limparLocalizacao() {
+  dynamic setLocalizacaoSelecionada(int index) {
     final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.limparLocalizacao');
+        name: '_AreaCultivoStoreBase.setLocalizacaoSelecionada');
     try {
-      return super.limparLocalizacao();
+      return super.setLocalizacaoSelecionada(index);
     } finally {
       _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic limparTudo() {
+  dynamic limparLocalizacao() {
     final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.limparTudo');
+        name: '_AreaCultivoStoreBase.limparLocalizacao');
     try {
-      return super.limparTudo();
+      return super.limparLocalizacao();
     } finally {
       _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -414,6 +415,17 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
         name: '_AreaCultivoStoreBase.alterarNome');
     try {
       return super.alterarNome(name);
+    } finally {
+      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic limparTudo() {
+    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
+        name: '_AreaCultivoStoreBase.limparTudo');
+    try {
+      return super.limparTudo();
     } finally {
       _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }

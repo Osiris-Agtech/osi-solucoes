@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import '../../../models/estufa/estufa_model.dart';
 import '../../home/components/top_app_bar.dart';
 
 class SetorPage extends StatefulWidget {
@@ -78,7 +78,7 @@ class SetorPageState extends State<SetorPage> {
 
 // ignore: camel_case_types
 class appBar extends StatelessWidget {
-  final Estufa areaN1;
+  final Area areaN1;
   const appBar({
     Key? key,
     required this.areaN1,

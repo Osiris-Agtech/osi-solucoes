@@ -12,13 +12,13 @@ mixin _$SetorStore on _SetorStoreBase, Store {
   final _$areaSelecionadaAtom = Atom(name: '_SetorStoreBase.areaSelecionada');
 
   @override
-  Estufa get areaSelecionada {
+  Area get areaSelecionada {
     _$areaSelecionadaAtom.reportRead();
     return super.areaSelecionada;
   }
 
   @override
-  set areaSelecionada(Estufa value) {
+  set areaSelecionada(Area value) {
     _$areaSelecionadaAtom.reportWrite(value, super.areaSelecionada, () {
       super.areaSelecionada = value;
     });
@@ -51,7 +51,7 @@ mixin _$SetorStore on _SetorStoreBase, Store {
       ActionController(name: '_SetorStoreBase');
 
   @override
-  dynamic setAreaSelecionada(Estufa estufa) {
+  dynamic setAreaSelecionada(Area estufa) {
     final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
         name: '_SetorStoreBase.setAreaSelecionada');
     try {

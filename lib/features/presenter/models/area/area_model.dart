@@ -1,14 +1,14 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
-import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
-import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
+import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
+import 'package:osi_solucoes/features/presenter/models/localizacao/localizacao_model.dart';
+import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 
-part 'setor_model.g.dart';
+part 'area_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class Setor {
+class Area {
   @JsonKey(required: false, disallowNullValue: false)
   int? id;
 
@@ -19,82 +19,92 @@ class Setor {
   String? descricao;
 
   @JsonKey(required: false, disallowNullValue: false)
+  String? imagem;
+
+  @JsonKey(required: false, disallowNullValue: false)
+  String? tipo;
+
+  @JsonKey(required: false, disallowNullValue: false)
   DateTime? created_at;
 
   @JsonKey(required: false, disallowNullValue: false)
-  Area? area;
+  Conta? conta;
 
   @JsonKey(required: false, disallowNullValue: false)
-  Reservatorio? reservatorio;
+  Localizacao? localizacao;
 
   @JsonKey(required: false, disallowNullValue: false)
-  List<Lote>? lotes;
+  List<Setor>? setores;
 
-  Setor({
+  Area({
     this.id,
     this.nome,
     this.descricao,
+    this.imagem,
+    this.tipo,
     this.created_at,
-    this.area,
-    this.reservatorio,
-    this.lotes,
+    this.conta,
+    this.localizacao,
+    this.setores,
   });
 
-  factory Setor.fromJson(Map<String, dynamic> json) => _$SetorFromJson(json);
+  factory Area.fromJson(Map<String, dynamic> json) => _$AreaFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SetorToJson(this);
+  Map<String, dynamic> toJson() => _$AreaToJson(this);
 }
 
-// List<Setor> listaEstufas = [
-//   Setor(
+List<Area> listAreas = [];
+
+// List<Estufa> listaEstufas = [
+//   Estufa(
 //       id: 01,
 //       nome: "Estufa UFMT",
 //       endereco: "Rua França, Maria Joaquina 1, Pontal do Araguaia - MT",
 //       setores: 04,
 //       lotes: 16),
-//   Setor(
+//   Estufa(
 //       id: 02,
 //       nome: "Estufa FAAZ",
 //       endereco: "Rua França, Maria Joaquina 1, Pontal do Araguaia - MT",
 //       setores: 04,
 //       lotes: 16),
-//   Setor(
+//   Estufa(
 //       id: 03,
 //       nome: "Estufa OSIRIS",
 //       endereco: "Rua França, Maria Joaquina 1, Pontal do Araguaia - MT",
 //       setores: 04,
 //       lotes: 16),
-//   Setor(
+//   Estufa(
 //       id: 01,
 //       nome: "Estufa UFMT",
 //       endereco: "Rua França, Maria Joaquina 1, Pontal do Araguaia - MT",
 //       setores: 04,
 //       lotes: 16),
-//   Setor(
+//   Estufa(
 //       id: 02,
 //       nome: "Estufa FAAZ",
 //       endereco: "Rua França, Maria Joaquina 1, Pontal do Araguaia - MT",
 //       setores: 04,
 //       lotes: 16),
-//   Setor(
+//   Estufa(
 //       id: 03,
 //       nome: "Estufa OSIRIS",
 //       endereco: "Rua França, Maria Joaquina 1, Pontal do Araguaia - MT",
 //       setores: 04,
 //       lotes: 16),
-//   Setor(
+//   Estufa(
 //       id: 01,
 //       nome: "Estufa UFMT",
 //       endereco: "Rua França, Maria Joaquina 1, Pontal do Araguaia - MT",
 //       setores: 04,
 //       lotes: 16),
-//   Setor(
+//   Estufa(
 //       id: 02,
 //       nome: "Estufa FAAZ",
 //       endereco: "Rua França, Maria Joaquina 1, Pontal do Araguaia - MT",
 //       setores: 04,
 //       lotes: 16),
-//   Setor(
+//   Estufa(
 //       id: 03,
 //       nome: "Estufa OSIRIS",
 //       endereco: "Rua França, Maria Joaquina 1, Pontal do Araguaia - MT",
