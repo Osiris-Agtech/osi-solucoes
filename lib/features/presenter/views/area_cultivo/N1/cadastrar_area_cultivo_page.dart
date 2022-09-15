@@ -166,7 +166,9 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-              onPressed: null, //store.registrarReservatorio(),
+              onPressed: () {
+                store.registrarArea();
+              }, //store.registrarReservatorio(),
             );
           }),
         ),

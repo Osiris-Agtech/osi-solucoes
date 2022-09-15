@@ -132,6 +132,21 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
+  final _$novaAreaAtom = Atom(name: '_AreaCultivoStoreBase.novaArea');
+
+  @override
+  Area get novaArea {
+    _$novaAreaAtom.reportRead();
+    return super.novaArea;
+  }
+
+  @override
+  set novaArea(Area value) {
+    _$novaAreaAtom.reportWrite(value, super.novaArea, () {
+      super.novaArea = value;
+    });
+  }
+
   final _$localizacaoSelecionadaAtom =
       Atom(name: '_AreaCultivoStoreBase.localizacaoSelecionada');
 
@@ -318,6 +333,14 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
         .run(() => super.buscarLocalizacoes());
   }
 
+  final _$registrarAreaAsyncAction =
+      AsyncAction('_AreaCultivoStoreBase.registrarArea');
+
+  @override
+  Future registrarArea() {
+    return _$registrarAreaAsyncAction.run(() => super.registrarArea());
+  }
+
   final _$_AreaCultivoStoreBaseActionController =
       ActionController(name: '_AreaCultivoStoreBase');
 
@@ -442,6 +465,7 @@ isNovaAreaLoading: ${isNovaAreaLoading},
 showTextFormField: ${showTextFormField},
 dotIndicator: ${dotIndicator},
 localizacaoList: ${localizacaoList},
+novaArea: ${novaArea},
 localizacaoSelecionada: ${localizacaoSelecionada},
 novaAreaName: ${novaAreaName},
 novaAreaDescricao: ${novaAreaDescricao},

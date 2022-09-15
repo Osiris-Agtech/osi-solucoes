@@ -79,3 +79,9 @@ class ErrorReservatorio implements Failure {
   final String message;
   ErrorReservatorio({required this.message});
 }
+
+class ErrorArea implements Failure {
+  @override
+  final String message;
+  ErrorArea({required this.message});
+}

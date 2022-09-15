@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/features/data/repositories/area/area_repository.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
 import '../../../core/utils/toast.dart';
+import '../models/area/area_model.dart';
 import '../models/localizacao/localizacao_model.dart';
 
 part 'area_cultivo_store.g.dart';
@@ -52,6 +54,9 @@ abstract class _AreaCultivoStoreBase with Store {
 
   @observable
   List<Localizacao> localizacaoList = [];
+
+  @observable
+  Area novaArea = Area();
 
   @observable
   Localizacao localizacaoSelecionada = Localizacao();
@@ -133,6 +138,37 @@ abstract class _AreaCultivoStoreBase with Store {
         localizacaoList = List.from(data);
       },
     );
+  }
+
+  @action
+  registrarArea() async {
+    AuthController authController = GetIt.I<AuthController>();
+    AreaRepository areaRepository = GetIt.I<AreaRepository>();
+    isNovaAreaLoading = true;
+
+    Area novaArea = Area(
+      nome: novaAreaName.text,
+      descricao: novaAreaDescricao.text,
+      tipo: 'hidroponia',
+      conta: authController.usuario.selected_conta!.conta,
+      localizacao: localizacaoSelecionada,
+    );
+
+    var registrarArea = await areaRepository.registrarArea(novaArea);
+
+    registrarArea.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        toastSuccess(message: "Cadastrado com sucesso");
+        //buscarArea();
+        limparTudo();
+        Get.close(1);
+      },
+    );
+
+    isNovaAreaLoading = false;
   }
 
   @action

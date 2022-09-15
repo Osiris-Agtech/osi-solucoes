@@ -22,4 +22,6 @@ class FailureMessage {
   static const errorInfoMessage = 'Falha ao carregar as informações';
   static const errorNovoReservatorioMessage =
       'Falha ao cadastrar, verifique se os campos estão preenchidos';
+  static const errorNovaAreaMessage =
+      'Falha ao cadastrar área, verifique se os campos estão preenchidos';
 }
