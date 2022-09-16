@@ -29,6 +29,12 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
   final formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    store.buscarArea();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -47,22 +53,32 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
               physics: const BouncingScrollPhysics(),
               slivers: [
                 appBar(store: store),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return listAreas.isEmpty
-                          ? Container()
-                          : Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 16.0, right: 16, top: 10),
-                              child: CardEstufa(
-                                area: listAreas[index],
-                              ),
-                            );
-                    },
-                    childCount: listAreas.length,
-                  ),
-                ),
+                Observer(builder: (_) {
+                  if (store.isAreaLoading) {
+                    return const SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 200, left: 60, right: 60),
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    );
+                  }
+                  if (store.areaList.isEmpty) {
+                    return const SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 200, left: 60, right: 60),
+                        child: Center(
+                          child: Text(
+                            'Nenhuma área de cultivo cadastrada',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return showList();
+                }),
               ],
             ),
           ),
@@ -70,17 +86,33 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
       ),
     );
   }
+
+  SliverList showList() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 16.0, right: 16, top: 10),
+            child: CardArea(
+              area: store.areaList[index],
+            ),
+          );
+        },
+        childCount: store.areaList.length,
+      ),
+    );
+  }
 }
 
-class CardEstufa extends StatefulWidget {
-  const CardEstufa({Key? key, required this.area}) : super(key: key);
+class CardArea extends StatefulWidget {
+  const CardArea({Key? key, required this.area}) : super(key: key);
   final Area area;
 
   @override
-  State<CardEstufa> createState() => _CardEstufaState();
+  State<CardArea> createState() => _CardAreaState();
 }
 
-class _CardEstufaState extends State<CardEstufa> {
+class _CardAreaState extends State<CardArea> {
   SetorStore setorStore = GetIt.I<SetorStore>();
 
   @override
@@ -96,7 +128,7 @@ class _CardEstufaState extends State<CardEstufa> {
         );
       },
       child: SizedBox(
-        height: 190,
+        height: 170,
         child: Card(
           elevation: 2,
           shape: RoundedRectangleBorder(
@@ -145,14 +177,14 @@ class _CardEstufaState extends State<CardEstufa> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 25.0),
+                  padding: const EdgeInsets.only(left: 25.0, bottom: 10),
                   child: Text(
                     widget.area.nome!,
                     style: const TextStyle(fontSize: 22),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
+                  padding: const EdgeInsets.only(left: 15.0, bottom: 5),
                   child: Row(
                     children: [
                       IconButton(
@@ -162,10 +194,11 @@ class _CardEstufaState extends State<CardEstufa> {
                       SizedBox(
                         width: 190,
                         child: Text(
-                          widget.area.localizacao?.endereco ?? "",
+                          '${widget.area.localizacao?.endereco}, ${widget.area.localizacao?.bairro}, ${widget.area.localizacao?.cidade} - ${widget.area.localizacao?.estado}',
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontSize: 12),
+                          textAlign: TextAlign.start,
                         ),
                       ),
                       const Spacer(),
@@ -182,12 +215,15 @@ class _CardEstufaState extends State<CardEstufa> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 55),
-                  child: Text("${widget.area.setores} Setores"),
+                  child: Text(
+                    "${widget.area.setores?.length ?? 0} Setores",
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 55),
-                  child: Text("${widget.area.setores?.length ?? 0} Setores"),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 55),
+                //   child: Text("${widget.area.setores?.length ?? 0} Lotes"),
+                // ),
               ],
             ),
           ),

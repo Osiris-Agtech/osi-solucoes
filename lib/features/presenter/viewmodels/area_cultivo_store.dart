@@ -15,6 +15,9 @@ class AreaCultivoStore = _AreaCultivoStoreBase with _$AreaCultivoStore;
 
 abstract class _AreaCultivoStoreBase with Store {
   @observable
+  bool isAreaLoading = false;
+
+  @observable
   String dropDownValue = "Nome";
 
   @action
@@ -41,6 +44,26 @@ abstract class _AreaCultivoStoreBase with Store {
     value++;
   }
 
+  @action
+  buscarArea() async {
+    isAreaLoading = true;
+    AreaRepository areaRepository = GetIt.I<AreaRepository>();
+    AuthController authController = GetIt.I<AuthController>();
+
+    var areaListResult = await areaRepository
+        .buscarArea(authController.usuario.selected_conta!.conta!.id!);
+
+    areaListResult.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        areaList = List.from(data);
+      },
+    );
+    isAreaLoading = false;
+  }
+
   //####################### START CADASTRAR AREA DE CULTIVO ##########################
 
   @observable
@@ -54,6 +77,9 @@ abstract class _AreaCultivoStoreBase with Store {
 
   @observable
   List<Localizacao> localizacaoList = [];
+
+  @observable
+  List<Area> areaList = [];
 
   @observable
   Area novaArea = Area();
@@ -162,7 +188,7 @@ abstract class _AreaCultivoStoreBase with Store {
       },
       (data) async {
         toastSuccess(message: "Cadastrado com sucesso");
-        //buscarArea();
+        buscarArea();
         limparTudo();
         Get.close(1);
       },

@@ -35,4 +35,11 @@ class AreaRepository implements IAreaRepository {
 
     return result;
   }
+
+  @override
+  Future<Either<Failure, List<Area>>> buscarArea(int contaId) async {
+    var result = await datasource.buscarArea(contaId: contaId);
+
+    return result;
+  }
 }
