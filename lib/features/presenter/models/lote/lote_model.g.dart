@@ -34,6 +34,12 @@ Lote _$LoteFromJson(Map<String, dynamic> json) => Lote(
       reservatorio: json['reservatorio'] == null
           ? null
           : Reservatorio.fromJson(json['reservatorio'] as Map<String, dynamic>),
+      setor: json['setor'] == null
+          ? null
+          : Setor.fromJson(json['setor'] as Map<String, dynamic>),
+      cultura: json['cultura'] == null
+          ? null
+          : Cultura.fromJson(json['cultura'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$LoteToJson(Lote instance) => <String, dynamic>{
@@ -51,5 +57,7 @@ Map<String, dynamic> _$LoteToJson(Lote instance) => <String, dynamic>{
       'mudas_transplantadas': instance.mudas_transplantadas,
       'plantas_colhidas': instance.plantas_colhidas,
       'embalagens_produzidas': instance.embalagens_produzidas,
+      'cultura': instance.cultura?.toJson(),
       'reservatorio': instance.reservatorio?.toJson(),
+      'setor': instance.setor?.toJson(),
     };

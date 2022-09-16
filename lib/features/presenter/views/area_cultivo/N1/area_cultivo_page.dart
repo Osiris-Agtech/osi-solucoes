@@ -92,7 +92,7 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           return Padding(
-            padding: const EdgeInsets.only(left: 16.0, right: 16, top: 10),
+            padding: const EdgeInsets.only(left: 16.0, right: 16, top: 5),
             child: CardArea(
               area: store.areaList[index],
             ),
@@ -128,7 +128,7 @@ class _CardAreaState extends State<CardArea> {
         );
       },
       child: SizedBox(
-        height: 170,
+        height: 185,
         child: Card(
           elevation: 2,
           shape: RoundedRectangleBorder(

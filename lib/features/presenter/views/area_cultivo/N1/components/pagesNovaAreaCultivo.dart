@@ -9,7 +9,6 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components/nomePage.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components/localizacaoPage.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components/novaLocalizacaoPage.dart';
 
 SizedBox pagesNovaAreaCultivo(BuildContext context, AreaCultivoStore store,
     CarouselController carouselController, CarouselController controlerPages) {

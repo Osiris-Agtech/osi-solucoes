@@ -5,28 +5,28 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
+import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/lote_page.dart';
-import '../../home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/detalhes_lote_page.dart';
+import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 
-class SetorPage extends StatefulWidget {
-  const SetorPage({Key? key}) : super(key: key);
+class LotePage extends StatefulWidget {
+  const LotePage({Key? key}) : super(key: key);
+
   @override
-  SetorPageState createState() => SetorPageState();
+  State<LotePage> createState() => _LotePageState();
 }
 
-class SetorPageState extends State<SetorPage> {
-  SetorStore store = GetIt.I<SetorStore>();
+class _LotePageState extends State<LotePage> {
+  LoteStore store = GetIt.I<LoteStore>();
 
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
   final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    store.buscarSetores();
+    store.buscarLotes();
     super.initState();
   }
 
@@ -48,9 +48,9 @@ class SetorPageState extends State<SetorPage> {
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                appBar(areaN1: store.areaSelecionada, store: store),
+                appBar(setorN2: store.setorSelecionado, store: store),
                 Observer(builder: (_) {
-                  if (store.isSetorListLoading) {
+                  if (store.isLoteListLoading) {
                     return const SliverToBoxAdapter(
                       child: Padding(
                         padding:
@@ -61,14 +61,14 @@ class SetorPageState extends State<SetorPage> {
                       ),
                     );
                   }
-                  if (store.setorList.isEmpty) {
+                  if (store.loteList.isEmpty) {
                     return const SliverToBoxAdapter(
                       child: Padding(
                         padding:
                             EdgeInsets.only(top: 200.0, left: 60, right: 60),
                         child: Center(
                           child: Text(
-                            "Não há setores cadastrados nesta área de cultivo",
+                            "Não há lotes cadastrados neste setor",
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -82,13 +82,13 @@ class SetorPageState extends State<SetorPage> {
                           return Padding(
                             padding: const EdgeInsets.only(
                                 left: 16.0, right: 16, top: 10),
-                            child: CardSetor(
-                              setor: store.setorList[index],
+                            child: CardLote(
+                              lote: store.loteList[index],
                             ),
                           );
                         });
                       },
-                      childCount: store.setorList.length,
+                      childCount: store.loteList.length,
                     ),
                   );
                 }),
@@ -103,14 +103,14 @@ class SetorPageState extends State<SetorPage> {
 
 // ignore: camel_case_types
 class appBar extends StatelessWidget {
-  final Area areaN1;
+  final Setor setorN2;
   const appBar({
     Key? key,
-    required this.areaN1,
+    required this.setorN2,
     required this.store,
   }) : super(key: key);
 
-  final SetorStore store;
+  final LoteStore store;
 
   @override
   Widget build(BuildContext context) {
@@ -143,8 +143,8 @@ class appBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TopAppBar(
-              namePage: areaN1.nome ?? '',
-              subtitle: "Lista de setores cadastrados",
+              namePage: setorN2.nome ?? '',
+              subtitle: "Lista de lotes cadastrados",
             ),
             const SizedBox(
               height: 30,
@@ -186,16 +186,16 @@ class appBar extends StatelessWidget {
   }
 }
 
-class CardSetor extends StatefulWidget {
-  final Setor setor;
-  const CardSetor({Key? key, required this.setor}) : super(key: key);
+class CardLote extends StatefulWidget {
+  final Lote lote;
+  const CardLote({Key? key, required this.lote}) : super(key: key);
 
   @override
-  State<CardSetor> createState() => _CardSetorState();
+  State<CardLote> createState() => _CardLoteState();
 }
 
-class _CardSetorState extends State<CardSetor> {
-  LoteStore loteStore = GetIt.I<LoteStore>();
+class _CardLoteState extends State<CardLote> {
+  LoteStore store = GetIt.I<LoteStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -203,10 +203,10 @@ class _CardSetorState extends State<CardSetor> {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        loteStore.setSetorSelecionado(widget.setor);
+        store.selecionarLote(widget.lote);
         Get.to(
-          () => const LotePage(),
-          transition: Transition.rightToLeftWithFade,
+          () => const DetalhesLotePage(),
+          transition: Transition.rightToLeft,
         );
       },
       child: Card(
@@ -215,10 +215,7 @@ class _CardSetorState extends State<CardSetor> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 8.0,
-          ),
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
               Expanded(
@@ -226,32 +223,40 @@ class _CardSetorState extends State<CardSetor> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: Image.asset(
-                            "assets/icons/hydroponic1_icon.png",
-                            height: 25,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.eco,
+                            size: 26,
+                            color: Color(0xFF26C165),
                           ),
-                          onPressed: null,
-                        ),
-                        Text(
-                          "# ${widget.setor.id}",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FontStyle.italic,
+                          const SizedBox(
+                            width: 5,
                           ),
-                        ),
-                        const Spacer(),
-                      ],
+                          Text(
+                            "# ${widget.lote.id}",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                          const Spacer(),
+                        ],
+                      ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
+                      padding: const EdgeInsets.only(
+                        left: 8.0,
+                        bottom: 2.0,
+                        top: 8.0,
+                      ),
                       child: Text(
-                        widget.setor.nome ?? '',
+                        widget.lote.nome ?? '',
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
@@ -260,16 +265,16 @@ class _CardSetorState extends State<CardSetor> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+                      padding: const EdgeInsets.only(left: 8.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Text(
-                            "Lotes: ",
+                            "Cultura: ",
                             style: TextStyle(fontSize: 16),
                           ),
                           Text(
-                            "${widget.setor.lotes?.length ?? 0}",
+                            "${widget.lote.cultura?.nome}",
                             style: const TextStyle(
                               fontSize: 16,
                               color: Constants.kPrimaryColor,

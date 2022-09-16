@@ -9,6 +9,22 @@ part of 'setor_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$SetorStore on _SetorStoreBase, Store {
+  final _$isSetorListLoadingAtom =
+      Atom(name: '_SetorStoreBase.isSetorListLoading');
+
+  @override
+  bool get isSetorListLoading {
+    _$isSetorListLoadingAtom.reportRead();
+    return super.isSetorListLoading;
+  }
+
+  @override
+  set isSetorListLoading(bool value) {
+    _$isSetorListLoadingAtom.reportWrite(value, super.isSetorListLoading, () {
+      super.isSetorListLoading = value;
+    });
+  }
+
   final _$areaSelecionadaAtom = Atom(name: '_SetorStoreBase.areaSelecionada');
 
   @override
@@ -64,6 +80,7 @@ mixin _$SetorStore on _SetorStoreBase, Store {
   @override
   String toString() {
     return '''
+isSetorListLoading: ${isSetorListLoading},
 areaSelecionada: ${areaSelecionada},
 setorList: ${setorList}
     ''';

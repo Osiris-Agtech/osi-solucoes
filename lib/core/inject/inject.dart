@@ -1,11 +1,14 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/data/datasources/login/login_datasource.dart';
+import 'package:osi_solucoes/features/data/datasources/lote/lote_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/reservatorio/reservatorio_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/setor/setor_datasource.dart';
+import 'package:osi_solucoes/features/data/repositories/lote/lote_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/reservatorio/reservatorio_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/setor/setor_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 
 import '../../features/data/datasources/area/area_datasource.dart';
@@ -42,6 +45,7 @@ Future<void> initInject() async {
       () => ReservatorioDatasource());
   sl.registerLazySingleton<ISetorDatasource>(() => SetorDatasource());
   sl.registerLazySingleton<IAreaDatasource>(() => AreaDatasource());
+  sl.registerLazySingleton<ILoteDatasource>(() => LoteDatasource());
 
   //repositories
   sl.registerLazySingleton<CadastroRepository>(
@@ -54,11 +58,14 @@ Future<void> initInject() async {
       () => SetorRepository(datasource: sl()));
   sl.registerLazySingleton<AreaRepository>(
       () => AreaRepository(datasource: sl()));
+  sl.registerLazySingleton<LoteRepository>(
+      () => LoteRepository(datasource: sl()));
 
   //viewmodels
   sl.registerLazySingleton<AjustesStore>(() => AjustesStore());
   sl.registerLazySingleton<AreaCultivoStore>(() => AreaCultivoStore());
   sl.registerLazySingleton<SetorStore>(() => SetorStore());
+  sl.registerLazySingleton<LoteStore>(() => LoteStore());
   sl.registerLazySingleton<AuthController>(() => AuthController());
   sl.registerLazySingleton<CadastroStore>(() => CadastroStore());
   sl.registerLazySingleton<CadernoCampoStore>(() => CadernoCampoStore());

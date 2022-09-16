@@ -11,6 +11,9 @@ class SetorStore = _SetorStoreBase with _$SetorStore;
 
 abstract class _SetorStoreBase with Store {
   @observable
+  bool isSetorListLoading = false;
+
+  @observable
   Area areaSelecionada = Area();
 
   @observable
@@ -21,6 +24,8 @@ abstract class _SetorStoreBase with Store {
 
   @action
   buscarSetores() async {
+    isSetorListLoading = true;
+
     SetorRepository setorRepository = GetIt.I<SetorRepository>();
 
     var setores = await setorRepository.buscarSetores(areaSelecionada.id!);
@@ -28,11 +33,13 @@ abstract class _SetorStoreBase with Store {
     setores.fold(
       (err) {
         toastError(message: err.message);
+        setorList = [];
       },
       (data) async {
         setorList = List.from(data);
       },
     );
-    print(setorList);
+
+    isSetorListLoading = false;
   }
 }
