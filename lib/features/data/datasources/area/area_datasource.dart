@@ -12,6 +12,7 @@ abstract class IAreaDatasource {
       {required Localizacao localizacao});
   Future<Either<Failure, List<Localizacao>>> buscarLocalizacoes(
       {required int contaId});
+  Future<Either<Failure, List<Area>>> buscarArea({required int contaId});
   Future<Either<Failure, Area>> registrarArea({required Area novaArea});
 }
 
@@ -193,6 +194,59 @@ class AreaDatasource implements IAreaDatasource {
       }
     } catch (e) {
       return Left(ErrorArea(message: FailureMessage.errorNovaAreaMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Area>>> buscarArea({required int contaId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+        query Areas ($contaId: Int!){
+          areas(where: {
+            conta: {
+              id: {
+                equals: $contaId
+              }
+            }
+          }) {
+            id
+            nome
+            localizacao {
+              endereco
+              bairro
+              cidade
+              estado
+            }
+            setores {
+              id
+              lotes {
+                id
+              }
+            }
+          }
+        }
+      ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'contaId': contaId,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      List areaResult =
+          result.data?['areas']?.map((item) => Area.fromJson(item)).toList();
+
+      List<Area> areaList = areaResult.cast<Area>();
+      return Right(areaList);
+    } else {
+      return Left(ErrorArea(message: FailureMessage.emptyListMessage));
     }
   }
 }

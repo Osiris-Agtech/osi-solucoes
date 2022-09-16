@@ -9,6 +9,21 @@ part of 'area_cultivo_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
+  final _$isAreaLoadingAtom = Atom(name: '_AreaCultivoStoreBase.isAreaLoading');
+
+  @override
+  bool get isAreaLoading {
+    _$isAreaLoadingAtom.reportRead();
+    return super.isAreaLoading;
+  }
+
+  @override
+  set isAreaLoading(bool value) {
+    _$isAreaLoadingAtom.reportWrite(value, super.isAreaLoading, () {
+      super.isAreaLoading = value;
+    });
+  }
+
   final _$dropDownValueAtom = Atom(name: '_AreaCultivoStoreBase.dropDownValue');
 
   @override
@@ -129,6 +144,21 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
   set localizacaoList(List<Localizacao> value) {
     _$localizacaoListAtom.reportWrite(value, super.localizacaoList, () {
       super.localizacaoList = value;
+    });
+  }
+
+  final _$areaListAtom = Atom(name: '_AreaCultivoStoreBase.areaList');
+
+  @override
+  List<Area> get areaList {
+    _$areaListAtom.reportRead();
+    return super.areaList;
+  }
+
+  @override
+  set areaList(List<Area> value) {
+    _$areaListAtom.reportWrite(value, super.areaList, () {
+      super.areaList = value;
     });
   }
 
@@ -315,6 +345,14 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
+  final _$buscarAreaAsyncAction =
+      AsyncAction('_AreaCultivoStoreBase.buscarArea');
+
+  @override
+  Future buscarArea() {
+    return _$buscarAreaAsyncAction.run(() => super.buscarArea());
+  }
+
   final _$cadastrarNovaLocalizacaoAsyncAction =
       AsyncAction('_AreaCultivoStoreBase.cadastrarNovaLocalizacao');
 
@@ -457,6 +495,7 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
   @override
   String toString() {
     return '''
+isAreaLoading: ${isAreaLoading},
 dropDownValue: ${dropDownValue},
 data2: ${data2},
 data1: ${data1},
@@ -465,6 +504,7 @@ isNovaAreaLoading: ${isNovaAreaLoading},
 showTextFormField: ${showTextFormField},
 dotIndicator: ${dotIndicator},
 localizacaoList: ${localizacaoList},
+areaList: ${areaList},
 novaArea: ${novaArea},
 localizacaoSelecionada: ${localizacaoSelecionada},
 novaAreaName: ${novaAreaName},
