@@ -46,27 +46,38 @@ class SetorPageState extends State<SetorPage> {
               physics: const BouncingScrollPhysics(),
               slivers: [
                 appBar(areaN1: store.areaSelecionada, store: store),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return Observer(builder: (_) {
-                        return store.setorList.isEmpty
-                            ? const Center(
-                                child: Text(
-                                    "Não há setores cadastrados nesta área de cultivo"),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 16.0, right: 16, top: 10),
-                                child: CardSetor(
-                                  setor: store.setorList[index],
-                                ),
-                              );
-                      });
-                    },
-                    childCount: store.setorList.length,
-                  ),
-                ),
+                Observer(builder: (_) {
+                  if (store.setorList.isEmpty) {
+                    return const SliverToBoxAdapter(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
+                        child: Center(
+                          child: Text(
+                            "Não há setores cadastrados nesta área de cultivo",
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return Observer(builder: (_) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                left: 16.0, right: 16, top: 10),
+                            child: CardSetor(
+                              setor: store.setorList[index],
+                            ),
+                          );
+                        });
+                      },
+                      // childCount: store.setorList.length,
+                    ),
+                  );
+                }),
               ],
             ),
           ),
