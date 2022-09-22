@@ -1,5 +1,7 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
@@ -52,6 +54,15 @@ Widget novaLocalizacaoPage(BuildContext context,
             children: [
               Observer(builder: (_) {
                 return TextFormField(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    CepInputFormatter(),
+                  ],
+                  onChanged: (value) async {
+                    if (value.length == 10) {
+                      await store.buscaCEP();
+                    }
+                  },
                   controller: store.cep,
                   style: const TextStyle(
                     fontSize: 24,

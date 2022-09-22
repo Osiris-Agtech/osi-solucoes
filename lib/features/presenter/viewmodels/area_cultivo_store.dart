@@ -1,9 +1,11 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/features/data/repositories/area/area_repository.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:search_cep/search_cep.dart';
 
 import '../../../core/utils/toast.dart';
 import '../models/area/area_model.dart';
@@ -83,6 +85,9 @@ abstract class _AreaCultivoStoreBase with Store {
 
   @observable
   Area novaArea = Area();
+
+  @observable
+  String? responseCEP;
 
   @observable
   Localizacao localizacaoSelecionada = Localizacao();
@@ -227,6 +232,33 @@ abstract class _AreaCultivoStoreBase with Store {
   @action
   alterarNome(String name) {
     novaAreaName = TextEditingController(text: name);
+  }
+
+  @action
+  Future<String> buscaCEP() async {
+    final viaCepSearchCep = ViaCepSearchCep();
+    final infoCepJSON = await viaCepSearchCep.searchInfoByCep(
+        cep: cep.text.replaceAll(".", '').replaceAll("-", ""));
+    if (infoCepJSON.isRight()) {
+      Right(infoCepJSON).value.map(
+            (r) => {
+              endereco.text = r.logradouro ?? '',
+              complemento.text = r.complemento ?? '',
+              bairro.text = r.bairro ?? '',
+              cidade.text = r.localidade ?? '',
+              estado.text = r.uf ?? '',
+              pais.text = "Brasil",
+            },
+          );
+      return "Sucess";
+    } else {
+      // logradouro.clear();
+      // complemento.clear();
+      // bairro.clear();
+      // cidade.clear();
+      // estado.clear();
+      return "Error";
+    }
   }
 
   //####################### END CADASTRAR AREA DE CULTIVO ##########################

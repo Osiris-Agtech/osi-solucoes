@@ -177,6 +177,21 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
+  final _$responseCEPAtom = Atom(name: '_AreaCultivoStoreBase.responseCEP');
+
+  @override
+  String? get responseCEP {
+    _$responseCEPAtom.reportRead();
+    return super.responseCEP;
+  }
+
+  @override
+  set responseCEP(String? value) {
+    _$responseCEPAtom.reportWrite(value, super.responseCEP, () {
+      super.responseCEP = value;
+    });
+  }
+
   final _$localizacaoSelecionadaAtom =
       Atom(name: '_AreaCultivoStoreBase.localizacaoSelecionada');
 
@@ -379,6 +394,13 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     return _$registrarAreaAsyncAction.run(() => super.registrarArea());
   }
 
+  final _$buscaCEPAsyncAction = AsyncAction('_AreaCultivoStoreBase.buscaCEP');
+
+  @override
+  Future<String> buscaCEP() {
+    return _$buscaCEPAsyncAction.run(() => super.buscaCEP());
+  }
+
   final _$_AreaCultivoStoreBaseActionController =
       ActionController(name: '_AreaCultivoStoreBase');
 
@@ -506,6 +528,7 @@ dotIndicator: ${dotIndicator},
 localizacaoList: ${localizacaoList},
 areaList: ${areaList},
 novaArea: ${novaArea},
+responseCEP: ${responseCEP},
 localizacaoSelecionada: ${localizacaoSelecionada},
 novaAreaName: ${novaAreaName},
 novaAreaDescricao: ${novaAreaDescricao},
