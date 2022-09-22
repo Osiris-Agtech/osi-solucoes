@@ -5,4 +5,5 @@ import '../../../../core/errors/failure.dart';
 
 abstract class ISetorRepository {
   Future<Either<Failure, List<Setor>>> buscarSetores(int areaId);
+  Future<Either<Failure, Setor>> cadastrarSetor(Setor setor);
 }

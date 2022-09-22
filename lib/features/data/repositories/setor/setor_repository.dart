@@ -16,4 +16,11 @@ class SetorRepository implements ISetorRepository {
 
     return result;
   }
+
+  @override
+  Future<Either<Failure, Setor>> cadastrarSetor(Setor setor) async{
+    var result = await datasource.cadastrarSetor(setor: setor);
+
+    return result;
+  }
 }

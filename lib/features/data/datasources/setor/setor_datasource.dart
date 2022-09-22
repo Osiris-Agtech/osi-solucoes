@@ -8,6 +8,7 @@ import '../../../../core/errors/errors.dart';
 
 abstract class ISetorDatasource {
   Future<Either<Failure, List<Setor>>> buscarSetores({required int areaId});
+  Future<Either<Failure, Setor>> cadastrarSetor({required Setor setor});
 }
 
 class SetorDatasource implements ISetorDatasource {
@@ -57,5 +58,11 @@ class SetorDatasource implements ISetorDatasource {
     } else {
       return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
     }
+  }
+
+  @override
+  Future<Either<Failure, Setor>> cadastrarSetor({required Setor setor}) {
+    // TODO: implement cadastrarSetor
+    throw UnimplementedError();
   }
 }

@@ -1,0 +1,298 @@
+import 'package:carousel_slider/carousel_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/bottomSheet.dart';
+import '../../../../../core/constants/constants.dart';
+
+class CadastrarSetorPage extends StatefulWidget {
+  const CadastrarSetorPage({Key? key}) : super(key: key);
+
+  @override
+  State<CadastrarSetorPage> createState() => _CadastrarSetorPageState();
+}
+
+class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
+  CarouselController carouselController = CarouselController();
+  CarouselController controlerPages = CarouselController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Constants.kBackgroundColor,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+      child: SafeArea(
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: appBar(),
+          backgroundColor: Constants.kBackgroundColor,
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                titulo(),
+                const SizedBox(height: 20),
+                local(),
+                subtitulo(),
+                const SizedBox(height: 10),
+                nome(context),
+                const Divider(),
+                warning(),
+                reservatorio(context),
+                const Divider(),
+                descricao(context),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 20),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: const Color(0xffF5F5F5),
+                      ),
+                      child: Observer(
+                        builder: (_) {
+                          return SizedBox(
+                              width: double.infinity, child: botaoDescricao());
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                saveButton(size),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget subtitulo() {
+    return const Padding(
+      padding: EdgeInsets.only(top: 10, left: 20),
+      child: Text(
+        'Cadastrar Informações',
+        style: TextStyle(
+          fontSize: 14,
+          color: Color(0xff6F6464),
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  Widget warning() {
+    return const Padding(
+      padding: EdgeInsets.only(top: 10, left: 20),
+      child: Text(
+        '*Migração Automática',
+        style: TextStyle(
+          fontSize: 14,
+          color: Color(0xff9F9F9F),
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  Widget local() {
+    return Row(
+      children:  [
+        const Padding(
+          padding: EdgeInsets.only(top: 10, left: 20),
+          child: Text(
+            'Local: ',
+            style: TextStyle(
+              fontSize: 18,
+              color: Constants.kText2,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.only(top: 10),
+          child: Text(
+            'Estufa FAAZ',
+            style: TextStyle(
+              fontSize: 18,
+              color: Constants.kPrimaryColor,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ),
+        const Spacer(),
+        Padding(
+          padding: const EdgeInsets.only(right: 20, top: 10),
+          child: SizedBox(
+            child: Image.asset(
+                "assets/icons/greenhouse1_icon.png",
+                height: 40,
+              ),
+           ),
+        ),
+      ],
+    );
+  }
+
+  Widget titulo() {
+    return const Padding(
+      padding: EdgeInsets.only(
+        left: 20,
+        right: 10,
+      ),
+      child: Text(
+        'Criando Novo Setor',
+        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+
+  AppBar appBar() {
+    return AppBar(
+      backgroundColor: Constants.kBackgroundColor,
+      elevation: 0,
+      leading: const BackButton(
+        color: Constants.kPrimaryColor,
+      ),
+    );
+  }
+
+  Padding saveButton(Size size) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 30),
+      child: Center(
+        child: SizedBox(
+          width: size.width * .8,
+          height: 40,
+          child: Observer(builder: (_) {
+            return ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Constants.kPrimaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              child: const Text(
+                "Salvar",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              onPressed: () {
+                // store.registrarArea();
+              }, //store.registrarReservatorio(),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  InkWell nome(BuildContext context) {
+    return InkWell(
+      child: Observer(builder: (_) {
+        return ListTile(
+          leading: const Icon(Icons.label),
+          title: const Text(
+            'Nome',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+          ),
+          trailing: const Text(
+            "Preencher",
+            style: TextStyle(
+              color: Constants.kPrimaryColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          onTap: () {
+            bottomSheet(context, carouselController, controlerPages);
+          }
+        );
+      }),
+    );
+  }
+
+  InkWell reservatorio(BuildContext context) {
+    return InkWell(
+      child: Observer(builder: (_) {
+        return ListTile(
+          leading: SvgPicture.asset(
+            'assets/icons/reservatorio_icon.svg',
+            height: 25,
+            width: 25,
+          ),
+          title: const Text(
+            'Reservatório',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+          ),
+          trailing: const Icon(
+            Icons.chevron_right,
+            color: Constants.kPrimaryColor,
+          ),
+          onTap: () {
+            // store.setDotIndicator(0);
+          },
+        );
+      }),
+    );
+  }
+
+  InkWell descricao(BuildContext context) {
+    return InkWell(
+      child: ListTile(
+        leading: const Icon(Icons.description),
+        title: const Text(
+          'Descrição',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+        ),
+        onTap: () {
+          // bottomSheet(context, controlerPages, carouselController, store);
+        },
+      ),
+    );
+  }
+
+  Padding botaoDescricao() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconButton(
+            onPressed: () {
+              // store.setShowTextFormField(true);
+            },
+            icon: const Icon(
+              Icons.add,
+              color: Colors.green,
+            ),
+          ),
+          const Text('Adicionar descrição'),
+          const Text('(opcional)')
+        ],
+      ),
+    );
+  }
+}

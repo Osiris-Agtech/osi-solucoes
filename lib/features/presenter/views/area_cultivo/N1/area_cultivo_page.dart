@@ -15,6 +15,7 @@ import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/setor_page.dart';
 import '../../../viewmodels/area_cultivo_store.dart';
 import '../../home/components/top_app_bar.dart';
+import '../N2/cadastrar_setor_page.dart';
 
 class AreaCultivoPage extends StatefulWidget {
   const AreaCultivoPage({Key? key}) : super(key: key);
@@ -268,7 +269,10 @@ class NewFloactingButton extends StatelessWidget {
             ),
             label: "Novo Setor",
             labelStyle: const TextStyle(fontSize: 18),
-            onTap: () {},
+            onTap: () => Get.to(
+              () => const CadastrarSetorPage(),
+              transition: Transition.rightToLeft,
+            ),
           ),
           SpeedDialChild(
             child: Image.asset(
