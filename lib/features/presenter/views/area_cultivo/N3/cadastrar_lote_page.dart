@@ -48,42 +48,6 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                 const SizedBox(height: 20),
                 nome(context),
                 const Divider(),
-                localizacao(context),
-                const Divider(),
-                descricao(context),
-                // solucaoNutritiva(context),
-                // const Divider(),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 20, bottom: 20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: const Color(0xffF5F5F5),
-                      ),
-                      child: Observer(
-                        builder: (_) {
-                          return SizedBox(
-                            width: double.infinity,
-                            child: store.novaAreaDescricao.text.isEmpty &&
-                                    !store.showTextFormField
-                                ? botaoDescricao()
-                                : Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: TextFormField(
-                                      autofocus: true,
-                                      maxLines: 20,
-                                      decoration: const InputDecoration(
-                                          border: InputBorder.none),
-                                      controller: store.novaAreaDescricao,
-                                    ),
-                                  ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
                 saveButton(size),
               ],
             ),
@@ -173,7 +137,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
         return ListTile(
           leading: const Icon(Icons.label),
           title: const Text(
-            'Nome',
+            'Lote',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
           trailing: store.novoLoteName.text.isNotEmpty
@@ -215,93 +179,6 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
           },
         );
       }),
-    );
-  }
-
-  InkWell localizacao(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          leading: const Icon(Icons.location_on),
-          trailing: store.localizacaoSelecionada.endereco != null &&
-                  store.localizacaoSelecionada.endereco!.isNotEmpty
-              ? SizedBox(
-                  width: 100,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        width: 76,
-                        child: Text(
-                          store.localizacaoSelecionada.endereco!,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.end,
-                          style: const TextStyle(
-                            color: Constants.kPrimaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      const Icon(
-                        Icons.chevron_right,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ],
-                  ),
-                )
-              : const Icon(
-                  Icons.chevron_right,
-                  color: Constants.kPrimaryColor,
-                ),
-          title: const Text(
-            'Localização',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
-          onTap: () {
-            // store.setDotIndicator(1);
-            // bottomSheet(context, controlerPages, carouselController, store);
-          },
-        );
-      }),
-    );
-  }
-
-  InkWell descricao(BuildContext context) {
-    return InkWell(
-      child: ListTile(
-        leading: const Icon(Icons.description),
-        title: const Text(
-          'Descrição',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-        ),
-        onTap: () {
-          // bottomSheet(context, controlerPages, carouselController, store);
-        },
-      ),
-    );
-  }
-
-  Padding botaoDescricao() {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          IconButton(
-            onPressed: () {
-              store.setShowTextFormField(true);
-            },
-            icon: const Icon(
-              Icons.add,
-              color: Colors.green,
-            ),
-          ),
-          const Text('Adicionar descrição'),
-          const Text('(opcional)')
-        ],
-      ),
     );
   }
 }
