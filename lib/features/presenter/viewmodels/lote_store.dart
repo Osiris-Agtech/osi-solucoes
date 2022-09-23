@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
@@ -74,4 +75,20 @@ abstract class _LoteStoreBase with Store {
   }
 
   // ##################### END DETALHES LOTE ########################
+
+  // #################### START CADASTRAR LOTE ######################
+
+  @observable
+  bool showTextFormField = false;
+
+  @observable
+  bool isNovaAreaLoading = false;
+
+  @observable
+  TextEditingController novoLoteName = TextEditingController();
+
+  @observable
+  TextEditingController novoLoteDescricao = TextEditingController();
+
+  // ##################### END CADASTRAR LOTE ######################
 }

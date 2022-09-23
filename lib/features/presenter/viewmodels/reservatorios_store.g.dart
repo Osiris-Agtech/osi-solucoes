@@ -396,11 +396,11 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
   }
 
   @override
-  dynamic setReservatorioDetalhes(int index) {
+  dynamic setReservatorioDetalhes(Reservatorio reservatorio) {
     final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
         name: '_ReservatoriosStoreBase.setReservatorioDetalhes');
     try {
-      return super.setReservatorioDetalhes(index);
+      return super.setReservatorioDetalhes(reservatorio);
     } finally {
       _$_ReservatoriosStoreBaseActionController.endAction(_$actionInfo);
     }

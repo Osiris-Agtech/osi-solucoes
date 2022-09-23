@@ -206,7 +206,7 @@ class _CardSetorState extends State<CardSetor> {
         loteStore.setSetorSelecionado(widget.setor);
         Get.to(
           () => const LotePage(),
-          transition: Transition.rightToLeftWithFade,
+          transition: Transition.rightToLeft,
         );
       },
       child: Card(

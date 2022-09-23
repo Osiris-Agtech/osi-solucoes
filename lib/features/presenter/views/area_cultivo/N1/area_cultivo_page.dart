@@ -124,7 +124,7 @@ class _CardAreaState extends State<CardArea> {
         setorStore.setAreaSelecionada(widget.area);
         Get.to(
           () => const SetorPage(),
-          transition: Transition.rightToLeftWithFade,
+          transition: Transition.rightToLeft,
         );
       },
       child: SizedBox(

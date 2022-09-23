@@ -87,6 +87,69 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$showTextFormFieldAtom =
+      Atom(name: '_LoteStoreBase.showTextFormField');
+
+  @override
+  bool get showTextFormField {
+    _$showTextFormFieldAtom.reportRead();
+    return super.showTextFormField;
+  }
+
+  @override
+  set showTextFormField(bool value) {
+    _$showTextFormFieldAtom.reportWrite(value, super.showTextFormField, () {
+      super.showTextFormField = value;
+    });
+  }
+
+  final _$isNovaAreaLoadingAtom =
+      Atom(name: '_LoteStoreBase.isNovaAreaLoading');
+
+  @override
+  bool get isNovaAreaLoading {
+    _$isNovaAreaLoadingAtom.reportRead();
+    return super.isNovaAreaLoading;
+  }
+
+  @override
+  set isNovaAreaLoading(bool value) {
+    _$isNovaAreaLoadingAtom.reportWrite(value, super.isNovaAreaLoading, () {
+      super.isNovaAreaLoading = value;
+    });
+  }
+
+  final _$novoLoteNameAtom = Atom(name: '_LoteStoreBase.novoLoteName');
+
+  @override
+  TextEditingController get novoLoteName {
+    _$novoLoteNameAtom.reportRead();
+    return super.novoLoteName;
+  }
+
+  @override
+  set novoLoteName(TextEditingController value) {
+    _$novoLoteNameAtom.reportWrite(value, super.novoLoteName, () {
+      super.novoLoteName = value;
+    });
+  }
+
+  final _$novoLoteDescricaoAtom =
+      Atom(name: '_LoteStoreBase.novoLoteDescricao');
+
+  @override
+  TextEditingController get novoLoteDescricao {
+    _$novoLoteDescricaoAtom.reportRead();
+    return super.novoLoteDescricao;
+  }
+
+  @override
+  set novoLoteDescricao(TextEditingController value) {
+    _$novoLoteDescricaoAtom.reportWrite(value, super.novoLoteDescricao, () {
+      super.novoLoteDescricao = value;
+    });
+  }
+
   final _$buscarLotesAsyncAction = AsyncAction('_LoteStoreBase.buscarLotes');
 
   @override
@@ -135,7 +198,11 @@ isLoteListLoading: ${isLoteListLoading},
 setorSelecionado: ${setorSelecionado},
 loteList: ${loteList},
 isDetalhesLoteLoading: ${isDetalhesLoteLoading},
-loteSelecionado: ${loteSelecionado}
+loteSelecionado: ${loteSelecionado},
+showTextFormField: ${showTextFormField},
+isNovaAreaLoading: ${isNovaAreaLoading},
+novoLoteName: ${novoLoteName},
+novoLoteDescricao: ${novoLoteDescricao}
     ''';
   }
 }

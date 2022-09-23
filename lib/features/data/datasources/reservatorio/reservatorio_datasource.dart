@@ -207,7 +207,11 @@ class ReservatorioDatasource implements IReservatorioDatasource {
             lotes {
               id
               nome
-              plantas_colhidas
+              bandeijas_semeadas
+              setor{
+                id
+                nome
+              }
             }
             solucao {
               solucoes_fertilizantes_concentradas {
