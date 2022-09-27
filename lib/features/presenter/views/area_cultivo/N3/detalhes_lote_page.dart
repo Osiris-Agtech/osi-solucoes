@@ -187,28 +187,41 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       const SizedBox(
                         width: 16,
                       ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CircleAvatar(
-                            radius: 25,
-                            child: SvgPicture.asset(
-                              "assets/icons/migrar_lote.svg",
+                      InkWell(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircleAvatar(
+                              radius: 25,
+                              child: SvgPicture.asset(
+                                "assets/icons/migrar_lote.svg",
+                              ),
+                              backgroundColor: Constants.kCardColor,
                             ),
-                            backgroundColor: Constants.kCardColor,
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          const Text(
-                            'Migrar Lote',
-                            style: TextStyle(
-                              color: Constants.kGreyText,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                            const SizedBox(
+                              height: 8,
                             ),
-                          ),
-                        ],
+                            const Text(
+                              'Migrar Lote',
+                              style: TextStyle(
+                                color: Constants.kGreyText,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const CustomDialog(
+                                  title: 'Migrar Lote',
+                                );
+                              });
+                        },
                       ),
                       const SizedBox(
                         width: 20,
@@ -598,6 +611,253 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
               ],
             );
           }),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomDialog extends StatelessWidget {
+  const CustomDialog({Key? key, this.title}) : super(key: key);
+  final title;
+
+  @override
+  Widget build(BuildContext context) {
+    LoteStore store = GetIt.I<LoteStore>();
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: IconButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                alignment: Alignment.topLeft,
+                icon: const Icon(
+                  Icons.close,
+                  size: 24,
+                ),
+                color: Constants.kPrimaryColor,
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                'Migrar Lote',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                store.loteSelecionado.nome ?? '---',
+                style: const TextStyle(
+                  color: Constants.kText2,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                'Localização Atual:',
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    ' - ${store.loteSelecionado.setor?.area?.nome ?? '-'}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(width: 80),
+                  const Text(
+                    'Estufa',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                  Image.asset(
+                    "assets/icons/greenhouse1_icon.png",
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    ' - ${store.loteSelecionado.setor?.nome ?? '-'}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 30),
+                  const Text(
+                    'Setor',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                  Image.asset(
+                    "assets/icons/hydroponic1_icon.png",
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                'Selecione o novo local',
+                style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14),
+              ),
+            ),
+            SizedBox(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20, bottom: 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color(0xffF5F5F5),
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Área de\n Cultivo:',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: SizedBox(
+                                width: 150,
+                                child: DropdownButton<String>(
+                                  hint: const Text(
+                                    'Selecionar',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                  isExpanded: true,
+                                  iconEnabledColor: Constants.kPrimaryColor,
+                                  items: ['bau', 'bau', 'bau']
+                                      .map((String dropDownStringItem) {
+                                    return DropdownMenuItem<String>(
+                                      value: dropDownStringItem,
+                                      child: Text(dropDownStringItem),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {},
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Setor:',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: SizedBox(
+                                width: 150,
+                                child: DropdownButton<String>(
+                                  hint: const Text(
+                                    'Selecionar',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                  isExpanded: true,
+                                  iconEnabledColor: Constants.kPrimaryColor,
+                                  items: ['bau', 'bau', 'bau']
+                                      .map((String dropDownStringItem) {
+                                    return DropdownMenuItem<String>(
+                                      value: dropDownStringItem,
+                                      child: Text(dropDownStringItem),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {},
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  height: 40,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Constants.kPrimaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: const Text(
+                      "Migrar",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
