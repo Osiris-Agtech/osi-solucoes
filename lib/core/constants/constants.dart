@@ -10,6 +10,7 @@ class Constants {
   static const kSecondaryColor = Color(0xFF82A1B1);
   static const kText2 = Color(0xFF333333);
   static const kGreyText = Color(0xFF4A4A4A);
+  static const kGreyText2 = Color(0xFF9F9F9F);
   static const kContentColorLightTheme = Color(0xFF2A2A2A);
   static const kContentColorDarkTheme = Color(0xFFF5FCF9);
   static const kWarninngColor = Color(0xFFF3BB1C);

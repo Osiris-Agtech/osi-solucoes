@@ -13,6 +13,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.da
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/setor_page.dart';
+import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 import '../../../viewmodels/area_cultivo_store.dart';
 import '../../home/components/top_app_bar.dart';
 
@@ -45,7 +46,9 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
         child: Scaffold(
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           backgroundColor: Constants.kSecondBackgroundColor,
-          floatingActionButton: const NewFloactingButton(),
+          floatingActionButton: const NewFloatingActionButton(
+            nivel: 1,
+          ),
           body: Form(
             key: formKey,
             child: CustomScrollView(
@@ -228,61 +231,6 @@ class _CardAreaState extends State<CardArea> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class NewFloactingButton extends StatelessWidget {
-  const NewFloactingButton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 18.0),
-      child: SpeedDial(
-        elevation: 10,
-        backgroundColor: Constants.kPrimaryColor,
-        icon: Icons.add,
-        activeIcon: Icons.close,
-        spaceBetweenChildren: 0,
-        // childMargin: EdgeInsets.all(10),
-        spacing: 10,
-        iconTheme: const IconThemeData(size: 35),
-        children: [
-          SpeedDialChild(
-            child: Image.asset(
-              "assets/icons/hydroponic2_icon.png",
-              height: 70,
-            ),
-            label: "Novo Lote",
-            labelStyle: const TextStyle(fontSize: 18),
-            onTap: () {},
-          ),
-          SpeedDialChild(
-            child: Image.asset(
-              "assets/icons/hydroponic1_icon.png",
-              height: 70,
-            ),
-            label: "Novo Setor",
-            labelStyle: const TextStyle(fontSize: 18),
-            onTap: () {},
-          ),
-          SpeedDialChild(
-            child: Image.asset(
-              "assets/icons/greenhouse1_icon.png",
-              height: 100,
-            ),
-            label: "Nova Área",
-            labelStyle: const TextStyle(fontSize: 18),
-            onTap: () => Get.to(
-              () => const CadastrarAreaCultivo(),
-              transition: Transition.rightToLeft,
-            ),
-          ),
-        ],
       ),
     );
   }

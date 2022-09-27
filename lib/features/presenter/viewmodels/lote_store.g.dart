@@ -119,6 +119,21 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$novoLoteSetorAtom = Atom(name: '_LoteStoreBase.novoLoteSetor');
+
+  @override
+  Setor get novoLoteSetor {
+    _$novoLoteSetorAtom.reportRead();
+    return super.novoLoteSetor;
+  }
+
+  @override
+  set novoLoteSetor(Setor value) {
+    _$novoLoteSetorAtom.reportWrite(value, super.novoLoteSetor, () {
+      super.novoLoteSetor = value;
+    });
+  }
+
   final _$novoLoteNameAtom = Atom(name: '_LoteStoreBase.novoLoteName');
 
   @override
@@ -131,6 +146,38 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   set novoLoteName(TextEditingController value) {
     _$novoLoteNameAtom.reportWrite(value, super.novoLoteName, () {
       super.novoLoteName = value;
+    });
+  }
+
+  final _$novoLoteCulturaAtom = Atom(name: '_LoteStoreBase.novoLoteCultura');
+
+  @override
+  Cultura get novoLoteCultura {
+    _$novoLoteCulturaAtom.reportRead();
+    return super.novoLoteCultura;
+  }
+
+  @override
+  set novoLoteCultura(Cultura value) {
+    _$novoLoteCulturaAtom.reportWrite(value, super.novoLoteCultura, () {
+      super.novoLoteCultura = value;
+    });
+  }
+
+  final _$novoLoteReservatorioAtom =
+      Atom(name: '_LoteStoreBase.novoLoteReservatorio');
+
+  @override
+  Reservatorio get novoLoteReservatorio {
+    _$novoLoteReservatorioAtom.reportRead();
+    return super.novoLoteReservatorio;
+  }
+
+  @override
+  set novoLoteReservatorio(Reservatorio value) {
+    _$novoLoteReservatorioAtom.reportWrite(value, super.novoLoteReservatorio,
+        () {
+      super.novoLoteReservatorio = value;
     });
   }
 
@@ -201,7 +248,10 @@ isDetalhesLoteLoading: ${isDetalhesLoteLoading},
 loteSelecionado: ${loteSelecionado},
 showTextFormField: ${showTextFormField},
 isNovaAreaLoading: ${isNovaAreaLoading},
+novoLoteSetor: ${novoLoteSetor},
 novoLoteName: ${novoLoteName},
+novoLoteCultura: ${novoLoteCultura},
+novoLoteReservatorio: ${novoLoteReservatorio},
 novoLoteDescricao: ${novoLoteDescricao}
     ''';
   }
