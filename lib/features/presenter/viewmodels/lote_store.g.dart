@@ -55,6 +55,36 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$areaListAtom = Atom(name: '_LoteStoreBase.areaList');
+
+  @override
+  List<Area> get areaList {
+    _$areaListAtom.reportRead();
+    return super.areaList;
+  }
+
+  @override
+  set areaList(List<Area> value) {
+    _$areaListAtom.reportWrite(value, super.areaList, () {
+      super.areaList = value;
+    });
+  }
+
+  final _$isAreaLoadingAtom = Atom(name: '_LoteStoreBase.isAreaLoading');
+
+  @override
+  bool get isAreaLoading {
+    _$isAreaLoadingAtom.reportRead();
+    return super.isAreaLoading;
+  }
+
+  @override
+  set isAreaLoading(bool value) {
+    _$isAreaLoadingAtom.reportWrite(value, super.isAreaLoading, () {
+      super.isAreaLoading = value;
+    });
+  }
+
   final _$isDetalhesLoteLoadingAtom =
       Atom(name: '_LoteStoreBase.isDetalhesLoteLoading');
 
@@ -84,6 +114,38 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   set loteSelecionado(Lote value) {
     _$loteSelecionadoAtom.reportWrite(value, super.loteSelecionado, () {
       super.loteSelecionado = value;
+    });
+  }
+
+  final _$areaSelecionadaAtom = Atom(name: '_LoteStoreBase.areaSelecionada');
+
+  @override
+  Area get areaSelecionada {
+    _$areaSelecionadaAtom.reportRead();
+    return super.areaSelecionada;
+  }
+
+  @override
+  set areaSelecionada(Area value) {
+    _$areaSelecionadaAtom.reportWrite(value, super.areaSelecionada, () {
+      super.areaSelecionada = value;
+    });
+  }
+
+  final _$setorSelecionadoMigrarAtom =
+      Atom(name: '_LoteStoreBase.setorSelecionadoMigrar');
+
+  @override
+  Setor get setorSelecionadoMigrar {
+    _$setorSelecionadoMigrarAtom.reportRead();
+    return super.setorSelecionadoMigrar;
+  }
+
+  @override
+  set setorSelecionadoMigrar(Setor value) {
+    _$setorSelecionadoMigrarAtom
+        .reportWrite(value, super.setorSelecionadoMigrar, () {
+      super.setorSelecionadoMigrar = value;
     });
   }
 
@@ -243,6 +305,14 @@ mixin _$LoteStore on _LoteStoreBase, Store {
         .run(() => super.buscarDetalhesLote());
   }
 
+  final _$buscarAreasListAsyncAction =
+      AsyncAction('_LoteStoreBase.buscarAreasList');
+
+  @override
+  Future buscarAreasList() {
+    return _$buscarAreasListAsyncAction.run(() => super.buscarAreasList());
+  }
+
   final _$buscarCulturasAsyncAction =
       AsyncAction('_LoteStoreBase.buscarCulturas');
 
@@ -266,11 +336,33 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic selecionarSetorMigrar(Setor setor) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.selecionarSetorMigrar');
+    try {
+      return super.selecionarSetorMigrar(setor);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic selecionarLote(Lote lote) {
     final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
         name: '_LoteStoreBase.selecionarLote');
     try {
       return super.selecionarLote(lote);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selecionarArea(Area area) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.selecionarArea');
+    try {
+      return super.selecionarArea(area);
     } finally {
       _$_LoteStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -293,8 +385,12 @@ mixin _$LoteStore on _LoteStoreBase, Store {
 isLoteListLoading: ${isLoteListLoading},
 setorSelecionado: ${setorSelecionado},
 loteList: ${loteList},
+areaList: ${areaList},
+isAreaLoading: ${isAreaLoading},
 isDetalhesLoteLoading: ${isDetalhesLoteLoading},
 loteSelecionado: ${loteSelecionado},
+areaSelecionada: ${areaSelecionada},
+setorSelecionadoMigrar: ${setorSelecionadoMigrar},
 showTextFormField: ${showTextFormField},
 isNovaAreaLoading: ${isNovaAreaLoading},
 dotIndicator: ${dotIndicator},

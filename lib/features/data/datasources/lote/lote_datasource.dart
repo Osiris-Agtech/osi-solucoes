@@ -6,11 +6,13 @@ import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dar
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 
 import '../../../../core/errors/errors.dart';
+import '../../../presenter/models/area/area_model.dart';
 
 abstract class ILoteDatasource {
   Future<Either<Failure, List<Lote>>> buscarLotes({required int setorId});
   Future<Either<Failure, Lote>> buscarDetalhesLote({required int loteId});
   Future<Either<Failure, List<Cultura>>> buscarCulturas({required int contaId});
+  Future<Either<Failure, List<Area>>> buscarAreasList({required int contaId});
 }
 
 class LoteDatasource implements ILoteDatasource {
@@ -126,32 +128,78 @@ class LoteDatasource implements ILoteDatasource {
   }
 
   @override
+  Future<Either<Failure, List<Area>>> buscarAreasList(
+      {required int contaId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      query Areas ($contaId: Int!){
+        areas(where: {
+          conta: {
+            id: {
+              equals: $contaId
+            }
+          }
+        }) {
+          id
+          nome
+          setores {
+            id
+            nome
+          }
+        }
+      }
+    ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'contaId': contaId,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      List areaResult =
+          result.data?['areas']?.map((item) => Area.fromJson(item)).toList();
+
+      List<Area> areaList = areaResult.cast<Area>();
+      return Right(areaList);
+    } else {
+      return Left(ErrorArea(message: FailureMessage.emptyListMessage));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<Cultura>>> buscarCulturas(
       {required int contaId}) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     const String readRepositories = r'''
-        query Culturas($contaId: Int!) {
-          culturas(where: {
-            OR: [
-              {
-                privado: {
-                  equals: false
-                },
+      query Culturas($contaId: Int!) {
+        culturas(where: {
+          OR: [
+            {
+              privado: {
+                equals: false
               },
-              {
-                conta: {
-                  id: {
-                    equals: $contaId
-                  }
+            },
+            {
+              conta: {
+                id: {
+                  equals: $contaId
                 }
               }
-            ]
-          }) {
-            id
-            nome
-          }
+            }
+          ]
+        }) {
+          id
+          nome
         }
+      }
       ''';
 
     final QueryOptions? options;

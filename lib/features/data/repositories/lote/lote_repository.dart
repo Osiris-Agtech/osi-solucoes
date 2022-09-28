@@ -5,6 +5,8 @@ import 'package:osi_solucoes/features/data/repositories/lote/lote_repository_int
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 
+import '../../../presenter/models/area/area_model.dart';
+
 class LoteRepository implements ILoteRepository {
   final ILoteDatasource datasource;
   LoteRepository({
@@ -26,6 +28,12 @@ class LoteRepository implements ILoteRepository {
   @override
   Future<Either<Failure, List<Cultura>>> buscarCulturas(int contaId) async {
     var result = await datasource.buscarCulturas(contaId: contaId);
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, List<Area>>> buscarAreasList(int contaId) async {
+    var result = await datasource.buscarAreasList(contaId: contaId);
     return result;
   }
 }
