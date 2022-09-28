@@ -7,6 +7,9 @@ import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dar
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+
+import '../models/area/area_model.dart';
 
 part 'lote_store.g.dart';
 
@@ -47,14 +50,33 @@ abstract class _LoteStoreBase with Store {
   }
 
   // #################### START DETALHES LOTE #######################
+
+  @observable
+  List<Area> areaList = [];
+
+  @observable
+  bool isAreaLoading = false;
+
   @observable
   bool isDetalhesLoteLoading = false;
 
   @observable
   Lote loteSelecionado = Lote();
 
+  @observable
+  Area areaSelecionada = Area();
+
+  @observable
+  Setor setorSelecionadoMigrar = Setor();
+
+  @action
+  selecionarSetorMigrar(Setor setor) => setorSelecionadoMigrar = setor;
+
   @action
   selecionarLote(Lote lote) => loteSelecionado = lote;
+
+  @action
+  selecionarArea(Area area) => areaSelecionada = area;
 
   @action
   buscarDetalhesLote() async {
@@ -74,6 +96,26 @@ abstract class _LoteStoreBase with Store {
     );
 
     isDetalhesLoteLoading = false;
+  }
+
+  @action
+  buscarAreasList() async {
+    isAreaLoading = true;
+    LoteRepository loteRepository = GetIt.I<LoteRepository>();
+    AuthController authController = GetIt.I<AuthController>();
+
+    var areaListResult = await loteRepository
+        .buscarAreasList(authController.usuario.selected_conta!.conta!.id!);
+
+    areaListResult.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        areaList = List.from(data);
+      },
+    );
+    isAreaLoading = false;
   }
 
   // ##################### END DETALHES LOTE ########################

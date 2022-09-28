@@ -4,6 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
+import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
+import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/detalhes_reservatorio_page.dart';
@@ -23,6 +26,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
   void initState() {
     super.initState();
     store.buscarDetalhesLote();
+    store.buscarAreasList();
   }
 
   @override
@@ -217,9 +221,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return const CustomDialog(
-                                  title: 'Migrar Lote',
-                                );
+                                return const CustomDialog();
                               });
                         },
                       ),
@@ -617,9 +619,15 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
   }
 }
 
-class CustomDialog extends StatelessWidget {
-  const CustomDialog({Key? key, this.title}) : super(key: key);
-  final title;
+class CustomDialog extends StatefulWidget {
+  const CustomDialog({Key? key}) : super(key: key);
+
+  @override
+  State<CustomDialog> createState() => _CustomDialogState();
+}
+
+class _CustomDialogState extends State<CustomDialog> {
+  final GlobalKey<FormFieldState> _key = GlobalKey<FormFieldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -685,14 +693,16 @@ class CustomDialog extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    ' - ${store.loteSelecionado.setor?.area?.nome ?? '-'}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                  Flexible(
+                    child: Text(
+                      ' - ${store.loteSelecionado.setor?.area?.nome ?? '-'}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 80),
+                  const Spacer(),
                   const Text(
                     'Estufa',
                     style: TextStyle(fontStyle: FontStyle.italic),
@@ -708,14 +718,16 @@ class CustomDialog extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    ' - ${store.loteSelecionado.setor?.nome ?? '-'}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Text(
+                      ' - ${store.loteSelecionado.setor?.nome ?? '-'}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 30),
+                  const Spacer(),
                   const Text(
                     'Setor',
                     style: TextStyle(fontStyle: FontStyle.italic),
@@ -766,23 +778,31 @@ class CustomDialog extends StatelessWidget {
                               alignment: Alignment.centerRight,
                               child: SizedBox(
                                 width: 150,
-                                child: DropdownButton<String>(
-                                  hint: const Text(
-                                    'Selecionar',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
-                                  ),
-                                  isExpanded: true,
-                                  iconEnabledColor: Constants.kPrimaryColor,
-                                  items: ['bau', 'bau', 'bau']
-                                      .map((String dropDownStringItem) {
-                                    return DropdownMenuItem<String>(
-                                      value: dropDownStringItem,
-                                      child: Text(dropDownStringItem),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {},
-                                ),
+                                child: Observer(builder: (_) {
+                                  return DropdownButtonFormField<Area>(
+                                    hint: const Text(
+                                      'Selecionar',
+                                      style: TextStyle(
+                                          fontStyle: FontStyle.italic),
+                                    ),
+                                    isExpanded: true,
+                                    iconEnabledColor: Constants.kPrimaryColor,
+                                    items: store.areaList.map((Area item) {
+                                      return DropdownMenuItem<Area>(
+                                        value: item,
+                                        child: Text(
+                                          item.nome ?? '',
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      if (value != null) {
+                                        _key.currentState?.reset();
+                                        store.selecionarArea(value);
+                                      }
+                                    },
+                                  );
+                                }),
                               ),
                             ),
                           ],
@@ -805,23 +825,32 @@ class CustomDialog extends StatelessWidget {
                               alignment: Alignment.centerRight,
                               child: SizedBox(
                                 width: 150,
-                                child: DropdownButton<String>(
-                                  hint: const Text(
-                                    'Selecionar',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
-                                  ),
-                                  isExpanded: true,
-                                  iconEnabledColor: Constants.kPrimaryColor,
-                                  items: ['bau', 'bau', 'bau']
-                                      .map((String dropDownStringItem) {
-                                    return DropdownMenuItem<String>(
-                                      value: dropDownStringItem,
-                                      child: Text(dropDownStringItem),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {},
-                                ),
+                                child: Observer(builder: (_) {
+                                  return DropdownButtonFormField<Setor>(
+                                    key: _key,
+                                    hint: const Text(
+                                      'Selecionar',
+                                      style: TextStyle(
+                                          fontStyle: FontStyle.italic),
+                                    ),
+                                    isExpanded: true,
+                                    iconEnabledColor: Constants.kPrimaryColor,
+                                    items: (store.areaSelecionada.setores ?? [])
+                                        .map((Setor item) {
+                                      return DropdownMenuItem<Setor>(
+                                        value: item,
+                                        child: Text(
+                                          item.nome ?? '',
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      if (value != null) {
+                                        store.selecionarSetorMigrar(value);
+                                      }
+                                    },
+                                  );
+                                }),
                               ),
                             ),
                           ],

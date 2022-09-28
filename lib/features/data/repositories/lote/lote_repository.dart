@@ -4,6 +4,8 @@ import 'package:osi_solucoes/features/data/datasources/lote/lote_datasource.dart
 import 'package:osi_solucoes/features/data/repositories/lote/lote_repository_interface.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 
+import '../../../presenter/models/area/area_model.dart';
+
 class LoteRepository implements ILoteRepository {
   final ILoteDatasource datasource;
   LoteRepository({
@@ -19,6 +21,12 @@ class LoteRepository implements ILoteRepository {
   @override
   Future<Either<Failure, Lote>> buscarDetalhesLote(int loteId) async {
     var result = await datasource.buscarDetalhesLote(loteId: loteId);
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, List<Area>>> buscarAreasList(int contaId) async {
+    var result = await datasource.buscarAreasList(contaId: contaId);
     return result;
   }
 }
