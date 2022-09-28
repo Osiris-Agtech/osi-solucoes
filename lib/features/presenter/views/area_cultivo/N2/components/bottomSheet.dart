@@ -3,13 +3,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/nomePage.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/pagesNovoSetor.dart';
 
 Future<void> bottomSheet(
   BuildContext context,
   CarouselController carouselController,
   CarouselController controlerPages,
+  SetorStore store
 ) {
   return showModalBottomSheet<void>(
     backgroundColor: Constants.kBackgroundColor,
@@ -33,7 +34,7 @@ Future<void> bottomSheet(
           scrollPhysics: const NeverScrollableScrollPhysics(),
         ),
         items: [
-          pagesNovoSetor(context, carouselController, controlerPages)
+          pagesNovoSetor(context, carouselController, controlerPages, store)
         ],
       );
     },

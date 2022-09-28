@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/nomePage.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/reservatorioPage.dart';
 
-SizedBox pagesNovoSetor(BuildContext context, CarouselController carouselController, CarouselController controlerPages) {
+SizedBox pagesNovoSetor(BuildContext context,
+    CarouselController carouselController, CarouselController controlerPages, SetorStore store) {
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
     child: Column(
@@ -32,7 +34,7 @@ SizedBox pagesNovoSetor(BuildContext context, CarouselController carouselControl
               Observer(builder: (_) {
                 return DotsIndicator(
                   dotsCount: 2,
-                  // position: store.dotIndicator * 1.0,
+                  position: store.dotIndicator * 1.0,
                   decorator: DotsDecorator(
                     size: const Size.square(9.0),
                     activeSize: const Size(18.0, 9.0),
@@ -52,7 +54,7 @@ SizedBox pagesNovoSetor(BuildContext context, CarouselController carouselControl
           return CarouselSlider(
             carouselController: carouselController,
             options: CarouselOptions(
-              // initialPage: store.dotIndicator,
+              initialPage: store.dotIndicator,
               enableInfiniteScroll: false,
               height: MediaQuery.of(context).size.height * 0.9 - 140,
               viewportFraction: 1.0,
@@ -60,7 +62,8 @@ SizedBox pagesNovoSetor(BuildContext context, CarouselController carouselControl
               scrollPhysics: const NeverScrollableScrollPhysics(),
             ),
             items: [
-              nomePage(context),
+              nomePage(context, store),
+              reservatorioPage(context, store),
             ],
           );
         }),
@@ -72,7 +75,7 @@ SizedBox pagesNovoSetor(BuildContext context, CarouselController carouselControl
             children: [
               TextButton(
                 onPressed: () {
-                  // store.setDotIndicator(store.dotIndicator - 1);
+                  store.setDotIndicator(store.dotIndicator - 1);
                   carouselController.previousPage(
                     duration: const Duration(milliseconds: 400),
                     curve: Curves.easeIn,
@@ -81,21 +84,19 @@ SizedBox pagesNovoSetor(BuildContext context, CarouselController carouselControl
                 child: Observer(builder: (_) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(
                         Icons.chevron_left,
-                        // color: store.dotIndicator == 0
-                        //     ? Colors.grey
-                        //     : Constants.kPrimaryColor,
+                        color: store.dotIndicator == 0
+                             ? Colors.grey
+                             : Constants.kButtonGrey,
                       ),
-                      Text(
+                      const Text(
                         'Voltar',
                         style: TextStyle(
                           fontSize: 18,
                           fontStyle: FontStyle.italic,
-                        //   color: store.dotIndicator == 0
-                        //       ? Colors.grey
-                        //       : Constants.kPrimaryColor,
+                          color: Constants.kButtonGrey
                         ),
                       ),
                     ],
@@ -128,7 +129,7 @@ class NextStepButton extends StatefulWidget {
 }
 
 class _NextStepButtonState extends State<NextStepButton> {
-  AreaCultivoStore store = GetIt.I<AreaCultivoStore>();
+  SetorStore store = GetIt.I<SetorStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -139,25 +140,24 @@ class _NextStepButtonState extends State<NextStepButton> {
       ),
       child: Center(
         child: Observer(builder: (_) {
-          return Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              store.dotIndicator == 1 ? const Icon(Icons.add) : Container(),
-              Text(
-                store.dotIndicator == 0 ? 'Avançar' : "Novo",
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              store.dotIndicator == 0
-                  ? const Icon(Icons.chevron_right)
-                  : Container(),
-            ],
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text(
+                  'Avançar',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+                Icon(Icons.chevron_right),
+              ],
+            ),
           );
         }),
       ),
       onPressed: () {
         if (store.dotIndicator == 1) {
-          widget.controlerPages.nextPage();
+          Navigator.pop(context);
         } else {
           store.setDotIndicator(store.dotIndicator + 1);
           widget.carouselController.nextPage(

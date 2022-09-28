@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/bottomSheet.dart';
 import '../../../../../core/constants/constants.dart';
 
@@ -16,15 +18,18 @@ class CadastrarSetorPage extends StatefulWidget {
 class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
   CarouselController carouselController = CarouselController();
   CarouselController controlerPages = CarouselController();
+  SetorStore store = GetIt.I<SetorStore>();
 
   @override
   void initState() {
     super.initState();
+    store.buscarReservatorios();
   }
 
   @override
   void dispose() {
     super.dispose();
+    store.limparTudo();
   }
 
   @override
@@ -69,7 +74,21 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
                       child: Observer(
                         builder: (_) {
                           return SizedBox(
-                              width: double.infinity, child: botaoDescricao());
+                            width: double.infinity,
+                            child: store.novoSetorDescription.text.isEmpty &&
+                                    !store.showTextFormField
+                                ? botaoDescricao()
+                                : Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: TextFormField(
+                                      autofocus: true,
+                                      maxLines: 20,
+                                      decoration: const InputDecoration(
+                                          border: InputBorder.none),
+                                      controller: store.novoSetorDescription,
+                                    ),
+                                  ),
+                          );
                         },
                       ),
                     ),
@@ -115,7 +134,7 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
 
   Widget local() {
     return Row(
-      children:  [
+      children: [
         const Padding(
           padding: EdgeInsets.only(top: 10, left: 20),
           child: Text(
@@ -145,10 +164,10 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
           padding: const EdgeInsets.only(right: 20, top: 10),
           child: SizedBox(
             child: Image.asset(
-                "assets/icons/greenhouse1_icon.png",
-                height: 40,
-              ),
-           ),
+              "assets/icons/greenhouse1_icon.png",
+              height: 40,
+            ),
+          ),
         ),
       ],
     );
@@ -213,22 +232,22 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
     return InkWell(
       child: Observer(builder: (_) {
         return ListTile(
-          leading: const Icon(Icons.label),
-          title: const Text(
-            'Nome',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
-          trailing: const Text(
-            "Preencher",
-            style: TextStyle(
-              color: Constants.kPrimaryColor,
-              fontWeight: FontWeight.w600,
+            leading: const Icon(Icons.label),
+            title: const Text(
+              'Nome',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
             ),
-          ),
-          onTap: () {
-            bottomSheet(context, carouselController, controlerPages);
-          }
-        );
+            trailing: const Text(
+              "Preencher",
+              style: TextStyle(
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            onTap: () {
+              store.setDotIndicator(0);
+              bottomSheet(context, carouselController, controlerPages, store);
+            });
       }),
     );
   }
@@ -251,7 +270,8 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
             color: Constants.kPrimaryColor,
           ),
           onTap: () {
-            // store.setDotIndicator(0);
+            store.setDotIndicator(1);
+            bottomSheet(context, controlerPages, carouselController, store);
           },
         );
       }),
@@ -282,7 +302,7 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
         children: [
           IconButton(
             onPressed: () {
-              // store.setShowTextFormField(true);
+              store.setShowTextFormField(true);
             },
             icon: const Icon(
               Icons.add,

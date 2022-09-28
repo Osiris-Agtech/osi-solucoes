@@ -55,12 +55,157 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
+  final _$reservatorioListAtom = Atom(name: '_SetorStoreBase.reservatorioList');
+
+  @override
+  List<Reservatorio> get reservatorioList {
+    _$reservatorioListAtom.reportRead();
+    return super.reservatorioList;
+  }
+
+  @override
+  set reservatorioList(List<Reservatorio> value) {
+    _$reservatorioListAtom.reportWrite(value, super.reservatorioList, () {
+      super.reservatorioList = value;
+    });
+  }
+
+  final _$selectedReservatorioAtom =
+      Atom(name: '_SetorStoreBase.selectedReservatorio');
+
+  @override
+  Reservatorio? get selectedReservatorio {
+    _$selectedReservatorioAtom.reportRead();
+    return super.selectedReservatorio;
+  }
+
+  @override
+  set selectedReservatorio(Reservatorio? value) {
+    _$selectedReservatorioAtom.reportWrite(value, super.selectedReservatorio,
+        () {
+      super.selectedReservatorio = value;
+    });
+  }
+
+  final _$novoSetorNameAtom = Atom(name: '_SetorStoreBase.novoSetorName');
+
+  @override
+  TextEditingController get novoSetorName {
+    _$novoSetorNameAtom.reportRead();
+    return super.novoSetorName;
+  }
+
+  @override
+  set novoSetorName(TextEditingController value) {
+    _$novoSetorNameAtom.reportWrite(value, super.novoSetorName, () {
+      super.novoSetorName = value;
+    });
+  }
+
+  final _$novoSetorDescriptionAtom =
+      Atom(name: '_SetorStoreBase.novoSetorDescription');
+
+  @override
+  TextEditingController get novoSetorDescription {
+    _$novoSetorDescriptionAtom.reportRead();
+    return super.novoSetorDescription;
+  }
+
+  @override
+  set novoSetorDescription(TextEditingController value) {
+    _$novoSetorDescriptionAtom.reportWrite(value, super.novoSetorDescription,
+        () {
+      super.novoSetorDescription = value;
+    });
+  }
+
+  final _$novoSetorReservatorioAtom =
+      Atom(name: '_SetorStoreBase.novoSetorReservatorio');
+
+  @override
+  Reservatorio get novoSetorReservatorio {
+    _$novoSetorReservatorioAtom.reportRead();
+    return super.novoSetorReservatorio;
+  }
+
+  @override
+  set novoSetorReservatorio(Reservatorio value) {
+    _$novoSetorReservatorioAtom.reportWrite(value, super.novoSetorReservatorio,
+        () {
+      super.novoSetorReservatorio = value;
+    });
+  }
+
+  final _$showTextFormFieldAtom =
+      Atom(name: '_SetorStoreBase.showTextFormField');
+
+  @override
+  bool get showTextFormField {
+    _$showTextFormFieldAtom.reportRead();
+    return super.showTextFormField;
+  }
+
+  @override
+  set showTextFormField(bool value) {
+    _$showTextFormFieldAtom.reportWrite(value, super.showTextFormField, () {
+      super.showTextFormField = value;
+    });
+  }
+
+  final _$isNovoSetorLoadingAtom =
+      Atom(name: '_SetorStoreBase.isNovoSetorLoading');
+
+  @override
+  bool get isNovoSetorLoading {
+    _$isNovoSetorLoadingAtom.reportRead();
+    return super.isNovoSetorLoading;
+  }
+
+  @override
+  set isNovoSetorLoading(bool value) {
+    _$isNovoSetorLoadingAtom.reportWrite(value, super.isNovoSetorLoading, () {
+      super.isNovoSetorLoading = value;
+    });
+  }
+
+  final _$dotIndicatorAtom = Atom(name: '_SetorStoreBase.dotIndicator');
+
+  @override
+  int get dotIndicator {
+    _$dotIndicatorAtom.reportRead();
+    return super.dotIndicator;
+  }
+
+  @override
+  set dotIndicator(int value) {
+    _$dotIndicatorAtom.reportWrite(value, super.dotIndicator, () {
+      super.dotIndicator = value;
+    });
+  }
+
   final _$buscarSetoresAsyncAction =
       AsyncAction('_SetorStoreBase.buscarSetores');
 
   @override
   Future buscarSetores() {
     return _$buscarSetoresAsyncAction.run(() => super.buscarSetores());
+  }
+
+  final _$buscarReservatoriosAsyncAction =
+      AsyncAction('_SetorStoreBase.buscarReservatorios');
+
+  @override
+  Future buscarReservatorios() {
+    return _$buscarReservatoriosAsyncAction
+        .run(() => super.buscarReservatorios());
+  }
+
+  final _$registrarSetorAsyncAction =
+      AsyncAction('_SetorStoreBase.registrarSetor');
+
+  @override
+  Future registrarSetor() {
+    return _$registrarSetorAsyncAction.run(() => super.registrarSetor());
   }
 
   final _$_SetorStoreBaseActionController =
@@ -78,11 +223,63 @@ mixin _$SetorStore on _SetorStoreBase, Store {
   }
 
   @override
+  dynamic setDotIndicator(int value) {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.setDotIndicator');
+    try {
+      return super.setDotIndicator(value);
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setShowTextFormField(bool value) {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.setShowTextFormField');
+    try {
+      return super.setShowTextFormField(value);
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selectReservatorio(Reservatorio reservatorio) {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.selectReservatorio');
+    try {
+      return super.selectReservatorio(reservatorio);
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic limparTudo() {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.limparTudo');
+    try {
+      return super.limparTudo();
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isSetorListLoading: ${isSetorListLoading},
 areaSelecionada: ${areaSelecionada},
-setorList: ${setorList}
+setorList: ${setorList},
+reservatorioList: ${reservatorioList},
+selectedReservatorio: ${selectedReservatorio},
+novoSetorName: ${novoSetorName},
+novoSetorDescription: ${novoSetorDescription},
+novoSetorReservatorio: ${novoSetorReservatorio},
+showTextFormField: ${showTextFormField},
+isNovoSetorLoading: ${isNovoSetorLoading},
+dotIndicator: ${dotIndicator}
     ''';
   }
 }
