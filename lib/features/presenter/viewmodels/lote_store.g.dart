@@ -134,6 +134,21 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$culturaListAtom = Atom(name: '_LoteStoreBase.culturaList');
+
+  @override
+  List<Cultura> get culturaList {
+    _$culturaListAtom.reportRead();
+    return super.culturaList;
+  }
+
+  @override
+  set culturaList(List<Cultura> value) {
+    _$culturaListAtom.reportWrite(value, super.culturaList, () {
+      super.culturaList = value;
+    });
+  }
+
   final _$novoLoteSetorAtom = Atom(name: '_LoteStoreBase.novoLoteSetor');
 
   @override
@@ -228,6 +243,14 @@ mixin _$LoteStore on _LoteStoreBase, Store {
         .run(() => super.buscarDetalhesLote());
   }
 
+  final _$buscarCulturasAsyncAction =
+      AsyncAction('_LoteStoreBase.buscarCulturas');
+
+  @override
+  Future buscarCulturas() {
+    return _$buscarCulturasAsyncAction.run(() => super.buscarCulturas());
+  }
+
   final _$_LoteStoreBaseActionController =
       ActionController(name: '_LoteStoreBase');
 
@@ -275,6 +298,7 @@ loteSelecionado: ${loteSelecionado},
 showTextFormField: ${showTextFormField},
 isNovaAreaLoading: ${isNovaAreaLoading},
 dotIndicator: ${dotIndicator},
+culturaList: ${culturaList},
 novoLoteSetor: ${novoLoteSetor},
 novoLoteName: ${novoLoteName},
 novoLoteCultura: ${novoLoteCultura},

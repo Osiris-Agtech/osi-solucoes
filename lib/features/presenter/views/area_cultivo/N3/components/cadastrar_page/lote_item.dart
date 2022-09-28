@@ -78,17 +78,25 @@ lotePage(BuildContext context, LoteStore store) {
           child: RichText(
             textAlign: TextAlign.start,
             text: const TextSpan(
-              text: 'Qual nome deseja para a ',
               style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
               children: <TextSpan>[
                 TextSpan(
-                    text: 'área de cultivo?',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Constants.kPrimaryColor)),
+                  text: 'Qual nome deseja para o ',
+                ),
+                TextSpan(
+                  text: 'lote',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Constants.kPrimaryColor,
+                  ),
+                ),
+                TextSpan(
+                  text: ' ?',
+                ),
               ],
             ),
           ),
@@ -105,7 +113,7 @@ lotePage(BuildContext context, LoteStore store) {
               fontStyle: FontStyle.italic,
             ),
             decoration: const InputDecoration(
-              hintText: 'EX. Estufa UFMT',
+              hintText: 'EX. L01S01-250721',
               hintStyle: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.normal,

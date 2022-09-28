@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:graphql/client.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/api_source.dart';
+import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 
 import '../../../../core/errors/errors.dart';
@@ -9,6 +10,7 @@ import '../../../../core/errors/errors.dart';
 abstract class ILoteDatasource {
   Future<Either<Failure, List<Lote>>> buscarLotes({required int setorId});
   Future<Either<Failure, Lote>> buscarDetalhesLote({required int loteId});
+  Future<Either<Failure, List<Cultura>>> buscarCulturas({required int contaId});
 }
 
 class LoteDatasource implements ILoteDatasource {
@@ -120,6 +122,61 @@ class LoteDatasource implements ILoteDatasource {
       return Right(lote);
     } else {
       return Left(InternalError(message: FailureMessage.internalErrorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Cultura>>> buscarCulturas(
+      {required int contaId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+        query Culturas($contaId: Int!) {
+          culturas(where: {
+            OR: [
+              {
+                privado: {
+                  equals: false
+                },
+              },
+              {
+                conta: {
+                  id: {
+                    equals: $contaId
+                  }
+                }
+              }
+            ]
+          }) {
+            id
+            nome
+          }
+        }
+      ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'contaId': contaId,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      List? culturas = result.data?['culturas']
+          ?.map((item) => Cultura.fromJson(item))
+          .toList();
+      if (culturas == null || culturas.isEmpty) {
+        return Left(InternalError(message: FailureMessage.emptyListMessage));
+      }
+
+      List<Cultura> culturaList = culturas.cast<Cultura>();
+      return Right(culturaList);
+    } else {
+      return Left(InternalError(message: FailureMessage.emptyListMessage));
     }
   }
 }

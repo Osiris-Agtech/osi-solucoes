@@ -27,6 +27,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
   @override
   void initState() {
     super.initState();
+    store.buscarCulturas();
   }
 
   @override
@@ -62,7 +63,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
-                cultura(context, store),
+                cultura(context, carouselController, store),
                 const Divider(
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
@@ -190,7 +191,7 @@ bottomSheetN3(BuildContext context, CarouselController carouselController,
                   ),
                   Observer(builder: (_) {
                     return DotsIndicator(
-                      dotsCount: 2,
+                      dotsCount: 3,
                       position: store.dotIndicator * 1.0,
                       decorator: DotsDecorator(
                         size: const Size.square(9.0),
@@ -211,7 +212,7 @@ bottomSheetN3(BuildContext context, CarouselController carouselController,
               return CarouselSlider(
                 carouselController: carouselController,
                 options: CarouselOptions(
-                  // initialPage: store.dotIndicator,
+                  initialPage: store.dotIndicator,
                   enableInfiniteScroll: false,
                   height: MediaQuery.of(context).size.height * 0.9 - 140,
                   viewportFraction: 1.0,
@@ -221,6 +222,7 @@ bottomSheetN3(BuildContext context, CarouselController carouselController,
                 items: [
                   setorPage(context, store),
                   lotePage(context, store),
+                  culturaPage(context, store),
                 ],
               );
             }),
@@ -232,7 +234,7 @@ bottomSheetN3(BuildContext context, CarouselController carouselController,
                 children: [
                   TextButton(
                     onPressed: () {
-                      // store.setDotIndicator(store.dotIndicator - 1);
+                      store.setDotIndicator(store.dotIndicator - 1);
                       carouselController.previousPage(
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.easeIn,
@@ -241,23 +243,21 @@ bottomSheetN3(BuildContext context, CarouselController carouselController,
                     child: Observer(builder: (_) {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(
                             Icons.chevron_left,
-                            color: Constants.kPrimaryColor,
-                            // store.dotIndicator == 0
-                            //     ? Colors.grey
-                            //     : Constants.kPrimaryColor,
+                            color: store.dotIndicator == 0
+                                ? Colors.grey
+                                : Constants.kPrimaryColor,
                           ),
                           Text(
                             'Voltar',
                             style: TextStyle(
                               fontSize: 18,
                               fontStyle: FontStyle.italic,
-                              color: Constants.kPrimaryColor,
-                              // store.dotIndicator == 0
-                              //     ? Colors.grey
-                              //     : Constants.kPrimaryColor,
+                              color: store.dotIndicator == 0
+                                  ? Colors.grey
+                                  : Constants.kPrimaryColor,
                             ),
                           ),
                         ],
@@ -314,9 +314,11 @@ class _NextStepButtonState extends State<NextStepButton> {
         }),
       ),
       onPressed: () {
-        // if (store.dotIndicator == 1) {
-        widget.carouselController.nextPage();
-        // } else {
+        if (store.dotIndicator < 2) {
+          store.setDotIndicator(store.dotIndicator + 1);
+          widget.carouselController.nextPage();
+        }
+        //else {
         //   store.setDotIndicator(store.dotIndicator + 1);
         //   widget.carouselController.nextPage(
         //     duration: const Duration(milliseconds: 400),

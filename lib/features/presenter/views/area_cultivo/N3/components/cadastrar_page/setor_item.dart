@@ -58,7 +58,7 @@ setor(
                 ),
               ),
         onTap: () {
-          // store.setDotIndicator(0);
+          store.setDotIndicator(0);
           bottomSheetN3(context, carouselController, store);
         },
       );
@@ -105,7 +105,7 @@ setorPage(BuildContext context, LoteStore store) {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 20),
+          padding: const EdgeInsets.only(top: 40, bottom: 20),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -186,6 +186,18 @@ setorPage(BuildContext context, LoteStore store) {
                   ),
                 )
               ],
+            ),
+          ),
+        ),
+        const Spacer(),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Text(
+            'Caso não seja selecionado nenhuma área de cultivo ou setor, criaremos automaticamente uma genérica para alocar seu lote',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Constants.kGreyText2,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),

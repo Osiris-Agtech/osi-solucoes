@@ -7,6 +7,7 @@ import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dar
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
 part 'lote_store.g.dart';
 
@@ -90,6 +91,9 @@ abstract class _LoteStoreBase with Store {
   int dotIndicator = 1;
 
   @observable
+  List<Cultura> culturaList = [];
+
+  @observable
   Setor novoLoteSetor = Setor();
 
   @observable
@@ -112,6 +116,25 @@ abstract class _LoteStoreBase with Store {
     if (value >= 0 && value <= 4) {
       dotIndicator = value;
     }
+  }
+
+  @action
+  buscarCulturas() async {
+    AuthController authController = GetIt.I<AuthController>();
+    LoteRepository loteRepository = GetIt.I<LoteRepository>();
+
+    var culturas = await loteRepository
+        .buscarCulturas(authController.usuario.selected_conta!.conta!.id!);
+
+    culturas.fold(
+      (err) {
+        toastError(message: err.message);
+        culturaList = [];
+      },
+      (data) async {
+        culturaList = List.from(data);
+      },
+    );
   }
 
   // ##################### END CADASTRAR LOTE ######################
