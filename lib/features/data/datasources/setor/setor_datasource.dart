@@ -64,9 +64,60 @@ class SetorDatasource implements ISetorDatasource {
   }
 
   @override
-  Future<Either<Failure, Setor>> cadastrarSetor({required Setor setor}) {
-    // TODO: implement cadastrarSetor
-    throw UnimplementedError();
+  Future<Either<Failure, Setor>> cadastrarSetor({required Setor setor}) async{
+     GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    try {
+      const String readRepositories = r'''
+      mutation CreateOneSetor ($nome: String!, $descricao: String!, $reservatorioId: Int!, $areaId: Int!) {
+        createOneSetor(data: {
+          area: {
+            connect: {
+              id: $areaId
+            }
+          },
+          nome: $nome,
+          descricao: $descricao,
+          reservatorio: {
+            connect: {
+              id: $reservatorioId
+            }
+          }
+        }) {
+          nome
+          descricao
+          area {
+            id
+            nome
+          }
+        }
+      }
+      ''';
+
+      final MutationOptions? options;
+
+      options = MutationOptions(
+        document: gql(readRepositories),
+        variables: <String, dynamic>{
+          'nome': setor.nome,
+          'descricao': setor.descricao,
+          'reservatorioId': setor.reservatorio!.id,
+          'areaId': setor.area!.id,
+        },
+      );
+
+      final QueryResult result = await client.mutate(options);
+
+      if (!result.hasException) {
+        Setor? setor = Setor.fromJson(result.data?['createOneSetor']);
+
+        return Right(setor);
+      } else {
+        return Left(ErrorSetor(message: FailureMessage.errorNovoSetorMessage));
+      }
+    } catch (e) {
+      return Left(ErrorSetor(message: FailureMessage.errorNovoSetorMessage));
+    }
   }
 
   @override

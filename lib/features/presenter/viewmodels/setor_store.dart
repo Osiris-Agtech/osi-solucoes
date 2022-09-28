@@ -112,9 +112,27 @@ abstract class _SetorStoreBase with Store {
     );
   }
 
-    @action
+  @action
+  limparTudo() {
+    reservatorioList.clear();
+    novoSetorName.clear();
+    novoSetorDescription.clear();
+    novoSetorReservatorio = Reservatorio();
+    areaSelecionada = Area();
+  }
+
+
+  @action
+  alterarNome(String name) {
+    novoSetorName = TextEditingController(text: name);
+  }
+
+   @action
+  setLocalizacaoSelecionada(Reservatorio reservatorio) =>
+      novoSetorReservatorio = reservatorio;
+
+  @action
   registrarSetor() async {
-    AuthController authController = GetIt.I<AuthController>();
     SetorRepository setorRepository = GetIt.I<SetorRepository>();
     isNovoSetorLoading = true;
 
@@ -122,7 +140,7 @@ abstract class _SetorStoreBase with Store {
       nome: novoSetorName.text,
       descricao: novoSetorDescription.text,
       reservatorio: selectedReservatorio,
-      area: area,
+      area: areaSelecionada,
     );
 
     var registrarSetor = await setorRepository.cadastrarSetor(novoSetor);
@@ -141,15 +159,6 @@ abstract class _SetorStoreBase with Store {
 
     isNovoSetorLoading = false;
   }
-
-  @action
-  limparTudo() {
-    reservatorioList.clear();
-    novoSetorName.clear();
-    novoSetorDescription.clear();
-    novoSetorReservatorio = Reservatorio();
-  }
-
   // #################### END CADASTRO SETOR #######################
 
 }

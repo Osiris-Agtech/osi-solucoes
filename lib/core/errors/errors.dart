@@ -85,3 +85,9 @@ class ErrorArea implements Failure {
   final String message;
   ErrorArea({required this.message});
 }
+
+class ErrorSetor implements Failure {
+  @override
+  final String message;
+  ErrorSetor({required this.message});
+}

@@ -24,6 +24,7 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
   void initState() {
     super.initState();
     store.buscarReservatorios();
+    store.setShowTextFormField(false);
   }
 
   @override
@@ -147,11 +148,11 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
             ),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(top: 10),
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
           child: Text(
-            'Estufa FAAZ',
-            style: TextStyle(
+            store.areaSelecionada.nome ?? '',
+            style: const TextStyle(
               fontSize: 18,
               color: Constants.kPrimaryColor,
               fontWeight: FontWeight.w600,
@@ -219,7 +220,7 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
                 ),
               ),
               onPressed: () {
-                // store.registrarArea();
+                store.registrarSetor();
               }, //store.registrarReservatorio(),
             );
           }),
@@ -237,13 +238,39 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
               'Nome',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
             ),
-            trailing: const Text(
-              "Preencher",
-              style: TextStyle(
-                color: Constants.kPrimaryColor,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+              trailing: store.novoSetorName.text.isNotEmpty
+              ? SizedBox(
+                  width: 100,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        width: 76,
+                        child: Text(
+                          store.novoSetorName.text,
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(
+                            color: Constants.kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  ),
+                )
+              : const Text(
+                  "Preencher",
+                  style: TextStyle(
+                    color: Constants.kPrimaryColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
             onTap: () {
               store.setDotIndicator(0);
               bottomSheet(context, carouselController, controlerPages, store);
@@ -265,10 +292,37 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
             'Reservatório',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
-          trailing: const Icon(
-            Icons.chevron_right,
-            color: Constants.kPrimaryColor,
-          ),
+           trailing: store.novoSetorReservatorio.nome != null &&
+                  store.novoSetorReservatorio.nome!.isNotEmpty
+              ? SizedBox(
+                  width: 100,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        width: 76,
+                        child: Text(
+                          store.novoSetorReservatorio.nome!,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(
+                            color: Constants.kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  ),
+                )
+              : const Icon(
+                  Icons.chevron_right,
+                  color: Constants.kPrimaryColor,
+                ),
           onTap: () {
             store.setDotIndicator(1);
             bottomSheet(context, controlerPages, carouselController, store);

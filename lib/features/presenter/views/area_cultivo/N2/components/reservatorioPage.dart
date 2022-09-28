@@ -121,6 +121,7 @@ Widget reservatorioPage(BuildContext context, SetorStore store) {
               onChanged: (value) {
                 if (value != null) {
                   store.selectReservatorio(value);
+                  store.setLocalizacaoSelecionada(value);
                 }
               },
             );

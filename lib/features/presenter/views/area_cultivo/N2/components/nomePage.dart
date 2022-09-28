@@ -47,7 +47,7 @@ Container nomePage(BuildContext context, SetorStore store) {
           child: Observer(
             builder: (_) {
               return TextFormField(
-                controller: store.novoSetorName,
+                // controller: store.novoSetorName,
                 textCapitalization: TextCapitalization.words,
                 style: const TextStyle(
                   fontSize: 24,
@@ -62,7 +62,7 @@ Container nomePage(BuildContext context, SetorStore store) {
                     fontStyle: FontStyle.italic,
                   ),
                 ),
-                // onChanged: (String value) => store.alterarNome(value),
+                onChanged: (String value) => store.alterarNome(value),
               );
             }
           ),

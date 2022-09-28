@@ -267,6 +267,28 @@ mixin _$SetorStore on _SetorStoreBase, Store {
   }
 
   @override
+  dynamic alterarNome(String name) {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.alterarNome');
+    try {
+      return super.alterarNome(name);
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setLocalizacaoSelecionada(Reservatorio reservatorio) {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.setLocalizacaoSelecionada');
+    try {
+      return super.setLocalizacaoSelecionada(reservatorio);
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isSetorListLoading: ${isSetorListLoading},
