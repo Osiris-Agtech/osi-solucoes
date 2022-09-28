@@ -87,6 +87,131 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$showTextFormFieldAtom =
+      Atom(name: '_LoteStoreBase.showTextFormField');
+
+  @override
+  bool get showTextFormField {
+    _$showTextFormFieldAtom.reportRead();
+    return super.showTextFormField;
+  }
+
+  @override
+  set showTextFormField(bool value) {
+    _$showTextFormFieldAtom.reportWrite(value, super.showTextFormField, () {
+      super.showTextFormField = value;
+    });
+  }
+
+  final _$isNovaAreaLoadingAtom =
+      Atom(name: '_LoteStoreBase.isNovaAreaLoading');
+
+  @override
+  bool get isNovaAreaLoading {
+    _$isNovaAreaLoadingAtom.reportRead();
+    return super.isNovaAreaLoading;
+  }
+
+  @override
+  set isNovaAreaLoading(bool value) {
+    _$isNovaAreaLoadingAtom.reportWrite(value, super.isNovaAreaLoading, () {
+      super.isNovaAreaLoading = value;
+    });
+  }
+
+  final _$dotIndicatorAtom = Atom(name: '_LoteStoreBase.dotIndicator');
+
+  @override
+  int get dotIndicator {
+    _$dotIndicatorAtom.reportRead();
+    return super.dotIndicator;
+  }
+
+  @override
+  set dotIndicator(int value) {
+    _$dotIndicatorAtom.reportWrite(value, super.dotIndicator, () {
+      super.dotIndicator = value;
+    });
+  }
+
+  final _$novoLoteSetorAtom = Atom(name: '_LoteStoreBase.novoLoteSetor');
+
+  @override
+  Setor get novoLoteSetor {
+    _$novoLoteSetorAtom.reportRead();
+    return super.novoLoteSetor;
+  }
+
+  @override
+  set novoLoteSetor(Setor value) {
+    _$novoLoteSetorAtom.reportWrite(value, super.novoLoteSetor, () {
+      super.novoLoteSetor = value;
+    });
+  }
+
+  final _$novoLoteNameAtom = Atom(name: '_LoteStoreBase.novoLoteName');
+
+  @override
+  TextEditingController get novoLoteName {
+    _$novoLoteNameAtom.reportRead();
+    return super.novoLoteName;
+  }
+
+  @override
+  set novoLoteName(TextEditingController value) {
+    _$novoLoteNameAtom.reportWrite(value, super.novoLoteName, () {
+      super.novoLoteName = value;
+    });
+  }
+
+  final _$novoLoteCulturaAtom = Atom(name: '_LoteStoreBase.novoLoteCultura');
+
+  @override
+  Cultura get novoLoteCultura {
+    _$novoLoteCulturaAtom.reportRead();
+    return super.novoLoteCultura;
+  }
+
+  @override
+  set novoLoteCultura(Cultura value) {
+    _$novoLoteCulturaAtom.reportWrite(value, super.novoLoteCultura, () {
+      super.novoLoteCultura = value;
+    });
+  }
+
+  final _$novoLoteReservatorioAtom =
+      Atom(name: '_LoteStoreBase.novoLoteReservatorio');
+
+  @override
+  Reservatorio get novoLoteReservatorio {
+    _$novoLoteReservatorioAtom.reportRead();
+    return super.novoLoteReservatorio;
+  }
+
+  @override
+  set novoLoteReservatorio(Reservatorio value) {
+    _$novoLoteReservatorioAtom.reportWrite(value, super.novoLoteReservatorio,
+        () {
+      super.novoLoteReservatorio = value;
+    });
+  }
+
+  final _$novoLoteDescricaoAtom =
+      Atom(name: '_LoteStoreBase.novoLoteDescricao');
+
+  @override
+  TextEditingController get novoLoteDescricao {
+    _$novoLoteDescricaoAtom.reportRead();
+    return super.novoLoteDescricao;
+  }
+
+  @override
+  set novoLoteDescricao(TextEditingController value) {
+    _$novoLoteDescricaoAtom.reportWrite(value, super.novoLoteDescricao, () {
+      super.novoLoteDescricao = value;
+    });
+  }
+
   final _$buscarLotesAsyncAction = AsyncAction('_LoteStoreBase.buscarLotes');
 
   @override
@@ -129,13 +254,32 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic setDotIndicator(int value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setDotIndicator');
+    try {
+      return super.setDotIndicator(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isLoteListLoading: ${isLoteListLoading},
 setorSelecionado: ${setorSelecionado},
 loteList: ${loteList},
 isDetalhesLoteLoading: ${isDetalhesLoteLoading},
-loteSelecionado: ${loteSelecionado}
+loteSelecionado: ${loteSelecionado},
+showTextFormField: ${showTextFormField},
+isNovaAreaLoading: ${isNovaAreaLoading},
+dotIndicator: ${dotIndicator},
+novoLoteSetor: ${novoLoteSetor},
+novoLoteName: ${novoLoteName},
+novoLoteCultura: ${novoLoteCultura},
+novoLoteReservatorio: ${novoLoteReservatorio},
+novoLoteDescricao: ${novoLoteDescricao}
     ''';
   }
 }

@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/lote/lote_repository.dart';
+import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
+import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 
 part 'lote_store.g.dart';
@@ -74,4 +77,42 @@ abstract class _LoteStoreBase with Store {
   }
 
   // ##################### END DETALHES LOTE ########################
+
+  // #################### START CADASTRAR LOTE ######################
+
+  @observable
+  bool showTextFormField = false;
+
+  @observable
+  bool isNovaAreaLoading = false;
+
+  @observable
+  int dotIndicator = 1;
+
+  @observable
+  Setor novoLoteSetor = Setor();
+
+  @observable
+  TextEditingController novoLoteName = TextEditingController();
+
+  @observable
+  Cultura novoLoteCultura = Cultura();
+
+  @observable
+  Reservatorio novoLoteReservatorio = Reservatorio();
+
+  // @observable
+  // Fase novoLoteFase = Fase();
+
+  @observable
+  TextEditingController novoLoteDescricao = TextEditingController();
+
+  @action
+  setDotIndicator(int value) {
+    if (value >= 0 && value <= 4) {
+      dotIndicator = value;
+    }
+  }
+
+  // ##################### END CADASTRAR LOTE ######################
 }

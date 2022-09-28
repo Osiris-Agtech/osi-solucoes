@@ -16,7 +16,7 @@ Padding reservatorioItem(int index, ReservatoriosStore store) {
     ),
     child: GestureDetector(
       onTap: () {
-        store.setReservatorioDetalhes(index);
+        store.setReservatorioDetalhes(store.reservatorioList[index]);
         Get.to(
           () => const DetalhesReservatorio(),
           transition: Transition.rightToLeft,
@@ -63,8 +63,8 @@ Padding reservatorioItem(int index, ReservatoriosStore store) {
                       padding: const EdgeInsets.only(left: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: const [
-                          Text(
+                        children: [
+                          const Text(
                             "Cultivos:",
                             style: TextStyle(
                               fontSize: 14,
@@ -72,10 +72,10 @@ Padding reservatorioItem(int index, ReservatoriosStore store) {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 5),
+                            padding: const EdgeInsets.only(left: 5),
                             child: Text(
-                              "0 Ativos",
-                              style: TextStyle(
+                              "${store.reservatorioList[index].lotes?.length ?? 0} Ativos",
+                              style: const TextStyle(
                                 color: Constants.kPrimaryColor,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,

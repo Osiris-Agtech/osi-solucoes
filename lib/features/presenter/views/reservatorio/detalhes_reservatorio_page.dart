@@ -411,7 +411,7 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                                 ),
                               ),
                               subtitle: Text(
-                                'Setor #1',
+                                'Setor: ${store.reservatorioDetalhes.lotes![index].setor?.nome ?? '--'}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Constants.kContentColorLightTheme
@@ -420,7 +420,7 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                                 ),
                               ),
                               trailing: Text(
-                                '--\nplantas',
+                                '${store.reservatorioDetalhes.lotes![index].bandeijas_semeadas ?? '--'}\nbandeijas',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Constants.kContentColorLightTheme

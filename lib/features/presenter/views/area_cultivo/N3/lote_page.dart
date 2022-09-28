@@ -10,6 +10,7 @@ import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/detalhes_lote_page.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
 class LotePage extends StatefulWidget {
   const LotePage({Key? key}) : super(key: key);
@@ -41,7 +42,9 @@ class _LotePageState extends State<LotePage> {
         child: Scaffold(
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           backgroundColor: Constants.kSecondBackgroundColor,
-          // floatingActionButton: const NewFloactingButton(),
+          floatingActionButton: const NewFloatingActionButton(
+            nivel: 3,
+          ),
           body: Form(
             key: formKey,
             child: CustomScrollView(

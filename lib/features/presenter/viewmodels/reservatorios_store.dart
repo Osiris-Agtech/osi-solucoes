@@ -38,8 +38,8 @@ abstract class _ReservatoriosStoreBase with Store {
   setIndexDotDetalhe(double value) => indexDotDetalhe = value;
 
   @action
-  setReservatorioDetalhes(int index) {
-    reservatorioDetalhes = reservatorioList[index];
+  setReservatorioDetalhes(Reservatorio reservatorio) {
+    reservatorioDetalhes = reservatorio;
   }
 
   @action
