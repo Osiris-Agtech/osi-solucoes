@@ -5,6 +5,8 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 
+import '../views/area_cultivo/N2/cadastrar_setor_page.dart';
+
 class NewFloatingActionButton extends StatelessWidget {
   final int nivel;
   const NewFloatingActionButton({
@@ -47,7 +49,12 @@ class NewFloatingActionButton extends StatelessWidget {
             ),
             label: "Novo Setor",
             labelStyle: const TextStyle(fontSize: 18),
-            onTap: nivel <= 2 ? () {} : null,
+            onTap: nivel <= 2
+                ? () => Get.to(
+                      () => const CadastrarSetorPage(),
+                      transition: Transition.rightToLeft,
+                    )
+                : null,
           ),
           SpeedDialChild(
             child: Image.asset(

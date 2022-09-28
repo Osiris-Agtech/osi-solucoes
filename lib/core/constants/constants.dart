@@ -8,6 +8,7 @@ class Constants {
   // Colors
   static const kPrimaryColor = Color.fromARGB(255, 38, 193, 100);
   static const kSecondaryColor = Color(0xFF82A1B1);
+  static const kButtonGrey = Color(0xFF767676);
   static const kText2 = Color(0xFF333333);
   static const kGreyText = Color(0xFF4A4A4A);
   static const kGreyText2 = Color(0xFF9F9F9F);

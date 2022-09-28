@@ -10,6 +10,7 @@ import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/lote_page.dart';
+import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 import '../../home/components/top_app_bar.dart';
 
 class SetorPage extends StatefulWidget {
@@ -42,6 +43,9 @@ class SetorPageState extends State<SetorPage> {
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           backgroundColor: Constants.kSecondBackgroundColor,
           // floatingActionButton: const NewFloactingButton(),
+          floatingActionButton: const NewFloatingActionButton(
+            nivel: 2,
+          ),
           body: Form(
             key: formKey,
             child: CustomScrollView(
