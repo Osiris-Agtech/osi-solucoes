@@ -304,6 +304,21 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$reservatorioListAtom = Atom(name: '_LoteStoreBase.reservatorioList');
+
+  @override
+  List<Reservatorio> get reservatorioList {
+    _$reservatorioListAtom.reportRead();
+    return super.reservatorioList;
+  }
+
+  @override
+  set reservatorioList(List<Reservatorio> value) {
+    _$reservatorioListAtom.reportWrite(value, super.reservatorioList, () {
+      super.reservatorioList = value;
+    });
+  }
+
   final _$buscarLotesAsyncAction = AsyncAction('_LoteStoreBase.buscarLotes');
 
   @override
@@ -334,6 +349,15 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   @override
   Future buscarCulturas() {
     return _$buscarCulturasAsyncAction.run(() => super.buscarCulturas());
+  }
+
+  final _$buscarReservatoriosAsyncAction =
+      AsyncAction('_LoteStoreBase.buscarReservatorios');
+
+  @override
+  Future buscarReservatorios() {
+    return _$buscarReservatoriosAsyncAction
+        .run(() => super.buscarReservatorios());
   }
 
   final _$_LoteStoreBaseActionController =
@@ -437,7 +461,8 @@ novoLoteArea: ${novoLoteArea},
 novoLoteName: ${novoLoteName},
 novoLoteCultura: ${novoLoteCultura},
 novoLoteReservatorio: ${novoLoteReservatorio},
-novoLoteDescricao: ${novoLoteDescricao}
+novoLoteDescricao: ${novoLoteDescricao},
+reservatorioList: ${reservatorioList}
     ''';
   }
 }

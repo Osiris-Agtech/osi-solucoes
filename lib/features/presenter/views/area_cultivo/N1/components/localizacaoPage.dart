@@ -39,24 +39,27 @@ Widget localizacaoPage(BuildContext context, AreaCultivoStore store) {
           ),
         ),
         Expanded(
-            child: Padding(
-          padding: const EdgeInsets.only(top: 50, bottom: 50),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: const Color(0xffF5F5F5),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 50, bottom: 50),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: const Color(0xffF5F5F5),
+              ),
+              child: Observer(
+                builder: (_) {
+                  if (store.isNovaAreaLoading) {
+                    return loadingWidget();
+                  }
+                  if (store.localizacaoList.isEmpty) {
+                    return emptyList();
+                  }
+                  return showList(store);
+                },
+              ),
             ),
-            child: Observer(builder: (_) {
-              if (store.isNovaAreaLoading) {
-                return loadingWidget();
-              }
-              if (store.localizacaoList.isEmpty) {
-                return emptyList();
-              }
-              return showList(store);
-            }),
           ),
-        ))
+        )
       ],
     ),
   );

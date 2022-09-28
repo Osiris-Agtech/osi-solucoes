@@ -4,6 +4,7 @@ import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/api_source.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
+import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 
 import '../../../../core/errors/errors.dart';
 import '../../../presenter/models/area/area_model.dart';
@@ -13,6 +14,8 @@ abstract class ILoteDatasource {
   Future<Either<Failure, Lote>> buscarDetalhesLote({required int loteId});
   Future<Either<Failure, List<Cultura>>> buscarCulturas({required int contaId});
   Future<Either<Failure, List<Area>>> buscarAreasList({required int contaId});
+  Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(
+      {required int contaId});
 }
 
 class LoteDatasource implements ILoteDatasource {
@@ -225,6 +228,59 @@ class LoteDatasource implements ILoteDatasource {
       return Right(culturaList);
     } else {
       return Left(InternalError(message: FailureMessage.emptyListMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(
+      {required int contaId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+        query Reservatorios($contaId: Int) {
+          reservatorios(
+            where: {
+              fk_contas_id: {
+                equals: $contaId
+              }
+            },
+            orderBy: [
+              {
+                nome: desc
+              }
+            ],
+          ) {
+            id
+            nome
+            volume
+          }
+        }
+      ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'contaId': contaId,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      List? reservatorios = result.data?['reservatorios']
+          ?.map((item) => Reservatorio.fromJson(item))
+          .toList();
+      if (reservatorios == null || reservatorios.isEmpty) {
+        return Left(
+            ErrorReservatorio(message: FailureMessage.emptyListMessage));
+      }
+
+      List<Reservatorio> reservatoriosList = reservatorios.cast<Reservatorio>();
+      return Right(reservatoriosList);
+    } else {
+      return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
     }
   }
 }

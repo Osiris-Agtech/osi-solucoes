@@ -30,6 +30,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
     super.initState();
     store.buscarAreasList();
     store.buscarCulturas();
+    store.buscarReservatorios();
   }
 
   @override
@@ -76,7 +77,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
-                reservatorio(context, store),
+                reservatorio(context, carouselController, store, key),
                 // fase(context),
                 const Divider(),
                 datas(context),
@@ -203,7 +204,7 @@ bottomSheetN3(
                   ),
                   Observer(builder: (_) {
                     return DotsIndicator(
-                      dotsCount: 3,
+                      dotsCount: 4,
                       position: store.dotIndicator * 1.0,
                       decorator: DotsDecorator(
                         size: const Size.square(9.0),
@@ -235,6 +236,7 @@ bottomSheetN3(
                   setorPage(context, store, key),
                   lotePage(context, store),
                   culturaPage(context, store),
+                  reservatorioPage(context, store),
                 ],
               );
             }),
@@ -326,7 +328,7 @@ class _NextStepButtonState extends State<NextStepButton> {
         }),
       ),
       onPressed: () {
-        if (store.dotIndicator < 2) {
+        if (store.dotIndicator < 3) {
           store.setDotIndicator(store.dotIndicator + 1);
           widget.carouselController.nextPage();
         }

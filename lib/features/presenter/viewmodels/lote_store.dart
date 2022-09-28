@@ -16,6 +16,9 @@ part 'lote_store.g.dart';
 class LoteStore = _LoteStoreBase with _$LoteStore;
 
 abstract class _LoteStoreBase with Store {
+  LoteRepository loteRepository = GetIt.I<LoteRepository>();
+  AuthController authController = GetIt.I<AuthController>();
+
   @observable
   bool isLoteListLoading = false;
 
@@ -101,8 +104,6 @@ abstract class _LoteStoreBase with Store {
   @action
   buscarAreasList() async {
     isAreaLoading = true;
-    LoteRepository loteRepository = GetIt.I<LoteRepository>();
-    AuthController authController = GetIt.I<AuthController>();
 
     var areaListResult = await loteRepository
         .buscarAreasList(authController.usuario.selected_conta!.conta!.id!);
@@ -170,9 +171,6 @@ abstract class _LoteStoreBase with Store {
 
   @action
   buscarCulturas() async {
-    AuthController authController = GetIt.I<AuthController>();
-    LoteRepository loteRepository = GetIt.I<LoteRepository>();
-
     var culturas = await loteRepository
         .buscarCulturas(authController.usuario.selected_conta!.conta!.id!);
 
@@ -188,4 +186,23 @@ abstract class _LoteStoreBase with Store {
   }
 
   // ##################### END CADASTRAR LOTE ######################
+
+  @observable
+  List<Reservatorio> reservatorioList = [];
+
+  @action
+  buscarReservatorios() async {
+    var reservatorios = await loteRepository
+        .buscarReservatorios(authController.usuario.selected_conta!.conta!.id!);
+
+    reservatorios.fold(
+      (err) {
+        reservatorioList = List.from([]);
+        toastError(message: err.message);
+      },
+      (data) async {
+        reservatorioList = List.from(data);
+      },
+    );
+  }
 }
