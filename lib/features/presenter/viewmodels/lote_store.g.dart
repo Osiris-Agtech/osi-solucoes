@@ -226,6 +226,21 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$novoLoteAreaAtom = Atom(name: '_LoteStoreBase.novoLoteArea');
+
+  @override
+  Area get novoLoteArea {
+    _$novoLoteAreaAtom.reportRead();
+    return super.novoLoteArea;
+  }
+
+  @override
+  set novoLoteArea(Area value) {
+    _$novoLoteAreaAtom.reportWrite(value, super.novoLoteArea, () {
+      super.novoLoteArea = value;
+    });
+  }
+
   final _$novoLoteNameAtom = Atom(name: '_LoteStoreBase.novoLoteName');
 
   @override
@@ -369,6 +384,28 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic selecionarNovoLoteArea(Area area) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.selecionarNovoLoteArea');
+    try {
+      return super.selecionarNovoLoteArea(area);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selecionarNovoLoteSetor(Setor setor) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.selecionarNovoLoteSetor');
+    try {
+      return super.selecionarNovoLoteSetor(setor);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setDotIndicator(int value) {
     final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
         name: '_LoteStoreBase.setDotIndicator');
@@ -396,6 +433,7 @@ isNovaAreaLoading: ${isNovaAreaLoading},
 dotIndicator: ${dotIndicator},
 culturaList: ${culturaList},
 novoLoteSetor: ${novoLoteSetor},
+novoLoteArea: ${novoLoteArea},
 novoLoteName: ${novoLoteName},
 novoLoteCultura: ${novoLoteCultura},
 novoLoteReservatorio: ${novoLoteReservatorio},

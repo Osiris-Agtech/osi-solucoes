@@ -9,6 +9,7 @@ cultura(
   BuildContext context,
   CarouselController carouselController,
   LoteStore store,
+  GlobalKey<FormFieldState> key,
 ) {
   return InkWell(
     child: Observer(builder: (_) {
@@ -57,7 +58,7 @@ cultura(
               ),
         onTap: () {
           store.setDotIndicator(2);
-          bottomSheetN3(context, carouselController, store);
+          bottomSheetN3(context, carouselController, store, key);
         },
       );
     }),

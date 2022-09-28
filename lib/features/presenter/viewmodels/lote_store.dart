@@ -138,6 +138,9 @@ abstract class _LoteStoreBase with Store {
   Setor novoLoteSetor = Setor();
 
   @observable
+  Area novoLoteArea = Area();
+
+  @observable
   TextEditingController novoLoteName = TextEditingController();
 
   @observable
@@ -151,6 +154,12 @@ abstract class _LoteStoreBase with Store {
 
   @observable
   TextEditingController novoLoteDescricao = TextEditingController();
+
+  @action
+  selecionarNovoLoteArea(Area area) => novoLoteArea = area;
+
+  @action
+  selecionarNovoLoteSetor(Setor setor) => novoLoteSetor = setor;
 
   @action
   setDotIndicator(int value) {

@@ -4,6 +4,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
+import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 
@@ -11,6 +13,7 @@ setor(
   BuildContext context,
   CarouselController carouselController,
   LoteStore store,
+  GlobalKey<FormFieldState> key,
 ) {
   return InkWell(
     child: Observer(builder: (_) {
@@ -59,14 +62,18 @@ setor(
               ),
         onTap: () {
           store.setDotIndicator(0);
-          bottomSheetN3(context, carouselController, store);
+          bottomSheetN3(context, carouselController, store, key);
         },
       );
     }),
   );
 }
 
-setorPage(BuildContext context, LoteStore store) {
+setorPage(
+  BuildContext context,
+  LoteStore store,
+  GlobalKey<FormFieldState> key,
+) {
   return Container(
     height: MediaQuery.of(context).size.height * 0.9,
     margin: EdgeInsets.only(
@@ -128,22 +135,28 @@ setorPage(BuildContext context, LoteStore store) {
                         alignment: Alignment.centerRight,
                         child: SizedBox(
                           width: 200,
-                          child: DropdownButton<String>(
-                            hint: const Text(
-                              'Selecionar',
-                              style: TextStyle(fontStyle: FontStyle.italic),
-                            ),
-                            isExpanded: true,
-                            iconEnabledColor: Constants.kPrimaryColor,
-                            items: ['bau', 'bau', 'bau']
-                                .map((String dropDownStringItem) {
-                              return DropdownMenuItem<String>(
-                                value: dropDownStringItem,
-                                child: Text(dropDownStringItem),
-                              );
-                            }).toList(),
-                            onChanged: (value) {},
-                          ),
+                          child: Observer(builder: (_) {
+                            return DropdownButtonFormField<Area>(
+                              hint: const Text(
+                                'Selecionar',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                              isExpanded: true,
+                              iconEnabledColor: Constants.kPrimaryColor,
+                              items: store.areaList.map((Area area) {
+                                return DropdownMenuItem<Area>(
+                                  value: area,
+                                  child: Text(area.nome ?? '-'),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                if (value != null) {
+                                  key.currentState?.reset();
+                                  store.selecionarNovoLoteArea(value);
+                                }
+                              },
+                            );
+                          }),
                         ),
                       ),
                     ],
@@ -164,22 +177,29 @@ setorPage(BuildContext context, LoteStore store) {
                         alignment: Alignment.centerRight,
                         child: SizedBox(
                           width: 200,
-                          child: DropdownButton<String>(
-                            hint: const Text(
-                              'Selecionar',
-                              style: TextStyle(fontStyle: FontStyle.italic),
-                            ),
-                            isExpanded: true,
-                            iconEnabledColor: Constants.kPrimaryColor,
-                            items: ['bau', 'bau', 'bau']
-                                .map((String dropDownStringItem) {
-                              return DropdownMenuItem<String>(
-                                value: dropDownStringItem,
-                                child: Text(dropDownStringItem),
-                              );
-                            }).toList(),
-                            onChanged: (value) {},
-                          ),
+                          child: Observer(builder: (_) {
+                            return DropdownButtonFormField<Setor>(
+                              key: key,
+                              hint: const Text(
+                                'Selecionar',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                              isExpanded: true,
+                              iconEnabledColor: Constants.kPrimaryColor,
+                              items: (store.novoLoteArea.setores ?? [])
+                                  .map((Setor setor) {
+                                return DropdownMenuItem<Setor>(
+                                  value: setor,
+                                  child: Text(setor.nome!),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                if (value != null) {
+                                  store.selecionarNovoLoteSetor(value);
+                                }
+                              },
+                            );
+                          }),
                         ),
                       ),
                     ],

@@ -9,6 +9,7 @@ lote(
   BuildContext context,
   CarouselController carouselController,
   LoteStore store,
+  GlobalKey<FormFieldState> key,
 ) {
   return InkWell(
     child: Observer(builder: (_) {
@@ -56,7 +57,7 @@ lote(
               ),
         onTap: () {
           store.setDotIndicator(1);
-          bottomSheetN3(context, carouselController, store);
+          bottomSheetN3(context, carouselController, store, key);
         },
       );
     }),

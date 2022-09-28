@@ -23,11 +23,19 @@ class CadastrarLotePage extends StatefulWidget {
 class _CadastrarLotePageState extends State<CadastrarLotePage> {
   LoteStore store = GetIt.I<LoteStore>();
   CarouselController carouselController = CarouselController();
+  final GlobalKey<FormFieldState> key = GlobalKey<FormFieldState>();
 
   @override
   void initState() {
     super.initState();
+    store.buscarAreasList();
     store.buscarCulturas();
+  }
+
+  @override
+  void dispose() {
+    key.currentState?.reset();
+    super.dispose();
   }
 
   @override
@@ -53,17 +61,17 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                 titulo(),
                 subtitulo(),
                 const SizedBox(height: 20),
-                setor(context, carouselController, store),
+                setor(context, carouselController, store, key),
                 const Divider(
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
-                lote(context, carouselController, store),
+                lote(context, carouselController, store, key),
                 const Divider(
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
-                cultura(context, carouselController, store),
+                cultura(context, carouselController, store, key),
                 const Divider(
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
@@ -157,8 +165,12 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
   }
 }
 
-bottomSheetN3(BuildContext context, CarouselController carouselController,
-    LoteStore store) {
+bottomSheetN3(
+  BuildContext context,
+  CarouselController carouselController,
+  LoteStore store,
+  GlobalKey<FormFieldState> key,
+) {
   return showModalBottomSheet<void>(
     backgroundColor: Constants.kBackgroundColor,
     context: context,
@@ -220,7 +232,7 @@ bottomSheetN3(BuildContext context, CarouselController carouselController,
                   scrollPhysics: const NeverScrollableScrollPhysics(),
                 ),
                 items: [
-                  setorPage(context, store),
+                  setorPage(context, store, key),
                   lotePage(context, store),
                   culturaPage(context, store),
                 ],
