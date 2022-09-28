@@ -87,6 +87,9 @@ abstract class _LoteStoreBase with Store {
   bool isNovaAreaLoading = false;
 
   @observable
+  int dotIndicator = 1;
+
+  @observable
   Setor novoLoteSetor = Setor();
 
   @observable
@@ -103,6 +106,13 @@ abstract class _LoteStoreBase with Store {
 
   @observable
   TextEditingController novoLoteDescricao = TextEditingController();
+
+  @action
+  setDotIndicator(int value) {
+    if (value >= 0 && value <= 4) {
+      dotIndicator = value;
+    }
+  }
 
   // ##################### END CADASTRAR LOTE ######################
 }

@@ -119,6 +119,21 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$dotIndicatorAtom = Atom(name: '_LoteStoreBase.dotIndicator');
+
+  @override
+  int get dotIndicator {
+    _$dotIndicatorAtom.reportRead();
+    return super.dotIndicator;
+  }
+
+  @override
+  set dotIndicator(int value) {
+    _$dotIndicatorAtom.reportWrite(value, super.dotIndicator, () {
+      super.dotIndicator = value;
+    });
+  }
+
   final _$novoLoteSetorAtom = Atom(name: '_LoteStoreBase.novoLoteSetor');
 
   @override
@@ -239,6 +254,17 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic setDotIndicator(int value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setDotIndicator');
+    try {
+      return super.setDotIndicator(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isLoteListLoading: ${isLoteListLoading},
@@ -248,6 +274,7 @@ isDetalhesLoteLoading: ${isDetalhesLoteLoading},
 loteSelecionado: ${loteSelecionado},
 showTextFormField: ${showTextFormField},
 isNovaAreaLoading: ${isNovaAreaLoading},
+dotIndicator: ${dotIndicator},
 novoLoteSetor: ${novoLoteSetor},
 novoLoteName: ${novoLoteName},
 novoLoteCultura: ${novoLoteCultura},

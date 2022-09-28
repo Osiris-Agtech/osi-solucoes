@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -6,7 +7,11 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
-import 'components/cadastrar_page/setorItem.dart';
+import 'components/cadastrar_page/cultura_item.dart';
+import 'components/cadastrar_page/data_item.dart';
+import 'components/cadastrar_page/lote_item.dart';
+import 'components/cadastrar_page/reservatorio_item.dart';
+import 'components/cadastrar_page/setor_item.dart';
 
 class CadastrarLotePage extends StatefulWidget {
   const CadastrarLotePage({Key? key}) : super(key: key);
@@ -18,7 +23,6 @@ class CadastrarLotePage extends StatefulWidget {
 class _CadastrarLotePageState extends State<CadastrarLotePage> {
   LoteStore store = GetIt.I<LoteStore>();
   CarouselController carouselController = CarouselController();
-  CarouselController controlerPages = CarouselController();
 
   @override
   void initState() {
@@ -44,27 +48,26 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              // mainAxisSize: MainAxisSize.min,
               children: [
                 titulo(),
                 subtitulo(),
                 const SizedBox(height: 20),
-                setor(context, store),
+                setor(context, carouselController, store),
                 const Divider(
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
-                lote(context),
+                lote(context, carouselController, store),
                 const Divider(
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
-                cultura(context),
+                cultura(context, store),
                 const Divider(
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
-                reservatorio(context),
+                reservatorio(context, store),
                 // fase(context),
                 const Divider(),
                 datas(context),
@@ -100,7 +103,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
         right: 10,
       ),
       child: Text(
-        'Criando Nova Área de Cultivo',
+        'Criando Novo Lote',
         style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
       ),
     );
@@ -123,376 +126,204 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
         child: SizedBox(
           width: size.width * .8,
           height: 40,
-          child: Observer(builder: (_) {
-            return ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Constants.kPrimaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Constants.kPrimaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
               ),
-              child: store.isNovaAreaLoading
-                  ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                  : const Text(
-                      "Salvar",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
+            ),
+            child: Observer(
+              builder: (_) {
+                return store.isNovaAreaLoading
+                    ? const CircularProgressIndicator(
+                        color: Colors.white,
+                      )
+                    : const Text(
+                        "Salvar",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+              },
+            ),
+            onPressed: () {},
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+bottomSheetN3(BuildContext context, CarouselController carouselController,
+    LoteStore store) {
+  return showModalBottomSheet<void>(
+    backgroundColor: Constants.kBackgroundColor,
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(10),
+      ),
+    ),
+    isScrollControlled: true,
+    builder: (BuildContext context) {
+      return SizedBox(
+        height: MediaQuery.of(context).size.height * 0.9,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 15, left: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(
+                      Icons.close,
+                      size: 32,
                     ),
-              onPressed: () {
-                // store.registrarArea();
-              }, //store.registrarReservatorio(),
-            );
-          }),
+                    color: Constants.kPrimaryColor,
+                  ),
+                  Observer(builder: (_) {
+                    return DotsIndicator(
+                      dotsCount: 2,
+                      position: store.dotIndicator * 1.0,
+                      decorator: DotsDecorator(
+                        size: const Size.square(9.0),
+                        activeSize: const Size(18.0, 9.0),
+                        activeShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      ),
+                    );
+                  }),
+                  const SizedBox(
+                    width: 70,
+                  ),
+                ],
+              ),
+            ),
+            Observer(builder: (_) {
+              return CarouselSlider(
+                carouselController: carouselController,
+                options: CarouselOptions(
+                  // initialPage: store.dotIndicator,
+                  enableInfiniteScroll: false,
+                  height: MediaQuery.of(context).size.height * 0.9 - 140,
+                  viewportFraction: 1.0,
+                  enlargeCenterPage: false,
+                  scrollPhysics: const NeverScrollableScrollPhysics(),
+                ),
+                items: [
+                  setorPage(context, store),
+                  lotePage(context, store),
+                ],
+              );
+            }),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      // store.setDotIndicator(store.dotIndicator - 1);
+                      carouselController.previousPage(
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    child: Observer(builder: (_) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.chevron_left,
+                            color: Constants.kPrimaryColor,
+                            // store.dotIndicator == 0
+                            //     ? Colors.grey
+                            //     : Constants.kPrimaryColor,
+                          ),
+                          Text(
+                            'Voltar',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontStyle: FontStyle.italic,
+                              color: Constants.kPrimaryColor,
+                              // store.dotIndicator == 0
+                              //     ? Colors.grey
+                              //     : Constants.kPrimaryColor,
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
+                  ),
+                  NextStepButton(
+                    carouselController: carouselController,
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
-      ),
-    );
-  }
-
-  lote(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          leading: const Icon(
-            Icons.label,
-            color: Constants.kPrimaryColor,
-          ),
-          title: const Text(
-            'Lote',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
-          trailing: store.novoLoteName.text.isNotEmpty
-              ? SizedBox(
-                  width: 100,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        width: 76,
-                        child: Text(
-                          store.novoLoteName.text,
-                          textAlign: TextAlign.end,
-                          style: const TextStyle(
-                            color: Constants.kPrimaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const Icon(
-                        Icons.chevron_right,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ],
-                  ),
-                )
-              : const Text(
-                  "Preencher",
-                  style: TextStyle(
-                    color: Constants.kPrimaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-          onTap: () {
-            // store.setDotIndicator(0);
-            // bottomSheet(context, controlerPages, carouselController, store);
-          },
-        );
-      }),
-    );
-  }
-
-  cultura(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          leading: const Icon(
-            Icons.park,
-            color: Constants.kPrimaryColor,
-          ),
-          title: const Text(
-            'Cultura',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
-          trailing: store.novoLoteCultura.nome != null &&
-                  store.novoLoteCultura.nome!.isNotEmpty
-              ? SizedBox(
-                  width: 100,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        width: 76,
-                        child: Text(
-                          store.novoLoteCultura.nome ?? '---',
-                          textAlign: TextAlign.end,
-                          style: const TextStyle(
-                            color: Constants.kPrimaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const Icon(
-                        Icons.chevron_right,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ],
-                  ),
-                )
-              : const Text(
-                  "Preencher",
-                  style: TextStyle(
-                    color: Constants.kPrimaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-          onTap: () {
-            // store.setDotIndicator(0);
-            // bottomSheet(context, controlerPages, carouselController, store);
-          },
-        );
-      }),
-    );
-  }
-
-  reservatorio(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          leading: const Icon(
-            Icons.waves,
-            color: Constants.kPrimaryColor,
-          ),
-          title: const Text(
-            'Reservatório',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
-          trailing: store.novoLoteReservatorio.nome != null &&
-                  store.novoLoteReservatorio.nome!.isNotEmpty
-              ? SizedBox(
-                  width: 100,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        width: 76,
-                        child: Text(
-                          store.novoLoteReservatorio.nome ?? '---',
-                          textAlign: TextAlign.end,
-                          style: const TextStyle(
-                            color: Constants.kPrimaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const Icon(
-                        Icons.chevron_right,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ],
-                  ),
-                )
-              : const Text(
-                  "Preencher",
-                  style: TextStyle(
-                    color: Constants.kPrimaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-          onTap: () {
-            // store.setDotIndicator(0);
-            // bottomSheet(context, controlerPages, carouselController, store);
-          },
-        );
-      }),
-    );
-  }
-
-  datas(BuildContext context) {
-    return Observer(builder: (_) {
-      return Column(
-        children: [
-          const ListTile(
-            leading: Icon(
-              Icons.watch_later,
-              color: Constants.kPrimaryColor,
-            ),
-            title: Text(
-              'Datas',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-            ),
-          ),
-          registroItem(),
-          semeaduraItem(),
-          transplantioItem(),
-          colheitaItem(),
-        ],
       );
-    });
-  }
+    },
+  );
+}
 
-  registroItem() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10.0),
-      child: ListTile(
-        dense: true,
-        title: const Text(
-          'Registro',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-        ),
-        trailing: SizedBox(
-          width: 140,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
-              SizedBox(
-                width: 100,
-                child: Text(
-                  '25/07/2021',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    color: Constants.kGreyText2,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Icon(
-                Icons.event,
-                color: Constants.kPrimaryColor,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+class NextStepButton extends StatefulWidget {
+  final CarouselController carouselController;
+  const NextStepButton({
+    Key? key,
+    required this.carouselController,
+  }) : super(key: key);
 
-  semeaduraItem() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10.0),
-      child: ListTile(
-        title: const Text(
-          'Semeadura',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-        ),
-        trailing: SizedBox(
-          width: 140,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
-              SizedBox(
-                width: 100,
-                child: Text(
-                  'Opcional',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    color: Constants.kGreyText2,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Icon(
-                Icons.event,
-                color: Constants.kPrimaryColor,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  @override
+  State<NextStepButton> createState() => _NextStepButtonState();
+}
 
-  transplantioItem() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10.0),
-      child: ListTile(
-        title: const Text(
-          'Transplantio',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-        ),
-        trailing: SizedBox(
-          width: 140,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
-              SizedBox(
-                width: 100,
-                child: Text(
-                  'Opcional',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    color: Constants.kGreyText2,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Icon(
-                Icons.event,
-                color: Constants.kPrimaryColor,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+class _NextStepButtonState extends State<NextStepButton> {
+  LoteStore store = GetIt.I<LoteStore>();
 
-  colheitaItem() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10.0),
-      child: ListTile(
-        title: const Text(
-          'Colheita',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-        ),
-        trailing: SizedBox(
-          width: 140,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
-              SizedBox(
-                width: 100,
-                child: Text(
-                  'Opcional',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    color: Constants.kGreyText2,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Icon(
-                Icons.event,
-                color: Constants.kPrimaryColor,
-              ),
-            ],
-          ),
-        ),
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        primary: Constants.kPrimaryColor,
       ),
+      child: Center(
+        child: Observer(builder: (_) {
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              // store.dotIndicator == 1 ? const Icon(Icons.add) : Container(),
+              Text(
+                'Avançar',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+              Icon(Icons.chevron_right),
+            ],
+          );
+        }),
+      ),
+      onPressed: () {
+        // if (store.dotIndicator == 1) {
+        widget.carouselController.nextPage();
+        // } else {
+        //   store.setDotIndicator(store.dotIndicator + 1);
+        //   widget.carouselController.nextPage(
+        //     duration: const Duration(milliseconds: 400),
+        //     curve: Curves.easeIn,
+        //   );
+        // }
+      },
     );
   }
 }
