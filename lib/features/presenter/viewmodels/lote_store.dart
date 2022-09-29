@@ -7,6 +7,7 @@ import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dar
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
+import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
 import '../models/area/area_model.dart';
@@ -130,6 +131,9 @@ abstract class _LoteStoreBase with Store {
   bool isNovaAreaLoading = false;
 
   @observable
+  bool showReservatorioDetalhes = false;
+
+  @observable
   int dotIndicator = 1;
 
   @observable
@@ -162,6 +166,18 @@ abstract class _LoteStoreBase with Store {
   @action
   selecionarNovoLoteSetor(Setor setor) => novoLoteSetor = setor;
 
+  @observable
+  List<Reservatorio> reservatorioList = [];
+
+  @observable
+  Reservatorio reservatorioDetalhes = Reservatorio();
+
+  @observable
+  List<SolucaoFertilizanteConcentrada> solucaoNutritivaList = [];
+
+  @observable
+  List<SolucaoFertilizanteConcentrada> solucaoConcentradaList = [];
+
   @action
   setDotIndicator(int value) {
     if (value >= 0 && value <= 4) {
@@ -185,11 +201,6 @@ abstract class _LoteStoreBase with Store {
     );
   }
 
-  // ##################### END CADASTRAR LOTE ######################
-
-  @observable
-  List<Reservatorio> reservatorioList = [];
-
   @action
   buscarReservatorios() async {
     var reservatorios = await loteRepository
@@ -205,4 +216,45 @@ abstract class _LoteStoreBase with Store {
       },
     );
   }
+
+  @action
+  setShowReservatorioDetalhes(bool value) => showReservatorioDetalhes = value;
+
+  @action
+  setReservatorioDetalhes(Reservatorio reservatorio) {
+    reservatorioDetalhes = reservatorio;
+    showReservatorioDetalhes = true;
+  }
+
+  @action
+  buscarReservatorioDetalhes() async {
+    var reservatorios = await loteRepository
+        .buscarReservatorioDetalhes(reservatorioDetalhes.id!);
+
+    reservatorios.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        reservatorioDetalhes = data;
+        solucaoNutritivaList = [];
+        solucaoConcentradaList = [];
+        reservatorioDetalhes.solucao?.solucoes_fertilizantes_concentradas
+            ?.forEach(
+          (element) {
+            if (element.concentrada == null) {
+              solucaoNutritivaList.add(element);
+            } else {
+              solucaoConcentradaList.add(element);
+            }
+          },
+        );
+      },
+    );
+
+    solucaoNutritivaList = List.from(solucaoNutritivaList);
+    solucaoConcentradaList = List.from(solucaoConcentradaList);
+  }
+
+  // ##################### END CADASTRAR LOTE ######################
 }

@@ -10,6 +10,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'components/cadastrar_page/cultura_item.dart';
 import 'components/cadastrar_page/data_item.dart';
 import 'components/cadastrar_page/lote_item.dart';
+import 'components/cadastrar_page/reservatorio_detalhes_page.dart';
 import 'components/cadastrar_page/reservatorio_item.dart';
 import 'components/cadastrar_page/setor_item.dart';
 
@@ -194,13 +195,28 @@ bottomSheetN3(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(
-                      Icons.close,
-                      size: 32,
-                    ),
-                    color: Constants.kPrimaryColor,
+                  Observer(
+                    builder: (_) {
+                      return store.dotIndicator == 3 &&
+                              store.showReservatorioDetalhes
+                          ? IconButton(
+                              onPressed: () =>
+                                  store.setShowReservatorioDetalhes(false),
+                              icon: const Icon(
+                                Icons.arrow_back_ios_new_rounded,
+                                size: 32,
+                              ),
+                              color: Constants.kPrimaryColor,
+                            )
+                          : IconButton(
+                              onPressed: () => Navigator.pop(context),
+                              icon: const Icon(
+                                Icons.close,
+                                size: 32,
+                              ),
+                              color: Constants.kPrimaryColor,
+                            );
+                    },
                   ),
                   Observer(builder: (_) {
                     return DotsIndicator(
@@ -236,7 +252,14 @@ bottomSheetN3(
                   setorPage(context, store, key),
                   lotePage(context, store),
                   culturaPage(context, store),
-                  reservatorioPage(context, store),
+                  AnimatedCrossFade(
+                    duration: const Duration(milliseconds: 500),
+                    firstChild: reservatorioPage(context, store),
+                    secondChild: reservatorioDetalhesPage(store),
+                    crossFadeState: !store.showReservatorioDetalhes
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                  ),
                 ],
               );
             }),
@@ -246,37 +269,8 @@ bottomSheetN3(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  TextButton(
-                    onPressed: () {
-                      store.setDotIndicator(store.dotIndicator - 1);
-                      carouselController.previousPage(
-                        duration: const Duration(milliseconds: 400),
-                        curve: Curves.easeIn,
-                      );
-                    },
-                    child: Observer(builder: (_) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.chevron_left,
-                            color: store.dotIndicator == 0
-                                ? Colors.grey
-                                : Constants.kPrimaryColor,
-                          ),
-                          Text(
-                            'Voltar',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontStyle: FontStyle.italic,
-                              color: store.dotIndicator == 0
-                                  ? Colors.grey
-                                  : Constants.kPrimaryColor,
-                            ),
-                          ),
-                        ],
-                      );
-                    }),
+                  BackStepButton(
+                    carouselController: carouselController,
                   ),
                   NextStepButton(
                     carouselController: carouselController,
@@ -289,6 +283,61 @@ bottomSheetN3(
       );
     },
   );
+}
+
+class BackStepButton extends StatefulWidget {
+  final CarouselController carouselController;
+  const BackStepButton({
+    Key? key,
+    required this.carouselController,
+  }) : super(key: key);
+
+  @override
+  State<BackStepButton> createState() => _BackStepButtonState();
+}
+
+class _BackStepButtonState extends State<BackStepButton> {
+  LoteStore store = GetIt.I<LoteStore>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Observer(builder: (_) {
+      return store.dotIndicator == 3 && store.showReservatorioDetalhes
+          ? Container()
+          : TextButton(
+              onPressed: () {
+                store.setDotIndicator(store.dotIndicator - 1);
+                widget.carouselController.previousPage(
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeIn,
+                );
+              },
+              child: Observer(builder: (_) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.chevron_left,
+                      color: store.dotIndicator == 0
+                          ? Colors.grey
+                          : Constants.kPrimaryColor,
+                    ),
+                    Text(
+                      'Voltar',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontStyle: FontStyle.italic,
+                        color: store.dotIndicator == 0
+                            ? Colors.grey
+                            : Constants.kPrimaryColor,
+                      ),
+                    ),
+                  ],
+                );
+              }),
+            );
+    });
+  }
 }
 
 class NextStepButton extends StatefulWidget {
@@ -314,17 +363,22 @@ class _NextStepButtonState extends State<NextStepButton> {
       ),
       child: Center(
         child: Observer(builder: (_) {
-          return Row(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              // store.dotIndicator == 1 ? const Icon(Icons.add) : Container(),
-              Text(
-                'Avançar',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              Icon(Icons.chevron_right),
-            ],
-          );
+          return store.dotIndicator == 3 && store.showReservatorioDetalhes
+              ? const Text(
+                  'Vincular',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                )
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text(
+                      'Avançar',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    ),
+                    Icon(Icons.chevron_right),
+                  ],
+                );
         }),
       ),
       onPressed: () {

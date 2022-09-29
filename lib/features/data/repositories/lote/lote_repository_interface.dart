@@ -12,4 +12,6 @@ abstract class ILoteRepository {
   Future<Either<Failure, List<Cultura>>> buscarCulturas(int contaId);
   Future<Either<Failure, List<Area>>> buscarAreasList(int contaId);
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(int contaId);
+  Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
+      int reservatorioId);
 }

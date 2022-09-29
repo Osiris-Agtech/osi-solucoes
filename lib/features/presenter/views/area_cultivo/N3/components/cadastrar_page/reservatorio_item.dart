@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -103,27 +101,25 @@ reservatorioPage(BuildContext context, LoteStore store) {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
-          child: Expanded(
-            child: TextFormField(
-              controller: store.novoLoteName,
-              // initialValue: store.novoLoteName.text,
-              textCapitalization: TextCapitalization.words,
-              style: const TextStyle(
+          child: TextFormField(
+            controller: store.novoLoteName,
+            // initialValue: store.novoLoteName.text,
+            textCapitalization: TextCapitalization.words,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.normal,
+              fontStyle: FontStyle.italic,
+            ),
+            decoration: const InputDecoration(
+              hintText: 'Pesquisar',
+              prefixIcon: Icon(Icons.search),
+              hintStyle: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.normal,
                 fontStyle: FontStyle.italic,
               ),
-              decoration: const InputDecoration(
-                hintText: 'Pesquisar',
-                prefixIcon: Icon(Icons.search),
-                hintStyle: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.normal,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-              // onChanged: (String value) => store.alterarNome(value),
             ),
+            // onChanged: (String value) => store.alterarNome(value),
           ),
         ),
         const Padding(
@@ -203,8 +199,8 @@ ListView showList(LoteStore store) {
               color: Constants.kPrimaryColor,
             ),
             onTap: () {
-              // store.setLocalizacaoSelecionada(index);
-              // Navigator.pop(context);
+              store.setReservatorioDetalhes(store.reservatorioList[index]);
+              store.buscarReservatorioDetalhes();
             },
           ),
         ),

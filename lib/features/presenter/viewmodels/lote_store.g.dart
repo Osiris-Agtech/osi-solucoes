@@ -181,6 +181,23 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$showReservatorioDetalhesAtom =
+      Atom(name: '_LoteStoreBase.showReservatorioDetalhes');
+
+  @override
+  bool get showReservatorioDetalhes {
+    _$showReservatorioDetalhesAtom.reportRead();
+    return super.showReservatorioDetalhes;
+  }
+
+  @override
+  set showReservatorioDetalhes(bool value) {
+    _$showReservatorioDetalhesAtom
+        .reportWrite(value, super.showReservatorioDetalhes, () {
+      super.showReservatorioDetalhes = value;
+    });
+  }
+
   final _$dotIndicatorAtom = Atom(name: '_LoteStoreBase.dotIndicator');
 
   @override
@@ -319,6 +336,57 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$reservatorioDetalhesAtom =
+      Atom(name: '_LoteStoreBase.reservatorioDetalhes');
+
+  @override
+  Reservatorio get reservatorioDetalhes {
+    _$reservatorioDetalhesAtom.reportRead();
+    return super.reservatorioDetalhes;
+  }
+
+  @override
+  set reservatorioDetalhes(Reservatorio value) {
+    _$reservatorioDetalhesAtom.reportWrite(value, super.reservatorioDetalhes,
+        () {
+      super.reservatorioDetalhes = value;
+    });
+  }
+
+  final _$solucaoNutritivaListAtom =
+      Atom(name: '_LoteStoreBase.solucaoNutritivaList');
+
+  @override
+  List<SolucaoFertilizanteConcentrada> get solucaoNutritivaList {
+    _$solucaoNutritivaListAtom.reportRead();
+    return super.solucaoNutritivaList;
+  }
+
+  @override
+  set solucaoNutritivaList(List<SolucaoFertilizanteConcentrada> value) {
+    _$solucaoNutritivaListAtom.reportWrite(value, super.solucaoNutritivaList,
+        () {
+      super.solucaoNutritivaList = value;
+    });
+  }
+
+  final _$solucaoConcentradaListAtom =
+      Atom(name: '_LoteStoreBase.solucaoConcentradaList');
+
+  @override
+  List<SolucaoFertilizanteConcentrada> get solucaoConcentradaList {
+    _$solucaoConcentradaListAtom.reportRead();
+    return super.solucaoConcentradaList;
+  }
+
+  @override
+  set solucaoConcentradaList(List<SolucaoFertilizanteConcentrada> value) {
+    _$solucaoConcentradaListAtom
+        .reportWrite(value, super.solucaoConcentradaList, () {
+      super.solucaoConcentradaList = value;
+    });
+  }
+
   final _$buscarLotesAsyncAction = AsyncAction('_LoteStoreBase.buscarLotes');
 
   @override
@@ -358,6 +426,15 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   Future buscarReservatorios() {
     return _$buscarReservatoriosAsyncAction
         .run(() => super.buscarReservatorios());
+  }
+
+  final _$buscarReservatorioDetalhesAsyncAction =
+      AsyncAction('_LoteStoreBase.buscarReservatorioDetalhes');
+
+  @override
+  Future buscarReservatorioDetalhes() {
+    return _$buscarReservatorioDetalhesAsyncAction
+        .run(() => super.buscarReservatorioDetalhes());
   }
 
   final _$_LoteStoreBaseActionController =
@@ -441,6 +518,28 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic setShowReservatorioDetalhes(bool value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setShowReservatorioDetalhes');
+    try {
+      return super.setShowReservatorioDetalhes(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setReservatorioDetalhes(Reservatorio reservatorio) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setReservatorioDetalhes');
+    try {
+      return super.setReservatorioDetalhes(reservatorio);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isLoteListLoading: ${isLoteListLoading},
@@ -454,6 +553,7 @@ areaSelecionada: ${areaSelecionada},
 setorSelecionadoMigrar: ${setorSelecionadoMigrar},
 showTextFormField: ${showTextFormField},
 isNovaAreaLoading: ${isNovaAreaLoading},
+showReservatorioDetalhes: ${showReservatorioDetalhes},
 dotIndicator: ${dotIndicator},
 culturaList: ${culturaList},
 novoLoteSetor: ${novoLoteSetor},
@@ -462,7 +562,10 @@ novoLoteName: ${novoLoteName},
 novoLoteCultura: ${novoLoteCultura},
 novoLoteReservatorio: ${novoLoteReservatorio},
 novoLoteDescricao: ${novoLoteDescricao},
-reservatorioList: ${reservatorioList}
+reservatorioList: ${reservatorioList},
+reservatorioDetalhes: ${reservatorioDetalhes},
+solucaoNutritivaList: ${solucaoNutritivaList},
+solucaoConcentradaList: ${solucaoConcentradaList}
     ''';
   }
 }

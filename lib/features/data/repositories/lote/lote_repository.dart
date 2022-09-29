@@ -42,7 +42,14 @@ class LoteRepository implements ILoteRepository {
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(
       int contaId) async {
     var result = await datasource.buscarReservatorios(contaId: contaId);
+    return result;
+  }
 
+  @override
+  Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
+      int reservatorioId) async {
+    var result = await datasource.buscarReservatorioDetalhes(
+        reservatorioId: reservatorioId);
     return result;
   }
 }
