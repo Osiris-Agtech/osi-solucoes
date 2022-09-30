@@ -799,6 +799,7 @@ class _CustomDialogState extends State<CustomDialog> {
                                       if (value != null) {
                                         _key.currentState?.reset();
                                         store.selecionarArea(value);
+                                        store.isVisible = true;
                                       }
                                     },
                                   );
@@ -811,50 +812,54 @@ class _CustomDialogState extends State<CustomDialog> {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'Setor:',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(
-                              width: 30,
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: SizedBox(
-                                width: 150,
-                                child: Observer(builder: (_) {
-                                  return DropdownButtonFormField<Setor>(
-                                    key: _key,
-                                    hint: const Text(
-                                      'Selecionar',
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic),
+                        child: Observer(builder: (_) {
+                          return Visibility(
+                            visible: store.isVisible,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Setor:',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(
+                                  width: 30,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: SizedBox(
+                                    width: 150,
+                                    child: DropdownButtonFormField<Setor>(
+                                      key: _key,
+                                      hint: const Text(
+                                        'Selecionar',
+                                        style: TextStyle(
+                                            fontStyle: FontStyle.italic),
+                                      ),
+                                      isExpanded: true,
+                                      iconEnabledColor: Constants.kPrimaryColor,
+                                      items:
+                                          (store.areaSelecionada.setores ?? [])
+                                              .map((Setor item) {
+                                        return DropdownMenuItem<Setor>(
+                                          value: item,
+                                          child: Text(
+                                            item.nome ?? '',
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (value) {
+                                        if (value != null) {
+                                          store.selecionarSetorMigrar(value);
+                                        }
+                                      },
                                     ),
-                                    isExpanded: true,
-                                    iconEnabledColor: Constants.kPrimaryColor,
-                                    items: (store.areaSelecionada.setores ?? [])
-                                        .map((Setor item) {
-                                      return DropdownMenuItem<Setor>(
-                                        value: item,
-                                        child: Text(
-                                          item.nome ?? '',
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) {
-                                      if (value != null) {
-                                        store.selecionarSetorMigrar(value);
-                                      }
-                                    },
-                                  );
-                                }),
-                              ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          );
+                        }),
                       )
                     ],
                   ),

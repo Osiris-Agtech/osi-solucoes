@@ -128,6 +128,9 @@ abstract class _LoteStoreBase with Store {
   bool showTextFormField = false;
 
   @observable
+  bool isVisible = false;
+
+  @observable
   bool isNovaAreaLoading = false;
 
   @observable

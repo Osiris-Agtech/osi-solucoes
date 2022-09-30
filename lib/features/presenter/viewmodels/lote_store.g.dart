@@ -165,6 +165,21 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$isVisibleAtom = Atom(name: '_LoteStoreBase.isVisible');
+
+  @override
+  bool get isVisible {
+    _$isVisibleAtom.reportRead();
+    return super.isVisible;
+  }
+
+  @override
+  set isVisible(bool value) {
+    _$isVisibleAtom.reportWrite(value, super.isVisible, () {
+      super.isVisible = value;
+    });
+  }
+
   final _$isNovaAreaLoadingAtom =
       Atom(name: '_LoteStoreBase.isNovaAreaLoading');
 
@@ -582,6 +597,7 @@ loteSelecionado: ${loteSelecionado},
 areaSelecionada: ${areaSelecionada},
 setorSelecionadoMigrar: ${setorSelecionadoMigrar},
 showTextFormField: ${showTextFormField},
+isVisible: ${isVisible},
 isNovaAreaLoading: ${isNovaAreaLoading},
 showReservatorioDetalhes: ${showReservatorioDetalhes},
 dotIndicator: ${dotIndicator},
