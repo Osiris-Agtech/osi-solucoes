@@ -81,7 +81,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                 reservatorio(context, carouselController, store, key),
                 // fase(context),
                 const Divider(),
-                datas(context),
+                datas(context, store),
                 const SizedBox(height: 20),
                 saveButton(size),
               ],
