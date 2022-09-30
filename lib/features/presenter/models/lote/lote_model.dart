@@ -2,6 +2,9 @@
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
+import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
+
+import '../cultura/cultura_model.dart';
 
 part 'lote_model.g.dart';
 
@@ -35,14 +38,14 @@ class Lote {
   int? plantas_colhidas;
   @JsonKey(required: false, disallowNullValue: false)
   int? embalagens_produzidas;
-  // @JsonKey(required: false, disallowNullValue: false)
-  // Cultura? cultura;
+  @JsonKey(required: false, disallowNullValue: false)
+  Cultura? cultura;
   // @JsonKey(required: false, disallowNullValue: false)
   // Fase? fase;
   @JsonKey(required: false, disallowNullValue: false)
   Reservatorio? reservatorio;
-  // @JsonKey(required: false, disallowNullValue: false)
-  // Setor? setor;
+  @JsonKey(required: false, disallowNullValue: false)
+  Setor? setor;
   // @JsonKey(required: false, disallowNullValue: false)
   // Lotes_Atividades? lotes_atividades;
 
@@ -62,6 +65,8 @@ class Lote {
     this.plantas_colhidas,
     this.embalagens_produzidas,
     this.reservatorio,
+    this.setor,
+    this.cultura,
   });
 
   factory Lote.fromJson(Map<String, dynamic> json) => _$LoteFromJson(json);

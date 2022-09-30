@@ -21,5 +21,9 @@ class FailureMessage {
   static const emptyListMessage = 'Lista Vazia';
   static const errorInfoMessage = 'Falha ao carregar as informações';
   static const errorNovoReservatorioMessage =
-      'Falha ao cadastrar, verifique se os campos estão preenchidos';
+      'Falha ao cadastrar, verifique se os campos estão preenchidos corretamente';
+  static const errorNovaAreaMessage =
+      'Falha ao cadastrar área, verifique se os campos estão preenchidos corretamente';
+  static const errorNovoSetorMessage =
+      'Falha ao cadastrar setor, verifique se os campos estão preenchidos corretamente';
 }

@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:osi_solucoes/features/presenter/models/estufa/estufa_model.dart';
+import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 
@@ -22,7 +22,7 @@ class Setor {
   DateTime? created_at;
 
   @JsonKey(required: false, disallowNullValue: false)
-  Estufa? area;
+  Area? area;
 
   @JsonKey(required: false, disallowNullValue: false)
   Reservatorio? reservatorio;

@@ -2,11 +2,15 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import '../../../models/estufa/estufa_model.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/lote_page.dart';
+import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 import '../../home/components/top_app_bar.dart';
 
 class SetorPage extends StatefulWidget {
@@ -39,6 +43,9 @@ class SetorPageState extends State<SetorPage> {
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           backgroundColor: Constants.kSecondBackgroundColor,
           // floatingActionButton: const NewFloactingButton(),
+          floatingActionButton: const NewFloatingActionButton(
+            nivel: 2,
+          ),
           body: Form(
             key: formKey,
             child: CustomScrollView(
@@ -46,27 +53,49 @@ class SetorPageState extends State<SetorPage> {
               physics: const BouncingScrollPhysics(),
               slivers: [
                 appBar(areaN1: store.areaSelecionada, store: store),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return Observer(builder: (_) {
-                        return store.setorList.isEmpty
-                            ? const Center(
-                                child: Text(
-                                    "Não há setores cadastrados nesta área de cultivo"),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 16.0, right: 16, top: 10),
-                                child: CardSetor(
-                                  setor: store.setorList[index],
-                                ),
-                              );
-                      });
-                    },
-                    childCount: store.setorList.length,
-                  ),
-                ),
+                Observer(builder: (_) {
+                  if (store.isSetorListLoading) {
+                    return const SliverToBoxAdapter(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    );
+                  }
+                  if (store.setorList.isEmpty) {
+                    return const SliverToBoxAdapter(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
+                        child: Center(
+                          child: Text(
+                            "Não há setores cadastrados nesta área de cultivo",
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return Observer(builder: (_) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                left: 16.0, right: 16, top: 10),
+                            child: CardSetor(
+                              setor: store.setorList[index],
+                            ),
+                          );
+                        });
+                      },
+                      childCount: store.setorList.length,
+                    ),
+                  );
+                }),
               ],
             ),
           ),
@@ -78,7 +107,7 @@ class SetorPageState extends State<SetorPage> {
 
 // ignore: camel_case_types
 class appBar extends StatelessWidget {
-  final Estufa areaN1;
+  final Area areaN1;
   const appBar({
     Key? key,
     required this.areaN1,
@@ -119,7 +148,7 @@ class appBar extends StatelessWidget {
           children: [
             TopAppBar(
               namePage: areaN1.nome ?? '',
-              subtitle: "Lista de áreas cadastrados",
+              subtitle: "Lista de setores cadastrados",
             ),
             const SizedBox(
               height: 30,
@@ -170,14 +199,20 @@ class CardSetor extends StatefulWidget {
 }
 
 class _CardSetorState extends State<CardSetor> {
-  SetorStore store = GetIt.I<SetorStore>();
+  LoteStore loteStore = GetIt.I<LoteStore>();
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: () {},
+      onTap: () {
+        loteStore.setSetorSelecionado(widget.setor);
+        Get.to(
+          () => const LotePage(),
+          transition: Transition.rightToLeft,
+        );
+      },
       child: Card(
         elevation: 2,
         shape: RoundedRectangleBorder(

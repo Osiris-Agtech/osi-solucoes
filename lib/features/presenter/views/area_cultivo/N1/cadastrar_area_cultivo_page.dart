@@ -1,9 +1,11 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components/bottomSheet.dart';
 
 class CadastrarAreaCultivo extends StatefulWidget {
   const CadastrarAreaCultivo({Key? key}) : super(key: key);
@@ -14,6 +16,21 @@ class CadastrarAreaCultivo extends StatefulWidget {
 
 class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
   AreaCultivoStore store = GetIt.I<AreaCultivoStore>();
+  CarouselController carouselController = CarouselController();
+  CarouselController controlerPages = CarouselController();
+
+  @override
+  void initState() {
+    super.initState();
+    store.buscarLocalizacoes();
+    store.setShowTextFormField(false);
+  }
+
+  @override
+  void dispose() {
+    store.limparTudo();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +57,42 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
                 const SizedBox(height: 20),
                 nome(context),
                 const Divider(),
-                volume(context),
+                localizacao(context),
                 const Divider(),
+                descricao(context),
                 // solucaoNutritiva(context),
                 // const Divider(),
-                Expanded(child: Container()),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 20),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: const Color(0xffF5F5F5),
+                      ),
+                      child: Observer(
+                        builder: (_) {
+                          return SizedBox(
+                            width: double.infinity,
+                            child: store.novaAreaDescricao.text.isEmpty &&
+                                    !store.showTextFormField
+                                ? botaoDescricao()
+                                : Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: TextFormField(
+                                      autofocus: true,
+                                      maxLines: 20,
+                                      decoration: const InputDecoration(
+                                          border: InputBorder.none),
+                                      controller: store.novaAreaDescricao,
+                                    ),
+                                  ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
                 saveButton(size),
               ],
             ),
@@ -54,7 +102,7 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
     );
   }
 
-  Padding subtitulo() {
+  Widget subtitulo() {
     return const Padding(
       padding: EdgeInsets.only(top: 10, left: 20),
       child: Text(
@@ -69,14 +117,14 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
     );
   }
 
-  Padding titulo() {
+  Widget titulo() {
     return const Padding(
       padding: EdgeInsets.only(
         left: 20,
         right: 10,
       ),
       child: Text(
-        'Criar Nova Área de Cultivo',
+        'Criando Nova Área de Cultivo',
         style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
       ),
     );
@@ -118,7 +166,9 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-              onPressed: null, //store.registrarReservatorio(),
+              onPressed: () {
+                store.registrarArea();
+              }, //store.registrarReservatorio(),
             );
           }),
         ),
@@ -136,21 +186,30 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
           trailing: store.novaAreaName.text.isNotEmpty
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      store.novaAreaName.text,
-                      style: const TextStyle(
-                        color: Constants.kPrimaryColor,
-                        fontWeight: FontWeight.w600,
+              ? SizedBox(
+                  width: 100,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        width: 76,
+                        child: Text(
+                          store.novaAreaName.text,
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(
+                            color: Constants.kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
-                    const Icon(
-                      Icons.chevron_right,
-                      color: Constants.kPrimaryColor,
-                    ),
-                  ],
+                      const Icon(
+                        Icons.chevron_right,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  ),
                 )
               : const Text(
                   "Preencher",
@@ -160,54 +219,98 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
                   ),
                 ),
           onTap: () {
-            // store.setDotIndicator(0);
-            // bottomSheet(context, controlerPages, carouselController, store);
-            // showConfirmDialog(context);
+            store.setDotIndicator(0);
+            bottomSheet(context, controlerPages, carouselController, store);
           },
         );
       }),
     );
   }
 
-  InkWell volume(BuildContext context) {
+  InkWell localizacao(BuildContext context) {
     return InkWell(
       child: Observer(builder: (_) {
         return ListTile(
-          leading: const Icon(Icons.waves),
+          leading: const Icon(Icons.location_on),
+          trailing: store.localizacaoSelecionada.endereco != null &&
+                  store.localizacaoSelecionada.endereco!.isNotEmpty
+              ? SizedBox(
+                  width: 100,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        width: 76,
+                        child: Text(
+                          store.localizacaoSelecionada.endereco!,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(
+                            color: Constants.kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  ),
+                )
+              : const Icon(
+                  Icons.chevron_right,
+                  color: Constants.kPrimaryColor,
+                ),
           title: const Text(
-            'Volume',
+            'Localização',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
-          trailing: store.novaAreaDescricao.text.isNotEmpty
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      store.novaAreaDescricao.text,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          color: Constants.kPrimaryColor,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    const Icon(
-                      Icons.chevron_right,
-                      color: Constants.kPrimaryColor,
-                    )
-                  ],
-                )
-              : const Text(
-                  "Preencher",
-                  style: TextStyle(
-                    color: Constants.kPrimaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
           onTap: () {
-            // store.setDotIndicator(1);
-            // bottomSheet(context, controlerPages, carouselController, store);
+            store.setDotIndicator(1);
+            bottomSheet(context, controlerPages, carouselController, store);
           },
         );
       }),
+    );
+  }
+
+  InkWell descricao(BuildContext context) {
+    return InkWell(
+      child: ListTile(
+        leading: const Icon(Icons.description),
+        title: const Text(
+          'Descrição',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+        ),
+        onTap: () {
+          // bottomSheet(context, controlerPages, carouselController, store);
+        },
+      ),
+    );
+  }
+
+  Padding botaoDescricao() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconButton(
+            onPressed: () {
+              store.setShowTextFormField(true);
+            },
+            icon: const Icon(
+              Icons.add,
+              color: Colors.green,
+            ),
+          ),
+          const Text('Adicionar descrição'),
+          const Text('(opcional)')
+        ],
+      ),
     );
   }
 }
