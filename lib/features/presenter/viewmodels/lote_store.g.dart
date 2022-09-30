@@ -437,6 +437,14 @@ mixin _$LoteStore on _LoteStoreBase, Store {
         .run(() => super.buscarReservatorioDetalhes());
   }
 
+  final _$registrarLoteAsyncAction =
+      AsyncAction('_LoteStoreBase.registrarLote');
+
+  @override
+  Future registrarLote() {
+    return _$registrarLoteAsyncAction.run(() => super.registrarLote());
+  }
+
   final _$_LoteStoreBaseActionController =
       ActionController(name: '_LoteStoreBase');
 
@@ -501,6 +509,28 @@ mixin _$LoteStore on _LoteStoreBase, Store {
         name: '_LoteStoreBase.selecionarNovoLoteSetor');
     try {
       return super.selecionarNovoLoteSetor(setor);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setNovoLoteCultura(int index) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setNovoLoteCultura');
+    try {
+      return super.setNovoLoteCultura(index);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selecionarNovoLoteReservatorio() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.selecionarNovoLoteReservatorio');
+    try {
+      return super.selecionarNovoLoteReservatorio();
     } finally {
       _$_LoteStoreBaseActionController.endAction(_$actionInfo);
     }

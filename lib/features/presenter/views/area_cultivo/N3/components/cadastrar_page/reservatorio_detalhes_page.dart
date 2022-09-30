@@ -119,7 +119,17 @@ reservatorioDetalhesPage(LoteStore store) {
         );
       }),
       const SizedBox(
-        height: 30,
+        height: 15,
+      ),
+      const Divider(
+        // height: 15,
+        indent: 20,
+        endIndent: 20,
+        thickness: 0.5,
+        color: Color(0xFFC4C4C4),
+      ),
+      const SizedBox(
+        height: 15,
       ),
       const Padding(
         padding: EdgeInsets.only(left: 30.0),

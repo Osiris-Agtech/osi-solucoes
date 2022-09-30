@@ -29,13 +29,13 @@ setor(
         trailing: store.novoLoteSetor.nome != null &&
                 store.novoLoteSetor.nome!.isNotEmpty
             ? SizedBox(
-                width: 100,
+                width: 150,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SizedBox(
-                      width: 76,
+                      width: 126,
                       child: Text(
                         store.novoLoteSetor.nome ?? '---',
                         textAlign: TextAlign.end,
@@ -74,17 +74,16 @@ setorPage(
   LoteStore store,
   GlobalKey<FormFieldState> key,
 ) {
-  return Container(
+  return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
-    margin: EdgeInsets.only(
-      top: 0,
-      left: MediaQuery.of(context).size.width * 0.08,
-      right: MediaQuery.of(context).size.width * 0.08,
-    ),
     child: Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.only(
+            top: 10,
+            left: 30,
+            right: 30,
+          ),
           child: RichText(
             textAlign: TextAlign.start,
             text: const TextSpan(
@@ -119,45 +118,51 @@ setorPage(
               color: const Color(0xffF5F5F5),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        'Área de\n Cultivo:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const Spacer(),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: SizedBox(
-                          width: 200,
-                          child: Observer(builder: (_) {
-                            return DropdownButtonFormField<Area>(
-                              hint: const Text(
-                                'Selecionar',
-                                style: TextStyle(fontStyle: FontStyle.italic),
-                              ),
-                              isExpanded: true,
-                              iconEnabledColor: Constants.kPrimaryColor,
-                              items: store.areaList.map((Area area) {
-                                return DropdownMenuItem<Area>(
-                                  value: area,
-                                  child: Text(area.nome ?? '-'),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                if (value != null) {
-                                  key.currentState?.reset();
-                                  store.selecionarNovoLoteArea(value);
-                                }
-                              },
-                            );
-                          }),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: Text(
+                          'Área de\n Cultivo:',
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
+                      ),
+                      const SizedBox(
+                        width: 40,
+                      ),
+                      SizedBox(
+                        width: 200,
+                        child: Observer(builder: (_) {
+                          return DropdownButtonFormField<Area>(
+                            value: store.novoLoteArea.id != null
+                                ? store.novoLoteArea
+                                : null,
+                            hint: const Text(
+                              'Selecionar',
+                              style: TextStyle(fontStyle: FontStyle.italic),
+                            ),
+                            isExpanded: true,
+                            iconEnabledColor: Constants.kPrimaryColor,
+                            items: store.areaList.map((Area area) {
+                              return DropdownMenuItem<Area>(
+                                value: area,
+                                child: Text(area.nome ?? '-'),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              if (value != null) {
+                                key.currentState?.reset();
+                                store.selecionarNovoLoteArea(value);
+                              }
+                            },
+                          );
+                        }),
                       ),
                     ],
                   ),
@@ -172,14 +177,19 @@ setorPage(
                         'Setor:',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      const Spacer(),
-                      Align(
-                        alignment: Alignment.centerRight,
+                      const SizedBox(
+                        width: 40,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
                         child: SizedBox(
                           width: 200,
                           child: Observer(builder: (_) {
                             return DropdownButtonFormField<Setor>(
                               key: key,
+                              value: store.novoLoteSetor.id != null
+                                  ? store.novoLoteSetor
+                                  : null,
                               hint: const Text(
                                 'Selecionar',
                                 style: TextStyle(fontStyle: FontStyle.italic),
@@ -211,7 +221,7 @@ setorPage(
         ),
         const Spacer(),
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          padding: EdgeInsets.symmetric(horizontal: 50.0),
           child: Text(
             'Caso não seja selecionado nenhuma área de cultivo ou setor, criaremos automaticamente uma genérica para alocar seu lote',
             textAlign: TextAlign.center,

@@ -52,4 +52,10 @@ class LoteRepository implements ILoteRepository {
         reservatorioId: reservatorioId);
     return result;
   }
+
+  @override
+  Future<Either<Failure, Lote>> registrarLote(Lote lote) async {
+    var result = await datasource.registrarLote(lote: lote);
+    return result;
+  }
 }

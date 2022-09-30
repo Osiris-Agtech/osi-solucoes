@@ -166,6 +166,13 @@ abstract class _LoteStoreBase with Store {
   @action
   selecionarNovoLoteSetor(Setor setor) => novoLoteSetor = setor;
 
+  @action
+  setNovoLoteCultura(int index) => novoLoteCultura = culturaList[index];
+
+  @action
+  selecionarNovoLoteReservatorio() =>
+      novoLoteReservatorio = reservatorioDetalhes;
+
   @observable
   List<Reservatorio> reservatorioList = [];
 
@@ -254,6 +261,27 @@ abstract class _LoteStoreBase with Store {
 
     solucaoNutritivaList = List.from(solucaoNutritivaList);
     solucaoConcentradaList = List.from(solucaoConcentradaList);
+  }
+
+  @action
+  registrarLote() async {
+    Lote novoLote = Lote(
+      nome: novoLoteName.text,
+      setor: novoLoteSetor,
+      cultura: novoLoteCultura,
+      reservatorio: novoLoteReservatorio,
+    );
+
+    var lote = await loteRepository.registrarLote(novoLote);
+
+    lote.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        print("Deu bom!");
+      },
+    );
   }
 
   // ##################### END CADASTRAR LOTE ######################

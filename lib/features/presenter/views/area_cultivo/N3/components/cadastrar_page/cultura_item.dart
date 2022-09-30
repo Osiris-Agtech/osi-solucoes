@@ -25,13 +25,13 @@ cultura(
         trailing: store.novoLoteCultura.nome != null &&
                 store.novoLoteCultura.nome!.isNotEmpty
             ? SizedBox(
-                width: 100,
+                width: 150,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SizedBox(
-                      width: 76,
+                      width: 126,
                       child: Text(
                         store.novoLoteCultura.nome ?? '---',
                         textAlign: TextAlign.end,
@@ -105,18 +105,24 @@ culturaPage(BuildContext context, LoteStore store) {
         ),
         const SizedBox(height: 16),
         Expanded(
-          child: ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: store.culturaList.length,
-            itemBuilder: (context, index) {
-              return RadioListTile(
-                title: Text("${store.culturaList[index].nome}"),
-                value: store.culturaList[index].nome!,
-                groupValue: "cultura",
-                onChanged: (value) {},
-              );
-            },
-          ),
+          child: Observer(builder: (_) {
+            return ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: store.culturaList.length,
+              itemBuilder: (context, index) {
+                return Observer(builder: (_) {
+                  return RadioListTile(
+                    title: Text("${store.culturaList[index].nome}"),
+                    value: store.culturaList[index],
+                    groupValue: store.novoLoteCultura,
+                    onChanged: (value) {
+                      if (value != null) store.setNovoLoteCultura(index);
+                    },
+                  );
+                });
+              },
+            );
+          }),
         ),
         const SizedBox(height: 20),
       ],

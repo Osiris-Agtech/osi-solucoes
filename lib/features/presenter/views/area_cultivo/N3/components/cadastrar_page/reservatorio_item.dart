@@ -25,13 +25,13 @@ reservatorio(
         trailing: store.novoLoteReservatorio.nome != null &&
                 store.novoLoteReservatorio.nome!.isNotEmpty
             ? SizedBox(
-                width: 100,
+                width: 150,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SizedBox(
-                      width: 76,
+                      width: 126,
                       child: Text(
                         store.novoLoteReservatorio.nome ?? '---',
                         textAlign: TextAlign.end,

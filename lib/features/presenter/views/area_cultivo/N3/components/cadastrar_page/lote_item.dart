@@ -24,13 +24,13 @@ lote(
         ),
         trailing: store.novoLoteName.text.isNotEmpty
             ? SizedBox(
-                width: 100,
+                width: 150,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SizedBox(
-                      width: 76,
+                      width: 126,
                       child: Text(
                         store.novoLoteName.text,
                         textAlign: TextAlign.end,

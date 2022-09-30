@@ -204,7 +204,7 @@ bottomSheetN3(
                                   store.setShowReservatorioDetalhes(false),
                               icon: const Icon(
                                 Icons.arrow_back_ios_new_rounded,
-                                size: 32,
+                                size: 26,
                               ),
                               color: Constants.kPrimaryColor,
                             )
@@ -301,42 +301,44 @@ class _BackStepButtonState extends State<BackStepButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Observer(builder: (_) {
-      return store.dotIndicator == 3 && store.showReservatorioDetalhes
-          ? Container()
-          : TextButton(
-              onPressed: () {
-                store.setDotIndicator(store.dotIndicator - 1);
-                widget.carouselController.previousPage(
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.easeIn,
-                );
-              },
-              child: Observer(builder: (_) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.chevron_left,
-                      color: store.dotIndicator == 0
-                          ? Colors.grey
-                          : Constants.kPrimaryColor,
-                    ),
-                    Text(
-                      'Voltar',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontStyle: FontStyle.italic,
+    return Observer(
+      builder: (_) {
+        return store.dotIndicator == 3 && store.showReservatorioDetalhes
+            ? Container()
+            : TextButton(
+                onPressed: () {
+                  store.setDotIndicator(store.dotIndicator - 1);
+                  widget.carouselController.previousPage(
+                    duration: const Duration(milliseconds: 400),
+                    curve: Curves.easeIn,
+                  );
+                },
+                child: Observer(builder: (_) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.chevron_left,
                         color: store.dotIndicator == 0
                             ? Colors.grey
                             : Constants.kPrimaryColor,
                       ),
-                    ),
-                  ],
-                );
-              }),
-            );
-    });
+                      Text(
+                        'Voltar',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontStyle: FontStyle.italic,
+                          color: store.dotIndicator == 0
+                              ? Colors.grey
+                              : Constants.kPrimaryColor,
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+              );
+      },
+    );
   }
 }
 
@@ -382,6 +384,10 @@ class _NextStepButtonState extends State<NextStepButton> {
         }),
       ),
       onPressed: () {
+        if (store.dotIndicator == 3 && store.showReservatorioDetalhes) {
+          store.selecionarNovoLoteReservatorio();
+          Navigator.pop(context);
+        }
         if (store.dotIndicator < 3) {
           store.setDotIndicator(store.dotIndicator + 1);
           widget.carouselController.nextPage();

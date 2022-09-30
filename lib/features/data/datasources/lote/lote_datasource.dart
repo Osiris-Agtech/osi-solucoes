@@ -18,6 +18,7 @@ abstract class ILoteDatasource {
       {required int contaId});
   Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
       {required int reservatorioId});
+  Future<Either<Failure, Lote>> registrarLote({required Lote lote});
 }
 
 class LoteDatasource implements ILoteDatasource {
@@ -346,6 +347,90 @@ class LoteDatasource implements ILoteDatasource {
       return Right(reservatorio);
     } else {
       return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Lote>> registrarLote({required Lote lote}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+        mutation CreateOneLote($nome: String!, $setorId: Int!, $culturaId: Int!, $reservatorioId: Int!, $registro: DateTime, $semeadura: DateTime, $transplantio: DateTime, $colheita: DateTime) {
+          createOneLote(data: {
+            nome: $nome,
+            ativo: true,
+            registro_data: $registro,
+            semeadura_data: $semeadura,
+            transplantio_data: $transplantio,
+            colheita_data: $colheita,
+            setor: {
+              connect: {
+                id: $setorId
+              }
+            },
+            cultura: {
+              connect: {
+                id: $culturaId
+              }
+            },
+            reservatorio: {
+              connect: {
+                id: $reservatorioId
+              }
+            }
+          }) {
+            id
+            nome
+            registro_data
+            semeadura_data
+            transplantio_data
+            colheita_data
+            ativo
+            cultura {
+              id
+              nome
+            }
+            reservatorio {
+              id
+              nome
+            }
+            setor {
+              id
+              nome
+              area {
+                id
+                nome
+              }
+            }
+          }
+        }
+      ''';
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "nome": lote.nome,
+        "setorId": lote.setor!.id,
+        "culturaId": lote.cultura!.id,
+        "reservatorioId": lote.reservatorio!.id,
+        "registro": lote.registro_data,
+        "semeadura": lote.semeadura_data,
+        "transplantio": lote.transplantio_data,
+        "colheita": lote.colheita_data,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      Lote? loteResult = Lote.fromJson(result.data?['createOneLote']);
+
+      return Right(loteResult);
+    } else {
+      return Left(
+          ErrorReservatorio(message: FailureMessage.errorNovoLoteMessage));
     }
   }
 }

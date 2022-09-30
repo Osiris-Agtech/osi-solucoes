@@ -26,4 +26,6 @@ class FailureMessage {
       'Falha ao cadastrar área, verifique se os campos estão preenchidos corretamente';
   static const errorNovoSetorMessage =
       'Falha ao cadastrar setor, verifique se os campos estão preenchidos corretamente';
+  static const errorNovoLoteMessage =
+      'Falha ao cadastrar lote, verifique se os campos estão preenchidos corretamente';
 }

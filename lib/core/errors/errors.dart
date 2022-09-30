@@ -91,3 +91,9 @@ class ErrorSetor implements Failure {
   final String message;
   ErrorSetor({required this.message});
 }
+
+class ErrorLote implements Failure {
+  @override
+  final String message;
+  ErrorLote({required this.message});
+}
