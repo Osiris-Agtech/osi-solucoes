@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_null_aware_operators
+
 import 'package:dartz/dartz.dart';
 import 'package:graphql/client.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
@@ -355,30 +357,17 @@ class LoteDatasource implements ILoteDatasource {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     const String readRepositories = r'''
-        mutation CreateOneLote($nome: String!, $setorId: Int!, $culturaId: Int!, $reservatorioId: Int!, $registro: DateTime, $semeadura: DateTime, $transplantio: DateTime, $colheita: DateTime) {
-          createOneLote(data: {
+        mutation CreateOneLote($nome: String!, $setorId: Int!, $culturaId: Int!, $reservatorioId: Int!, $registro: String!, $semeadura: String, $transplantio: String, $colheita: String) {
+          createOneLote(
             nome: $nome,
-            ativo: true,
             registro_data: $registro,
             semeadura_data: $semeadura,
             transplantio_data: $transplantio,
             colheita_data: $colheita,
-            setor: {
-              connect: {
-                id: $setorId
-              }
-            },
-            cultura: {
-              connect: {
-                id: $culturaId
-              }
-            },
-            reservatorio: {
-              connect: {
-                id: $reservatorioId
-              }
-            }
-          }) {
+            setorId: $setorId,
+            culturaId: $culturaId,
+            reservatorioId: $reservatorioId,
+          ) {
             id
             nome
             registro_data
@@ -415,10 +404,15 @@ class LoteDatasource implements ILoteDatasource {
         "setorId": lote.setor!.id,
         "culturaId": lote.cultura!.id,
         "reservatorioId": lote.reservatorio!.id,
-        "registro": lote.registro_data,
-        "semeadura": lote.semeadura_data,
-        "transplantio": lote.transplantio_data,
-        "colheita": lote.colheita_data,
+        "registro":
+            lote.registro_data != null ? lote.registro_data.toString() : null,
+        "semeadura":
+            lote.semeadura_data != null ? lote.semeadura_data.toString() : null,
+        "transplantio": lote.transplantio_data != null
+            ? lote.transplantio_data.toString()
+            : null,
+        "colheita":
+            lote.colheita_data != null ? lote.colheita_data.toString() : null,
       },
     );
 

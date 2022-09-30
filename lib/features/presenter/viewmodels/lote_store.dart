@@ -359,6 +359,10 @@ abstract class _LoteStoreBase with Store {
     reservatorioDetalhes = Reservatorio();
     solucaoNutritivaList = [];
     solucaoConcentradaList = [];
+    registroData = DateTime.now();
+    semeaduraData = null;
+    transplantioData = null;
+    colheitaData = null;
   }
 
   // ##################### END CADASTRAR LOTE ######################

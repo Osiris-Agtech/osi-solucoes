@@ -272,8 +272,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     title: const Text(
                       'Registro',
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -305,8 +305,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     title: const Text(
                       'Semeadura',
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -338,8 +338,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     title: const Text(
                       'Transplantio',
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -371,8 +371,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     title: const Text(
                       'Colheita',
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -441,8 +441,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       'Bandeijas\nSemeadas',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -475,8 +475,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       'Mudas\nTransplantadas',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -509,8 +509,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       'Plantas\nColhidas',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -543,8 +543,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       'Embalagens\nProduzidas',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

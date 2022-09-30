@@ -264,7 +264,7 @@ bottomSheetN3(
                   lotePage(context, store),
                   culturaPage(context, store),
                   AnimatedCrossFade(
-                    duration: const Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 200),
                     firstChild: reservatorioPage(context, store),
                     secondChild: reservatorioDetalhesPage(store),
                     crossFadeState: !store.showReservatorioDetalhes
