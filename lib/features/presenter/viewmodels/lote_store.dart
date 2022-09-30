@@ -205,6 +205,18 @@ abstract class _LoteStoreBase with Store {
       novoLoteReservatorio = reservatorioDetalhes;
 
   @action
+  setRegistroData(DateTime dateTime) => registroData = dateTime;
+
+  @action
+  setSemeaduraData(DateTime dateTime) => semeaduraData = dateTime;
+
+  @action
+  setTransplantioData(DateTime dateTime) => transplantioData = dateTime;
+
+  @action
+  setColheitaData(DateTime dateTime) => colheitaData = dateTime;
+
+  @action
   setDotIndicator(int value) {
     if (value >= 0 && value <= 4) {
       dotIndicator = value;
@@ -292,6 +304,10 @@ abstract class _LoteStoreBase with Store {
         setor: novoLoteSetor,
         cultura: novoLoteCultura,
         reservatorio: novoLoteReservatorio,
+        registro_data: registroData,
+        semeadura_data: semeaduraData,
+        transplantio_data: transplantioData,
+        colheita_data: colheitaData,
       );
 
       var lote = await loteRepository.registrarLote(novoLote);

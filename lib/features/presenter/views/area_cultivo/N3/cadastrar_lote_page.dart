@@ -3,6 +3,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
@@ -124,8 +125,12 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
     return AppBar(
       backgroundColor: Constants.kBackgroundColor,
       elevation: 0,
-      leading: const BackButton(
+      leading: BackButton(
         color: Constants.kPrimaryColor,
+        onPressed: () {
+          Get.close(1);
+          store.limparTudo();
+        },
       ),
     );
   }

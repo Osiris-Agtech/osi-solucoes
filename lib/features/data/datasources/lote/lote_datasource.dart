@@ -429,8 +429,7 @@ class LoteDatasource implements ILoteDatasource {
 
       return Right(loteResult);
     } else {
-      return Left(
-          ErrorReservatorio(message: FailureMessage.errorNovoLoteMessage));
+      return Left(ErrorLote(message: FailureMessage.errorNovoLoteMessage));
     }
   }
 }

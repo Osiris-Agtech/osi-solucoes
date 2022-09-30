@@ -40,12 +40,16 @@ registroItem(LoteStore store, BuildContext context) {
         child: InkWell(
           onTap: () async {
             final data = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2022),
-                lastDate: DateTime(2030));
-            locale:
-            const Locale("pt", "BR");
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2022),
+              lastDate: DateTime(2030),
+              locale: const Locale("pt", "BR"),
+            );
+
+            if (data != null) {
+              store.setRegistroData(data);
+            }
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -53,14 +57,16 @@ registroItem(LoteStore store, BuildContext context) {
             children: [
               SizedBox(
                 width: 100,
-                child: Text(
-                  '${store.registroData.day}/${store.registroData.month}/${store.registroData.year}',
-                  textAlign: TextAlign.end,
-                  style: const TextStyle(
-                    color: Constants.kGreyText2,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                child: Observer(builder: (_) {
+                  return Text(
+                    '${store.registroData.day.toString().padLeft(2, '0')}/${store.registroData.month.toString().padLeft(2, '0')}/${store.registroData.year}',
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(
+                      color: Constants.kGreyText2,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                }),
               ),
               const SizedBox(
                 width: 10,
@@ -90,32 +96,40 @@ semeaduraItem(LoteStore store, BuildContext context) {
         child: InkWell(
           onTap: () async {
             final data = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2022),
-                lastDate: DateTime(2030));
-            locale:
-            const Locale("pt", "BR");
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2022),
+              lastDate: DateTime(2030),
+              locale: const Locale("pt", "BR"),
+            );
+
+            if (data != null) {
+              store.setSemeaduraData(data);
+            }
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
+            children: [
               SizedBox(
                 width: 100,
-                child: Text(
-                  'Opcional',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    color: Constants.kGreyText2,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                child: Observer(builder: (_) {
+                  return Text(
+                    store.semeaduraData != null
+                        ? '${store.semeaduraData!.day.toString().padLeft(2, '0')}/${store.semeaduraData!.month.toString().padLeft(2, '0')}/${store.semeaduraData!.year}'
+                        : 'Opcional',
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(
+                      color: Constants.kGreyText2,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                }),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
-              Icon(Icons.event, color: Constants.kPrimaryColor),
+              const Icon(Icons.event, color: Constants.kPrimaryColor),
             ],
           ),
         ),
@@ -137,32 +151,40 @@ transplantioItem(LoteStore store, BuildContext context) {
         child: InkWell(
           onTap: () async {
             final data = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2022),
-                lastDate: DateTime(2030));
-            locale:
-            const Locale("pt", "BR");
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2022),
+              lastDate: DateTime(2030),
+              locale: const Locale("pt", "BR"),
+            );
+
+            if (data != null) {
+              store.setTransplantioData(data);
+            }
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
+            children: [
               SizedBox(
                 width: 100,
-                child: Text(
-                  'Opcional',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    color: Constants.kGreyText2,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                child: Observer(builder: (_) {
+                  return Text(
+                    store.transplantioData != null
+                        ? '${store.transplantioData!.day.toString().padLeft(2, '0')}/${store.transplantioData!.month.toString().padLeft(2, '0')}/${store.transplantioData!.year}'
+                        : 'Opcional',
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(
+                      color: Constants.kGreyText2,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                }),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
-              Icon(
+              const Icon(
                 Icons.event,
                 color: Constants.kPrimaryColor,
               ),
@@ -187,32 +209,40 @@ colheitaItem(LoteStore store, BuildContext context) {
         child: InkWell(
           onTap: () async {
             final data = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2022),
-                lastDate: DateTime(2030));
-            locale:
-            const Locale("pt", "BR");
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2022),
+              lastDate: DateTime(2030),
+              locale: const Locale("pt", "BR"),
+            );
+
+            if (data != null) {
+              store.setColheitaData(data);
+            }
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
+            children: [
               SizedBox(
                 width: 100,
-                child: Text(
-                  'Opcional',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    color: Constants.kGreyText2,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                child: Observer(builder: (_) {
+                  return Text(
+                    store.colheitaData != null
+                        ? '${store.colheitaData!.day.toString().padLeft(2, '0')}/${store.colheitaData!.month.toString().padLeft(2, '0')}/${store.colheitaData!.year}'
+                        : 'Opcional',
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(
+                      color: Constants.kGreyText2,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                }),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
-              Icon(
+              const Icon(
                 Icons.event,
                 color: Constants.kPrimaryColor,
               ),
