@@ -161,6 +161,18 @@ abstract class _LoteStoreBase with Store {
   @observable
   Reservatorio novoLoteReservatorio = Reservatorio();
 
+  @observable
+  DateTime registroData = DateTime.now();
+
+  @observable
+  DateTime? semeaduraData;
+
+  @observable
+  DateTime? transplantioData;
+
+  @observable
+  DateTime? colheitaData;
+
   // @observable
   // Fase novoLoteFase = Fase();
 

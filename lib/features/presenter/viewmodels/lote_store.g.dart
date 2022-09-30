@@ -336,6 +336,66 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$registroDataAtom = Atom(name: '_LoteStoreBase.registroData');
+
+  @override
+  DateTime get registroData {
+    _$registroDataAtom.reportRead();
+    return super.registroData;
+  }
+
+  @override
+  set registroData(DateTime value) {
+    _$registroDataAtom.reportWrite(value, super.registroData, () {
+      super.registroData = value;
+    });
+  }
+
+  final _$semeaduraDataAtom = Atom(name: '_LoteStoreBase.semeaduraData');
+
+  @override
+  DateTime? get semeaduraData {
+    _$semeaduraDataAtom.reportRead();
+    return super.semeaduraData;
+  }
+
+  @override
+  set semeaduraData(DateTime? value) {
+    _$semeaduraDataAtom.reportWrite(value, super.semeaduraData, () {
+      super.semeaduraData = value;
+    });
+  }
+
+  final _$transplantioDataAtom = Atom(name: '_LoteStoreBase.transplantioData');
+
+  @override
+  DateTime? get transplantioData {
+    _$transplantioDataAtom.reportRead();
+    return super.transplantioData;
+  }
+
+  @override
+  set transplantioData(DateTime? value) {
+    _$transplantioDataAtom.reportWrite(value, super.transplantioData, () {
+      super.transplantioData = value;
+    });
+  }
+
+  final _$colheitaDataAtom = Atom(name: '_LoteStoreBase.colheitaData');
+
+  @override
+  DateTime? get colheitaData {
+    _$colheitaDataAtom.reportRead();
+    return super.colheitaData;
+  }
+
+  @override
+  set colheitaData(DateTime? value) {
+    _$colheitaDataAtom.reportWrite(value, super.colheitaData, () {
+      super.colheitaData = value;
+    });
+  }
+
   final _$novoLoteDescricaoAtom =
       Atom(name: '_LoteStoreBase.novoLoteDescricao');
 
@@ -635,6 +695,10 @@ novoLoteArea: ${novoLoteArea},
 novoLoteName: ${novoLoteName},
 novoLoteCultura: ${novoLoteCultura},
 novoLoteReservatorio: ${novoLoteReservatorio},
+registroData: ${registroData},
+semeaduraData: ${semeaduraData},
+transplantioData: ${transplantioData},
+colheitaData: ${colheitaData},
 novoLoteDescricao: ${novoLoteDescricao},
 reservatorioList: ${reservatorioList},
 reservatorioDetalhes: ${reservatorioDetalhes},

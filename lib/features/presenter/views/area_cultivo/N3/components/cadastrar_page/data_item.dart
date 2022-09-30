@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
-datas(BuildContext context) {
+datas(BuildContext context, LoteStore store) {
   return Observer(builder: (_) {
     return Column(
       children: [
@@ -16,16 +17,16 @@ datas(BuildContext context) {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
         ),
-        registroItem(),
-        semeaduraItem(),
-        transplantioItem(),
-        colheitaItem(),
+        registroItem(store, context),
+        semeaduraItem(store, context),
+        transplantioItem(store, context),
+        colheitaItem(store, context),
       ],
     );
   });
 }
 
-registroItem() {
+registroItem(LoteStore store, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 10.0),
     child: ListTile(
@@ -35,37 +36,48 @@ registroItem() {
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
       ),
       trailing: SizedBox(
-        width: 140,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: const [
-            SizedBox(
-              width: 100,
-              child: Text(
-                '25/07/2021',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                  color: Constants.kGreyText2,
-                  fontWeight: FontWeight.w600,
+        width: 150,
+        child: InkWell(
+          onTap: () async {
+            final data = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2022),
+                lastDate: DateTime(2030));
+            locale:
+            const Locale("pt", "BR");
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                width: 100,
+                child: Text(
+                  '${store.registroData.day}/${store.registroData.month}/${store.registroData.year}',
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                    color: Constants.kGreyText2,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Icon(
-              Icons.event,
-              color: Constants.kPrimaryColor,
-            ),
-          ],
+              const SizedBox(
+                width: 10,
+              ),
+              const Icon(
+                Icons.event,
+                color: Constants.kPrimaryColor,
+              ),
+            ],
+          ),
         ),
       ),
     ),
   );
 }
 
-semeaduraItem() {
+semeaduraItem(LoteStore store, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 10.0),
     child: ListTile(
@@ -74,37 +86,45 @@ semeaduraItem() {
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
       ),
       trailing: SizedBox(
-        width: 140,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: const [
-            SizedBox(
-              width: 100,
-              child: Text(
-                'Opcional',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                  color: Constants.kGreyText2,
-                  fontWeight: FontWeight.w600,
+        width: 150,
+        child: InkWell(
+          onTap: () async {
+            final data = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2022),
+                lastDate: DateTime(2030));
+            locale:
+            const Locale("pt", "BR");
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: const [
+              SizedBox(
+                width: 100,
+                child: Text(
+                  'Opcional',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    color: Constants.kGreyText2,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Icon(
-              Icons.event,
-              color: Constants.kPrimaryColor,
-            ),
-          ],
+              SizedBox(
+                width: 10,
+              ),
+              Icon(Icons.event, color: Constants.kPrimaryColor),
+            ],
+          ),
         ),
       ),
     ),
   );
 }
 
-transplantioItem() {
+transplantioItem(LoteStore store, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 10.0),
     child: ListTile(
@@ -114,36 +134,47 @@ transplantioItem() {
       ),
       trailing: SizedBox(
         width: 140,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: const [
-            SizedBox(
-              width: 100,
-              child: Text(
-                'Opcional',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                  color: Constants.kGreyText2,
-                  fontWeight: FontWeight.w600,
+        child: InkWell(
+          onTap: () async {
+            final data = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2022),
+                lastDate: DateTime(2030));
+            locale:
+            const Locale("pt", "BR");
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: const [
+              SizedBox(
+                width: 100,
+                child: Text(
+                  'Opcional',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    color: Constants.kGreyText2,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Icon(
-              Icons.event,
-              color: Constants.kPrimaryColor,
-            ),
-          ],
+              SizedBox(
+                width: 10,
+              ),
+              Icon(
+                Icons.event,
+                color: Constants.kPrimaryColor,
+              ),
+            ],
+          ),
         ),
       ),
     ),
   );
 }
 
-colheitaItem() {
+colheitaItem(LoteStore store, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 10.0),
     child: ListTile(
@@ -153,29 +184,40 @@ colheitaItem() {
       ),
       trailing: SizedBox(
         width: 140,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: const [
-            SizedBox(
-              width: 100,
-              child: Text(
-                'Opcional',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                  color: Constants.kGreyText2,
-                  fontWeight: FontWeight.w600,
+        child: InkWell(
+          onTap: () async {
+            final data = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2022),
+                lastDate: DateTime(2030));
+            locale:
+            const Locale("pt", "BR");
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: const [
+              SizedBox(
+                width: 100,
+                child: Text(
+                  'Opcional',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    color: Constants.kGreyText2,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Icon(
-              Icons.event,
-              color: Constants.kPrimaryColor,
-            ),
-          ],
+              SizedBox(
+                width: 10,
+              ),
+              Icon(
+                Icons.event,
+                color: Constants.kPrimaryColor,
+              ),
+            ],
+          ),
         ),
       ),
     ),
