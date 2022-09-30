@@ -99,29 +99,29 @@ reservatorioPage(BuildContext context, LoteStore store) {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
-          child: TextFormField(
-            controller: store.novoLoteName,
-            // initialValue: store.novoLoteName.text,
-            textCapitalization: TextCapitalization.words,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.normal,
-              fontStyle: FontStyle.italic,
-            ),
-            decoration: const InputDecoration(
-              hintText: 'Pesquisar',
-              prefixIcon: Icon(Icons.search),
-              hintStyle: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.normal,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-            // onChanged: (String value) => store.alterarNome(value),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
+        //   child: TextFormField(
+        //     controller: store.novoLoteName,
+        //     // initialValue: store.novoLoteName.text,
+        //     textCapitalization: TextCapitalization.words,
+        //     style: const TextStyle(
+        //       fontSize: 24,
+        //       fontWeight: FontWeight.normal,
+        //       fontStyle: FontStyle.italic,
+        //     ),
+        //     decoration: const InputDecoration(
+        //       hintText: 'Pesquisar',
+        //       prefixIcon: Icon(Icons.search),
+        //       hintStyle: TextStyle(
+        //         fontSize: 24,
+        //         fontWeight: FontWeight.normal,
+        //         fontStyle: FontStyle.italic,
+        //       ),
+        //     ),
+        //     // onChanged: (String value) => store.alterarNome(value),
+        //   ),
+        // ),
         const Padding(
             padding: EdgeInsets.only(top: 20, left: 30),
             child: Text('Todos os reservatórios')),

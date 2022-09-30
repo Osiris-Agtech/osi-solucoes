@@ -196,6 +196,22 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$isNovoLoteLoadingAtom =
+      Atom(name: '_LoteStoreBase.isNovoLoteLoading');
+
+  @override
+  bool get isNovoLoteLoading {
+    _$isNovoLoteLoadingAtom.reportRead();
+    return super.isNovoLoteLoading;
+  }
+
+  @override
+  set isNovoLoteLoading(bool value) {
+    _$isNovoLoteLoadingAtom.reportWrite(value, super.isNovoLoteLoading, () {
+      super.isNovoLoteLoading = value;
+    });
+  }
+
   final _$showReservatorioDetalhesAtom =
       Atom(name: '_LoteStoreBase.showReservatorioDetalhes');
 
@@ -585,6 +601,17 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic validarRegistro() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.validarRegistro');
+    try {
+      return super.validarRegistro();
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isLoteListLoading: ${isLoteListLoading},
@@ -599,6 +626,7 @@ setorSelecionadoMigrar: ${setorSelecionadoMigrar},
 showTextFormField: ${showTextFormField},
 isVisible: ${isVisible},
 isNovaAreaLoading: ${isNovaAreaLoading},
+isNovoLoteLoading: ${isNovoLoteLoading},
 showReservatorioDetalhes: ${showReservatorioDetalhes},
 dotIndicator: ${dotIndicator},
 culturaList: ${culturaList},

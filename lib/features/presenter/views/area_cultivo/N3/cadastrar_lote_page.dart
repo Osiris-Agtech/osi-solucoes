@@ -146,9 +146,13 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
             ),
             child: Observer(
               builder: (_) {
-                return store.isNovaAreaLoading
-                    ? const CircularProgressIndicator(
-                        color: Colors.white,
+                return store.isNovoLoteLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
                       )
                     : const Text(
                         "Salvar",
@@ -159,7 +163,9 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                       );
               },
             ),
-            onPressed: () {},
+            onPressed: () {
+              store.registrarLote();
+            },
           ),
         ),
       ),

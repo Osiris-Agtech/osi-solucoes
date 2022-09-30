@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
@@ -134,6 +135,9 @@ abstract class _LoteStoreBase with Store {
   bool isNovaAreaLoading = false;
 
   @observable
+  bool isNovoLoteLoading = false;
+
+  @observable
   bool showReservatorioDetalhes = false;
 
   @observable
@@ -163,6 +167,18 @@ abstract class _LoteStoreBase with Store {
   @observable
   TextEditingController novoLoteDescricao = TextEditingController();
 
+  @observable
+  List<Reservatorio> reservatorioList = [];
+
+  @observable
+  Reservatorio reservatorioDetalhes = Reservatorio();
+
+  @observable
+  List<SolucaoFertilizanteConcentrada> solucaoNutritivaList = [];
+
+  @observable
+  List<SolucaoFertilizanteConcentrada> solucaoConcentradaList = [];
+
   @action
   selecionarNovoLoteArea(Area area) => novoLoteArea = area;
 
@@ -175,18 +191,6 @@ abstract class _LoteStoreBase with Store {
   @action
   selecionarNovoLoteReservatorio() =>
       novoLoteReservatorio = reservatorioDetalhes;
-
-  @observable
-  List<Reservatorio> reservatorioList = [];
-
-  @observable
-  Reservatorio reservatorioDetalhes = Reservatorio();
-
-  @observable
-  List<SolucaoFertilizanteConcentrada> solucaoNutritivaList = [];
-
-  @observable
-  List<SolucaoFertilizanteConcentrada> solucaoConcentradaList = [];
 
   @action
   setDotIndicator(int value) {
@@ -268,23 +272,65 @@ abstract class _LoteStoreBase with Store {
 
   @action
   registrarLote() async {
-    Lote novoLote = Lote(
-      nome: novoLoteName.text,
-      setor: novoLoteSetor,
-      cultura: novoLoteCultura,
-      reservatorio: novoLoteReservatorio,
-    );
+    isNovoLoteLoading = true;
+    await Future.delayed(const Duration(seconds: 1));
+    if (validarRegistro()) {
+      Lote novoLote = Lote(
+        nome: novoLoteName.text,
+        setor: novoLoteSetor,
+        cultura: novoLoteCultura,
+        reservatorio: novoLoteReservatorio,
+      );
 
-    var lote = await loteRepository.registrarLote(novoLote);
+      var lote = await loteRepository.registrarLote(novoLote);
 
-    lote.fold(
-      (err) {
-        toastError(message: err.message);
-      },
-      (data) async {
-        print("Deu bom!");
-      },
-    );
+      lote.fold(
+        (err) {
+          toastError(message: err.message);
+        },
+        (data) async {
+          limparTudo();
+          Get.close(1);
+          if (setorSelecionado.id != null) {
+            buscarLotes();
+          }
+        },
+      );
+    }
+
+    isNovoLoteLoading = false;
+  }
+
+  @action
+  validarRegistro() {
+    bool isValid = novoLoteName.text.isNotEmpty &&
+        novoLoteSetor.id != null &&
+        novoLoteCultura.id != null &&
+        novoLoteReservatorio.id != null;
+
+    if (isValid) {
+      return true;
+    }
+
+    toastError(message: "Preencha todos os campos obrigatórios");
+    return false;
+  }
+
+  limparTudo() {
+    showTextFormField = false;
+    isVisible = false;
+    showReservatorioDetalhes = false;
+    culturaList = [];
+    novoLoteSetor = Setor();
+    novoLoteArea = Area();
+    novoLoteName = TextEditingController();
+    novoLoteCultura = Cultura();
+    novoLoteReservatorio = Reservatorio();
+    novoLoteDescricao = TextEditingController();
+    reservatorioList = [];
+    reservatorioDetalhes = Reservatorio();
+    solucaoNutritivaList = [];
+    solucaoConcentradaList = [];
   }
 
   // ##################### END CADASTRAR LOTE ######################
