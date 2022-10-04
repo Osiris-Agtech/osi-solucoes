@@ -53,7 +53,7 @@ class Area {
   Map<String, dynamic> toJson() => _$AreaToJson(this);
 }
 
-List<Area> listAreas = [];
+
 
 // List<Estufa> listaEstufas = [
 //   Estufa(

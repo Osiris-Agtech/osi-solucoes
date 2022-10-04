@@ -3,6 +3,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
@@ -10,6 +11,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'components/cadastrar_page/cultura_item.dart';
 import 'components/cadastrar_page/data_item.dart';
 import 'components/cadastrar_page/lote_item.dart';
+import 'components/cadastrar_page/reservatorio_detalhes_page.dart';
 import 'components/cadastrar_page/reservatorio_item.dart';
 import 'components/cadastrar_page/setor_item.dart';
 
@@ -23,10 +25,20 @@ class CadastrarLotePage extends StatefulWidget {
 class _CadastrarLotePageState extends State<CadastrarLotePage> {
   LoteStore store = GetIt.I<LoteStore>();
   CarouselController carouselController = CarouselController();
+  final GlobalKey<FormFieldState> key = GlobalKey<FormFieldState>();
 
   @override
   void initState() {
     super.initState();
+    store.buscarAreasList();
+    store.buscarCulturas();
+    store.buscarReservatorios();
+  }
+
+  @override
+  void dispose() {
+    key.currentState?.reset();
+    super.dispose();
   }
 
   @override
@@ -52,25 +64,25 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                 titulo(),
                 subtitulo(),
                 const SizedBox(height: 20),
-                setor(context, carouselController, store),
+                setor(context, carouselController, store, key),
                 const Divider(
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
-                lote(context, carouselController, store),
+                lote(context, carouselController, store, key),
                 const Divider(
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
-                cultura(context, store),
+                cultura(context, carouselController, store, key),
                 const Divider(
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
-                reservatorio(context, store),
+                reservatorio(context, carouselController, store, key),
                 // fase(context),
                 const Divider(),
-                datas(context),
+                datas(context, store),
                 const SizedBox(height: 20),
                 saveButton(size),
               ],
@@ -113,8 +125,12 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
     return AppBar(
       backgroundColor: Constants.kBackgroundColor,
       elevation: 0,
-      leading: const BackButton(
+      leading: BackButton(
         color: Constants.kPrimaryColor,
+        onPressed: () {
+          Get.close(1);
+          store.limparTudo();
+        },
       ),
     );
   }
@@ -135,9 +151,13 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
             ),
             child: Observer(
               builder: (_) {
-                return store.isNovaAreaLoading
-                    ? const CircularProgressIndicator(
-                        color: Colors.white,
+                return store.isNovoLoteLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
                       )
                     : const Text(
                         "Salvar",
@@ -148,7 +168,9 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                       );
               },
             ),
-            onPressed: () {},
+            onPressed: () {
+              store.registrarLote();
+            },
           ),
         ),
       ),
@@ -156,8 +178,12 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
   }
 }
 
-bottomSheetN3(BuildContext context, CarouselController carouselController,
-    LoteStore store) {
+bottomSheetN3(
+  BuildContext context,
+  CarouselController carouselController,
+  LoteStore store,
+  GlobalKey<FormFieldState> key,
+) {
   return showModalBottomSheet<void>(
     backgroundColor: Constants.kBackgroundColor,
     context: context,
@@ -180,17 +206,32 @@ bottomSheetN3(BuildContext context, CarouselController carouselController,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(
-                      Icons.close,
-                      size: 32,
-                    ),
-                    color: Constants.kPrimaryColor,
+                  Observer(
+                    builder: (_) {
+                      return store.dotIndicator == 3 &&
+                              store.showReservatorioDetalhes
+                          ? IconButton(
+                              onPressed: () =>
+                                  store.setShowReservatorioDetalhes(false),
+                              icon: const Icon(
+                                Icons.arrow_back_ios_new_rounded,
+                                size: 26,
+                              ),
+                              color: Constants.kPrimaryColor,
+                            )
+                          : IconButton(
+                              onPressed: () => Navigator.pop(context),
+                              icon: const Icon(
+                                Icons.close,
+                                size: 32,
+                              ),
+                              color: Constants.kPrimaryColor,
+                            );
+                    },
                   ),
                   Observer(builder: (_) {
                     return DotsIndicator(
-                      dotsCount: 2,
+                      dotsCount: 4,
                       position: store.dotIndicator * 1.0,
                       decorator: DotsDecorator(
                         size: const Size.square(9.0),
@@ -211,7 +252,7 @@ bottomSheetN3(BuildContext context, CarouselController carouselController,
               return CarouselSlider(
                 carouselController: carouselController,
                 options: CarouselOptions(
-                  // initialPage: store.dotIndicator,
+                  initialPage: store.dotIndicator,
                   enableInfiniteScroll: false,
                   height: MediaQuery.of(context).size.height * 0.9 - 140,
                   viewportFraction: 1.0,
@@ -219,8 +260,17 @@ bottomSheetN3(BuildContext context, CarouselController carouselController,
                   scrollPhysics: const NeverScrollableScrollPhysics(),
                 ),
                 items: [
-                  setorPage(context, store),
+                  setorPage(context, store, key),
                   lotePage(context, store),
+                  culturaPage(context, store),
+                  AnimatedCrossFade(
+                    duration: const Duration(milliseconds: 200),
+                    firstChild: reservatorioPage(context, store),
+                    secondChild: reservatorioDetalhesPage(store),
+                    crossFadeState: !store.showReservatorioDetalhes
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                  ),
                 ],
               );
             }),
@@ -230,39 +280,8 @@ bottomSheetN3(BuildContext context, CarouselController carouselController,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  TextButton(
-                    onPressed: () {
-                      // store.setDotIndicator(store.dotIndicator - 1);
-                      carouselController.previousPage(
-                        duration: const Duration(milliseconds: 400),
-                        curve: Curves.easeIn,
-                      );
-                    },
-                    child: Observer(builder: (_) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.chevron_left,
-                            color: Constants.kPrimaryColor,
-                            // store.dotIndicator == 0
-                            //     ? Colors.grey
-                            //     : Constants.kPrimaryColor,
-                          ),
-                          Text(
-                            'Voltar',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontStyle: FontStyle.italic,
-                              color: Constants.kPrimaryColor,
-                              // store.dotIndicator == 0
-                              //     ? Colors.grey
-                              //     : Constants.kPrimaryColor,
-                            ),
-                          ),
-                        ],
-                      );
-                    }),
+                  BackStepButton(
+                    carouselController: carouselController,
                   ),
                   NextStepButton(
                     carouselController: carouselController,
@@ -275,6 +294,63 @@ bottomSheetN3(BuildContext context, CarouselController carouselController,
       );
     },
   );
+}
+
+class BackStepButton extends StatefulWidget {
+  final CarouselController carouselController;
+  const BackStepButton({
+    Key? key,
+    required this.carouselController,
+  }) : super(key: key);
+
+  @override
+  State<BackStepButton> createState() => _BackStepButtonState();
+}
+
+class _BackStepButtonState extends State<BackStepButton> {
+  LoteStore store = GetIt.I<LoteStore>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Observer(
+      builder: (_) {
+        return store.dotIndicator == 3 && store.showReservatorioDetalhes
+            ? Container()
+            : TextButton(
+                onPressed: () {
+                  store.setDotIndicator(store.dotIndicator - 1);
+                  widget.carouselController.previousPage(
+                    duration: const Duration(milliseconds: 400),
+                    curve: Curves.easeIn,
+                  );
+                },
+                child: Observer(builder: (_) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.chevron_left,
+                        color: store.dotIndicator == 0
+                            ? Colors.grey
+                            : Constants.kPrimaryColor,
+                      ),
+                      Text(
+                        'Voltar',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontStyle: FontStyle.italic,
+                          color: store.dotIndicator == 0
+                              ? Colors.grey
+                              : Constants.kPrimaryColor,
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+              );
+      },
+    );
+  }
 }
 
 class NextStepButton extends StatefulWidget {
@@ -300,23 +376,34 @@ class _NextStepButtonState extends State<NextStepButton> {
       ),
       child: Center(
         child: Observer(builder: (_) {
-          return Row(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              // store.dotIndicator == 1 ? const Icon(Icons.add) : Container(),
-              Text(
-                'Avançar',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              Icon(Icons.chevron_right),
-            ],
-          );
+          return store.dotIndicator == 3 && store.showReservatorioDetalhes
+              ? const Text(
+                  'Vincular',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                )
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text(
+                      'Avançar',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    ),
+                    Icon(Icons.chevron_right),
+                  ],
+                );
         }),
       ),
       onPressed: () {
-        // if (store.dotIndicator == 1) {
-        widget.carouselController.nextPage();
-        // } else {
+        if (store.dotIndicator == 3 && store.showReservatorioDetalhes) {
+          store.selecionarNovoLoteReservatorio();
+          Navigator.pop(context);
+        }
+        if (store.dotIndicator < 3) {
+          store.setDotIndicator(store.dotIndicator + 1);
+          widget.carouselController.nextPage();
+        }
+        //else {
         //   store.setDotIndicator(store.dotIndicator + 1);
         //   widget.carouselController.nextPage(
         //     duration: const Duration(milliseconds: 400),

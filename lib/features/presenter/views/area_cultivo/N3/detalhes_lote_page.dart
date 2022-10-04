@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
+import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/detalhes_reservatorio_page.dart';
@@ -23,6 +25,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
   void initState() {
     super.initState();
     store.buscarDetalhesLote();
+    store.buscarAreasList();
   }
 
   @override
@@ -36,6 +39,18 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
           iconTheme: const IconThemeData(
             color: Constants.kPrimaryColor, //change your color here
           ),
+          actions: const [
+            Padding(
+              padding: EdgeInsets.only(right: 16.0),
+              child: IconButton(
+                onPressed: null,
+                icon: Icon(
+                  Icons.settings,
+                  color: Constants.kGreyText,
+                ),
+              ),
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -109,7 +124,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 24,
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -217,9 +232,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return const CustomDialog(
-                                  title: 'Migrar Lote',
-                                );
+                                return const CustomDialog();
                               });
                         },
                       ),
@@ -254,7 +267,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       Text(
                         'Data',
                         style: TextStyle(
-                          color: Constants.kText2,
+                          color: Constants.kGreyText,
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
                         ),
@@ -271,8 +284,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     title: const Text(
                       'Registro',
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -283,7 +296,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           '${store.loteSelecionado.registro_data?.day ?? '--'}/${store.loteSelecionado.registro_data?.month ?? '--'}/${store.loteSelecionado.registro_data?.year ?? '--'}',
                           style: const TextStyle(
                             color: Constants.kGreyText,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -304,8 +317,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     title: const Text(
                       'Semeadura',
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -316,7 +329,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           '${store.loteSelecionado.semeadura_data?.day ?? '--'}/${store.loteSelecionado.semeadura_data?.month ?? '--'}/${store.loteSelecionado.semeadura_data?.year ?? '--'}',
                           style: const TextStyle(
                             color: Constants.kGreyText,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -337,8 +350,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     title: const Text(
                       'Transplantio',
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -349,7 +362,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           '${store.loteSelecionado.transplantio_data?.day ?? '--'}/${store.loteSelecionado.transplantio_data?.month ?? '--'}/${store.loteSelecionado.transplantio_data?.year ?? '--'}',
                           style: const TextStyle(
                             color: Constants.kGreyText,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -370,8 +383,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     title: const Text(
                       'Colheita',
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -382,7 +395,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           '${store.loteSelecionado.colheita_data?.day ?? '--'}/${store.loteSelecionado.colheita_data?.month ?? '--'}/${store.loteSelecionado.colheita_data?.year ?? '--'}',
                           style: const TextStyle(
                             color: Constants.kGreyText,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -422,7 +435,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       Text(
                         'Produção',
                         style: TextStyle(
-                          color: Constants.kText2,
+                          color: Constants.kGreyText,
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
                         ),
@@ -440,8 +453,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       'Bandeijas\nSemeadas',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -452,7 +465,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           '${store.loteSelecionado.bandeijas_semeadas ?? '-'}',
                           style: const TextStyle(
                             color: Constants.kGreyText,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -474,8 +487,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       'Mudas\nTransplantadas',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -486,7 +499,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           '${store.loteSelecionado.mudas_transplantadas ?? '-'}',
                           style: const TextStyle(
                             color: Constants.kGreyText,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -508,8 +521,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       'Plantas\nColhidas',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -542,8 +555,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       'Embalagens\nProduzidas',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+                        color: Constants.kText2,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -617,9 +630,15 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
   }
 }
 
-class CustomDialog extends StatelessWidget {
-  const CustomDialog({Key? key, this.title}) : super(key: key);
-  final title;
+class CustomDialog extends StatefulWidget {
+  const CustomDialog({Key? key}) : super(key: key);
+
+  @override
+  State<CustomDialog> createState() => _CustomDialogState();
+}
+
+class _CustomDialogState extends State<CustomDialog> {
+  final GlobalKey<FormFieldState> _key = GlobalKey<FormFieldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -685,14 +704,16 @@ class CustomDialog extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    ' - ${store.loteSelecionado.setor?.area?.nome ?? '-'}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                  Flexible(
+                    child: Text(
+                      ' - ${store.loteSelecionado.setor?.area?.nome ?? '-'}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 80),
+                  const Spacer(),
                   const Text(
                     'Estufa',
                     style: TextStyle(fontStyle: FontStyle.italic),
@@ -708,14 +729,16 @@ class CustomDialog extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    ' - ${store.loteSelecionado.setor?.nome ?? '-'}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Text(
+                      ' - ${store.loteSelecionado.setor?.nome ?? '-'}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 30),
+                  const Spacer(),
                   const Text(
                     'Setor',
                     style: TextStyle(fontStyle: FontStyle.italic),
@@ -766,23 +789,32 @@ class CustomDialog extends StatelessWidget {
                               alignment: Alignment.centerRight,
                               child: SizedBox(
                                 width: 150,
-                                child: DropdownButton<String>(
-                                  hint: const Text(
-                                    'Selecionar',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
-                                  ),
-                                  isExpanded: true,
-                                  iconEnabledColor: Constants.kPrimaryColor,
-                                  items: ['bau', 'bau', 'bau']
-                                      .map((String dropDownStringItem) {
-                                    return DropdownMenuItem<String>(
-                                      value: dropDownStringItem,
-                                      child: Text(dropDownStringItem),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {},
-                                ),
+                                child: Observer(builder: (_) {
+                                  return DropdownButtonFormField<Area>(
+                                    hint: const Text(
+                                      'Selecionar',
+                                      style: TextStyle(
+                                          fontStyle: FontStyle.italic),
+                                    ),
+                                    isExpanded: true,
+                                    iconEnabledColor: Constants.kPrimaryColor,
+                                    items: store.areaList.map((Area item) {
+                                      return DropdownMenuItem<Area>(
+                                        value: item,
+                                        child: Text(
+                                          item.nome ?? '',
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      if (value != null) {
+                                        _key.currentState?.reset();
+                                        store.selecionarArea(value);
+                                        store.isVisible = true;
+                                      }
+                                    },
+                                  );
+                                }),
                               ),
                             ),
                           ],
@@ -791,41 +823,54 @@ class CustomDialog extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'Setor:',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(
-                              width: 30,
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: SizedBox(
-                                width: 150,
-                                child: DropdownButton<String>(
-                                  hint: const Text(
-                                    'Selecionar',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
-                                  ),
-                                  isExpanded: true,
-                                  iconEnabledColor: Constants.kPrimaryColor,
-                                  items: ['bau', 'bau', 'bau']
-                                      .map((String dropDownStringItem) {
-                                    return DropdownMenuItem<String>(
-                                      value: dropDownStringItem,
-                                      child: Text(dropDownStringItem),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {},
+                        child: Observer(builder: (_) {
+                          return Visibility(
+                            visible: store.isVisible,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Setor:',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                              ),
+                                const SizedBox(
+                                  width: 30,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: SizedBox(
+                                    width: 150,
+                                    child: DropdownButtonFormField<Setor>(
+                                      key: _key,
+                                      hint: const Text(
+                                        'Selecionar',
+                                        style: TextStyle(
+                                            fontStyle: FontStyle.italic),
+                                      ),
+                                      isExpanded: true,
+                                      iconEnabledColor: Constants.kPrimaryColor,
+                                      items:
+                                          (store.areaSelecionada.setores ?? [])
+                                              .map((Setor item) {
+                                        return DropdownMenuItem<Setor>(
+                                          value: item,
+                                          child: Text(
+                                            item.nome ?? '',
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (value) {
+                                        if (value != null) {
+                                          store.selecionarSetorMigrar(value);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          );
+                        }),
                       )
                     ],
                   ),

@@ -4,6 +4,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
+import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 
@@ -11,6 +13,7 @@ setor(
   BuildContext context,
   CarouselController carouselController,
   LoteStore store,
+  GlobalKey<FormFieldState> key,
 ) {
   return InkWell(
     child: Observer(builder: (_) {
@@ -26,13 +29,13 @@ setor(
         trailing: store.novoLoteSetor.nome != null &&
                 store.novoLoteSetor.nome!.isNotEmpty
             ? SizedBox(
-                width: 100,
+                width: 150,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SizedBox(
-                      width: 76,
+                      width: 126,
                       child: Text(
                         store.novoLoteSetor.nome ?? '---',
                         textAlign: TextAlign.end,
@@ -58,26 +61,29 @@ setor(
                 ),
               ),
         onTap: () {
-          // store.setDotIndicator(0);
-          bottomSheetN3(context, carouselController, store);
+          store.setDotIndicator(0);
+          bottomSheetN3(context, carouselController, store, key);
         },
       );
     }),
   );
 }
 
-setorPage(BuildContext context, LoteStore store) {
-  return Container(
+setorPage(
+  BuildContext context,
+  LoteStore store,
+  GlobalKey<FormFieldState> key,
+) {
+  return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
-    margin: EdgeInsets.only(
-      top: 0,
-      left: MediaQuery.of(context).size.width * 0.08,
-      right: MediaQuery.of(context).size.width * 0.08,
-    ),
     child: Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.only(
+            top: 10,
+            left: 30,
+            right: 30,
+          ),
           child: RichText(
             textAlign: TextAlign.start,
             text: const TextSpan(
@@ -105,46 +111,58 @@ setorPage(BuildContext context, LoteStore store) {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 20),
+          padding: const EdgeInsets.only(top: 40, bottom: 20),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: const Color(0xffF5F5F5),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        'Área de\n Cultivo:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: Text(
+                          'Área de\n Cultivo:',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      const Spacer(),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: SizedBox(
-                          width: 200,
-                          child: DropdownButton<String>(
+                      const SizedBox(
+                        width: 40,
+                      ),
+                      SizedBox(
+                        width: 200,
+                        child: Observer(builder: (_) {
+                          return DropdownButtonFormField<Area>(
+                            value: store.novoLoteArea.id != null
+                                ? store.novoLoteArea
+                                : null,
                             hint: const Text(
                               'Selecionar',
                               style: TextStyle(fontStyle: FontStyle.italic),
                             ),
                             isExpanded: true,
                             iconEnabledColor: Constants.kPrimaryColor,
-                            items: ['bau', 'bau', 'bau']
-                                .map((String dropDownStringItem) {
-                              return DropdownMenuItem<String>(
-                                value: dropDownStringItem,
-                                child: Text(dropDownStringItem),
+                            items: store.areaList.map((Area area) {
+                              return DropdownMenuItem<Area>(
+                                value: area,
+                                child: Text(area.nome ?? '-'),
                               );
                             }).toList(),
-                            onChanged: (value) {},
-                          ),
-                        ),
+                            onChanged: (value) {
+                              if (value != null) {
+                                key.currentState?.reset();
+                                store.selecionarNovoLoteArea(value);
+                              }
+                            },
+                          );
+                        }),
                       ),
                     ],
                   ),
@@ -159,33 +177,57 @@ setorPage(BuildContext context, LoteStore store) {
                         'Setor:',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      const Spacer(),
-                      Align(
-                        alignment: Alignment.centerRight,
+                      const SizedBox(
+                        width: 40,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
                         child: SizedBox(
                           width: 200,
-                          child: DropdownButton<String>(
-                            hint: const Text(
-                              'Selecionar',
-                              style: TextStyle(fontStyle: FontStyle.italic),
-                            ),
-                            isExpanded: true,
-                            iconEnabledColor: Constants.kPrimaryColor,
-                            items: ['bau', 'bau', 'bau']
-                                .map((String dropDownStringItem) {
-                              return DropdownMenuItem<String>(
-                                value: dropDownStringItem,
-                                child: Text(dropDownStringItem),
-                              );
-                            }).toList(),
-                            onChanged: (value) {},
-                          ),
+                          child: Observer(builder: (_) {
+                            return DropdownButtonFormField<Setor>(
+                              key: key,
+                              value: store.novoLoteSetor.id != null
+                                  ? store.novoLoteSetor
+                                  : null,
+                              hint: const Text(
+                                'Selecionar',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                              isExpanded: true,
+                              iconEnabledColor: Constants.kPrimaryColor,
+                              items: (store.novoLoteArea.setores ?? [])
+                                  .map((Setor setor) {
+                                return DropdownMenuItem<Setor>(
+                                  value: setor,
+                                  child: Text(setor.nome!),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                if (value != null) {
+                                  store.selecionarNovoLoteSetor(value);
+                                }
+                              },
+                            );
+                          }),
                         ),
                       ),
                     ],
                   ),
                 )
               ],
+            ),
+          ),
+        ),
+        const Spacer(),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 50.0),
+          child: Text(
+            'Caso não seja selecionado nenhuma área de cultivo ou setor, criaremos automaticamente uma genérica para alocar seu lote',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Constants.kGreyText2,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),

@@ -717,7 +717,7 @@ class _HomePageState extends State<HomePage> {
                         height: 25,
                         width: 25,
                       ),
-                      onPressed: () {},
+                      onPressed: null,
                     ),
                   ),
                 ),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
-datas(BuildContext context) {
+datas(BuildContext context, LoteStore store) {
   return Observer(builder: (_) {
     return Column(
       children: [
@@ -16,16 +17,16 @@ datas(BuildContext context) {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
         ),
-        registroItem(),
-        semeaduraItem(),
-        transplantioItem(),
-        colheitaItem(),
+        registroItem(store, context),
+        semeaduraItem(store, context),
+        transplantioItem(store, context),
+        colheitaItem(store, context),
       ],
     );
   });
 }
 
-registroItem() {
+registroItem(LoteStore store, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 10.0),
     child: ListTile(
@@ -35,37 +36,54 @@ registroItem() {
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
       ),
       trailing: SizedBox(
-        width: 140,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: const [
-            SizedBox(
-              width: 100,
-              child: Text(
-                '25/07/2021',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                  color: Constants.kGreyText2,
-                  fontWeight: FontWeight.w600,
-                ),
+        width: 150,
+        child: InkWell(
+          onTap: () async {
+            final data = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2022),
+              lastDate: DateTime(2030),
+              locale: const Locale("pt", "BR"),
+            );
+
+            if (data != null) {
+              store.setRegistroData(data);
+            }
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                width: 100,
+                child: Observer(builder: (_) {
+                  return Text(
+                    '${store.registroData.day.toString().padLeft(2, '0')}/${store.registroData.month.toString().padLeft(2, '0')}/${store.registroData.year}',
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(
+                      color: Constants.kGreyText2,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                }),
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Icon(
-              Icons.event,
-              color: Constants.kPrimaryColor,
-            ),
-          ],
+              const SizedBox(
+                width: 10,
+              ),
+              const Icon(
+                Icons.event,
+                color: Constants.kPrimaryColor,
+              ),
+            ],
+          ),
         ),
       ),
     ),
   );
 }
 
-semeaduraItem() {
+semeaduraItem(LoteStore store, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 10.0),
     child: ListTile(
@@ -74,37 +92,53 @@ semeaduraItem() {
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
       ),
       trailing: SizedBox(
-        width: 140,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: const [
-            SizedBox(
-              width: 100,
-              child: Text(
-                'Opcional',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                  color: Constants.kGreyText2,
-                  fontWeight: FontWeight.w600,
-                ),
+        width: 150,
+        child: InkWell(
+          onTap: () async {
+            final data = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2022),
+              lastDate: DateTime(2030),
+              locale: const Locale("pt", "BR"),
+            );
+
+            if (data != null) {
+              store.setSemeaduraData(data);
+            }
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                width: 100,
+                child: Observer(builder: (_) {
+                  return Text(
+                    store.semeaduraData != null
+                        ? '${store.semeaduraData!.day.toString().padLeft(2, '0')}/${store.semeaduraData!.month.toString().padLeft(2, '0')}/${store.semeaduraData!.year}'
+                        : 'Opcional',
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(
+                      color: Constants.kGreyText2,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                }),
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Icon(
-              Icons.event,
-              color: Constants.kPrimaryColor,
-            ),
-          ],
+              const SizedBox(
+                width: 10,
+              ),
+              const Icon(Icons.event, color: Constants.kPrimaryColor),
+            ],
+          ),
         ),
       ),
     ),
   );
 }
 
-transplantioItem() {
+transplantioItem(LoteStore store, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 10.0),
     child: ListTile(
@@ -114,36 +148,55 @@ transplantioItem() {
       ),
       trailing: SizedBox(
         width: 140,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: const [
-            SizedBox(
-              width: 100,
-              child: Text(
-                'Opcional',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                  color: Constants.kGreyText2,
-                  fontWeight: FontWeight.w600,
-                ),
+        child: InkWell(
+          onTap: () async {
+            final data = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2022),
+              lastDate: DateTime(2030),
+              locale: const Locale("pt", "BR"),
+            );
+
+            if (data != null) {
+              store.setTransplantioData(data);
+            }
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                width: 100,
+                child: Observer(builder: (_) {
+                  return Text(
+                    store.transplantioData != null
+                        ? '${store.transplantioData!.day.toString().padLeft(2, '0')}/${store.transplantioData!.month.toString().padLeft(2, '0')}/${store.transplantioData!.year}'
+                        : 'Opcional',
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(
+                      color: Constants.kGreyText2,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                }),
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Icon(
-              Icons.event,
-              color: Constants.kPrimaryColor,
-            ),
-          ],
+              const SizedBox(
+                width: 10,
+              ),
+              const Icon(
+                Icons.event,
+                color: Constants.kPrimaryColor,
+              ),
+            ],
+          ),
         ),
       ),
     ),
   );
 }
 
-colheitaItem() {
+colheitaItem(LoteStore store, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 10.0),
     child: ListTile(
@@ -153,29 +206,48 @@ colheitaItem() {
       ),
       trailing: SizedBox(
         width: 140,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: const [
-            SizedBox(
-              width: 100,
-              child: Text(
-                'Opcional',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                  color: Constants.kGreyText2,
-                  fontWeight: FontWeight.w600,
-                ),
+        child: InkWell(
+          onTap: () async {
+            final data = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2022),
+              lastDate: DateTime(2030),
+              locale: const Locale("pt", "BR"),
+            );
+
+            if (data != null) {
+              store.setColheitaData(data);
+            }
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                width: 100,
+                child: Observer(builder: (_) {
+                  return Text(
+                    store.colheitaData != null
+                        ? '${store.colheitaData!.day.toString().padLeft(2, '0')}/${store.colheitaData!.month.toString().padLeft(2, '0')}/${store.colheitaData!.year}'
+                        : 'Opcional',
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(
+                      color: Constants.kGreyText2,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                }),
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Icon(
-              Icons.event,
-              color: Constants.kPrimaryColor,
-            ),
-          ],
+              const SizedBox(
+                width: 10,
+              ),
+              const Icon(
+                Icons.event,
+                color: Constants.kPrimaryColor,
+              ),
+            ],
+          ),
         ),
       ),
     ),
