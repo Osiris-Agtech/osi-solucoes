@@ -162,18 +162,15 @@ class _CardAreaState extends State<CardArea> {
                           onPressed: null,
                         ),
                       ),
-                      Text("# ${widget.area.id}",
-                          style: const TextStyle(fontSize: 12)),
+                      Text(
+                        "# ${widget.area.id}",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Constants.kGreyText,
+                        ),
+                      ),
                       const Spacer(),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(right: 5.0),
-                      //   child: IconButton(
-                      //     onPressed: () {},
-                      //     icon: SvgPicture.asset(
-                      //         "assets/icons/settings_black_icon.svg"),
-                      //     color: Colors.black,
-                      //   ),
-                      // )
                     ],
                   ),
                 ),
@@ -181,7 +178,11 @@ class _CardAreaState extends State<CardArea> {
                   padding: const EdgeInsets.only(left: 25.0, bottom: 10),
                   child: Text(
                     widget.area.nome!,
-                    style: const TextStyle(fontSize: 22),
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: Constants.kText2.withOpacity(.9),
+                    ),
                   ),
                 ),
                 Padding(
@@ -189,16 +190,22 @@ class _CardAreaState extends State<CardArea> {
                   child: Row(
                     children: [
                       IconButton(
-                          onPressed: null,
-                          icon: SvgPicture.asset(
-                              "assets/icons/location_icon.svg")),
+                        onPressed: null,
+                        icon:
+                            SvgPicture.asset("assets/icons/location_icon.svg"),
+                        color: Constants.kGreyText,
+                      ),
                       SizedBox(
                         width: 190,
                         child: Text(
                           '${widget.area.localizacao?.endereco}, ${widget.area.localizacao?.bairro}, ${widget.area.localizacao?.cidade} - ${widget.area.localizacao?.estado}',
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 12),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Constants.kGreyText,
+                          ),
                           textAlign: TextAlign.start,
                         ),
                       ),
@@ -218,7 +225,11 @@ class _CardAreaState extends State<CardArea> {
                   padding: const EdgeInsets.only(left: 55),
                   child: Text(
                     "${widget.area.setores?.length ?? 0} Setores",
-                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Constants.kGreyText,
+                    ),
                   ),
                 ),
                 // Padding(

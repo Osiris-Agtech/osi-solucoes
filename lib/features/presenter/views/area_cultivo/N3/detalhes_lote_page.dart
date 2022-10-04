@@ -39,6 +39,18 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
           iconTheme: const IconThemeData(
             color: Constants.kPrimaryColor, //change your color here
           ),
+          actions: const [
+            Padding(
+              padding: EdgeInsets.only(right: 16.0),
+              child: IconButton(
+                onPressed: null,
+                icon: Icon(
+                  Icons.settings,
+                  color: Constants.kGreyText,
+                ),
+              ),
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -112,7 +124,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 24,
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -255,7 +267,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       Text(
                         'Data',
                         style: TextStyle(
-                          color: Constants.kText2,
+                          color: Constants.kGreyText,
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
                         ),
@@ -284,7 +296,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           '${store.loteSelecionado.registro_data?.day ?? '--'}/${store.loteSelecionado.registro_data?.month ?? '--'}/${store.loteSelecionado.registro_data?.year ?? '--'}',
                           style: const TextStyle(
                             color: Constants.kGreyText,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -317,7 +329,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           '${store.loteSelecionado.semeadura_data?.day ?? '--'}/${store.loteSelecionado.semeadura_data?.month ?? '--'}/${store.loteSelecionado.semeadura_data?.year ?? '--'}',
                           style: const TextStyle(
                             color: Constants.kGreyText,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -350,7 +362,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           '${store.loteSelecionado.transplantio_data?.day ?? '--'}/${store.loteSelecionado.transplantio_data?.month ?? '--'}/${store.loteSelecionado.transplantio_data?.year ?? '--'}',
                           style: const TextStyle(
                             color: Constants.kGreyText,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -383,7 +395,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           '${store.loteSelecionado.colheita_data?.day ?? '--'}/${store.loteSelecionado.colheita_data?.month ?? '--'}/${store.loteSelecionado.colheita_data?.year ?? '--'}',
                           style: const TextStyle(
                             color: Constants.kGreyText,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -423,7 +435,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       Text(
                         'Produção',
                         style: TextStyle(
-                          color: Constants.kText2,
+                          color: Constants.kGreyText,
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
                         ),
@@ -453,7 +465,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           '${store.loteSelecionado.bandeijas_semeadas ?? '-'}',
                           style: const TextStyle(
                             color: Constants.kGreyText,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -487,7 +499,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           '${store.loteSelecionado.mudas_transplantadas ?? '-'}',
                           style: const TextStyle(
                             color: Constants.kGreyText,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
