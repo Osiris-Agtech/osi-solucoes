@@ -14,6 +14,7 @@ abstract class IAreaDatasource {
       {required int contaId});
   Future<Either<Failure, List<Area>>> buscarArea({required int contaId});
   Future<Either<Failure, Area>> registrarArea({required Area novaArea});
+  Future<Either<Failure, Area>> alterarArea({required Area alterarArea});
 }
 
 class AreaDatasource implements IAreaDatasource {
@@ -194,6 +195,75 @@ class AreaDatasource implements IAreaDatasource {
       }
     } catch (e) {
       return Left(ErrorArea(message: FailureMessage.errorNovaAreaMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Area>> alterarArea({required Area alterarArea}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    try {
+      const String readRepositories = r'''
+        mutation CreateOneArea ($nome: String!, $descricao: String!, $tipo: String!, $contaId: Int!, $localizacaoId: Int!) {
+          createOneArea(data: {
+            nome: $nome,
+            descricao: $descricao,
+            tipo: $tipo,
+            conta: {
+              connect: {
+                id: $contaId
+              }
+            },
+            localizacao: {
+              connect: {
+                id: $localizacaoId
+              }
+            }
+          }) {
+            id
+            nome
+            descricao
+            tipo
+            conta {
+              nome
+            }
+            localizacao {
+              cep
+              endereco
+            }
+            setores {
+              nome
+            }
+          }
+        } 
+      ''';
+
+      final MutationOptions? options;
+
+      options = MutationOptions(
+        document: gql(readRepositories),
+        variables: <String, dynamic>{
+          'nome': alterarArea.nome,
+          'descricao': alterarArea.descricao,
+          'imagem': alterarArea.imagem,
+          'tipo': alterarArea.tipo,
+          'creat_at': alterarArea.created_at,
+          'contaId': alterarArea.conta!.id,
+          'localizacaoId': alterarArea.localizacao!.id,
+        },
+      );
+
+      final QueryResult result = await client.mutate(options);
+
+      if (!result.hasException) {
+        Area? area = Area.fromJson(result.data?['createOneArea']);
+
+        return Right(area);
+      } else {
+        return Left(ErrorArea(message: FailureMessage.errorAlterarAreaMessage));
+      }
+    } catch (e) {
+      return Left(ErrorArea(message: FailureMessage.errorAlterarAreaMessage));
     }
   }
 

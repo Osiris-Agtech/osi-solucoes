@@ -75,6 +75,9 @@ abstract class _AreaCultivoStoreBase with Store {
   bool showTextFormField = false;
 
   @observable
+  bool isEditing = false;
+
+  @observable
   int dotIndicator = 1;
 
   @observable
@@ -121,6 +124,19 @@ abstract class _AreaCultivoStoreBase with Store {
 
   @observable
   TextEditingController estado = TextEditingController();
+
+  @action
+  setIsEditing(bool value) => isEditing = value;
+
+  @action
+  setAreaEditing(Area area) {
+    novaAreaName = TextEditingController(text: area.nome);
+    novaAreaDescricao = TextEditingController(text: area.descricao);
+    localizacaoSelecionada = area.localizacao!;
+    novaArea = area;
+    setIsEditing(true);
+    return;
+  }
 
   @action
   cadastrarNovaLocalizacao(BuildContext context) async {
@@ -177,7 +193,7 @@ abstract class _AreaCultivoStoreBase with Store {
     AreaRepository areaRepository = GetIt.I<AreaRepository>();
     isNovaAreaLoading = true;
 
-    Area novaArea = Area(
+    novaArea = Area(
       nome: novaAreaName.text,
       descricao: novaAreaDescricao.text,
       tipo: 'hidroponia',
@@ -188,6 +204,35 @@ abstract class _AreaCultivoStoreBase with Store {
     var registrarArea = await areaRepository.registrarArea(novaArea);
 
     registrarArea.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        toastSuccess(message: "Cadastrado com sucesso");
+        buscarArea();
+        limparTudo();
+        Get.close(1);
+      },
+    );
+
+    isNovaAreaLoading = false;
+  }
+
+  @action
+  alterarArea() async {
+    AuthController authController = GetIt.I<AuthController>();
+    AreaRepository areaRepository = GetIt.I<AreaRepository>();
+    isNovaAreaLoading = true;
+
+    novaArea.nome = novaAreaName.text;
+    novaArea.descricao = novaAreaDescricao.text;
+    novaArea.tipo = 'hidroponia';
+    novaArea.conta = authController.usuario.selected_conta!.conta;
+    novaArea.localizacao = localizacaoSelecionada;
+
+    var alterarArea = await areaRepository.alterarArea(novaArea);
+
+    alterarArea.fold(
       (err) {
         toastError(message: err.message);
       },

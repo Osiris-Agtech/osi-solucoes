@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 
 import '../views/area_cultivo/N2/cadastrar_setor_page.dart';
 
-class NewFloatingActionButton extends StatelessWidget {
+class NewFloatingActionButton extends StatefulWidget {
   final int nivel;
   const NewFloatingActionButton({
     Key? key,
     required this.nivel,
   }) : super(key: key);
+
+  @override
+  State<NewFloatingActionButton> createState() =>
+      _NewFloatingActionButtonState();
+}
+
+class _NewFloatingActionButtonState extends State<NewFloatingActionButton> {
+  AreaCultivoStore areaStore = GetIt.I<AreaCultivoStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +45,7 @@ class NewFloatingActionButton extends StatelessWidget {
             ),
             label: "Novo Lote",
             labelStyle: const TextStyle(fontSize: 18),
-            onTap: nivel <= 3
+            onTap: widget.nivel <= 3
                 ? () => Get.to(
                       () => const CadastrarLotePage(),
                       transition: Transition.rightToLeft,
@@ -49,11 +59,13 @@ class NewFloatingActionButton extends StatelessWidget {
             ),
             label: "Novo Setor",
             labelStyle: const TextStyle(fontSize: 18),
-            onTap: nivel <= 2
-                ? () => Get.to(
+            onTap: widget.nivel <= 2
+                ? () {
+                    Get.to(
                       () => const CadastrarSetorPage(),
                       transition: Transition.rightToLeft,
-                    )
+                    );
+                  }
                 : null,
           ),
           SpeedDialChild(
@@ -63,11 +75,14 @@ class NewFloatingActionButton extends StatelessWidget {
             ),
             label: "Nova Área",
             labelStyle: const TextStyle(fontSize: 18),
-            onTap: nivel <= 1
-                ? () => Get.to(
+            onTap: widget.nivel <= 1
+                ? () {
+                    areaStore.setIsEditing(false);
+                    Get.to(
                       () => const CadastrarAreaCultivo(),
                       transition: Transition.rightToLeft,
-                    )
+                    );
+                  }
                 : null,
           ),
         ],

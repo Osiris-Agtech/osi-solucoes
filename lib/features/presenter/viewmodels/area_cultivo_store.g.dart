@@ -116,6 +116,21 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
+  final _$isEditingAtom = Atom(name: '_AreaCultivoStoreBase.isEditing');
+
+  @override
+  bool get isEditing {
+    _$isEditingAtom.reportRead();
+    return super.isEditing;
+  }
+
+  @override
+  set isEditing(bool value) {
+    _$isEditingAtom.reportWrite(value, super.isEditing, () {
+      super.isEditing = value;
+    });
+  }
+
   final _$dotIndicatorAtom = Atom(name: '_AreaCultivoStoreBase.dotIndicator');
 
   @override
@@ -394,6 +409,14 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     return _$registrarAreaAsyncAction.run(() => super.registrarArea());
   }
 
+  final _$alterarAreaAsyncAction =
+      AsyncAction('_AreaCultivoStoreBase.alterarArea');
+
+  @override
+  Future alterarArea() {
+    return _$alterarAreaAsyncAction.run(() => super.alterarArea());
+  }
+
   final _$buscaCEPAsyncAction = AsyncAction('_AreaCultivoStoreBase.buscaCEP');
 
   @override
@@ -443,6 +466,28 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
         name: '_AreaCultivoStoreBase.increment');
     try {
       return super.increment();
+    } finally {
+      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setIsEditing(bool value) {
+    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
+        name: '_AreaCultivoStoreBase.setIsEditing');
+    try {
+      return super.setIsEditing(value);
+    } finally {
+      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setAreaEditing(Area area) {
+    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
+        name: '_AreaCultivoStoreBase.setAreaEditing');
+    try {
+      return super.setAreaEditing(area);
     } finally {
       _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -524,6 +569,7 @@ data1: ${data1},
 value: ${value},
 isNovaAreaLoading: ${isNovaAreaLoading},
 showTextFormField: ${showTextFormField},
+isEditing: ${isEditing},
 dotIndicator: ${dotIndicator},
 localizacaoList: ${localizacaoList},
 areaList: ${areaList},
