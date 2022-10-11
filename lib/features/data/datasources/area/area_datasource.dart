@@ -159,6 +159,7 @@ class AreaDatasource implements IAreaDatasource {
               nome
             }
             localizacao {
+              id
               cep
               endereco
             }
@@ -204,38 +205,22 @@ class AreaDatasource implements IAreaDatasource {
 
     try {
       const String readRepositories = r'''
-        mutation CreateOneArea ($nome: String!, $descricao: String!, $tipo: String!, $contaId: Int!, $localizacaoId: Int!) {
-          createOneArea(data: {
-            nome: $nome,
-            descricao: $descricao,
-            tipo: $tipo,
-            conta: {
-              connect: {
-                id: $contaId
-              }
-            },
-            localizacao: {
-              connect: {
-                id: $localizacaoId
-              }
-            }
-          }) {
+        mutation($areaId: Int!, $areaNome: String!, $areaDescricao: String!, $areaTipo: String!, $localizacaoId: Int!, $contaId: Int!) {
+          updateArea(areaId: $areaId, areaNome: $areaNome, areaDescricao: $areaDescricao, areaTipo: $areaTipo, localizacaoId: $localizacaoId, contaId: $contaId) {
             id
             nome
             descricao
             tipo
             conta {
+              id
               nome
             }
             localizacao {
-              cep
+              id
               endereco
             }
-            setores {
-              nome
-            }
           }
-        } 
+        }
       ''';
 
       final MutationOptions? options;
@@ -243,20 +228,19 @@ class AreaDatasource implements IAreaDatasource {
       options = MutationOptions(
         document: gql(readRepositories),
         variables: <String, dynamic>{
-          'nome': alterarArea.nome,
-          'descricao': alterarArea.descricao,
-          'imagem': alterarArea.imagem,
-          'tipo': alterarArea.tipo,
-          'creat_at': alterarArea.created_at,
-          'contaId': alterarArea.conta!.id,
-          'localizacaoId': alterarArea.localizacao!.id,
+          "areaId": alterarArea.id,
+          "areaNome": alterarArea.nome,
+          "areaDescricao": alterarArea.descricao,
+          "areaTipo": "hidroponia",
+          "localizacaoId": alterarArea.localizacao!.id,
+          "contaId": alterarArea.conta!.id
         },
       );
 
       final QueryResult result = await client.mutate(options);
 
       if (!result.hasException) {
-        Area? area = Area.fromJson(result.data?['createOneArea']);
+        Area? area = Area.fromJson(result.data?['updateArea']);
 
         return Right(area);
       } else {
@@ -283,6 +267,7 @@ class AreaDatasource implements IAreaDatasource {
             id
             nome
             localizacao {
+              id
               endereco
               bairro
               cidade

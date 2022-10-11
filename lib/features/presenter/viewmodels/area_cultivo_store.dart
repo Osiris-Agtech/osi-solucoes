@@ -237,7 +237,7 @@ abstract class _AreaCultivoStoreBase with Store {
         toastError(message: err.message);
       },
       (data) async {
-        toastSuccess(message: "Cadastrado com sucesso");
+        toastSuccess(message: "Alterado com sucesso");
         buscarArea();
         limparTudo();
         Get.close(1);

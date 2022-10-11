@@ -177,35 +177,42 @@ class _CardAreaState extends State<CardArea> {
                           const SizedBox(
                             width: 220,
                           ),
-                          PopupMenuButton(
-                            icon: const Icon(
-                              Icons.settings,
-                              color: Constants.kButtonGrey,
+                          Theme(
+                            data: Theme.of(context).copyWith(
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
                             ),
-                            itemBuilder: (context) => [
-                              PopupMenuItem(
-                                child: Row(
-                                  children: const [
-                                    Text('Editar'),
-                                  ],
-                                ),
-                                onTap: () async {
-                                  await store.setAreaEditing(widget.area);
-                                  Get.to(
-                                    () => const CadastrarAreaCultivo(),
-                                    transition: Transition.rightToLeft,
-                                  );
-                                },
+                            child: PopupMenuButton(
+                              icon: SvgPicture.asset(
+                                "assets/icons/settings_icon.svg",
+                                color: Constants.kButtonGrey,
+                                height: 20,
                               ),
-                              PopupMenuItem(
-                                child: Row(
-                                  children: const [
-                                    Text('Deletar'),
-                                  ],
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                                  child: Row(
+                                    children: const [
+                                      Text('Editar'),
+                                    ],
+                                  ),
+                                  onTap: () async {
+                                    await store.setAreaEditing(widget.area);
+                                    Get.to(
+                                      () => const CadastrarAreaCultivo(),
+                                      transition: Transition.rightToLeft,
+                                    );
+                                  },
                                 ),
-                                onTap: () {},
-                              ),
-                            ],
+                                PopupMenuItem(
+                                  child: Row(
+                                    children: const [
+                                      Text('Deletar'),
+                                    ],
+                                  ),
+                                  onTap: () {},
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
