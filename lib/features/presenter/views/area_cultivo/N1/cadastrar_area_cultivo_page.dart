@@ -159,15 +159,27 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
                   ? const CircularProgressIndicator(
                       color: Colors.white,
                     )
-                  : const Text(
-                      "Salvar",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                  : store.isEditing
+                      ? const Text(
+                          "Alterar",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      : const Text(
+                          "Salvar",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
               onPressed: () {
-                store.registrarArea();
+                if (store.isEditing) {
+                  store.alterarArea();
+                } else {
+                  store.registrarArea();
+                }
               }, //store.registrarReservatorio(),
             );
           }),
