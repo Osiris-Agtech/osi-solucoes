@@ -10,8 +10,11 @@ import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/nomePage.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/reservatorioPage.dart';
 
-SizedBox pagesNovoSetor(BuildContext context,
-    CarouselController carouselController, CarouselController controlerPages, SetorStore store) {
+SizedBox pagesNovoSetor(
+    BuildContext context,
+    CarouselController carouselController,
+    CarouselController controlerPages,
+    SetorStore store) {
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
     child: Column(
@@ -88,16 +91,15 @@ SizedBox pagesNovoSetor(BuildContext context,
                       Icon(
                         Icons.chevron_left,
                         color: store.dotIndicator == 0
-                             ? Colors.grey
-                             : Constants.kButtonGrey,
+                            ? Colors.grey
+                            : Constants.kButtonGrey,
                       ),
                       const Text(
                         'Voltar',
                         style: TextStyle(
-                          fontSize: 18,
-                          fontStyle: FontStyle.italic,
-                          color: Constants.kButtonGrey
-                        ),
+                            fontSize: 18,
+                            fontStyle: FontStyle.italic,
+                            color: Constants.kButtonGrey),
                       ),
                     ],
                   );
@@ -139,21 +141,19 @@ class _NextStepButtonState extends State<NextStepButton> {
         primary: Constants.kPrimaryColor,
       ),
       child: Center(
-        child: Observer(builder: (_) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                Text(
-                  'Avançar',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                ),
-                Icon(Icons.chevron_right),
-              ],
-            ),
-          );
-        }),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              Text(
+                'Avançar',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+              Icon(Icons.chevron_right),
+            ],
+          ),
+        ),
       ),
       onPressed: () {
         if (store.dotIndicator == 1) {

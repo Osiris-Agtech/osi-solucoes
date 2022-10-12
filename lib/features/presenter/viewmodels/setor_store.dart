@@ -56,10 +56,10 @@ abstract class _SetorStoreBase with Store {
   // #################### START CADASTRO SETOR #######################
 
   @observable
-  List<Reservatorio> reservatorioList = [];
+  bool isEditing = false;
 
   @observable
-  Reservatorio? selectedReservatorio;
+  List<Reservatorio> reservatorioList = [];
 
   @observable
   TextEditingController novoSetorName = TextEditingController(text: '');
@@ -79,6 +79,23 @@ abstract class _SetorStoreBase with Store {
   @observable
   int dotIndicator = 1;
 
+  @observable
+  Setor novoSetor = Setor();
+
+  @action
+  setIsEditing(bool value) => isEditing = value;
+
+  @action
+  setSetorEditing(Setor setor) {
+    novoSetorName = TextEditingController(text: setor.nome);
+    novoSetorDescription = TextEditingController(text: setor.descricao);
+    novoSetorReservatorio = setor.reservatorio!;
+    areaSelecionada = setor.area!;
+    novoSetor = setor;
+    setIsEditing(true);
+    return;
+  }
+
   @action
   setDotIndicator(int value) {
     if (value >= 0 && value <= 1) {
@@ -89,11 +106,6 @@ abstract class _SetorStoreBase with Store {
   @action
   setShowTextFormField(bool value) {
     showTextFormField = value;
-  }
-
-  @action
-  selectReservatorio(Reservatorio reservatorio) {
-    selectedReservatorio = reservatorio;
   }
 
   @action
@@ -121,14 +133,13 @@ abstract class _SetorStoreBase with Store {
     areaSelecionada = Area();
   }
 
-
   @action
   alterarNome(String name) {
     novoSetorName = TextEditingController(text: name);
   }
 
-   @action
-  setLocalizacaoSelecionada(Reservatorio reservatorio) =>
+  @action
+  setReservatorioSelecionada(Reservatorio reservatorio) =>
       novoSetorReservatorio = reservatorio;
 
   @action
@@ -136,10 +147,10 @@ abstract class _SetorStoreBase with Store {
     SetorRepository setorRepository = GetIt.I<SetorRepository>();
     isNovoSetorLoading = true;
 
-    Setor novoSetor = Setor(
+    novoSetor = Setor(
       nome: novoSetorName.text,
       descricao: novoSetorDescription.text,
-      reservatorio: selectedReservatorio,
+      reservatorio: novoSetorReservatorio,
       area: areaSelecionada,
     );
 
@@ -151,6 +162,33 @@ abstract class _SetorStoreBase with Store {
       },
       (data) async {
         toastSuccess(message: "Cadastrado com sucesso");
+        buscarSetores();
+        limparTudo();
+        Get.close(1);
+      },
+    );
+
+    isNovoSetorLoading = false;
+  }
+
+  @action
+  alterarSetor() async {
+    SetorRepository setorRepository = GetIt.I<SetorRepository>();
+    isNovoSetorLoading = true;
+
+    novoSetor.nome = novoSetorName.text;
+    novoSetor.descricao = novoSetorDescription.text;
+    novoSetor.reservatorio = novoSetorReservatorio;
+    novoSetor.area = areaSelecionada;
+
+    var alterarSetor = await setorRepository.alterarSetor(novoSetor);
+
+    alterarSetor.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        toastSuccess(message: "Alterado com sucesso");
         buscarSetores();
         limparTudo();
         Get.close(1);

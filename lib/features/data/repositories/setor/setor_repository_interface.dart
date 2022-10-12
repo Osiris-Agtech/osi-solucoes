@@ -8,4 +8,5 @@ abstract class ISetorRepository {
   Future<Either<Failure, List<Setor>>> buscarSetores(int areaId);
   Future<Either<Failure, Setor>> cadastrarSetor(Setor setor);
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(int contaId);
+  Future<Either<Failure, Setor>> alterarSetor(Setor alterarSetor);
 }

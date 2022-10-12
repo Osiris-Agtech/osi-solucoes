@@ -35,8 +35,7 @@ Container nomePage(BuildContext context, SetorStore store) {
                 TextSpan(
                   text: '?',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Constants.kText2),
+                      fontWeight: FontWeight.bold, color: Constants.kText2),
                 ),
               ],
             ),
@@ -44,27 +43,23 @@ Container nomePage(BuildContext context, SetorStore store) {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 30),
-          child: Observer(
-            builder: (_) {
-              return TextFormField(
-                // controller: store.novoSetorName,
-                textCapitalization: TextCapitalization.words,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.normal,
-                  fontStyle: FontStyle.italic,
-                ),
-                decoration: const InputDecoration(
-                  hintText: 'EX. Setor de Crescimento',
-                  hintStyle: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-                onChanged: (String value) => store.alterarNome(value),
-              );
-            }
+          child: TextFormField(
+            initialValue: store.novoSetorName.text,
+            textCapitalization: TextCapitalization.words,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.normal,
+              fontStyle: FontStyle.italic,
+            ),
+            decoration: const InputDecoration(
+              hintText: 'EX. Setor de Crescimento',
+              hintStyle: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.normal,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+            onChanged: (String value) => store.alterarNome(value),
           ),
         ),
         const Spacer(),
