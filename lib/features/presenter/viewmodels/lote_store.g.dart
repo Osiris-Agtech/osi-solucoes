@@ -102,6 +102,23 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$isMigrateLoteLoadingAtom =
+      Atom(name: '_LoteStoreBase.isMigrateLoteLoading');
+
+  @override
+  bool get isMigrateLoteLoading {
+    _$isMigrateLoteLoadingAtom.reportRead();
+    return super.isMigrateLoteLoading;
+  }
+
+  @override
+  set isMigrateLoteLoading(bool value) {
+    _$isMigrateLoteLoadingAtom.reportWrite(value, super.isMigrateLoteLoading,
+        () {
+      super.isMigrateLoteLoading = value;
+    });
+  }
+
   final _$loteSelecionadoAtom = Atom(name: '_LoteStoreBase.loteSelecionado');
 
   @override
@@ -485,6 +502,13 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     return _$buscarLotesAsyncAction.run(() => super.buscarLotes());
   }
 
+  final _$migrarLoteAsyncAction = AsyncAction('_LoteStoreBase.migrarLote');
+
+  @override
+  Future migrarLote() {
+    return _$migrarLoteAsyncAction.run(() => super.migrarLote());
+  }
+
   final _$buscarDetalhesLoteAsyncAction =
       AsyncAction('_LoteStoreBase.buscarDetalhesLote');
 
@@ -724,6 +748,7 @@ loteList: ${loteList},
 areaList: ${areaList},
 isAreaLoading: ${isAreaLoading},
 isDetalhesLoteLoading: ${isDetalhesLoteLoading},
+isMigrateLoteLoading: ${isMigrateLoteLoading},
 loteSelecionado: ${loteSelecionado},
 areaSelecionada: ${areaSelecionada},
 setorSelecionadoMigrar: ${setorSelecionadoMigrar},
