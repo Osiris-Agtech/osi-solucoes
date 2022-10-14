@@ -96,6 +96,10 @@ class LoteDatasource implements ILoteDatasource {
                 id
                 nome
               }
+              reservatorio {
+                id
+                nome
+              }
             }
             cultura {
               id
@@ -156,6 +160,10 @@ class LoteDatasource implements ILoteDatasource {
           setores {
             id
             nome
+            reservatorio {
+              id
+              nome
+            }
           }
         }
       }
@@ -311,9 +319,13 @@ class LoteDatasource implements ILoteDatasource {
               id
               nome
               bandeijas_semeadas
-              setor{
+              setor {
                 id
                 nome
+                reservatorio {
+                  id
+                  nome
+                }
               }
             }
             solucao {
@@ -392,6 +404,10 @@ class LoteDatasource implements ILoteDatasource {
                 id
                 nome
               }
+              reservatorio {
+                id
+                nome
+              }
             }
           }
         }
@@ -444,6 +460,10 @@ class LoteDatasource implements ILoteDatasource {
             setor {
               id
               nome
+              reservatorio {
+                id
+                nome
+              }
             }
             reservatorio {
               id

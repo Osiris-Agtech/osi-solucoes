@@ -923,7 +923,56 @@ class _CustomDialogState extends State<CustomDialog> {
                       );
                     }),
                     onPressed: () {
-                      store.migrarLote();
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text(
+                              "Deseja alterar reservatório ?",
+                              style: TextStyle(
+                                color: Constants.kText2,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            content: const Text(
+                              "Caso aceite, o reservatório do lote será alterado automaticamente para o reservatório vinculado ao setor escolhido",
+                              style: TextStyle(
+                                color: Constants.kGreyText,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            actions: [
+                              TextButton(
+                                child: const Text(
+                                  "Sim",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  store.migrarLote(true);
+                                },
+                              ),
+                              TextButton(
+                                child: const Text(
+                                  "Não",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  store.migrarLote(false);
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                   ),
                 ),

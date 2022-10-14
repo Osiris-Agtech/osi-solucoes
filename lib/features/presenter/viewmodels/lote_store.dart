@@ -82,7 +82,7 @@ abstract class _LoteStoreBase with Store {
   selecionarSetorMigrar(Setor setor) => setorSelecionadoMigrar = setor;
 
   @action
-  migrarLote() async {
+  migrarLote(bool migrarReservatorio) async {
     isMigrateLoteLoading = true;
 
     SetorStore setorStore = GetIt.I<SetorStore>();
@@ -91,7 +91,9 @@ abstract class _LoteStoreBase with Store {
     var lote = await loteRepository.migrarLote(
       loteSelecionado.id!,
       setorSelecionadoMigrar.id!,
-      loteSelecionado.reservatorio!.id!,
+      migrarReservatorio
+          ? setorSelecionadoMigrar.reservatorio!.id!
+          : loteSelecionado.reservatorio!.id!,
     );
 
     lote.fold(
@@ -100,7 +102,7 @@ abstract class _LoteStoreBase with Store {
       },
       (data) async {
         limparTudo();
-        Get.close(3);
+        Get.close(4);
         setorStore.buscarSetores();
       },
     );
@@ -172,6 +174,9 @@ abstract class _LoteStoreBase with Store {
   bool showReservatorioDetalhes = false;
 
   @observable
+  bool isNovaCultura = false;
+
+  @observable
   int dotIndicator = 1;
 
   @observable
@@ -185,6 +190,9 @@ abstract class _LoteStoreBase with Store {
 
   @observable
   TextEditingController novoLoteName = TextEditingController();
+
+  @observable
+  TextEditingController novaCulturaController = TextEditingController();
 
   @observable
   Cultura novoLoteCultura = Cultura();
@@ -288,6 +296,9 @@ abstract class _LoteStoreBase with Store {
 
   @action
   setShowReservatorioDetalhes(bool value) => showReservatorioDetalhes = value;
+
+  @action
+  setIsNovaCultura(bool value) => isNovaCultura = value;
 
   @action
   setReservatorioDetalhes(Reservatorio reservatorio) {

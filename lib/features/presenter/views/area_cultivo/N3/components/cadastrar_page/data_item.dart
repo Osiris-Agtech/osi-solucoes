@@ -4,26 +4,24 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
 datas(BuildContext context, LoteStore store) {
-  return Observer(builder: (_) {
-    return Column(
-      children: [
-        const ListTile(
-          leading: Icon(
-            Icons.watch_later,
-            color: Constants.kPrimaryColor,
-          ),
-          title: Text(
-            'Datas',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
+  return Column(
+    children: [
+      const ListTile(
+        leading: Icon(
+          Icons.watch_later,
+          color: Constants.kPrimaryColor,
         ),
-        registroItem(store, context),
-        semeaduraItem(store, context),
-        transplantioItem(store, context),
-        colheitaItem(store, context),
-      ],
-    );
-  });
+        title: Text(
+          'Datas',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+        ),
+      ),
+      registroItem(store, context),
+      semeaduraItem(store, context),
+      transplantioItem(store, context),
+      colheitaItem(store, context),
+    ],
+  );
 }
 
 registroItem(LoteStore store, BuildContext context) {
