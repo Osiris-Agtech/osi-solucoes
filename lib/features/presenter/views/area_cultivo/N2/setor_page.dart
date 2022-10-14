@@ -251,45 +251,6 @@ class _CardSetorState extends State<CardSetor> {
                             fontStyle: FontStyle.italic,
                           ),
                         ),
-                        const SizedBox(width: 150),
-                        Theme(
-                          data: Theme.of(context).copyWith(
-                            highlightColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                          ),
-                          child: PopupMenuButton(
-                            icon: SvgPicture.asset(
-                              "assets/icons/settings_icon.svg",
-                              color: Constants.kButtonGrey,
-                              height: 20,
-                            ),
-                            itemBuilder: (context) => [
-                              PopupMenuItem(
-                                child: Row(
-                                  children: const [
-                                    Text('Editar'),
-                                  ],
-                                ),
-                                onTap: () async {
-                                  await setorStore
-                                      .setSetorEditing(widget.setor);
-                                  Get.to(
-                                    () => const CadastrarSetorPage(),
-                                    transition: Transition.rightToLeft,
-                                  );
-                                },
-                              ),
-                              PopupMenuItem(
-                                child: Row(
-                                  children: const [
-                                    Text('Deletar'),
-                                  ],
-                                ),
-                                onTap: () {},
-                              ),
-                            ],
-                          ),
-                        ),
                       ],
                     ),
                     Padding(
@@ -326,10 +287,54 @@ class _CardSetorState extends State<CardSetor> {
                   ],
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.chevron_right_rounded),
-                color: Constants.kPrimaryColor,
-                onPressed: () {},
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                    ),
+                    child: PopupMenuButton(
+                      icon: SvgPicture.asset(
+                        "assets/icons/settings_icon.svg",
+                        color: Constants.kButtonGrey,
+                        height: 20,
+                      ),
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: Row(
+                            children: const [
+                              Text('Editar'),
+                            ],
+                          ),
+                          onTap: () async {
+                            await setorStore.setSetorEditing(widget.setor);
+                            Get.to(
+                              () => const CadastrarSetorPage(),
+                              transition: Transition.rightToLeft,
+                            );
+                          },
+                        ),
+                        PopupMenuItem(
+                          child: Row(
+                            children: const [
+                              Text('Deletar'),
+                            ],
+                          ),
+                          onTap: () {},
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 25),
+                    child: Icon(
+                      Icons.chevron_right_rounded,
+                      color: Constants.kPrimaryColor,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
