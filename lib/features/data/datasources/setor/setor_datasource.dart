@@ -12,6 +12,7 @@ abstract class ISetorDatasource {
   Future<Either<Failure, Setor>> cadastrarSetor({required Setor setor});
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(
       {required int contaId});
+  Future<Either<Failure, Setor>> alterarSetor({required Setor alterarSetor});
 }
 
 class SetorDatasource implements ISetorDatasource {
@@ -31,7 +32,18 @@ class SetorDatasource implements ISetorDatasource {
           }) {
             id
             nome
+            descricao
+            area {
+              id
+              nome
+            }
+            reservatorio {
+              id
+              nome
+              volume
+            }
             lotes {
+              id
               nome
             }
           }
@@ -64,8 +76,8 @@ class SetorDatasource implements ISetorDatasource {
   }
 
   @override
-  Future<Either<Failure, Setor>> cadastrarSetor({required Setor setor}) async{
-     GraphQLClient client = GraphQLAPI().getGraphQLClient();
+  Future<Either<Failure, Setor>> cadastrarSetor({required Setor setor}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     try {
       const String readRepositories = r'''
@@ -84,9 +96,19 @@ class SetorDatasource implements ISetorDatasource {
             }
           }
         }) {
+          id
           nome
           descricao
           area {
+            id
+            nome
+          }
+          reservatorio {
+            id
+            nome
+            volume
+          }
+          lotes {
             id
             nome
           }
@@ -117,6 +139,60 @@ class SetorDatasource implements ISetorDatasource {
       }
     } catch (e) {
       return Left(ErrorSetor(message: FailureMessage.errorNovoSetorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Setor>> alterarSetor(
+      {required Setor alterarSetor}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    try {
+      const String readRepositories = r'''
+        mutation UpdateSetor($setorId: Int!, $setorNome: String!, $setorDescricao: String!, $areaId: Int!, $reservatorioId: Int!) {
+          updateSetor(setorId: $setorId, setorNome: $setorNome, setorDescricao: $setorDescricao, areaId: $areaId, reservatorioId: $reservatorioId) {
+            id
+            nome
+            descricao
+            area {
+              id
+              nome
+            }
+            reservatorio {
+              id
+              nome
+              volume
+            }
+          }
+        }
+      ''';
+
+      final MutationOptions? options;
+
+      options = MutationOptions(
+        document: gql(readRepositories),
+        variables: <String, dynamic>{
+          "setorId": alterarSetor.id,
+          "setorNome": alterarSetor.nome,
+          "setorDescricao": alterarSetor.descricao,
+          "reservatorioId": alterarSetor.reservatorio!.id,
+          "areaId": alterarSetor.area!.id,
+          //verificar
+        },
+      );
+
+      final QueryResult result = await client.mutate(options);
+
+      if (!result.hasException) {
+        Setor? setor = Setor.fromJson(result.data?['updateSetor']);
+
+        return Right(setor);
+      } else {
+        return Left(
+            ErrorSetor(message: FailureMessage.errorAlterarSetorMessage));
+      }
+    } catch (e) {
+      return Left(ErrorSetor(message: FailureMessage.errorAlterarAreaMessage));
     }
   }
 
@@ -172,5 +248,4 @@ class SetorDatasource implements ISetorDatasource {
       return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
     }
   }
-
 }

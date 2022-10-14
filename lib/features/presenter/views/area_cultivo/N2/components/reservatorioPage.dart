@@ -109,6 +109,10 @@ Widget reservatorioPage(BuildContext context, SetorStore store) {
           padding: const EdgeInsets.only(top: 5, left: 40, right: 40),
           child: Observer(builder: (_) {
             return DropdownButtonFormField<Reservatorio>(
+              value: store.novoSetorReservatorio.id != null
+                  ? store.reservatorioList.firstWhere(
+                      (element) => element.id == store.novoSetorReservatorio.id)
+                  : null,
               isExpanded: true,
               hint: const Text('Selecionar'),
               iconEnabledColor: Constants.kPrimaryColor,
@@ -120,8 +124,7 @@ Widget reservatorioPage(BuildContext context, SetorStore store) {
               }).toList(),
               onChanged: (value) {
                 if (value != null) {
-                  store.selectReservatorio(value);
-                  store.setLocalizacaoSelecionada(value);
+                  store.setReservatorioSelecionada(value);
                 }
               },
             );

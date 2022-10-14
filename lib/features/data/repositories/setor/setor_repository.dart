@@ -19,7 +19,7 @@ class SetorRepository implements ISetorRepository {
   }
 
   @override
-  Future<Either<Failure, Setor>> cadastrarSetor(Setor setor) async{
+  Future<Either<Failure, Setor>> cadastrarSetor(Setor setor) async {
     var result = await datasource.cadastrarSetor(setor: setor);
 
     return result;
@@ -29,6 +29,13 @@ class SetorRepository implements ISetorRepository {
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(
       int contaId) async {
     var result = await datasource.buscarReservatorios(contaId: contaId);
+
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, Setor>> alterarSetor(Setor alterarSetor) async {
+    var result = await datasource.alterarSetor(alterarSetor: alterarSetor);
 
     return result;
   }

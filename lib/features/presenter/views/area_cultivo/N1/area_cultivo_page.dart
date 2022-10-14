@@ -164,59 +164,55 @@ class _CardAreaState extends State<CardArea> {
                           onPressed: null,
                         ),
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            "# ${widget.area.id}",
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: Constants.kGreyText,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 220,
-                          ),
-                          Theme(
-                            data: Theme.of(context).copyWith(
-                              highlightColor: Colors.transparent,
-                              splashColor: Colors.transparent,
-                            ),
-                            child: PopupMenuButton(
-                              icon: SvgPicture.asset(
-                                "assets/icons/settings_icon.svg",
-                                color: Constants.kButtonGrey,
-                                height: 20,
-                              ),
-                              itemBuilder: (context) => [
-                                PopupMenuItem(
-                                  child: Row(
-                                    children: const [
-                                      Text('Editar'),
-                                    ],
-                                  ),
-                                  onTap: () async {
-                                    await store.setAreaEditing(widget.area);
-                                    Get.to(
-                                      () => const CadastrarAreaCultivo(),
-                                      transition: Transition.rightToLeft,
-                                    );
-                                  },
-                                ),
-                                PopupMenuItem(
-                                  child: Row(
-                                    children: const [
-                                      Text('Deletar'),
-                                    ],
-                                  ),
-                                  onTap: () {},
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                      Text(
+                        "# ${widget.area.id}",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Constants.kGreyText,
+                        ),
                       ),
                       const Spacer(),
+                      Theme(
+                        data: Theme.of(context).copyWith(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: PopupMenuButton(
+                            icon: SvgPicture.asset(
+                              "assets/icons/settings_icon.svg",
+                              color: Constants.kButtonGrey,
+                              height: 20,
+                            ),
+                            itemBuilder: (context) => [
+                              PopupMenuItem(
+                                child: Row(
+                                  children: const [
+                                    Text('Editar'),
+                                  ],
+                                ),
+                                onTap: () async {
+                                  await store.setAreaEditing(widget.area);
+                                  Get.to(
+                                    () => const CadastrarAreaCultivo(),
+                                    transition: Transition.rightToLeft,
+                                  );
+                                },
+                              ),
+                              PopupMenuItem(
+                                child: Row(
+                                  children: const [
+                                    Text('Deletar'),
+                                  ],
+                                ),
+                                onTap: () {},
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
