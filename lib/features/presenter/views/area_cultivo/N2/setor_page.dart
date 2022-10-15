@@ -2,6 +2,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
@@ -9,6 +10,7 @@ import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/cadastrar_setor_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/lote_page.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 import '../../home/components/top_app_bar.dart';
@@ -200,7 +202,7 @@ class CardSetor extends StatefulWidget {
 
 class _CardSetorState extends State<CardSetor> {
   LoteStore loteStore = GetIt.I<LoteStore>();
-
+  SetorStore setorStore = GetIt.I<SetorStore>();
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -249,7 +251,6 @@ class _CardSetorState extends State<CardSetor> {
                             fontStyle: FontStyle.italic,
                           ),
                         ),
-                        const Spacer(),
                       ],
                     ),
                     Padding(
@@ -286,10 +287,54 @@ class _CardSetorState extends State<CardSetor> {
                   ],
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.chevron_right_rounded),
-                color: Constants.kPrimaryColor,
-                onPressed: () {},
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                    ),
+                    child: PopupMenuButton(
+                      icon: SvgPicture.asset(
+                        "assets/icons/settings_icon.svg",
+                        color: Constants.kButtonGrey,
+                        height: 20,
+                      ),
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: Row(
+                            children: const [
+                              Text('Editar'),
+                            ],
+                          ),
+                          onTap: () async {
+                            await setorStore.setSetorEditing(widget.setor);
+                            Get.to(
+                              () => const CadastrarSetorPage(),
+                              transition: Transition.rightToLeft,
+                            );
+                          },
+                        ),
+                        PopupMenuItem(
+                          child: Row(
+                            children: const [
+                              Text('Deletar'),
+                            ],
+                          ),
+                          onTap: () {},
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 25),
+                    child: Icon(
+                      Icons.chevron_right_rounded,
+                      color: Constants.kPrimaryColor,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

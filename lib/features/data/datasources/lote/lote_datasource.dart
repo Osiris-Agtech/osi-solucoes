@@ -21,6 +21,8 @@ abstract class ILoteDatasource {
   Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
       {required int reservatorioId});
   Future<Either<Failure, Lote>> registrarLote({required Lote lote});
+  Future<Either<Failure, Lote>> migrarLote(
+      {required int loteId, required int setorId, required int reservatorioId});
 }
 
 class LoteDatasource implements ILoteDatasource {
@@ -94,6 +96,10 @@ class LoteDatasource implements ILoteDatasource {
                 id
                 nome
               }
+              reservatorio {
+                id
+                nome
+              }
             }
             cultura {
               id
@@ -154,6 +160,10 @@ class LoteDatasource implements ILoteDatasource {
           setores {
             id
             nome
+            reservatorio {
+              id
+              nome
+            }
           }
         }
       }
@@ -309,9 +319,13 @@ class LoteDatasource implements ILoteDatasource {
               id
               nome
               bandeijas_semeadas
-              setor{
+              setor {
                 id
                 nome
+                reservatorio {
+                  id
+                  nome
+                }
               }
             }
             solucao {
@@ -390,6 +404,10 @@ class LoteDatasource implements ILoteDatasource {
                 id
                 nome
               }
+              reservatorio {
+                id
+                nome
+              }
             }
           }
         }
@@ -424,6 +442,56 @@ class LoteDatasource implements ILoteDatasource {
       return Right(loteResult);
     } else {
       return Left(ErrorLote(message: FailureMessage.errorNovoLoteMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Lote>> migrarLote(
+      {required int loteId,
+      required int setorId,
+      required int reservatorioId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+        mutation MigrarLote($loteId: Int!, $setorId: Int!, $novoReservatorioId: Int!) {
+          migrarLote(loteId: $loteId, setorId: $setorId, novoReservatorioId: $novoReservatorioId) {
+            id
+            nome
+            setor {
+              id
+              nome
+              reservatorio {
+                id
+                nome
+              }
+            }
+            reservatorio {
+              id
+              nome
+            }
+          }
+        }
+      ''';
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "loteId": loteId,
+        "setorId": setorId,
+        "novoReservatorioId": reservatorioId,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      Lote? loteResult = Lote.fromJson(result.data?['migrarLote']);
+
+      return Right(loteResult);
+    } else {
+      return Left(ErrorLote(message: FailureMessage.errorMigrarLoteMessage));
     }
   }
 }

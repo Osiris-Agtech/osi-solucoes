@@ -10,6 +10,7 @@ import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 
 import '../models/area/area_model.dart';
 
@@ -66,6 +67,9 @@ abstract class _LoteStoreBase with Store {
   bool isDetalhesLoteLoading = false;
 
   @observable
+  bool isMigrateLoteLoading = false;
+
+  @observable
   Lote loteSelecionado = Lote();
 
   @observable
@@ -76,6 +80,35 @@ abstract class _LoteStoreBase with Store {
 
   @action
   selecionarSetorMigrar(Setor setor) => setorSelecionadoMigrar = setor;
+
+  @action
+  migrarLote(bool migrarReservatorio) async {
+    isMigrateLoteLoading = true;
+
+    SetorStore setorStore = GetIt.I<SetorStore>();
+    LoteRepository loteRepository = GetIt.I<LoteRepository>();
+
+    var lote = await loteRepository.migrarLote(
+      loteSelecionado.id!,
+      setorSelecionadoMigrar.id!,
+      migrarReservatorio
+          ? setorSelecionadoMigrar.reservatorio!.id!
+          : loteSelecionado.reservatorio!.id!,
+    );
+
+    lote.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        limparTudo();
+        Get.close(4);
+        setorStore.buscarSetores();
+      },
+    );
+
+    isMigrateLoteLoading = false;
+  }
 
   @action
   selecionarLote(Lote lote) => loteSelecionado = lote;
@@ -141,6 +174,9 @@ abstract class _LoteStoreBase with Store {
   bool showReservatorioDetalhes = false;
 
   @observable
+  bool isNovaCultura = false;
+
+  @observable
   int dotIndicator = 1;
 
   @observable
@@ -154,6 +190,9 @@ abstract class _LoteStoreBase with Store {
 
   @observable
   TextEditingController novoLoteName = TextEditingController();
+
+  @observable
+  TextEditingController novaCulturaController = TextEditingController();
 
   @observable
   Cultura novoLoteCultura = Cultura();
@@ -257,6 +296,9 @@ abstract class _LoteStoreBase with Store {
 
   @action
   setShowReservatorioDetalhes(bool value) => showReservatorioDetalhes = value;
+
+  @action
+  setIsNovaCultura(bool value) => isNovaCultura = value;
 
   @action
   setReservatorioDetalhes(Reservatorio reservatorio) {

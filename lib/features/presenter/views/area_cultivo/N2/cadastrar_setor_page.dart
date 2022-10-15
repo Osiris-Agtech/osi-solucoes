@@ -150,15 +150,17 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 10),
-          child: Text(
-            store.areaSelecionada.nome ?? '',
-            style: const TextStyle(
-              fontSize: 18,
-              color: Constants.kPrimaryColor,
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
+          child: Observer(builder: (_) {
+            return Text(
+              store.areaSelecionada.nome ?? '',
+              style: const TextStyle(
+                fontSize: 18,
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontStyle: FontStyle.italic,
+              ),
+            );
+          }),
         ),
         const Spacer(),
         Padding(
@@ -212,15 +214,31 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              child: const Text(
-                "Salvar",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              child: store.isNovoSetorLoading
+                  ? const CircularProgressIndicator(
+                      color: Colors.white,
+                    )
+                  : store.isEditing
+                      ? const Text(
+                          "Alterar",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      : const Text(
+                          "Salvar",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
               onPressed: () {
-                store.registrarSetor();
+                if (store.isEditing) {
+                  store.alterarSetor();
+                } else {
+                  store.registrarSetor();
+                }
               }, //store.registrarReservatorio(),
             );
           }),
@@ -238,39 +256,39 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
               'Nome',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
             ),
-              trailing: store.novoSetorName.text.isNotEmpty
-              ? SizedBox(
-                  width: 100,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        width: 76,
-                        child: Text(
-                          store.novoSetorName.text,
-                          textAlign: TextAlign.end,
-                          style: const TextStyle(
-                            color: Constants.kPrimaryColor,
-                            fontWeight: FontWeight.w600,
+            trailing: store.novoSetorName.text.isNotEmpty
+                ? SizedBox(
+                    width: 100,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          width: 76,
+                          child: Text(
+                            store.novoSetorName.text,
+                            textAlign: TextAlign.end,
+                            style: const TextStyle(
+                              color: Constants.kPrimaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      const Icon(
-                        Icons.chevron_right,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ],
+                        const Icon(
+                          Icons.chevron_right,
+                          color: Constants.kPrimaryColor,
+                        ),
+                      ],
+                    ),
+                  )
+                : const Text(
+                    "Preencher",
+                    style: TextStyle(
+                      color: Constants.kPrimaryColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                )
-              : const Text(
-                  "Preencher",
-                  style: TextStyle(
-                    color: Constants.kPrimaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
             onTap: () {
               store.setDotIndicator(0);
               bottomSheet(context, carouselController, controlerPages, store);
@@ -292,7 +310,7 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
             'Reservatório',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
-           trailing: store.novoSetorReservatorio.nome != null &&
+          trailing: store.novoSetorReservatorio.nome != null &&
                   store.novoSetorReservatorio.nome!.isNotEmpty
               ? SizedBox(
                   width: 100,

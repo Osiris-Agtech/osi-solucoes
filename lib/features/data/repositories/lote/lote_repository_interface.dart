@@ -15,4 +15,6 @@ abstract class ILoteRepository {
   Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
       int reservatorioId);
   Future<Either<Failure, Lote>> registrarLote(Lote lote);
+  Future<Either<Failure, Lote>> migrarLote(
+      int loteId, int setorId, int reservatorioId);
 }

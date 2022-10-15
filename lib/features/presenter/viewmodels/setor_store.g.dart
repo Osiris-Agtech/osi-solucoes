@@ -55,6 +55,21 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
+  final _$isEditingAtom = Atom(name: '_SetorStoreBase.isEditing');
+
+  @override
+  bool get isEditing {
+    _$isEditingAtom.reportRead();
+    return super.isEditing;
+  }
+
+  @override
+  set isEditing(bool value) {
+    _$isEditingAtom.reportWrite(value, super.isEditing, () {
+      super.isEditing = value;
+    });
+  }
+
   final _$reservatorioListAtom = Atom(name: '_SetorStoreBase.reservatorioList');
 
   @override
@@ -67,23 +82,6 @@ mixin _$SetorStore on _SetorStoreBase, Store {
   set reservatorioList(List<Reservatorio> value) {
     _$reservatorioListAtom.reportWrite(value, super.reservatorioList, () {
       super.reservatorioList = value;
-    });
-  }
-
-  final _$selectedReservatorioAtom =
-      Atom(name: '_SetorStoreBase.selectedReservatorio');
-
-  @override
-  Reservatorio? get selectedReservatorio {
-    _$selectedReservatorioAtom.reportRead();
-    return super.selectedReservatorio;
-  }
-
-  @override
-  set selectedReservatorio(Reservatorio? value) {
-    _$selectedReservatorioAtom.reportWrite(value, super.selectedReservatorio,
-        () {
-      super.selectedReservatorio = value;
     });
   }
 
@@ -183,6 +181,21 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
+  final _$novoSetorAtom = Atom(name: '_SetorStoreBase.novoSetor');
+
+  @override
+  Setor get novoSetor {
+    _$novoSetorAtom.reportRead();
+    return super.novoSetor;
+  }
+
+  @override
+  set novoSetor(Setor value) {
+    _$novoSetorAtom.reportWrite(value, super.novoSetor, () {
+      super.novoSetor = value;
+    });
+  }
+
   final _$buscarSetoresAsyncAction =
       AsyncAction('_SetorStoreBase.buscarSetores');
 
@@ -208,6 +221,13 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     return _$registrarSetorAsyncAction.run(() => super.registrarSetor());
   }
 
+  final _$alterarSetorAsyncAction = AsyncAction('_SetorStoreBase.alterarSetor');
+
+  @override
+  Future alterarSetor() {
+    return _$alterarSetorAsyncAction.run(() => super.alterarSetor());
+  }
+
   final _$_SetorStoreBaseActionController =
       ActionController(name: '_SetorStoreBase');
 
@@ -217,6 +237,28 @@ mixin _$SetorStore on _SetorStoreBase, Store {
         name: '_SetorStoreBase.setAreaSelecionada');
     try {
       return super.setAreaSelecionada(estufa);
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setIsEditing(bool value) {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.setIsEditing');
+    try {
+      return super.setIsEditing(value);
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setSetorEditing(Setor setor) {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.setSetorEditing');
+    try {
+      return super.setSetorEditing(setor);
     } finally {
       _$_SetorStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -245,17 +287,6 @@ mixin _$SetorStore on _SetorStoreBase, Store {
   }
 
   @override
-  dynamic selectReservatorio(Reservatorio reservatorio) {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.selectReservatorio');
-    try {
-      return super.selectReservatorio(reservatorio);
-    } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic limparTudo() {
     final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
         name: '_SetorStoreBase.limparTudo');
@@ -278,11 +309,11 @@ mixin _$SetorStore on _SetorStoreBase, Store {
   }
 
   @override
-  dynamic setLocalizacaoSelecionada(Reservatorio reservatorio) {
+  dynamic setReservatorioSelecionada(Reservatorio reservatorio) {
     final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.setLocalizacaoSelecionada');
+        name: '_SetorStoreBase.setReservatorioSelecionada');
     try {
-      return super.setLocalizacaoSelecionada(reservatorio);
+      return super.setReservatorioSelecionada(reservatorio);
     } finally {
       _$_SetorStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -294,14 +325,15 @@ mixin _$SetorStore on _SetorStoreBase, Store {
 isSetorListLoading: ${isSetorListLoading},
 areaSelecionada: ${areaSelecionada},
 setorList: ${setorList},
+isEditing: ${isEditing},
 reservatorioList: ${reservatorioList},
-selectedReservatorio: ${selectedReservatorio},
 novoSetorName: ${novoSetorName},
 novoSetorDescription: ${novoSetorDescription},
 novoSetorReservatorio: ${novoSetorReservatorio},
 showTextFormField: ${showTextFormField},
 isNovoSetorLoading: ${isNovoSetorLoading},
-dotIndicator: ${dotIndicator}
+dotIndicator: ${dotIndicator},
+novoSetor: ${novoSetor}
     ''';
   }
 }

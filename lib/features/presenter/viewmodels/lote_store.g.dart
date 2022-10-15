@@ -102,6 +102,23 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$isMigrateLoteLoadingAtom =
+      Atom(name: '_LoteStoreBase.isMigrateLoteLoading');
+
+  @override
+  bool get isMigrateLoteLoading {
+    _$isMigrateLoteLoadingAtom.reportRead();
+    return super.isMigrateLoteLoading;
+  }
+
+  @override
+  set isMigrateLoteLoading(bool value) {
+    _$isMigrateLoteLoadingAtom.reportWrite(value, super.isMigrateLoteLoading,
+        () {
+      super.isMigrateLoteLoading = value;
+    });
+  }
+
   final _$loteSelecionadoAtom = Atom(name: '_LoteStoreBase.loteSelecionado');
 
   @override
@@ -229,6 +246,21 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$isNovaCulturaAtom = Atom(name: '_LoteStoreBase.isNovaCultura');
+
+  @override
+  bool get isNovaCultura {
+    _$isNovaCulturaAtom.reportRead();
+    return super.isNovaCultura;
+  }
+
+  @override
+  set isNovaCultura(bool value) {
+    _$isNovaCulturaAtom.reportWrite(value, super.isNovaCultura, () {
+      super.isNovaCultura = value;
+    });
+  }
+
   final _$dotIndicatorAtom = Atom(name: '_LoteStoreBase.dotIndicator');
 
   @override
@@ -301,6 +333,23 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   set novoLoteName(TextEditingController value) {
     _$novoLoteNameAtom.reportWrite(value, super.novoLoteName, () {
       super.novoLoteName = value;
+    });
+  }
+
+  final _$novaCulturaControllerAtom =
+      Atom(name: '_LoteStoreBase.novaCulturaController');
+
+  @override
+  TextEditingController get novaCulturaController {
+    _$novaCulturaControllerAtom.reportRead();
+    return super.novaCulturaController;
+  }
+
+  @override
+  set novaCulturaController(TextEditingController value) {
+    _$novaCulturaControllerAtom.reportWrite(value, super.novaCulturaController,
+        () {
+      super.novaCulturaController = value;
     });
   }
 
@@ -483,6 +532,14 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   @override
   Future buscarLotes() {
     return _$buscarLotesAsyncAction.run(() => super.buscarLotes());
+  }
+
+  final _$migrarLoteAsyncAction = AsyncAction('_LoteStoreBase.migrarLote');
+
+  @override
+  Future migrarLote(bool migrarReservatorio) {
+    return _$migrarLoteAsyncAction
+        .run(() => super.migrarLote(migrarReservatorio));
   }
 
   final _$buscarDetalhesLoteAsyncAction =
@@ -694,6 +751,17 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic setIsNovaCultura(bool value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setIsNovaCultura');
+    try {
+      return super.setIsNovaCultura(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setReservatorioDetalhes(Reservatorio reservatorio) {
     final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
         name: '_LoteStoreBase.setReservatorioDetalhes');
@@ -724,6 +792,7 @@ loteList: ${loteList},
 areaList: ${areaList},
 isAreaLoading: ${isAreaLoading},
 isDetalhesLoteLoading: ${isDetalhesLoteLoading},
+isMigrateLoteLoading: ${isMigrateLoteLoading},
 loteSelecionado: ${loteSelecionado},
 areaSelecionada: ${areaSelecionada},
 setorSelecionadoMigrar: ${setorSelecionadoMigrar},
@@ -732,11 +801,13 @@ isVisible: ${isVisible},
 isNovaAreaLoading: ${isNovaAreaLoading},
 isNovoLoteLoading: ${isNovoLoteLoading},
 showReservatorioDetalhes: ${showReservatorioDetalhes},
+isNovaCultura: ${isNovaCultura},
 dotIndicator: ${dotIndicator},
 culturaList: ${culturaList},
 novoLoteSetor: ${novoLoteSetor},
 novoLoteArea: ${novoLoteArea},
 novoLoteName: ${novoLoteName},
+novaCulturaController: ${novaCulturaController},
 novoLoteCultura: ${novoLoteCultura},
 novoLoteReservatorio: ${novoLoteReservatorio},
 registroData: ${registroData},

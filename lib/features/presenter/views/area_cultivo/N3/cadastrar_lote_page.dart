@@ -33,6 +33,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
     store.buscarAreasList();
     store.buscarCulturas();
     store.buscarReservatorios();
+    store.setIsNovaCultura(false);
   }
 
   @override
@@ -51,7 +52,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
         statusBarIconBrightness: Brightness.dark,
       ),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: appBar(),
         backgroundColor: Constants.kBackgroundColor,
         body: SingleChildScrollView(
@@ -185,8 +186,8 @@ bottomSheetN3(
   GlobalKey<FormFieldState> key,
 ) {
   return showModalBottomSheet<void>(
-    backgroundColor: Constants.kBackgroundColor,
     context: context,
+    backgroundColor: Constants.kBackgroundColor,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(10),
@@ -195,101 +196,111 @@ bottomSheetN3(
     ),
     isScrollControlled: true,
     builder: (BuildContext context) {
-      return SizedBox(
-        height: MediaQuery.of(context).size.height * 0.9,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 15, left: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Observer(
-                    builder: (_) {
-                      return store.dotIndicator == 3 &&
-                              store.showReservatorioDetalhes
-                          ? IconButton(
-                              onPressed: () =>
-                                  store.setShowReservatorioDetalhes(false),
-                              icon: const Icon(
-                                Icons.arrow_back_ios_new_rounded,
-                                size: 26,
-                              ),
-                              color: Constants.kPrimaryColor,
-                            )
-                          : IconButton(
-                              onPressed: () => Navigator.pop(context),
-                              icon: const Icon(
-                                Icons.close,
-                                size: 32,
-                              ),
-                              color: Constants.kPrimaryColor,
-                            );
-                    },
-                  ),
-                  Observer(builder: (_) {
-                    return DotsIndicator(
-                      dotsCount: 4,
-                      position: store.dotIndicator * 1.0,
-                      decorator: DotsDecorator(
-                        size: const Size.square(9.0),
-                        activeSize: const Size(18.0, 9.0),
-                        activeShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
+      return Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.9,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 15, left: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Observer(
+                        builder: (_) {
+                          return store.dotIndicator == 3 &&
+                                  store.showReservatorioDetalhes
+                              ? IconButton(
+                                  onPressed: () =>
+                                      store.setShowReservatorioDetalhes(false),
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios_new_rounded,
+                                    size: 26,
+                                  ),
+                                  color: Constants.kPrimaryColor,
+                                )
+                              : IconButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  icon: const Icon(
+                                    Icons.close,
+                                    size: 32,
+                                  ),
+                                  color: Constants.kPrimaryColor,
+                                );
+                        },
                       ),
-                    );
-                  }),
-                  const SizedBox(
-                    width: 70,
+                      Observer(builder: (_) {
+                        return DotsIndicator(
+                          dotsCount: 4,
+                          position: store.dotIndicator * 1.0,
+                          decorator: DotsDecorator(
+                            size: const Size.square(9.0),
+                            activeSize: const Size(18.0, 9.0),
+                            activeShape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                          ),
+                        );
+                      }),
+                      const SizedBox(
+                        width: 70,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Observer(builder: (_) {
-              return CarouselSlider(
-                carouselController: carouselController,
-                options: CarouselOptions(
-                  initialPage: store.dotIndicator,
-                  enableInfiniteScroll: false,
-                  height: MediaQuery.of(context).size.height * 0.9 - 140,
-                  viewportFraction: 1.0,
-                  enlargeCenterPage: false,
-                  scrollPhysics: const NeverScrollableScrollPhysics(),
                 ),
-                items: [
-                  setorPage(context, store, key),
-                  lotePage(context, store),
-                  culturaPage(context, store),
-                  AnimatedCrossFade(
-                    duration: const Duration(milliseconds: 200),
-                    firstChild: reservatorioPage(context, store),
-                    secondChild: reservatorioDetalhesPage(store),
-                    crossFadeState: !store.showReservatorioDetalhes
-                        ? CrossFadeState.showFirst
-                        : CrossFadeState.showSecond,
-                  ),
-                ],
-              );
-            }),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  BackStepButton(
+                Observer(builder: (_) {
+                  return CarouselSlider(
                     carouselController: carouselController,
+                    options: CarouselOptions(
+                      initialPage: store.dotIndicator,
+                      enableInfiniteScroll: false,
+                      height: MediaQuery.of(context).size.height * 0.9 - 140,
+                      viewportFraction: 1.0,
+                      enlargeCenterPage: false,
+                      scrollPhysics: const NeverScrollableScrollPhysics(),
+                      onPageChanged: (page, reason) {
+                        store.setIsNovaCultura(false);
+                      },
+                    ),
+                    items: [
+                      setorPage(context, store, key),
+                      lotePage(context, store),
+                      culturaPage(context, store),
+                      AnimatedCrossFade(
+                        duration: const Duration(milliseconds: 200),
+                        firstChild: reservatorioPage(context, store),
+                        secondChild: reservatorioDetalhesPage(store),
+                        crossFadeState: !store.showReservatorioDetalhes
+                            ? CrossFadeState.showFirst
+                            : CrossFadeState.showSecond,
+                      ),
+                    ],
+                  );
+                }),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      BackStepButton(
+                        carouselController: carouselController,
+                      ),
+                      NextStepButton(
+                        carouselController: carouselController,
+                      ),
+                    ],
                   ),
-                  NextStepButton(
-                    carouselController: carouselController,
-                  ),
-                ],
-              ),
-            )
-          ],
+                )
+              ],
+            ),
+          ),
         ),
       );
     },

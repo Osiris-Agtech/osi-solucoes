@@ -14,6 +14,7 @@ abstract class IAreaDatasource {
       {required int contaId});
   Future<Either<Failure, List<Area>>> buscarArea({required int contaId});
   Future<Either<Failure, Area>> registrarArea({required Area novaArea});
+  Future<Either<Failure, Area>> alterarArea({required Area alterarArea});
 }
 
 class AreaDatasource implements IAreaDatasource {
@@ -158,6 +159,7 @@ class AreaDatasource implements IAreaDatasource {
               nome
             }
             localizacao {
+              id
               cep
               endereco
             }
@@ -198,6 +200,58 @@ class AreaDatasource implements IAreaDatasource {
   }
 
   @override
+  Future<Either<Failure, Area>> alterarArea({required Area alterarArea}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    try {
+      const String readRepositories = r'''
+        mutation($areaId: Int!, $areaNome: String!, $areaDescricao: String!, $areaTipo: String!, $localizacaoId: Int!, $contaId: Int!) {
+          updateArea(areaId: $areaId, areaNome: $areaNome, areaDescricao: $areaDescricao, areaTipo: $areaTipo, localizacaoId: $localizacaoId, contaId: $contaId) {
+            id
+            nome
+            descricao
+            tipo
+            conta {
+              id
+              nome
+            }
+            localizacao {
+              id
+              endereco
+            }
+          }
+        }
+      ''';
+
+      final MutationOptions? options;
+
+      options = MutationOptions(
+        document: gql(readRepositories),
+        variables: <String, dynamic>{
+          "areaId": alterarArea.id,
+          "areaNome": alterarArea.nome,
+          "areaDescricao": alterarArea.descricao,
+          "areaTipo": "hidroponia",
+          "localizacaoId": alterarArea.localizacao!.id,
+          "contaId": alterarArea.conta!.id
+        },
+      );
+
+      final QueryResult result = await client.mutate(options);
+
+      if (!result.hasException) {
+        Area? area = Area.fromJson(result.data?['updateArea']);
+
+        return Right(area);
+      } else {
+        return Left(ErrorArea(message: FailureMessage.errorAlterarAreaMessage));
+      }
+    } catch (e) {
+      return Left(ErrorArea(message: FailureMessage.errorAlterarAreaMessage));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<Area>>> buscarArea({required int contaId}) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
@@ -213,6 +267,7 @@ class AreaDatasource implements IAreaDatasource {
             id
             nome
             localizacao {
+              id
               endereco
               bairro
               cidade

@@ -163,7 +163,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                               'Reservatório',
                               style: TextStyle(
                                 color: Constants.kGreyText,
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -171,7 +171,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                         ),
                       ),
                       const SizedBox(
-                        width: 16,
+                        width: 24,
                       ),
                       Column(
                         mainAxisSize: MainAxisSize.min,
@@ -193,14 +193,14 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Constants.kGreyText,
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(
-                        width: 16,
+                        width: 24,
                       ),
                       InkWell(
                         splashColor: Colors.transparent,
@@ -222,7 +222,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                               'Migrar Lote',
                               style: TextStyle(
                                 color: Constants.kGreyText,
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -230,10 +230,11 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                         ),
                         onTap: () {
                           showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const CustomDialog();
-                              });
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const CustomDialog();
+                            },
+                          );
                         },
                       ),
                       const SizedBox(
@@ -652,7 +653,7 @@ class _CustomDialogState extends State<CustomDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
               child: IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
@@ -697,7 +698,7 @@ class _CustomDialogState extends State<CustomDialog> {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 8,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -706,20 +707,27 @@ class _CustomDialogState extends State<CustomDialog> {
                 children: [
                   Flexible(
                     child: Text(
-                      ' - ${store.loteSelecionado.setor?.area?.nome ?? '-'}',
+                      store.loteSelecionado.setor?.area?.nome ?? '-',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                  const Spacer(),
-                  const Text(
-                    'Estufa',
-                    style: TextStyle(fontStyle: FontStyle.italic),
-                  ),
-                  Image.asset(
-                    "assets/icons/greenhouse1_icon.png",
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Estufa',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Image.asset(
+                        "assets/icons/greenhouse1_icon.png",
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -731,20 +739,27 @@ class _CustomDialogState extends State<CustomDialog> {
                 children: [
                   Flexible(
                     child: Text(
-                      ' - ${store.loteSelecionado.setor?.nome ?? '-'}',
+                      store.loteSelecionado.setor?.nome ?? '-',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  const Spacer(),
-                  const Text(
-                    'Setor',
-                    style: TextStyle(fontStyle: FontStyle.italic),
-                  ),
-                  Image.asset(
-                    "assets/icons/hydroponic1_icon.png",
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Setor',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Image.asset(
+                        "assets/icons/hydroponic1_icon.png",
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -820,12 +835,12 @@ class _CustomDialogState extends State<CustomDialog> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        child: Observer(builder: (_) {
-                          return Visibility(
-                            visible: store.isVisible,
+                      Observer(builder: (_) {
+                        return Visibility(
+                          visible: store.isVisible,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 16, right: 16, top: 4, bottom: 24),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -869,9 +884,9 @@ class _CustomDialogState extends State<CustomDialog> {
                                 ),
                               ],
                             ),
-                          );
-                        }),
-                      )
+                          ),
+                        );
+                      })
                     ],
                   ),
                 ),
@@ -890,14 +905,75 @@ class _CustomDialogState extends State<CustomDialog> {
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
-                    child: const Text(
-                      "Migrar",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    onPressed: () {},
+                    child: Observer(builder: (_) {
+                      if (store.isMigrateLoteLoading) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                      return const Text(
+                        "Migrar",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    }),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text(
+                              "Deseja alterar reservatório ?",
+                              style: TextStyle(
+                                color: Constants.kText2,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            content: const Text(
+                              "Caso aceite, o reservatório do lote será alterado automaticamente para o reservatório vinculado ao setor escolhido",
+                              style: TextStyle(
+                                color: Constants.kGreyText,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            actions: [
+                              TextButton(
+                                child: const Text(
+                                  "Sim",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  store.migrarLote(true);
+                                },
+                              ),
+                              TextButton(
+                                child: const Text(
+                                  "Não",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  store.migrarLote(false);
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
               ),
