@@ -130,6 +130,48 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
+  final _$selectedReservatorioAtom =
+      Atom(name: '_AjustesStoreBase.selectedReservatorio');
+
+  @override
+  Reservatorio get selectedReservatorio {
+    _$selectedReservatorioAtom.reportRead();
+    return super.selectedReservatorio;
+  }
+
+  @override
+  set selectedReservatorio(Reservatorio value) {
+    _$selectedReservatorioAtom.reportWrite(value, super.selectedReservatorio,
+        () {
+      super.selectedReservatorio = value;
+    });
+  }
+
+  final _$reservatorioListAtom =
+      Atom(name: '_AjustesStoreBase.reservatorioList');
+
+  @override
+  List<Reservatorio> get reservatorioList {
+    _$reservatorioListAtom.reportRead();
+    return super.reservatorioList;
+  }
+
+  @override
+  set reservatorioList(List<Reservatorio> value) {
+    _$reservatorioListAtom.reportWrite(value, super.reservatorioList, () {
+      super.reservatorioList = value;
+    });
+  }
+
+  final _$buscarReservatoriosAsyncAction =
+      AsyncAction('_AjustesStoreBase.buscarReservatorios');
+
+  @override
+  Future buscarReservatorios() {
+    return _$buscarReservatoriosAsyncAction
+        .run(() => super.buscarReservatorios());
+  }
+
   final _$_AjustesStoreBaseActionController =
       ActionController(name: '_AjustesStoreBase');
 
@@ -167,6 +209,17 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
   }
 
   @override
+  dynamic selectReservatorio(Reservatorio reservatorio) {
+    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
+        name: '_AjustesStoreBase.selectReservatorio');
+    try {
+      return super.selectReservatorio(reservatorio);
+    } finally {
+      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 selectedItem: ${selectedItem},
@@ -176,7 +229,9 @@ cEletricoDesejado: ${cEletricoDesejado},
 volumeAtual: ${volumeAtual},
 volumeDesejado: ${volumeDesejado},
 pH: ${pH},
-reservatorio: ${reservatorio}
+reservatorio: ${reservatorio},
+selectedReservatorio: ${selectedReservatorio},
+reservatorioList: ${reservatorioList}
     ''';
   }
 }
