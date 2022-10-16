@@ -163,6 +163,36 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
+  final _$ceAguaAtom = Atom(name: '_AjustesStoreBase.ceAgua');
+
+  @override
+  double get ceAgua {
+    _$ceAguaAtom.reportRead();
+    return super.ceAgua;
+  }
+
+  @override
+  set ceAgua(double value) {
+    _$ceAguaAtom.reportWrite(value, super.ceAgua, () {
+      super.ceAgua = value;
+    });
+  }
+
+  final _$reposicaoFertAtom = Atom(name: '_AjustesStoreBase.reposicaoFert');
+
+  @override
+  List<ReposicaoFert> get reposicaoFert {
+    _$reposicaoFertAtom.reportRead();
+    return super.reposicaoFert;
+  }
+
+  @override
+  set reposicaoFert(List<ReposicaoFert> value) {
+    _$reposicaoFertAtom.reportWrite(value, super.reposicaoFert, () {
+      super.reposicaoFert = value;
+    });
+  }
+
   final _$buscarReservatoriosAsyncAction =
       AsyncAction('_AjustesStoreBase.buscarReservatorios');
 
@@ -209,6 +239,28 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
   }
 
   @override
+  dynamic calculoLado(SolucaoFertilizanteConcentrada fertilizante, String ce) {
+    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
+        name: '_AjustesStoreBase.calculoLado');
+    try {
+      return super.calculoLado(fertilizante, ce);
+    } finally {
+      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic calculoAjuste() {
+    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
+        name: '_AjustesStoreBase.calculoAjuste');
+    try {
+      return super.calculoAjuste();
+    } finally {
+      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 selectedItem: ${selectedItem},
@@ -220,7 +272,9 @@ volumeDesejado: ${volumeDesejado},
 pH: ${pH},
 reservatorio: ${reservatorio},
 selectedReservatorio: ${selectedReservatorio},
-reservatorioList: ${reservatorioList}
+reservatorioList: ${reservatorioList},
+ceAgua: ${ceAgua},
+reposicaoFert: ${reposicaoFert}
     ''';
   }
 }

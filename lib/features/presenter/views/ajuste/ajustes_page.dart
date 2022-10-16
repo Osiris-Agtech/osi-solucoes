@@ -29,7 +29,6 @@ class AjustesPageState extends State<AjustesPage> {
   @override
   void initState() {
     store.buscarReservatorios();
-    print(store.reservatorioList);
     super.initState();
   }
 
@@ -54,14 +53,18 @@ class AjustesPageState extends State<AjustesPage> {
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 18.0),
             child: FloatingActionButton.extended(
-              onPressed: () {
-                store.reservatorio.text.isNotEmpty
-                    ? Get.to(
+              onPressed:
+                store.selectedReservatorio.nome != null &&
+                store.selectedReservatorio.nome!.isNotEmpty
+                    ? 
+                    () async{
+                      await store.calculoAjuste();
+                      Get.to(
                         () => const ResultadoajustePage(),
                         transition: Transition.rightToLeft,
-                      )
-                    : ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              },
+                      );
+                    }
+                    : () => ScaffoldMessenger.of(context).showSnackBar(snackBar),
               backgroundColor: Constants.kPrimaryColor,
               label: const Text(
                 'Calcular',
@@ -100,71 +103,75 @@ class AjustesPageState extends State<AjustesPage> {
                             horizontal:
                                 MediaQuery.of(context).size.width * 0.04,
                           ),
-                          child: DropdownSearch<Reservatorio>(
-                            key: dropDownKey,
-                            mode: Mode.MENU,
-                            items: store.reservatorioList,
-                            dropdownBuilder: (context, selectedItem) {
-                              if (selectedItem != null) {
-                                return Text(
-                                  selectedItem.nome!,
-                                  overflow: TextOverflow.visible,
-                                );
-                              }
-                              return const Text(
-                                'Selecione o Reservatório',
-                                overflow: TextOverflow.visible,
-                              );
-                            },
-                            filterFn: (reservatorio, nome) {
-                              bool contains = reservatorio!.nome!
-                                  .toLowerCase()
-                                  .contains(nome!.toLowerCase());
-                              return contains;
-                            },
-                            popupItemBuilder: (ctx, reservatorio, selected) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: DropdownMenuItem<Reservatorio>(
-                                  value: reservatorio,
-                                  child: Text(
-                                    reservatorio.nome!,
+                          child: Observer(
+                            builder: (_) {
+                              return DropdownSearch<Reservatorio>(
+                                key: dropDownKey,
+                                mode: Mode.MENU,
+                                items: store.reservatorioList,
+                                dropdownBuilder: (context, selectedItem) {
+                                  if (selectedItem != null) {
+                                    return Text(
+                                      selectedItem.nome!,
+                                      overflow: TextOverflow.visible,
+                                    );
+                                  }
+                                  return const Text(
+                                    'Selecione o Reservatório',
                                     overflow: TextOverflow.visible,
+                                  );
+                                },
+                                filterFn: (reservatorio, nome) {
+                                  bool contains = reservatorio!.nome!
+                                      .toLowerCase()
+                                      .contains(nome!.toLowerCase());
+                                  return contains;
+                                },
+                                popupItemBuilder: (ctx, reservatorio, selected) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    child: DropdownMenuItem<Reservatorio>(
+                                      value: reservatorio,
+                                      child: Text(
+                                        reservatorio.nome!,
+                                        overflow: TextOverflow.visible,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                emptyBuilder: (ctx, _) {
+                                  return const Center(
+                                    child: Text('Nenhum reservatório encontrado'),
+                                  );
+                                },
+                                dropDownButton: const Icon(
+                                  Icons.arrow_drop_down,
+                                  size: 30,
+                                  color: Constants.kPrimaryColor,
+                                ),
+                                dropdownSearchDecoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  prefixIconConstraints: const BoxConstraints(
+                                      maxHeight: 50, maxWidth: 50),
+                                  contentPadding: const EdgeInsets.only(top: 15),
+                                  alignLabelWithHint: true,
+                                  hintText: "Buscar Reservatório...",
+                                  prefixIcon: Padding(
+                                    padding:
+                                        const EdgeInsets.only(right: 5.0, left: 10),
+                                    child: SvgPicture.asset(
+                                      "assets/icons/reservatorio_icon.svg",
+                                    ),
                                   ),
                                 ),
+                                onChanged: (reservatorio) {
+                                  store.selectReservatorio(reservatorio!);
+                                },
+                                showSearchBox: true,
+                                showAsSuffixIcons: true,
                               );
-                            },
-                            emptyBuilder: (ctx, _) {
-                              return const Center(
-                                child: Text('Nenhum reservatório encontrado'),
-                              );
-                            },
-                            dropDownButton: const Icon(
-                              Icons.arrow_drop_down,
-                              size: 30,
-                              color: Constants.kPrimaryColor,
-                            ),
-                            dropdownSearchDecoration: InputDecoration(
-                              border: InputBorder.none,
-                              prefixIconConstraints: const BoxConstraints(
-                                  maxHeight: 50, maxWidth: 50),
-                              contentPadding: const EdgeInsets.only(top: 15),
-                              alignLabelWithHint: true,
-                              hintText: "Buscar Reservatório...",
-                              prefixIcon: Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 5.0, left: 10),
-                                child: SvgPicture.asset(
-                                  "assets/icons/reservatorio_icon.svg",
-                                ),
-                              ),
-                            ),
-                            onChanged: (reservatorio) {
-                              store.selectReservatorio(reservatorio!);
-                            },
-                            showSearchBox: true,
-                            showAsSuffixIcons: true,
+                            }
                           )),
                     ],
                   ),
@@ -605,10 +612,17 @@ class AjustesPageState extends State<AjustesPage> {
   }
 }
 
-class ButtonWidget extends StatelessWidget {
+class ButtonWidget extends StatefulWidget {
   const ButtonWidget({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<ButtonWidget> createState() => _ButtonWidgetState();
+}
+
+class _ButtonWidgetState extends State<ButtonWidget> {
+  AjustesStore store = GetIt.I<AjustesStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -631,7 +645,7 @@ class ButtonWidget extends StatelessWidget {
               'Calcular',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
-            onPressed: () {
+            onPressed: () async {
               Get.to(
                 () => const ResultadoajustePage(),
                 transition: Transition.rightToLeft,

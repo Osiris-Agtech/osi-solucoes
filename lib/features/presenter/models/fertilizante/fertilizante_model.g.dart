@@ -9,7 +9,7 @@ part of 'fertilizante_model.dart';
 Fertilizante _$FertilizanteFromJson(Map<String, dynamic> json) => Fertilizante(
       id: json['id'] as int?,
       nome: json['nome'] as String?,
-      c_eletrica: (json['c_eletrica'] as num?)?.toDouble(),
+      c_eletrica: json['c_eletrica'] as String?,
       compatibilidade: json['compatibilidade'] as int?,
       solubilidade: (json['solubilidade'] as num?)?.toDouble(),
       created_at: json['created_at'] == null

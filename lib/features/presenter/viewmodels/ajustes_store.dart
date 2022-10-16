@@ -1,8 +1,12 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/ajuste/ajuste_repository.dart';
+import 'package:osi_solucoes/features/presenter/models/reposicaoFert/reposicaoFert_model.dart';
+import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
 import '../models/reservatorio/reservatorio_model.dart';
@@ -74,10 +78,54 @@ abstract class _AjustesStoreBase with Store {
       },
     );
   }
+  // #################### FIM DROPDOWN RESERVATORIO #######################
 
-  List<String> listaReservatorios = [
-    "UFMT",
-    "IC-UFMT",
-    "Osiris",
-  ];
+  // #################### INICIO CALCULO ##################################
+
+  @observable
+  double ceAgua = 0.1;
+
+  @observable
+  List<ReposicaoFert> reposicaoFert = [];
+
+  @action
+  calculoLado(SolucaoFertilizanteConcentrada fertilizante, String ce) {
+    double ceTeorico =
+        double.parse(selectedReservatorio.solucao?.c_eletrica ?? '0.0');
+    // Referencias da celulas do excel planilha PLANILHA DE ELABORAÇÃO DE SOLUÇÃO NUTRITIVA-RafaelCampagnol
+    // https://onedrive.live.com/edit.aspx?resid=49A98B4ECB99BBF9!70910&ithint=file%2cxlsx&authkey=!AJd2bx4J46wp3l4
+    // referencia - V11
+    double relacao =
+        (ceTeorico - ceAgua) / double.parse(fertilizante.fertilizante!.c_eletrica!);
+    // referencia - Y11
+    double cet = (double.parse(ce) - ceAgua) / relacao;
+    // referencia - H11
+    double fertCE = double.parse(fertilizante.quantidade!) /
+        double.parse(fertilizante.fertilizante!.c_eletrica!) *
+        1000;
+    // referencia - Z11
+    double x = (cet * 1000) / fertCE;
+
+    return x;
+  }
+
+  @action
+  calculoAjuste() {
+    reposicaoFert = [];
+    selectedReservatorio.solucao?.solucoes_fertilizantes_concentradas
+        ?.forEach((fertilizante) {
+      if (fertilizante.fertilizante != null) {
+        double x = calculoLado(fertilizante, cEletricoAtual.text);
+        double ladoMedido = x * double.parse(volumeAtual.text);
+        double y = calculoLado(fertilizante, cEletricoDesejado.text);
+        double ladoDesejado = y * double.parse(volumeDesejado.text);
+        double reposicao = ladoDesejado - ladoMedido;
+        print(reposicao);
+        reposicaoFert.add(ReposicaoFert(
+            fertilizante: fertilizante.fertilizante!, valor: reposicao));
+      }
+    });
+    print(reposicaoFert);
+    return;
+  }
 }

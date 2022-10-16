@@ -34,6 +34,20 @@ class AjusteDatasource implements IAjusteDatasource {
             id
             nome
             volume
+            solucao {
+              id
+              c_eletrica
+              nome
+              solucoes_fertilizantes_concentradas {
+                id
+                quantidade
+                fertilizante {
+                  id
+                  nome
+                  c_eletrica
+                }
+              }
+            }
           }
         }
       ''';
