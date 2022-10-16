@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/views/ajuste/resultadoajuste_page.dart';
 
 import '../../viewmodels/ajustes_store.dart';
@@ -24,6 +25,13 @@ class AjustesPageState extends State<AjustesPage> {
   AjustesStore store = GetIt.I<AjustesStore>();
   final formKey = GlobalKey<FormState>();
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
+
+  @override
+  void initState() {
+    store.buscarReservatorios();
+    print(store.reservatorioList);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,11 +100,46 @@ class AjustesPageState extends State<AjustesPage> {
                             horizontal:
                                 MediaQuery.of(context).size.width * 0.04,
                           ),
-                          child: DropdownSearch<String>(
+                          child: DropdownSearch<Reservatorio>(
                             key: dropDownKey,
                             mode: Mode.MENU,
-                            showSelectedItems: true,
-                            items: store.listaReservatorios,
+                            items: store.reservatorioList,
+                            dropdownBuilder: (context, selectedItem) {
+                              if (selectedItem != null) {
+                                return Text(
+                                  selectedItem.nome!,
+                                  overflow: TextOverflow.visible,
+                                );
+                              }
+                              return const Text(
+                                'Selecione o Reservatório',
+                                overflow: TextOverflow.visible,
+                              );
+                            },
+                            filterFn: (reservatorio, nome) {
+                              bool contains = reservatorio!.nome!
+                                  .toLowerCase()
+                                  .contains(nome!.toLowerCase());
+                              return contains;
+                            },
+                            popupItemBuilder: (ctx, reservatorio, selected) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: DropdownMenuItem<Reservatorio>(
+                                  value: reservatorio,
+                                  child: Text(
+                                    reservatorio.nome!,
+                                    overflow: TextOverflow.visible,
+                                  ),
+                                ),
+                              );
+                            },
+                            emptyBuilder: (ctx, _) {
+                              return const Center(
+                                child: Text('Nenhum reservatório encontrado'),
+                              );
+                            },
                             dropDownButton: const Icon(
                               Icons.arrow_drop_down,
                               size: 30,
@@ -117,9 +160,8 @@ class AjustesPageState extends State<AjustesPage> {
                                 ),
                               ),
                             ),
-                            onChanged: (data) {
-                              print;
-                              store.setReservatorio(data!);
+                            onChanged: (reservatorio) {
+                              store.selectReservatorio(reservatorio!);
                             },
                             showSearchBox: true,
                             showAsSuffixIcons: true,

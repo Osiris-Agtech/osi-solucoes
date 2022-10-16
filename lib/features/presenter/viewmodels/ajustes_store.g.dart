@@ -187,17 +187,6 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
   }
 
   @override
-  dynamic setReservatorio(String value) {
-    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.setReservatorio');
-    try {
-      return super.setReservatorio(value);
-    } finally {
-      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic clearAll() {
     final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
         name: '_AjustesStoreBase.clearAll');

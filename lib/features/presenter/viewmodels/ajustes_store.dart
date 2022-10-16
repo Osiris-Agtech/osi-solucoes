@@ -12,9 +12,6 @@ part 'ajustes_store.g.dart';
 class AjustesStore = _AjustesStoreBase with _$AjustesStore;
 
 abstract class _AjustesStoreBase with Store {
-  AjusteRepository ajusteRepository = GetIt.I<AjusteRepository>();
-  AuthController authController = GetIt.I<AuthController>();
-
   @observable
   int selectedItem = 26;
 
@@ -38,9 +35,6 @@ abstract class _AjustesStoreBase with Store {
   TextEditingController reservatorio = TextEditingController();
 
   @action
-  setReservatorio(String value) => reservatorio.text = value;
-
-  @action
   clearAll() {
     cEletricoAtual.clear();
     cEletricoDesejado.clear();
@@ -53,21 +47,23 @@ abstract class _AjustesStoreBase with Store {
   // #################### DROPDOWN RESERVATORIO #######################
 
   @observable
-   Reservatorio selectedReservatorio = Reservatorio();
+  Reservatorio selectedReservatorio = Reservatorio();
 
   @observable
   List<Reservatorio> reservatorioList = [];
 
-   @action
+  @action
   selectReservatorio(Reservatorio reservatorio) {
     selectedReservatorio = reservatorio;
   }
 
   @action
   buscarReservatorios() async {
+    AjusteRepository ajusteRepository = GetIt.I<AjusteRepository>();
+    AuthController authController = GetIt.I<AuthController>();
+
     var reservatorios = await ajusteRepository
         .buscarReservatorios(authController.usuario.selected_conta!.conta!.id!);
-
     reservatorios.fold(
       (err) {
         reservatorioList = List.from([]);
