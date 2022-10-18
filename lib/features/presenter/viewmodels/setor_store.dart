@@ -41,7 +41,7 @@ abstract class _SetorStoreBase with Store {
 
     setores.fold(
       (err) {
-        toastError(message: err.message);
+        //toastError(message: err.message);
         setorList = [];
       },
       (data) async {

@@ -44,7 +44,7 @@ abstract class _LoteStoreBase with Store {
 
     lotes.fold(
       (err) {
-        toastError(message: err.message);
+        //toastError(message: err.message);
         loteList = [];
       },
       (data) async {

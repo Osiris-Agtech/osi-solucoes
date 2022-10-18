@@ -57,7 +57,7 @@ abstract class _AreaCultivoStoreBase with Store {
 
     areaListResult.fold(
       (err) {
-        toastError(message: err.message);
+        //toastError(message: err.message);
       },
       (data) async {
         areaList = List.from(data);
@@ -179,7 +179,7 @@ abstract class _AreaCultivoStoreBase with Store {
 
     localizaoListResult.fold(
       (err) {
-        toastError(message: err.message);
+        //toastError(message: err.message);
       },
       (data) async {
         localizacaoList = List.from(data);
