@@ -9,6 +9,8 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/cadastrar_setor_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/detalhes_lote_page.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
@@ -52,7 +54,7 @@ class _LotePageState extends State<LotePage> {
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                appBar(setorN2: loteStore.setorSelecionado, store: loteStore),
+                AppBar(setorN2: loteStore.setorSelecionado, store: loteStore),
                 Observer(builder: (_) {
                   if (loteStore.isLoteListLoading) {
                     return const SliverToBoxAdapter(
@@ -106,9 +108,9 @@ class _LotePageState extends State<LotePage> {
 }
 
 // ignore: camel_case_types
-class appBar extends StatelessWidget {
+class AppBar extends StatefulWidget {
   final Setor setorN2;
-  const appBar({
+  const AppBar({
     Key? key,
     required this.setorN2,
     required this.store,
@@ -116,6 +118,12 @@ class appBar extends StatelessWidget {
 
   final LoteStore store;
 
+  @override
+  State<AppBar> createState() => _AppBarState();
+}
+
+class _AppBarState extends State<AppBar> {
+  SetorStore setorStore = GetIt.I<SetorStore>();
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
@@ -151,7 +159,13 @@ class appBar extends StatelessWidget {
                           Text('Editar'),
                         ],
                       ),
-                      onTap: () async {},
+                      onTap: () async {
+                        await setorStore.setSetorEditing(widget.setorN2);
+                        Get.to(
+                          () => const CadastrarSetorPage(),
+                          transition: Transition.rightToLeft,
+                        );
+                      },
                     ),
                     PopupMenuItem(
                       child: Row(
@@ -171,7 +185,7 @@ class appBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TopAppBar(
-              namePage: setorN2.nome ?? '',
+              namePage: widget.setorN2.nome ?? '',
               subtitle: "Lista de lotes cadastrados",
             ),
             const SizedBox(

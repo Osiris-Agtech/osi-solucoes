@@ -5,6 +5,8 @@ import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/features/data/repositories/area/area_repository.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/setor_page.dart';
 import 'package:search_cep/search_cep.dart';
 
 import '../../../core/utils/toast.dart';
@@ -222,6 +224,8 @@ abstract class _AreaCultivoStoreBase with Store {
   alterarArea() async {
     AuthController authController = GetIt.I<AuthController>();
     AreaRepository areaRepository = GetIt.I<AreaRepository>();
+    SetorStore setorStore = GetIt.I<SetorStore>();
+
     isNovaAreaLoading = true;
 
     novaArea.nome = novaAreaName.text;
@@ -240,7 +244,12 @@ abstract class _AreaCultivoStoreBase with Store {
         toastSuccess(message: "Alterado com sucesso");
         buscarArea();
         limparTudo();
-        Get.close(1);
+        Get.close(2);
+        setorStore.setAreaSelecionada(data);
+        Get.to(
+          () => const SetorPage(),
+          transition: Transition.rightToLeft,
+        );
       },
     );
 
