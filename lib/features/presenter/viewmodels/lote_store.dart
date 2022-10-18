@@ -162,6 +162,9 @@ abstract class _LoteStoreBase with Store {
   bool showTextFormField = false;
 
   @observable
+  bool isEditing = false;
+
+  @observable
   bool isVisible = false;
 
   @observable
@@ -230,6 +233,9 @@ abstract class _LoteStoreBase with Store {
   @observable
   List<SolucaoFertilizanteConcentrada> solucaoConcentradaList = [];
 
+  @observable
+  Lote novoLote = Lote();
+
   @action
   selecionarNovoLoteArea(Area area) => novoLoteArea = area;
 
@@ -254,6 +260,31 @@ abstract class _LoteStoreBase with Store {
 
   @action
   setColheitaData(DateTime dateTime) => colheitaData = dateTime;
+
+  @action
+  setIsEditing(bool value) => isEditing = value;
+
+  @action
+  alterarNome(String name) {
+    novoLoteName = TextEditingController(text: name);
+  }
+
+  @action
+  setLoteEditing(Lote lote) {
+    novoLoteName = TextEditingController(text: lote.nome);
+    novoLoteCultura = lote.cultura ?? Cultura(); // CORRIGIR
+    novoLoteReservatorio = lote.reservatorio ?? Reservatorio(); // CORRIGIR
+    novoLoteSetor = lote.setor ?? Setor(); // CORRIGIR
+    semeaduraData = lote.semeadura_data;
+    registroData = lote.registro_data ?? DateTime.now(); // CORRIGIR
+    transplantioData = lote.transplantio_data;
+    colheitaData = lote.colheita_data;
+    // conferir com o tijas
+
+    novoLote = lote;
+    setIsEditing(true);
+    return;
+  }
 
   @action
   setDotIndicator(int value) {
@@ -341,7 +372,7 @@ abstract class _LoteStoreBase with Store {
     isNovoLoteLoading = true;
     await Future.delayed(const Duration(seconds: 1));
     if (validarRegistro()) {
-      Lote novoLote = Lote(
+      novoLote = Lote(
         nome: novoLoteName.text,
         setor: novoLoteSetor,
         cultura: novoLoteCultura,
@@ -384,6 +415,39 @@ abstract class _LoteStoreBase with Store {
 
     toastError(message: "Preencha todos os campos obrigatórios");
     return false;
+  }
+
+  @action
+  alterarLote() async {
+    LoteRepository loteRepository = GetIt.I<LoteRepository>();
+    isNovoLoteLoading = true;
+
+    novoLote = loteSelecionado;
+    novoLote.nome = novoLoteName.text;
+    novoLote.setor = novoLoteSetor;
+    novoLote.cultura = novoLoteCultura;
+    novoLote.reservatorio = novoLoteReservatorio;
+    novoLote.registro_data = registroData;
+    novoLote.semeadura_data = semeaduraData;
+    novoLote.transplantio_data = transplantioData;
+    novoLote.colheita_data = colheitaData;
+
+    var alterarLote = await loteRepository.alterarLote(novoLote);
+
+    alterarLote.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        toastSuccess(message: "Alterado com sucesso");
+        buscarDetalhesLote();
+        buscarLotes();
+        limparTudo();
+        Get.close(1);
+      },
+    );
+
+    isNovoLoteLoading = false;
   }
 
   limparTudo() {

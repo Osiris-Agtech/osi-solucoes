@@ -66,4 +66,11 @@ class LoteRepository implements ILoteRepository {
         loteId: loteId, setorId: setorId, reservatorioId: reservatorioId);
     return result;
   }
+
+  @override
+  Future<Either<Failure, Lote>> alterarLote(Lote alterarLote) async {
+    var result = await datasource.alterarLote(alterarLote: alterarLote);
+
+    return result;
+  }
 }

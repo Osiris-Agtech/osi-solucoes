@@ -34,4 +34,6 @@ class FailureMessage {
       'Falha ao alterar setor, verifique se os campos estão preenchidos corretamente';
   static const errorMigrarLoteMessage =
       'Falha ao migrar lote, algo está bloqueando a ação';
+  static const errorAlterarLoteMessage =
+      'Falha ao alterar lote, verifique se os campos estão preenchidos corretamente';
 }

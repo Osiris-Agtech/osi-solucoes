@@ -2,12 +2,14 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/detalhes_lote_page.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
@@ -20,14 +22,14 @@ class LotePage extends StatefulWidget {
 }
 
 class _LotePageState extends State<LotePage> {
-  LoteStore store = GetIt.I<LoteStore>();
+  LoteStore loteStore = GetIt.I<LoteStore>();
 
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
   final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    store.buscarLotes();
+    loteStore.buscarLotes();
     super.initState();
   }
 
@@ -51,9 +53,9 @@ class _LotePageState extends State<LotePage> {
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                appBar(setorN2: store.setorSelecionado, store: store),
+                appBar(setorN2: loteStore.setorSelecionado, store: loteStore),
                 Observer(builder: (_) {
-                  if (store.isLoteListLoading) {
+                  if (loteStore.isLoteListLoading) {
                     return const SliverToBoxAdapter(
                       child: Padding(
                         padding:
@@ -64,7 +66,7 @@ class _LotePageState extends State<LotePage> {
                       ),
                     );
                   }
-                  if (store.loteList.isEmpty) {
+                  if (loteStore.loteList.isEmpty) {
                     return const SliverToBoxAdapter(
                       child: Padding(
                         padding:
@@ -86,12 +88,12 @@ class _LotePageState extends State<LotePage> {
                             padding: const EdgeInsets.only(
                                 left: 16.0, right: 16, top: 10),
                             child: CardLote(
-                              lote: store.loteList[index],
+                              lote: loteStore.loteList[index],
                             ),
                           );
                         });
                       },
-                      childCount: store.loteList.length,
+                      childCount: loteStore.loteList.length,
                     ),
                   );
                 }),
@@ -132,11 +134,35 @@ class appBar extends StatelessWidget {
             alignment: const Alignment(0.6, -0.9),
             child: Padding(
               padding: const EdgeInsets.only(right: 16.0),
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.settings,
-                  color: Constants.kGreyText,
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                ),
+                child: PopupMenuButton(
+                  icon: SvgPicture.asset(
+                    "assets/icons/settings_icon.svg",
+                    color: Constants.kButtonGrey,
+                    height: 20,
+                  ),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: Row(
+                        children: const [
+                          Text('Editar'),
+                        ],
+                      ),
+                      onTap: () async {},
+                    ),
+                    PopupMenuItem(
+                      child: Row(
+                        children: const [
+                          Text('Deletar'),
+                        ],
+                      ),
+                      onTap: () {},
+                    ),
+                  ],
                 ),
               ),
             ),

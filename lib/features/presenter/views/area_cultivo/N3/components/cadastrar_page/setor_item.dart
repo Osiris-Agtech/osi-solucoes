@@ -158,6 +158,8 @@ setorPage(
                             onChanged: (value) {
                               if (value != null) {
                                 key.currentState?.reset();
+                                store.selecionarNovoLoteSetor(
+                                    Setor()); // Resetar a seleção do setor
                                 store.selecionarNovoLoteArea(value);
                               }
                             },

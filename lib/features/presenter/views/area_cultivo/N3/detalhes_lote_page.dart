@@ -8,6 +8,7 @@ import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/detalhes_reservatorio_page.dart';
 
 class DetalhesLotePage extends StatefulWidget {
@@ -39,14 +40,47 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
           iconTheme: const IconThemeData(
             color: Constants.kPrimaryColor, //change your color here
           ),
-          actions: const [
-            Padding(
-              padding: EdgeInsets.only(right: 16.0),
-              child: IconButton(
-                onPressed: null,
-                icon: Icon(
-                  Icons.settings,
-                  color: Constants.kGreyText,
+          actions: [
+            Align(
+              alignment: const Alignment(0.6, -0.9),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16.0, top: 8.0),
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                  ),
+                  child: PopupMenuButton(
+                    icon: SvgPicture.asset(
+                      "assets/icons/settings_icon.svg",
+                      color: Constants.kButtonGrey,
+                      height: 20,
+                    ),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: Row(
+                          children: const [
+                            Text('Editar'),
+                          ],
+                        ),
+                        onTap: () async {
+                          await store.setLoteEditing(store.loteSelecionado);
+                          Get.to(
+                            () => const CadastrarLotePage(),
+                            transition: Transition.rightToLeft,
+                          );
+                        },
+                      ),
+                      PopupMenuItem(
+                        child: Row(
+                          children: const [
+                            Text('Deletar'),
+                          ],
+                        ),
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

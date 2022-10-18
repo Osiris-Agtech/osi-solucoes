@@ -182,6 +182,21 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$isEditingAtom = Atom(name: '_LoteStoreBase.isEditing');
+
+  @override
+  bool get isEditing {
+    _$isEditingAtom.reportRead();
+    return super.isEditing;
+  }
+
+  @override
+  set isEditing(bool value) {
+    _$isEditingAtom.reportWrite(value, super.isEditing, () {
+      super.isEditing = value;
+    });
+  }
+
   final _$isVisibleAtom = Atom(name: '_LoteStoreBase.isVisible');
 
   @override
@@ -527,6 +542,21 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$novoLoteAtom = Atom(name: '_LoteStoreBase.novoLote');
+
+  @override
+  Lote get novoLote {
+    _$novoLoteAtom.reportRead();
+    return super.novoLote;
+  }
+
+  @override
+  set novoLote(Lote value) {
+    _$novoLoteAtom.reportWrite(value, super.novoLote, () {
+      super.novoLote = value;
+    });
+  }
+
   final _$buscarLotesAsyncAction = AsyncAction('_LoteStoreBase.buscarLotes');
 
   @override
@@ -591,6 +621,13 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   @override
   Future registrarLote() {
     return _$registrarLoteAsyncAction.run(() => super.registrarLote());
+  }
+
+  final _$alterarLoteAsyncAction = AsyncAction('_LoteStoreBase.alterarLote');
+
+  @override
+  Future alterarLote() {
+    return _$alterarLoteAsyncAction.run(() => super.alterarLote());
   }
 
   final _$_LoteStoreBaseActionController =
@@ -729,6 +766,39 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic setIsEditing(bool value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setIsEditing');
+    try {
+      return super.setIsEditing(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarNome(String name) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.alterarNome');
+    try {
+      return super.alterarNome(name);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setLoteEditing(Lote lote) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setLoteEditing');
+    try {
+      return super.setLoteEditing(lote);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setDotIndicator(int value) {
     final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
         name: '_LoteStoreBase.setDotIndicator');
@@ -797,6 +867,7 @@ loteSelecionado: ${loteSelecionado},
 areaSelecionada: ${areaSelecionada},
 setorSelecionadoMigrar: ${setorSelecionadoMigrar},
 showTextFormField: ${showTextFormField},
+isEditing: ${isEditing},
 isVisible: ${isVisible},
 isNovaAreaLoading: ${isNovaAreaLoading},
 isNovoLoteLoading: ${isNovoLoteLoading},
@@ -818,7 +889,8 @@ novoLoteDescricao: ${novoLoteDescricao},
 reservatorioList: ${reservatorioList},
 reservatorioDetalhes: ${reservatorioDetalhes},
 solucaoNutritivaList: ${solucaoNutritivaList},
-solucaoConcentradaList: ${solucaoConcentradaList}
+solucaoConcentradaList: ${solucaoConcentradaList},
+novoLote: ${novoLote}
     ''';
   }
 }

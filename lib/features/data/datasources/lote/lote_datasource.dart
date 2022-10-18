@@ -23,6 +23,7 @@ abstract class ILoteDatasource {
   Future<Either<Failure, Lote>> registrarLote({required Lote lote});
   Future<Either<Failure, Lote>> migrarLote(
       {required int loteId, required int setorId, required int reservatorioId});
+  Future<Either<Failure, Lote>> alterarLote({required Lote alterarLote});
 }
 
 class LoteDatasource implements ILoteDatasource {
@@ -442,6 +443,63 @@ class LoteDatasource implements ILoteDatasource {
       return Right(loteResult);
     } else {
       return Left(ErrorLote(message: FailureMessage.errorNovoLoteMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Lote>> alterarLote({required Lote alterarLote}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    try {
+      const String readRepositories = r'''
+        mutation UpdateLote($loteId: Int!, $loteNome: String!, $setorId: Int!, $culturaId: Int!, $reservatorioId: Int!, $bandeijaSemeadas: Int, $mudasTransplantadas: Int, $plantasColhidas: Int) {
+          updateLote(loteId: $loteId, loteNome: $loteNome, setorId: $setorId, culturaId: $culturaId, reservatorioId: $reservatorioId, bandeijaSemeadas: $bandeijaSemeadas, mudasTransplantadas: $mudasTransplantadas, plantasColhidas: $plantasColhidas) {
+            id
+            nome
+            cultura {
+              id
+              nome
+            }
+            reservatorio {
+              id
+              nome
+            }
+            bandeijas_semeadas
+            mudas_transplantadas
+            plantas_colhidas
+            embalagens_produzidas
+          }
+        }
+      ''';
+
+      final MutationOptions? options;
+
+      options = MutationOptions(
+        document: gql(readRepositories),
+        variables: <String, dynamic>{
+          "loteId": alterarLote.id,
+          "loteNome": alterarLote.nome,
+          "setorId": alterarLote.setor!.id,
+          "culturaId": alterarLote.cultura!.id,
+          "reservatorioId": alterarLote.reservatorio!.id,
+          "plantasColhidas": alterarLote.plantas_colhidas,
+          "mudasTransplantadas": alterarLote.mudas_transplantadas,
+          "bandeijaSemeadas": alterarLote.bandeijas_semeadas,
+        },
+      );
+
+      final QueryResult result = await client.mutate(options);
+
+      if (!result.hasException) {
+        Lote? lote = Lote.fromJson(result.data?['updateLote']);
+
+        return Right(lote);
+      } else {
+        return Left(
+            ErrorSetor(message: FailureMessage.errorAlterarLoteMessage));
+      }
+    } catch (e) {
+      return Left(ErrorSetor(message: FailureMessage.errorAlterarLoteMessage));
     }
   }
 
