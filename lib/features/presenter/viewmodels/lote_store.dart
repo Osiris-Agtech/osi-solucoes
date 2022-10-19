@@ -130,6 +130,18 @@ abstract class _LoteStoreBase with Store {
       },
       (data) async {
         loteSelecionado = data;
+        bandeijasSemeadasController = TextEditingController(
+          text: (loteSelecionado.bandeijas_semeadas ?? 0).toString(),
+        );
+        mudasTransplantadasController = TextEditingController(
+          text: (loteSelecionado.mudas_transplantadas ?? 0).toString(),
+        );
+        plantasColhidasController = TextEditingController(
+          text: (loteSelecionado.plantas_colhidas ?? 0).toString(),
+        );
+        embalagensProduzidasController = TextEditingController(
+          text: (loteSelecionado.embalagens_produzidas ?? 0).toString(),
+        );
       },
     );
 
@@ -165,6 +177,18 @@ abstract class _LoteStoreBase with Store {
   bool isEditing = false;
 
   @observable
+  bool isBandeijasEditing = false;
+
+  @observable
+  bool isMudasEditing = false;
+
+  @observable
+  bool isPlantasEditing = false;
+
+  @observable
+  bool isEmbalagensEditing = false;
+
+  @observable
   bool isVisible = false;
 
   @observable
@@ -196,6 +220,19 @@ abstract class _LoteStoreBase with Store {
 
   @observable
   TextEditingController novaCulturaController = TextEditingController();
+
+  @observable
+  TextEditingController bandeijasSemeadasController = TextEditingController();
+
+  @observable
+  TextEditingController mudasTransplantadasController = TextEditingController();
+
+  @observable
+  TextEditingController plantasColhidasController = TextEditingController();
+
+  @observable
+  TextEditingController embalagensProduzidasController =
+      TextEditingController();
 
   @observable
   Cultura novoLoteCultura = Cultura();
@@ -265,6 +302,27 @@ abstract class _LoteStoreBase with Store {
   setIsEditing(bool value) => isEditing = value;
 
   @action
+  setIsBandeijaEditing(bool value) {
+    isBandeijasEditing = value;
+    if (!value &&
+        bandeijasSemeadasController.text !=
+            (loteSelecionado.bandeijas_semeadas ?? 0).toString()) {
+      loteSelecionado.bandeijas_semeadas =
+          int.parse(bandeijasSemeadasController.text);
+      alterarProducaoLote();
+    }
+  }
+
+  @action
+  setIsMudasEditing(bool value) => isMudasEditing = value;
+
+  @action
+  setIsPlantasEditing(bool value) => isPlantasEditing = value;
+
+  @action
+  setIsEmbalagensEditing(bool value) => isEmbalagensEditing = value;
+
+  @action
   alterarNome(String name) {
     novoLoteName = TextEditingController(text: name);
   }
@@ -272,14 +330,13 @@ abstract class _LoteStoreBase with Store {
   @action
   setLoteEditing(Lote lote) {
     novoLoteName = TextEditingController(text: lote.nome);
-    novoLoteCultura = lote.cultura ?? Cultura(); // CORRIGIR
-    novoLoteReservatorio = lote.reservatorio ?? Reservatorio(); // CORRIGIR
-    novoLoteSetor = lote.setor ?? Setor(); // CORRIGIR
+    novoLoteCultura = lote.cultura ?? Cultura();
+    novoLoteReservatorio = lote.reservatorio ?? Reservatorio();
+    novoLoteSetor = lote.setor ?? Setor();
     semeaduraData = lote.semeadura_data;
-    registroData = lote.registro_data ?? DateTime.now(); // CORRIGIR
+    registroData = lote.registro_data ?? DateTime.now();
     transplantioData = lote.transplantio_data;
     colheitaData = lote.colheita_data;
-    // conferir com o tijas
 
     novoLote = lote;
     setIsEditing(true);
@@ -431,6 +488,12 @@ abstract class _LoteStoreBase with Store {
     novoLote.semeadura_data = semeaduraData;
     novoLote.transplantio_data = transplantioData;
     novoLote.colheita_data = colheitaData;
+    novoLote.bandeijas_semeadas = int.parse(bandeijasSemeadasController.text);
+    novoLote.mudas_transplantadas =
+        int.parse(mudasTransplantadasController.text);
+    novoLote.plantas_colhidas = int.parse(plantasColhidasController.text);
+    novoLote.embalagens_produzidas =
+        int.parse(embalagensProduzidasController.text);
 
     var alterarLote = await loteRepository.alterarLote(novoLote);
 
@@ -444,6 +507,35 @@ abstract class _LoteStoreBase with Store {
         buscarLotes();
         limparTudo();
         Get.close(1);
+      },
+    );
+
+    isNovoLoteLoading = false;
+  }
+
+  @action
+  alterarProducaoLote() async {
+    LoteRepository loteRepository = GetIt.I<LoteRepository>();
+    isNovoLoteLoading = true;
+
+    loteSelecionado.bandeijas_semeadas =
+        int.parse(bandeijasSemeadasController.text);
+    loteSelecionado.mudas_transplantadas =
+        int.parse(mudasTransplantadasController.text);
+    loteSelecionado.plantas_colhidas =
+        int.parse(plantasColhidasController.text);
+    loteSelecionado.embalagens_produzidas =
+        int.parse(embalagensProduzidasController.text);
+
+    var alterarLote = await loteRepository.alterarLote(loteSelecionado);
+
+    alterarLote.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        toastSuccess(message: "Alterado com sucesso");
+        buscarDetalhesLote();
       },
     );
 

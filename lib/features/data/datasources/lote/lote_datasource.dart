@@ -485,6 +485,7 @@ class LoteDatasource implements ILoteDatasource {
           "plantasColhidas": alterarLote.plantas_colhidas,
           "mudasTransplantadas": alterarLote.mudas_transplantadas,
           "bandeijaSemeadas": alterarLote.bandeijas_semeadas,
+          "embalagensProduzidas": alterarLote.embalagens_produzidas,
         },
       );
 

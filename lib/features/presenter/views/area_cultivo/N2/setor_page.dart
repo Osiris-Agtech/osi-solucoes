@@ -189,12 +189,10 @@ class _AppBarState extends State<AppBar> {
         flexibleSpace: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Observer(builder: (_) {
-              return TopAppBar(
-                namePage: widget.areaN1.nome ?? '',
-                subtitle: "Lista de setores cadastrados",
-              );
-            }),
+            TopAppBar(
+              namePage: widget.areaN1.nome ?? '',
+              subtitle: "Lista de setores cadastrados",
+            ),
             const SizedBox(
               height: 30,
             ),

@@ -496,20 +496,48 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          '${store.loteSelecionado.bandeijas_semeadas ?? '-'}',
-                          style: const TextStyle(
-                            color: Constants.kGreyText,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        Observer(builder: (_) {
+                          return AnimatedCrossFade(
+                            duration: const Duration(milliseconds: 200),
+                            firstChild: Text(
+                              '${store.loteSelecionado.bandeijas_semeadas ?? '-'}',
+                              style: const TextStyle(
+                                color: Constants.kGreyText,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            secondChild: SizedBox(
+                              width: 50,
+                              child: TextFormField(
+                                controller: store.bandeijasSemeadasController,
+                              ),
+                            ),
+                            crossFadeState: !store.isBandeijasEditing
+                                ? CrossFadeState.showFirst
+                                : CrossFadeState.showSecond,
+                          );
+                        }),
                         const SizedBox(
                           width: 10,
                         ),
-                        const Icon(
-                          Icons.edit,
-                          color: Constants.kPrimaryColor,
+                        InkWell(
+                          child: Observer(builder: (_) {
+                            if (store.isBandeijasEditing) {
+                              return const Icon(
+                                Icons.check,
+                                color: Constants.kPrimaryColor,
+                              );
+                            }
+                            return const Icon(
+                              Icons.edit,
+                              color: Constants.kPrimaryColor,
+                            );
+                          }),
+                          onTap: () {
+                            store.setIsBandeijaEditing(
+                                !store.isBandeijasEditing);
+                          },
                         ),
                       ],
                     ),
