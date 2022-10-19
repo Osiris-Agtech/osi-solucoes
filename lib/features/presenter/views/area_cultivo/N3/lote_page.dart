@@ -329,10 +329,12 @@ class _CardLoteState extends State<CardLote> {
                   ],
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.chevron_right_rounded),
-                color: Constants.kPrimaryColor,
-                onPressed: () {},
+              const Padding(
+                padding: EdgeInsets.only(right: 8.0),
+                child: Icon(
+                  Icons.chevron_right_rounded,
+                  color: Constants.kPrimaryColor,
+                ),
               ),
             ],
           ),

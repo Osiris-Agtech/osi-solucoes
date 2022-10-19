@@ -145,98 +145,114 @@ class _CardAreaState extends State<CardArea> {
                 image: AssetImage("assets/images/greenhouse_background.png"),
               ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 20.0),
-                        child: IconButton(
-                          icon: SvgPicture.asset(
-                            "assets/icons/cultivo_icon.svg",
-                            height: 25,
-                          ),
-                          onPressed: null,
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20.0),
+                              child: IconButton(
+                                icon: SvgPicture.asset(
+                                  "assets/icons/cultivo_icon.svg",
+                                  height: 25,
+                                ),
+                                onPressed: null,
+                              ),
+                            ),
+                            Text(
+                              "# ${widget.area.id}",
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: Constants.kGreyText,
+                              ),
+                            ),
+                            const Spacer(),
+                          ],
                         ),
                       ),
-                      Text(
-                        "# ${widget.area.id}",
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: Constants.kGreyText,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25.0, bottom: 10),
+                        child: Text(
+                          widget.area.nome!,
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                            color: Constants.kText2.withOpacity(.9),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 15.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 8.0,
+                                top: 3.0,
+                                right: 8.0,
+                              ),
+                              child: Opacity(
+                                opacity: 0.8,
+                                child: SvgPicture.asset(
+                                  "assets/icons/location_icon.svg",
+                                  height: 18,
+                                  color: Constants.kGreyText,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 190,
+                              child: Text(
+                                '${widget.area.localizacao?.endereco}, ${widget.area.localizacao?.bairro}, ${widget.area.localizacao?.cidade} - ${widget.area.localizacao?.estado}',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Constants.kGreyText,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                            const Spacer(),
+                          ],
                         ),
                       ),
                       const Spacer(),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 25.0, bottom: 10),
-                  child: Text(
-                    widget.area.nome!,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: Constants.kText2.withOpacity(.9),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 15.0, bottom: 5),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: null,
-                        icon:
-                            SvgPicture.asset("assets/icons/location_icon.svg"),
-                        color: Constants.kGreyText,
-                      ),
-                      SizedBox(
-                        width: 190,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 55),
                         child: Text(
-                          '${widget.area.localizacao?.endereco}, ${widget.area.localizacao?.bairro}, ${widget.area.localizacao?.cidade} - ${widget.area.localizacao?.estado}',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                          "${widget.area.setores?.length ?? 0} Setores",
                           style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
                             color: Constants.kGreyText,
                           ),
-                          textAlign: TextAlign.start,
                         ),
                       ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 3.0),
-                        child: IconButton(
-                          icon: const Icon(Icons.chevron_right_rounded),
-                          color: Constants.kPrimaryColor,
-                          onPressed: () {},
-                        ),
-                      )
+                      const Spacer(
+                        flex: 2,
+                      ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 55),
-                  child: Text(
-                    "${widget.area.setores?.length ?? 0} Setores",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Constants.kGreyText,
-                    ),
+                const Padding(
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: Icon(
+                    Icons.chevron_right_rounded,
+                    color: Constants.kPrimaryColor,
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 55),
-                //   child: Text("${widget.area.setores?.length ?? 0} Lotes"),
-                // ),
               ],
             ),
           ),

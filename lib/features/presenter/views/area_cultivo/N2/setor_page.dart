@@ -307,10 +307,6 @@ class _CardSetorState extends State<CardSetor> {
                           ),
                         ),
                         const Spacer(),
-                        const Icon(
-                          Icons.chevron_right_rounded,
-                          color: Constants.kPrimaryColor,
-                        ),
                       ],
                     ),
                     Padding(
@@ -334,6 +330,13 @@ class _CardSetorState extends State<CardSetor> {
                       ),
                     ),
                   ],
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(right: 8.0),
+                child: Icon(
+                  Icons.chevron_right_rounded,
+                  color: Constants.kPrimaryColor,
                 ),
               ),
             ],
