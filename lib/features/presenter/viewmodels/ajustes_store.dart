@@ -46,6 +46,7 @@ abstract class _AjustesStoreBase with Store {
     volumeDesejado.clear();
     pH.clear();
     reservatorio.clear();
+    selectedReservatorio = Reservatorio();
   }
 
   // #################### DROPDOWN RESERVATORIO #######################
