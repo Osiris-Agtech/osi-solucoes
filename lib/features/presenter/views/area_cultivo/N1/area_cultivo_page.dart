@@ -10,7 +10,6 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/setor_page.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 import '../../../viewmodels/area_cultivo_store.dart';
