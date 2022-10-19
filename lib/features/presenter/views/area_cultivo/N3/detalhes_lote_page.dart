@@ -148,12 +148,12 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
   }
 
   configuracaoButton() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: ListTile(
         dense: true,
         minLeadingWidth: 10,
-        title: Text(
+        title: const Text(
           'Configurações',
           textAlign: TextAlign.start,
           style: TextStyle(
@@ -162,7 +162,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        subtitle: Text(
+        subtitle: const Text(
           'Alterar informações sobre o lote',
           style: TextStyle(
             color: Constants.kGreyText,
@@ -170,10 +170,17 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        leading: Icon(
+        leading: const Icon(
           Icons.settings,
           color: Constants.kPrimaryColor,
         ),
+        onTap: () async {
+          await store.setLoteEditing(store.loteSelecionado);
+          Get.to(
+            () => const CadastrarLotePage(),
+            transition: Transition.rightToLeft,
+          );
+        },
       ),
     );
   }
@@ -230,6 +237,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
 
   infoLote() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.0),

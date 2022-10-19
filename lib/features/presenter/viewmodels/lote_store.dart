@@ -283,8 +283,10 @@ abstract class _LoteStoreBase with Store {
   setNovoLoteCultura(int index) => novoLoteCultura = culturaList[index];
 
   @action
-  selecionarNovoLoteReservatorio() =>
-      novoLoteReservatorio = reservatorioDetalhes;
+  selecionarNovoLoteReservatorio() {
+    novoLoteReservatorio = reservatorioDetalhes;
+    setShowReservatorioDetalhes(false);
+  }
 
   @action
   setRegistroData(DateTime dateTime) => registroData = dateTime;

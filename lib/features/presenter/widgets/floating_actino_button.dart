@@ -43,6 +43,7 @@ class _NewFloatingActionButtonState extends State<NewFloatingActionButton> {
         iconTheme: const IconThemeData(size: 35),
         children: [
           SpeedDialChild(
+            visible: widget.nivel == 3,
             child: Image.asset(
               "assets/icons/hydroponic2_icon.png",
               height: 70,
@@ -60,6 +61,7 @@ class _NewFloatingActionButtonState extends State<NewFloatingActionButton> {
                 : null,
           ),
           SpeedDialChild(
+            visible: widget.nivel == 2,
             child: Image.asset(
               "assets/icons/hydroponic1_icon.png",
               height: 70,
@@ -77,6 +79,7 @@ class _NewFloatingActionButtonState extends State<NewFloatingActionButton> {
                 : null,
           ),
           SpeedDialChild(
+            visible: widget.nivel == 1,
             child: Image.asset(
               "assets/icons/greenhouse1_icon.png",
               height: 100,
