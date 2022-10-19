@@ -66,4 +66,12 @@ class LoteRepository implements ILoteRepository {
         loteId: loteId, setorId: setorId, reservatorioId: reservatorioId);
     return result;
   }
+
+  @override
+  Future<Either<Failure, Cultura>> registrarCultura(
+      Cultura cultura, int contaId) async {
+    var result =
+        await datasource.registrarCultura(cultura: cultura, contaId: contaId);
+    return result;
+  }
 }

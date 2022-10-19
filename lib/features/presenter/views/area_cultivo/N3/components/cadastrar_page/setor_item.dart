@@ -220,18 +220,18 @@ setorPage(
           ),
         ),
         const Spacer(),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 50.0),
-          child: Text(
-            'Caso não seja selecionado nenhuma área de cultivo ou setor, criaremos automaticamente uma genérica para alocar seu lote',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Constants.kGreyText2,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-        const Spacer(),
+        // const Padding(
+        //   padding: EdgeInsets.symmetric(horizontal: 50.0),
+        //   child: Text(
+        //     'Caso não seja selecionado nenhuma área de cultivo ou setor, criaremos automaticamente uma genérica para alocar seu lote',
+        //     textAlign: TextAlign.center,
+        //     style: TextStyle(
+        //       color: Constants.kGreyText2,
+        //       fontWeight: FontWeight.w600,
+        //     ),
+        //   ),
+        // ),
+        // const Spacer(),
       ],
     ),
   );
