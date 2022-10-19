@@ -500,7 +500,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                           return AnimatedCrossFade(
                             duration: const Duration(milliseconds: 200),
                             firstChild: Text(
-                              '${store.loteSelecionado.bandeijas_semeadas ?? '-'}',
+                              '${store.loteSelecionado.bandeijas_semeadas ?? '0'}',
                               style: const TextStyle(
                                 color: Constants.kGreyText,
                                 fontSize: 16,
@@ -558,20 +558,47 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          '${store.loteSelecionado.mudas_transplantadas ?? '-'}',
-                          style: const TextStyle(
-                            color: Constants.kGreyText,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        Observer(builder: (_) {
+                          return AnimatedCrossFade(
+                            duration: const Duration(milliseconds: 200),
+                            firstChild: Text(
+                              '${store.loteSelecionado.mudas_transplantadas ?? '0'}',
+                              style: const TextStyle(
+                                color: Constants.kGreyText,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            secondChild: SizedBox(
+                              width: 50,
+                              child: TextFormField(
+                                controller: store.mudasTransplantadasController,
+                              ),
+                            ),
+                            crossFadeState: !store.isMudasEditing
+                                ? CrossFadeState.showFirst
+                                : CrossFadeState.showSecond,
+                          );
+                        }),
                         const SizedBox(
                           width: 10,
                         ),
-                        const Icon(
-                          Icons.edit,
-                          color: Constants.kPrimaryColor,
+                        InkWell(
+                          child: Observer(builder: (_) {
+                            if (store.isMudasEditing) {
+                              return const Icon(
+                                Icons.check,
+                                color: Constants.kPrimaryColor,
+                              );
+                            }
+                            return const Icon(
+                              Icons.edit,
+                              color: Constants.kPrimaryColor,
+                            );
+                          }),
+                          onTap: () {
+                            store.setIsMudasEditing(!store.isMudasEditing);
+                          },
                         ),
                       ],
                     ),
@@ -592,20 +619,47 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          '${store.loteSelecionado.plantas_colhidas ?? '-'}',
-                          style: const TextStyle(
-                            color: Constants.kGreyText,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        Observer(builder: (_) {
+                          return AnimatedCrossFade(
+                            duration: const Duration(milliseconds: 200),
+                            firstChild: Text(
+                              '${store.loteSelecionado.plantas_colhidas ?? '0'}',
+                              style: const TextStyle(
+                                color: Constants.kGreyText,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            secondChild: SizedBox(
+                              width: 50,
+                              child: TextFormField(
+                                controller: store.plantasColhidasController,
+                              ),
+                            ),
+                            crossFadeState: !store.isPlantasEditing
+                                ? CrossFadeState.showFirst
+                                : CrossFadeState.showSecond,
+                          );
+                        }),
                         const SizedBox(
                           width: 10,
                         ),
-                        const Icon(
-                          Icons.edit,
-                          color: Constants.kPrimaryColor,
+                        InkWell(
+                          child: Observer(builder: (_) {
+                            if (store.isPlantasEditing) {
+                              return const Icon(
+                                Icons.check,
+                                color: Constants.kPrimaryColor,
+                              );
+                            }
+                            return const Icon(
+                              Icons.edit,
+                              color: Constants.kPrimaryColor,
+                            );
+                          }),
+                          onTap: () {
+                            store.setIsPlantasEditing(!store.isPlantasEditing);
+                          },
                         ),
                       ],
                     ),
@@ -626,20 +680,49 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          '${store.loteSelecionado.embalagens_produzidas ?? '-'}',
-                          style: const TextStyle(
-                            color: Constants.kGreyText,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        Observer(builder: (_) {
+                          return AnimatedCrossFade(
+                            duration: const Duration(milliseconds: 200),
+                            firstChild: Text(
+                              '${store.loteSelecionado.embalagens_produzidas ?? '0'}',
+                              style: const TextStyle(
+                                color: Constants.kGreyText,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            secondChild: SizedBox(
+                              width: 50,
+                              child: TextFormField(
+                                controller:
+                                    store.embalagensProduzidasController,
+                              ),
+                            ),
+                            crossFadeState: !store.isEmbalagensEditing
+                                ? CrossFadeState.showFirst
+                                : CrossFadeState.showSecond,
+                          );
+                        }),
                         const SizedBox(
                           width: 10,
                         ),
-                        const Icon(
-                          Icons.edit,
-                          color: Constants.kPrimaryColor,
+                        InkWell(
+                          child: Observer(builder: (_) {
+                            if (store.isEmbalagensEditing) {
+                              return const Icon(
+                                Icons.check,
+                                color: Constants.kPrimaryColor,
+                              );
+                            }
+                            return const Icon(
+                              Icons.edit,
+                              color: Constants.kPrimaryColor,
+                            );
+                          }),
+                          onTap: () {
+                            store.setIsEmbalagensEditing(
+                                !store.isEmbalagensEditing);
+                          },
                         ),
                       ],
                     ),

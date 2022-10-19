@@ -452,8 +452,8 @@ class LoteDatasource implements ILoteDatasource {
 
     try {
       const String readRepositories = r'''
-        mutation UpdateLote($loteId: Int!, $loteNome: String!, $setorId: Int!, $culturaId: Int!, $reservatorioId: Int!, $bandeijaSemeadas: Int, $mudasTransplantadas: Int, $plantasColhidas: Int) {
-          updateLote(loteId: $loteId, loteNome: $loteNome, setorId: $setorId, culturaId: $culturaId, reservatorioId: $reservatorioId, bandeijaSemeadas: $bandeijaSemeadas, mudasTransplantadas: $mudasTransplantadas, plantasColhidas: $plantasColhidas) {
+        mutation UpdateLote($loteId: Int!, $loteNome: String!, $setorId: Int!, $culturaId: Int!, $reservatorioId: Int!, $bandeijaSemeadas: Int, $mudasTransplantadas: Int, $plantasColhidas: Int, $embalagensProduzidas: Int) {
+          updateLote(loteId: $loteId, loteNome: $loteNome, setorId: $setorId, culturaId: $culturaId, reservatorioId: $reservatorioId, bandeijaSemeadas: $bandeijaSemeadas, mudasTransplantadas: $mudasTransplantadas, plantasColhidas: $plantasColhidas, embalagensProduzidas: $embalagensProduzidas) {
             id
             nome
             cultura {

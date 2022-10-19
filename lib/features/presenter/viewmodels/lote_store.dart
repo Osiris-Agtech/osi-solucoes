@@ -314,13 +314,40 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  setIsMudasEditing(bool value) => isMudasEditing = value;
+  setIsMudasEditing(bool value) {
+    isMudasEditing = value;
+    if (!value &&
+        mudasTransplantadasController.text !=
+            (loteSelecionado.mudas_transplantadas ?? 0).toString()) {
+      loteSelecionado.mudas_transplantadas =
+          int.parse(mudasTransplantadasController.text);
+      alterarProducaoLote();
+    }
+  }
 
   @action
-  setIsPlantasEditing(bool value) => isPlantasEditing = value;
+  setIsPlantasEditing(bool value) {
+    isPlantasEditing = value;
+    if (!value &&
+        plantasColhidasController.text !=
+            (loteSelecionado.plantas_colhidas ?? 0).toString()) {
+      loteSelecionado.plantas_colhidas =
+          int.parse(plantasColhidasController.text);
+      alterarProducaoLote();
+    }
+  }
 
   @action
-  setIsEmbalagensEditing(bool value) => isEmbalagensEditing = value;
+  setIsEmbalagensEditing(bool value) {
+    isEmbalagensEditing = value;
+    if (!value &&
+        embalagensProduzidasController.text !=
+            (loteSelecionado.embalagens_produzidas ?? 0).toString()) {
+      loteSelecionado.embalagens_produzidas =
+          int.parse(embalagensProduzidasController.text);
+      alterarProducaoLote();
+    }
+  }
 
   @action
   alterarNome(String name) {
@@ -488,12 +515,6 @@ abstract class _LoteStoreBase with Store {
     novoLote.semeadura_data = semeaduraData;
     novoLote.transplantio_data = transplantioData;
     novoLote.colheita_data = colheitaData;
-    novoLote.bandeijas_semeadas = int.parse(bandeijasSemeadasController.text);
-    novoLote.mudas_transplantadas =
-        int.parse(mudasTransplantadasController.text);
-    novoLote.plantas_colhidas = int.parse(plantasColhidasController.text);
-    novoLote.embalagens_produzidas =
-        int.parse(embalagensProduzidasController.text);
 
     var alterarLote = await loteRepository.alterarLote(novoLote);
 
