@@ -24,6 +24,8 @@ abstract class ILoteDatasource {
   Future<Either<Failure, Lote>> migrarLote(
       {required int loteId, required int setorId, required int reservatorioId});
   Future<Either<Failure, Lote>> alterarLote({required Lote alterarLote});
+  Future<Either<Failure, Cultura>> registrarCultura(
+      {required Cultura cultura, required int contaId});
 }
 
 class LoteDatasource implements ILoteDatasource {
@@ -551,6 +553,57 @@ class LoteDatasource implements ILoteDatasource {
       return Right(loteResult);
     } else {
       return Left(ErrorLote(message: FailureMessage.errorMigrarLoteMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Cultura>> registrarCultura(
+      {required Cultura cultura, required int contaId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+        mutation CreateOneCultura($nome: String!, $contaId: Int!) {
+          createOneCultura(data: {
+            nome: $nome,
+            privado: true,
+            conta: {
+              connect: {
+                id: $contaId
+              }
+            }
+          }) {
+            id
+            nome
+            privado
+            created_at
+            conta {
+              id
+              nome
+            }
+          }
+        }
+      ''';
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "nome": cultura.nome,
+        "contaId": contaId,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      Cultura? culturaResult =
+          Cultura.fromJson(result.data?['createOneCultura']);
+
+      return Right(culturaResult);
+    } else {
+      return Left(
+          ErrorLote(message: FailureMessage.errorCadastrarCulturaMessage));
     }
   }
 }

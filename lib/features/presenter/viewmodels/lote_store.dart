@@ -487,6 +487,29 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
+  registrarCultura() async {
+    if (novaCulturaController.text.isNotEmpty) {
+      Cultura novaCultura = Cultura(
+        nome: novaCulturaController.text,
+        privado: true,
+      );
+
+      var conta = await loteRepository.registrarCultura(
+          novaCultura, authController.usuario.selected_conta!.conta!.id!);
+
+      conta.fold(
+        (err) {
+          toastError(message: err.message);
+        },
+        (data) async {
+          culturaList = List.from([data, ...culturaList]);
+          setIsNovaCultura(false);
+        },
+      );
+    }
+  }
+
+  @action
   validarRegistro() {
     bool isValid = novoLoteName.text.isNotEmpty &&
         novoLoteSetor.id != null &&

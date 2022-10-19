@@ -753,6 +753,14 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     return _$registrarLoteAsyncAction.run(() => super.registrarLote());
   }
 
+  final _$registrarCulturaAsyncAction =
+      AsyncAction('_LoteStoreBase.registrarCultura');
+
+  @override
+  Future registrarCultura() {
+    return _$registrarCulturaAsyncAction.run(() => super.registrarCultura());
+  }
+
   final _$alterarLoteAsyncAction = AsyncAction('_LoteStoreBase.alterarLote');
 
   @override

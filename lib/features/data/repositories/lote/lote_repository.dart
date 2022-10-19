@@ -70,7 +70,14 @@ class LoteRepository implements ILoteRepository {
   @override
   Future<Either<Failure, Lote>> alterarLote(Lote alterarLote) async {
     var result = await datasource.alterarLote(alterarLote: alterarLote);
+    return result;
+  }
 
+  @override
+  Future<Either<Failure, Cultura>> registrarCultura(
+      Cultura cultura, int contaId) async {
+    var result =
+        await datasource.registrarCultura(cultura: cultura, contaId: contaId);
     return result;
   }
 }

@@ -426,13 +426,6 @@ class _NextStepButtonState extends State<NextStepButton> {
           store.setDotIndicator(store.dotIndicator + 1);
           widget.carouselController.nextPage();
         }
-        //else {
-        //   store.setDotIndicator(store.dotIndicator + 1);
-        //   widget.carouselController.nextPage(
-        //     duration: const Duration(milliseconds: 400),
-        //     curve: Curves.easeIn,
-        //   );
-        // }
       },
     );
   }
