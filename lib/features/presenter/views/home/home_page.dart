@@ -717,7 +717,7 @@ class _HomePageState extends State<HomePage> {
                         height: 25,
                         width: 25,
                       ),
-                      onPressed: () {},
+                      onPressed: null,
                     ),
                   ),
                 ),
@@ -762,7 +762,9 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
   ) {
     // final HomeStore store = Modular.get<HomeStore>();
     HomeStore store = GetIt.I<HomeStore>();
+    final AuthController authController = GetIt.I<AuthController>();
     final progress = shrinkOffset / maxExtent;
+
     return Material(
       elevation: 2,
       borderRadius: const BorderRadius.only(
@@ -848,10 +850,13 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
               child: AnimatedOpacity(
                 duration: const Duration(milliseconds: 150),
                 opacity: (1 - progress * 1.5) < 0 ? 0 : 1 - progress * 1.5,
-                child: const CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
-                  radius: 30,
+                child: InkWell(
+                  onTap: () => authController.setIsDevelop(),
+                  child: const CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
+                    radius: 30,
+                  ),
                 ),
               ),
             ),

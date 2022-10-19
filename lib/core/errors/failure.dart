@@ -18,4 +18,22 @@ class FailureMessage {
   static const internalErrorMessage = 'Erro interno';
   static const cepErrorMessage = 'Requisição inválida!';
   static const senEmailErrorMessage = 'Falha ao enviar e-mail';
+  static const emptyListMessage = 'Lista Vazia';
+  static const errorInfoMessage = 'Falha ao carregar as informações';
+  static const errorNovoReservatorioMessage =
+      'Falha ao cadastrar, verifique se os campos estão preenchidos corretamente';
+  static const errorNovaAreaMessage =
+      'Falha ao cadastrar área, verifique se os campos estão preenchidos corretamente';
+  static const errorNovoSetorMessage =
+      'Falha ao cadastrar setor, verifique se os campos estão preenchidos corretamente';
+  static const errorNovoLoteMessage =
+      'Falha ao cadastrar lote, verifique se os campos estão preenchidos corretamente';
+  static const errorAlterarAreaMessage =
+      'Falha ao alterar área, verifique se os campos estão preenchidos corretamente';
+  static const errorAlterarSetorMessage =
+      'Falha ao alterar setor, verifique se os campos estão preenchidos corretamente';
+  static const errorMigrarLoteMessage =
+      'Falha ao migrar lote, algo está bloqueando a ação';
+  static const errorAlterarLoteMessage =
+      'Falha ao alterar lote, verifique se os campos estão preenchidos corretamente';
 }

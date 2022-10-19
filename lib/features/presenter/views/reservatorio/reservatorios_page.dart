@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/cadastrar_resevatorio_page.dart';
+import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/reservatorioItem.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/reservatorios_store.dart';
@@ -17,192 +19,179 @@ class ReservatoriosPage extends StatefulWidget {
 }
 
 class ReservatoriosPageState extends State<ReservatoriosPage> {
-  // final ReservatoriosStore store = Modular.get();
   ReservatoriosStore store = GetIt.I<ReservatoriosStore>();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Constants.kSecondBackgroundColor,
-        body: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            SliverAppBar(
-              backgroundColor: Colors.white,
-              toolbarHeight: 120, //MediaQuery.of(context).size.height * 0.17,
-              // collapsedHeight: 200, //MediaQuery.of(context).size.height * 0.17,
-              floating: true,
-              automaticallyImplyLeading: true,
-              forceElevated: true,
-              elevation: 1,
-              flexibleSpace: const TopAppBar(
-                path: "/Home/",
-                namePage: "Meus Reservatórios",
-                subtitle: "Lista de reservatórios cadastrados",
-              ),
-              bottom: PreferredSize(
-                child: Container(
-                  height: 50,
-                  color: const Color(0xFFF8F8F6),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.04,
-                    vertical: 5, //MediaQuery.of(context).size.height * 0.007,
-                  ),
-                  child: TextFormField(
-                    textAlignVertical: TextAlignVertical.top,
-                    textAlign: TextAlign.start,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.zero,
-                      isDense: true,
-                      border: InputBorder.none,
-                      prefixIcon: const IconButton(
-                        onPressed: null,
-                        icon: Icon(
-                          Icons.search,
-                          size: 24,
-                        ),
-                      ),
-                      labelText: "Buscar...",
-                      labelStyle: const TextStyle(fontSize: 18),
-                      suffixIcon: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          primary: Constants.kPrimaryColor,
-                        ),
-                        child: const Text(
-                          "data",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                        onPressed: () {},
-                      ),
-                    ),
-                  ),
-                ),
-                preferredSize: const Size(
-                  double.infinity,
-                  60, //MediaQuery.of(context).size.height * 0.06,
-                ),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Constants.kSecondBackgroundColor,
+          body: PrimaryScrollController(
+            controller: _scrollController,
+            child: Scrollbar(
+              radius: const Radius.circular(12),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  sliverAppBar(context),
+                  Observer(builder: (_) {
+                    if (store.isReservatorioListLoading) {
+                      return loadingList();
+                    }
+                    if (store.reservatorioList.isEmpty) {
+                      return emptyList();
+                    }
+                    return showList();
+                  }),
+                ],
               ),
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return Card(
-                    elevation: 1,
-                    margin: const EdgeInsets.only(left: 20, right: 20, top: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ListView.builder(
-                      primary: false,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.width * 0.05,
-                        vertical: MediaQuery.of(context).size.height * 0.01,
-                      ),
-                      physics: const BouncingScrollPhysics(),
-                      controller: ScrollController(),
-                      shrinkWrap: true,
-                      itemCount: 1,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              top: index != 0
-                                  ? MediaQuery.of(context).size.height * 0.018
-                                  : 0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    IconButton(
-                                      icon: SvgPicture.asset(
-                                          'assets/icons/reservatorio_icon.svg'),
-                                      onPressed: null,
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                        "Reservatório 1",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(10),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: const [
-                                          Text(
-                                            "Cultivos:",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 5),
-                                            child: Text(
-                                              "9 Ativos",
-                                              style: TextStyle(
-                                                color: Constants.kPrimaryColor,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: const [
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 20,
-                                      color: Constants.kPrimaryColor,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-                childCount: 1000, // 1000 list items
-              ),
-            ),
-          ],
+          ),
+          floatingActionButton: floatingButton(),
         ),
-        floatingActionButton: FloatingActionButton(
-          heroTag: "Novo Reservatório",
-          onPressed: () => Get.to(
-            () => const CadastrarReservatorioPage(),
-            transition: Transition.rightToLeft,
+      ),
+    );
+  }
+
+  FloatingActionButton floatingButton() {
+    return FloatingActionButton(
+      heroTag: "Novo Reservatório",
+      onPressed: () => Get.to(
+        () => const CadastrarReservatorioPage(),
+        transition: Transition.rightToLeft,
+      ),
+      child: const Icon(
+        Icons.add,
+        size: 30,
+        color: Colors.white,
+      ),
+      backgroundColor: Constants.kPrimaryColor,
+    );
+  }
+
+  SliverList showList() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          return reservatorioItem(index, store);
+        },
+        childCount: store.reservatorioList.length,
+      ),
+    );
+  }
+
+  SliverList emptyList() {
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        [
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.only(top: 120.0),
+              child: Text(
+                'Não há reservatórios\ncadastrados em sua conta',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Color(0xff6F6464),
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w800,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
-          child: const Icon(
-            Icons.add,
-            size: 30,
-            color: Colors.white,
+        ],
+      ),
+    );
+  }
+
+  SliverList loadingList() {
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        [
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.only(top: 120.0),
+              child: CircularProgressIndicator(
+                strokeWidth: 1,
+              ),
+            ),
           ),
-          backgroundColor: Constants.kPrimaryColor,
+        ],
+      ),
+    );
+  }
+
+  SliverAppBar sliverAppBar(BuildContext context) {
+    return SliverAppBar(
+      backgroundColor: Colors.white,
+      toolbarHeight: 120, //MediaQuery.of(context).size.height * 0.17,
+      // collapsedHeight: 200, //MediaQuery.of(context).size.height * 0.17,
+      floating: true,
+      automaticallyImplyLeading: false,
+      forceElevated: true,
+      elevation: 1,
+      flexibleSpace: const TopAppBar(
+        path: "/Home/",
+        namePage: "Meus Reservatórios",
+        subtitle: "Lista de reservatórios cadastrados",
+      ),
+      bottom: PreferredSize(
+        child: filterWidget(context),
+        preferredSize: const Size(
+          double.infinity,
+          60, //MediaQuery.of(context).size.height * 0.06,
+        ),
+      ),
+    );
+  }
+
+  Container filterWidget(BuildContext context) {
+    return Container(
+      height: 50,
+      color: const Color(0xFFF8F8F6),
+      padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width * 0.04,
+        vertical: 5, //MediaQuery.of(context).size.height * 0.007,
+      ),
+      child: TextFormField(
+        textAlignVertical: TextAlignVertical.top,
+        textAlign: TextAlign.start,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.zero,
+          isDense: true,
+          border: InputBorder.none,
+          prefixIcon: const IconButton(
+            onPressed: null,
+            icon: Icon(
+              Icons.search,
+              size: 24,
+            ),
+          ),
+          labelText: "Buscar...",
+          labelStyle: const TextStyle(fontSize: 18),
+          suffixIcon: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+              primary: Constants.kPrimaryColor,
+            ),
+            child: const Text(
+              "data",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+            onPressed: () {},
+          ),
         ),
       ),
     );
