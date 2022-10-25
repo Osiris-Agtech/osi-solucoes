@@ -24,6 +24,62 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
+  final _$loteListAtom = Atom(name: '_CadernoCampoStoreBase.loteList');
+
+  @override
+  List<Lote> get loteList {
+    _$loteListAtom.reportRead();
+    return super.loteList;
+  }
+
+  @override
+  set loteList(List<Lote> value) {
+    _$loteListAtom.reportWrite(value, super.loteList, () {
+      super.loteList = value;
+    });
+  }
+
+  final _$isLoteListLoadingAtom =
+      Atom(name: '_CadernoCampoStoreBase.isLoteListLoading');
+
+  @override
+  bool get isLoteListLoading {
+    _$isLoteListLoadingAtom.reportRead();
+    return super.isLoteListLoading;
+  }
+
+  @override
+  set isLoteListLoading(bool value) {
+    _$isLoteListLoadingAtom.reportWrite(value, super.isLoteListLoading, () {
+      super.isLoteListLoading = value;
+    });
+  }
+
+  final _$setorSelecionadoAtom =
+      Atom(name: '_CadernoCampoStoreBase.setorSelecionado');
+
+  @override
+  Setor get setorSelecionado {
+    _$setorSelecionadoAtom.reportRead();
+    return super.setorSelecionado;
+  }
+
+  @override
+  set setorSelecionado(Setor value) {
+    _$setorSelecionadoAtom.reportWrite(value, super.setorSelecionado, () {
+      super.setorSelecionado = value;
+    });
+  }
+
+  final _$buscarLotesByContaAsyncAction =
+      AsyncAction('_CadernoCampoStoreBase.buscarLotesByConta');
+
+  @override
+  Future buscarLotesByConta() {
+    return _$buscarLotesByContaAsyncAction
+        .run(() => super.buscarLotesByConta());
+  }
+
   final _$_CadernoCampoStoreBaseActionController =
       ActionController(name: '_CadernoCampoStoreBase');
 
@@ -41,7 +97,10 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   @override
   String toString() {
     return '''
-value: ${value}
+value: ${value},
+loteList: ${loteList},
+isLoteListLoading: ${isLoteListLoading},
+setorSelecionado: ${setorSelecionado}
     ''';
   }
 }
