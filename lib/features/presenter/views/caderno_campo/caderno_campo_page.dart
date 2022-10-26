@@ -4,7 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
+import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
@@ -24,10 +26,12 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
 
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
   final formKey = GlobalKey<FormState>();
+  final key = GlobalKey<FormState>();
 
   @override
   void initState() {
     store.buscarLotesByConta();
+    store.buscarAreasList();
     super.initState();
   }
 
@@ -52,6 +56,83 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
               physics: const BouncingScrollPhysics(),
               slivers: [
                 const AppBar(),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 60,
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          child: Observer(builder: (_) {
+                            return DropdownButtonFormField<Area>(
+                              value: store.dropButtonArea.id != null
+                                  ? store.dropButtonArea
+                                  : null,
+                              hint: const Text(
+                                'Selecionar',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                              isExpanded: true,
+                              iconEnabledColor: Constants.kPrimaryColor,
+                              items: store.areaList.map((Area area) {
+                                return DropdownMenuItem<Area>(
+                                  value: area,
+                                  child: Text(area.nome ?? '-'),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                if (value != null) {
+                                  key.currentState?.reset();
+                                  store.selecionarDropButtonSetor(
+                                      Setor()); // Resetar a seleção do setor
+                                  store.selecionarDropButtonArea(value);
+                                  store.buscarLotesByArea();
+                                }
+                              },
+                            );
+                          }),
+                        ),
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        Expanded(
+                          child: Observer(builder: (_) {
+                            return DropdownButtonFormField<Setor>(
+                              key: key,
+                              value: store.dropButtonSetor.id != null
+                                  ? store.dropButtonSetor
+                                  : null,
+                              hint: const Text(
+                                'Selecionar',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                              isExpanded: true,
+                              iconEnabledColor: Constants.kPrimaryColor,
+                              items: (store.dropButtonArea.setores ?? [])
+                                  .map((Setor setor) {
+                                return DropdownMenuItem<Setor>(
+                                  value: setor,
+                                  child: Text(setor.nome!),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                if (value != null) {
+                                  store.selecionarDropButtonSetor(value);
+                                  store.buscarLotesBySetor();
+                                }
+                              },
+                            );
+                          }),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 Observer(builder: (_) {
                   if (store.isLoteListLoading) {
                     return const SliverToBoxAdapter(
@@ -261,36 +342,36 @@ class _CardLoteState extends State<CardLote> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
+                        children: [
+                          const Icon(
                             Icons.eco,
                             size: 26,
                             color: Color(0xFF26C165),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                           Text(
-                            "Lote ID",
-                            style: TextStyle(
+                            "# ${widget.lote.id}",
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               fontStyle: FontStyle.italic,
                             ),
                           ),
-                          Spacer(),
+                          const Spacer(),
                         ],
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(
+                    Padding(
+                      padding: const EdgeInsets.only(
                         left: 8.0,
                         bottom: 2.0,
                         top: 8.0,
                       ),
                       child: Text(
-                        'nome',
-                        style: TextStyle(
+                        widget.lote.nome ?? '',
+                        style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
                           color: Constants.kGreyText,
@@ -301,14 +382,14 @@ class _CardLoteState extends State<CardLote> {
                       padding: const EdgeInsets.only(left: 8.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Text(
+                        children: [
+                          const Text(
                             "Cultura: ",
                             style: TextStyle(fontSize: 16),
                           ),
                           Text(
-                            "CULTURA NOME",
-                            style: TextStyle(
+                            "${widget.lote.cultura?.nome}",
+                            style: const TextStyle(
                               fontSize: 16,
                               color: Constants.kPrimaryColor,
                               fontWeight: FontWeight.w700,

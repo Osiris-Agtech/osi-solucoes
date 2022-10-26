@@ -39,6 +39,21 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
+  final _$areaListAtom = Atom(name: '_CadernoCampoStoreBase.areaList');
+
+  @override
+  List<Area> get areaList {
+    _$areaListAtom.reportRead();
+    return super.areaList;
+  }
+
+  @override
+  set areaList(List<Area> value) {
+    _$areaListAtom.reportWrite(value, super.areaList, () {
+      super.areaList = value;
+    });
+  }
+
   final _$isLoteListLoadingAtom =
       Atom(name: '_CadernoCampoStoreBase.isLoteListLoading');
 
@@ -52,6 +67,22 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   set isLoteListLoading(bool value) {
     _$isLoteListLoadingAtom.reportWrite(value, super.isLoteListLoading, () {
       super.isLoteListLoading = value;
+    });
+  }
+
+  final _$isAreaLoadingAtom =
+      Atom(name: '_CadernoCampoStoreBase.isAreaLoading');
+
+  @override
+  bool get isAreaLoading {
+    _$isAreaLoadingAtom.reportRead();
+    return super.isAreaLoading;
+  }
+
+  @override
+  set isAreaLoading(bool value) {
+    _$isAreaLoadingAtom.reportWrite(value, super.isAreaLoading, () {
+      super.isAreaLoading = value;
     });
   }
 
@@ -71,6 +102,38 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
+  final _$dropButtonSetorAtom =
+      Atom(name: '_CadernoCampoStoreBase.dropButtonSetor');
+
+  @override
+  Setor get dropButtonSetor {
+    _$dropButtonSetorAtom.reportRead();
+    return super.dropButtonSetor;
+  }
+
+  @override
+  set dropButtonSetor(Setor value) {
+    _$dropButtonSetorAtom.reportWrite(value, super.dropButtonSetor, () {
+      super.dropButtonSetor = value;
+    });
+  }
+
+  final _$dropButtonAreaAtom =
+      Atom(name: '_CadernoCampoStoreBase.dropButtonArea');
+
+  @override
+  Area get dropButtonArea {
+    _$dropButtonAreaAtom.reportRead();
+    return super.dropButtonArea;
+  }
+
+  @override
+  set dropButtonArea(Area value) {
+    _$dropButtonAreaAtom.reportWrite(value, super.dropButtonArea, () {
+      super.dropButtonArea = value;
+    });
+  }
+
   final _$buscarLotesByContaAsyncAction =
       AsyncAction('_CadernoCampoStoreBase.buscarLotesByConta');
 
@@ -80,8 +143,55 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
         .run(() => super.buscarLotesByConta());
   }
 
+  final _$buscarLotesBySetorAsyncAction =
+      AsyncAction('_CadernoCampoStoreBase.buscarLotesBySetor');
+
+  @override
+  Future buscarLotesBySetor() {
+    return _$buscarLotesBySetorAsyncAction
+        .run(() => super.buscarLotesBySetor());
+  }
+
+  final _$buscarLotesByAreaAsyncAction =
+      AsyncAction('_CadernoCampoStoreBase.buscarLotesByArea');
+
+  @override
+  Future buscarLotesByArea() {
+    return _$buscarLotesByAreaAsyncAction.run(() => super.buscarLotesByArea());
+  }
+
+  final _$buscarAreasListAsyncAction =
+      AsyncAction('_CadernoCampoStoreBase.buscarAreasList');
+
+  @override
+  Future buscarAreasList() {
+    return _$buscarAreasListAsyncAction.run(() => super.buscarAreasList());
+  }
+
   final _$_CadernoCampoStoreBaseActionController =
       ActionController(name: '_CadernoCampoStoreBase');
+
+  @override
+  dynamic selecionarDropButtonArea(Area area) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.selecionarDropButtonArea');
+    try {
+      return super.selecionarDropButtonArea(area);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selecionarDropButtonSetor(Setor setor) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.selecionarDropButtonSetor');
+    try {
+      return super.selecionarDropButtonSetor(setor);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void increment() {
@@ -99,8 +209,12 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     return '''
 value: ${value},
 loteList: ${loteList},
+areaList: ${areaList},
 isLoteListLoading: ${isLoteListLoading},
-setorSelecionado: ${setorSelecionado}
+isAreaLoading: ${isAreaLoading},
+setorSelecionado: ${setorSelecionado},
+dropButtonSetor: ${dropButtonSetor},
+dropButtonArea: ${dropButtonArea}
     ''';
   }
 }
