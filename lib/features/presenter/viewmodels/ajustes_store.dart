@@ -95,11 +95,16 @@ abstract class _AjustesStoreBase with Store {
         double.parse(selectedReservatorio.solucao?.c_eletrica ?? '0.0');
     // Referencias da celulas do excel planilha PLANILHA DE ELABORAÇÃO DE SOLUÇÃO NUTRITIVA-RafaelCampagnol
     // https://onedrive.live.com/edit.aspx?resid=49A98B4ECB99BBF9!70910&ithint=file%2cxlsx&authkey=!AJd2bx4J46wp3l4
+    
+    //condutividade eletrica na SN
+    double ceSN =  double.parse(fertilizante.quantidade!) /1000 * double.parse(fertilizante.fertilizante!.c_eletrica!) ;
     // referencia - V11
     double relacao =
-        (ceTeorico - ceAgua) / double.parse(fertilizante.fertilizante!.c_eletrica!);
+        (ceTeorico - ceAgua) / ceSN;
     // referencia - Y11
     double cet = (double.parse(ce) - ceAgua) / relacao;
+    print(fertilizante.fertilizante!.nome);
+    print(relacao);
     // referencia - H11
     double fertCE = double.parse(fertilizante.quantidade!) /
         double.parse(fertilizante.fertilizante!.c_eletrica!) *
@@ -121,12 +126,10 @@ abstract class _AjustesStoreBase with Store {
         double y = calculoLado(fertilizante, cEletricoDesejado.text);
         double ladoDesejado = y * double.parse(volumeDesejado.text);
         double reposicao = ladoDesejado - ladoMedido;
-        print(reposicao);
         reposicaoFert.add(ReposicaoFert(
             fertilizante: fertilizante.fertilizante!, valor: reposicao));
       }
     });
-    print(reposicaoFert);
     return;
   }
 }

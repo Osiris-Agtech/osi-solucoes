@@ -17,6 +17,8 @@ class ResultadoajustePage extends StatefulWidget {
 
 class ResultadoajustePageState extends State<ResultadoajustePage>
     with TickerProviderStateMixin {
+  AjustesStore store = GetIt.I<AjustesStore>();
+
   late TabController tabController;
   late ScrollController scrollController1;
   late ScrollController scrollController2;
@@ -515,6 +517,7 @@ class TabSolucaoConcentrada extends StatelessWidget {
 }
 
 class ButtonCompleted extends StatelessWidget {
+  
   const ButtonCompleted({
     Key? key,
   }) : super(key: key);
@@ -590,7 +593,9 @@ class AppBarCustom extends StatelessWidget {
 }
 
 class TabFertilizantes extends StatelessWidget {
-  const TabFertilizantes({
+  final AjustesStore store = GetIt.I<AjustesStore>();
+
+  TabFertilizantes({
     Key? key,
     required this.scrollController1,
   }) : super(key: key);
@@ -598,7 +603,7 @@ class TabFertilizantes extends StatelessWidget {
   final ScrollController scrollController1;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,) {
     return Padding(
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).size.height * 0.024,
@@ -677,7 +682,7 @@ class TabFertilizantes extends StatelessWidget {
                     physics: const BouncingScrollPhysics(),
                     controller: scrollController1,
                     shrinkWrap: true,
-                    itemCount: 8,
+                    itemCount: store.reposicaoFert.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.only(
@@ -688,15 +693,15 @@ class TabFertilizantes extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            Expanded(
+                             Expanded(
                                 flex: 5,
                                 child: Text(
-                                  "Fertilizante #$index",
+                                  store.reposicaoFert[index].fertilizante.nome!,
                                 )),
                             Expanded(
                                 flex: 1,
                                 child: Text(
-                                  "${27 * index}",
+                                  store.reposicaoFert[index].valor.toStringAsFixed(2),
                                   textAlign: TextAlign.end,
                                 )),
                             Padding(
