@@ -19,4 +19,5 @@ abstract class ILoteRepository {
       Cultura cultura, int contaId);
   Future<Either<Failure, Lote>> migrarLote(
       int loteId, int setorId, int reservatorioId);
+  Future<Either<Failure, Lote>> alterarLote(Lote alterarLote);
 }

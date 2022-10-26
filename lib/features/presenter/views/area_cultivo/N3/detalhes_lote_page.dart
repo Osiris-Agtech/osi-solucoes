@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 
 import 'components/detalhes_page/dados_cultivo.dart';
 import 'components/detalhes_page/datas_itens.dart';
@@ -96,14 +99,47 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
       iconTheme: const IconThemeData(
         color: Constants.kPrimaryColor, //change your color here
       ),
-      actions: const [
-        Padding(
-          padding: EdgeInsets.only(right: 16.0),
-          child: IconButton(
-            onPressed: null,
-            icon: Icon(
-              Icons.settings,
-              color: Constants.kGreyText,
+      actions: [
+        Align(
+          alignment: const Alignment(0.6, -0.9),
+          child: Padding(
+            padding: const EdgeInsets.only(right: 16.0, top: 8.0),
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+              ),
+              child: PopupMenuButton(
+                icon: SvgPicture.asset(
+                  "assets/icons/settings_icon.svg",
+                  color: Constants.kButtonGrey,
+                  height: 20,
+                ),
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: Row(
+                      children: const [
+                        Text('Editar'),
+                      ],
+                    ),
+                    onTap: () async {
+                      await store.setLoteEditing(store.loteSelecionado);
+                      Get.to(
+                        () => const CadastrarLotePage(),
+                        transition: Transition.rightToLeft,
+                      );
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: Row(
+                      children: const [
+                        Text('Deletar'),
+                      ],
+                    ),
+                    onTap: () {},
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -112,12 +148,12 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
   }
 
   configuracaoButton() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: ListTile(
         dense: true,
         minLeadingWidth: 10,
-        title: Text(
+        title: const Text(
           'Configurações',
           textAlign: TextAlign.start,
           style: TextStyle(
@@ -126,7 +162,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        subtitle: Text(
+        subtitle: const Text(
           'Alterar informações sobre o lote',
           style: TextStyle(
             color: Constants.kGreyText,
@@ -134,10 +170,17 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        leading: Icon(
+        leading: const Icon(
           Icons.settings,
           color: Constants.kPrimaryColor,
         ),
+        onTap: () async {
+          await store.setLoteEditing(store.loteSelecionado);
+          Get.to(
+            () => const CadastrarLotePage(),
+            transition: Transition.rightToLeft,
+          );
+        },
       ),
     );
   }
@@ -194,6 +237,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
 
   infoLote() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.0),
