@@ -39,6 +39,21 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
+  final _$orderAtom = Atom(name: '_AreaCultivoStoreBase.order');
+
+  @override
+  String get order {
+    _$orderAtom.reportRead();
+    return super.order;
+  }
+
+  @override
+  set order(String value) {
+    _$orderAtom.reportWrite(value, super.order, () {
+      super.order = value;
+    });
+  }
+
   final _$data2Atom = Atom(name: '_AreaCultivoStoreBase.data2');
 
   @override
@@ -439,6 +454,17 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
   }
 
   @override
+  dynamic changeOrder() {
+    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
+        name: '_AreaCultivoStoreBase.changeOrder');
+    try {
+      return super.changeOrder();
+    } finally {
+      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setData2(DateTime value) {
     final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
         name: '_AreaCultivoStoreBase.setData2');
@@ -564,6 +590,7 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     return '''
 isAreaLoading: ${isAreaLoading},
 dropDownValue: ${dropDownValue},
+order: ${order},
 data2: ${data2},
 data1: ${data1},
 value: ${value},

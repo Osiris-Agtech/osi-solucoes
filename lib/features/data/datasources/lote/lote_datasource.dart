@@ -42,7 +42,11 @@ class LoteDatasource implements ILoteDatasource {
                 equals: $setorId
               }
             }
-          }) {
+          }, orderBy: [
+            {
+              nome: asc,
+            }
+          ]) {
             id
             nome
             cultura {

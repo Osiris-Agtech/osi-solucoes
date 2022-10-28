@@ -44,8 +44,20 @@ class AreaRepository implements IAreaRepository {
   }
 
   @override
-  Future<Either<Failure, List<Area>>> buscarArea(int contaId) async {
-    var result = await datasource.buscarArea(contaId: contaId);
+  Future<Either<Failure, List<Area>>> buscarArea(
+    int contaId,
+    String orderBy,
+    String order,
+    DateTime? startDate,
+    DateTime? endDate,
+  ) async {
+    var result = await datasource.buscarArea(
+      contaId: contaId,
+      orderBy: orderBy,
+      order: order,
+      startDate: startDate,
+      endDate: endDate,
+    );
 
     return result;
   }

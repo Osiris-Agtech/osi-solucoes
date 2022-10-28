@@ -28,6 +28,12 @@ abstract class _AreaCultivoStoreBase with Store {
   setDropDown(String value) => dropDownValue = value;
 
   @observable
+  String order = "asc";
+
+  @action
+  changeOrder() => order == "asc" ? order = "desc" : order = "asc";
+
+  @observable
   DateTime data2 = DateTime.now();
 
   @action
@@ -54,8 +60,13 @@ abstract class _AreaCultivoStoreBase with Store {
     AreaRepository areaRepository = GetIt.I<AreaRepository>();
     AuthController authController = GetIt.I<AuthController>();
 
-    var areaListResult = await areaRepository
-        .buscarArea(authController.usuario.selected_conta!.conta!.id!);
+    var areaListResult = await areaRepository.buscarArea(
+      authController.usuario.selected_conta!.conta!.id!,
+      dropDownValue,
+      order,
+      data1,
+      data2,
+    );
 
     areaListResult.fold(
       (err) {
