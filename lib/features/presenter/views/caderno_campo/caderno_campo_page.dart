@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
-import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/caderno_campo_store.dart';
+import 'cadastrar_caderno_campo_page.dart';
 
 class CadernoCampoPage extends StatefulWidget {
   final String title;
@@ -46,8 +47,18 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
         child: Scaffold(
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           backgroundColor: Constants.kSecondBackgroundColor,
-          floatingActionButton: const NewFloatingActionButton(
-            nivel: 3,
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: 18.0),
+            child: FloatingActionButton(
+              onPressed: () {
+                Get.to(
+                  () => const CadastroCadernoCampoPage(),
+                  transition: Transition.rightToLeft,
+                );
+              },
+              backgroundColor: Constants.kPrimaryColor,
+              child: const Icon(Icons.add),
+            ),
           ),
           body: Form(
             key: formKey,
