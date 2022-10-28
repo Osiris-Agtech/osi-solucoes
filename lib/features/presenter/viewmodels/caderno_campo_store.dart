@@ -36,6 +36,9 @@ abstract class _CadernoCampoStoreBase with Store {
   @observable
   Area dropButtonArea = Area();
 
+  @observable
+  Lote loteSelecionado = Lote();
+
   @action
   selecionarDropButtonArea(Area area) => dropButtonArea = area;
 

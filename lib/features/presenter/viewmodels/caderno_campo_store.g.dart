@@ -134,6 +134,22 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
+  final _$loteSelecionadoAtom =
+      Atom(name: '_CadernoCampoStoreBase.loteSelecionado');
+
+  @override
+  Lote get loteSelecionado {
+    _$loteSelecionadoAtom.reportRead();
+    return super.loteSelecionado;
+  }
+
+  @override
+  set loteSelecionado(Lote value) {
+    _$loteSelecionadoAtom.reportWrite(value, super.loteSelecionado, () {
+      super.loteSelecionado = value;
+    });
+  }
+
   final _$buscarLotesByContaAsyncAction =
       AsyncAction('_CadernoCampoStoreBase.buscarLotesByConta');
 
@@ -214,7 +230,8 @@ isLoteListLoading: ${isLoteListLoading},
 isAreaLoading: ${isAreaLoading},
 setorSelecionado: ${setorSelecionado},
 dropButtonSetor: ${dropButtonSetor},
-dropButtonArea: ${dropButtonArea}
+dropButtonArea: ${dropButtonArea},
+loteSelecionado: ${loteSelecionado}
     ''';
   }
 }

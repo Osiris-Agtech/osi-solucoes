@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
+import 'package:osi_solucoes/features/presenter/views/caderno_campo/detalhes_caderno_campo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
@@ -318,10 +320,10 @@ class _CardLoteState extends State<CardLote> {
       highlightColor: Colors.transparent,
       onTap: () {
         // store.selecionarLote(widget.lote);
-        // Get.to(
-        //   () => const DetalhesLotePage(),
-        //   transition: Transition.rightToLeft,
-        // );
+        Get.to(
+          () => const DetalhesCadernoCampoPage(),
+          transition: Transition.rightToLeft,
+        );
       },
       child: Card(
         elevation: 2,
