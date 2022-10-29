@@ -53,7 +53,7 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                AppBar(store: store),
+                const AppBar(),
                 Observer(builder: (_) {
                   if (store.isAreaLoading) {
                     return const SliverToBoxAdapter(
@@ -88,20 +88,22 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
     );
   }
 
-  SliverList showList() {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(left: 16.0, right: 16, top: 5),
-            child: CardArea(
-              area: store.areaList[index],
-            ),
-          );
-        },
-        childCount: store.areaList.length,
-      ),
-    );
+  showList() {
+    return Observer(builder: (_) {
+      return SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16, top: 10),
+              child: CardArea(
+                area: store.searchArea[index],
+              ),
+            );
+          },
+          childCount: store.searchArea.length,
+        ),
+      );
+    });
   }
 }
 
@@ -266,16 +268,15 @@ class _CardAreaState extends State<CardArea> {
 class AppBar extends StatefulWidget {
   const AppBar({
     Key? key,
-    required this.store,
   }) : super(key: key);
-
-  final AreaCultivoStore store;
 
   @override
   State<AppBar> createState() => _AppBarState();
 }
 
 class _AppBarState extends State<AppBar> {
+  AreaCultivoStore store = GetIt.I<AreaCultivoStore>();
+
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (_) {
@@ -284,7 +285,7 @@ class _AppBarState extends State<AppBar> {
         child: SliverAppBar(
           pinned: true,
           backgroundColor: Colors.white,
-          toolbarHeight: widget.store.dropDownValue == "Data" ? 200 : 175,
+          toolbarHeight: store.dropDownValue == "Data" ? 200 : 175,
           floating: true,
           automaticallyImplyLeading: false,
           forceElevated: true,
@@ -301,30 +302,30 @@ class _AppBarState extends State<AppBar> {
                 height: 30,
               ),
               Container(
-                height: widget.store.dropDownValue == "Data" ? 75 : 50,
+                height: store.dropDownValue == "Data" ? 75 : 50,
                 color: const Color(0xFFF8F8F6),
                 padding: EdgeInsets.symmetric(
                   horizontal: MediaQuery.of(context).size.width * 0.04,
                 ),
                 child: SizedBox(
-                  height: widget.store.dropDownValue == "Data" ? 70 : 50,
+                  height: store.dropDownValue == "Data" ? 70 : 50,
                   width: double.infinity,
                   child: Row(
                     children: [
                       Observer(builder: (_) {
                         return Padding(
                           padding: const EdgeInsets.only(right: 15.0, left: 10),
-                          child: widget.store.dropDownValue == "Nome"
+                          child: store.dropDownValue == "Nome"
                               ? const Icon(Icons.search)
                               : const Icon(Icons.calendar_month_outlined),
                         );
                       }),
-                      widget.store.dropDownValue == "Nome"
+                      store.dropDownValue == "Nome"
                           ? Container()
                           : const Spacer(),
                       Observer(
                         builder: (_) {
-                          return widget.store.dropDownValue == "Nome"
+                          return store.dropDownValue == "Nome"
                               ? Expanded(
                                   child: TextFormField(
                                     decoration: const InputDecoration(
@@ -334,6 +335,9 @@ class _AppBarState extends State<AppBar> {
                                       ),
                                       border: InputBorder.none,
                                     ),
+                                    onChanged: (newValue) {
+                                      store.setSearchAreaText(newValue);
+                                    },
                                   ),
                                 )
                               : Column(
@@ -347,47 +351,22 @@ class _AppBarState extends State<AppBar> {
                                           onTap: () {
                                             DatePicker.showDatePicker(
                                               context,
+                                              currentTime: store.data1,
                                               locale: LocaleType.pt,
                                               showTitleActions: true,
                                               minTime: DateTime(2018, 3, 5),
                                               maxTime: DateTime(2030, 12, 30),
                                               onConfirm: (date) async {
-                                                widget.store.setData1(date);
-                                                await widget.store.buscarArea();
+                                                store.setData1(date);
+                                                await store.buscarArea();
                                               },
-                                            );
-                                          },
-                                          child: Card(
-                                              child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 10.0,
-                                              vertical: 5,
-                                            ),
-                                            child: Text(
-                                              "${widget.store.data1.day} / ${widget.store.data1.month} / ${widget.store.data1.year}",
-                                              style: const TextStyle(
-                                                color: Constants.kPrimaryColor,
+                                              theme: const DatePickerTheme(
+                                                doneStyle: TextStyle(
+                                                  color:
+                                                      Constants.kPrimaryColor,
+                                                  fontSize: 16,
+                                                ),
                                               ),
-                                            ),
-                                          )),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Text("Até"),
-                                        InkWell(
-                                          onTap: () {
-                                            DatePicker.showDatePicker(
-                                              context,
-                                              locale: LocaleType.pt,
-                                              showTitleActions: true,
-                                              minTime: DateTime(2018, 3, 5),
-                                              maxTime: DateTime(2030, 12, 30),
-                                              onConfirm: (date) async {
-                                                widget.store.setData2(date);
-                                                await widget.store.buscarArea();
-                                              },
                                             );
                                           },
                                           child: Card(
@@ -398,7 +377,51 @@ class _AppBarState extends State<AppBar> {
                                                 vertical: 5,
                                               ),
                                               child: Text(
-                                                "${widget.store.data2.day} / ${widget.store.data2.month} / ${widget.store.data2.year}",
+                                                "${store.data1.day} / ${store.data1.month} / ${store.data1.year}",
+                                                style: const TextStyle(
+                                                  color:
+                                                      Constants.kPrimaryColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Text("Até"),
+                                        InkWell(
+                                          onTap: () {
+                                            DatePicker.showDatePicker(
+                                              context,
+                                              currentTime: store.data2,
+                                              locale: LocaleType.pt,
+                                              showTitleActions: true,
+                                              minTime: DateTime(2018, 3, 5),
+                                              maxTime: DateTime(2030, 12, 30),
+                                              onConfirm: (date) async {
+                                                store.setData2(date);
+                                                await store.buscarArea();
+                                              },
+                                              theme: const DatePickerTheme(
+                                                doneStyle: TextStyle(
+                                                  color:
+                                                      Constants.kPrimaryColor,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 10.0,
+                                                vertical: 5,
+                                              ),
+                                              child: Text(
+                                                "${store.data2.day} / ${store.data2.month} / ${store.data2.year}",
                                                 style: const TextStyle(
                                                   color:
                                                       Constants.kPrimaryColor,
@@ -427,7 +450,7 @@ class _AppBarState extends State<AppBar> {
                             children: [
                               DropdownButton<String>(
                                 alignment: Alignment.center,
-                                value: widget.store.dropDownValue,
+                                value: store.dropDownValue,
                                 dropdownColor: Constants.kPrimaryColor,
                                 underline: DropdownButtonHideUnderline(
                                     child: Container()),
@@ -438,11 +461,13 @@ class _AppBarState extends State<AppBar> {
                                     const BorderRadius.all(Radius.circular(5)),
                                 style: const TextStyle(color: Colors.white),
                                 onChanged: (String? newValue) async {
-                                  if (newValue == widget.store.dropDownValue) {
-                                    widget.store.changeOrder();
+                                  if (newValue == store.dropDownValue) {
+                                    store.changeOrder();
+                                  } else {
+                                    store.setSearchAreaText('');
                                   }
-                                  widget.store.setDropDown(newValue!);
-                                  await widget.store.buscarArea();
+                                  store.setDropDown(newValue!);
+                                  await store.buscarArea();
                                 },
                                 items: <String>[
                                   'Nome',
@@ -458,7 +483,7 @@ class _AppBarState extends State<AppBar> {
                               ),
                               Observer(builder: (_) {
                                 return Icon(
-                                  widget.store.order == "asc"
+                                  store.order == "asc"
                                       ? Icons.arrow_upward_rounded
                                       : Icons.arrow_downward_rounded,
                                   size: 14,

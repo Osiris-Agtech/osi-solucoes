@@ -54,6 +54,9 @@ abstract class _AreaCultivoStoreBase with Store {
     value++;
   }
 
+  @observable
+  List<Area> areaList = [];
+
   @action
   buscarArea() async {
     isAreaLoading = true;
@@ -79,6 +82,25 @@ abstract class _AreaCultivoStoreBase with Store {
     isAreaLoading = false;
   }
 
+  @observable
+  String searchAreaText = '';
+
+  @action
+  setSearchAreaText(String value) => searchAreaText = value;
+
+  @computed
+  List<Area> get searchArea {
+    List<Area> result = areaList
+        .where((element) =>
+            element.nome
+                ?.toLowerCase()
+                .contains(searchAreaText.toLowerCase()) ??
+            false)
+        .toList();
+
+    return result;
+  }
+
   //####################### START CADASTRAR AREA DE CULTIVO ##########################
 
   @observable
@@ -95,9 +117,6 @@ abstract class _AreaCultivoStoreBase with Store {
 
   @observable
   List<Localizacao> localizacaoList = [];
-
-  @observable
-  List<Area> areaList = [];
 
   @observable
   Area novaArea = Area();
