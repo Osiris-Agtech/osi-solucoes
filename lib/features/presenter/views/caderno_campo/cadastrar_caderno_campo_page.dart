@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/bottomSheet.dart';
+import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/bottomSheet.dart';
 import '../../../../../core/constants/constants.dart';
 
 class CadastroCadernoCampoPage extends StatefulWidget {
@@ -243,12 +243,24 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                       ],
                     ),
                   )
-                : const Text(
-                    "Preencher",
-                    style: TextStyle(
-                      color: Constants.kPrimaryColor,
-                      fontWeight: FontWeight.w600,
-                    ),
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Text(
+                        "Preencher",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        size: 18,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
                   ),
             onTap: () {
               store.setDotIndicator(0);
@@ -293,15 +305,27 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                       ],
                     ),
                   )
-                : const Text(
-                    "Preencher",
-                    style: TextStyle(
-                      color: Constants.kPrimaryColor,
-                      fontWeight: FontWeight.w600,
-                    ),
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Text(
+                        "Nenhum Selecionado",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        size: 18,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
                   ),
             onTap: () {
-              store.setDotIndicator(0);
+              store.setDotIndicator(1);
               bottomSheet(context, carouselController, controlerPages, store);
             });
       }),
@@ -343,16 +367,34 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                       ],
                     ),
                   )
-                : const Text(
-                    "Preencher",
-                    style: TextStyle(
-                      color: Constants.kPrimaryColor,
-                      fontWeight: FontWeight.w600,
-                    ),
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        '${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.chevron_right,
+                        size: 18,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
                   ),
-            onTap: () {
-              store.setDotIndicator(0);
-              bottomSheet(context, carouselController, controlerPages, store);
+            onTap: () async {
+              final data = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2022),
+              lastDate: DateTime(2030),
+              locale: const Locale("pt", "BR"),
+            );
+            print(data);
             });
       }),
     );
@@ -393,22 +435,34 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                       ],
                     ),
                   )
-                : const Text(
-                    "Preencher",
-                    style: TextStyle(
-                      color: Constants.kPrimaryColor,
-                      fontWeight: FontWeight.w600,
-                    ),
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children:  [
+                      Text(
+                        '${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.chevron_right,
+                        size: 18,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
                   ),
-            onTap: () {
-              store.setDotIndicator(0);
-              bottomSheet(context, carouselController, controlerPages, store);
+            onTap: () async {
+              final data = showTimePicker(context: context, initialTime: TimeOfDay.now());
+              print(data);
             });
       }),
     );
   }
 
-     InkWell lote (BuildContext context) {
+  InkWell lote(BuildContext context) {
     return InkWell(
       child: Observer(builder: (_) {
         return ListTile(
@@ -443,21 +497,32 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                       ],
                     ),
                   )
-                : const Text(
-                    "Preencher",
-                    style: TextStyle(
-                      color: Constants.kPrimaryColor,
-                      fontWeight: FontWeight.w600,
-                    ),
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Text(
+                        "Nenhum Selecionado",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        size: 18,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
                   ),
             onTap: () {
-              store.setDotIndicator(0);
+              store.setDotIndicator(2);
               bottomSheet(context, carouselController, controlerPages, store);
             });
       }),
     );
   }
-
 
   Widget descricao() {
     return const Padding(
@@ -486,12 +551,11 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
               store.setShowTextFormField(true);
             },
             icon: const Icon(
-              Icons.add,
+              Icons.add_circle_outline,
               color: Colors.green,
             ),
           ),
           const Text('Adicionar descrição'),
-          const Text('(opcional)')
         ],
       ),
     );

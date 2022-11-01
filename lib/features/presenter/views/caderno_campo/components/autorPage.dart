@@ -1,0 +1,85 @@
+// ignore_for_file: file_names
+
+import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+
+Container autorPage(BuildContext context, SetorStore store) {
+  return Container(
+    height: MediaQuery.of(context).size.height * 0.9,
+    margin: EdgeInsets.only(
+      top: 0,
+      left: MediaQuery.of(context).size.width * 0.08,
+      right: MediaQuery.of(context).size.width * 0.08,
+    ),
+    child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: RichText(
+            textAlign: TextAlign.start,
+            text: const TextSpan(
+              text: 'Qual',
+              style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+              children: <TextSpan>[
+                TextSpan(
+                  text: ' autor ',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Constants.kPrimaryColor),
+                ),
+                TextSpan(
+                  text: 'deseja selecionar ?',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Constants.kText2),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        Expanded(
+          //MOCK PARA DROPDOWN
+          //TODO: Apagar apos integração
+          child: Observer(builder: (_) {
+            List<Usuario> userList = [
+              Usuario(id: 1, nome: "Miguel Ribeiro"),
+              Usuario(id: 2, nome: "Jonas Boechat"),
+              Usuario(id: 3, nome: "João Dantas"),
+              Usuario(id: 4, nome: "Tijas Moreira"),
+            ];
+            Usuario valueUser = Usuario();
+            return DropdownButtonFormField<Usuario>(
+              value: null,
+              hint: const Text(
+                'Selecionar autor',
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+              isExpanded: true,
+              iconEnabledColor: Constants.kPrimaryColor,
+              items: userList.map((Usuario usuario) {
+                return DropdownMenuItem<Usuario>(
+                  value: usuario,
+                  child: Text(usuario.nome ?? '-'),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  value = valueUser;
+                }
+              },
+            );
+          }),
+        ),
+        const Spacer(),
+      ],
+    ),
+  );
+}
