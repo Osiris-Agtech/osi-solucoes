@@ -1,9 +1,9 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:timelines/timelines.dart';
 
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
@@ -23,6 +23,14 @@ class DetalhesCadernoCampoPage extends StatefulWidget {
 
 class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
   CadernoCampoStore store = GetIt.I<CadernoCampoStore>();
+  AuthController authController = GetIt.I<AuthController>();
+  final scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    store.buscarAtividades();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,43 +47,93 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
             nivel: 3,
           ),
           body: CustomScrollView(
+            controller: scrollController,
             primary: false,
             physics: const BouncingScrollPhysics(),
             slivers: [
               const AppBar(),
               Observer(builder: (_) {
-                // if (store.isLoteListLoading) {
-                //   return const SliverToBoxAdapter(
-                //     child: Padding(
-                //       padding: EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                //       child: Center(
-                //         child: CircularProgressIndicator(),
-                //       ),
-                //     ),
-                //   );
-                // }
-                // if (store.loteList.isEmpty) {
-                //   return const SliverToBoxAdapter(
-                //     child: Padding(
-                //       padding: EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                //       child: Center(
-                //         child: Text(
-                //           "Não há lotes cadastrados neste setor",
-                //           textAlign: TextAlign.center,
-                //         ),
-                //       ),
-                //     ),
-                //   );
-                // }
-                return SliverToBoxAdapter(
-                  child: Timeline.tileBuilder(
-                    shrinkWrap: true,
-                    builder: TimelineTileBuilder.fromStyle(
-                      contentsBuilder: (context, index) => const Padding(
-                        padding: EdgeInsets.only(top: 40),
-                        child: Text('Timeline Event'),
+                if (store.isLoteListLoading) {
+                  return const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 200.0, left: 60, right: 60),
+                      child: Center(
+                        child: CircularProgressIndicator(),
                       ),
-                      itemCount: 10,
+                    ),
+                  );
+                }
+                if (store.loteSelecionado.lotes_atividades != null &&
+                    store.loteSelecionado.lotes_atividades!.isEmpty) {
+                  return const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 200.0, left: 60, right: 60),
+                      child: Center(
+                        child: Text(
+                          "Não há lotes cadastrados neste setor",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                return SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Timeline.tileBuilder(
+                      controller: scrollController,
+                      theme: TimelineTheme.of(context).copyWith(
+                        color: Constants.kPrimaryColor,
+                        nodePosition: 0,
+                      ),
+                      shrinkWrap: true,
+                      builder: TimelineTileBuilder.fromStyle(
+                        connectorStyle: ConnectorStyle.dashedLine,
+                        contentsBuilder: (context, index) => Card(
+                          elevation: 0,
+                          color: Constants.kSecondBackgroundColor,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10, bottom: 10),
+                                    child: Text(
+                                      '${store.loteSelecionado.lotes_atividades?[index].atividade!.nome}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  const Text('Data'),
+                                ],
+                              ),
+                              ListTile(
+                                contentPadding: const EdgeInsets.only(right: 0),
+                                dense: true,
+                                leading: const Icon(Icons.person),
+                                title: Text(
+                                  '${store.loteSelecionado.lotes_atividades?[index].usuario!.nome}',
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                                subtitle: Text(
+                                  '${store.loteSelecionado.lotes_atividades?[index].usuario?.selected_conta?.cargo?.cargo}',
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                    'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don'),
+                              )
+                            ],
+                          ),
+                        ),
+                        itemCount:
+                            store.loteSelecionado.lotes_atividades?.length ?? 0,
+                      ),
                     ),
                   ),
                 );
@@ -107,7 +165,7 @@ class _AppBarState extends State<AppBar> {
       child: SliverAppBar(
         pinned: true,
         backgroundColor: Colors.white,
-        toolbarHeight: 175,
+        toolbarHeight: 180,
         floating: true,
         automaticallyImplyLeading: false,
         forceElevated: true,

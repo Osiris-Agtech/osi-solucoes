@@ -319,7 +319,7 @@ class _CardLoteState extends State<CardLote> {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        // store.selecionarLote(widget.lote);
+        store.setLoteSelecionado(widget.lote);
         Get.to(
           () => const DetalhesCadernoCampoPage(),
           transition: Transition.rightToLeft,

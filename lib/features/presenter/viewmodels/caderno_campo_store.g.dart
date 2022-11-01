@@ -159,6 +159,14 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
         .run(() => super.buscarLotesByConta());
   }
 
+  final _$buscarAtividadesAsyncAction =
+      AsyncAction('_CadernoCampoStoreBase.buscarAtividades');
+
+  @override
+  Future buscarAtividades() {
+    return _$buscarAtividadesAsyncAction.run(() => super.buscarAtividades());
+  }
+
   final _$buscarLotesBySetorAsyncAction =
       AsyncAction('_CadernoCampoStoreBase.buscarLotesBySetor');
 
@@ -204,6 +212,17 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
         name: '_CadernoCampoStoreBase.selecionarDropButtonSetor');
     try {
       return super.selecionarDropButtonSetor(setor);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setLoteSelecionado(Lote lote) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.setLoteSelecionado');
+    try {
+      return super.setLoteSelecionado(lote);
     } finally {
       _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
     }

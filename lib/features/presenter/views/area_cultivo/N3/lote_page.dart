@@ -131,7 +131,7 @@ class _AppBarState extends State<AppBar> {
       child: SliverAppBar(
         pinned: true,
         backgroundColor: Colors.white,
-        toolbarHeight: 175,
+        toolbarHeight: 170,
         floating: true,
         automaticallyImplyLeading: false,
         forceElevated: true,

@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:osi_solucoes/features/presenter/models/lotesAtividades/lotes_atividades_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 
@@ -46,8 +47,8 @@ class Lote {
   Reservatorio? reservatorio;
   @JsonKey(required: false, disallowNullValue: false)
   Setor? setor;
-  // @JsonKey(required: false, disallowNullValue: false)
-  // Lotes_Atividades? lotes_atividades;
+  @JsonKey(required: false, disallowNullValue: false, defaultValue: [])
+  List<LotesAtividades>? lotes_atividades;
 
   Lote({
     this.id,
@@ -67,6 +68,7 @@ class Lote {
     this.reservatorio,
     this.setor,
     this.cultura,
+    this.lotes_atividades,
   });
 
   factory Lote.fromJson(Map<String, dynamic> json) => _$LoteFromJson(json);
