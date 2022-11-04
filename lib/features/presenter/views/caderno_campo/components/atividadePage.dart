@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
 
-Container atividadePage(BuildContext context, SetorStore store) {
+Container atividadePage(BuildContext context, CadernoCampoStore store) {
   return Container(
     height: MediaQuery.of(context).size.height * 0.9,
     margin: EdgeInsets.only(
@@ -45,7 +45,7 @@ Container atividadePage(BuildContext context, SetorStore store) {
           padding: const EdgeInsets.only(top: 30),
           child: Observer(builder: (_) {
             return TextFormField(
-              initialValue: store.novoSetorName.text,
+              initialValue: store.novoAtividadeName.text,
               textCapitalization: TextCapitalization.words,
               style: const TextStyle(
                 fontSize: 24,
@@ -60,7 +60,7 @@ Container atividadePage(BuildContext context, SetorStore store) {
                   fontStyle: FontStyle.italic,
                 ),
               ),
-              onChanged: (String value) => store.alterarNome(value),
+              onChanged: (String value) => store.alterarAtividadeNome(value),
             );
           }),
         ),

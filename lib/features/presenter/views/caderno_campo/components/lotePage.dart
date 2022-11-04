@@ -1,11 +1,10 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
 
-Container lotePage(BuildContext context, SetorStore store) {
+Container lotePage(BuildContext context, CadernoCampoStore store) {
   return Container(
     height: MediaQuery.of(context).size.height * 0.9,
     margin: EdgeInsets.only(
@@ -40,29 +39,6 @@ Container lotePage(BuildContext context, SetorStore store) {
               ],
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 30),
-          child: Observer(builder: (_) {
-            return TextFormField(
-              initialValue: store.novoSetorName.text,
-              textCapitalization: TextCapitalization.words,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.normal,
-                fontStyle: FontStyle.italic,
-              ),
-              decoration: const InputDecoration(
-                hintText: 'Pesquisar por',
-                hintStyle: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.normal,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-              onChanged: (String value) => store.alterarNome(value),
-            );
-          }),
         ),
         const Spacer(),
       ],

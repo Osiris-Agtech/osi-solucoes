@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/bottomSheet.dart';
 import '../../../../../core/constants/constants.dart';
 import 'package:intl/intl.dart';
@@ -20,19 +20,17 @@ class CadastroCadernoCampoPage extends StatefulWidget {
 class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
   CarouselController carouselController = CarouselController();
   CarouselController controlerPages = CarouselController();
-  SetorStore store = GetIt.I<SetorStore>();
+  CadernoCampoStore store = GetIt.I<CadernoCampoStore>();
 
   @override
   void initState() {
     super.initState();
-    store.buscarReservatorios();
-    store.setShowTextFormField(false);
   }
 
   @override
   void dispose() {
     super.dispose();
-    store.limparTudo();
+    //store.limparTudo();
   }
 
   @override
@@ -82,7 +80,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                         builder: (_) {
                           return SizedBox(
                             width: double.infinity,
-                            child: store.novoSetorDescription.text.isEmpty &&
+                            child: store.novaDescricao.text.isEmpty &&
                                     !store.showTextFormField
                                 ? botaoDescricao()
                                 : Padding(
@@ -92,7 +90,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                                       maxLines: 20,
                                       decoration: const InputDecoration(
                                           border: InputBorder.none),
-                                      controller: store.novoSetorDescription,
+                                      controller: store.novaDescricao,
                                     ),
                                   ),
                           );
@@ -177,31 +175,33 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              child: store.isNovoSetorLoading
-                  ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                  : store.isEditing
-                      ? const Text(
-                          "Alterar",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      : const Text(
-                          "Salvar",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+              child:
+                  // store.isNovoSetorLoading
+                  //     ? const CircularProgressIndicator(
+                  //         color: Colors.white,
+                  //       )
+                  //     : store.isEditing
+                  //         ? const Text(
+                  //             "Alterar",
+                  //             style: TextStyle(
+                  //               fontSize: 18,
+                  //               fontWeight: FontWeight.w600,
+                  //             ),
+                  //           )
+                  //         :
+                  const Text(
+                "Salvar",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               onPressed: () {
-                if (store.isEditing) {
-                  store.alterarSetor();
-                } else {
-                  store.registrarSetor();
-                }
+                // if (store.isEditing) {
+                //   store.alterarSetor();
+                // } else {
+                //   store.registrarSetor();
+                // }
               }, //store.registrarReservatorio(),
             );
           }),
@@ -219,7 +219,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
               'Atividade',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
             ),
-            trailing: store.novoSetorName.text.isNotEmpty
+            trailing: store.novoAtividadeName.text.isNotEmpty
                 ? SizedBox(
                     width: 100,
                     child: Row(
@@ -229,7 +229,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                         SizedBox(
                           width: 76,
                           child: Text(
-                            store.novoSetorName.text,
+                            store.novoAtividadeName.text,
                             textAlign: TextAlign.end,
                             style: const TextStyle(
                               color: Constants.kPrimaryColor,
@@ -281,7 +281,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
               'Autor',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
             ),
-            trailing: store.novoSetorName.text.isNotEmpty
+            trailing: store.novoAutorName.text.isNotEmpty
                 ? SizedBox(
                     width: 100,
                     child: Row(
@@ -291,7 +291,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                         SizedBox(
                           width: 76,
                           child: Text(
-                            store.novoSetorName.text,
+                            store.novoAutorName.text,
                             textAlign: TextAlign.end,
                             style: const TextStyle(
                               color: Constants.kPrimaryColor,
@@ -343,7 +343,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
               'Data',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
             ),
-            trailing: store.novoSetorName.text.isNotEmpty
+            trailing: store.dataRegistro != null
                 ? SizedBox(
                     width: 100,
                     child: Row(
@@ -353,7 +353,14 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                         SizedBox(
                           width: 76,
                           child: Text(
-                            store.novoSetorName.text,
+                            DateFormat("dd/MM/y", 'pt_br')
+                                    .format(
+                                      DateTime.parse(
+                                        store.dataRegistro!.toIso8601String(),
+                                      ),
+                                    )
+                                    .capitalize ??
+                                '',
                             textAlign: TextAlign.end,
                             style: const TextStyle(
                               color: Constants.kPrimaryColor,
@@ -418,7 +425,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
               'Hora',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
             ),
-            trailing: store.novoSetorName.text.isNotEmpty
+            trailing: store.dataRegistro != null
                 ? SizedBox(
                     width: 100,
                     child: Row(
@@ -428,7 +435,14 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                         SizedBox(
                           width: 76,
                           child: Text(
-                            store.novoSetorName.text,
+                             DateFormat("HH:mm", 'pt_br')
+                                .format(
+                                  DateTime.parse(
+                                    store.dataRegistro!.toIso8601String()
+                                  ),
+                                )
+                                .capitalize ??
+                            '',
                             textAlign: TextAlign.end,
                             style: const TextStyle(
                               color: Constants.kPrimaryColor,
@@ -488,7 +502,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
               'Lote',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
             ),
-            trailing: store.novoSetorName.text.isNotEmpty
+            trailing: store.loteCadastro.nome != null
                 ? SizedBox(
                     width: 100,
                     child: Row(
@@ -498,7 +512,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                         SizedBox(
                           width: 76,
                           child: Text(
-                            store.novoSetorName.text,
+                            store.loteCadastro.nome!,
                             textAlign: TextAlign.end,
                             style: const TextStyle(
                               color: Constants.kPrimaryColor,

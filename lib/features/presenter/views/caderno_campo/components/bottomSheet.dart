@@ -3,14 +3,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/pagesNovoCadernoCampo.dart';
 
 Future<void> bottomSheet(
   BuildContext context,
   CarouselController carouselController,
   CarouselController controlerPages,
-  SetorStore store
+  CadernoCampoStore store
 ) {
   return showModalBottomSheet<void>(
     backgroundColor: Constants.kBackgroundColor,

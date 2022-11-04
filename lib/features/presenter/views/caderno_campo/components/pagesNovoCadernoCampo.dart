@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/atividadePage.dart';
 import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/autorPage.dart';
 import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/lotePage.dart';
@@ -15,7 +15,7 @@ SizedBox pagesNovoCadernoCampo(
     BuildContext context,
     CarouselController carouselController,
     CarouselController controlerPages,
-    SetorStore store) {
+    CadernoCampoStore store) {
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
     child: Column(
@@ -37,7 +37,7 @@ SizedBox pagesNovoCadernoCampo(
               ),
               Observer(builder: (_) {
                 return DotsIndicator(
-                  dotsCount: 2,
+                  dotsCount: 3,
                   position: store.dotIndicator * 1.0,
                   decorator: DotsDecorator(
                     size: const Size.square(9.0),
@@ -66,9 +66,9 @@ SizedBox pagesNovoCadernoCampo(
               scrollPhysics: const NeverScrollableScrollPhysics(),
             ),
             items: [
+              atividadePage(context, store),
               autorPage(context, store),
               lotePage(context, store),
-              atividadePage(context, store),
             ],
           );
         }),
@@ -133,7 +133,7 @@ class NextStepButton extends StatefulWidget {
 }
 
 class _NextStepButtonState extends State<NextStepButton> {
-  SetorStore store = GetIt.I<SetorStore>();
+  CadernoCampoStore store = GetIt.I<CadernoCampoStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +158,7 @@ class _NextStepButtonState extends State<NextStepButton> {
         ),
       ),
       onPressed: () {
-        if (store.dotIndicator == 1) {
+        if (store.dotIndicator == 2) {
           Navigator.pop(context);
         } else {
           store.setDotIndicator(store.dotIndicator + 1);

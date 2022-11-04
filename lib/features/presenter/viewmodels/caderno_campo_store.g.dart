@@ -150,6 +150,115 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
+  final _$dotIndicatorAtom = Atom(name: '_CadernoCampoStoreBase.dotIndicator');
+
+  @override
+  int get dotIndicator {
+    _$dotIndicatorAtom.reportRead();
+    return super.dotIndicator;
+  }
+
+  @override
+  set dotIndicator(int value) {
+    _$dotIndicatorAtom.reportWrite(value, super.dotIndicator, () {
+      super.dotIndicator = value;
+    });
+  }
+
+  final _$showTextFormFieldAtom =
+      Atom(name: '_CadernoCampoStoreBase.showTextFormField');
+
+  @override
+  bool get showTextFormField {
+    _$showTextFormFieldAtom.reportRead();
+    return super.showTextFormField;
+  }
+
+  @override
+  set showTextFormField(bool value) {
+    _$showTextFormFieldAtom.reportWrite(value, super.showTextFormField, () {
+      super.showTextFormField = value;
+    });
+  }
+
+  final _$novoAtividadeNameAtom =
+      Atom(name: '_CadernoCampoStoreBase.novoAtividadeName');
+
+  @override
+  TextEditingController get novoAtividadeName {
+    _$novoAtividadeNameAtom.reportRead();
+    return super.novoAtividadeName;
+  }
+
+  @override
+  set novoAtividadeName(TextEditingController value) {
+    _$novoAtividadeNameAtom.reportWrite(value, super.novoAtividadeName, () {
+      super.novoAtividadeName = value;
+    });
+  }
+
+  final _$novoAutorNameAtom =
+      Atom(name: '_CadernoCampoStoreBase.novoAutorName');
+
+  @override
+  TextEditingController get novoAutorName {
+    _$novoAutorNameAtom.reportRead();
+    return super.novoAutorName;
+  }
+
+  @override
+  set novoAutorName(TextEditingController value) {
+    _$novoAutorNameAtom.reportWrite(value, super.novoAutorName, () {
+      super.novoAutorName = value;
+    });
+  }
+
+  final _$novaDescricaoAtom =
+      Atom(name: '_CadernoCampoStoreBase.novaDescricao');
+
+  @override
+  TextEditingController get novaDescricao {
+    _$novaDescricaoAtom.reportRead();
+    return super.novaDescricao;
+  }
+
+  @override
+  set novaDescricao(TextEditingController value) {
+    _$novaDescricaoAtom.reportWrite(value, super.novaDescricao, () {
+      super.novaDescricao = value;
+    });
+  }
+
+  final _$dataRegistroAtom = Atom(name: '_CadernoCampoStoreBase.dataRegistro');
+
+  @override
+  DateTime? get dataRegistro {
+    _$dataRegistroAtom.reportRead();
+    return super.dataRegistro;
+  }
+
+  @override
+  set dataRegistro(DateTime? value) {
+    _$dataRegistroAtom.reportWrite(value, super.dataRegistro, () {
+      super.dataRegistro = value;
+    });
+  }
+
+  final _$loteCadastroAtom = Atom(name: '_CadernoCampoStoreBase.loteCadastro');
+
+  @override
+  Lote get loteCadastro {
+    _$loteCadastroAtom.reportRead();
+    return super.loteCadastro;
+  }
+
+  @override
+  set loteCadastro(Lote value) {
+    _$loteCadastroAtom.reportWrite(value, super.loteCadastro, () {
+      super.loteCadastro = value;
+    });
+  }
+
   final _$buscarLotesByContaAsyncAction =
       AsyncAction('_CadernoCampoStoreBase.buscarLotesByConta');
 
@@ -240,6 +349,39 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   }
 
   @override
+  dynamic setDotIndicator(int value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.setDotIndicator');
+    try {
+      return super.setDotIndicator(value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setShowTextFormField(bool value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.setShowTextFormField');
+    try {
+      return super.setShowTextFormField(value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarAtividadeNome(String name) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.alterarAtividadeNome');
+    try {
+      return super.alterarAtividadeNome(name);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
@@ -250,7 +392,14 @@ isAreaLoading: ${isAreaLoading},
 setorSelecionado: ${setorSelecionado},
 dropButtonSetor: ${dropButtonSetor},
 dropButtonArea: ${dropButtonArea},
-loteSelecionado: ${loteSelecionado}
+loteSelecionado: ${loteSelecionado},
+dotIndicator: ${dotIndicator},
+showTextFormField: ${showTextFormField},
+novoAtividadeName: ${novoAtividadeName},
+novoAutorName: ${novoAutorName},
+novaDescricao: ${novaDescricao},
+dataRegistro: ${dataRegistro},
+loteCadastro: ${loteCadastro}
     ''';
   }
 }

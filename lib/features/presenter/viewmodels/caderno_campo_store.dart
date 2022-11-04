@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
@@ -170,5 +171,45 @@ abstract class _CadernoCampoStoreBase with Store {
       },
     );
     isAreaLoading = false;
+  }
+
+    // #################### START CADASTRO CADERNO DE CAMPO #######################
+
+  @observable
+  int dotIndicator = 0;
+
+  @observable
+  bool showTextFormField = false;
+
+  @observable 
+  TextEditingController novoAtividadeName = TextEditingController(text: '');
+
+  @observable
+  TextEditingController novoAutorName = TextEditingController();
+
+  @observable
+  TextEditingController novaDescricao = TextEditingController(text: '');
+
+  @observable
+  DateTime? dataRegistro;
+
+  @observable
+  Lote loteCadastro = Lote();
+
+  @action
+  setDotIndicator(int value) {
+    if (value >= 0 && value <= 2) {
+      dotIndicator = value;
+    }
+  }
+
+  @action
+  setShowTextFormField(bool value) {
+    showTextFormField = value;
+  }
+
+  @action
+  alterarAtividadeNome(String name) {
+    novoAtividadeName = TextEditingController(text: name);
   }
 }
