@@ -34,4 +34,10 @@ class CadernoCampoRepository implements ICadernoCampoRepository {
     var result = await datasource.buscarAreasList(contaId: contaId);
     return result;
   }
+
+  @override
+  Future<Either<Failure, Lote>> buscarAtividades(int loteId) async {
+    var result = await datasource.buscarAtividades(loteId: loteId);
+    return result;
+  }
 }

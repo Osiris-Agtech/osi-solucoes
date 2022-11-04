@@ -134,6 +134,22 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
+  final _$loteSelecionadoAtom =
+      Atom(name: '_CadernoCampoStoreBase.loteSelecionado');
+
+  @override
+  Lote get loteSelecionado {
+    _$loteSelecionadoAtom.reportRead();
+    return super.loteSelecionado;
+  }
+
+  @override
+  set loteSelecionado(Lote value) {
+    _$loteSelecionadoAtom.reportWrite(value, super.loteSelecionado, () {
+      super.loteSelecionado = value;
+    });
+  }
+
   final _$buscarLotesByContaAsyncAction =
       AsyncAction('_CadernoCampoStoreBase.buscarLotesByConta');
 
@@ -141,6 +157,14 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   Future buscarLotesByConta() {
     return _$buscarLotesByContaAsyncAction
         .run(() => super.buscarLotesByConta());
+  }
+
+  final _$buscarAtividadesAsyncAction =
+      AsyncAction('_CadernoCampoStoreBase.buscarAtividades');
+
+  @override
+  Future buscarAtividades() {
+    return _$buscarAtividadesAsyncAction.run(() => super.buscarAtividades());
   }
 
   final _$buscarLotesBySetorAsyncAction =
@@ -194,6 +218,17 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   }
 
   @override
+  dynamic setLoteSelecionado(Lote lote) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.setLoteSelecionado');
+    try {
+      return super.setLoteSelecionado(lote);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void increment() {
     final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
         name: '_CadernoCampoStoreBase.increment');
@@ -214,7 +249,8 @@ isLoteListLoading: ${isLoteListLoading},
 isAreaLoading: ${isAreaLoading},
 setorSelecionado: ${setorSelecionado},
 dropButtonSetor: ${dropButtonSetor},
-dropButtonArea: ${dropButtonArea}
+dropButtonArea: ${dropButtonArea},
+loteSelecionado: ${loteSelecionado}
     ''';
   }
 }

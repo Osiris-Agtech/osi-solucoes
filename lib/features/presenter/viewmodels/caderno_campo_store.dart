@@ -36,11 +36,17 @@ abstract class _CadernoCampoStoreBase with Store {
   @observable
   Area dropButtonArea = Area();
 
+  @observable
+  Lote loteSelecionado = Lote();
+
   @action
   selecionarDropButtonArea(Area area) => dropButtonArea = area;
 
   @action
   selecionarDropButtonSetor(Setor setor) => dropButtonSetor = setor;
+
+  @action
+  setLoteSelecionado(Lote lote) => loteSelecionado = lote;
 
   @action
   buscarLotesByConta() async {
@@ -60,6 +66,33 @@ abstract class _CadernoCampoStoreBase with Store {
       },
       (data) async {
         loteList = List.from(data);
+      },
+    );
+
+    isLoteListLoading = false;
+  }
+
+  @action
+  buscarAtividades() async {
+    isLoteListLoading = true;
+
+    CadernoCampoRepository cadernoCampoRepository =
+        GetIt.I<CadernoCampoRepository>();
+    AuthController authController = GetIt.I<AuthController>();
+
+    var lote =
+        await cadernoCampoRepository.buscarAtividades(loteSelecionado.id!);
+
+    lote.fold(
+      (err) {
+        //toastError(message: err.message);
+      },
+      (data) async {
+        loteSelecionado = data;
+        loteSelecionado.lotes_atividades?.map((e) => e.usuario?.selected_conta =
+            e.usuario?.contas?.firstWhere((element) =>
+                element.conta?.id ==
+                authController.usuario.selected_conta!.id!));
       },
     );
 

@@ -16,6 +16,7 @@ abstract class ICadernoCampoDatasource {
       {required int setorId});
   Future<Either<Failure, List<Lote>>> buscarLotesByArea({required int areaId});
   Future<Either<Failure, List<Area>>> buscarAreasList({required int contaId});
+  Future<Either<Failure, Lote>> buscarAtividades({required int loteId});
 }
 
 class CadernoCampoDatasource implements ICadernoCampoDatasource {
@@ -265,6 +266,64 @@ class CadernoCampoDatasource implements ICadernoCampoDatasource {
 
       List<Area> areaList = areaResult.cast<Area>();
       return Right(areaList);
+    } else {
+      return Left(ErrorArea(message: FailureMessage.emptyListMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Lote>> buscarAtividades({required int loteId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      query Lote($loteId: Int!) {
+        lote(where: {
+          id: $loteId
+        }) {
+          id
+          nome
+          lotes_atividades {
+            atividade {
+              id
+              nome
+              descricao
+              created_at
+            }
+            usuario {
+              id
+              nome
+              contas {
+                id
+                cargo {
+                  id
+                  cargo
+                }
+                conta {
+                  id
+                  nome
+                }
+              }
+            }
+          }
+        }
+      }
+    ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'loteId': loteId,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      Lote loteResult = Lote.fromJson(result.data?['lote']);
+
+      return Right(loteResult);
     } else {
       return Left(ErrorArea(message: FailureMessage.emptyListMessage));
     }
