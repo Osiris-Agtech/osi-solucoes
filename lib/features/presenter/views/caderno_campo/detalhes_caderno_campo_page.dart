@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:timelines/timelines.dart';
+import 'package:intl/intl.dart';
+import 'dart:convert' show jsonDecode, utf8;
 
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
@@ -80,59 +83,40 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                 return SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Timeline.tileBuilder(
-                      controller: scrollController,
-                      theme: TimelineTheme.of(context).copyWith(
-                        color: Constants.kPrimaryColor,
+                    child: FixedTimeline.tileBuilder(
+                      theme: TimelineThemeData(
                         nodePosition: 0,
-                      ),
-                      shrinkWrap: true,
-                      builder: TimelineTileBuilder.fromStyle(
-                        connectorStyle: ConnectorStyle.dashedLine,
-                        contentsBuilder: (context, index) => Card(
-                          elevation: 0,
-                          color: Constants.kSecondBackgroundColor,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, bottom: 10),
-                                    child: Text(
-                                      '${store.loteSelecionado.lotes_atividades?[index].atividade!.nome}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  const Text('Data'),
-                                ],
-                              ),
-                              ListTile(
-                                contentPadding: const EdgeInsets.only(right: 0),
-                                dense: true,
-                                leading: const Icon(Icons.person),
-                                title: Text(
-                                  '${store.loteSelecionado.lotes_atividades?[index].usuario!.nome}',
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                                subtitle: Text(
-                                  '${store.loteSelecionado.lotes_atividades?[index].usuario?.selected_conta?.cargo?.cargo}',
-                                  style: const TextStyle(fontSize: 12),
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Text(
-                                    'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don'),
-                              )
-                            ],
-                          ),
+                        color: const Color(0xff989898),
+                        indicatorTheme: const IndicatorThemeData(
+                          position: 0.035,
+                          size: 20.0,
                         ),
+                        connectorTheme: const ConnectorThemeData(
+                          thickness: 2.5,
+                        ),
+                      ),
+                      builder: TimelineTileBuilder.connected(
                         itemCount:
                             store.loteSelecionado.lotes_atividades?.length ?? 0,
+                        contentsBuilder: (_, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 8.0, top: 10),
+                            child: cardTimeline(index),
+                          );
+                        },
+                        indicatorBuilder: (_, index) {
+                          return const DotIndicator(
+                            color: Constants.kPrimaryColor,
+                          );
+                        },
+                        connectorBuilder: (_, index, ___) =>
+                            const DashedLineConnector(
+                          color: Constants.kPrimaryColor,
+                          dash: 10,
+                          gap: 5,
+                          indent: 5,
+                          endIndent: 5,
+                        ),
                       ),
                     ),
                   ),
@@ -141,6 +125,71 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Card cardTimeline(int index) {
+    return Card(
+      elevation: 0,
+      color: Constants.kSecondBackgroundColor,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${store.loteSelecionado.lotes_atividades?[index].atividade!.nome}',
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              const Spacer(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(DateFormat("dd MMM y", 'pt_br')
+                          .format(
+                            store.loteSelecionado.lotes_atividades![index]
+                                .atividade!.created_at!,
+                          )
+                          .capitalize ??
+                      ''),
+                  Text(DateFormat("HH:mm", 'pt_br')
+                          .format(
+                            store.loteSelecionado.lotes_atividades![index]
+                                .atividade!.created_at!,
+                          )
+                          .capitalize ??
+                      ''),
+                ],
+              ),
+            ],
+          ),
+          ListTile(
+            contentPadding: const EdgeInsets.only(right: 0),
+            dense: true,
+            leading: const Icon(Icons.person),
+            title: Text(
+              '${store.loteSelecionado.lotes_atividades?[index].usuario!.nome}',
+              style: const TextStyle(fontSize: 14),
+            ),
+            subtitle: Text(
+              '${store.loteSelecionado.lotes_atividades?[index].usuario?.selected_conta?.cargo?.cargo}',
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(
+              utf8.decode(
+                jsonDecode(store.loteSelecionado.lotes_atividades?[index]
+                            .atividade?.descricao ??
+                        '[]')
+                    .cast<int>(),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
