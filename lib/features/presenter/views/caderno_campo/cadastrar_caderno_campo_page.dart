@@ -2,10 +2,12 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/bottomSheet.dart';
 import '../../../../../core/constants/constants.dart';
+import 'package:intl/intl.dart';
 
 class CadastroCadernoCampoPage extends StatefulWidget {
   const CadastroCadernoCampoPage({Key? key}) : super(key: key);
@@ -372,7 +374,14 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        '${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()}',
+                        DateFormat("dd/MM/y", 'pt_br')
+                                .format(
+                                  DateTime.parse(
+                                    DateTime.now().toString(),
+                                  ),
+                                )
+                                .capitalize ??
+                            '',
                         style: const TextStyle(
                           fontSize: 12,
                           color: Constants.kPrimaryColor,
@@ -388,13 +397,13 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                   ),
             onTap: () async {
               final data = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2022),
-              lastDate: DateTime(2030),
-              locale: const Locale("pt", "BR"),
-            );
-            print(data);
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2022),
+                lastDate: DateTime(2030),
+                locale: const Locale("pt", "BR"),
+              );
+              print(data);
             });
       }),
     );
@@ -438,9 +447,16 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                 : Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children:  [
+                    children: [
                       Text(
-                        '${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}',
+                        DateFormat("HH:mm", 'pt_br')
+                                .format(
+                                  DateTime.parse(
+                                    DateTime.now().toString(),
+                                  ),
+                                )
+                                .capitalize ??
+                            '',
                         style: const TextStyle(
                           fontSize: 12,
                           color: Constants.kPrimaryColor,
@@ -455,7 +471,8 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                     ],
                   ),
             onTap: () async {
-              final data = showTimePicker(context: context, initialTime: TimeOfDay.now());
+              final data = showTimePicker(
+                  context: context, initialTime: TimeOfDay.now());
               print(data);
             });
       }),
