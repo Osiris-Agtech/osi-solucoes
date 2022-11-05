@@ -112,8 +112,8 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                         connectorBuilder: (_, index, ___) =>
                             const DashedLineConnector(
                           color: Constants.kPrimaryColor,
-                          dash: 10,
-                          gap: 5,
+                          dash: 4,
+                          gap: 4,
                           indent: 5,
                           endIndent: 5,
                         ),
@@ -168,7 +168,9 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
           ListTile(
             contentPadding: const EdgeInsets.only(right: 0),
             dense: true,
-            leading: const Icon(Icons.person),
+            leading: const Icon(Icons.account_circle),
+            minLeadingWidth: 10,
+            minVerticalPadding: 0,
             title: Text(
               '${store.loteSelecionado.lotes_atividades?[index].usuario!.nome}',
               style: const TextStyle(fontSize: 14),
@@ -179,7 +181,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.only(left: 20),
             child: Text(
               utf8.decode(
                 jsonDecode(store.loteSelecionado.lotes_atividades?[index]
