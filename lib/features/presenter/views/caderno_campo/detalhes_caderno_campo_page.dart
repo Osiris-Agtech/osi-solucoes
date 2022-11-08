@@ -82,13 +82,13 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                 }
                 return SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: FixedTimeline.tileBuilder(
                       theme: TimelineThemeData(
                         nodePosition: 0,
                         color: const Color(0xff989898),
                         indicatorTheme: const IndicatorThemeData(
-                          position: 0.035,
+                          position: 0.060,
                           size: 20.0,
                         ),
                         connectorTheme: const ConnectorThemeData(
@@ -100,7 +100,8 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                             store.loteSelecionado.lotes_atividades?.length ?? 0,
                         contentsBuilder: (_, index) {
                           return Padding(
-                            padding: const EdgeInsets.only(left: 8.0, top: 10),
+                            padding: EdgeInsets.only(
+                                left: 12, top: index == 0 ? 20 : 12),
                             child: cardTimeline(index),
                           );
                         },
@@ -114,8 +115,6 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                           color: Constants.kPrimaryColor,
                           dash: 4,
                           gap: 4,
-                          indent: 5,
-                          endIndent: 5,
                         ),
                       ),
                     ),
@@ -139,60 +138,139 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '${store.loteSelecionado.lotes_atividades?[index].atividade!.nome}',
-                style: const TextStyle(fontWeight: FontWeight.w600),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '${store.loteSelecionado.lotes_atividades?[index].atividade!.nome}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    ListTile(
+                      contentPadding: const EdgeInsets.only(right: 0),
+                      dense: true,
+                      leading: const Icon(
+                        Icons.account_circle,
+                        size: 40,
+                      ),
+                      minLeadingWidth: 0,
+                      minVerticalPadding: 0,
+                      horizontalTitleGap: 10,
+                      title: Text(
+                        '${store.loteSelecionado.lotes_atividades?[index].usuario!.nome}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Constants.kText2,
+                        ),
+                      ),
+                      subtitle: Text(
+                        '${store.loteSelecionado.lotes_atividades?[index].usuario?.selected_conta?.cargo?.cargo}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Constants.kText2.withOpacity(0.8),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                  ],
+                ),
               ),
-              const Spacer(),
+              // const Spacer(),
+
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(DateFormat("dd MMM y", 'pt_br')
-                          .format(
-                            store.loteSelecionado.lotes_atividades![index]
-                                .atividade!.created_at!,
-                          )
-                          .capitalize ??
-                      ''),
-                  Text(DateFormat("HH:mm", 'pt_br')
-                          .format(
-                            store.loteSelecionado.lotes_atividades![index]
-                                .atividade!.created_at!,
-                          )
-                          .capitalize ??
-                      ''),
+                  Text(
+                    DateFormat("dd MMM y", 'pt_br')
+                            .format(
+                              store.loteSelecionado.lotes_atividades![index]
+                                  .atividade!.created_at!,
+                            )
+                            .capitalize ??
+                        '',
+                    style: const TextStyle(
+                      color: Constants.kGreyText,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    DateFormat("HH:mm", 'pt_br')
+                            .format(
+                              store.loteSelecionado.lotes_atividades![index]
+                                  .atividade!.created_at!,
+                            )
+                            .capitalize ??
+                        '',
+                    style: const TextStyle(
+                      color: Constants.kGreyText,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ],
               ),
             ],
           ),
-          ListTile(
-            contentPadding: const EdgeInsets.only(right: 0),
-            dense: true,
-            leading: const Icon(Icons.account_circle),
-            minLeadingWidth: 10,
-            minVerticalPadding: 0,
-            title: Text(
-              '${store.loteSelecionado.lotes_atividades?[index].usuario!.nome}',
-              style: const TextStyle(fontSize: 14),
-            ),
-            subtitle: Text(
-              '${store.loteSelecionado.lotes_atividades?[index].usuario?.selected_conta?.cargo?.cargo}',
-              style: const TextStyle(fontSize: 12),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.only(left: 20),
-            child: Text(
-              utf8.decode(
-                jsonDecode(store.loteSelecionado.lotes_atividades?[index]
-                            .atividade?.descricao ??
-                        '[]')
-                    .cast<int>(),
-              ),
+            child: AnimatedContainer(
+              height: 160,
+              duration: const Duration(milliseconds: 200),
+              child: expandedText(index),
             ),
           )
         ],
       ),
+    );
+  }
+
+  expandedText(int index) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          utf8.decode(
+            jsonDecode(store.loteSelecionado.lotes_atividades?[index].atividade
+                        ?.descricao ??
+                    '[]')
+                .cast<int>(),
+          ),
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            color: Constants.kGreyText,
+            fontStyle: FontStyle.italic,
+          ),
+          maxLines: 6,
+          overflow: TextOverflow.fade,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 24),
+          child: InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: const Icon(
+              Icons.expand_more,
+              color: Constants.kPrimaryColor,
+              size: 36,
+            ),
+            onTap: () {},
+          ),
+        ),
+      ],
     );
   }
 }
