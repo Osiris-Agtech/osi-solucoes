@@ -226,11 +226,13 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20),
-            child: AnimatedContainer(
-              height: 160,
-              duration: const Duration(milliseconds: 200),
-              child: expandedText(index),
-            ),
+            child: Observer(builder: (_) {
+              return AnimatedContainer(
+                height: store.expandedCard[index] ? 320 : 160,
+                duration: const Duration(milliseconds: 200),
+                child: expandedText(index),
+              );
+            }),
           )
         ],
       ),
@@ -254,8 +256,8 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
             color: Constants.kGreyText,
             fontStyle: FontStyle.italic,
           ),
-          maxLines: 6,
-          overflow: TextOverflow.fade,
+          maxLines: store.expandedCard[index] ? null : 6,
+          overflow: store.expandedCard[index] ? null : TextOverflow.fade,
         ),
         Padding(
           padding: const EdgeInsets.only(right: 24),
@@ -267,7 +269,9 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
               color: Constants.kPrimaryColor,
               size: 36,
             ),
-            onTap: () {},
+            onTap: () {
+              store.setExpandedCard(index);
+            },
           ),
         ),
       ],
