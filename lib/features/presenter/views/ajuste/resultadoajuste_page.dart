@@ -517,7 +517,6 @@ class TabSolucaoConcentrada extends StatelessWidget {
 }
 
 class ButtonCompleted extends StatelessWidget {
-  
   const ButtonCompleted({
     Key? key,
   }) : super(key: key);
@@ -603,7 +602,9 @@ class TabFertilizantes extends StatelessWidget {
   final ScrollController scrollController1;
 
   @override
-  Widget build(BuildContext context,) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Padding(
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).size.height * 0.024,
@@ -693,15 +694,16 @@ class TabFertilizantes extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                             Expanded(
-                                flex: 5,
+                            Expanded(
+                                flex: 7,
                                 child: Text(
                                   store.reposicaoFert[index].fertilizante.nome!,
                                 )),
                             Expanded(
-                                flex: 1,
+                                flex: 3,
                                 child: Text(
-                                  store.reposicaoFert[index].valor.toStringAsFixed(2),
+                                  store.reposicaoFert[index].valor
+                                      .toStringAsFixed(2),
                                   textAlign: TextAlign.end,
                                 )),
                             Padding(

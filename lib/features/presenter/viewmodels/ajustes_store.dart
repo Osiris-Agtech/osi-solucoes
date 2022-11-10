@@ -91,41 +91,45 @@ abstract class _AjustesStoreBase with Store {
 
   @action
   calculoLado(SolucaoFertilizanteConcentrada fertilizante, String ce) {
+    // Parse - string to double
+    double quantidadeFertilizanteSN = double.parse(fertilizante.quantidade!);
+    double ceDesejado = double.parse(cEletricoDesejado.text);
+    // obs: Essa condutividade ja deve vir considerando CE da agua
     double ceTeorico =
         double.parse(selectedReservatorio.solucao?.c_eletrica ?? '0.0');
-    // Referencias da celulas do excel planilha PLANILHA DE ELABORAÇÃO DE SOLUÇÃO NUTRITIVA-RafaelCampagnol
-    // https://onedrive.live.com/edit.aspx?resid=49A98B4ECB99BBF9!70910&ithint=file%2cxlsx&authkey=!AJd2bx4J46wp3l4
-    
-    //condutividade eletrica na SN
-    double ceSN =  double.parse(fertilizante.quantidade!) /1000 * double.parse(fertilizante.fertilizante!.c_eletrica!) ;
-    // referencia - V11
-    double relacao =
-        (ceTeorico - ceAgua) / ceSN;
-    // referencia - Y11
-    double cet = (double.parse(ce) - ceAgua) / relacao;
-    print(fertilizante.fertilizante!.nome);
-    print(relacao);
-    // referencia - H11
-    double fertCE = double.parse(fertilizante.quantidade!) /
-        double.parse(fertilizante.fertilizante!.c_eletrica!) *
-        1000;
-    // referencia - Z11
-    double x = (cet * 1000) / fertCE;
 
-    return x;
+    //Fator de correção - check
+    double fatorCorrecao = (ceDesejado - ceAgua) / (ceTeorico - ceAgua);
+
+    // Quant fert ajustado
+    double fertAjustado = quantidadeFertilizanteSN *
+        double.parse(fatorCorrecao.toStringAsFixed(4));
+    //Fator de proporcionalidade
+    double proporcao =
+        (ceDesejado - ceAgua) / double.parse(fertAjustado.toStringAsFixed(1));
+
+    // referencia - Z13
+    double cet = (double.parse(ce) - ceAgua) / proporcao;
+
+    return cet;
   }
 
+  // Calcula as quantidades de reposição de cada fertilizante
+  // @returns Retorna um array de reposicaoFert()
   @action
   calculoAjuste() {
     reposicaoFert = [];
     selectedReservatorio.solucao?.solucoes_fertilizantes_concentradas
         ?.forEach((fertilizante) {
       if (fertilizante.fertilizante != null) {
+        //calculo lado atual
         double x = calculoLado(fertilizante, cEletricoAtual.text);
         double ladoMedido = x * double.parse(volumeAtual.text);
+        //calculo lado desejado
         double y = calculoLado(fertilizante, cEletricoDesejado.text);
         double ladoDesejado = y * double.parse(volumeDesejado.text);
-        double reposicao = ladoDesejado - ladoMedido;
+        //valor de reposição para o fertilizante em gramas
+        double reposicao = (ladoDesejado - ladoMedido) / 1000;
         reposicaoFert.add(ReposicaoFert(
             fertilizante: fertilizante.fertilizante!, valor: reposicao));
       }
