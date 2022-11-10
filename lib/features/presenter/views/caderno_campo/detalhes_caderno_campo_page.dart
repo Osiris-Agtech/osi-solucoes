@@ -83,7 +83,9 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                 return SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: FixedTimeline.tileBuilder(
+                    child: Timeline.tileBuilder(
+                      controller: scrollController,
+                      shrinkWrap: true,
                       theme: TimelineThemeData(
                         nodePosition: 0,
                         color: const Color(0xff989898),
@@ -102,7 +104,34 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                           return Padding(
                             padding: EdgeInsets.only(
                                 left: 12, top: index == 0 ? 20 : 12),
-                            child: cardTimeline(index),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Observer(builder: (_) {
+                                    return ExpansionPanelList(
+                                      elevation: 0,
+                                      expansionCallback:
+                                          (int index, bool isExpanded) {
+                                        store.setExpandedCard(index);
+                                      },
+                                      children: [
+                                        ExpansionPanel(
+                                          backgroundColor:
+                                              Constants.kSecondBackgroundColor,
+                                          canTapOnHeader: true,
+                                          headerBuilder: (BuildContext context,
+                                              bool isExpanded) {
+                                            return headerCard(index);
+                                          },
+                                          body: bodyCard(index),
+                                          isExpanded: store.expandedCard[index],
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                                ],
+                              ),
+                            ),
                           );
                         },
                         indicatorBuilder: (_, index) {
@@ -128,12 +157,121 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
     );
   }
 
+  Text bodyCard(int index) {
+    return Text(
+      utf8.decode(
+        jsonDecode(store.loteSelecionado.lotes_atividades?[index].atividade
+                    ?.descricao ??
+                '[]')
+            .cast<int>(),
+      ),
+      style: const TextStyle(
+        fontSize: 15,
+        fontWeight: FontWeight.w500,
+        color: Constants.kGreyText,
+        fontStyle: FontStyle.italic,
+      ),
+    );
+  }
+
+  Row headerCard(int index) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '${store.loteSelecionado.lotes_atividades?[index].atividade!.nome}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              ListTile(
+                contentPadding: const EdgeInsets.only(right: 0),
+                dense: true,
+                leading: const Icon(
+                  Icons.account_circle,
+                  size: 40,
+                ),
+                minLeadingWidth: 0,
+                minVerticalPadding: 0,
+                horizontalTitleGap: 10,
+                title: Text(
+                  '${store.loteSelecionado.lotes_atividades?[index].usuario!.nome}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Constants.kText2,
+                  ),
+                ),
+                subtitle: Text(
+                  '${store.loteSelecionado.lotes_atividades?[index].usuario?.selected_conta?.cargo?.cargo}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Constants.kText2.withOpacity(0.8),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+            ],
+          ),
+        ),
+        // const Spacer(),
+
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              DateFormat("dd MMM y", 'pt_br')
+                      .format(
+                        store.loteSelecionado.lotes_atividades![index]
+                            .atividade!.created_at!,
+                      )
+                      .capitalize ??
+                  '',
+              style: const TextStyle(
+                color: Constants.kGreyText,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Text(
+              DateFormat("HH:mm", 'pt_br')
+                      .format(
+                        store.loteSelecionado.lotes_atividades![index]
+                            .atividade!.created_at!,
+                      )
+                      .capitalize ??
+                  '',
+              style: const TextStyle(
+                color: Constants.kGreyText,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   Card cardTimeline(int index) {
     return Card(
       elevation: 0,
       color: Constants.kSecondBackgroundColor,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,6 +279,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
@@ -228,10 +367,19 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
             padding: const EdgeInsets.only(left: 20),
             child: Observer(builder: (_) {
               return AnimatedContainer(
-                height: store.expandedCard[index] ? 320 : 160,
+                height: store.expandedCard[index] ? 280 : 100,
                 duration: const Duration(milliseconds: 200),
-                child: expandedText(index),
+                child: expandedCard(index),
               );
+              // return AnimatedCrossFade(
+              //   duration: const Duration(milliseconds: 500),
+              //   reverseDuration: const Duration(milliseconds: 500),
+              //   firstChild: smallCard(index),
+              //   secondChild: expandedCard(index),
+              //   crossFadeState: !store.expandedCard[index]
+              //       ? CrossFadeState.showFirst
+              //       : CrossFadeState.showSecond,
+              // );
             }),
           )
         ],
@@ -239,7 +387,51 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
     );
   }
 
-  expandedText(int index) {
+  smallCard(int index) {
+    return SingleChildScrollView(
+      controller: scrollController,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: Text(
+              utf8.decode(
+                jsonDecode(store.loteSelecionado.lotes_atividades?[index]
+                            .atividade?.descricao ??
+                        '[]')
+                    .cast<int>(),
+              ),
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: Constants.kGreyText,
+                fontStyle: FontStyle.italic,
+              ),
+              maxLines: 6,
+              overflow: TextOverflow.fade,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 24),
+            child: InkWell(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              child: const Icon(
+                Icons.expand_more,
+                color: Constants.kPrimaryColor,
+                size: 36,
+              ),
+              onTap: () {
+                store.setExpandedCard(index);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  expandedCard(int index) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -256,8 +448,8 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
             color: Constants.kGreyText,
             fontStyle: FontStyle.italic,
           ),
-          maxLines: store.expandedCard[index] ? null : 6,
           overflow: store.expandedCard[index] ? null : TextOverflow.fade,
+          maxLines: store.expandedCard[index] ? null : 4,
         ),
         Padding(
           padding: const EdgeInsets.only(right: 24),
