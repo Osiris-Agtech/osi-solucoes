@@ -356,6 +356,7 @@ class TabSolucaoConcentrada extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AjustesStore store = GetIt.I<AjustesStore>();
     return Padding(
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).size.height * 0.024,
@@ -473,14 +474,15 @@ class TabSolucaoConcentrada extends StatelessWidget {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   "Solução A ",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 Text(
-                  "431,94 ml",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  '${store.volumeConcentrado} ml',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
                 ),
               ],
             ),
@@ -498,14 +500,15 @@ class TabSolucaoConcentrada extends StatelessWidget {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   "Solução B ",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 Text(
-                  "431,94 ml",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  '${store.volumeConcentrado} ml',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
                 ),
               ],
             ),

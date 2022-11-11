@@ -178,6 +178,22 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
+  final _$volumeConcentradoAtom =
+      Atom(name: '_AjustesStoreBase.volumeConcentrado');
+
+  @override
+  String get volumeConcentrado {
+    _$volumeConcentradoAtom.reportRead();
+    return super.volumeConcentrado;
+  }
+
+  @override
+  set volumeConcentrado(String value) {
+    _$volumeConcentradoAtom.reportWrite(value, super.volumeConcentrado, () {
+      super.volumeConcentrado = value;
+    });
+  }
+
   final _$reposicaoFertAtom = Atom(name: '_AjustesStoreBase.reposicaoFert');
 
   @override
@@ -250,11 +266,22 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
   }
 
   @override
-  dynamic calculoAjuste() {
+  dynamic calculoAjusteReposicao() {
     final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.calculoAjuste');
+        name: '_AjustesStoreBase.calculoAjusteReposicao');
     try {
-      return super.calculoAjuste();
+      return super.calculoAjusteReposicao();
+    } finally {
+      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic calculoAjusteConcentrada(double reposicaoFert) {
+    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
+        name: '_AjustesStoreBase.calculoAjusteConcentrada');
+    try {
+      return super.calculoAjusteConcentrada(reposicaoFert);
     } finally {
       _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -274,6 +301,7 @@ reservatorio: ${reservatorio},
 selectedReservatorio: ${selectedReservatorio},
 reservatorioList: ${reservatorioList},
 ceAgua: ${ceAgua},
+volumeConcentrado: ${volumeConcentrado},
 reposicaoFert: ${reposicaoFert}
     ''';
   }

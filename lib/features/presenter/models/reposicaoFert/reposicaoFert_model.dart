@@ -1,4 +1,5 @@
-import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart' show Fertilizante;
+import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart'
+    show Fertilizante;
 
 class ReposicaoFert {
   final Fertilizante fertilizante;

@@ -87,8 +87,12 @@ abstract class _AjustesStoreBase with Store {
   double ceAgua = 0.1;
 
   @observable
+  String volumeConcentrado = '';
+  @observable
   List<ReposicaoFert> reposicaoFert = [];
 
+  // Função auxiliar para o calculo
+  // @returns Retorna um array de reposicaoFert()
   @action
   calculoLado(SolucaoFertilizanteConcentrada fertilizante, String ce) {
     // Parse - string to double
@@ -98,7 +102,7 @@ abstract class _AjustesStoreBase with Store {
     double ceTeorico =
         double.parse(selectedReservatorio.solucao?.c_eletrica ?? '0.0');
 
-    //Fator de correção - check
+    //Fator de correção
     double fatorCorrecao = (ceDesejado - ceAgua) / (ceTeorico - ceAgua);
 
     // Quant fert ajustado
@@ -117,7 +121,7 @@ abstract class _AjustesStoreBase with Store {
   // Calcula as quantidades de reposição de cada fertilizante
   // @returns Retorna um array de reposicaoFert()
   @action
-  calculoAjuste() {
+  calculoAjusteReposicao() {
     reposicaoFert = [];
     selectedReservatorio.solucao?.solucoes_fertilizantes_concentradas
         ?.forEach((fertilizante) {
@@ -134,6 +138,40 @@ abstract class _AjustesStoreBase with Store {
             fertilizante: fertilizante.fertilizante!, valor: reposicao));
       }
     });
+
+    calculoAjusteConcentrada(
+        double.parse(reposicaoFert[0].valor.toStringAsFixed(2)));
     return;
+  }
+
+  // Calcula as quantidades de reposição para solução concentrada
+  // @returns Retorna o valor em ml de solução concentrada para reposição
+  @action
+  calculoAjusteConcentrada(double reposicaoFert) {
+    //parses string to double
+    double ceDesejado = double.parse(cEletricoDesejado.text);
+    double quantidadeFertilizanteSN = double.parse(selectedReservatorio
+            .solucao?.solucoes_fertilizantes_concentradas?[0].quantidade! ??
+        '0.0');
+    double fatorConcentracao = 300;
+    // obs: Essa condutividade ja deve vir considerando CE da agua
+    double ceTeorico =
+        double.parse(selectedReservatorio.solucao?.c_eletrica ?? '0.0');
+
+    //Fator de correção
+    double fatorCorrecao = (ceDesejado - ceAgua) / (ceTeorico - ceAgua);
+
+    // Quant fert ajustado
+    double fertAjustado = quantidadeFertilizanteSN *
+        double.parse(fatorCorrecao.toStringAsFixed(4));
+
+    // Quant de fertilizantes na solução concentrada (SC)
+    double fertConcentrado = (fertAjustado * fatorConcentracao) / 1000;
+    print('fert concetrado $fertConcentrado');
+    // Vol de SC (ml) para AJUSTE
+    double volConcentrado = (reposicaoFert * 1000) / fertConcentrado;
+    print('reposicaoFert $reposicaoFert');
+    print('vol concetrado $volConcentrado');
+    volumeConcentrado = volConcentrado.toStringAsFixed(0);
   }
 }
