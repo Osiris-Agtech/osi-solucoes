@@ -99,10 +99,15 @@ abstract class _CadernoCampoStoreBase with Store {
       },
       (data) async {
         loteSelecionado = data;
-        loteSelecionado.lotes_atividades?.map((e) => e.usuario?.selected_conta =
-            e.usuario?.contas?.firstWhere((element) =>
-                element.conta?.id ==
-                authController.usuario.selected_conta!.id!));
+        for (var i = 0; i < loteSelecionado.lotes_atividades!.length; i++) {
+          loteSelecionado.lotes_atividades![i].usuario?.selected_conta =
+              loteSelecionado.lotes_atividades![i].usuario?.contas?.firstWhere(
+            (element) {
+              return element.conta?.id ==
+                  authController.usuario.selected_conta!.conta!.id!;
+            },
+          );
+        }
 
         expandedCard = [];
 
