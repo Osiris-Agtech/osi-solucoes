@@ -23,6 +23,9 @@ abstract class ILoteDatasource {
   Future<Either<Failure, Lote>> registrarLote({required Lote lote});
   Future<Either<Failure, Lote>> migrarLote(
       {required int loteId, required int setorId, required int reservatorioId});
+  Future<Either<Failure, Lote>> alterarLote({required Lote alterarLote});
+  Future<Either<Failure, Cultura>> registrarCultura(
+      {required Cultura cultura, required int contaId});
 }
 
 class LoteDatasource implements ILoteDatasource {
@@ -446,6 +449,64 @@ class LoteDatasource implements ILoteDatasource {
   }
 
   @override
+  Future<Either<Failure, Lote>> alterarLote({required Lote alterarLote}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    try {
+      const String readRepositories = r'''
+        mutation UpdateLote($loteId: Int!, $loteNome: String!, $setorId: Int!, $culturaId: Int!, $reservatorioId: Int!, $bandeijaSemeadas: Int, $mudasTransplantadas: Int, $plantasColhidas: Int, $embalagensProduzidas: Int) {
+          updateLote(loteId: $loteId, loteNome: $loteNome, setorId: $setorId, culturaId: $culturaId, reservatorioId: $reservatorioId, bandeijaSemeadas: $bandeijaSemeadas, mudasTransplantadas: $mudasTransplantadas, plantasColhidas: $plantasColhidas, embalagensProduzidas: $embalagensProduzidas) {
+            id
+            nome
+            cultura {
+              id
+              nome
+            }
+            reservatorio {
+              id
+              nome
+            }
+            bandeijas_semeadas
+            mudas_transplantadas
+            plantas_colhidas
+            embalagens_produzidas
+          }
+        }
+      ''';
+
+      final MutationOptions? options;
+
+      options = MutationOptions(
+        document: gql(readRepositories),
+        variables: <String, dynamic>{
+          "loteId": alterarLote.id,
+          "loteNome": alterarLote.nome,
+          "setorId": alterarLote.setor!.id,
+          "culturaId": alterarLote.cultura!.id,
+          "reservatorioId": alterarLote.reservatorio!.id,
+          "plantasColhidas": alterarLote.plantas_colhidas,
+          "mudasTransplantadas": alterarLote.mudas_transplantadas,
+          "bandeijaSemeadas": alterarLote.bandeijas_semeadas,
+          "embalagensProduzidas": alterarLote.embalagens_produzidas,
+        },
+      );
+
+      final QueryResult result = await client.mutate(options);
+
+      if (!result.hasException) {
+        Lote? lote = Lote.fromJson(result.data?['updateLote']);
+
+        return Right(lote);
+      } else {
+        return Left(
+            ErrorSetor(message: FailureMessage.errorAlterarLoteMessage));
+      }
+    } catch (e) {
+      return Left(ErrorSetor(message: FailureMessage.errorAlterarLoteMessage));
+    }
+  }
+
+  @override
   Future<Either<Failure, Lote>> migrarLote(
       {required int loteId,
       required int setorId,
@@ -492,6 +553,57 @@ class LoteDatasource implements ILoteDatasource {
       return Right(loteResult);
     } else {
       return Left(ErrorLote(message: FailureMessage.errorMigrarLoteMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Cultura>> registrarCultura(
+      {required Cultura cultura, required int contaId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+        mutation CreateOneCultura($nome: String!, $contaId: Int!) {
+          createOneCultura(data: {
+            nome: $nome,
+            privado: true,
+            conta: {
+              connect: {
+                id: $contaId
+              }
+            }
+          }) {
+            id
+            nome
+            privado
+            created_at
+            conta {
+              id
+              nome
+            }
+          }
+        }
+      ''';
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "nome": cultura.nome,
+        "contaId": contaId,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      Cultura? culturaResult =
+          Cultura.fromJson(result.data?['createOneCultura']);
+
+      return Right(culturaResult);
+    } else {
+      return Left(
+          ErrorLote(message: FailureMessage.errorCadastrarCulturaMessage));
     }
   }
 }

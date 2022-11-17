@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
@@ -25,6 +26,7 @@ class NewFloatingActionButton extends StatefulWidget {
 class _NewFloatingActionButtonState extends State<NewFloatingActionButton> {
   AreaCultivoStore areaStore = GetIt.I<AreaCultivoStore>();
   SetorStore setorStore = GetIt.I<SetorStore>();
+  LoteStore loteStore = GetIt.I<LoteStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,7 @@ class _NewFloatingActionButtonState extends State<NewFloatingActionButton> {
         iconTheme: const IconThemeData(size: 35),
         children: [
           SpeedDialChild(
+            visible: widget.nivel == 3,
             child: Image.asset(
               "assets/icons/hydroponic2_icon.png",
               height: 70,
@@ -48,13 +51,17 @@ class _NewFloatingActionButtonState extends State<NewFloatingActionButton> {
             label: "Novo Lote",
             labelStyle: const TextStyle(fontSize: 18),
             onTap: widget.nivel <= 3
-                ? () => Get.to(
+                ? () {
+                    loteStore.setIsEditing(false);
+                    Get.to(
                       () => const CadastrarLotePage(),
                       transition: Transition.rightToLeft,
-                    )
+                    );
+                  }
                 : null,
           ),
           SpeedDialChild(
+            visible: widget.nivel == 2,
             child: Image.asset(
               "assets/icons/hydroponic1_icon.png",
               height: 70,
@@ -72,6 +79,7 @@ class _NewFloatingActionButtonState extends State<NewFloatingActionButton> {
                 : null,
           ),
           SpeedDialChild(
+            visible: widget.nivel == 1,
             child: Image.asset(
               "assets/icons/greenhouse1_icon.png",
               height: 100,

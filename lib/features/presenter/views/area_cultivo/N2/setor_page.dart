@@ -8,9 +8,10 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/cadastrar_setor_page.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/lote_page.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 import '../../home/components/top_app_bar.dart';
@@ -54,7 +55,7 @@ class SetorPageState extends State<SetorPage> {
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                appBar(areaN1: store.areaSelecionada, store: store),
+                AppBar(areaN1: store.areaSelecionada, store: store),
                 Observer(builder: (_) {
                   if (store.isSetorListLoading) {
                     return const SliverToBoxAdapter(
@@ -108,9 +109,9 @@ class SetorPageState extends State<SetorPage> {
 }
 
 // ignore: camel_case_types
-class appBar extends StatelessWidget {
+class AppBar extends StatefulWidget {
   final Area areaN1;
-  const appBar({
+  const AppBar({
     Key? key,
     required this.areaN1,
     required this.store,
@@ -118,6 +119,12 @@ class appBar extends StatelessWidget {
 
   final SetorStore store;
 
+  @override
+  State<AppBar> createState() => _AppBarState();
+}
+
+class _AppBarState extends State<AppBar> {
+  AreaCultivoStore areaStore = GetIt.I<AreaCultivoStore>();
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
@@ -135,11 +142,44 @@ class appBar extends StatelessWidget {
             alignment: const Alignment(0.6, -0.9),
             child: Padding(
               padding: const EdgeInsets.only(right: 16.0),
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.settings,
-                  color: Constants.kGreyText,
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: PopupMenuButton(
+                    icon: SvgPicture.asset(
+                      "assets/icons/settings_icon.svg",
+                      color: Constants.kButtonGrey,
+                      height: 20,
+                    ),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: Row(
+                          children: const [
+                            Text('Editar'),
+                          ],
+                        ),
+                        onTap: () async {
+                          await areaStore.setAreaEditing(widget.areaN1);
+                          Get.to(
+                            () => const CadastrarAreaCultivo(),
+                            transition: Transition.rightToLeft,
+                          );
+                        },
+                      ),
+                      PopupMenuItem(
+                        child: Row(
+                          children: const [
+                            Text('Deletar'),
+                          ],
+                        ),
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -149,7 +189,7 @@ class appBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TopAppBar(
-              namePage: areaN1.nome ?? '',
+              namePage: widget.areaN1.nome ?? '',
               subtitle: "Lista de setores cadastrados",
             ),
             const SizedBox(
@@ -253,16 +293,21 @@ class _CardSetorState extends State<CardSetor> {
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        widget.setor.nome ?? '',
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                          color: Constants.kGreyText,
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            widget.setor.nome ?? '',
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              color: Constants.kGreyText,
+                            ),
+                          ),
                         ),
-                      ),
+                        const Spacer(),
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
@@ -287,54 +332,12 @@ class _CardSetorState extends State<CardSetor> {
                   ],
                 ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Theme(
-                    data: Theme.of(context).copyWith(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                    ),
-                    child: PopupMenuButton(
-                      icon: SvgPicture.asset(
-                        "assets/icons/settings_icon.svg",
-                        color: Constants.kButtonGrey,
-                        height: 20,
-                      ),
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          child: Row(
-                            children: const [
-                              Text('Editar'),
-                            ],
-                          ),
-                          onTap: () async {
-                            await setorStore.setSetorEditing(widget.setor);
-                            Get.to(
-                              () => const CadastrarSetorPage(),
-                              transition: Transition.rightToLeft,
-                            );
-                          },
-                        ),
-                        PopupMenuItem(
-                          child: Row(
-                            children: const [
-                              Text('Deletar'),
-                            ],
-                          ),
-                          onTap: () {},
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 25),
-                    child: Icon(
-                      Icons.chevron_right_rounded,
-                      color: Constants.kPrimaryColor,
-                    ),
-                  ),
-                ],
+              const Padding(
+                padding: EdgeInsets.only(right: 8.0),
+                child: Icon(
+                  Icons.chevron_right_rounded,
+                  color: Constants.kPrimaryColor,
+                ),
               ),
             ],
           ),

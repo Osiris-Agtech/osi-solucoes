@@ -160,17 +160,29 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                           color: Colors.white,
                         ),
                       )
-                    : const Text(
-                        "Salvar",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      );
+                    : store.isEditing
+                        ? const Text(
+                            "Alterar",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )
+                        : const Text(
+                            "Salvar",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          );
               },
             ),
             onPressed: () {
-              store.registrarLote();
+              if (store.isEditing) {
+                store.alterarLote();
+              } else {
+                store.registrarLote();
+              }
             },
           ),
         ),
@@ -414,13 +426,6 @@ class _NextStepButtonState extends State<NextStepButton> {
           store.setDotIndicator(store.dotIndicator + 1);
           widget.carouselController.nextPage();
         }
-        //else {
-        //   store.setDotIndicator(store.dotIndicator + 1);
-        //   widget.carouselController.nextPage(
-        //     duration: const Duration(milliseconds: 400),
-        //     curve: Curves.easeIn,
-        //   );
-        // }
       },
     );
   }

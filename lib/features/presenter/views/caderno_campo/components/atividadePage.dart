@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
 
-Container nomePage(BuildContext context, SetorStore store) {
+Container atividadePage(BuildContext context, CadernoCampoStore store) {
   return Container(
     height: MediaQuery.of(context).size.height * 0.9,
     margin: EdgeInsets.only(
@@ -20,20 +20,20 @@ Container nomePage(BuildContext context, SetorStore store) {
           child: RichText(
             textAlign: TextAlign.start,
             text: const TextSpan(
-              text: 'Qual nome deseja para seu',
+              text: 'Qual',
               style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
               children: <TextSpan>[
                 TextSpan(
-                  text: ' setor ',
+                  text: ' atividade ',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Constants.kPrimaryColor),
                 ),
                 TextSpan(
-                  text: '?',
+                  text: 'deseja registrar ?',
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Constants.kText2),
                 ),
@@ -45,7 +45,7 @@ Container nomePage(BuildContext context, SetorStore store) {
           padding: const EdgeInsets.only(top: 30),
           child: Observer(builder: (_) {
             return TextFormField(
-              initialValue: store.novoSetorName.text,
+              initialValue: store.novoAtividadeName.text,
               textCapitalization: TextCapitalization.words,
               style: const TextStyle(
                 fontSize: 24,
@@ -53,14 +53,14 @@ Container nomePage(BuildContext context, SetorStore store) {
                 fontStyle: FontStyle.italic,
               ),
               decoration: const InputDecoration(
-                hintText: 'EX. Setor de Crescimento',
+                hintText: 'Título da Atividade',
                 hintStyle: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.normal,
                   fontStyle: FontStyle.italic,
                 ),
               ),
-              onChanged: (String value) => store.alterarNome(value),
+              onChanged: (String value) => store.alterarAtividadeNome(value),
             );
           }),
         ),

@@ -8,6 +8,8 @@ import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/lote_page.dart';
 
 part 'setor_store.g.dart';
 
@@ -41,7 +43,7 @@ abstract class _SetorStoreBase with Store {
 
     setores.fold(
       (err) {
-        toastError(message: err.message);
+        //toastError(message: err.message);
         setorList = [];
       },
       (data) async {
@@ -174,6 +176,7 @@ abstract class _SetorStoreBase with Store {
   @action
   alterarSetor() async {
     SetorRepository setorRepository = GetIt.I<SetorRepository>();
+    LoteStore loteStore = GetIt.I<LoteStore>();
     isNovoSetorLoading = true;
 
     novoSetor.nome = novoSetorName.text;
@@ -191,7 +194,12 @@ abstract class _SetorStoreBase with Store {
         toastSuccess(message: "Alterado com sucesso");
         buscarSetores();
         limparTudo();
-        Get.close(1);
+        Get.close(2);
+        loteStore.setSetorSelecionado(data);
+        Get.to(
+          () => const LotePage(),
+          transition: Transition.rightToLeft,
+        );
       },
     );
 

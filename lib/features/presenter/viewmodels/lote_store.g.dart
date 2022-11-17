@@ -182,6 +182,83 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$isEditingAtom = Atom(name: '_LoteStoreBase.isEditing');
+
+  @override
+  bool get isEditing {
+    _$isEditingAtom.reportRead();
+    return super.isEditing;
+  }
+
+  @override
+  set isEditing(bool value) {
+    _$isEditingAtom.reportWrite(value, super.isEditing, () {
+      super.isEditing = value;
+    });
+  }
+
+  final _$isBandeijasEditingAtom =
+      Atom(name: '_LoteStoreBase.isBandeijasEditing');
+
+  @override
+  bool get isBandeijasEditing {
+    _$isBandeijasEditingAtom.reportRead();
+    return super.isBandeijasEditing;
+  }
+
+  @override
+  set isBandeijasEditing(bool value) {
+    _$isBandeijasEditingAtom.reportWrite(value, super.isBandeijasEditing, () {
+      super.isBandeijasEditing = value;
+    });
+  }
+
+  final _$isMudasEditingAtom = Atom(name: '_LoteStoreBase.isMudasEditing');
+
+  @override
+  bool get isMudasEditing {
+    _$isMudasEditingAtom.reportRead();
+    return super.isMudasEditing;
+  }
+
+  @override
+  set isMudasEditing(bool value) {
+    _$isMudasEditingAtom.reportWrite(value, super.isMudasEditing, () {
+      super.isMudasEditing = value;
+    });
+  }
+
+  final _$isPlantasEditingAtom = Atom(name: '_LoteStoreBase.isPlantasEditing');
+
+  @override
+  bool get isPlantasEditing {
+    _$isPlantasEditingAtom.reportRead();
+    return super.isPlantasEditing;
+  }
+
+  @override
+  set isPlantasEditing(bool value) {
+    _$isPlantasEditingAtom.reportWrite(value, super.isPlantasEditing, () {
+      super.isPlantasEditing = value;
+    });
+  }
+
+  final _$isEmbalagensEditingAtom =
+      Atom(name: '_LoteStoreBase.isEmbalagensEditing');
+
+  @override
+  bool get isEmbalagensEditing {
+    _$isEmbalagensEditingAtom.reportRead();
+    return super.isEmbalagensEditing;
+  }
+
+  @override
+  set isEmbalagensEditing(bool value) {
+    _$isEmbalagensEditingAtom.reportWrite(value, super.isEmbalagensEditing, () {
+      super.isEmbalagensEditing = value;
+    });
+  }
+
   final _$isVisibleAtom = Atom(name: '_LoteStoreBase.isVisible');
 
   @override
@@ -350,6 +427,74 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     _$novaCulturaControllerAtom.reportWrite(value, super.novaCulturaController,
         () {
       super.novaCulturaController = value;
+    });
+  }
+
+  final _$bandeijasSemeadasControllerAtom =
+      Atom(name: '_LoteStoreBase.bandeijasSemeadasController');
+
+  @override
+  TextEditingController get bandeijasSemeadasController {
+    _$bandeijasSemeadasControllerAtom.reportRead();
+    return super.bandeijasSemeadasController;
+  }
+
+  @override
+  set bandeijasSemeadasController(TextEditingController value) {
+    _$bandeijasSemeadasControllerAtom
+        .reportWrite(value, super.bandeijasSemeadasController, () {
+      super.bandeijasSemeadasController = value;
+    });
+  }
+
+  final _$mudasTransplantadasControllerAtom =
+      Atom(name: '_LoteStoreBase.mudasTransplantadasController');
+
+  @override
+  TextEditingController get mudasTransplantadasController {
+    _$mudasTransplantadasControllerAtom.reportRead();
+    return super.mudasTransplantadasController;
+  }
+
+  @override
+  set mudasTransplantadasController(TextEditingController value) {
+    _$mudasTransplantadasControllerAtom
+        .reportWrite(value, super.mudasTransplantadasController, () {
+      super.mudasTransplantadasController = value;
+    });
+  }
+
+  final _$plantasColhidasControllerAtom =
+      Atom(name: '_LoteStoreBase.plantasColhidasController');
+
+  @override
+  TextEditingController get plantasColhidasController {
+    _$plantasColhidasControllerAtom.reportRead();
+    return super.plantasColhidasController;
+  }
+
+  @override
+  set plantasColhidasController(TextEditingController value) {
+    _$plantasColhidasControllerAtom
+        .reportWrite(value, super.plantasColhidasController, () {
+      super.plantasColhidasController = value;
+    });
+  }
+
+  final _$embalagensProduzidasControllerAtom =
+      Atom(name: '_LoteStoreBase.embalagensProduzidasController');
+
+  @override
+  TextEditingController get embalagensProduzidasController {
+    _$embalagensProduzidasControllerAtom.reportRead();
+    return super.embalagensProduzidasController;
+  }
+
+  @override
+  set embalagensProduzidasController(TextEditingController value) {
+    _$embalagensProduzidasControllerAtom
+        .reportWrite(value, super.embalagensProduzidasController, () {
+      super.embalagensProduzidasController = value;
     });
   }
 
@@ -527,6 +672,21 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$novoLoteAtom = Atom(name: '_LoteStoreBase.novoLote');
+
+  @override
+  Lote get novoLote {
+    _$novoLoteAtom.reportRead();
+    return super.novoLote;
+  }
+
+  @override
+  set novoLote(Lote value) {
+    _$novoLoteAtom.reportWrite(value, super.novoLote, () {
+      super.novoLote = value;
+    });
+  }
+
   final _$buscarLotesAsyncAction = AsyncAction('_LoteStoreBase.buscarLotes');
 
   @override
@@ -591,6 +751,30 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   @override
   Future registrarLote() {
     return _$registrarLoteAsyncAction.run(() => super.registrarLote());
+  }
+
+  final _$registrarCulturaAsyncAction =
+      AsyncAction('_LoteStoreBase.registrarCultura');
+
+  @override
+  Future registrarCultura() {
+    return _$registrarCulturaAsyncAction.run(() => super.registrarCultura());
+  }
+
+  final _$alterarLoteAsyncAction = AsyncAction('_LoteStoreBase.alterarLote');
+
+  @override
+  Future alterarLote() {
+    return _$alterarLoteAsyncAction.run(() => super.alterarLote());
+  }
+
+  final _$alterarProducaoLoteAsyncAction =
+      AsyncAction('_LoteStoreBase.alterarProducaoLote');
+
+  @override
+  Future alterarProducaoLote() {
+    return _$alterarProducaoLoteAsyncAction
+        .run(() => super.alterarProducaoLote());
   }
 
   final _$_LoteStoreBaseActionController =
@@ -729,6 +913,83 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic setIsEditing(bool value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setIsEditing');
+    try {
+      return super.setIsEditing(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setIsBandeijaEditing(bool value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setIsBandeijaEditing');
+    try {
+      return super.setIsBandeijaEditing(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setIsMudasEditing(bool value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setIsMudasEditing');
+    try {
+      return super.setIsMudasEditing(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setIsPlantasEditing(bool value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setIsPlantasEditing');
+    try {
+      return super.setIsPlantasEditing(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setIsEmbalagensEditing(bool value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setIsEmbalagensEditing');
+    try {
+      return super.setIsEmbalagensEditing(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarNome(String name) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.alterarNome');
+    try {
+      return super.alterarNome(name);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setLoteEditing(Lote lote) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setLoteEditing');
+    try {
+      return super.setLoteEditing(lote);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setDotIndicator(int value) {
     final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
         name: '_LoteStoreBase.setDotIndicator');
@@ -797,6 +1058,11 @@ loteSelecionado: ${loteSelecionado},
 areaSelecionada: ${areaSelecionada},
 setorSelecionadoMigrar: ${setorSelecionadoMigrar},
 showTextFormField: ${showTextFormField},
+isEditing: ${isEditing},
+isBandeijasEditing: ${isBandeijasEditing},
+isMudasEditing: ${isMudasEditing},
+isPlantasEditing: ${isPlantasEditing},
+isEmbalagensEditing: ${isEmbalagensEditing},
 isVisible: ${isVisible},
 isNovaAreaLoading: ${isNovaAreaLoading},
 isNovoLoteLoading: ${isNovoLoteLoading},
@@ -808,6 +1074,10 @@ novoLoteSetor: ${novoLoteSetor},
 novoLoteArea: ${novoLoteArea},
 novoLoteName: ${novoLoteName},
 novaCulturaController: ${novaCulturaController},
+bandeijasSemeadasController: ${bandeijasSemeadasController},
+mudasTransplantadasController: ${mudasTransplantadasController},
+plantasColhidasController: ${plantasColhidasController},
+embalagensProduzidasController: ${embalagensProduzidasController},
 novoLoteCultura: ${novoLoteCultura},
 novoLoteReservatorio: ${novoLoteReservatorio},
 registroData: ${registroData},
@@ -818,7 +1088,8 @@ novoLoteDescricao: ${novoLoteDescricao},
 reservatorioList: ${reservatorioList},
 reservatorioDetalhes: ${reservatorioDetalhes},
 solucaoNutritivaList: ${solucaoNutritivaList},
-solucaoConcentradaList: ${solucaoConcentradaList}
+solucaoConcentradaList: ${solucaoConcentradaList},
+novoLote: ${novoLote}
     ''';
   }
 }

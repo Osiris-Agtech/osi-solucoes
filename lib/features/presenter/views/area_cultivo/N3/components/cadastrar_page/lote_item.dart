@@ -104,25 +104,27 @@ lotePage(BuildContext context, LoteStore store) {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 30),
-          child: TextFormField(
-            controller: store.novoLoteName,
-            // initialValue: store.novoLoteName.text,
-            textCapitalization: TextCapitalization.words,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.normal,
-              fontStyle: FontStyle.italic,
-            ),
-            decoration: const InputDecoration(
-              hintText: 'EX. L01S01-250721',
-              hintStyle: TextStyle(
+          child: Observer(builder: (_) {
+            return TextFormField(
+              //controller: store.novoLoteName,
+              initialValue: store.novoLoteName.text,
+              textCapitalization: TextCapitalization.words,
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.normal,
                 fontStyle: FontStyle.italic,
               ),
-            ),
-            // onChanged: (String value) => store.alterarNome(value),
-          ),
+              decoration: const InputDecoration(
+                hintText: 'EX. L01S01-250721',
+                hintStyle: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.normal,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+              onChanged: (String value) => store.alterarNome(value),
+            );
+          }),
         ),
         const Spacer(),
       ],

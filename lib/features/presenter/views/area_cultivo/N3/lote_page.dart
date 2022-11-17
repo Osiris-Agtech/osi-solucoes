@@ -2,12 +2,15 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/cadastrar_setor_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/detalhes_lote_page.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
@@ -20,14 +23,14 @@ class LotePage extends StatefulWidget {
 }
 
 class _LotePageState extends State<LotePage> {
-  LoteStore store = GetIt.I<LoteStore>();
+  LoteStore loteStore = GetIt.I<LoteStore>();
 
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
   final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    store.buscarLotes();
+    loteStore.buscarLotes();
     super.initState();
   }
 
@@ -51,9 +54,9 @@ class _LotePageState extends State<LotePage> {
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                appBar(setorN2: store.setorSelecionado, store: store),
+                AppBar(setorN2: loteStore.setorSelecionado, store: loteStore),
                 Observer(builder: (_) {
-                  if (store.isLoteListLoading) {
+                  if (loteStore.isLoteListLoading) {
                     return const SliverToBoxAdapter(
                       child: Padding(
                         padding:
@@ -64,7 +67,7 @@ class _LotePageState extends State<LotePage> {
                       ),
                     );
                   }
-                  if (store.loteList.isEmpty) {
+                  if (loteStore.loteList.isEmpty) {
                     return const SliverToBoxAdapter(
                       child: Padding(
                         padding:
@@ -86,12 +89,12 @@ class _LotePageState extends State<LotePage> {
                             padding: const EdgeInsets.only(
                                 left: 16.0, right: 16, top: 10),
                             child: CardLote(
-                              lote: store.loteList[index],
+                              lote: loteStore.loteList[index],
                             ),
                           );
                         });
                       },
-                      childCount: store.loteList.length,
+                      childCount: loteStore.loteList.length,
                     ),
                   );
                 }),
@@ -105,9 +108,9 @@ class _LotePageState extends State<LotePage> {
 }
 
 // ignore: camel_case_types
-class appBar extends StatelessWidget {
+class AppBar extends StatefulWidget {
   final Setor setorN2;
-  const appBar({
+  const AppBar({
     Key? key,
     required this.setorN2,
     required this.store,
@@ -116,13 +119,19 @@ class appBar extends StatelessWidget {
   final LoteStore store;
 
   @override
+  State<AppBar> createState() => _AppBarState();
+}
+
+class _AppBarState extends State<AppBar> {
+  SetorStore setorStore = GetIt.I<SetorStore>();
+  @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(seconds: 2),
       child: SliverAppBar(
         pinned: true,
         backgroundColor: Colors.white,
-        toolbarHeight: 175,
+        toolbarHeight: 170,
         floating: true,
         automaticallyImplyLeading: false,
         forceElevated: true,
@@ -132,11 +141,41 @@ class appBar extends StatelessWidget {
             alignment: const Alignment(0.6, -0.9),
             child: Padding(
               padding: const EdgeInsets.only(right: 16.0),
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.settings,
-                  color: Constants.kGreyText,
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                ),
+                child: PopupMenuButton(
+                  icon: SvgPicture.asset(
+                    "assets/icons/settings_icon.svg",
+                    color: Constants.kButtonGrey,
+                    height: 20,
+                  ),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: Row(
+                        children: const [
+                          Text('Editar'),
+                        ],
+                      ),
+                      onTap: () async {
+                        await setorStore.setSetorEditing(widget.setorN2);
+                        Get.to(
+                          () => const CadastrarSetorPage(),
+                          transition: Transition.rightToLeft,
+                        );
+                      },
+                    ),
+                    PopupMenuItem(
+                      child: Row(
+                        children: const [
+                          Text('Deletar'),
+                        ],
+                      ),
+                      onTap: () {},
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -146,7 +185,7 @@ class appBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TopAppBar(
-              namePage: setorN2.nome ?? '',
+              namePage: widget.setorN2.nome ?? '',
               subtitle: "Lista de lotes cadastrados",
             ),
             const SizedBox(
@@ -290,10 +329,12 @@ class _CardLoteState extends State<CardLote> {
                   ],
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.chevron_right_rounded),
-                color: Constants.kPrimaryColor,
-                onPressed: () {},
+              const Padding(
+                padding: EdgeInsets.only(right: 8.0),
+                child: Icon(
+                  Icons.chevron_right_rounded,
+                  color: Constants.kPrimaryColor,
+                ),
               ),
             ],
           ),

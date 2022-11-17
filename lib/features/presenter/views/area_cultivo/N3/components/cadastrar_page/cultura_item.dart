@@ -166,7 +166,6 @@ addCulturaTextFormField(LoteStore store) {
           Expanded(
             child: TextFormField(
               controller: store.novaCulturaController,
-              // initialValue: store.novoLoteName.text,
               textCapitalization: TextCapitalization.words,
               style: const TextStyle(
                 fontSize: 20,
@@ -181,7 +180,6 @@ addCulturaTextFormField(LoteStore store) {
                   fontStyle: FontStyle.italic,
                 ),
               ),
-              // onChanged: (String value) => store.alterarNome(value),
             ),
           ),
           const SizedBox(
@@ -201,7 +199,7 @@ addCulturaTextFormField(LoteStore store) {
                 fontStyle: FontStyle.italic,
               ),
             ),
-            onPressed: () {},
+            onPressed: store.registrarCultura,
           ),
         ],
       ),
@@ -216,6 +214,7 @@ addCulturaButton(LoteStore store) {
       "Deseja cadastrar nova cultura ?",
       style: TextStyle(
         fontSize: 16,
+        color: Constants.kPrimaryColor,
       ),
     ),
   );

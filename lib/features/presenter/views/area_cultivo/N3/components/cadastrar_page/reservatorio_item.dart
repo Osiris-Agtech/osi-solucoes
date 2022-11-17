@@ -99,29 +99,6 @@ reservatorioPage(BuildContext context, LoteStore store) {
             ),
           ),
         ),
-        // Padding(
-        //   padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
-        //   child: TextFormField(
-        //     controller: store.novoLoteName,
-        //     // initialValue: store.novoLoteName.text,
-        //     textCapitalization: TextCapitalization.words,
-        //     style: const TextStyle(
-        //       fontSize: 24,
-        //       fontWeight: FontWeight.normal,
-        //       fontStyle: FontStyle.italic,
-        //     ),
-        //     decoration: const InputDecoration(
-        //       hintText: 'Pesquisar',
-        //       prefixIcon: Icon(Icons.search),
-        //       hintStyle: TextStyle(
-        //         fontSize: 24,
-        //         fontWeight: FontWeight.normal,
-        //         fontStyle: FontStyle.italic,
-        //       ),
-        //     ),
-        //     // onChanged: (String value) => store.alterarNome(value),
-        //   ),
-        // ),
         const Padding(
             padding: EdgeInsets.only(top: 20, left: 30),
             child: Text('Todos os reservatórios')),
@@ -185,7 +162,36 @@ ListView showList(LoteStore store) {
           child: ListTile(
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-            subtitle: Text('volume: ${store.reservatorioList[index].volume}'),
+            subtitle: Row(
+              children: [
+                Text('volume: ${store.reservatorioList[index].volume}'),
+                const SizedBox(width: 16),
+                Observer(builder: (_) {
+                  if (store.novoLoteReservatorio.id != null &&
+                      store.novoLoteReservatorio.id ==
+                          store.reservatorioList[index].id) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        color: Constants.kPrimaryColor,
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(6.0),
+                        child: Text(
+                          'Vinculado',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Constants.kBackgroundColor,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return Container();
+                }),
+              ],
+            ),
             title: Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: Text(
