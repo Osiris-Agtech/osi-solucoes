@@ -92,7 +92,7 @@ abstract class _AjustesStoreBase with Store {
   List<ReposicaoFert> reposicaoFert = [];
 
   // Função auxiliar para o calculo
-  // @returns Retorna um array de reposicaoFert()
+  // @returns double cet
   @action
   calculoLado(SolucaoFertilizanteConcentrada fertilizante, String ce) {
     // Parse - string to double
@@ -145,7 +145,7 @@ abstract class _AjustesStoreBase with Store {
   }
 
   // Calcula as quantidades de reposição para solução concentrada
-  // @returns Retorna o valor em ml de solução concentrada para reposição
+  // @returns double volumeConcentrado
   @action
   calculoAjusteConcentrada(double reposicaoFert) {
     //parses string to double
@@ -167,11 +167,10 @@ abstract class _AjustesStoreBase with Store {
 
     // Quant de fertilizantes na solução concentrada (SC)
     double fertConcentrado = (fertAjustado * fatorConcentracao) / 1000;
-    print('fert concetrado $fertConcentrado');
     // Vol de SC (ml) para AJUSTE
     double volConcentrado = (reposicaoFert * 1000) / fertConcentrado;
-    print('reposicaoFert $reposicaoFert');
-    print('vol concetrado $volConcentrado');
     volumeConcentrado = volConcentrado.toStringAsFixed(0);
   }
+  // #################### FIM CALCULO ##################################
+
 }
