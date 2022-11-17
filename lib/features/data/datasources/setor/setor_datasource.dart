@@ -8,7 +8,13 @@ import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import '../../../../core/errors/errors.dart';
 
 abstract class ISetorDatasource {
-  Future<Either<Failure, List<Setor>>> buscarSetores({required int areaId});
+  Future<Either<Failure, List<Setor>>> buscarSetores({
+    required int areaId,
+    required String orderBy,
+    required String order,
+    DateTime? startDate,
+    DateTime? endDate,
+  });
   Future<Either<Failure, Setor>> cadastrarSetor({required Setor setor});
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(
       {required int contaId});
@@ -17,19 +23,42 @@ abstract class ISetorDatasource {
 
 class SetorDatasource implements ISetorDatasource {
   @override
-  Future<Either<Failure, List<Setor>>> buscarSetores(
-      {required int areaId}) async {
+  Future<Either<Failure, List<Setor>>> buscarSetores({
+    required int areaId,
+    required String orderBy,
+    required String order,
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-    const String readRepositories = r'''
-        query Setors($areaId: Int) {
+    String readRepositories = '';
+    Map<String, dynamic> variables = <String, dynamic>{
+      'areaId': areaId,
+      'order': order,
+    };
+
+    if (orderBy == 'Data') {
+      variables['startDate'] = startDate?.toIso8601String();
+      variables['endDate'] = endDate?.toIso8601String();
+
+      readRepositories = r'''
+        query Setors($areaId: Int, $order: SortOrder!, $startDate: DateTime, $endDate: DateTime) {
           setors(where: {
-          area: {
+            area: {
               id: {
                 equals: $areaId
               }
+            },
+            created_at: {
+              gt: $startDate,
+              lte: $endDate
             }
-          }) {
+          }, orderBy: [
+            {
+              created_at: $order,
+            }
+          ]) {
             id
             nome
             descricao
@@ -49,14 +78,46 @@ class SetorDatasource implements ISetorDatasource {
           }
         }
       ''';
+    } else {
+      readRepositories = r'''
+        query Setors($areaId: Int, $order: SortOrder!) {
+          setors(where: {
+          area: {
+              id: {
+                equals: $areaId
+              }
+            }
+          }, orderBy: [
+            {
+              nome: $order,
+            }
+          ]) {
+            id
+            nome
+            descricao
+            area {
+              id
+              nome
+            }
+            reservatorio {
+              id
+              nome
+              volume
+            }
+            lotes {
+              id
+              nome
+            }
+          }
+        }
+      ''';
+    }
 
     final QueryOptions? options;
 
     options = QueryOptions(
       document: gql(readRepositories),
-      variables: <String, dynamic>{
-        'areaId': areaId,
-      },
+      variables: variables,
     );
 
     final QueryResult result = await client.query(options);
