@@ -82,7 +82,7 @@ class SetorDatasource implements ISetorDatasource {
       readRepositories = r'''
         query Setors($areaId: Int, $order: SortOrder!) {
           setors(where: {
-          area: {
+            area: {
               id: {
                 equals: $areaId
               }

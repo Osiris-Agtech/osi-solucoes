@@ -7,7 +7,13 @@ import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio
 import '../../../../core/errors/failure.dart';
 
 abstract class ILoteRepository {
-  Future<Either<Failure, List<Lote>>> buscarLotes(int setorId);
+  Future<Either<Failure, List<Lote>>> buscarLotes(
+    int setorId,
+    String orderBy,
+    String order,
+    DateTime? startDate,
+    DateTime? endDate,
+  );
   Future<Either<Failure, Lote>> buscarDetalhesLote(int loteId);
   Future<Either<Failure, List<Cultura>>> buscarCulturas(int contaId);
   Future<Either<Failure, List<Area>>> buscarAreasList(int contaId);

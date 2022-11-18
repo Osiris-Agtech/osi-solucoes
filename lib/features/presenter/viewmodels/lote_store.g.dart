@@ -9,6 +9,14 @@ part of 'lote_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$LoteStore on _LoteStoreBase, Store {
+  Computed<List<Lote>>? _$searchLoteComputed;
+
+  @override
+  List<Lote> get searchLote =>
+      (_$searchLoteComputed ??= Computed<List<Lote>>(() => super.searchLote,
+              name: '_LoteStoreBase.searchLote'))
+          .value;
+
   final _$isLoteListLoadingAtom =
       Atom(name: '_LoteStoreBase.isLoteListLoading');
 
@@ -22,6 +30,51 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   set isLoteListLoading(bool value) {
     _$isLoteListLoadingAtom.reportWrite(value, super.isLoteListLoading, () {
       super.isLoteListLoading = value;
+    });
+  }
+
+  final _$dropDownValueAtom = Atom(name: '_LoteStoreBase.dropDownValue');
+
+  @override
+  String get dropDownValue {
+    _$dropDownValueAtom.reportRead();
+    return super.dropDownValue;
+  }
+
+  @override
+  set dropDownValue(String value) {
+    _$dropDownValueAtom.reportWrite(value, super.dropDownValue, () {
+      super.dropDownValue = value;
+    });
+  }
+
+  final _$searchLoteTextAtom = Atom(name: '_LoteStoreBase.searchLoteText');
+
+  @override
+  String get searchLoteText {
+    _$searchLoteTextAtom.reportRead();
+    return super.searchLoteText;
+  }
+
+  @override
+  set searchLoteText(String value) {
+    _$searchLoteTextAtom.reportWrite(value, super.searchLoteText, () {
+      super.searchLoteText = value;
+    });
+  }
+
+  final _$orderAtom = Atom(name: '_LoteStoreBase.order');
+
+  @override
+  String get order {
+    _$orderAtom.reportRead();
+    return super.order;
+  }
+
+  @override
+  set order(String value) {
+    _$orderAtom.reportWrite(value, super.order, () {
+      super.order = value;
     });
   }
 
@@ -52,6 +105,36 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   set loteList(List<Lote> value) {
     _$loteListAtom.reportWrite(value, super.loteList, () {
       super.loteList = value;
+    });
+  }
+
+  final _$data1Atom = Atom(name: '_LoteStoreBase.data1');
+
+  @override
+  DateTime get data1 {
+    _$data1Atom.reportRead();
+    return super.data1;
+  }
+
+  @override
+  set data1(DateTime value) {
+    _$data1Atom.reportWrite(value, super.data1, () {
+      super.data1 = value;
+    });
+  }
+
+  final _$data2Atom = Atom(name: '_LoteStoreBase.data2');
+
+  @override
+  DateTime get data2 {
+    _$data2Atom.reportRead();
+    return super.data2;
+  }
+
+  @override
+  set data2(DateTime value) {
+    _$data2Atom.reportWrite(value, super.data2, () {
+      super.data2 = value;
     });
   }
 
@@ -781,11 +864,66 @@ mixin _$LoteStore on _LoteStoreBase, Store {
       ActionController(name: '_LoteStoreBase');
 
   @override
+  dynamic setData1(DateTime value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setData1');
+    try {
+      return super.setData1(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setData2(DateTime value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setData2');
+    try {
+      return super.setData2(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic changeOrder() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.changeOrder');
+    try {
+      return super.changeOrder();
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setSetorSelecionado(Setor setor) {
     final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
         name: '_LoteStoreBase.setSetorSelecionado');
     try {
       return super.setSetorSelecionado(setor);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setDropDown(String value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setDropDown');
+    try {
+      return super.setDropDown(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setSearchLoteText(String value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setSearchLoteText');
+    try {
+      return super.setSearchLoteText(value);
     } finally {
       _$_LoteStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -1048,8 +1186,13 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   String toString() {
     return '''
 isLoteListLoading: ${isLoteListLoading},
+dropDownValue: ${dropDownValue},
+searchLoteText: ${searchLoteText},
+order: ${order},
 setorSelecionado: ${setorSelecionado},
 loteList: ${loteList},
+data1: ${data1},
+data2: ${data2},
 areaList: ${areaList},
 isAreaLoading: ${isAreaLoading},
 isDetalhesLoteLoading: ${isDetalhesLoteLoading},
@@ -1089,7 +1232,8 @@ reservatorioList: ${reservatorioList},
 reservatorioDetalhes: ${reservatorioDetalhes},
 solucaoNutritivaList: ${solucaoNutritivaList},
 solucaoConcentradaList: ${solucaoConcentradaList},
-novoLote: ${novoLote}
+novoLote: ${novoLote},
+searchLote: ${searchLote}
     ''';
   }
 }

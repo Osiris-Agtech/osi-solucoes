@@ -29,6 +29,7 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
 
   @override
   void initState() {
+    store.setSearchAreaText('');
     store.buscarArea();
     super.initState();
   }

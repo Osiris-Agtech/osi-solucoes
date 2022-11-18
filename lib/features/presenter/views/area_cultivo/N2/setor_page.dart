@@ -31,6 +31,7 @@ class SetorPageState extends State<SetorPage> {
 
   @override
   void initState() {
+    store.setSearchSetorText('');
     store.buscarSetores();
     super.initState();
   }
