@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/ajuste/ajuste_repository.dart';
+import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reposicaoFert/reposicaoFert_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
@@ -172,5 +174,64 @@ abstract class _AjustesStoreBase with Store {
     volumeConcentrado = volConcentrado.toStringAsFixed(0);
   }
   // #################### FIM CALCULO ##################################
+  // #################### INICIO REGISTRO DE ATIVIDADE ##################################
+
+  @action
+  registrarAtividade() async {
+    AuthController authController = GetIt.I<AuthController>();
+    AjusteRepository ajusteRepository = GetIt.I<AjusteRepository>();
+    var descricao = montandoDescricao();
+    Atividade novaAtividade = Atividade(
+      nome: 'Ajuste de Solução Nutritiva',
+      descricao: descricao,
+      conta: authController.usuario.selected_conta!.conta,
+      created_at: DateTime.now(),
+    );
+
+    var registrarArea = await ajusteRepository.salvarAjuste(
+        novaAtividade, authController.usuario.id!);
+
+    registrarArea.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        toastSuccess(message: "Cadastrado com sucesso");
+        //limparTudo();
+        //Get.close(1);
+      },
+    );
+
+    //isNovaAreaLoading = false;
+  }
+
+  @action
+  montandoDescricao() {
+    // Construindo strings para descrição
+    var volumeAjuste =
+        (double.parse(volumeDesejado.text) - double.parse(volumeAtual.text))
+            .toString();
+    var fertDescrition = '';
+    for (var listFert in reposicaoFert) {
+      var fertDescritionline =
+          "${listFert.valor.toStringAsFixed(2)}g ${listFert.fertilizante.nome} \n";
+      fertDescrition = fertDescrition + fertDescritionline;
+    }
+    //Criando encoded da descrição
+    var encoded = utf8.encode("##Ajuste Solução Nutritiva##\n\n"
+        "Reservatório: ${selectedReservatorio.nome ?? 'Não informado'} \n\n"
+        "Condutividade Elétrica: ${cEletricoAtual.text} S.m/mm2 -> ${cEletricoDesejado.text} S.m/mm2\n"
+        "Volume: ${volumeAtual.text}L -> ${volumeDesejado.text}L \n"
+        "PH: ${pH.text}\n"
+        "Temperatura: Não Informado\n\n"
+        "Ajuste aplicado:\n"
+        "$volumeAjuste L água\n"
+        "$fertDescrition");
+
+    var decoded = utf8.decode(encoded);
+    print(decoded);
+    return encoded;
+  }
+  // #################### FIM REGISTRO DE ATIVIDADE ##################################
 
 }

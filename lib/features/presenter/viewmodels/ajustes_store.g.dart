@@ -218,6 +218,15 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
         .run(() => super.buscarReservatorios());
   }
 
+  final _$registrarAtividadeAsyncAction =
+      AsyncAction('_AjustesStoreBase.registrarAtividade');
+
+  @override
+  Future registrarAtividade() {
+    return _$registrarAtividadeAsyncAction
+        .run(() => super.registrarAtividade());
+  }
+
   final _$_AjustesStoreBaseActionController =
       ActionController(name: '_AjustesStoreBase');
 
@@ -282,6 +291,17 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
         name: '_AjustesStoreBase.calculoAjusteConcentrada');
     try {
       return super.calculoAjusteConcentrada(reposicaoFert);
+    } finally {
+      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic montandoDescricao() {
+    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
+        name: '_AjustesStoreBase.montandoDescricao');
+    try {
+      return super.montandoDescricao();
     } finally {
       _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
     }

@@ -64,6 +64,7 @@ class AjustesPageState extends State<AjustesPage> {
                         store.selectedReservatorio.nome!.isNotEmpty
                     ? () async {
                         await store.calculoAjusteReposicao();
+                        await store.montandoDescricao();
                         Get.to(
                           () => const ResultadoajustePage(),
                           transition: Transition.rightToLeft,
