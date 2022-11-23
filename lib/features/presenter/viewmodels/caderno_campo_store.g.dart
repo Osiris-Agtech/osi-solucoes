@@ -150,6 +150,21 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
+  final _$expandedCardAtom = Atom(name: '_CadernoCampoStoreBase.expandedCard');
+
+  @override
+  List<bool> get expandedCard {
+    _$expandedCardAtom.reportRead();
+    return super.expandedCard;
+  }
+
+  @override
+  set expandedCard(List<bool> value) {
+    _$expandedCardAtom.reportWrite(value, super.expandedCard, () {
+      super.expandedCard = value;
+    });
+  }
+
   final _$dotIndicatorAtom = Atom(name: '_CadernoCampoStoreBase.dotIndicator');
 
   @override
@@ -338,6 +353,17 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   }
 
   @override
+  dynamic setExpandedCard(int index) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.setExpandedCard');
+    try {
+      return super.setExpandedCard(index);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void increment() {
     final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
         name: '_CadernoCampoStoreBase.increment');
@@ -393,6 +419,7 @@ setorSelecionado: ${setorSelecionado},
 dropButtonSetor: ${dropButtonSetor},
 dropButtonArea: ${dropButtonArea},
 loteSelecionado: ${loteSelecionado},
+expandedCard: ${expandedCard},
 dotIndicator: ${dotIndicator},
 showTextFormField: ${showTextFormField},
 novoAtividadeName: ${novoAtividadeName},

@@ -40,6 +40,9 @@ abstract class _CadernoCampoStoreBase with Store {
   @observable
   Lote loteSelecionado = Lote();
 
+  @observable
+  List<bool> expandedCard = [];
+
   @action
   selecionarDropButtonArea(Area area) => dropButtonArea = area;
 
@@ -48,6 +51,12 @@ abstract class _CadernoCampoStoreBase with Store {
 
   @action
   setLoteSelecionado(Lote lote) => loteSelecionado = lote;
+
+  @action
+  setExpandedCard(int index) {
+    expandedCard[index] = !expandedCard[index];
+    expandedCard = List.from(expandedCard);
+  }
 
   @action
   buscarLotesByConta() async {
@@ -90,10 +99,25 @@ abstract class _CadernoCampoStoreBase with Store {
       },
       (data) async {
         loteSelecionado = data;
-        loteSelecionado.lotes_atividades?.map((e) => e.usuario?.selected_conta =
-            e.usuario?.contas?.firstWhere((element) =>
-                element.conta?.id ==
-                authController.usuario.selected_conta!.id!));
+        for (var i = 0; i < loteSelecionado.lotes_atividades!.length; i++) {
+          loteSelecionado.lotes_atividades![i].usuario?.selected_conta =
+              loteSelecionado.lotes_atividades![i].usuario?.contas?.firstWhere(
+            (element) {
+              return element.conta?.id ==
+                  authController.usuario.selected_conta!.conta!.id!;
+            },
+          );
+        }
+
+        expandedCard = [];
+
+        for (var i = 0;
+            i < (loteSelecionado.lotes_atividades?.length ?? 0.0);
+            i++) {
+          expandedCard.add(false);
+        }
+
+        expandedCard = List.from(expandedCard);
       },
     );
 
@@ -173,7 +197,7 @@ abstract class _CadernoCampoStoreBase with Store {
     isAreaLoading = false;
   }
 
-    // #################### START CADASTRO CADERNO DE CAMPO #######################
+  // #################### START CADASTRO CADERNO DE CAMPO #######################
 
   @observable
   int dotIndicator = 0;
@@ -181,7 +205,7 @@ abstract class _CadernoCampoStoreBase with Store {
   @observable
   bool showTextFormField = false;
 
-  @observable 
+  @observable
   TextEditingController novoAtividadeName = TextEditingController(text: '');
 
   @observable

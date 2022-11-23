@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:timelines/timelines.dart';
+import 'package:intl/intl.dart';
+import 'dart:convert' show jsonDecode, utf8;
 
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
@@ -79,60 +82,69 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                 }
                 return SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                    ),
                     child: Timeline.tileBuilder(
                       controller: scrollController,
-                      theme: TimelineTheme.of(context).copyWith(
-                        color: Constants.kPrimaryColor,
-                        nodePosition: 0,
-                      ),
                       shrinkWrap: true,
-                      builder: TimelineTileBuilder.fromStyle(
-                        connectorStyle: ConnectorStyle.dashedLine,
-                        contentsBuilder: (context, index) => Card(
-                          elevation: 0,
-                          color: Constants.kSecondBackgroundColor,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, bottom: 10),
-                                    child: Text(
-                                      '${store.loteSelecionado.lotes_atividades?[index].atividade!.nome}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  const Text('Data'),
-                                ],
-                              ),
-                              ListTile(
-                                contentPadding: const EdgeInsets.only(right: 0),
-                                dense: true,
-                                leading: const Icon(Icons.person),
-                                title: Text(
-                                  '${store.loteSelecionado.lotes_atividades?[index].usuario!.nome}',
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                                subtitle: Text(
-                                  '${store.loteSelecionado.lotes_atividades?[index].usuario?.selected_conta?.cargo?.cargo}',
-                                  style: const TextStyle(fontSize: 12),
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Text(
-                                    'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don'),
-                              )
-                            ],
-                          ),
+                      theme: TimelineThemeData(
+                        nodePosition: 0,
+                        color: const Color(0xff989898),
+                        // indicatorTheme: const IndicatorThemeData(
+                        //   position: 0,
+                        //   size: 20.0,
+                        // ),
+                        connectorTheme: const ConnectorThemeData(
+                          thickness: 2.5,
                         ),
+                      ),
+                      builder: TimelineTileBuilder.connected(
                         itemCount:
                             store.loteSelecionado.lotes_atividades?.length ?? 0,
+                        contentsBuilder: (_, index) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                left: 12, top: index == 0 ? 10 : 0),
+                            child: SingleChildScrollView(
+                              child: Observer(builder: (_) {
+                                return ExpansionPanelList(
+                                  expandedHeaderPadding:
+                                      const EdgeInsets.only(bottom: 5),
+                                  elevation: 0,
+                                  expansionCallback: (__, bool isExpanded) {
+                                    store.setExpandedCard(index);
+                                  },
+                                  children: [
+                                    ExpansionPanel(
+                                      backgroundColor:
+                                          Constants.kSecondBackgroundColor,
+                                      canTapOnHeader: true,
+                                      headerBuilder: (BuildContext context,
+                                          bool isExpanded) {
+                                        return headerCard(index);
+                                      },
+                                      body: bodyCard(index),
+                                      isExpanded: store.expandedCard[index],
+                                    ),
+                                  ],
+                                );
+                              }),
+                            ),
+                          );
+                        },
+                        indicatorBuilder: (_, index) {
+                          return const DotIndicator(
+                            // position: 0.04,
+                            color: Constants.kPrimaryColor,
+                          );
+                        },
+                        connectorBuilder: (_, index, ___) =>
+                            const DashedLineConnector(
+                          color: Constants.kPrimaryColor,
+                          dash: 4,
+                          gap: 4,
+                        ),
                       ),
                     ),
                   ),
@@ -142,6 +154,160 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
           ),
         ),
       ),
+    );
+  }
+
+  bodyCard(int index) {
+    return Column(
+      children: [
+        Text(
+          utf8.decode(
+            jsonDecode(store.loteSelecionado.lotes_atividades?[index].atividade
+                        ?.descricao ??
+                    '[]')
+                .cast<int>(),
+          ),
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            color: Constants.kGreyText,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        const Divider(
+          color: Constants.kButtonGrey,
+          height: 35,
+        )
+      ],
+    );
+  }
+
+  headerCard(int index) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '${store.loteSelecionado.lotes_atividades?[index].atividade!.nome}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              ListTile(
+                contentPadding: const EdgeInsets.only(right: 0),
+                dense: true,
+                leading: const Icon(
+                  Icons.account_circle,
+                  size: 40,
+                ),
+                minLeadingWidth: 0,
+                minVerticalPadding: 0,
+                horizontalTitleGap: 10,
+                title: Text(
+                  '${store.loteSelecionado.lotes_atividades?[index].usuario!.nome}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Constants.kText2,
+                  ),
+                ),
+                subtitle: Text(
+                  '${store.loteSelecionado.lotes_atividades?[index].usuario?.selected_conta?.cargo?.cargo}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Constants.kText2.withOpacity(0.8),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        // const Spacer(),
+
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              DateFormat("dd MMM y", 'pt_br')
+                      .format(
+                        store.loteSelecionado.lotes_atividades![index]
+                            .atividade!.created_at!,
+                      )
+                      .capitalize ??
+                  '',
+              style: const TextStyle(
+                color: Constants.kGreyText,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Text(
+              DateFormat("HH:mm", 'pt_br')
+                      .format(
+                        store.loteSelecionado.lotes_atividades![index]
+                            .atividade!.created_at!,
+                      )
+                      .capitalize ??
+                  '',
+              style: const TextStyle(
+                color: Constants.kGreyText,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  expandedCard(int index) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          utf8.decode(
+            jsonDecode(store.loteSelecionado.lotes_atividades?[index].atividade
+                        ?.descricao ??
+                    '[]')
+                .cast<int>(),
+          ),
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            color: Constants.kGreyText,
+            fontStyle: FontStyle.italic,
+          ),
+          overflow: store.expandedCard[index] ? null : TextOverflow.fade,
+          maxLines: store.expandedCard[index] ? null : 4,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 24),
+          child: InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: const Icon(
+              Icons.expand_more,
+              color: Constants.kPrimaryColor,
+              size: 36,
+            ),
+            onTap: () {
+              store.setExpandedCard(index);
+            },
+          ),
+        ),
+      ],
     );
   }
 }
@@ -218,8 +384,8 @@ class _AppBarState extends State<AppBar> {
         flexibleSpace: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TopAppBar(
-              namePage: 'Nome do lote',
+            TopAppBar(
+              namePage: '${store.loteSelecionado.nome}',
               subtitle: "Linha do tempo do lote",
             ),
             const SizedBox(
