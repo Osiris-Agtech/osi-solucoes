@@ -21,9 +21,9 @@ class AjusteRepository implements IAjusteRepository {
 
   @override
   Future<Either<Failure, Atividade>> salvarAjuste(
-      Atividade atividade, int usuarioId) async {
+      Atividade atividade, int usuarioId, List<int> listLoteId) async {
     var result = await datasource.salvarAjuste(
-        atividade: atividade, usuarioId: usuarioId);
+        atividade: atividade, usuarioId: usuarioId, listLoteId: listLoteId);
     return result;
   }
 }

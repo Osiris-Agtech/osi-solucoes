@@ -6,5 +6,5 @@ import '../../../presenter/models/atividade/atividade_model.dart';
 abstract class IAjusteRepository {
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(int contaId);
   Future<Either<Failure, Atividade>> salvarAjuste(
-      Atividade atividade, int usuarioId);
+      Atividade atividade, int usuarioId, List<int> listLoteId);
 }

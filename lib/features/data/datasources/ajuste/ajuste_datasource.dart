@@ -10,7 +10,9 @@ abstract class IAjusteDatasource {
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(
       {required int contaId});
   Future<Either<Failure, Atividade>> salvarAjuste(
-      {required Atividade atividade, required int usuarioId});
+      {required Atividade atividade,
+      required int usuarioId,
+      required List<int> listLoteId});
 }
 
 class AjusteDatasource implements IAjusteDatasource {
@@ -36,6 +38,10 @@ class AjusteDatasource implements IAjusteDatasource {
             id
             nome
             volume
+            lotes {
+              id
+              nome
+            }
             solucao {
               id
               c_eletrica
@@ -83,10 +89,13 @@ class AjusteDatasource implements IAjusteDatasource {
 
   @override
   Future<Either<Failure, Atividade>> salvarAjuste(
-      {required Atividade atividade, required int usuarioId}) async {
+      {required Atividade atividade,
+      required int usuarioId,
+      required List<int> listLoteId}) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
-
-    const String readRepositories = r'''
+    print(listLoteId);
+    // criar uma variavel String[] para concatenar com a querry readRepositories - da linha 110 a 126
+    String readRepositories = r'''
         mutation CreateOneAtividade($nome: String!, $descricao: String!, $contaId: Int!, $loteId: Int!, $usuarioId: Int!, $created_at: Datetime){
           createOneAtividade(
             nome: $nome,
@@ -137,7 +146,7 @@ class AjusteDatasource implements IAjusteDatasource {
     options = MutationOptions(
       document: gql(readRepositories),
       variables: <String, dynamic>{
-        "nome": atividade.nome,
+        "nome": atividade.nome!,
         "descricao": atividade.descricao!,
         "contaId": atividade.conta!.id,
         "usuarioId":

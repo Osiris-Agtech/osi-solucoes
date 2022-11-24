@@ -180,16 +180,23 @@ abstract class _AjustesStoreBase with Store {
   registrarAtividade() async {
     AuthController authController = GetIt.I<AuthController>();
     AjusteRepository ajusteRepository = GetIt.I<AjusteRepository>();
+
     var descricao = montandoDescricao();
     Atividade novaAtividade = Atividade(
       nome: 'Ajuste de Solução Nutritiva',
-      descricao: descricao,
+      descricao: descricao.toString(),
       conta: authController.usuario.selected_conta!.conta,
       created_at: DateTime.now(),
     );
 
+    List<int> listLoteId = [];
+
+    for (var lote in selectedReservatorio.lotes ?? []) {
+      listLoteId.add(lote.id);
+    }
+
     var registrarArea = await ajusteRepository.salvarAjuste(
-        novaAtividade, authController.usuario.id!);
+        novaAtividade, authController.usuario.id!, listLoteId);
 
     registrarArea.fold(
       (err) {
@@ -198,11 +205,9 @@ abstract class _AjustesStoreBase with Store {
       (data) async {
         toastSuccess(message: "Cadastrado com sucesso");
         //limparTudo();
-        //Get.close(1);
       },
     );
-
-    //isNovaAreaLoading = false;
+    // isNovaAreaLoading = false;
   }
 
   @action
@@ -228,8 +233,7 @@ abstract class _AjustesStoreBase with Store {
         "$volumeAjuste L água\n"
         "$fertDescrition");
 
-    var decoded = utf8.decode(encoded);
-    print(decoded);
+    // var decoded = utf8.decode(encoded);
     return encoded;
   }
   // #################### FIM REGISTRO DE ATIVIDADE ##################################

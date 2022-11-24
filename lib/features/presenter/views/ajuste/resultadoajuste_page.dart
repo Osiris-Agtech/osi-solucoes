@@ -155,6 +155,7 @@ showConfirmDialog(BuildContext context) {
                       ),
                       onPressed: () async {
                         showDoneAnimation(context);
+                        await store.registrarAtividade();
                         await Future.delayed(
                             const Duration(milliseconds: 1500));
                         Navigator.pop(context);
