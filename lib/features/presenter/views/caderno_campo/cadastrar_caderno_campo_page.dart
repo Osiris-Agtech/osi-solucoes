@@ -24,6 +24,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
 
   @override
   void initState() {
+    store.groupLotesBy();
     super.initState();
   }
 
@@ -435,14 +436,13 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                         SizedBox(
                           width: 76,
                           child: Text(
-                             DateFormat("HH:mm", 'pt_br')
-                                .format(
-                                  DateTime.parse(
-                                    store.dataRegistro!.toIso8601String()
-                                  ),
-                                )
-                                .capitalize ??
-                            '',
+                            DateFormat("HH:mm", 'pt_br')
+                                    .format(
+                                      DateTime.parse(store.dataRegistro!
+                                          .toIso8601String()),
+                                    )
+                                    .capitalize ??
+                                '',
                             textAlign: TextAlign.end,
                             style: const TextStyle(
                               color: Constants.kPrimaryColor,

@@ -180,6 +180,23 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
+  final _$isCadastroLoteLoadingAtom =
+      Atom(name: '_CadernoCampoStoreBase.isCadastroLoteLoading');
+
+  @override
+  bool get isCadastroLoteLoading {
+    _$isCadastroLoteLoadingAtom.reportRead();
+    return super.isCadastroLoteLoading;
+  }
+
+  @override
+  set isCadastroLoteLoading(bool value) {
+    _$isCadastroLoteLoadingAtom.reportWrite(value, super.isCadastroLoteLoading,
+        () {
+      super.isCadastroLoteLoading = value;
+    });
+  }
+
   final _$showTextFormFieldAtom =
       Atom(name: '_CadernoCampoStoreBase.showTextFormField');
 
@@ -193,6 +210,37 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   set showTextFormField(bool value) {
     _$showTextFormFieldAtom.reportWrite(value, super.showTextFormField, () {
       super.showTextFormField = value;
+    });
+  }
+
+  final _$selectedGroupAtom =
+      Atom(name: '_CadernoCampoStoreBase.selectedGroup');
+
+  @override
+  String get selectedGroup {
+    _$selectedGroupAtom.reportRead();
+    return super.selectedGroup;
+  }
+
+  @override
+  set selectedGroup(String value) {
+    _$selectedGroupAtom.reportWrite(value, super.selectedGroup, () {
+      super.selectedGroup = value;
+    });
+  }
+
+  final _$lotesGroupAtom = Atom(name: '_CadernoCampoStoreBase.lotesGroup');
+
+  @override
+  List<LoteByFilter> get lotesGroup {
+    _$lotesGroupAtom.reportRead();
+    return super.lotesGroup;
+  }
+
+  @override
+  set lotesGroup(List<LoteByFilter> value) {
+    _$lotesGroupAtom.reportWrite(value, super.lotesGroup, () {
+      super.lotesGroup = value;
     });
   }
 
@@ -316,6 +364,14 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     return _$buscarAreasListAsyncAction.run(() => super.buscarAreasList());
   }
 
+  final _$groupLotesByAsyncAction =
+      AsyncAction('_CadernoCampoStoreBase.groupLotesBy');
+
+  @override
+  Future groupLotesBy() {
+    return _$groupLotesByAsyncAction.run(() => super.groupLotesBy());
+  }
+
   final _$_CadernoCampoStoreBaseActionController =
       ActionController(name: '_CadernoCampoStoreBase');
 
@@ -386,6 +442,17 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   }
 
   @override
+  dynamic setSelectedGroup(String name) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.setSelectedGroup');
+    try {
+      return super.setSelectedGroup(name);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setShowTextFormField(bool value) {
     final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
         name: '_CadernoCampoStoreBase.setShowTextFormField');
@@ -397,11 +464,33 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   }
 
   @override
+  dynamic setIsCadastroLoteLoading(bool value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.setIsCadastroLoteLoading');
+    try {
+      return super.setIsCadastroLoteLoading(value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic alterarAtividadeNome(String name) {
     final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
         name: '_CadernoCampoStoreBase.alterarAtividadeNome');
     try {
       return super.alterarAtividadeNome(name);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selectLotesGroup(int index, bool value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.selectLotesGroup');
+    try {
+      return super.selectLotesGroup(index, value);
     } finally {
       _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -421,7 +510,10 @@ dropButtonArea: ${dropButtonArea},
 loteSelecionado: ${loteSelecionado},
 expandedCard: ${expandedCard},
 dotIndicator: ${dotIndicator},
+isCadastroLoteLoading: ${isCadastroLoteLoading},
 showTextFormField: ${showTextFormField},
+selectedGroup: ${selectedGroup},
+lotesGroup: ${lotesGroup},
 novoAtividadeName: ${novoAtividadeName},
 novoAutorName: ${novoAutorName},
 novaDescricao: ${novaDescricao},

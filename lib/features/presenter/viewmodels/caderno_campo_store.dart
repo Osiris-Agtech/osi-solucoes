@@ -7,6 +7,7 @@ import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import "package:collection/collection.dart";
 
 part 'caderno_campo_store.g.dart';
 
@@ -80,6 +81,7 @@ abstract class _CadernoCampoStoreBase with Store {
     );
 
     isLoteListLoading = false;
+    return;
   }
 
   @action
@@ -203,7 +205,16 @@ abstract class _CadernoCampoStoreBase with Store {
   int dotIndicator = 0;
 
   @observable
+  bool isCadastroLoteLoading = false;
+
+  @observable
   bool showTextFormField = false;
+
+  @observable
+  String selectedGroup = 'Cultura';
+
+  @observable
+  List<LoteByFilter> lotesGroup = [];
 
   @observable
   TextEditingController novoAtividadeName = TextEditingController(text: '');
@@ -228,12 +239,61 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
+  setSelectedGroup(String name) {
+    selectedGroup = name;
+  }
+
+  @action
   setShowTextFormField(bool value) {
     showTextFormField = value;
   }
 
   @action
+  setIsCadastroLoteLoading(bool value) {
+    isCadastroLoteLoading = value;
+  }
+
+  @action
   alterarAtividadeNome(String name) {
     novoAtividadeName = TextEditingController(text: name);
+  }
+
+  @action
+  selectLotesGroup(int index, bool value) {
+    lotesGroup[index].selected = value;
+    lotesGroup = List.from(lotesGroup);
+  }
+
+  @action
+  groupLotesBy() async {
+    isCadastroLoteLoading = true;
+
+    await buscarLotesByConta();
+
+    switch (selectedGroup) {
+      case 'Cultura':
+        final groupResult = groupBy(loteList, (Lote loteGroup) {
+          return loteGroup.cultura?.nome ?? 'Não informado';
+        });
+        lotesGroup = [];
+        groupResult.forEach((key, value) {
+          lotesGroup.add(
+            LoteByFilter(
+              key: key,
+              selected: false,
+              lotesSelection: value
+                  .map((e) => LoteSelection(selected: false, lote: e))
+                  .toList(),
+            ),
+          );
+        });
+        break;
+      default:
+        lotesGroup = [];
+        break;
+    }
+
+    lotesGroup = List.from(lotesGroup);
+    isCadastroLoteLoading = false;
   }
 }

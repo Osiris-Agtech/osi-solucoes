@@ -38,6 +38,13 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
   }
 
   @override
+  void dispose() {
+    formKey.currentState?.dispose();
+    key.currentState?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
