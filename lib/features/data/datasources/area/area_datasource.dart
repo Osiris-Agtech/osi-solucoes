@@ -12,7 +12,12 @@ abstract class IAreaDatasource {
       {required Localizacao localizacao});
   Future<Either<Failure, List<Localizacao>>> buscarLocalizacoes(
       {required int contaId});
-  Future<Either<Failure, List<Area>>> buscarArea({required int contaId});
+  Future<Either<Failure, List<Area>>> buscarArea(
+      {required int contaId,
+      required String orderBy,
+      required String order,
+      DateTime? startDate,
+      DateTime? endDate});
   Future<Either<Failure, Area>> registrarArea({required Area novaArea});
   Future<Either<Failure, Area>> alterarArea({required Area alterarArea});
 }
@@ -252,18 +257,42 @@ class AreaDatasource implements IAreaDatasource {
   }
 
   @override
-  Future<Either<Failure, List<Area>>> buscarArea({required int contaId}) async {
+  Future<Either<Failure, List<Area>>> buscarArea({
+    required int contaId,
+    required String orderBy,
+    required String order,
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-    const String readRepositories = r'''
-        query Areas ($contaId: Int!){
+    String readRepositories = '';
+    Map<String, dynamic> variables = <String, dynamic>{
+      'contaId': contaId,
+      'order': order,
+    };
+
+    if (orderBy == 'Data') {
+      variables['startDate'] = startDate?.toIso8601String();
+      variables['endDate'] = endDate?.toIso8601String();
+
+      readRepositories = r'''
+        query Areas ($contaId: Int!, $order: SortOrder!, $startDate: DateTime, $endDate: DateTime){
           areas(where: {
             conta: {
               id: {
                 equals: $contaId
               }
+            },
+            created_at: {
+              gt: $startDate,
+              lte: $endDate
             }
-          }) {
+          }, orderBy: [
+            {
+              created_at: $order,
+            }
+          ]) {
             id
             nome
             localizacao {
@@ -282,14 +311,45 @@ class AreaDatasource implements IAreaDatasource {
           }
         }
       ''';
+    } else {
+      readRepositories = r'''
+        query Areas ($contaId: Int!, $order: SortOrder!){
+          areas(where: {
+            conta: {
+              id: {
+                equals: $contaId
+              }
+            }
+          }, orderBy: [
+            {
+              nome: $order,
+            }
+          ]) {
+            id
+            nome
+            localizacao {
+              id
+              endereco
+              bairro
+              cidade
+              estado
+            }
+            setores {
+              id
+              lotes {
+                id
+              }
+            }
+          }
+        }
+      ''';
+    }
 
     final QueryOptions? options;
 
     options = QueryOptions(
       document: gql(readRepositories),
-      variables: <String, dynamic>{
-        'contaId': contaId,
-      },
+      variables: variables,
     );
 
     final QueryResult result = await client.query(options);

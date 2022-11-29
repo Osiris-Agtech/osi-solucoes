@@ -12,8 +12,20 @@ class SetorRepository implements ISetorRepository {
   });
 
   @override
-  Future<Either<Failure, List<Setor>>> buscarSetores(int areaId) async {
-    var result = await datasource.buscarSetores(areaId: areaId);
+  Future<Either<Failure, List<Setor>>> buscarSetores(
+    int areaId,
+    String orderBy,
+    String order,
+    DateTime? startDate,
+    DateTime? endDate,
+  ) async {
+    var result = await datasource.buscarSetores(
+      areaId: areaId,
+      orderBy: orderBy,
+      order: order,
+      startDate: startDate,
+      endDate: endDate,
+    );
 
     return result;
   }

@@ -22,6 +22,15 @@ abstract class _SetorStoreBase with Store {
   // #################### START LISTAGEM SETOR #######################
 
   @observable
+  String searchSetorText = '';
+
+  @observable
+  String dropDownValue = "Nome";
+
+  @observable
+  String order = "asc";
+
+  @observable
   bool isSetorListLoading = false;
 
   @observable
@@ -31,7 +40,29 @@ abstract class _SetorStoreBase with Store {
   List<Setor> setorList = [];
 
   @action
+  changeOrder() => order == "asc" ? order = "desc" : order = "asc";
+
+  @observable
+  DateTime data1 = DateTime(
+      DateTime.now().year, DateTime.now().month - 1, DateTime.now().day);
+
+  @observable
+  DateTime data2 = DateTime.now();
+
+  @action
+  setData1(DateTime value) => data1 = value;
+
+  @action
+  setData2(DateTime value) => data2 = value;
+
+  @action
   setAreaSelecionada(Area estufa) => areaSelecionada = estufa;
+
+  @action
+  setDropDown(String value) => dropDownValue = value;
+
+  @action
+  setSearchSetorText(String value) => searchSetorText = value;
 
   @action
   buscarSetores() async {
@@ -39,7 +70,13 @@ abstract class _SetorStoreBase with Store {
 
     SetorRepository setorRepository = GetIt.I<SetorRepository>();
 
-    var setores = await setorRepository.buscarSetores(areaSelecionada.id!);
+    var setores = await setorRepository.buscarSetores(
+      areaSelecionada.id!,
+      dropDownValue,
+      order,
+      data1,
+      data2,
+    );
 
     setores.fold(
       (err) {
@@ -53,6 +90,20 @@ abstract class _SetorStoreBase with Store {
 
     isSetorListLoading = false;
   }
+
+  @computed
+  List<Setor> get searchSetor {
+    List<Setor> result = setorList
+        .where((element) =>
+            element.nome
+                ?.toLowerCase()
+                .contains(searchSetorText.toLowerCase()) ??
+            false)
+        .toList();
+
+    return result;
+  }
+
   // #################### END LISTAGEM SETOR #######################
 
   // #################### START CADASTRO SETOR #######################

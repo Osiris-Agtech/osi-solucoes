@@ -15,8 +15,20 @@ class LoteRepository implements ILoteRepository {
   });
 
   @override
-  Future<Either<Failure, List<Lote>>> buscarLotes(int setorId) async {
-    var result = await datasource.buscarLotes(setorId: setorId);
+  Future<Either<Failure, List<Lote>>> buscarLotes(
+    int setorId,
+    String orderBy,
+    String order,
+    DateTime? startDate,
+    DateTime? endDate,
+  ) async {
+    var result = await datasource.buscarLotes(
+      setorId: setorId,
+      orderBy: orderBy,
+      order: order,
+      startDate: startDate,
+      endDate: endDate,
+    );
     return result;
   }
 

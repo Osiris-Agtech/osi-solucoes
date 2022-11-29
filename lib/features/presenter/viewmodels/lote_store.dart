@@ -26,13 +26,44 @@ abstract class _LoteStoreBase with Store {
   bool isLoteListLoading = false;
 
   @observable
+  String dropDownValue = "Nome";
+
+  @observable
+  String searchLoteText = '';
+
+  @observable
+  String order = "asc";
+
+  @observable
   Setor setorSelecionado = Setor();
 
   @observable
   List<Lote> loteList = [];
 
+  @observable
+  DateTime data1 = DateTime(
+      DateTime.now().year, DateTime.now().month - 1, DateTime.now().day);
+
+  @observable
+  DateTime data2 = DateTime.now();
+
+  @action
+  setData1(DateTime value) => data1 = value;
+
+  @action
+  setData2(DateTime value) => data2 = value;
+
+  @action
+  changeOrder() => order == "asc" ? order = "desc" : order = "asc";
+
   @action
   setSetorSelecionado(Setor setor) => setorSelecionado = setor;
+
+  @action
+  setDropDown(String value) => dropDownValue = value;
+
+  @action
+  setSearchLoteText(String value) => searchLoteText = value;
 
   @action
   buscarLotes() async {
@@ -40,7 +71,13 @@ abstract class _LoteStoreBase with Store {
 
     LoteRepository loteRepository = GetIt.I<LoteRepository>();
 
-    var lotes = await loteRepository.buscarLotes(setorSelecionado.id!);
+    var lotes = await loteRepository.buscarLotes(
+      setorSelecionado.id!,
+      dropDownValue,
+      order,
+      data1,
+      data2,
+    );
 
     lotes.fold(
       (err) {
@@ -53,6 +90,19 @@ abstract class _LoteStoreBase with Store {
     );
 
     isLoteListLoading = false;
+  }
+
+  @computed
+  List<Lote> get searchLote {
+    List<Lote> result = loteList
+        .where((element) =>
+            element.nome
+                ?.toLowerCase()
+                .contains(searchLoteText.toLowerCase()) ??
+            false)
+        .toList();
+
+    return result;
   }
 
   // #################### START DETALHES LOTE #######################

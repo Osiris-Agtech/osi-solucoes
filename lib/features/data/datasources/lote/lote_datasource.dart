@@ -12,7 +12,13 @@ import '../../../../core/errors/errors.dart';
 import '../../../presenter/models/area/area_model.dart';
 
 abstract class ILoteDatasource {
-  Future<Either<Failure, List<Lote>>> buscarLotes({required int setorId});
+  Future<Either<Failure, List<Lote>>> buscarLotes({
+    required int setorId,
+    required String orderBy,
+    required String order,
+    DateTime? startDate,
+    DateTime? endDate,
+  });
   Future<Either<Failure, Lote>> buscarDetalhesLote({required int loteId});
   Future<Either<Failure, List<Cultura>>> buscarCulturas({required int contaId});
   Future<Either<Failure, List<Area>>> buscarAreasList({required int contaId});
@@ -30,19 +36,42 @@ abstract class ILoteDatasource {
 
 class LoteDatasource implements ILoteDatasource {
   @override
-  Future<Either<Failure, List<Lote>>> buscarLotes(
-      {required int setorId}) async {
+  Future<Either<Failure, List<Lote>>> buscarLotes({
+    required int setorId,
+    required String orderBy,
+    required String order,
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-    const String readRepositories = r'''
-        query Lotes($setorId: Int!) {
+    String readRepositories = '';
+    Map<String, dynamic> variables = <String, dynamic>{
+      'setorId': setorId,
+      'order': order,
+    };
+
+    if (orderBy == 'Data') {
+      variables['startDate'] = startDate?.toIso8601String();
+      variables['endDate'] = endDate?.toIso8601String();
+
+      readRepositories = r'''
+        query Lotes($setorId: Int!, $order: SortOrder!, $startDate: DateTime, $endDate: DateTime) {
           lotes(where: {
             setor: {
               id: {
                 equals: $setorId
               }
+            }, 
+            registro_data: {
+              gt: $startDate,
+              lte: $endDate
             }
-          }) {
+          }, orderBy: [
+            {
+              registro_data: $order,
+            }
+          ]) {
             id
             nome
             cultura {
@@ -54,14 +83,38 @@ class LoteDatasource implements ILoteDatasource {
           }
         }
       ''';
+    } else {
+      readRepositories = r'''
+        query Lotes($setorId: Int!, $order: SortOrder!) {
+          lotes(where: {
+            setor: {
+              id: {
+                equals: $setorId
+              }
+            }
+          }, orderBy: [
+            {
+              nome: $order,
+            }
+          ]) {
+            id
+            nome
+            cultura {
+              id
+              nome
+            }
+            registro_data
+            colheita_data
+          }
+        }
+      ''';
+    }
 
     final QueryOptions? options;
 
     options = QueryOptions(
       document: gql(readRepositories),
-      variables: <String, dynamic>{
-        'setorId': setorId,
-      },
+      variables: variables,
     );
 
     final QueryResult result = await client.query(options);
