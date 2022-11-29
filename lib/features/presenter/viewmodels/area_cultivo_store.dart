@@ -28,6 +28,12 @@ abstract class _AreaCultivoStoreBase with Store {
   setDropDown(String value) => dropDownValue = value;
 
   @observable
+  String order = "asc";
+
+  @action
+  changeOrder() => order == "asc" ? order = "desc" : order = "asc";
+
+  @observable
   DateTime data2 = DateTime.now();
 
   @action
@@ -48,14 +54,22 @@ abstract class _AreaCultivoStoreBase with Store {
     value++;
   }
 
+  @observable
+  List<Area> areaList = [];
+
   @action
   buscarArea() async {
     isAreaLoading = true;
     AreaRepository areaRepository = GetIt.I<AreaRepository>();
     AuthController authController = GetIt.I<AuthController>();
 
-    var areaListResult = await areaRepository
-        .buscarArea(authController.usuario.selected_conta!.conta!.id!);
+    var areaListResult = await areaRepository.buscarArea(
+      authController.usuario.selected_conta!.conta!.id!,
+      dropDownValue,
+      order,
+      data1,
+      data2,
+    );
 
     areaListResult.fold(
       (err) {
@@ -66,6 +80,25 @@ abstract class _AreaCultivoStoreBase with Store {
       },
     );
     isAreaLoading = false;
+  }
+
+  @observable
+  String searchAreaText = '';
+
+  @action
+  setSearchAreaText(String value) => searchAreaText = value;
+
+  @computed
+  List<Area> get searchArea {
+    List<Area> result = areaList
+        .where((element) =>
+            element.nome
+                ?.toLowerCase()
+                .contains(searchAreaText.toLowerCase()) ??
+            false)
+        .toList();
+
+    return result;
   }
 
   //####################### START CADASTRAR AREA DE CULTIVO ##########################
@@ -84,9 +117,6 @@ abstract class _AreaCultivoStoreBase with Store {
 
   @observable
   List<Localizacao> localizacaoList = [];
-
-  @observable
-  List<Area> areaList = [];
 
   @observable
   Area novaArea = Area();

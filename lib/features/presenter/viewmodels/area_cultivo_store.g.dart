@@ -9,6 +9,14 @@ part of 'area_cultivo_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
+  Computed<List<Area>>? _$searchAreaComputed;
+
+  @override
+  List<Area> get searchArea =>
+      (_$searchAreaComputed ??= Computed<List<Area>>(() => super.searchArea,
+              name: '_AreaCultivoStoreBase.searchArea'))
+          .value;
+
   final _$isAreaLoadingAtom = Atom(name: '_AreaCultivoStoreBase.isAreaLoading');
 
   @override
@@ -36,6 +44,21 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
   set dropDownValue(String value) {
     _$dropDownValueAtom.reportWrite(value, super.dropDownValue, () {
       super.dropDownValue = value;
+    });
+  }
+
+  final _$orderAtom = Atom(name: '_AreaCultivoStoreBase.order');
+
+  @override
+  String get order {
+    _$orderAtom.reportRead();
+    return super.order;
+  }
+
+  @override
+  set order(String value) {
+    _$orderAtom.reportWrite(value, super.order, () {
+      super.order = value;
     });
   }
 
@@ -81,6 +104,37 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
   set value(int value) {
     _$valueAtom.reportWrite(value, super.value, () {
       super.value = value;
+    });
+  }
+
+  final _$areaListAtom = Atom(name: '_AreaCultivoStoreBase.areaList');
+
+  @override
+  List<Area> get areaList {
+    _$areaListAtom.reportRead();
+    return super.areaList;
+  }
+
+  @override
+  set areaList(List<Area> value) {
+    _$areaListAtom.reportWrite(value, super.areaList, () {
+      super.areaList = value;
+    });
+  }
+
+  final _$searchAreaTextAtom =
+      Atom(name: '_AreaCultivoStoreBase.searchAreaText');
+
+  @override
+  String get searchAreaText {
+    _$searchAreaTextAtom.reportRead();
+    return super.searchAreaText;
+  }
+
+  @override
+  set searchAreaText(String value) {
+    _$searchAreaTextAtom.reportWrite(value, super.searchAreaText, () {
+      super.searchAreaText = value;
     });
   }
 
@@ -159,21 +213,6 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
   set localizacaoList(List<Localizacao> value) {
     _$localizacaoListAtom.reportWrite(value, super.localizacaoList, () {
       super.localizacaoList = value;
-    });
-  }
-
-  final _$areaListAtom = Atom(name: '_AreaCultivoStoreBase.areaList');
-
-  @override
-  List<Area> get areaList {
-    _$areaListAtom.reportRead();
-    return super.areaList;
-  }
-
-  @override
-  set areaList(List<Area> value) {
-    _$areaListAtom.reportWrite(value, super.areaList, () {
-      super.areaList = value;
     });
   }
 
@@ -439,6 +478,17 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
   }
 
   @override
+  dynamic changeOrder() {
+    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
+        name: '_AreaCultivoStoreBase.changeOrder');
+    try {
+      return super.changeOrder();
+    } finally {
+      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setData2(DateTime value) {
     final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
         name: '_AreaCultivoStoreBase.setData2');
@@ -466,6 +516,17 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
         name: '_AreaCultivoStoreBase.increment');
     try {
       return super.increment();
+    } finally {
+      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setSearchAreaText(String value) {
+    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
+        name: '_AreaCultivoStoreBase.setSearchAreaText');
+    try {
+      return super.setSearchAreaText(value);
     } finally {
       _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -564,15 +625,17 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     return '''
 isAreaLoading: ${isAreaLoading},
 dropDownValue: ${dropDownValue},
+order: ${order},
 data2: ${data2},
 data1: ${data1},
 value: ${value},
+areaList: ${areaList},
+searchAreaText: ${searchAreaText},
 isNovaAreaLoading: ${isNovaAreaLoading},
 showTextFormField: ${showTextFormField},
 isEditing: ${isEditing},
 dotIndicator: ${dotIndicator},
 localizacaoList: ${localizacaoList},
-areaList: ${areaList},
 novaArea: ${novaArea},
 responseCEP: ${responseCEP},
 localizacaoSelecionada: ${localizacaoSelecionada},
@@ -585,7 +648,8 @@ cidade: ${cidade},
 numero: ${numero},
 complemento: ${complemento},
 pais: ${pais},
-estado: ${estado}
+estado: ${estado},
+searchArea: ${searchArea}
     ''';
   }
 }

@@ -10,5 +10,11 @@ abstract class IAreaRepository {
   Future<Either<Failure, List<Localizacao>>> buscarLocalizacoes(int userId);
   Future<Either<Failure, Area>> registrarArea(Area novaArea);
   Future<Either<Failure, Area>> alterarArea(Area alterarArea);
-  Future<Either<Failure, List<Area>>> buscarArea(int contaId);
+  Future<Either<Failure, List<Area>>> buscarArea(
+    int contaId,
+    String orderBy,
+    String order,
+    DateTime? startDate,
+    DateTime? endDate,
+  );
 }
