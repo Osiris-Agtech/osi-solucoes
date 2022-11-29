@@ -24,6 +24,38 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
+  final _$isReceitaListLoadingAtom =
+      Atom(name: '_SolucaoStoreBase.isReceitaListLoading');
+
+  @override
+  bool get isReceitaListLoading {
+    _$isReceitaListLoadingAtom.reportRead();
+    return super.isReceitaListLoading;
+  }
+
+  @override
+  set isReceitaListLoading(bool value) {
+    _$isReceitaListLoadingAtom.reportWrite(value, super.isReceitaListLoading,
+        () {
+      super.isReceitaListLoading = value;
+    });
+  }
+
+  final _$receitaListAtom = Atom(name: '_SolucaoStoreBase.receitaList');
+
+  @override
+  List<SolucaoNutritiva> get receitaList {
+    _$receitaListAtom.reportRead();
+    return super.receitaList;
+  }
+
+  @override
+  set receitaList(List<SolucaoNutritiva> value) {
+    _$receitaListAtom.reportWrite(value, super.receitaList, () {
+      super.receitaList = value;
+    });
+  }
+
   final _$_SolucaoStoreBaseActionController =
       ActionController(name: '_SolucaoStoreBase');
 
@@ -41,7 +73,9 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   @override
   String toString() {
     return '''
-value: ${value}
+value: ${value},
+isReceitaListLoading: ${isReceitaListLoading},
+receitaList: ${receitaList}
     ''';
   }
 }
