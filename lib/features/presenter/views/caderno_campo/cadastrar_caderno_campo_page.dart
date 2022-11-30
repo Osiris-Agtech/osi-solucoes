@@ -176,27 +176,25 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              child:
-                  // store.isNovoSetorLoading
-                  //     ? const CircularProgressIndicator(
-                  //         color: Colors.white,
-                  //       )
-                  //     : store.isEditing
-                  //         ? const Text(
-                  //             "Alterar",
-                  //             style: TextStyle(
-                  //               fontSize: 18,
-                  //               fontWeight: FontWeight.w600,
-                  //             ),
-                  //           )
-                  //         :
-                  const Text(
-                "Salvar",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              child: store.isNovoRegistroLoading
+                  ? const CircularProgressIndicator(
+                      color: Colors.white,
+                    )
+                  : store.isEditing
+                      ? const Text(
+                          "Alterar",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      : const Text(
+                          "Salvar",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
               onPressed: () {
                 // if (store.isEditing) {
                 //   store.alterarSetor();
@@ -339,80 +337,80 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
     return InkWell(
       child: Observer(builder: (_) {
         return ListTile(
-            leading: const Icon(Icons.event),
-            title: const Text(
-              'Data',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-            ),
-            trailing: store.dataRegistro != null
-                ? SizedBox(
-                    width: 100,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          width: 76,
-                          child: Text(
-                            DateFormat("dd/MM/y", 'pt_br')
-                                    .format(
-                                      DateTime.parse(
-                                        store.dataRegistro!.toIso8601String(),
-                                      ),
-                                    )
-                                    .capitalize ??
-                                '',
-                            textAlign: TextAlign.end,
-                            style: const TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const Icon(
-                          Icons.chevron_right,
-                          color: Constants.kPrimaryColor,
-                        ),
-                      ],
-                    ),
-                  )
-                : Row(
+          leading: const Icon(Icons.event),
+          title: const Text(
+            'Data',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+          ),
+          trailing: store.dataRegistro != null
+              ? SizedBox(
+                  width: 100,
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        DateFormat("dd/MM/y", 'pt_br')
-                                .format(
-                                  DateTime.parse(
-                                    DateTime.now().toString(),
-                                  ),
-                                )
-                                .capitalize ??
-                            '',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Constants.kPrimaryColor,
-                          fontWeight: FontWeight.w600,
+                      SizedBox(
+                        width: 76,
+                        child: Text(
+                          DateFormat("dd/MM/y", 'pt_br')
+                                  .format(
+                                    DateTime.parse(
+                                      store.dataRegistro!.toIso8601String(),
+                                    ),
+                                  )
+                                  .capitalize ??
+                              '',
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(
+                            color: Constants.kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       const Icon(
                         Icons.chevron_right,
-                        size: 18,
                         color: Constants.kPrimaryColor,
                       ),
                     ],
                   ),
-            onTap: () async {
-              final data = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2022),
-                lastDate: DateTime(2030),
-                locale: const Locale("pt", "BR"),
-              );
-              print(data);
-            });
+                )
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      DateFormat("dd/MM/y", 'pt_br')
+                              .format(
+                                DateTime.parse(
+                                  DateTime.now().toString(),
+                                ),
+                              )
+                              .capitalize ??
+                          '',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Constants.kPrimaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Icon(
+                      Icons.chevron_right,
+                      size: 18,
+                      color: Constants.kPrimaryColor,
+                    ),
+                  ],
+                ),
+          onTap: () async {
+            await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2022),
+              lastDate: DateTime(2030),
+              locale: const Locale("pt", "BR"),
+            );
+          },
+        );
       }),
     );
   }
@@ -485,9 +483,10 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                     ],
                   ),
             onTap: () async {
-              final data = showTimePicker(
-                  context: context, initialTime: TimeOfDay.now());
-              print(data);
+              showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+              );
             });
       }),
     );

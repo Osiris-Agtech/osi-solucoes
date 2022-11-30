@@ -213,6 +213,38 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
+  final _$isNovoRegistroLoadingAtom =
+      Atom(name: '_CadernoCampoStoreBase.isNovoRegistroLoading');
+
+  @override
+  bool get isNovoRegistroLoading {
+    _$isNovoRegistroLoadingAtom.reportRead();
+    return super.isNovoRegistroLoading;
+  }
+
+  @override
+  set isNovoRegistroLoading(bool value) {
+    _$isNovoRegistroLoadingAtom.reportWrite(value, super.isNovoRegistroLoading,
+        () {
+      super.isNovoRegistroLoading = value;
+    });
+  }
+
+  final _$isEditingAtom = Atom(name: '_CadernoCampoStoreBase.isEditing');
+
+  @override
+  bool get isEditing {
+    _$isEditingAtom.reportRead();
+    return super.isEditing;
+  }
+
+  @override
+  set isEditing(bool value) {
+    _$isEditingAtom.reportWrite(value, super.isEditing, () {
+      super.isEditing = value;
+    });
+  }
+
   final _$selectedGroupAtom =
       Atom(name: '_CadernoCampoStoreBase.selectedGroup');
 
@@ -497,6 +529,17 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   }
 
   @override
+  dynamic selectLotesSelection(int index1, int index2, bool value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.selectLotesSelection');
+    try {
+      return super.selectLotesSelection(index1, index2, value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
@@ -512,6 +555,8 @@ expandedCard: ${expandedCard},
 dotIndicator: ${dotIndicator},
 isCadastroLoteLoading: ${isCadastroLoteLoading},
 showTextFormField: ${showTextFormField},
+isNovoRegistroLoading: ${isNovoRegistroLoading},
+isEditing: ${isEditing},
 selectedGroup: ${selectedGroup},
 lotesGroup: ${lotesGroup},
 novoAtividadeName: ${novoAtividadeName},

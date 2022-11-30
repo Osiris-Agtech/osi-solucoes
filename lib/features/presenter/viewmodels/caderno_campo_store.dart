@@ -211,6 +211,12 @@ abstract class _CadernoCampoStoreBase with Store {
   bool showTextFormField = false;
 
   @observable
+  bool isNovoRegistroLoading = false;
+
+  @observable
+  bool isEditing = false;
+
+  @observable
   String selectedGroup = 'Cultura';
 
   @observable
@@ -261,6 +267,16 @@ abstract class _CadernoCampoStoreBase with Store {
   @action
   selectLotesGroup(int index, bool value) {
     lotesGroup[index].selected = value;
+    for (var i = 0; i < lotesGroup[index].lotesSelection.length; i++) {
+      lotesGroup[index].lotesSelection[i].selected = value;
+    }
+
+    lotesGroup = List.from(lotesGroup);
+  }
+
+  @action
+  selectLotesSelection(int index1, int index2, bool value) {
+    lotesGroup[index1].lotesSelection[index2].selected = value;
     lotesGroup = List.from(lotesGroup);
   }
 

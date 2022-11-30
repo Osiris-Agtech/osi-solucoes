@@ -1,9 +1,12 @@
 // ignore_for_file: file_names
 
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
+
+import 'expandedCard.dart';
 
 Container lotePage(BuildContext context, CadernoCampoStore store) {
   final ScrollController scrollController = ScrollController();
@@ -56,63 +59,13 @@ Container lotePage(BuildContext context, CadernoCampoStore store) {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Row(
-                                children: [
-                                  Observer(builder: (_) {
-                                    if (!store.lotesGroup[index].selected) {
-                                      return IconButton(
-                                        padding: EdgeInsets.zero,
-                                        alignment: Alignment.centerLeft,
-                                        icon: const Icon(Icons
-                                            .check_box_outline_blank_rounded),
-                                        onPressed: () {
-                                          store.selectLotesGroup(index, true);
-                                        },
-                                      );
-                                    }
-                                    return IconButton(
-                                      padding: EdgeInsets.zero,
-                                      alignment: Alignment.centerLeft,
-                                      icon: const Icon(
-                                        Icons.check_box,
-                                        color: Constants.kPrimaryColor,
-                                      ),
-                                      onPressed: () {
-                                        store.selectLotesGroup(index, false);
-                                      },
-                                    );
-                                  }),
-                                  Text(
-                                    store.lotesGroup[index].key,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Constants.kText2,
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  const Icon(
-                                    Icons.open_in_full_rounded,
-                                    color: Constants.kPrimaryColor,
-                                  )
-                                ],
-                              ),
-                            ),
-                            internalCardList(scrollController, store, index),
-                          ],
-                        ),
-                      ),
+                    child: OpenContainer(
+                      transitionDuration: const Duration(milliseconds: 500),
+                      openBuilder: (context, _) =>
+                          ExpandedLoteCard(index: index),
+                      closedBuilder: (context, VoidCallback openContainer) =>
+                          externalCardList(
+                              store, index, scrollController, openContainer),
                     ),
                   );
                 },
@@ -125,7 +78,70 @@ Container lotePage(BuildContext context, CadernoCampoStore store) {
   );
 }
 
-internalCardList(
+Widget externalCardList(
+  CadernoCampoStore store,
+  int index,
+  ScrollController scrollController,
+  VoidCallback onPressed,
+) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: ListView(
+      shrinkWrap: true,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(
+            children: [
+              Observer(builder: (_) {
+                if (!store.lotesGroup[index].selected) {
+                  return IconButton(
+                    padding: EdgeInsets.zero,
+                    alignment: Alignment.centerLeft,
+                    icon: const Icon(Icons.check_box_outline_blank_rounded),
+                    onPressed: () {
+                      store.selectLotesGroup(index, true);
+                    },
+                  );
+                }
+                return IconButton(
+                  padding: EdgeInsets.zero,
+                  alignment: Alignment.centerLeft,
+                  icon: const Icon(
+                    Icons.check_box,
+                    color: Constants.kPrimaryColor,
+                  ),
+                  onPressed: () {
+                    store.selectLotesGroup(index, false);
+                  },
+                );
+              }),
+              Text(
+                store.lotesGroup[index].key,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Constants.kText2,
+                ),
+              ),
+              const Spacer(),
+              IconButton(
+                icon: const Icon(
+                  Icons.open_in_full_rounded,
+                  color: Constants.kPrimaryColor,
+                ),
+                onPressed: onPressed,
+              )
+            ],
+          ),
+        ),
+        internalCardList(scrollController, store, index),
+      ],
+    ),
+  );
+}
+
+Widget internalCardList(
     ScrollController scrollController, CadernoCampoStore store, int index) {
   return Padding(
     padding: const EdgeInsets.only(
@@ -135,7 +151,7 @@ internalCardList(
     ),
     child: GridView.count(
       shrinkWrap: true,
-      childAspectRatio: 1.6,
+      childAspectRatio: 1.4,
       controller: scrollController,
       crossAxisCount: 2,
       children: List.generate(
@@ -161,7 +177,7 @@ internalCardList(
                       alignment: Alignment.centerLeft,
                       icon: const Icon(Icons.check_box_outline_blank_rounded),
                       onPressed: () {
-                        store.selectLotesGroup(index, true);
+                        store.selectLotesSelection(index, indexLote, true);
                       },
                     );
                   }
@@ -173,7 +189,7 @@ internalCardList(
                       color: Constants.kPrimaryColor,
                     ),
                     onPressed: () {
-                      store.selectLotesGroup(index, false);
+                      store.selectLotesSelection(index, indexLote, false);
                     },
                   );
                 }),
@@ -193,7 +209,7 @@ internalCardList(
                     fontSize: 14,
                     color: Constants.kGreyText2,
                   ),
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],

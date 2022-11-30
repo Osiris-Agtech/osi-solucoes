@@ -47,7 +47,6 @@ Container autorPage(BuildContext context, CadernoCampoStore store) {
         ),
         Expanded(
           //MOCK PARA DROPDOWN
-          //TODO: Apagar apos integração
           child: Observer(builder: (_) {
             List<Usuario> userList = [
               Usuario(id: 1, nome: "Miguel Ribeiro"),
