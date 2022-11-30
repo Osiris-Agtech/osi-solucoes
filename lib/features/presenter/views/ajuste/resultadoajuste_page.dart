@@ -154,13 +154,12 @@ showConfirmDialog(BuildContext context) {
                             fontSize: 14, fontWeight: FontWeight.w600),
                       ),
                       onPressed: () async {
-                        showDoneAnimation(context);
                         await store.registrarAtividade();
+                        showDoneAnimation(context);
                         await Future.delayed(
                             const Duration(milliseconds: 1500));
-                        Navigator.pop(context);
                         store.clearAll();
-                        Get.close(2);
+                        Get.close(3);
                         // Modular.to.popUntil(ModalRoute.withName('/Home'));
                         // Modular.to.pushReplacementNamed("/Tab/Ajustes/");
                       },

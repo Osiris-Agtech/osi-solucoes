@@ -194,7 +194,6 @@ abstract class _AjustesStoreBase with Store {
     for (var lote in selectedReservatorio.lotes ?? []) {
       listLoteId.add(lote.id);
     }
-
     var registrarArea = await ajusteRepository.salvarAjuste(
         novaAtividade, authController.usuario.id!, listLoteId);
 
@@ -204,10 +203,10 @@ abstract class _AjustesStoreBase with Store {
       },
       (data) async {
         toastSuccess(message: "Cadastrado com sucesso");
-        //limparTudo();
+        clearAll();
       },
     );
-    // isNovaAreaLoading = false;
+    //isNovaAreaLoading = false;
   }
 
   @action

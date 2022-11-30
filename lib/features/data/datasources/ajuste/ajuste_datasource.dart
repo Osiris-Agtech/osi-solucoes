@@ -93,41 +93,68 @@ class AjusteDatasource implements IAjusteDatasource {
       required int usuarioId,
       required List<int> listLoteId}) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
-    print(listLoteId);
-    // criar uma variavel String[] para concatenar com a querry readRepositories - da linha 110 a 126
-    String readRepositories = r'''
-        mutation CreateOneAtividade($nome: String!, $descricao: String!, $contaId: Int!, $loteId: Int!, $usuarioId: Int!, $created_at: Datetime){
+    //Criando a query para varios lotes
+    String query = '';
+    for (var element in listLoteId) {
+      if (element == listLoteId[listLoteId.length - 1]) {
+        query += """{
+          conta: {
+            connect: {
+              id: ${atividade.conta!.id}
+            }
+          },
+          lote: {
+            connect: {
+              id: $element
+            }
+          },
+          usuario: {
+            connect: {
+              id: $usuarioId
+            }
+          }
+        }""";
+      } else {
+        query += """{
+          conta: {
+            connect: {
+              id: ${atividade.conta!.id}
+            }
+          },
+          lote: {
+            connect: {
+              id: $element
+            }
+          },
+          usuario: {
+            connect: {
+              id: $usuarioId
+            }
+          }
+        },""";
+      }
+    }
+
+    // Erro esta no usuario - id 38
+    String readRepositories = """
+        mutation CreateOneAtividade{
           createOneAtividade(
-            nome: $nome,
-            descricao: $descricao,
-            conta: {
-              connect: {
-                id: $contaId
-              }
-            },
-            lotes_atividades: {
-              create: [
-                {
-                  conta: {
-                    connect: {
-                      id: $contaId
-                    }
-                  },
-                  lote: {
-                    connect: {
-                      id: $loteId
-                    }
-                  },
-                  usuario: {
-                    connect: {
-                      id: $usuarioId
-                    }
-                  }
+            data: {
+              nome: "${atividade.nome!}",
+              descricao: "${atividade.descricao!}",
+              conta: {
+                connect: {
+                  id: ${atividade.conta!.id}
                 }
-              ]
-            },
-            created_at: $created_at
-          }) {
+              },
+              lotes_atividades: {
+                create: [
+                  $query
+                ]
+              },
+              created_at: "${atividade.created_at}"
+            }
+          ) {
             id
             nome
             descricao
@@ -139,27 +166,18 @@ class AjusteDatasource implements IAjusteDatasource {
             }
           }
         }
-      ''';
-
+      """;
     final MutationOptions? options;
 
     options = MutationOptions(
       document: gql(readRepositories),
-      variables: <String, dynamic>{
-        "nome": atividade.nome!,
-        "descricao": atividade.descricao!,
-        "contaId": atividade.conta!.id,
-        "usuarioId":
-            usuarioId, // passar por parametro - pegar no store com o getit do AuthController
-        "created_at": atividade.created_at
-      },
     );
 
     final QueryResult result = await client.mutate(options);
 
     if (!result.hasException) {
       Atividade? atividadeResult =
-          Atividade.fromJson(result.data?['CreateOneAtividade']);
+          Atividade.fromJson(result.data?['createOneAtividade']);
 
       return Right(atividadeResult);
     } else {
