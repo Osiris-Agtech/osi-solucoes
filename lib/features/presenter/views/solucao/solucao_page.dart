@@ -2,15 +2,12 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get/get.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/detalhes_lote_page.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
@@ -26,6 +23,12 @@ class _SolucaoPage extends State<SolucaoPage> {
 
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
   final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    solucaoStore.buscarSolucoes();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,42 +52,43 @@ class _SolucaoPage extends State<SolucaoPage> {
               slivers: [
                 AppBar(store: solucaoStore),
                 Observer(builder: (_) {
-                  if (solucaoStore.isReceitaListLoading) {
-                    return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                    );
-                  }
-                  if (solucaoStore.receitaList.isEmpty) {
-                    return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                        child: Center(
-                          child: Text(
-                            "Não há receitas cadastradas neste setor",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return Observer(builder: (_) {
-                          return const Padding(
-                            padding:
-                                EdgeInsets.only(left: 16.0, right: 16, top: 10),
-                            child: Text('teste'),
-                          );
-                        });
-                      },
+                  // if (solucaoStore.isReceitaListLoading) {
+                  //   return const SliverToBoxAdapter(
+                  //     child: Padding(
+                  //       padding:
+                  //           EdgeInsets.only(top: 200.0, left: 60, right: 60),
+                  //       child: Center(
+                  //         child: CircularProgressIndicator(),
+                  //       ),
+                  //     ),
+                  //   );
+                  // }
+                  // if (solucaoStore.receitaList.isEmpty) {
+                  //   return const SliverToBoxAdapter(
+                  //     child: Padding(
+                  //       padding:
+                  //           EdgeInsets.only(top: 200.0, left: 60, right: 60),
+                  //       child: Center(
+                  //         child: Text(
+                  //           "Não há receitas cadastradas neste setor",
+                  //           textAlign: TextAlign.center,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   );
+                  // }
+                  return SliverPadding(
+                    padding: const EdgeInsets.all(8.0),
+                    sliver: SliverGrid.count(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                      children: List.generate(
+                          solucaoStore.solucaoList.length,
+                          (index) => CardReceita(
+                                solucaoNutritiva:
+                                    solucaoStore.searchSolucao[index],
+                              )),
                     ),
                   );
                 }),
@@ -119,7 +123,7 @@ class _AppBarState extends State<AppBar> {
       child: SliverAppBar(
         pinned: true,
         backgroundColor: Colors.white,
-        toolbarHeight: 175,
+        toolbarHeight: 180,
         floating: true,
         automaticallyImplyLeading: false,
         forceElevated: true,
@@ -128,11 +132,11 @@ class _AppBarState extends State<AppBar> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const TopAppBar(
-              namePage: 'nome page',
+              namePage: 'Minhas Soluções\nNutritivas',
               subtitle: "Lista de receitas cadastrados",
             ),
             const SizedBox(
-              height: 30,
+              height: 10,
             ),
             Container(
               color: const Color(0xFFF8F8F6),
@@ -141,15 +145,13 @@ class _AppBarState extends State<AppBar> {
               ),
               child: SizedBox(
                   width: double.infinity,
-                  child: Expanded(
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: "Buscar...",
-                        hintStyle: TextStyle(
-                          fontFamily: "Roboto",
-                        ),
-                        border: InputBorder.none,
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: "Buscar...",
+                      hintStyle: TextStyle(
+                        fontFamily: "Roboto",
                       ),
+                      border: InputBorder.none,
                     ),
                   )),
             ),
@@ -170,85 +172,44 @@ class CardReceita extends StatefulWidget {
 }
 
 class _CardReceitaState extends State<CardReceita> {
-  LoteStore store = GetIt.I<LoteStore>();
+  SolucaoStore store = GetIt.I<SolucaoStore>();
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: () {
-        // store.selecionarLote(widget.lote);
-        // Get.to(
-        //   () => const DetalhesLotePage(),
-        //   transition: Transition.rightToLeft,
-        // );
-      },
+      onTap: () {},
       child: Card(
         elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: Row(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.eco,
-                            size: 26,
-                            color: Color(0xFF26C165),
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            "Nome receita",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                          Spacer(),
-                        ],
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(
-                        left: 8.0,
-                        bottom: 2.0,
-                        top: 8.0,
-                      ),
-                      child: Text(
-                        "cultivos ativos",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                          color: Constants.kGreyText,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              SvgPicture.asset(
+                "assets/icons/solucoes_nutritivas_icon.svg",
+                color: Constants.kButtonGrey,
+                height: 35,
               ),
-              const Padding(
-                padding: EdgeInsets.only(right: 8.0),
-                child: Icon(
-                  Icons.chevron_right_rounded,
-                  color: Constants.kPrimaryColor,
-                ),
+              const SizedBox(
+                height: 10,
               ),
+              Text(
+                widget.solucaoNutritiva.nome ?? '',
+                style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                    color: Constants.kGreyText),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                  'Reservatórios\nativos: ${widget.solucaoNutritiva.reservatorios?.length ?? 0} '),
             ],
           ),
         ),

@@ -5,10 +5,12 @@ import 'package:osi_solucoes/features/data/datasources/login/login_datasource.da
 import 'package:osi_solucoes/features/data/datasources/lote/lote_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/reservatorio/reservatorio_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/setor/setor_datasource.dart';
+import 'package:osi_solucoes/features/data/datasources/solucoes/solucoes_nutritivas_datasource.dart';
 import 'package:osi_solucoes/features/data/repositories/cadernoCampo/cadeno_campo_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/lote/lote_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/reservatorio/reservatorio_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/setor/setor_repository.dart';
+import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
@@ -50,6 +52,7 @@ Future<void> initInject() async {
   sl.registerLazySingleton<ILoteDatasource>(() => LoteDatasource());
   sl.registerLazySingleton<ICadernoCampoDatasource>(
       () => CadernoCampoDatasource());
+  sl.registerLazySingleton<ISolucaoDatasource>(() => SolucaoDatasource());
 
   //repositories
   sl.registerLazySingleton<CadastroRepository>(
@@ -66,6 +69,8 @@ Future<void> initInject() async {
       () => LoteRepository(datasource: sl()));
   sl.registerLazySingleton<CadernoCampoRepository>(
       () => CadernoCampoRepository(datasource: sl()));
+  sl.registerLazySingleton<SolucaoRepository>(
+      () => SolucaoRepository(datasource: sl()));
 
   //viewmodels
   sl.registerLazySingleton<AjustesStore>(() => AjustesStore());
