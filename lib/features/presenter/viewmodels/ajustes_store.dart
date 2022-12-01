@@ -19,7 +19,7 @@ class AjustesStore = _AjustesStoreBase with _$AjustesStore;
 
 abstract class _AjustesStoreBase with Store {
   @observable
-  int selectedItem = 26;
+  int selectedItem = 25;
 
   @observable
   List<int> quantityList = List<int>.generate(50, (int i) => i);
@@ -90,6 +90,7 @@ abstract class _AjustesStoreBase with Store {
 
   @observable
   String volumeConcentrado = '';
+
   @observable
   List<ReposicaoFert> reposicaoFert = [];
 
@@ -216,21 +217,32 @@ abstract class _AjustesStoreBase with Store {
         (double.parse(volumeDesejado.text) - double.parse(volumeAtual.text))
             .toString();
     var fertDescrition = '';
+    String ph = "PH: Não Informado";
+
+    //Construindo String reposicaoFert
     for (var listFert in reposicaoFert) {
       var fertDescritionline =
-          "${listFert.valor.toStringAsFixed(2)}g ${listFert.fertilizante.nome} \n";
+          "${listFert.valor.toStringAsFixed(2)} g  ${listFert.fertilizante.nome} \n";
       fertDescrition = fertDescrition + fertDescritionline;
     }
+    // Construindo String concentrada
+    // Construindo String pH
+    if (pH.text != '') {
+      ph = "PH: ${pH.text}";
+    }
+
     //Criando encoded da descrição
     var encoded = utf8.encode("##Ajuste Solução Nutritiva##\n\n"
-        "Reservatório: ${selectedReservatorio.nome ?? 'Não informado'} \n\n"
-        "Condutividade Elétrica: ${cEletricoAtual.text} S.m/mm2 -> ${cEletricoDesejado.text} S.m/mm2\n"
-        "Volume: ${volumeAtual.text}L -> ${volumeDesejado.text}L \n"
-        "PH: ${pH.text}\n"
-        "Temperatura: Não Informado\n\n"
-        "Ajuste aplicado:\n"
-        "$volumeAjuste L água\n"
-        "$fertDescrition");
+        "Reservatório: ${selectedReservatorio.nome ?? 'Não informado'} \n"
+        "$volumeAjuste L Água \n\n"
+        "Condutividade Elétrica: ${cEletricoAtual.text} S.m/mm2 -> ${cEletricoDesejado.text} S.m/mm2 \n"
+        "Volume: ${volumeAtual.text}L -> ${volumeDesejado.text}L \n\n"
+        "$ph \n"
+        "Temperatura: ${selectedItem.toString()} ºC \n\n"
+        "Reposição por Fertilizante: \n"
+        "$fertDescrition \n\n"
+        "Reposição por Solução Concentrada: \n"
+        "$volumeConcentrado ml por solução");
 
     // var decoded = utf8.decode(encoded);
     return encoded;
