@@ -15,9 +15,6 @@ class CadernoCampoStore = _CadernoCampoStoreBase with _$CadernoCampoStore;
 
 abstract class _CadernoCampoStoreBase with Store {
   @observable
-  int value = 0;
-
-  @observable
   List<Lote> loteList = [];
 
   @observable
@@ -173,11 +170,6 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
-  void increment() {
-    value++;
-  }
-
-  @action
   buscarAreasList() async {
     isAreaLoading = true;
 
@@ -232,10 +224,18 @@ abstract class _CadernoCampoStoreBase with Store {
   TextEditingController novaDescricao = TextEditingController(text: '');
 
   @observable
+  TextEditingController searchLotePage = TextEditingController(text: '');
+
+  @observable
   DateTime? dataRegistro;
 
   @observable
   Lote loteCadastro = Lote();
+
+  @action
+  setSeachLotePage(String value) {
+    searchLotePage = TextEditingController(text: value);
+  }
 
   @action
   setDotIndicator(int value) {
@@ -266,9 +266,9 @@ abstract class _CadernoCampoStoreBase with Store {
 
   @action
   selectLotesGroup(int index, bool value) {
-    lotesGroup[index].selected = value;
-    for (var i = 0; i < lotesGroup[index].lotesSelection.length; i++) {
-      lotesGroup[index].lotesSelection[i].selected = value;
+    getLotesGroup[index].selected = value;
+    for (var i = 0; i < getLotesGroup[index].lotesSelection.length; i++) {
+      getLotesGroup[index].lotesSelection[i].selected = value;
     }
 
     lotesGroup = List.from(lotesGroup);
@@ -276,7 +276,7 @@ abstract class _CadernoCampoStoreBase with Store {
 
   @action
   selectLotesSelection(int index1, int index2, bool value) {
-    lotesGroup[index1].lotesSelection[index2].selected = value;
+    getLotesGroup[index1].lotesSelection[index2].selected = value;
     lotesGroup = List.from(lotesGroup);
   }
 
@@ -304,6 +304,28 @@ abstract class _CadernoCampoStoreBase with Store {
           );
         });
         break;
+      case 'Setor':
+        var groupResult = groupBy(loteList, (Lote loteGroup) {
+          return '${loteGroup.setor?.area?.nome ?? 'Não informado'} - ${loteGroup.setor?.nome ?? 'Não informado'}';
+        });
+
+        var sortedKeys = Map.fromEntries(groupResult.entries.toList()
+          ..sort((e1, e2) => e1.key.compareTo(e2.key)));
+        groupResult = sortedKeys;
+
+        lotesGroup = [];
+        groupResult.forEach((key, value) {
+          lotesGroup.add(
+            LoteByFilter(
+              key: key,
+              selected: false,
+              lotesSelection: value
+                  .map((e) => LoteSelection(selected: false, lote: e))
+                  .toList(),
+            ),
+          );
+        });
+        break;
       default:
         lotesGroup = [];
         break;
@@ -312,4 +334,12 @@ abstract class _CadernoCampoStoreBase with Store {
     lotesGroup = List.from(lotesGroup);
     isCadastroLoteLoading = false;
   }
+
+  @computed
+  List<LoteByFilter> get getLotesGroup => lotesGroup.where((element) {
+        if (searchLotePage.text.isEmpty) return true;
+        return element.key
+            .toLowerCase()
+            .contains(searchLotePage.text.toLowerCase());
+      }).toList();
 }

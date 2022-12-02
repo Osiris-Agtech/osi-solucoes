@@ -187,13 +187,14 @@ class AjustesPageState extends State<AjustesPage> {
                                                   fontStyle: FontStyle.italic,
                                                 ),
                                               ),
-                                              Text("Atual",
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                      fontWeight:
-                                                          FontWeight.bold))
+                                              Text(
+                                                "Atual",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
                                             ],
                                           ),
                                           SizedBox(
@@ -204,27 +205,29 @@ class AjustesPageState extends State<AjustesPage> {
                                               keyboardType:
                                                   TextInputType.number,
                                               decoration: const InputDecoration(
-                                                  contentPadding:
-                                                      EdgeInsets.only(
-                                                          bottom: 10),
-                                                  hintText: "S.m/mm2",
-                                                  hintStyle: TextStyle(
-                                                    fontWeight: FontWeight.w100,
-                                                    color: Colors.black38,
-                                                  )),
+                                                contentPadding: EdgeInsets.only(
+                                                  bottom: 10,
+                                                ),
+                                                hintText: "S.m/mm2",
+                                                hintStyle: TextStyle(
+                                                  fontWeight: FontWeight.w100,
+                                                  color: Colors.black38,
+                                                ),
+                                              ),
                                             ),
                                           )
                                         ],
                                       ),
                                       const Center(
-                                          child: Padding(
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Icon(
-                                          Icons.arrow_forward_ios,
-                                          size: 20,
-                                          color: Constants.kPrimaryColor,
+                                        child: Padding(
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Icon(
+                                            Icons.arrow_forward_ios,
+                                            size: 20,
+                                            color: Constants.kPrimaryColor,
+                                          ),
                                         ),
-                                      )),
+                                      ),
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -240,13 +243,14 @@ class AjustesPageState extends State<AjustesPage> {
                                                   fontStyle: FontStyle.italic,
                                                 ),
                                               ),
-                                              Text("Desejado",
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                      fontWeight:
-                                                          FontWeight.bold))
+                                              Text(
+                                                "Desejado",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
                                             ],
                                           ),
                                           SizedBox(
@@ -258,16 +262,17 @@ class AjustesPageState extends State<AjustesPage> {
                                               keyboardType:
                                                   TextInputType.number,
                                               decoration: const InputDecoration(
-                                                  contentPadding:
-                                                      EdgeInsets.only(
-                                                          bottom: 10),
-                                                  hintText: "S.m/mm2",
-                                                  hintStyle: TextStyle(
-                                                    fontWeight: FontWeight.w100,
-                                                    color: Colors.black38,
-                                                  )),
+                                                contentPadding: EdgeInsets.only(
+                                                  bottom: 10,
+                                                ),
+                                                hintText: "S.m/mm2",
+                                                hintStyle: TextStyle(
+                                                  fontWeight: FontWeight.w100,
+                                                  color: Colors.black38,
+                                                ),
+                                              ),
                                             ),
-                                          )
+                                          ),
                                         ],
                                       ),
                                     ],

@@ -45,7 +45,7 @@ class _ExpandedLoteCardState extends State<ExpandedLoteCard> {
               child: Row(
                 children: [
                   Observer(builder: (_) {
-                    if (!store.lotesGroup[widget.index].selected) {
+                    if (!store.getLotesGroup[widget.index].selected) {
                       return IconButton(
                         padding: EdgeInsets.zero,
                         alignment: Alignment.centerLeft,
@@ -67,24 +67,17 @@ class _ExpandedLoteCardState extends State<ExpandedLoteCard> {
                       },
                     );
                   }),
-                  Text(
-                    store.lotesGroup[widget.index].key,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Constants.kText2,
+                  Expanded(
+                    child: Text(
+                      store.getLotesGroup[widget.index].key,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Constants.kText2,
+                      ),
                     ),
                   ),
-                  const Spacer(),
-                  // IconButton(
-                  //   icon: const Icon(
-                  //     Icons.close_fullscreen_rounded,
-                  //     color: Constants.kPrimaryColor,
-                  //   ),
-                  //   onPressed: () {
-                  //     Get.close(1);
-                  //   },
-                  // )
+                  const SizedBox(width: 20),
                 ],
               ),
             ),
@@ -94,7 +87,7 @@ class _ExpandedLoteCardState extends State<ExpandedLoteCard> {
                 childAspectRatio: 1.4,
                 crossAxisCount: 2,
                 children: List.generate(
-                    store.lotesGroup[widget.index].lotesSelection.length,
+                    store.getLotesGroup[widget.index].lotesSelection.length,
                     (indexLote) {
                   return Card(
                     shape: RoundedRectangleBorder(
@@ -108,7 +101,7 @@ class _ExpandedLoteCardState extends State<ExpandedLoteCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Observer(builder: (_) {
-                            if (!store.lotesGroup[widget.index]
+                            if (!store.getLotesGroup[widget.index]
                                 .lotesSelection[indexLote].selected) {
                               return IconButton(
                                 padding: EdgeInsets.zero,
@@ -136,7 +129,7 @@ class _ExpandedLoteCardState extends State<ExpandedLoteCard> {
                           }),
                           const SizedBox(width: 4),
                           Text(
-                            store.lotesGroup[widget.index]
+                            store.getLotesGroup[widget.index]
                                     .lotesSelection[indexLote].lote.nome ??
                                 'Não informado',
                             style: const TextStyle(
@@ -146,7 +139,7 @@ class _ExpandedLoteCardState extends State<ExpandedLoteCard> {
                             ),
                           ),
                           Text(
-                            '${store.lotesGroup[widget.index].lotesSelection[indexLote].lote.setor?.nome ?? 'Setor não informado'} / ${store.lotesGroup[widget.index].lotesSelection[indexLote].lote.reservatorio?.nome ?? 'Reservatório não informado'}',
+                            '${store.getLotesGroup[widget.index].lotesSelection[indexLote].lote.setor?.nome ?? 'Setor não informado'} / ${store.getLotesGroup[widget.index].lotesSelection[indexLote].lote.reservatorio?.nome ?? 'Reservatório não informado'}',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Constants.kGreyText2,

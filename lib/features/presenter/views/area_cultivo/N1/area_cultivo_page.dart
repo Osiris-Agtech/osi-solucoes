@@ -376,15 +376,19 @@ class appBar extends StatelessWidget {
                                           });
                                         },
                                         child: Card(
-                                            child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10.0, vertical: 5),
-                                          child: Text(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0,
+                                              vertical: 5,
+                                            ),
+                                            child: Text(
                                               "${store.data2.day} / ${store.data2.month} / ${store.data2.year}",
                                               style: const TextStyle(
-                                                  color:
-                                                      Constants.kPrimaryColor)),
-                                        )),
+                                                color: Constants.kPrimaryColor,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
