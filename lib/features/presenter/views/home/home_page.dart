@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
+import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
 import 'package:osi_solucoes/features/presenter/views/modulos/modulos_page.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
@@ -437,8 +438,16 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        firstItems(context, size, "card1Home".i18n(),
-                            "assets/icons/gerenciar_icon.svg"),
+                        firstItems(
+                          context,
+                          size,
+                          "card1Home".i18n(),
+                          "assets/icons/gerenciar_icon.svg",
+                          onTap: () => Get.to(
+                            () => const GerenciarEquipePage(),
+                            transition: Transition.rightToLeft,
+                          ),
+                        ),
                         firstItems(context, size, "card2Home".i18n(),
                             "assets/icons/relatorio_icon.svg"),
                         firstItems(context, size, "card3Home".i18n(),
@@ -638,34 +647,39 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget firstItems(
-      BuildContext context, Size size, String title, String icon) {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            gradient: const LinearGradient(
-                colors: [Color(0xFF707070), Color(0xFF53916C)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomRight,
-                stops: [0.2, 1]),
+  Widget firstItems(BuildContext context, Size size, String title, String icon,
+      {VoidCallback? onTap}) {
+    return InkWell(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              gradient: const LinearGradient(
+                  colors: [Color(0xFF707070), Color(0xFF53916C)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomRight,
+                  stops: [0.2, 1]),
+            ),
+            height: 50,
+            width: 50,
+            child: IconButton(
+                icon: SvgPicture.asset(icon),
+                onPressed: () {},
+                color: Constants.kBackgroundColor),
           ),
-          height: 50,
-          width: 50,
-          child: IconButton(
-              icon: SvgPicture.asset(icon),
-              onPressed: () {},
-              color: Constants.kBackgroundColor),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: size.height * 0.009),
-          child: Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.w500),
+          Padding(
+            padding: EdgeInsets.only(top: size.height * 0.009),
+            child: Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

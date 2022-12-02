@@ -19,6 +19,7 @@ class GerenciarEquipePage extends StatefulWidget {
 }
 
 class _GerenciarEquipePage extends State<GerenciarEquipePage> {
+  //mudar conta para usuario
   GerenciarEquipeStore gerenciarEquipeStore = GetIt.I<GerenciarEquipeStore>();
 
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
@@ -131,8 +132,8 @@ class _AppBarState extends State<AppBar> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const TopAppBar(
-              namePage: 'Minhas Soluções\nNutritivas',
-              subtitle: "Lista de receitas cadastrados",
+              namePage: 'Gereciar Equipe',
+              subtitle: "Lista de colaboradores",
             ),
             const SizedBox(
               height: 10,

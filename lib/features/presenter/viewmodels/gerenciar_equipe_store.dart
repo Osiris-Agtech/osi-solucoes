@@ -14,6 +14,7 @@ abstract class _GerenciarEquipeBase with Store {
   @observable
   bool isSolucaoListLoading = false;
 
+  //mudar conta para usuario
   @observable
   List<Conta> contaList = [];
 
