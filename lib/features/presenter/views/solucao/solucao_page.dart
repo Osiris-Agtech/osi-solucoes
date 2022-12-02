@@ -52,37 +52,37 @@ class _SolucaoPage extends State<SolucaoPage> {
               slivers: [
                 AppBar(store: solucaoStore),
                 Observer(builder: (_) {
-                  // if (solucaoStore.isReceitaListLoading) {
-                  //   return const SliverToBoxAdapter(
-                  //     child: Padding(
-                  //       padding:
-                  //           EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                  //       child: Center(
-                  //         child: CircularProgressIndicator(),
-                  //       ),
-                  //     ),
-                  //   );
-                  // }
-                  // if (solucaoStore.receitaList.isEmpty) {
-                  //   return const SliverToBoxAdapter(
-                  //     child: Padding(
-                  //       padding:
-                  //           EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                  //       child: Center(
-                  //         child: Text(
-                  //           "Não há receitas cadastradas neste setor",
-                  //           textAlign: TextAlign.center,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   );
-                  // }
+                  if (solucaoStore.isSolucaoListLoading) {
+                    return const SliverToBoxAdapter(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    );
+                  }
+                  if (solucaoStore.solucaoList.isEmpty) {
+                    return const SliverToBoxAdapter(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
+                        child: Center(
+                          child: Text(
+                            "Não há receitas cadastradas neste setor",
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
                   return SliverPadding(
                     padding: const EdgeInsets.all(8.0),
                     sliver: SliverGrid.count(
                       crossAxisCount: 2,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 2,
+                      mainAxisSpacing: 2,
                       children: List.generate(
                           solucaoStore.solucaoList.length,
                           (index) => CardReceita(
@@ -196,7 +196,7 @@ class _CardReceitaState extends State<CardReceita> {
                 height: 35,
               ),
               const SizedBox(
-                height: 10,
+                height: 5,
               ),
               Text(
                 widget.solucaoNutritiva.nome ?? '',
