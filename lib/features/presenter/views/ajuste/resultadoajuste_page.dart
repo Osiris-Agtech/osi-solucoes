@@ -17,6 +17,8 @@ class ResultadoajustePage extends StatefulWidget {
 
 class ResultadoajustePageState extends State<ResultadoajustePage>
     with TickerProviderStateMixin {
+  AjustesStore store = GetIt.I<AjustesStore>();
+
   late TabController tabController;
   late ScrollController scrollController1;
   late ScrollController scrollController2;
@@ -152,12 +154,12 @@ showConfirmDialog(BuildContext context) {
                             fontSize: 14, fontWeight: FontWeight.w600),
                       ),
                       onPressed: () async {
+                        await store.registrarAtividade();
                         showDoneAnimation(context);
                         await Future.delayed(
                             const Duration(milliseconds: 1500));
-                        Navigator.pop(context);
                         store.clearAll();
-                        Get.close(2);
+                        Get.close(3);
                         // Modular.to.popUntil(ModalRoute.withName('/Home'));
                         // Modular.to.pushReplacementNamed("/Tab/Ajustes/");
                       },
@@ -354,6 +356,7 @@ class TabSolucaoConcentrada extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AjustesStore store = GetIt.I<AjustesStore>();
     return Padding(
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).size.height * 0.024,
@@ -471,14 +474,15 @@ class TabSolucaoConcentrada extends StatelessWidget {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   "Solução A ",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 Text(
-                  "431,94 ml",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  '${store.volumeConcentrado} ml',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
                 ),
               ],
             ),
@@ -496,14 +500,15 @@ class TabSolucaoConcentrada extends StatelessWidget {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   "Solução B ",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 Text(
-                  "431,94 ml",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  '${store.volumeConcentrado} ml',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
                 ),
               ],
             ),
@@ -590,7 +595,9 @@ class AppBarCustom extends StatelessWidget {
 }
 
 class TabFertilizantes extends StatelessWidget {
-  const TabFertilizantes({
+  final AjustesStore store = GetIt.I<AjustesStore>();
+
+  TabFertilizantes({
     Key? key,
     required this.scrollController1,
   }) : super(key: key);
@@ -598,7 +605,9 @@ class TabFertilizantes extends StatelessWidget {
   final ScrollController scrollController1;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Padding(
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).size.height * 0.024,
@@ -677,7 +686,7 @@ class TabFertilizantes extends StatelessWidget {
                     physics: const BouncingScrollPhysics(),
                     controller: scrollController1,
                     shrinkWrap: true,
-                    itemCount: 8,
+                    itemCount: store.reposicaoFert.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.only(
@@ -689,14 +698,15 @@ class TabFertilizantes extends StatelessWidget {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Expanded(
-                                flex: 5,
+                                flex: 7,
                                 child: Text(
-                                  "Fertilizante #$index",
+                                  store.reposicaoFert[index].fertilizante.nome!,
                                 )),
                             Expanded(
-                                flex: 1,
+                                flex: 3,
                                 child: Text(
-                                  "${27 * index}",
+                                  store.reposicaoFert[index].valor
+                                      .toStringAsFixed(2),
                                   textAlign: TextAlign.end,
                                 )),
                             Padding(
