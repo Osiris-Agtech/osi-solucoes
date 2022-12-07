@@ -24,14 +24,17 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
 
   @override
   void initState() {
-    store.groupLotesBy();
     super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      store.groupLotesBy();
+      store.buscarUsuariosConta();
+    });
   }
 
   @override
   void dispose() {
-    super.dispose();
     //store.limparTudo();
+    super.dispose();
   }
 
   @override

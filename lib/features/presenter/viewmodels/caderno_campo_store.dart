@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/cadernoCampo/cadeno_campo_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
+import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import "package:collection/collection.dart";
 
@@ -182,7 +182,7 @@ abstract class _CadernoCampoStoreBase with Store {
 
     areaListResult.fold(
       (err) {
-        toastError(message: err.message);
+        // toastError(message: err.message);
       },
       (data) async {
         areaList = List.from(data);
@@ -215,6 +215,12 @@ abstract class _CadernoCampoStoreBase with Store {
   List<LoteByFilter> lotesGroup = [];
 
   @observable
+  List<Usuario> usuariosConta = [];
+
+  @observable
+  Usuario? selectedUsuario;
+
+  @observable
   TextEditingController novoAtividadeName = TextEditingController(text: '');
 
   @observable
@@ -236,6 +242,9 @@ abstract class _CadernoCampoStoreBase with Store {
   setSeachLotePage(String value) {
     searchLotePage = TextEditingController(text: value);
   }
+
+  @action
+  selectUser(Usuario? usuario) => selectedUsuario = usuario;
 
   @action
   setDotIndicator(int value) {
@@ -278,6 +287,28 @@ abstract class _CadernoCampoStoreBase with Store {
   selectLotesSelection(int index1, int index2, bool value) {
     getLotesGroup[index1].lotesSelection[index2].selected = value;
     lotesGroup = List.from(lotesGroup);
+  }
+
+  @action
+  buscarUsuariosConta() async {
+    isAreaLoading = true;
+
+    AuthController authController = GetIt.I<AuthController>();
+    CadernoCampoRepository cadernoCampoRepository =
+        GetIt.I<CadernoCampoRepository>();
+
+    var usuariosContaResult = await cadernoCampoRepository
+        .buscarUsuariosConta(authController.usuario.selected_conta!.conta!.id!);
+
+    usuariosContaResult.fold(
+      (err) {
+        usuariosConta = List.from([]);
+      },
+      (data) async {
+        usuariosConta = List.from(data);
+      },
+    );
+    isAreaLoading = false;
   }
 
   @action

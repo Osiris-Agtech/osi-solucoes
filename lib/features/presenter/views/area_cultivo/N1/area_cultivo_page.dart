@@ -42,7 +42,7 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+          // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           backgroundColor: Constants.kSecondBackgroundColor,
           floatingActionButton: const NewFloatingActionButton(
             nivel: 1,

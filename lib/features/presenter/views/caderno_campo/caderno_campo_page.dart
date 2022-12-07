@@ -53,11 +53,11 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           backgroundColor: Constants.kSecondBackgroundColor,
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 18.0),
             child: FloatingActionButton(
+              heroTag: 'NovaNota',
               onPressed: () {
                 Get.to(
                   () => const CadastroCadernoCampoPage(),

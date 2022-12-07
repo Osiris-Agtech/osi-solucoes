@@ -61,7 +61,7 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
 
   FloatingActionButton floatingButton() {
     return FloatingActionButton(
-      // heroTag: "Novo Reservatório",
+      heroTag: "NovoReservatório",
       onPressed: () => Get.to(
         () => const CadastrarReservatorioPage(),
         transition: Transition.rightToLeft,

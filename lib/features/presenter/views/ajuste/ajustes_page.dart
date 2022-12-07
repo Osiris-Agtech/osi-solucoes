@@ -41,11 +41,12 @@ class AjustesPageState extends State<AjustesPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+          // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           backgroundColor: Constants.kSecondBackgroundColor,
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 18.0),
             child: FloatingActionButton.extended(
+              heroTag: 'CalcularAJuste',
               onPressed: () {
                 store.reservatorio.text.isNotEmpty
                     ? Get.to(

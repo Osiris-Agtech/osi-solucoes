@@ -269,6 +269,38 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
+  final _$usuariosContaAtom =
+      Atom(name: '_CadernoCampoStoreBase.usuariosConta');
+
+  @override
+  List<Usuario> get usuariosConta {
+    _$usuariosContaAtom.reportRead();
+    return super.usuariosConta;
+  }
+
+  @override
+  set usuariosConta(List<Usuario> value) {
+    _$usuariosContaAtom.reportWrite(value, super.usuariosConta, () {
+      super.usuariosConta = value;
+    });
+  }
+
+  final _$selectedUsuarioAtom =
+      Atom(name: '_CadernoCampoStoreBase.selectedUsuario');
+
+  @override
+  Usuario? get selectedUsuario {
+    _$selectedUsuarioAtom.reportRead();
+    return super.selectedUsuario;
+  }
+
+  @override
+  set selectedUsuario(Usuario? value) {
+    _$selectedUsuarioAtom.reportWrite(value, super.selectedUsuario, () {
+      super.selectedUsuario = value;
+    });
+  }
+
   final _$novoAtividadeNameAtom =
       Atom(name: '_CadernoCampoStoreBase.novoAtividadeName');
 
@@ -405,6 +437,15 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     return _$buscarAreasListAsyncAction.run(() => super.buscarAreasList());
   }
 
+  final _$buscarUsuariosContaAsyncAction =
+      AsyncAction('_CadernoCampoStoreBase.buscarUsuariosConta');
+
+  @override
+  Future buscarUsuariosConta() {
+    return _$buscarUsuariosContaAsyncAction
+        .run(() => super.buscarUsuariosConta());
+  }
+
   final _$groupLotesByAsyncAction =
       AsyncAction('_CadernoCampoStoreBase.groupLotesBy');
 
@@ -466,6 +507,17 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
         name: '_CadernoCampoStoreBase.setSeachLotePage');
     try {
       return super.setSeachLotePage(value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selectUser(Usuario? usuario) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.selectUser');
+    try {
+      return super.selectUser(usuario);
     } finally {
       _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -567,6 +619,8 @@ isNovoRegistroLoading: ${isNovoRegistroLoading},
 isEditing: ${isEditing},
 selectedGroup: ${selectedGroup},
 lotesGroup: ${lotesGroup},
+usuariosConta: ${usuariosConta},
+selectedUsuario: ${selectedUsuario},
 novoAtividadeName: ${novoAtividadeName},
 novoAutorName: ${novoAutorName},
 novaDescricao: ${novaDescricao},
