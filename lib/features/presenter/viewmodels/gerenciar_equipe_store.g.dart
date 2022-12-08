@@ -41,18 +41,18 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$contaListAtom = Atom(name: '_GerenciarEquipeBase.contaList');
+  final _$userListAtom = Atom(name: '_GerenciarEquipeBase.userList');
 
   @override
-  List<Conta> get contaList {
-    _$contaListAtom.reportRead();
-    return super.contaList;
+  List<Usuario> get userList {
+    _$userListAtom.reportRead();
+    return super.userList;
   }
 
   @override
-  set contaList(List<Conta> value) {
-    _$contaListAtom.reportWrite(value, super.contaList, () {
-      super.contaList = value;
+  set userList(List<Usuario> value) {
+    _$userListAtom.reportWrite(value, super.userList, () {
+      super.userList = value;
     });
   }
 
@@ -72,12 +72,12 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$buscarSolucoesAsyncAction =
-      AsyncAction('_GerenciarEquipeBase.buscarSolucoes');
+  final _$buscarUsuariosAsyncAction =
+      AsyncAction('_GerenciarEquipeBase.buscarUsuarios');
 
   @override
-  Future buscarSolucoes() {
-    return _$buscarSolucoesAsyncAction.run(() => super.buscarSolucoes());
+  Future buscarUsuarios() {
+    return _$buscarUsuariosAsyncAction.run(() => super.buscarUsuarios());
   }
 
   final _$_GerenciarEquipeBaseActionController =
@@ -110,7 +110,7 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     return '''
 value: ${value},
 isSolucaoListLoading: ${isSolucaoListLoading},
-contaList: ${contaList},
+userList: ${userList},
 searchSolucaoText: ${searchSolucaoText}
     ''';
   }

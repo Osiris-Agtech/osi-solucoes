@@ -1,7 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
+import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe.dart';
+import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+
+import '../../../core/utils/toast.dart';
 
 part 'gerenciar_equipe_store.g.dart';
 
@@ -16,7 +19,7 @@ abstract class _GerenciarEquipeBase with Store {
 
   //mudar conta para usuario
   @observable
-  List<Conta> contaList = [];
+  List<Usuario> userList = [];
 
   @observable
   String searchSolucaoText = '';
@@ -30,23 +33,24 @@ abstract class _GerenciarEquipeBase with Store {
   setsearchSolucaoText(String value) => searchSolucaoText = value;
 
   @action
-  buscarSolucoes() async {
+  buscarUsuarios() async {
     AuthController authController = GetIt.I<AuthController>();
-    // SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
-    // isSolucaoListLoading = true;
+    GerenciarEquipeRepository gerenciarEquipeRepository =
+        GetIt.I<GerenciarEquipeRepository>();
+    isSolucaoListLoading = true;
 
-    // var solucoes = await solucaoRepository
-    //     .buscarSolucoes(authController.usuario.selected_conta!.conta!.id!);
+    var usuarios = await gerenciarEquipeRepository
+        .buscarUsuarios(authController.usuario.selected_conta!.conta!.id!);
 
-    // solucoes.fold(
-    //   (err) {
-    //     solucaoList = ObservableList.of([]);
-    //     toastError(message: err.message);
-    //   },
-    //   (data) async {
-    //     solucaoList = ObservableList.of(data);
-    //   },
-    // );
+    usuarios.fold(
+      (err) {
+        userList = ObservableList.of([]);
+        toastError(message: err.message);
+      },
+      (data) async {
+        userList = ObservableList.of(data);
+      },
+    );
 
     isSolucaoListLoading = false;
   }

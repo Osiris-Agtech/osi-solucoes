@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
+import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
@@ -64,7 +64,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                       ),
                     );
                   }
-                  if (gerenciarEquipeStore.contaList.isEmpty) {
+                  if (gerenciarEquipeStore.userList.isEmpty) {
                     return const SliverToBoxAdapter(
                       child: Padding(
                         padding:
@@ -84,11 +84,11 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 2,
-                      children: List.generate(
-                          gerenciarEquipeStore.contaList.length,
-                          (index) => CardConta(
-                                conta: gerenciarEquipeStore.contaList[index],
-                              )),
+                      // children: List.generate(
+                      //     gerenciarEquipeStore.userList.length,
+                      //     (index) => CardConta(
+                      //           conta: gerenciarEquipeStore.userList[index],
+                      //         )),
                     ),
                   );
                 }),
@@ -162,15 +162,15 @@ class _AppBarState extends State<AppBar> {
   }
 }
 
-class CardConta extends StatefulWidget {
-  final Conta conta;
-  const CardConta({Key? key, required this.conta}) : super(key: key);
+class CardUsuario extends StatefulWidget {
+  final Usuario user;
+  const CardUsuario({Key? key, required this.user}) : super(key: key);
 
   @override
-  State<CardConta> createState() => _CardContaState();
+  State<CardUsuario> createState() => _CardUsuarioState();
 }
 
-class _CardContaState extends State<CardConta> {
+class _CardUsuarioState extends State<CardUsuario> {
   GerenciarEquipeStore store = GetIt.I<GerenciarEquipeStore>();
 
   @override
@@ -197,13 +197,13 @@ class _CardContaState extends State<CardConta> {
               const SizedBox(
                 height: 5,
               ),
-              Text(
-                widget.conta.nome ?? '',
-                style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    color: Constants.kGreyText),
-              ),
+              // Text(
+              //   widget.conta.nome ?? '',
+              //   style: const TextStyle(
+              //       fontSize: 22,
+              //       fontWeight: FontWeight.w600,
+              //       color: Constants.kGreyText),
+              // ),
               const SizedBox(
                 height: 10,
               ),
