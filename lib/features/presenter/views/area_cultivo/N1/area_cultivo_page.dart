@@ -29,6 +29,7 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
 
   @override
   void initState() {
+    store.setSearchAreaText('');
     store.buscarArea();
     super.initState();
   }
@@ -53,7 +54,7 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                appBar(store: store),
+                const AppBar(),
                 Observer(builder: (_) {
                   if (store.isAreaLoading) {
                     return const SliverToBoxAdapter(
@@ -88,20 +89,22 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
     );
   }
 
-  SliverList showList() {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(left: 16.0, right: 16, top: 5),
-            child: CardArea(
-              area: store.areaList[index],
-            ),
-          );
-        },
-        childCount: store.areaList.length,
-      ),
-    );
+  showList() {
+    return Observer(builder: (_) {
+      return SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16, top: 10),
+              child: CardArea(
+                area: store.searchArea[index],
+              ),
+            );
+          },
+          childCount: store.searchArea.length,
+        ),
+      );
+    });
   }
 }
 
@@ -263,13 +266,17 @@ class _CardAreaState extends State<CardArea> {
 }
 
 // ignore: camel_case_types
-class appBar extends StatelessWidget {
-  const appBar({
+class AppBar extends StatefulWidget {
+  const AppBar({
     Key? key,
-    required this.store,
   }) : super(key: key);
 
-  final AreaCultivoStore store;
+  @override
+  State<AppBar> createState() => _AppBarState();
+}
+
+class _AppBarState extends State<AppBar> {
+  AreaCultivoStore store = GetIt.I<AreaCultivoStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -317,121 +324,174 @@ class appBar extends StatelessWidget {
                       store.dropDownValue == "Nome"
                           ? Container()
                           : const Spacer(),
-                      Observer(builder: (_) {
-                        return store.dropDownValue == "Nome"
-                            ? Expanded(
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                    hintText: "Buscar...",
-                                    hintStyle: TextStyle(
-                                      fontFamily: "Roboto",
-                                    ),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              )
-                            : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Text("De:"),
-                                      InkWell(
-                                        onTap: () {
-                                          DatePicker.showDatePicker(context,
-                                              locale: LocaleType.pt,
-                                              showTitleActions: true,
-                                              minTime: DateTime(2018, 3, 5),
-                                              maxTime: DateTime(2030, 12, 30),
-                                              onConfirm: (date) {
-                                            store.setData1(date);
-                                          });
-                                        },
-                                        child: Card(
-                                            child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10.0, vertical: 5),
-                                          child: Text(
-                                              "${store.data1.day} / ${store.data1.month} / ${store.data1.year}",
-                                              style: const TextStyle(
-                                                  color:
-                                                      Constants.kPrimaryColor)),
-                                        )),
+                      Observer(
+                        builder: (_) {
+                          return store.dropDownValue == "Nome"
+                              ? Expanded(
+                                  child: TextFormField(
+                                    decoration: const InputDecoration(
+                                      hintText: "Buscar...",
+                                      hintStyle: TextStyle(
+                                        fontFamily: "Roboto",
                                       ),
-                                    ],
+                                      border: InputBorder.none,
+                                    ),
+                                    onChanged: (newValue) {
+                                      store.setSearchAreaText(newValue);
+                                    },
                                   ),
-                                  Row(
-                                    children: [
-                                      const Text("Até"),
-                                      InkWell(
-                                        onTap: () {
-                                          DatePicker.showDatePicker(context,
+                                )
+                              : Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Text("De:"),
+                                        InkWell(
+                                          onTap: () {
+                                            DatePicker.showDatePicker(
+                                              context,
+                                              currentTime: store.data1,
                                               locale: LocaleType.pt,
                                               showTitleActions: true,
                                               minTime: DateTime(2018, 3, 5),
                                               maxTime: DateTime(2030, 12, 30),
-                                              onConfirm: (date) {
-                                            store.setData2(date);
-                                          });
-                                        },
-                                        child: Card(
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 10.0,
-                                              vertical: 5,
-                                            ),
-                                            child: Text(
-                                              "${store.data2.day} / ${store.data2.month} / ${store.data2.year}",
-                                              style: const TextStyle(
-                                                color: Constants.kPrimaryColor,
+                                              onConfirm: (date) async {
+                                                store.setData1(date);
+                                                await store.buscarArea();
+                                              },
+                                              theme: const DatePickerTheme(
+                                                doneStyle: TextStyle(
+                                                  color:
+                                                      Constants.kPrimaryColor,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 10.0,
+                                                vertical: 5,
+                                              ),
+                                              child: Text(
+                                                "${store.data1.day} / ${store.data1.month} / ${store.data1.year}",
+                                                style: const TextStyle(
+                                                  color:
+                                                      Constants.kPrimaryColor,
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              );
-                      }),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Text("Até"),
+                                        InkWell(
+                                          onTap: () {
+                                            DatePicker.showDatePicker(
+                                              context,
+                                              currentTime: store.data2,
+                                              locale: LocaleType.pt,
+                                              showTitleActions: true,
+                                              minTime: DateTime(2018, 3, 5),
+                                              maxTime: DateTime(2030, 12, 30),
+                                              onConfirm: (date) async {
+                                                store.setData2(date);
+                                                await store.buscarArea();
+                                              },
+                                              theme: const DatePickerTheme(
+                                                doneStyle: TextStyle(
+                                                  color:
+                                                      Constants.kPrimaryColor,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 10.0,
+                                                vertical: 5,
+                                              ),
+                                              child: Text(
+                                                "${store.data2.day} / ${store.data2.month} / ${store.data2.year}",
+                                                style: const TextStyle(
+                                                  color:
+                                                      Constants.kPrimaryColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                        },
+                      ),
                       const Spacer(),
                       Observer(builder: (_) {
                         return Container(
                           height: 30,
-                          width: 70,
+                          width: 80,
                           decoration: const BoxDecoration(
                             color: Constants.kPrimaryColor,
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                           ),
-                          child: Center(
-                            child: DropdownButton<String>(
-                              alignment: Alignment.center,
-                              value: store.dropDownValue,
-                              dropdownColor: Constants.kPrimaryColor,
-                              underline: DropdownButtonHideUnderline(
-                                  child: Container()),
-                              iconSize: 0,
-                              iconEnabledColor: Constants.kPrimaryColor,
-                              elevation: 16,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(5)),
-                              style: const TextStyle(color: Colors.white),
-                              onChanged: (String? newValue) {
-                                store.setDropDown(newValue!);
-                              },
-                              items: <String>[
-                                'Nome',
-                                'Data'
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                  ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              DropdownButton<String>(
+                                alignment: Alignment.center,
+                                value: store.dropDownValue,
+                                dropdownColor: Constants.kPrimaryColor,
+                                underline: DropdownButtonHideUnderline(
+                                    child: Container()),
+                                iconSize: 0,
+                                iconEnabledColor: Constants.kPrimaryColor,
+                                elevation: 16,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(5)),
+                                style: const TextStyle(color: Colors.white),
+                                onChanged: (String? newValue) async {
+                                  if (newValue == store.dropDownValue) {
+                                    store.changeOrder();
+                                  } else {
+                                    store.setSearchAreaText('');
+                                  }
+                                  store.setDropDown(newValue!);
+                                  await store.buscarArea();
+                                },
+                                items: <String>[
+                                  'Nome',
+                                  'Data'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                              Observer(builder: (_) {
+                                return Icon(
+                                  store.order == "asc"
+                                      ? Icons.arrow_upward_rounded
+                                      : Icons.arrow_downward_rounded,
+                                  size: 14,
+                                  color: Colors.white,
                                 );
-                              }).toList(),
-                            ),
+                              }),
+                            ],
                           ),
                         );
                       }),

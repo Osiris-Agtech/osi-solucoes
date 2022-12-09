@@ -13,7 +13,7 @@ class Fertilizante {
   @JsonKey(required: false, disallowNullValue: false)
   String? nome;
   @JsonKey(required: false, disallowNullValue: false)
-  double? c_eletrica;
+  String? c_eletrica;
   @JsonKey(required: false, disallowNullValue: false)
   int? compatibilidade;
   @JsonKey(required: false, disallowNullValue: false)

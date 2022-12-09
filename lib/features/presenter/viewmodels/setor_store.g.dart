@@ -9,6 +9,59 @@ part of 'setor_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$SetorStore on _SetorStoreBase, Store {
+  Computed<List<Setor>>? _$searchSetorComputed;
+
+  @override
+  List<Setor> get searchSetor =>
+      (_$searchSetorComputed ??= Computed<List<Setor>>(() => super.searchSetor,
+              name: '_SetorStoreBase.searchSetor'))
+          .value;
+
+  final _$searchSetorTextAtom = Atom(name: '_SetorStoreBase.searchSetorText');
+
+  @override
+  String get searchSetorText {
+    _$searchSetorTextAtom.reportRead();
+    return super.searchSetorText;
+  }
+
+  @override
+  set searchSetorText(String value) {
+    _$searchSetorTextAtom.reportWrite(value, super.searchSetorText, () {
+      super.searchSetorText = value;
+    });
+  }
+
+  final _$dropDownValueAtom = Atom(name: '_SetorStoreBase.dropDownValue');
+
+  @override
+  String get dropDownValue {
+    _$dropDownValueAtom.reportRead();
+    return super.dropDownValue;
+  }
+
+  @override
+  set dropDownValue(String value) {
+    _$dropDownValueAtom.reportWrite(value, super.dropDownValue, () {
+      super.dropDownValue = value;
+    });
+  }
+
+  final _$orderAtom = Atom(name: '_SetorStoreBase.order');
+
+  @override
+  String get order {
+    _$orderAtom.reportRead();
+    return super.order;
+  }
+
+  @override
+  set order(String value) {
+    _$orderAtom.reportWrite(value, super.order, () {
+      super.order = value;
+    });
+  }
+
   final _$isSetorListLoadingAtom =
       Atom(name: '_SetorStoreBase.isSetorListLoading');
 
@@ -52,6 +105,36 @@ mixin _$SetorStore on _SetorStoreBase, Store {
   set setorList(List<Setor> value) {
     _$setorListAtom.reportWrite(value, super.setorList, () {
       super.setorList = value;
+    });
+  }
+
+  final _$data1Atom = Atom(name: '_SetorStoreBase.data1');
+
+  @override
+  DateTime get data1 {
+    _$data1Atom.reportRead();
+    return super.data1;
+  }
+
+  @override
+  set data1(DateTime value) {
+    _$data1Atom.reportWrite(value, super.data1, () {
+      super.data1 = value;
+    });
+  }
+
+  final _$data2Atom = Atom(name: '_SetorStoreBase.data2');
+
+  @override
+  DateTime get data2 {
+    _$data2Atom.reportRead();
+    return super.data2;
+  }
+
+  @override
+  set data2(DateTime value) {
+    _$data2Atom.reportWrite(value, super.data2, () {
+      super.data2 = value;
     });
   }
 
@@ -232,11 +315,66 @@ mixin _$SetorStore on _SetorStoreBase, Store {
       ActionController(name: '_SetorStoreBase');
 
   @override
+  dynamic changeOrder() {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.changeOrder');
+    try {
+      return super.changeOrder();
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setData1(DateTime value) {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.setData1');
+    try {
+      return super.setData1(value);
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setData2(DateTime value) {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.setData2');
+    try {
+      return super.setData2(value);
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setAreaSelecionada(Area estufa) {
     final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
         name: '_SetorStoreBase.setAreaSelecionada');
     try {
       return super.setAreaSelecionada(estufa);
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setDropDown(String value) {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.setDropDown');
+    try {
+      return super.setDropDown(value);
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setSearchSetorText(String value) {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.setSearchSetorText');
+    try {
+      return super.setSearchSetorText(value);
     } finally {
       _$_SetorStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -322,9 +460,14 @@ mixin _$SetorStore on _SetorStoreBase, Store {
   @override
   String toString() {
     return '''
+searchSetorText: ${searchSetorText},
+dropDownValue: ${dropDownValue},
+order: ${order},
 isSetorListLoading: ${isSetorListLoading},
 areaSelecionada: ${areaSelecionada},
 setorList: ${setorList},
+data1: ${data1},
+data2: ${data2},
 isEditing: ${isEditing},
 reservatorioList: ${reservatorioList},
 novoSetorName: ${novoSetorName},
@@ -333,7 +476,8 @@ novoSetorReservatorio: ${novoSetorReservatorio},
 showTextFormField: ${showTextFormField},
 isNovoSetorLoading: ${isNovoSetorLoading},
 dotIndicator: ${dotIndicator},
-novoSetor: ${novoSetor}
+novoSetor: ${novoSetor},
+searchSetor: ${searchSetor}
     ''';
   }
 }
