@@ -2,7 +2,6 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
@@ -27,7 +26,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
 
   @override
   void initState() {
-    //solucaoStore.buscarSolucoes();
+    gerenciarEquipeStore.buscarUsuarios();
     super.initState();
   }
 
@@ -71,7 +70,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                             EdgeInsets.only(top: 200.0, left: 60, right: 60),
                         child: Center(
                           child: Text(
-                            "Não há receitas cadastradas neste setor",
+                            "Não há usuário cadastrados",
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -84,11 +83,11 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 2,
-                      // children: List.generate(
-                      //     gerenciarEquipeStore.userList.length,
-                      //     (index) => CardConta(
-                      //           conta: gerenciarEquipeStore.userList[index],
-                      //         )),
+                      children: List.generate(
+                          gerenciarEquipeStore.userList.length,
+                          (index) => CardUsuario(
+                                user: gerenciarEquipeStore.userList[index],
+                              )),
                     ),
                   );
                 }),
@@ -189,21 +188,67 @@ class _CardUsuarioState extends State<CardUsuario> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SvgPicture.asset(
-                "assets/icons/solucoes_nutritivas_icon.svg",
-                color: Constants.kButtonGrey,
-                height: 35,
+              Row(
+                children: [
+                  const Icon(
+                    Icons.account_circle,
+                    color: Constants.kButtonGrey,
+                    size: 35,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Status',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Constants.kGreyText,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            color:
+                                widget.user.ativo != null && widget.user.ativo!
+                                    ? Constants.kGreyText2
+                                    : Constants.kPrimaryColor,
+                            size: 10,
+                          ),
+                          Text(
+                            widget.user.ativo != null && widget.user.ativo!
+                                ? ' Inativo'
+                                : ' Ativo',
+                            style: const TextStyle(
+                              fontSize: 9,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                ],
               ),
               const SizedBox(
                 height: 5,
               ),
-              // Text(
-              //   widget.conta.nome ?? '',
-              //   style: const TextStyle(
-              //       fontSize: 22,
-              //       fontWeight: FontWeight.w600,
-              //       color: Constants.kGreyText),
-              // ),
+              Text(
+                widget.user.nome ?? '',
+                style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                    color: Constants.kGreyText),
+              ),
+              Text(
+                widget.user.selected_conta?.cargo?.cargo ?? '',
+                style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Constants.kPrimaryColor),
+              ),
               const SizedBox(
                 height: 10,
               ),

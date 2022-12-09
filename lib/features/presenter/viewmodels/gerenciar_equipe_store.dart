@@ -49,6 +49,14 @@ abstract class _GerenciarEquipeBase with Store {
       },
       (data) async {
         userList = ObservableList.of(data);
+        for (var user in userList) {
+          int index = user.contas!.indexWhere((element) =>
+              element.conta!.id ==
+              authController.usuario.selected_conta!.conta!.id);
+          if (index != -1) {
+            user.selected_conta = user.contas?[index];
+          }
+        }
       },
     );
 

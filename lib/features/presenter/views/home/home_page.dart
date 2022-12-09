@@ -666,10 +666,10 @@ class _HomePageState extends State<HomePage> {
             ),
             height: 50,
             width: 50,
-            child: IconButton(
-                icon: SvgPicture.asset(icon),
-                onPressed: () {},
-                color: Constants.kBackgroundColor),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: SvgPicture.asset(icon),
+            ),
           ),
           Padding(
             padding: EdgeInsets.only(top: size.height * 0.009),
