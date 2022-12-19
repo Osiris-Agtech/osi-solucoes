@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/bottomSheet.dart';
 import '../../../../../core/constants/constants.dart';
@@ -33,7 +34,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
 
   @override
   void dispose() {
-    //store.limparTudo();
+    store.limparTudo();
     super.dispose();
   }
 
@@ -46,22 +47,27 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
         statusBarColor: Constants.kBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
       ),
-      child: Observer(builder: (_) {
-        return GestureDetector(
-          onTap: () {
-            //here
-            FocusScope.of(context).unfocus();
-            if (store.novaDescricao.text.isEmpty) {
-              store.setShowTextFormField(false);
-            }
-          },
-          child: SafeArea(
-            child: Scaffold(
-              resizeToAvoidBottomInset: false,
-              appBar: appBar(),
-              backgroundColor: Constants.kBackgroundColor,
-              body: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: GestureDetector(
+        onTap: () {
+          //here
+          FocusScope.of(context).unfocus();
+          if (store.novaDescricao.text.isEmpty) {
+            store.setShowTextFormField(false);
+          }
+        },
+        child: SafeArea(
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: appBar(),
+            backgroundColor: Constants.kBackgroundColor,
+            body: Padding(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+              ),
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -81,47 +87,49 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                     lote(context),
                     const Divider(),
                     descricao(),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 20),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: const Color(0xffF5F5F5),
-                          ),
-                          child: Observer(
-                            builder: (_) {
-                              return SizedBox(
-                                width: double.infinity,
-                                child: store.novaDescricao.text.isEmpty &&
-                                        !store.showTextFormField
-                                    ? botaoDescricao()
-                                    : Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
-                                        child: TextFormField(
-                                          autofocus: true,
-                                          maxLines: 20,
-                                          decoration: const InputDecoration(
-                                            border: InputBorder.none,
-                                          ),
-                                          controller: store.novaDescricao,
-                                        ),
-                                      ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
+                    _descricaoTextFormField(),
                     saveButton(size),
                   ],
                 ),
               ),
             ),
           ),
-        );
-      }),
+        ),
+      ),
+    );
+  }
+
+  Padding _descricaoTextFormField() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, bottom: 20),
+      child: Container(
+        height: 200,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: const Color(0xffF5F5F5),
+        ),
+        child: Observer(
+          builder: (_) {
+            return SizedBox(
+              width: double.infinity,
+              child:
+                  store.novaDescricao.text.isEmpty && !store.showTextFormField
+                      ? botaoDescricao()
+                      : Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: TextFormField(
+                            autofocus: true,
+                            maxLines: 20,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                            controller: store.novaDescricao,
+                          ),
+                        ),
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -179,11 +187,15 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
 
   Padding saveButton(Size size) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 30),
+      padding: const EdgeInsets.only(
+        right: 10,
+        left: 10,
+        bottom: 30,
+      ),
       child: Center(
         child: SizedBox(
-          width: size.width * .8,
           height: 40,
+          width: double.infinity,
           child: Observer(builder: (_) {
             return ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -193,8 +205,12 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                 ),
               ),
               child: store.isNovoRegistroLoading
-                  ? const CircularProgressIndicator(
-                      color: Colors.white,
+                  ? const SizedBox(
+                      height: 25,
+                      width: 25,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
                     )
                   : store.isEditing
                       ? const Text(
@@ -212,11 +228,16 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                           ),
                         ),
               onPressed: () {
-                // if (store.isEditing) {
-                //   store.alterarSetor();
-                // } else {
-                //   store.registrarSetor();
-                // }
+                if (!store.validarCadastro()) {
+                  toastError(message: 'Preencha todos os campos corretamente');
+                  return;
+                }
+
+                if (store.isEditing) {
+                  // store.alterarSetor();
+                } else {
+                  store.cadastrarAtividade();
+                }
               }, //store.registrarReservatorio(),
             );
           }),
@@ -235,30 +256,24 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
           trailing: store.novoAtividadeName.text.isNotEmpty
-              ? SizedBox(
-                  width: 100,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        width: 76,
-                        child: Text(
-                          store.novoAtividadeName.text,
-                          textAlign: TextAlign.end,
-                          style: const TextStyle(
-                            color: Constants.kPrimaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const Icon(
-                        Icons.chevron_right,
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      store.novoAtividadeName.text,
+                      textAlign: TextAlign.end,
+                      style: const TextStyle(
                         color: Constants.kPrimaryColor,
+                        fontWeight: FontWeight.w600,
                       ),
-                    ],
-                  ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: Constants.kPrimaryColor,
+                    ),
+                  ],
                 )
               : Row(
                   mainAxisSize: MainAxisSize.min,
@@ -298,30 +313,24 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
             ),
             trailing: store.novoAutorName.text.isNotEmpty
-                ? SizedBox(
-                    width: 100,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          width: 76,
-                          child: Text(
-                            store.novoAutorName.text,
-                            textAlign: TextAlign.end,
-                            style: const TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const Icon(
-                          Icons.chevron_right,
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        store.novoAutorName.text,
+                        textAlign: TextAlign.end,
+                        style: const TextStyle(
                           color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ],
-                    ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
                   )
                 : Row(
                     mainAxisSize: MainAxisSize.min,
@@ -359,35 +368,29 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
             'Data',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
-          trailing: SizedBox(
-            width: 100,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SizedBox(
-                  width: 76,
-                  child: Text(
-                    DateFormat("dd/MM/y", 'pt_br')
-                            .format(
-                              store.dateRegistro,
-                            )
-                            .capitalize ??
-                        '',
-                    textAlign: TextAlign.end,
-                    style: const TextStyle(
-                      color: Constants.kPrimaryColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const Icon(
-                  Icons.chevron_right,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                DateFormat("dd/MM/y", 'pt_br')
+                        .format(
+                          store.dateRegistro,
+                        )
+                        .capitalize ??
+                    '',
+                textAlign: TextAlign.end,
+                style: const TextStyle(
                   color: Constants.kPrimaryColor,
+                  fontWeight: FontWeight.w600,
                 ),
-              ],
-            ),
+                overflow: TextOverflow.ellipsis,
+              ),
+              const Icon(
+                Icons.chevron_right,
+                color: Constants.kPrimaryColor,
+              ),
+            ],
           ),
           onTap: () async {
             DateTime? date = await showDatePicker(
@@ -416,33 +419,27 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
             'Hora',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
-          trailing: SizedBox(
-            width: 100,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SizedBox(
-                  width: 76,
-                  child: Text(
-                    DateFormat("HH:mm", 'pt_br')
-                            .format(store.dateRegistro)
-                            .capitalize ??
-                        '',
-                    textAlign: TextAlign.end,
-                    style: const TextStyle(
-                      color: Constants.kPrimaryColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const Icon(
-                  Icons.chevron_right,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                DateFormat("HH:mm", 'pt_br')
+                        .format(store.dateRegistro)
+                        .capitalize ??
+                    '',
+                textAlign: TextAlign.end,
+                style: const TextStyle(
                   color: Constants.kPrimaryColor,
+                  fontWeight: FontWeight.w600,
                 ),
-              ],
-            ),
+                overflow: TextOverflow.ellipsis,
+              ),
+              const Icon(
+                Icons.chevron_right,
+                color: Constants.kPrimaryColor,
+              ),
+            ],
           ),
           onTap: () async {
             TimeOfDay? time = await showTimePicker(
@@ -464,35 +461,32 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
       child: Observer(builder: (_) {
         return ListTile(
           leading: const Icon(Icons.eco),
-          title: const Text(
-            'Lote',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+          title: const SizedBox(
+            width: 100,
+            child: Text(
+              'Lote',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+            ),
           ),
-          trailing: store.loteCadastro.nome != null
-              ? SizedBox(
-                  width: 100,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        width: 76,
-                        child: Text(
-                          store.loteCadastro.nome!,
-                          textAlign: TextAlign.end,
-                          style: const TextStyle(
-                            color: Constants.kPrimaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const Icon(
-                        Icons.chevron_right,
+          trailing: store.selectedLotes.isNotEmpty
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      '${store.selectedLotes.length} lotes selecionados',
+                      textAlign: TextAlign.end,
+                      style: const TextStyle(
                         color: Constants.kPrimaryColor,
+                        fontWeight: FontWeight.w600,
                       ),
-                    ],
-                  ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: Constants.kPrimaryColor,
+                    ),
+                  ],
                 )
               : Row(
                   mainAxisSize: MainAxisSize.min,

@@ -251,6 +251,30 @@ class CadernoCampoDatasource implements ICadernoCampoDatasource {
             email
             acesso_externo
             cod_acesso
+            contas {
+              id
+              conta {
+                id
+                nome
+              }
+              cargo {
+                id
+                cargo
+                permissoes {
+                  permissao {
+                    id
+                    nome
+                  }
+                  status
+                  id
+                }
+              }
+            }
+            logs {
+              id
+              descricao
+              data
+            }
           }
         }
       ''';

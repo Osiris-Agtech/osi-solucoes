@@ -59,7 +59,8 @@ Container autorPage(BuildContext context, CadernoCampoStore store) {
               items: store.usuariosConta.map((Usuario usuario) {
                 return DropdownMenuItem<Usuario>(
                   value: usuario,
-                  child: Text(usuario.nome ?? '-'),
+                  child: Text(
+                      '${usuario.nome} (${usuario.selected_conta?.cargo?.cargo})'),
                 );
               }).toList(),
               onChanged: store.selectUser,

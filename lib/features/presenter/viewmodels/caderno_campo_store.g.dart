@@ -9,12 +9,27 @@ part of 'caderno_campo_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
+  Computed<List<LotesAtividades>>? _$getLotesAtividadesFilterComputed;
+
+  @override
+  List<LotesAtividades> get getLotesAtividadesFilter =>
+      (_$getLotesAtividadesFilterComputed ??= Computed<List<LotesAtividades>>(
+              () => super.getLotesAtividadesFilter,
+              name: '_CadernoCampoStoreBase.getLotesAtividadesFilter'))
+          .value;
   Computed<List<LoteByFilter>>? _$getLotesGroupComputed;
 
   @override
   List<LoteByFilter> get getLotesGroup => (_$getLotesGroupComputed ??=
           Computed<List<LoteByFilter>>(() => super.getLotesGroup,
               name: '_CadernoCampoStoreBase.getLotesGroup'))
+      .value;
+  Computed<List<Lote>>? _$selectedLotesComputed;
+
+  @override
+  List<Lote> get selectedLotes => (_$selectedLotesComputed ??=
+          Computed<List<Lote>>(() => super.selectedLotes,
+              name: '_CadernoCampoStoreBase.selectedLotes'))
       .value;
 
   final _$loteListAtom = Atom(name: '_CadernoCampoStoreBase.loteList');
@@ -155,6 +170,22 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   set expandedCard(List<bool> value) {
     _$expandedCardAtom.reportWrite(value, super.expandedCard, () {
       super.expandedCard = value;
+    });
+  }
+
+  final _$searchAtividadeAtom =
+      Atom(name: '_CadernoCampoStoreBase.searchAtividade');
+
+  @override
+  TextEditingController get searchAtividade {
+    _$searchAtividadeAtom.reportRead();
+    return super.searchAtividade;
+  }
+
+  @override
+  set searchAtividade(TextEditingController value) {
+    _$searchAtividadeAtom.reportWrite(value, super.searchAtividade, () {
+      super.searchAtividade = value;
     });
   }
 
@@ -467,6 +498,17 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
       ActionController(name: '_CadernoCampoStoreBase');
 
   @override
+  dynamic setSearchAtividade(String value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.setSearchAtividade');
+    try {
+      return super.setSearchAtividade(value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic selecionarDropButtonArea(Area area) {
     final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
         name: '_CadernoCampoStoreBase.selecionarDropButtonArea');
@@ -632,6 +674,17 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   }
 
   @override
+  dynamic validarCadastro() {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.validarCadastro');
+    try {
+      return super.validarCadastro();
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 loteList: ${loteList},
@@ -643,6 +696,7 @@ dropButtonSetor: ${dropButtonSetor},
 dropButtonArea: ${dropButtonArea},
 loteSelecionado: ${loteSelecionado},
 expandedCard: ${expandedCard},
+searchAtividade: ${searchAtividade},
 dotIndicator: ${dotIndicator},
 isCadastroLoteLoading: ${isCadastroLoteLoading},
 showTextFormField: ${showTextFormField},
@@ -658,7 +712,9 @@ novaDescricao: ${novaDescricao},
 searchLotePage: ${searchLotePage},
 dateRegistro: ${dateRegistro},
 loteCadastro: ${loteCadastro},
-getLotesGroup: ${getLotesGroup}
+getLotesAtividadesFilter: ${getLotesAtividadesFilter},
+getLotesGroup: ${getLotesGroup},
+selectedLotes: ${selectedLotes}
     ''';
   }
 }

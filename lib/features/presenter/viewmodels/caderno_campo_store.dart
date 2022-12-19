@@ -9,6 +9,7 @@ import 'package:osi_solucoes/features/data/repositories/cadernoCampo/cadeno_camp
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
+import 'package:osi_solucoes/features/presenter/models/lotesAtividades/lotes_atividades_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
@@ -45,6 +46,13 @@ abstract class _CadernoCampoStoreBase with Store {
 
   @observable
   List<bool> expandedCard = [];
+
+  @observable
+  TextEditingController searchAtividade = TextEditingController();
+
+  @action
+  setSearchAtividade(String value) =>
+      searchAtividade = TextEditingController(text: value);
 
   @action
   selecionarDropButtonArea(Area area) => dropButtonArea = area;
@@ -121,7 +129,9 @@ abstract class _CadernoCampoStoreBase with Store {
           expandedCard.add(false);
         }
 
-        expandedCard = List.from(expandedCard);
+        loteSelecionado.lotes_atividades =
+            List.from(loteSelecionado.lotes_atividades!.reversed);
+        expandedCard = List.from(expandedCard.reversed);
       },
     );
 
@@ -196,6 +206,18 @@ abstract class _CadernoCampoStoreBase with Store {
     isAreaLoading = false;
   }
 
+  @computed
+  List<LotesAtividades> get getLotesAtividadesFilter {
+    List<LotesAtividades> list =
+        (loteSelecionado.lotes_atividades ?? []).where((element) {
+      if (searchAtividade.text.isEmpty) return true;
+      return (element.atividade?.nome ?? '')
+          .toLowerCase()
+          .contains(searchAtividade.text.toLowerCase());
+    }).toList();
+    return list;
+  }
+
   // #################### START CADASTRO CADERNO DE CAMPO #######################
 
   @observable
@@ -263,7 +285,15 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
-  selectUser(Usuario? usuario) => selectedUsuario = usuario;
+  selectUser(Usuario? usuario) {
+    selectedUsuario = usuario;
+    if (usuario != null) {
+      novoAutorName = TextEditingController(
+          text: '${usuario.nome} (${usuario.selected_conta?.cargo?.cargo})');
+    } else {
+      novoAutorName.clear();
+    }
+  }
 
   @action
   setDotIndicator(int value) {
@@ -324,15 +354,32 @@ abstract class _CadernoCampoStoreBase with Store {
         usuariosConta = List.from([]);
       },
       (data) async {
-        usuariosConta = List.from(data);
+        usuariosConta = data;
+        for (var user in usuariosConta) {
+          int index = user.contas!.indexWhere((element) =>
+              element.conta!.id ==
+              authController.usuario.selected_conta!.conta!.id);
+          if (index != -1) {
+            user.selected_conta = user.contas?[index];
+          }
+        }
+        usuariosConta = List.from(usuariosConta);
       },
     );
     isAreaLoading = false;
   }
 
   @action
+  validarCadastro() {
+    bool validate = novoAtividadeName.text.isNotEmpty &&
+        novaDescricao.text.isNotEmpty &&
+        selectedUsuario != null;
+    return validate;
+  }
+
+  @action
   cadastrarAtividade() async {
-    isAreaLoading = true;
+    isNovoRegistroLoading = true;
 
     AuthController authController = GetIt.I<AuthController>();
     CadernoCampoRepository cadernoCampoRepository =
@@ -358,7 +405,7 @@ abstract class _CadernoCampoStoreBase with Store {
 
     var atividadeResult = await cadernoCampoRepository.cadastrarAtividade(
       atividade: novaAtividade,
-      usuarioId: authController.usuario.id!,
+      usuarioId: selectedUsuario!.id!,
       listLoteId: listLoteId,
     );
 
@@ -366,11 +413,12 @@ abstract class _CadernoCampoStoreBase with Store {
       (err) {
         toastError(message: err.message);
       },
-      (data) {
+      (data) async {
+        await buscarLotesByConta();
         Get.back();
       },
     );
-    isAreaLoading = false;
+    isNovoRegistroLoading = false;
   }
 
   @action
@@ -428,6 +476,24 @@ abstract class _CadernoCampoStoreBase with Store {
     isCadastroLoteLoading = false;
   }
 
+  limparTudo() {
+    dotIndicator = 0;
+    isCadastroLoteLoading = false;
+    showTextFormField = false;
+    isNovoRegistroLoading = false;
+    isEditing = false;
+    selectedGroup = 'Cultura';
+    lotesGroup = [];
+    usuariosConta = [];
+    selectedUsuario = null;
+    novoAtividadeName.clear();
+    novoAutorName.clear();
+    novaDescricao.clear();
+    searchLotePage.clear();
+    dateRegistro = DateTime.now();
+    loteCadastro = Lote();
+  }
+
   @computed
   List<LoteByFilter> get getLotesGroup => lotesGroup.where((element) {
         if (searchLotePage.text.isEmpty) return true;
@@ -435,4 +501,15 @@ abstract class _CadernoCampoStoreBase with Store {
             .toLowerCase()
             .contains(searchLotePage.text.toLowerCase());
       }).toList();
+
+  @computed
+  List<Lote> get selectedLotes {
+    List<Lote> list = [];
+    for (var i = 0; i < lotesGroup.length; i++) {
+      for (var item in lotesGroup[i].lotesSelection) {
+        if (item.selected) list.add(item.lote);
+      }
+    }
+    return list;
+  }
 }
