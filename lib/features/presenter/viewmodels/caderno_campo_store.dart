@@ -1,8 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
+import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/cadernoCampo/cadeno_campo_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
+import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
@@ -233,10 +238,24 @@ abstract class _CadernoCampoStoreBase with Store {
   TextEditingController searchLotePage = TextEditingController(text: '');
 
   @observable
-  DateTime? dataRegistro;
+  DateTime dateRegistro = DateTime.now();
+
+  // @observable
+  // TimeOfDay timeRegistro = TimeOfDay.now();
 
   @observable
   Lote loteCadastro = Lote();
+
+  @action
+  selectDateRegistro(DateTime value) => dateRegistro = value;
+
+  @action
+  selectTimeRegistro(TimeOfDay value) => dateRegistro = DateTime(
+      dateRegistro.year,
+      dateRegistro.month,
+      dateRegistro.day,
+      value.hour,
+      value.minute);
 
   @action
   setSeachLotePage(String value) {
@@ -306,6 +325,49 @@ abstract class _CadernoCampoStoreBase with Store {
       },
       (data) async {
         usuariosConta = List.from(data);
+      },
+    );
+    isAreaLoading = false;
+  }
+
+  @action
+  cadastrarAtividade() async {
+    isAreaLoading = true;
+
+    AuthController authController = GetIt.I<AuthController>();
+    CadernoCampoRepository cadernoCampoRepository =
+        GetIt.I<CadernoCampoRepository>();
+
+    Atividade novaAtividade = Atividade(
+      nome: novoAtividadeName.text,
+      descricao: utf8.encode(novaDescricao.text).toString(),
+      privado: true,
+      conta: authController.usuario.selected_conta!.conta,
+      created_at: dateRegistro,
+    );
+
+    List<int> listLoteId = [];
+
+    for (var groups in lotesGroup) {
+      for (var lote in groups.lotesSelection) {
+        if (lote.selected) {
+          listLoteId.add(lote.lote.id!);
+        }
+      }
+    }
+
+    var atividadeResult = await cadernoCampoRepository.cadastrarAtividade(
+      atividade: novaAtividade,
+      usuarioId: authController.usuario.id!,
+      listLoteId: listLoteId,
+    );
+
+    atividadeResult.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) {
+        Get.back();
       },
     );
     isAreaLoading = false;

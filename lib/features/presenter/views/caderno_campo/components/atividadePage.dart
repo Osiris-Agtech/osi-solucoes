@@ -20,20 +20,20 @@ Container atividadePage(BuildContext context, CadernoCampoStore store) {
           child: RichText(
             textAlign: TextAlign.start,
             text: const TextSpan(
-              text: 'Qual',
+              text: 'Qual ',
               style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
               children: <TextSpan>[
                 TextSpan(
-                  text: ' atividade ',
+                  text: 'atividade',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Constants.kPrimaryColor),
                 ),
                 TextSpan(
-                  text: 'deseja registrar ?',
+                  text: ' deseja registrar ?',
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Constants.kText2),
                 ),

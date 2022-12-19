@@ -39,5 +39,5 @@ class FailureMessage {
   static const errorCadastrarCulturaMessage =
       'Falha ao cadastrar cultura, verifique se o campo está preenchido corretamente';
   static const errorCadastrarAjusteMessage =
-      'Falha ao cadastrar ajuste, verifique se os campos estão preenchido corretamente';
+      'Falha ao cadastrar atividade, verifique se os campos estão preenchido corretamente';
 }

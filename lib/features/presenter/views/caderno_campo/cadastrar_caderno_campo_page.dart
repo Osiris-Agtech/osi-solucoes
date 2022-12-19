@@ -46,69 +46,82 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
         statusBarColor: Constants.kBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
       ),
-      child: SafeArea(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: appBar(),
-          backgroundColor: Constants.kBackgroundColor,
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                titulo(),
-                const SizedBox(height: 20),
-                subtitulo(),
-                const SizedBox(height: 10),
-                atividade(context),
-                const Divider(),
-                autor(context),
-                const Divider(),
-                data(context),
-                const Divider(),
-                hora(context),
-                const Divider(),
-                lote(context),
-                const Divider(),
-                descricao(),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10, bottom: 20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: const Color(0xffF5F5F5),
-                      ),
-                      child: Observer(
-                        builder: (_) {
-                          return SizedBox(
-                            width: double.infinity,
-                            child: store.novaDescricao.text.isEmpty &&
-                                    !store.showTextFormField
-                                ? botaoDescricao()
-                                : Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: TextFormField(
-                                      autofocus: true,
-                                      maxLines: 20,
-                                      decoration: const InputDecoration(
-                                          border: InputBorder.none),
-                                      controller: store.novaDescricao,
-                                    ),
-                                  ),
-                          );
-                        },
+      child: Observer(builder: (_) {
+        return GestureDetector(
+          onTap: () {
+            //here
+            FocusScope.of(context).unfocus();
+            if (store.novaDescricao.text.isEmpty) {
+              store.setShowTextFormField(false);
+            }
+          },
+          child: SafeArea(
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: appBar(),
+              backgroundColor: Constants.kBackgroundColor,
+              body: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    titulo(),
+                    const SizedBox(height: 20),
+                    subtitulo(),
+                    const SizedBox(height: 10),
+                    atividade(context),
+                    const Divider(),
+                    autor(context),
+                    const Divider(),
+                    data(context),
+                    const Divider(),
+                    hora(context),
+                    const Divider(),
+                    lote(context),
+                    const Divider(),
+                    descricao(),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 20),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color(0xffF5F5F5),
+                          ),
+                          child: Observer(
+                            builder: (_) {
+                              return SizedBox(
+                                width: double.infinity,
+                                child: store.novaDescricao.text.isEmpty &&
+                                        !store.showTextFormField
+                                    ? botaoDescricao()
+                                    : Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: TextFormField(
+                                          autofocus: true,
+                                          maxLines: 20,
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
+                                          controller: store.novaDescricao,
+                                        ),
+                                      ),
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    saveButton(size),
+                  ],
                 ),
-                saveButton(size),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -216,60 +229,61 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
     return InkWell(
       child: Observer(builder: (_) {
         return ListTile(
-            leading: const Icon(Icons.label),
-            title: const Text(
-              'Atividade',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-            ),
-            trailing: store.novoAtividadeName.text.isNotEmpty
-                ? SizedBox(
-                    width: 100,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          width: 76,
-                          child: Text(
-                            store.novoAtividadeName.text,
-                            textAlign: TextAlign.end,
-                            style: const TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const Icon(
-                          Icons.chevron_right,
-                          color: Constants.kPrimaryColor,
-                        ),
-                      ],
-                    ),
-                  )
-                : Row(
+          leading: const Icon(Icons.label),
+          title: const Text(
+            'Atividade',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+          ),
+          trailing: store.novoAtividadeName.text.isNotEmpty
+              ? SizedBox(
+                  width: 100,
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Text(
-                        "Preencher",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Constants.kPrimaryColor,
-                          fontWeight: FontWeight.w600,
+                    children: [
+                      SizedBox(
+                        width: 76,
+                        child: Text(
+                          store.novoAtividadeName.text,
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(
+                            color: Constants.kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.chevron_right,
-                        size: 18,
                         color: Constants.kPrimaryColor,
                       ),
                     ],
                   ),
-            onTap: () {
-              store.setDotIndicator(0);
-              bottomSheet(context, carouselController, controlerPages, store);
-            });
+                )
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: const [
+                    Text(
+                      "Preencher",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Constants.kPrimaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      size: 18,
+                      color: Constants.kPrimaryColor,
+                    ),
+                  ],
+                ),
+          onTap: () {
+            store.setDotIndicator(0);
+            bottomSheet(context, carouselController, controlerPages, store);
+          },
+        );
       }),
     );
   }
@@ -345,7 +359,116 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
             'Data',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           ),
-          trailing: store.dataRegistro != null
+          trailing: SizedBox(
+            width: 100,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SizedBox(
+                  width: 76,
+                  child: Text(
+                    DateFormat("dd/MM/y", 'pt_br')
+                            .format(
+                              store.dateRegistro,
+                            )
+                            .capitalize ??
+                        '',
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(
+                      color: Constants.kPrimaryColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const Icon(
+                  Icons.chevron_right,
+                  color: Constants.kPrimaryColor,
+                ),
+              ],
+            ),
+          ),
+          onTap: () async {
+            DateTime? date = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2022),
+              lastDate: DateTime(2030),
+              locale: const Locale("pt", "BR"),
+            );
+
+            if (date != null) {
+              store.selectDateRegistro(date);
+            }
+          },
+        );
+      }),
+    );
+  }
+
+  InkWell hora(BuildContext context) {
+    return InkWell(
+      child: Observer(builder: (_) {
+        return ListTile(
+          leading: const Icon(Icons.schedule),
+          title: const Text(
+            'Hora',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+          ),
+          trailing: SizedBox(
+            width: 100,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SizedBox(
+                  width: 76,
+                  child: Text(
+                    DateFormat("HH:mm", 'pt_br')
+                            .format(store.dateRegistro)
+                            .capitalize ??
+                        '',
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(
+                      color: Constants.kPrimaryColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const Icon(
+                  Icons.chevron_right,
+                  color: Constants.kPrimaryColor,
+                ),
+              ],
+            ),
+          ),
+          onTap: () async {
+            TimeOfDay? time = await showTimePicker(
+              context: context,
+              initialTime: TimeOfDay.now(),
+            );
+
+            if (time != null) {
+              store.selectTimeRegistro(time);
+            }
+          },
+        );
+      }),
+    );
+  }
+
+  InkWell lote(BuildContext context) {
+    return InkWell(
+      child: Observer(builder: (_) {
+        return ListTile(
+          leading: const Icon(Icons.eco),
+          title: const Text(
+            'Lote',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+          ),
+          trailing: store.loteCadastro.nome != null
               ? SizedBox(
                   width: 100,
                   child: Row(
@@ -355,14 +478,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                       SizedBox(
                         width: 76,
                         child: Text(
-                          DateFormat("dd/MM/y", 'pt_br')
-                                  .format(
-                                    DateTime.parse(
-                                      store.dataRegistro!.toIso8601String(),
-                                    ),
-                                  )
-                                  .capitalize ??
-                              '',
+                          store.loteCadastro.nome!,
                           textAlign: TextAlign.end,
                           style: const TextStyle(
                             color: Constants.kPrimaryColor,
@@ -381,178 +497,27 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
               : Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
+                  children: const [
                     Text(
-                      DateFormat("dd/MM/y", 'pt_br')
-                              .format(
-                                DateTime.parse(
-                                  DateTime.now().toString(),
-                                ),
-                              )
-                              .capitalize ??
-                          '',
-                      style: const TextStyle(
+                      "Nenhum Selecionado",
+                      style: TextStyle(
                         fontSize: 12,
                         color: Constants.kPrimaryColor,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const Icon(
+                    Icon(
                       Icons.chevron_right,
                       size: 18,
                       color: Constants.kPrimaryColor,
                     ),
                   ],
                 ),
-          onTap: () async {
-            await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2022),
-              lastDate: DateTime(2030),
-              locale: const Locale("pt", "BR"),
-            );
+          onTap: () {
+            store.setDotIndicator(2);
+            bottomSheet(context, carouselController, controlerPages, store);
           },
         );
-      }),
-    );
-  }
-
-  InkWell hora(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-            leading: const Icon(Icons.schedule),
-            title: const Text(
-              'Hora',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-            ),
-            trailing: store.dataRegistro != null
-                ? SizedBox(
-                    width: 100,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          width: 76,
-                          child: Text(
-                            DateFormat("HH:mm", 'pt_br')
-                                    .format(
-                                      DateTime.parse(store.dataRegistro!
-                                          .toIso8601String()),
-                                    )
-                                    .capitalize ??
-                                '',
-                            textAlign: TextAlign.end,
-                            style: const TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const Icon(
-                          Icons.chevron_right,
-                          color: Constants.kPrimaryColor,
-                        ),
-                      ],
-                    ),
-                  )
-                : Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        DateFormat("HH:mm", 'pt_br')
-                                .format(
-                                  DateTime.parse(
-                                    DateTime.now().toString(),
-                                  ),
-                                )
-                                .capitalize ??
-                            '',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Constants.kPrimaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const Icon(
-                        Icons.chevron_right,
-                        size: 18,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ],
-                  ),
-            onTap: () async {
-              showTimePicker(
-                context: context,
-                initialTime: TimeOfDay.now(),
-              );
-            });
-      }),
-    );
-  }
-
-  InkWell lote(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-            leading: const Icon(Icons.eco),
-            title: const Text(
-              'Lote',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-            ),
-            trailing: store.loteCadastro.nome != null
-                ? SizedBox(
-                    width: 100,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          width: 76,
-                          child: Text(
-                            store.loteCadastro.nome!,
-                            textAlign: TextAlign.end,
-                            style: const TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const Icon(
-                          Icons.chevron_right,
-                          color: Constants.kPrimaryColor,
-                        ),
-                      ],
-                    ),
-                  )
-                : Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Text(
-                        "Nenhum Selecionado",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Constants.kPrimaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Icon(
-                        Icons.chevron_right,
-                        size: 18,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ],
-                  ),
-            onTap: () {
-              store.setDotIndicator(2);
-              bottomSheet(context, carouselController, controlerPages, store);
-            });
       }),
     );
   }

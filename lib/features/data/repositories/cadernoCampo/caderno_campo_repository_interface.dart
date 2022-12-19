@@ -13,5 +13,9 @@ abstract class ICadernoCampoRepository {
   Future<Either<Failure, List<Lote>>> buscarLotesByArea(int areaId);
   Future<Either<Failure, List<Area>>> buscarAreasList(int contaId);
   Future<Either<Failure, Lote>> buscarAtividades(int loteId);
-  Future<Either<Failure, Atividade>> cadastrarAtividade(Atividade atividade);
+  Future<Either<Failure, Atividade>> cadastrarAtividade({
+    required Atividade atividade,
+    required int usuarioId,
+    required List<int> listLoteId,
+  });
 }

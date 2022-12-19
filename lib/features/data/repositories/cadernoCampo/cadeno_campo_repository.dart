@@ -52,9 +52,16 @@ class CadernoCampoRepository implements ICadernoCampoRepository {
   }
 
   @override
-  Future<Either<Failure, Atividade>> cadastrarAtividade(
-      Atividade atividade) async {
-    var result = await datasource.cadastrarAtividade(atividade: atividade);
+  Future<Either<Failure, Atividade>> cadastrarAtividade({
+    required Atividade atividade,
+    required int usuarioId,
+    required List<int> listLoteId,
+  }) async {
+    var result = await datasource.cadastrarAtividade(
+      atividade: atividade,
+      usuarioId: usuarioId,
+      listLoteId: listLoteId,
+    );
     return result;
   }
 }

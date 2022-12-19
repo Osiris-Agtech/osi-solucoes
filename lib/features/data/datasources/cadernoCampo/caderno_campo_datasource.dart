@@ -21,8 +21,11 @@ abstract class ICadernoCampoDatasource {
       {required int contaId});
   Future<Either<Failure, List<Area>>> buscarAreasList({required int contaId});
   Future<Either<Failure, Lote>> buscarAtividades({required int loteId});
-  Future<Either<Failure, Atividade>> cadastrarAtividade(
-      {required Atividade atividade});
+  Future<Either<Failure, Atividade>> cadastrarAtividade({
+    required Atividade atividade,
+    required int usuarioId,
+    required List<int> listLoteId,
+  });
 }
 
 class CadernoCampoDatasource implements ICadernoCampoDatasource {
@@ -387,62 +390,102 @@ class CadernoCampoDatasource implements ICadernoCampoDatasource {
   }
 
   @override
-  Future<Either<Failure, Atividade>> cadastrarAtividade(
-      {required Atividade atividade}) async {
+  Future<Either<Failure, Atividade>> cadastrarAtividade({
+    required Atividade atividade,
+    required int usuarioId,
+    required List<int> listLoteId,
+  }) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
-
-    const String readRepositories = r'''
-      query Lote($loteId: Int!) {
-        lote(where: {
-          id: $loteId
-        }) {
-          id
-          nome
-          lotes_atividades {
-            atividade {
-              id
-              nome
-              descricao
-              created_at
+    //Criando a query para varios lotes
+    String query = '';
+    for (var element in listLoteId) {
+      if (element == listLoteId[listLoteId.length - 1]) {
+        query += """{
+          conta: {
+            connect: {
+              id: ${atividade.conta!.id}
             }
-            usuario {
+          },
+          lote: {
+            connect: {
+              id: $element
+            }
+          },
+          usuario: {
+            connect: {
+              id: $usuarioId
+            }
+          }
+        }""";
+      } else {
+        query += """{
+          conta: {
+            connect: {
+              id: ${atividade.conta!.id}
+            }
+          },
+          lote: {
+            connect: {
+              id: $element
+            }
+          },
+          usuario: {
+            connect: {
+              id: $usuarioId
+            }
+          }
+        },""";
+      }
+    }
+
+    // Erro esta no usuario - id 38
+    String readRepositories = """
+        mutation CreateOneAtividade{
+          createOneAtividade(
+            data: {
+              nome: "${atividade.nome!}",
+              descricao: "${atividade.descricao!}",
+              conta: {
+                connect: {
+                  id: ${atividade.conta!.id}
+                }
+              },
+              lotes_atividades: {
+                create: [
+                  $query
+                ]
+              },
+              created_at: "${atividade.created_at}"
+            }
+          ) {
+            id
+            nome
+            descricao
+            privado
+            created_at
+            conta {
               id
               nome
-              contas {
-                id
-                cargo {
-                  id
-                  cargo
-                }
-                conta {
-                  id
-                  nome
-                }
-              }
             }
           }
         }
-      }
-    ''';
+      """;
+    final MutationOptions? options;
 
-    final QueryOptions? options;
-
-    options = QueryOptions(
+    options = MutationOptions(
       document: gql(readRepositories),
-      variables: <String, dynamic>{
-        'loteId': atividade,
-      },
     );
 
-    final QueryResult result = await client.query(options);
+    final QueryResult result = await client.mutate(options);
 
     if (!result.hasException) {
-      Atividade atividadeResult =
+      Atividade? atividadeResult =
           Atividade.fromJson(result.data?['createOneAtividade']);
 
       return Right(atividadeResult);
     } else {
-      return Left(ErrorArea(message: FailureMessage.emptyListMessage));
+      return Left(
+          ErrorLote(message: FailureMessage.errorCadastrarAjusteMessage));
     }
   }
 }

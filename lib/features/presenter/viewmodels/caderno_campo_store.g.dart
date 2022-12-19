@@ -365,18 +365,18 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
-  final _$dataRegistroAtom = Atom(name: '_CadernoCampoStoreBase.dataRegistro');
+  final _$dateRegistroAtom = Atom(name: '_CadernoCampoStoreBase.dateRegistro');
 
   @override
-  DateTime? get dataRegistro {
-    _$dataRegistroAtom.reportRead();
-    return super.dataRegistro;
+  DateTime get dateRegistro {
+    _$dateRegistroAtom.reportRead();
+    return super.dateRegistro;
   }
 
   @override
-  set dataRegistro(DateTime? value) {
-    _$dataRegistroAtom.reportWrite(value, super.dataRegistro, () {
-      super.dataRegistro = value;
+  set dateRegistro(DateTime value) {
+    _$dateRegistroAtom.reportWrite(value, super.dateRegistro, () {
+      super.dateRegistro = value;
     });
   }
 
@@ -446,6 +446,15 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
         .run(() => super.buscarUsuariosConta());
   }
 
+  final _$cadastrarAtividadeAsyncAction =
+      AsyncAction('_CadernoCampoStoreBase.cadastrarAtividade');
+
+  @override
+  Future cadastrarAtividade() {
+    return _$cadastrarAtividadeAsyncAction
+        .run(() => super.cadastrarAtividade());
+  }
+
   final _$groupLotesByAsyncAction =
       AsyncAction('_CadernoCampoStoreBase.groupLotesBy');
 
@@ -496,6 +505,28 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
         name: '_CadernoCampoStoreBase.setExpandedCard');
     try {
       return super.setExpandedCard(index);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selectDateRegistro(DateTime value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.selectDateRegistro');
+    try {
+      return super.selectDateRegistro(value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selectTimeRegistro(TimeOfDay value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.selectTimeRegistro');
+    try {
+      return super.selectTimeRegistro(value);
     } finally {
       _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -625,7 +656,7 @@ novoAtividadeName: ${novoAtividadeName},
 novoAutorName: ${novoAutorName},
 novaDescricao: ${novaDescricao},
 searchLotePage: ${searchLotePage},
-dataRegistro: ${dataRegistro},
+dateRegistro: ${dateRegistro},
 loteCadastro: ${loteCadastro},
 getLotesGroup: ${getLotesGroup}
     ''';
