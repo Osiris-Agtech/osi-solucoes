@@ -11,26 +11,21 @@ part 'gerenciar_equipe_store.g.dart';
 class GerenciarEquipeStore = _GerenciarEquipeBase with _$GerenciarEquipeStore;
 
 abstract class _GerenciarEquipeBase with Store {
+  //####################### START LISTAGEM DE USUARIOS ##########################
+
   @observable
   int value = 0;
 
   @observable
   bool isSolucaoListLoading = false;
 
-  //mudar conta para usuario
   @observable
   List<Usuario> userList = [];
-
-  @observable
-  String searchSolucaoText = '';
 
   @action
   void increment() {
     value++;
   }
-
-  @action
-  setsearchSolucaoText(String value) => searchSolucaoText = value;
 
   @action
   buscarUsuarios() async {
@@ -62,17 +57,27 @@ abstract class _GerenciarEquipeBase with Store {
 
     isSolucaoListLoading = false;
   }
+  //####################### END LISTAGEM DE USUARIOS ##########################
 
-  // @computed
-  // List<SolucaoNutritiva> get searchSolucao {
-  //   List<SolucaoNutritiva> result = solucaoList
-  //       .where((element) =>
-  //           element.nome
-  //               ?.toLowerCase()
-  //               .contains(searchSolucaoText.toLowerCase()) ??
-  //           false)
-  //       .toList();
+  //####################### START PESQUISAR ##########################
+  @observable
+  String searchUserText = '';
 
-  //   return result;
-  // }
+  @action
+  setsearchUserText(String value) => searchUserText = value;
+
+  @computed
+  List<Usuario> get searchUser {
+    List<Usuario> result = userList
+        .where((element) =>
+            element.nome
+                ?.toLowerCase()
+                .contains(searchUserText.toLowerCase()) ??
+            false)
+        .toList();
+
+    return result;
+  }
+
+  //####################### END PESQUISAR ##########################
 }

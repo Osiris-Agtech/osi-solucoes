@@ -77,6 +77,61 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                       ),
                     );
                   }
+                  if (gerenciarEquipeStore.searchUserText.isEmpty) {
+                    return SliverToBoxAdapter(
+                      // pesquisar para fazer no store -> trazer a lista e fazer um groupBy
+                      // https://stackoverflow.com/questions/54029370/flutter-dart-how-to-groupby-list-of-maps
+                      child: CustomScrollView(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        slivers: [
+                          SliverGrid.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 2,
+                            mainAxisSpacing: 2,
+                            children:
+                                List.generate(2, (index) => const Text('oi')),
+                          ),
+                          const SliverToBoxAdapter(
+                            child: Text('salve'),
+                          ),
+                          SliverGrid.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 2,
+                            mainAxisSpacing: 2,
+                            children: List.generate(
+                              2,
+                              (index) => const Text('tchau'),
+                            ),
+                          ),
+                          const SliverToBoxAdapter(
+                            child: Text('salve'),
+                          ),
+                          SliverGrid.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 2,
+                            mainAxisSpacing: 2,
+                            children: List.generate(
+                              2,
+                              (index) => const Text('tchau'),
+                            ),
+                          ),
+                          const SliverToBoxAdapter(
+                            child: Text('salve'),
+                          ),
+                          SliverGrid.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 2,
+                            mainAxisSpacing: 2,
+                            children: List.generate(
+                              2,
+                              (index) => const Text('tchau'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                   return SliverPadding(
                     padding: const EdgeInsets.all(8.0),
                     sliver: SliverGrid.count(
@@ -84,10 +139,11 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 2,
                       children: List.generate(
-                          gerenciarEquipeStore.userList.length,
-                          (index) => CardUsuario(
-                                user: gerenciarEquipeStore.userList[index],
-                              )),
+                        gerenciarEquipeStore.searchUser.length,
+                        (index) => CardUsuario(
+                          user: gerenciarEquipeStore.searchUser[index],
+                        ),
+                      ),
                     ),
                   );
                 }),
@@ -137,22 +193,27 @@ class _AppBarState extends State<AppBar> {
             const SizedBox(
               height: 10,
             ),
-            Container(
-              color: const Color(0xFFF8F8F6),
-              padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+              child: TextFormField(
+                onChanged: (value) =>
+                    gerenciarEquipeStore.setsearchUserText(value),
+                textCapitalization: TextCapitalization.words,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.normal,
+                  fontStyle: FontStyle.italic,
+                ),
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  hintText: 'Pesquisar',
+                  hintStyle: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
               ),
-              child: SizedBox(
-                  width: double.infinity,
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: "Buscar...",
-                      hintStyle: TextStyle(
-                        fontFamily: "Roboto",
-                      ),
-                      border: InputBorder.none,
-                    ),
-                  )),
             ),
           ],
         ),

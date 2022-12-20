@@ -9,6 +9,14 @@ part of 'gerenciar_equipe_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
+  Computed<List<Usuario>>? _$searchUserComputed;
+
+  @override
+  List<Usuario> get searchUser =>
+      (_$searchUserComputed ??= Computed<List<Usuario>>(() => super.searchUser,
+              name: '_GerenciarEquipeBase.searchUser'))
+          .value;
+
   final _$valueAtom = Atom(name: '_GerenciarEquipeBase.value');
 
   @override
@@ -56,19 +64,19 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$searchSolucaoTextAtom =
-      Atom(name: '_GerenciarEquipeBase.searchSolucaoText');
+  final _$searchUserTextAtom =
+      Atom(name: '_GerenciarEquipeBase.searchUserText');
 
   @override
-  String get searchSolucaoText {
-    _$searchSolucaoTextAtom.reportRead();
-    return super.searchSolucaoText;
+  String get searchUserText {
+    _$searchUserTextAtom.reportRead();
+    return super.searchUserText;
   }
 
   @override
-  set searchSolucaoText(String value) {
-    _$searchSolucaoTextAtom.reportWrite(value, super.searchSolucaoText, () {
-      super.searchSolucaoText = value;
+  set searchUserText(String value) {
+    _$searchUserTextAtom.reportWrite(value, super.searchUserText, () {
+      super.searchUserText = value;
     });
   }
 
@@ -95,11 +103,11 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
   }
 
   @override
-  dynamic setsearchSolucaoText(String value) {
+  dynamic setsearchUserText(String value) {
     final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
-        name: '_GerenciarEquipeBase.setsearchSolucaoText');
+        name: '_GerenciarEquipeBase.setsearchUserText');
     try {
-      return super.setsearchSolucaoText(value);
+      return super.setsearchUserText(value);
     } finally {
       _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
     }
@@ -111,7 +119,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
 value: ${value},
 isSolucaoListLoading: ${isSolucaoListLoading},
 userList: ${userList},
-searchSolucaoText: ${searchSolucaoText}
+searchUserText: ${searchUserText},
+searchUser: ${searchUser}
     ''';
   }
 }
