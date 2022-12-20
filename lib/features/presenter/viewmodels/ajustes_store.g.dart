@@ -130,6 +130,103 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
+  final _$selectedReservatorioAtom =
+      Atom(name: '_AjustesStoreBase.selectedReservatorio');
+
+  @override
+  Reservatorio get selectedReservatorio {
+    _$selectedReservatorioAtom.reportRead();
+    return super.selectedReservatorio;
+  }
+
+  @override
+  set selectedReservatorio(Reservatorio value) {
+    _$selectedReservatorioAtom.reportWrite(value, super.selectedReservatorio,
+        () {
+      super.selectedReservatorio = value;
+    });
+  }
+
+  final _$reservatorioListAtom =
+      Atom(name: '_AjustesStoreBase.reservatorioList');
+
+  @override
+  List<Reservatorio> get reservatorioList {
+    _$reservatorioListAtom.reportRead();
+    return super.reservatorioList;
+  }
+
+  @override
+  set reservatorioList(List<Reservatorio> value) {
+    _$reservatorioListAtom.reportWrite(value, super.reservatorioList, () {
+      super.reservatorioList = value;
+    });
+  }
+
+  final _$ceAguaAtom = Atom(name: '_AjustesStoreBase.ceAgua');
+
+  @override
+  double get ceAgua {
+    _$ceAguaAtom.reportRead();
+    return super.ceAgua;
+  }
+
+  @override
+  set ceAgua(double value) {
+    _$ceAguaAtom.reportWrite(value, super.ceAgua, () {
+      super.ceAgua = value;
+    });
+  }
+
+  final _$volumeConcentradoAtom =
+      Atom(name: '_AjustesStoreBase.volumeConcentrado');
+
+  @override
+  String get volumeConcentrado {
+    _$volumeConcentradoAtom.reportRead();
+    return super.volumeConcentrado;
+  }
+
+  @override
+  set volumeConcentrado(String value) {
+    _$volumeConcentradoAtom.reportWrite(value, super.volumeConcentrado, () {
+      super.volumeConcentrado = value;
+    });
+  }
+
+  final _$reposicaoFertAtom = Atom(name: '_AjustesStoreBase.reposicaoFert');
+
+  @override
+  List<ReposicaoFert> get reposicaoFert {
+    _$reposicaoFertAtom.reportRead();
+    return super.reposicaoFert;
+  }
+
+  @override
+  set reposicaoFert(List<ReposicaoFert> value) {
+    _$reposicaoFertAtom.reportWrite(value, super.reposicaoFert, () {
+      super.reposicaoFert = value;
+    });
+  }
+
+  final _$buscarReservatoriosAsyncAction =
+      AsyncAction('_AjustesStoreBase.buscarReservatorios');
+
+  @override
+  Future buscarReservatorios() {
+    return _$buscarReservatoriosAsyncAction
+        .run(() => super.buscarReservatorios());
+  }
+
+  final _$registrarAtividadeAsyncAction =
+      AsyncAction('_AjustesStoreBase.registrarAtividade');
+
+  @override
+  Future registrarAtividade() {
+    return _$registrarAtividadeAsyncAction
+        .run(() => super.registrarAtividade());
+  }
+
   final _$_AjustesStoreBaseActionController =
       ActionController(name: '_AjustesStoreBase');
 
@@ -139,17 +236,6 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
         name: '_AjustesStoreBase.newValueItem');
     try {
       return super.newValueItem(newValue);
-    } finally {
-      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic setReservatorio(String value) {
-    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.setReservatorio');
-    try {
-      return super.setReservatorio(value);
     } finally {
       _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -167,6 +253,61 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
   }
 
   @override
+  dynamic selectReservatorio(Reservatorio reservatorio) {
+    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
+        name: '_AjustesStoreBase.selectReservatorio');
+    try {
+      return super.selectReservatorio(reservatorio);
+    } finally {
+      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic calculoLado(SolucaoFertilizanteConcentrada fertilizante, String ce) {
+    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
+        name: '_AjustesStoreBase.calculoLado');
+    try {
+      return super.calculoLado(fertilizante, ce);
+    } finally {
+      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic calculoAjusteReposicao() {
+    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
+        name: '_AjustesStoreBase.calculoAjusteReposicao');
+    try {
+      return super.calculoAjusteReposicao();
+    } finally {
+      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic calculoAjusteConcentrada(double reposicaoFert) {
+    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
+        name: '_AjustesStoreBase.calculoAjusteConcentrada');
+    try {
+      return super.calculoAjusteConcentrada(reposicaoFert);
+    } finally {
+      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic montandoDescricao() {
+    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
+        name: '_AjustesStoreBase.montandoDescricao');
+    try {
+      return super.montandoDescricao();
+    } finally {
+      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 selectedItem: ${selectedItem},
@@ -176,7 +317,12 @@ cEletricoDesejado: ${cEletricoDesejado},
 volumeAtual: ${volumeAtual},
 volumeDesejado: ${volumeDesejado},
 pH: ${pH},
-reservatorio: ${reservatorio}
+reservatorio: ${reservatorio},
+selectedReservatorio: ${selectedReservatorio},
+reservatorioList: ${reservatorioList},
+ceAgua: ${ceAgua},
+volumeConcentrado: ${volumeConcentrado},
+reposicaoFert: ${reposicaoFert}
     ''';
   }
 }

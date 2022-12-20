@@ -3,6 +3,7 @@ import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dar
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/setor_page.dart';
+import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/cadastrar_resevatorio_page.dart';
 
 import '../views/ajuste/ajustes_page.dart';
@@ -53,5 +54,8 @@ class AppPages {
         name: Routes.cadastrarReservatoriosPage,
         page: () => const CadastrarReservatorioPage()),
     GetPage(name: Routes.solucaoPage, page: () => const SolucaoPage()),
+    GetPage(
+        name: Routes.gerenciarEquipePage,
+        page: () => const GerenciarEquipePage()),
   ];
 }

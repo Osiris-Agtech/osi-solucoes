@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/views/ajuste/resultadoajuste_page.dart';
 
 import '../../viewmodels/ajustes_store.dart';
@@ -26,6 +27,18 @@ class AjustesPageState extends State<AjustesPage> {
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
 
   @override
+  void initState() {
+    store.buscarReservatorios();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    store.clearAll();
+  }
+
+  @override
   Widget build(BuildContext context) {
     const snackBar = SnackBar(
       backgroundColor: Colors.white,
@@ -41,25 +54,32 @@ class AjustesPageState extends State<AjustesPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+          // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           backgroundColor: Constants.kSecondBackgroundColor,
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 18.0),
-            child: FloatingActionButton.extended(
-              onPressed: () {
-                store.reservatorio.text.isNotEmpty
-                    ? Get.to(
-                        () => const ResultadoajustePage(),
-                        transition: Transition.rightToLeft,
-                      )
-                    : ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              },
-              backgroundColor: Constants.kPrimaryColor,
-              label: const Text(
-                'Calcular',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-            ),
+            child: Observer(builder: (_) {
+              return FloatingActionButton.extended(
+                heroTag: 'CalcularAJuste',
+                onPressed: store.selectedReservatorio.nome != null &&
+                        store.selectedReservatorio.nome!.isNotEmpty
+                    ? () async {
+                        await store.calculoAjusteReposicao();
+                        await store.montandoDescricao();
+                        Get.to(
+                          () => const ResultadoajustePage(),
+                          transition: Transition.rightToLeft,
+                        );
+                      }
+                    : () =>
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar),
+                backgroundColor: Constants.kPrimaryColor,
+                label: const Text(
+                  'Calcular',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+              );
+            }),
           ),
           body: Form(
             key: formKey,
@@ -92,38 +112,87 @@ class AjustesPageState extends State<AjustesPage> {
                             horizontal:
                                 MediaQuery.of(context).size.width * 0.04,
                           ),
-                          child: DropdownSearch<String>(
-                            key: dropDownKey,
-                            mode: Mode.MENU,
-                            showSelectedItems: true,
-                            items: store.listaReservatorios,
-                            dropDownButton: const Icon(
-                              Icons.arrow_drop_down,
-                              size: 30,
-                              color: Constants.kPrimaryColor,
-                            ),
-                            dropdownSearchDecoration: InputDecoration(
-                              border: InputBorder.none,
-                              prefixIconConstraints: const BoxConstraints(
-                                  maxHeight: 50, maxWidth: 50),
-                              contentPadding: const EdgeInsets.only(top: 15),
-                              alignLabelWithHint: true,
-                              hintText: "Buscar Reservatório...",
-                              prefixIcon: Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 5.0, left: 10),
-                                child: SvgPicture.asset(
-                                  "assets/icons/reservatorio_icon.svg",
+                          child: Observer(builder: (_) {
+                            return DropdownSearch<Reservatorio>(
+                              key: dropDownKey,
+                              mode: Mode.MENU,
+                              items: store.reservatorioList,
+                              dropdownBuilder: (context, selectedItem) {
+                                if (selectedItem != null) {
+                                  return Text(
+                                    selectedItem.nome!,
+                                    overflow: TextOverflow.visible,
+                                  );
+                                }
+                                return const Text(
+                                  'Selecione o Reservatório',
+                                  overflow: TextOverflow.visible,
+                                  style: TextStyle(color: Constants.kGreyText2),
+                                );
+                              },
+                              filterFn: (reservatorio, nome) {
+                                bool contains = reservatorio!.nome!
+                                    .toLowerCase()
+                                    .contains(nome!.toLowerCase());
+                                return contains;
+                              },
+                              popupItemBuilder: (ctx, reservatorio, selected) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  child: DropdownMenuItem<Reservatorio>(
+                                    value: reservatorio,
+                                    child: Text(
+                                      reservatorio.nome!,
+                                      overflow: TextOverflow.visible,
+                                    ),
+                                  ),
+                                );
+                              },
+                              emptyBuilder: (ctx, _) {
+                                return const Center(
+                                  child: Text('Nenhum reservatório encontrado'),
+                                );
+                              },
+                              dropDownButton: const Icon(
+                                Icons.arrow_drop_down,
+                                size: 30,
+                                color: Constants.kPrimaryColor,
+                              ),
+                              dropdownSearchDecoration: InputDecoration(
+                                border: InputBorder.none,
+                                prefixIconConstraints: const BoxConstraints(
+                                    maxHeight: 50, maxWidth: 50),
+                                contentPadding: const EdgeInsets.only(top: 15),
+                                alignLabelWithHint: true,
+                                hintText: "Buscar Reservatório...",
+                                prefixIcon: Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 10.0, left: 10, top: 5),
+                                  child: Observer(builder: (_) {
+                                    return store.selectedReservatorio.nome !=
+                                                null &&
+                                            store.selectedReservatorio.nome!
+                                                .isNotEmpty
+                                        ? SvgPicture.asset(
+                                            "assets/icons/reservatorio_icon.svg",
+                                          )
+                                        : Opacity(
+                                            opacity: 0.6,
+                                            child: SvgPicture.asset(
+                                              "assets/icons/reservatorio_icon.svg",
+                                            ),
+                                          );
+                                  }),
                                 ),
                               ),
-                            ),
-                            onChanged: (data) {
-                              print;
-                              store.setReservatorio(data!);
-                            },
-                            showSearchBox: true,
-                            showAsSuffixIcons: true,
-                          )),
+                              onChanged: (reservatorio) {
+                                store.selectReservatorio(reservatorio!);
+                              },
+                              showSearchBox: true,
+                              showAsSuffixIcons: true,
+                            );
+                          })),
                     ],
                   ),
                 ),
@@ -187,13 +256,14 @@ class AjustesPageState extends State<AjustesPage> {
                                                   fontStyle: FontStyle.italic,
                                                 ),
                                               ),
-                                              Text("Atual",
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                      fontWeight:
-                                                          FontWeight.bold))
+                                              Text(
+                                                "Atual",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
                                             ],
                                           ),
                                           SizedBox(
@@ -204,27 +274,29 @@ class AjustesPageState extends State<AjustesPage> {
                                               keyboardType:
                                                   TextInputType.number,
                                               decoration: const InputDecoration(
-                                                  contentPadding:
-                                                      EdgeInsets.only(
-                                                          bottom: 10),
-                                                  hintText: "S.m/mm2",
-                                                  hintStyle: TextStyle(
-                                                    fontWeight: FontWeight.w100,
-                                                    color: Colors.black38,
-                                                  )),
+                                                contentPadding: EdgeInsets.only(
+                                                  bottom: 10,
+                                                ),
+                                                hintText: "S.m/mm2",
+                                                hintStyle: TextStyle(
+                                                  fontWeight: FontWeight.w100,
+                                                  color: Colors.black38,
+                                                ),
+                                              ),
                                             ),
                                           )
                                         ],
                                       ),
                                       const Center(
-                                          child: Padding(
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Icon(
-                                          Icons.arrow_forward_ios,
-                                          size: 20,
-                                          color: Constants.kPrimaryColor,
+                                        child: Padding(
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Icon(
+                                            Icons.arrow_forward_ios,
+                                            size: 20,
+                                            color: Constants.kPrimaryColor,
+                                          ),
                                         ),
-                                      )),
+                                      ),
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -240,13 +312,14 @@ class AjustesPageState extends State<AjustesPage> {
                                                   fontStyle: FontStyle.italic,
                                                 ),
                                               ),
-                                              Text("Desejado",
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                      fontWeight:
-                                                          FontWeight.bold))
+                                              Text(
+                                                "Desejado",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
                                             ],
                                           ),
                                           SizedBox(
@@ -258,16 +331,17 @@ class AjustesPageState extends State<AjustesPage> {
                                               keyboardType:
                                                   TextInputType.number,
                                               decoration: const InputDecoration(
-                                                  contentPadding:
-                                                      EdgeInsets.only(
-                                                          bottom: 10),
-                                                  hintText: "S.m/mm2",
-                                                  hintStyle: TextStyle(
-                                                    fontWeight: FontWeight.w100,
-                                                    color: Colors.black38,
-                                                  )),
+                                                contentPadding: EdgeInsets.only(
+                                                  bottom: 10,
+                                                ),
+                                                hintText: "S.m/mm2",
+                                                hintStyle: TextStyle(
+                                                  fontWeight: FontWeight.w100,
+                                                  color: Colors.black38,
+                                                ),
+                                              ),
                                             ),
-                                          )
+                                          ),
                                         ],
                                       ),
                                     ],
@@ -563,10 +637,17 @@ class AjustesPageState extends State<AjustesPage> {
   }
 }
 
-class ButtonWidget extends StatelessWidget {
+class ButtonWidget extends StatefulWidget {
   const ButtonWidget({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<ButtonWidget> createState() => _ButtonWidgetState();
+}
+
+class _ButtonWidgetState extends State<ButtonWidget> {
+  AjustesStore store = GetIt.I<AjustesStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -589,7 +670,7 @@ class ButtonWidget extends StatelessWidget {
               'Calcular',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
-            onPressed: () {
+            onPressed: () async {
               Get.to(
                 () => const ResultadoajustePage(),
                 transition: Transition.rightToLeft,

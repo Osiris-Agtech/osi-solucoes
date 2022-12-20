@@ -47,34 +47,23 @@ Container autorPage(BuildContext context, CadernoCampoStore store) {
         ),
         Expanded(
           //MOCK PARA DROPDOWN
-          //TODO: Apagar apos integração
           child: Observer(builder: (_) {
-            List<Usuario> userList = [
-              Usuario(id: 1, nome: "Miguel Ribeiro"),
-              Usuario(id: 2, nome: "Jonas Boechat"),
-              Usuario(id: 3, nome: "João Dantas"),
-              Usuario(id: 4, nome: "Tijas Moreira"),
-            ];
-            Usuario valueUser = Usuario();
             return DropdownButtonFormField<Usuario>(
-              value: null,
+              value: store.selectedUsuario,
               hint: const Text(
                 'Selecionar autor',
                 style: TextStyle(fontStyle: FontStyle.italic),
               ),
               isExpanded: true,
               iconEnabledColor: Constants.kPrimaryColor,
-              items: userList.map((Usuario usuario) {
+              items: store.usuariosConta.map((Usuario usuario) {
                 return DropdownMenuItem<Usuario>(
                   value: usuario,
-                  child: Text(usuario.nome ?? '-'),
+                  child: Text(
+                      '${usuario.nome} (${usuario.selected_conta?.cargo?.cargo})'),
                 );
               }).toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  value = valueUser;
-                }
-              },
+              onChanged: store.selectUser,
             );
           }),
         ),
