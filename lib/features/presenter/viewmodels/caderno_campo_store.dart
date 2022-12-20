@@ -50,9 +50,16 @@ abstract class _CadernoCampoStoreBase with Store {
   @observable
   TextEditingController searchAtividade = TextEditingController();
 
+  @observable
+  TextEditingController searchLote = TextEditingController();
+
   @action
   setSearchAtividade(String value) =>
       searchAtividade = TextEditingController(text: value);
+
+  @action
+  setSearchLote(String value) =>
+      searchLote = TextEditingController(text: value);
 
   @action
   selecionarDropButtonArea(Area area) => dropButtonArea = area;
@@ -206,6 +213,21 @@ abstract class _CadernoCampoStoreBase with Store {
     isAreaLoading = false;
   }
 
+  @action
+  limparLotes() {
+    loteList.clear();
+    areaList.clear();
+    isLoteListLoading = false;
+    isAreaLoading = false;
+    setorSelecionado = Setor();
+    dropButtonSetor = Setor();
+    dropButtonArea = Area();
+    loteSelecionado = Lote();
+    expandedCard.clear();
+    searchAtividade.clear();
+    searchLote.clear();
+  }
+
   @computed
   List<LotesAtividades> get getLotesAtividadesFilter {
     List<LotesAtividades> list =
@@ -217,6 +239,14 @@ abstract class _CadernoCampoStoreBase with Store {
     }).toList();
     return list;
   }
+
+  @computed
+  List<Lote> get getLotesFilter => loteList.where((element) {
+        if (searchLote.text.isEmpty) return true;
+        return (element.nome ?? '')
+            .toLowerCase()
+            .contains(searchLote.text.toLowerCase());
+      }).toList();
 
   // #################### START CADASTRO CADERNO DE CAMPO #######################
 
@@ -333,6 +363,17 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
+  selectLotesByLote(Lote lote, bool value) {
+    for (var i = 0; i < lotesGroup.length; i++) {
+      for (var item in lotesGroup[i].lotesSelection) {
+        if (item.lote.id == lote.id) item.selected = value;
+      }
+    }
+
+    lotesGroup = List.from(lotesGroup);
+  }
+
+  @action
   selectLotesSelection(int index1, int index2, bool value) {
     getLotesGroup[index1].lotesSelection[index2].selected = value;
     lotesGroup = List.from(lotesGroup);
@@ -415,7 +456,7 @@ abstract class _CadernoCampoStoreBase with Store {
       },
       (data) async {
         await buscarLotesByConta();
-        Get.back();
+        Get.close(2);
       },
     );
     isNovoRegistroLoading = false;
@@ -476,6 +517,7 @@ abstract class _CadernoCampoStoreBase with Store {
     isCadastroLoteLoading = false;
   }
 
+  @action
   limparTudo() {
     dotIndicator = 0;
     isCadastroLoteLoading = false;

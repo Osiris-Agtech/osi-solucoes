@@ -17,6 +17,13 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
               () => super.getLotesAtividadesFilter,
               name: '_CadernoCampoStoreBase.getLotesAtividadesFilter'))
           .value;
+  Computed<List<Lote>>? _$getLotesFilterComputed;
+
+  @override
+  List<Lote> get getLotesFilter => (_$getLotesFilterComputed ??=
+          Computed<List<Lote>>(() => super.getLotesFilter,
+              name: '_CadernoCampoStoreBase.getLotesFilter'))
+      .value;
   Computed<List<LoteByFilter>>? _$getLotesGroupComputed;
 
   @override
@@ -186,6 +193,21 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   set searchAtividade(TextEditingController value) {
     _$searchAtividadeAtom.reportWrite(value, super.searchAtividade, () {
       super.searchAtividade = value;
+    });
+  }
+
+  final _$searchLoteAtom = Atom(name: '_CadernoCampoStoreBase.searchLote');
+
+  @override
+  TextEditingController get searchLote {
+    _$searchLoteAtom.reportRead();
+    return super.searchLote;
+  }
+
+  @override
+  set searchLote(TextEditingController value) {
+    _$searchLoteAtom.reportWrite(value, super.searchLote, () {
+      super.searchLote = value;
     });
   }
 
@@ -509,6 +531,17 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   }
 
   @override
+  dynamic setSearchLote(String value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.setSearchLote');
+    try {
+      return super.setSearchLote(value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic selecionarDropButtonArea(Area area) {
     final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
         name: '_CadernoCampoStoreBase.selecionarDropButtonArea');
@@ -547,6 +580,17 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
         name: '_CadernoCampoStoreBase.setExpandedCard');
     try {
       return super.setExpandedCard(index);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic limparLotes() {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.limparLotes');
+    try {
+      return super.limparLotes();
     } finally {
       _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -663,6 +707,17 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   }
 
   @override
+  dynamic selectLotesByLote(Lote lote, bool value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.selectLotesByLote');
+    try {
+      return super.selectLotesByLote(lote, value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic selectLotesSelection(int index1, int index2, bool value) {
     final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
         name: '_CadernoCampoStoreBase.selectLotesSelection');
@@ -685,6 +740,17 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   }
 
   @override
+  dynamic limparTudo() {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.limparTudo');
+    try {
+      return super.limparTudo();
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 loteList: ${loteList},
@@ -697,6 +763,7 @@ dropButtonArea: ${dropButtonArea},
 loteSelecionado: ${loteSelecionado},
 expandedCard: ${expandedCard},
 searchAtividade: ${searchAtividade},
+searchLote: ${searchLote},
 dotIndicator: ${dotIndicator},
 isCadastroLoteLoading: ${isCadastroLoteLoading},
 showTextFormField: ${showTextFormField},
@@ -713,6 +780,7 @@ searchLotePage: ${searchLotePage},
 dateRegistro: ${dateRegistro},
 loteCadastro: ${loteCadastro},
 getLotesAtividadesFilter: ${getLotesAtividadesFilter},
+getLotesFilter: ${getLotesFilter},
 getLotesGroup: ${getLotesGroup},
 selectedLotes: ${selectedLotes}
     ''';
