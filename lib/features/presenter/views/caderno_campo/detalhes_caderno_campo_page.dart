@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
@@ -352,51 +351,51 @@ class _AppBarState extends State<AppBar> {
         automaticallyImplyLeading: false,
         forceElevated: true,
         elevation: 1,
-        actions: [
-          Align(
-            alignment: const Alignment(0.6, -0.9),
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: Theme(
-                data: Theme.of(context).copyWith(
-                  highlightColor: Colors.transparent,
-                  splashColor: Colors.transparent,
-                ),
-                child: PopupMenuButton(
-                  icon: SvgPicture.asset(
-                    "assets/icons/settings_icon.svg",
-                    color: Constants.kButtonGrey,
-                    height: 20,
-                  ),
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      child: Row(
-                        children: const [
-                          Text('Editar'),
-                        ],
-                      ),
-                      onTap: () async {
-                        // await setorStore.setSetorEditing(widget.setorN2);
-                        // Get.to(
-                        //   () => const CadastrarSetorPage(),
-                        //   transition: Transition.rightToLeft,
-                        // );
-                      },
-                    ),
-                    PopupMenuItem(
-                      child: Row(
-                        children: const [
-                          Text('Deletar'),
-                        ],
-                      ),
-                      onTap: () {},
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
+        // actions: [
+        //   Align(
+        //     alignment: const Alignment(0.6, -0.9),
+        //     child: Padding(
+        //       padding: const EdgeInsets.only(right: 16.0),
+        //       child: Theme(
+        //         data: Theme.of(context).copyWith(
+        //           highlightColor: Colors.transparent,
+        //           splashColor: Colors.transparent,
+        //         ),
+        //         child: PopupMenuButton(
+        //           icon: SvgPicture.asset(
+        //             "assets/icons/settings_icon.svg",
+        //             color: Constants.kButtonGrey,
+        //             height: 20,
+        //           ),
+        //           itemBuilder: (context) => [
+        //             PopupMenuItem(
+        //               child: Row(
+        //                 children: const [
+        //                   Text('Editar'),
+        //                 ],
+        //               ),
+        //               onTap: () async {
+        //                 // await setorStore.setSetorEditing(widget.setorN2);
+        //                 // Get.to(
+        //                 //   () => const CadastrarSetorPage(),
+        //                 //   transition: Transition.rightToLeft,
+        //                 // );
+        //               },
+        //             ),
+        //             PopupMenuItem(
+        //               child: Row(
+        //                 children: const [
+        //                   Text('Deletar'),
+        //                 ],
+        //               ),
+        //               onTap: () {},
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ],
         flexibleSpace: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
