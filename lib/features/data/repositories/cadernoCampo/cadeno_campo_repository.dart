@@ -3,13 +3,23 @@ import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/datasources/cadernoCampo/caderno_campo_datasource.dart';
 import 'package:osi_solucoes/features/data/repositories/cadernoCampo/caderno_campo_repository_interface.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
+import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
+import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 
 class CadernoCampoRepository implements ICadernoCampoRepository {
   final ICadernoCampoDatasource datasource;
   CadernoCampoRepository({
     required this.datasource,
   });
+
+  @override
+  Future<Either<Failure, List<Usuario>>> buscarUsuariosConta(
+      int contaId) async {
+    var result =
+        await datasource.buscarUsuariosByConta(contaId: contaId); //mudar
+    return result;
+  }
 
   @override
   Future<Either<Failure, List<Lote>>> buscarLotesByConta(int contaId) async {
@@ -38,6 +48,20 @@ class CadernoCampoRepository implements ICadernoCampoRepository {
   @override
   Future<Either<Failure, Lote>> buscarAtividades(int loteId) async {
     var result = await datasource.buscarAtividades(loteId: loteId);
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, Atividade>> cadastrarAtividade({
+    required Atividade atividade,
+    required int usuarioId,
+    required List<int> listLoteId,
+  }) async {
+    var result = await datasource.cadastrarAtividade(
+      atividade: atividade,
+      usuarioId: usuarioId,
+      listLoteId: listLoteId,
+    );
     return result;
   }
 }

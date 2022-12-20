@@ -9,20 +9,35 @@ part of 'caderno_campo_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
-  final _$valueAtom = Atom(name: '_CadernoCampoStoreBase.value');
+  Computed<List<LotesAtividades>>? _$getLotesAtividadesFilterComputed;
 
   @override
-  int get value {
-    _$valueAtom.reportRead();
-    return super.value;
-  }
+  List<LotesAtividades> get getLotesAtividadesFilter =>
+      (_$getLotesAtividadesFilterComputed ??= Computed<List<LotesAtividades>>(
+              () => super.getLotesAtividadesFilter,
+              name: '_CadernoCampoStoreBase.getLotesAtividadesFilter'))
+          .value;
+  Computed<List<Lote>>? _$getLotesFilterComputed;
 
   @override
-  set value(int value) {
-    _$valueAtom.reportWrite(value, super.value, () {
-      super.value = value;
-    });
-  }
+  List<Lote> get getLotesFilter => (_$getLotesFilterComputed ??=
+          Computed<List<Lote>>(() => super.getLotesFilter,
+              name: '_CadernoCampoStoreBase.getLotesFilter'))
+      .value;
+  Computed<List<LoteByFilter>>? _$getLotesGroupComputed;
+
+  @override
+  List<LoteByFilter> get getLotesGroup => (_$getLotesGroupComputed ??=
+          Computed<List<LoteByFilter>>(() => super.getLotesGroup,
+              name: '_CadernoCampoStoreBase.getLotesGroup'))
+      .value;
+  Computed<List<Lote>>? _$selectedLotesComputed;
+
+  @override
+  List<Lote> get selectedLotes => (_$selectedLotesComputed ??=
+          Computed<List<Lote>>(() => super.selectedLotes,
+              name: '_CadernoCampoStoreBase.selectedLotes'))
+      .value;
 
   final _$loteListAtom = Atom(name: '_CadernoCampoStoreBase.loteList');
 
@@ -165,6 +180,37 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
+  final _$searchAtividadeAtom =
+      Atom(name: '_CadernoCampoStoreBase.searchAtividade');
+
+  @override
+  TextEditingController get searchAtividade {
+    _$searchAtividadeAtom.reportRead();
+    return super.searchAtividade;
+  }
+
+  @override
+  set searchAtividade(TextEditingController value) {
+    _$searchAtividadeAtom.reportWrite(value, super.searchAtividade, () {
+      super.searchAtividade = value;
+    });
+  }
+
+  final _$searchLoteAtom = Atom(name: '_CadernoCampoStoreBase.searchLote');
+
+  @override
+  TextEditingController get searchLote {
+    _$searchLoteAtom.reportRead();
+    return super.searchLote;
+  }
+
+  @override
+  set searchLote(TextEditingController value) {
+    _$searchLoteAtom.reportWrite(value, super.searchLote, () {
+      super.searchLote = value;
+    });
+  }
+
   final _$dotIndicatorAtom = Atom(name: '_CadernoCampoStoreBase.dotIndicator');
 
   @override
@@ -177,6 +223,23 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   set dotIndicator(int value) {
     _$dotIndicatorAtom.reportWrite(value, super.dotIndicator, () {
       super.dotIndicator = value;
+    });
+  }
+
+  final _$isCadastroLoteLoadingAtom =
+      Atom(name: '_CadernoCampoStoreBase.isCadastroLoteLoading');
+
+  @override
+  bool get isCadastroLoteLoading {
+    _$isCadastroLoteLoadingAtom.reportRead();
+    return super.isCadastroLoteLoading;
+  }
+
+  @override
+  set isCadastroLoteLoading(bool value) {
+    _$isCadastroLoteLoadingAtom.reportWrite(value, super.isCadastroLoteLoading,
+        () {
+      super.isCadastroLoteLoading = value;
     });
   }
 
@@ -193,6 +256,101 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   set showTextFormField(bool value) {
     _$showTextFormFieldAtom.reportWrite(value, super.showTextFormField, () {
       super.showTextFormField = value;
+    });
+  }
+
+  final _$isNovoRegistroLoadingAtom =
+      Atom(name: '_CadernoCampoStoreBase.isNovoRegistroLoading');
+
+  @override
+  bool get isNovoRegistroLoading {
+    _$isNovoRegistroLoadingAtom.reportRead();
+    return super.isNovoRegistroLoading;
+  }
+
+  @override
+  set isNovoRegistroLoading(bool value) {
+    _$isNovoRegistroLoadingAtom.reportWrite(value, super.isNovoRegistroLoading,
+        () {
+      super.isNovoRegistroLoading = value;
+    });
+  }
+
+  final _$isEditingAtom = Atom(name: '_CadernoCampoStoreBase.isEditing');
+
+  @override
+  bool get isEditing {
+    _$isEditingAtom.reportRead();
+    return super.isEditing;
+  }
+
+  @override
+  set isEditing(bool value) {
+    _$isEditingAtom.reportWrite(value, super.isEditing, () {
+      super.isEditing = value;
+    });
+  }
+
+  final _$selectedGroupAtom =
+      Atom(name: '_CadernoCampoStoreBase.selectedGroup');
+
+  @override
+  String get selectedGroup {
+    _$selectedGroupAtom.reportRead();
+    return super.selectedGroup;
+  }
+
+  @override
+  set selectedGroup(String value) {
+    _$selectedGroupAtom.reportWrite(value, super.selectedGroup, () {
+      super.selectedGroup = value;
+    });
+  }
+
+  final _$lotesGroupAtom = Atom(name: '_CadernoCampoStoreBase.lotesGroup');
+
+  @override
+  List<LoteByFilter> get lotesGroup {
+    _$lotesGroupAtom.reportRead();
+    return super.lotesGroup;
+  }
+
+  @override
+  set lotesGroup(List<LoteByFilter> value) {
+    _$lotesGroupAtom.reportWrite(value, super.lotesGroup, () {
+      super.lotesGroup = value;
+    });
+  }
+
+  final _$usuariosContaAtom =
+      Atom(name: '_CadernoCampoStoreBase.usuariosConta');
+
+  @override
+  List<Usuario> get usuariosConta {
+    _$usuariosContaAtom.reportRead();
+    return super.usuariosConta;
+  }
+
+  @override
+  set usuariosConta(List<Usuario> value) {
+    _$usuariosContaAtom.reportWrite(value, super.usuariosConta, () {
+      super.usuariosConta = value;
+    });
+  }
+
+  final _$selectedUsuarioAtom =
+      Atom(name: '_CadernoCampoStoreBase.selectedUsuario');
+
+  @override
+  Usuario? get selectedUsuario {
+    _$selectedUsuarioAtom.reportRead();
+    return super.selectedUsuario;
+  }
+
+  @override
+  set selectedUsuario(Usuario? value) {
+    _$selectedUsuarioAtom.reportWrite(value, super.selectedUsuario, () {
+      super.selectedUsuario = value;
     });
   }
 
@@ -244,18 +402,34 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
-  final _$dataRegistroAtom = Atom(name: '_CadernoCampoStoreBase.dataRegistro');
+  final _$searchLotePageAtom =
+      Atom(name: '_CadernoCampoStoreBase.searchLotePage');
 
   @override
-  DateTime? get dataRegistro {
-    _$dataRegistroAtom.reportRead();
-    return super.dataRegistro;
+  TextEditingController get searchLotePage {
+    _$searchLotePageAtom.reportRead();
+    return super.searchLotePage;
   }
 
   @override
-  set dataRegistro(DateTime? value) {
-    _$dataRegistroAtom.reportWrite(value, super.dataRegistro, () {
-      super.dataRegistro = value;
+  set searchLotePage(TextEditingController value) {
+    _$searchLotePageAtom.reportWrite(value, super.searchLotePage, () {
+      super.searchLotePage = value;
+    });
+  }
+
+  final _$dateRegistroAtom = Atom(name: '_CadernoCampoStoreBase.dateRegistro');
+
+  @override
+  DateTime get dateRegistro {
+    _$dateRegistroAtom.reportRead();
+    return super.dateRegistro;
+  }
+
+  @override
+  set dateRegistro(DateTime value) {
+    _$dateRegistroAtom.reportWrite(value, super.dateRegistro, () {
+      super.dateRegistro = value;
     });
   }
 
@@ -316,8 +490,56 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     return _$buscarAreasListAsyncAction.run(() => super.buscarAreasList());
   }
 
+  final _$buscarUsuariosContaAsyncAction =
+      AsyncAction('_CadernoCampoStoreBase.buscarUsuariosConta');
+
+  @override
+  Future buscarUsuariosConta() {
+    return _$buscarUsuariosContaAsyncAction
+        .run(() => super.buscarUsuariosConta());
+  }
+
+  final _$cadastrarAtividadeAsyncAction =
+      AsyncAction('_CadernoCampoStoreBase.cadastrarAtividade');
+
+  @override
+  Future cadastrarAtividade() {
+    return _$cadastrarAtividadeAsyncAction
+        .run(() => super.cadastrarAtividade());
+  }
+
+  final _$groupLotesByAsyncAction =
+      AsyncAction('_CadernoCampoStoreBase.groupLotesBy');
+
+  @override
+  Future groupLotesBy() {
+    return _$groupLotesByAsyncAction.run(() => super.groupLotesBy());
+  }
+
   final _$_CadernoCampoStoreBaseActionController =
       ActionController(name: '_CadernoCampoStoreBase');
+
+  @override
+  dynamic setSearchAtividade(String value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.setSearchAtividade');
+    try {
+      return super.setSearchAtividade(value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setSearchLote(String value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.setSearchLote');
+    try {
+      return super.setSearchLote(value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic selecionarDropButtonArea(Area area) {
@@ -364,11 +586,55 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   }
 
   @override
-  void increment() {
+  dynamic limparLotes() {
     final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
-        name: '_CadernoCampoStoreBase.increment');
+        name: '_CadernoCampoStoreBase.limparLotes');
     try {
-      return super.increment();
+      return super.limparLotes();
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selectDateRegistro(DateTime value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.selectDateRegistro');
+    try {
+      return super.selectDateRegistro(value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selectTimeRegistro(TimeOfDay value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.selectTimeRegistro');
+    try {
+      return super.selectTimeRegistro(value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setSeachLotePage(String value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.setSeachLotePage');
+    try {
+      return super.setSeachLotePage(value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selectUser(Usuario? usuario) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.selectUser');
+    try {
+      return super.selectUser(usuario);
     } finally {
       _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -386,11 +652,33 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   }
 
   @override
+  dynamic setSelectedGroup(String name) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.setSelectedGroup');
+    try {
+      return super.setSelectedGroup(name);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setShowTextFormField(bool value) {
     final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
         name: '_CadernoCampoStoreBase.setShowTextFormField');
     try {
       return super.setShowTextFormField(value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setIsCadastroLoteLoading(bool value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.setIsCadastroLoteLoading');
+    try {
+      return super.setIsCadastroLoteLoading(value);
     } finally {
       _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -408,9 +696,63 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   }
 
   @override
+  dynamic selectLotesGroup(int index, bool value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.selectLotesGroup');
+    try {
+      return super.selectLotesGroup(index, value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selectLotesByLote(Lote lote, bool value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.selectLotesByLote');
+    try {
+      return super.selectLotesByLote(lote, value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selectLotesSelection(int index1, int index2, bool value) {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.selectLotesSelection');
+    try {
+      return super.selectLotesSelection(index1, index2, value);
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic validarCadastro() {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.validarCadastro');
+    try {
+      return super.validarCadastro();
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic limparTudo() {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.limparTudo');
+    try {
+      return super.limparTudo();
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-value: ${value},
 loteList: ${loteList},
 areaList: ${areaList},
 isLoteListLoading: ${isLoteListLoading},
@@ -420,13 +762,27 @@ dropButtonSetor: ${dropButtonSetor},
 dropButtonArea: ${dropButtonArea},
 loteSelecionado: ${loteSelecionado},
 expandedCard: ${expandedCard},
+searchAtividade: ${searchAtividade},
+searchLote: ${searchLote},
 dotIndicator: ${dotIndicator},
+isCadastroLoteLoading: ${isCadastroLoteLoading},
 showTextFormField: ${showTextFormField},
+isNovoRegistroLoading: ${isNovoRegistroLoading},
+isEditing: ${isEditing},
+selectedGroup: ${selectedGroup},
+lotesGroup: ${lotesGroup},
+usuariosConta: ${usuariosConta},
+selectedUsuario: ${selectedUsuario},
 novoAtividadeName: ${novoAtividadeName},
 novoAutorName: ${novoAutorName},
 novaDescricao: ${novaDescricao},
-dataRegistro: ${dataRegistro},
-loteCadastro: ${loteCadastro}
+searchLotePage: ${searchLotePage},
+dateRegistro: ${dateRegistro},
+loteCadastro: ${loteCadastro},
+getLotesAtividadesFilter: ${getLotesAtividadesFilter},
+getLotesFilter: ${getLotesFilter},
+getLotesGroup: ${getLotesGroup},
+selectedLotes: ${selectedLotes}
     ''';
   }
 }

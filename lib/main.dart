@@ -43,7 +43,12 @@ class AppWidget extends StatelessWidget {
       locale: const Locale("pt", "BR"),
       debugShowCheckedModeBanner: false,
       title: 'Osíris Soluções',
-      theme: ThemeData(primarySwatch: Colors.green, fontFamily: "Montserrat"),
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        fontFamily: "Montserrat",
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+      ),
       initialRoute: Routes.splashPage,
       getPages: AppPages.routes,
       // routeInformationParser: , //Modular.routeInformationParser,
