@@ -1,8 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe.dart';
+import 'package:osi_solucoes/features/presenter/models/usuario/user_map_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import "package:collection/collection.dart";
 
 import '../../../core/utils/toast.dart';
 
@@ -21,6 +23,9 @@ abstract class _GerenciarEquipeBase with Store {
 
   @observable
   List<Usuario> userList = [];
+
+  @observable
+  List<UserMap> userMap = [];
 
   @action
   void increment() {
@@ -44,6 +49,7 @@ abstract class _GerenciarEquipeBase with Store {
       },
       (data) async {
         userList = ObservableList.of(data);
+        // Encontrando a conta logada na lista de contas do usuario
         for (var user in userList) {
           int index = user.contas!.indexWhere((element) =>
               element.conta!.id ==
@@ -52,6 +58,21 @@ abstract class _GerenciarEquipeBase with Store {
             user.selected_conta = user.contas?[index];
           }
         }
+        // Separando os usuarios por cargo
+        var map = groupBy(
+            userList, (Usuario obj) => obj.selected_conta?.cargo?.cargo);
+        userMap.clear();
+        map.forEach(
+          (key, value) {
+            userMap.add(
+              UserMap(
+                key: key ?? '',
+                values: value,
+              ),
+            );
+          },
+        );
+        userMap = List.from(userMap);
       },
     );
 

@@ -79,59 +79,74 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                   }
                   if (gerenciarEquipeStore.searchUserText.isEmpty) {
                     return SliverToBoxAdapter(
-                      // pesquisar para fazer no store -> trazer a lista e fazer um groupBy
-                      // https://stackoverflow.com/questions/54029370/flutter-dart-how-to-groupby-list-of-maps
                       child: CustomScrollView(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         slivers: [
-                          SliverGrid.count(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 2,
-                            mainAxisSpacing: 2,
-                            children:
-                                List.generate(2, (index) => const Text('oi')),
-                          ),
-                          const SliverToBoxAdapter(
-                            child: Text('salve'),
-                          ),
-                          SliverGrid.count(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 2,
-                            mainAxisSpacing: 2,
-                            children: List.generate(
-                              2,
-                              (index) => const Text('tchau'),
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                return SizedBox(
+                                  height: 300,
+                                  width: double.infinity,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SliverToBoxAdapter(
+                                        child: Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: Container(
+                                                margin: const EdgeInsets.only(
+                                                    left: 10.0, right: 20.0),
+                                                child: const Divider(
+                                                  color: Colors.black,
+                                                  height: 36,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(
+                                              gerenciarEquipeStore
+                                                  .userMap[index].key,
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                margin: const EdgeInsets.only(
+                                                    left: 20.0, right: 10.0),
+                                                child: const Divider(
+                                                  color: Colors.black,
+                                                  height: 36,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      // SliverGrid.count(
+                                      //   crossAxisCount: 2,
+                                      //   crossAxisSpacing: 2,
+                                      //   mainAxisSpacing: 2,
+                                      //   children: List.generate(
+                                      //     gerenciarEquipeStore
+                                      //         .userMap[index].values.length,
+                                      //     (indexUser) => Text(
+                                      //       gerenciarEquipeStore.userMap[index]
+                                      //               .values[indexUser].nome ??
+                                      //           'Não informado',
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
-                          ),
-                          const SliverToBoxAdapter(
-                            child: Text('salve'),
-                          ),
-                          SliverGrid.count(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 2,
-                            mainAxisSpacing: 2,
-                            children: List.generate(
-                              2,
-                              (index) => const Text('tchau'),
-                            ),
-                          ),
-                          const SliverToBoxAdapter(
-                            child: Text('salve'),
-                          ),
-                          SliverGrid.count(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 2,
-                            mainAxisSpacing: 2,
-                            children: List.generate(
-                              2,
-                              (index) => const Text('tchau'),
-                            ),
-                          ),
+                          )
                         ],
                       ),
                     );
                   }
+
                   return SliverPadding(
                     padding: const EdgeInsets.all(8.0),
                     sliver: SliverGrid.count(
