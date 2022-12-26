@@ -64,6 +64,21 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
+  final _$userMapAtom = Atom(name: '_GerenciarEquipeBase.userMap');
+
+  @override
+  List<UserMap> get userMap {
+    _$userMapAtom.reportRead();
+    return super.userMap;
+  }
+
+  @override
+  set userMap(List<UserMap> value) {
+    _$userMapAtom.reportWrite(value, super.userMap, () {
+      super.userMap = value;
+    });
+  }
+
   final _$searchUserTextAtom =
       Atom(name: '_GerenciarEquipeBase.searchUserText');
 
@@ -119,6 +134,7 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
 value: ${value},
 isSolucaoListLoading: ${isSolucaoListLoading},
 userList: ${userList},
+userMap: ${userMap},
 searchUserText: ${searchUserText},
 searchUser: ${searchUser}
     ''';

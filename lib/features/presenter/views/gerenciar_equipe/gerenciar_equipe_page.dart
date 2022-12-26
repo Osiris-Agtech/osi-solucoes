@@ -18,6 +18,8 @@ class GerenciarEquipePage extends StatefulWidget {
 }
 
 class _GerenciarEquipePage extends State<GerenciarEquipePage> {
+  final scrollController = ScrollController();
+
   //mudar conta para usuario
   GerenciarEquipeStore gerenciarEquipeStore = GetIt.I<GerenciarEquipeStore>();
 
@@ -47,6 +49,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
           body: Form(
             key: formKey,
             child: CustomScrollView(
+              controller: scrollController,
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
@@ -79,77 +82,69 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                   }
                   if (gerenciarEquipeStore.searchUserText.isEmpty) {
                     return SliverToBoxAdapter(
-                      child: CustomScrollView(
+                      child: ListView.builder(
+                        itemCount: gerenciarEquipeStore.userMap.length,
+                        controller: scrollController,
                         shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        slivers: [
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                                return SizedBox(
-                                  height: 300,
-                                  width: double.infinity,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SliverToBoxAdapter(
-                                        child: Row(
-                                          children: <Widget>[
-                                            Expanded(
-                                              child: Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: 10.0, right: 20.0),
-                                                child: const Divider(
-                                                  color: Colors.black,
-                                                  height: 36,
-                                                ),
-                                              ),
-                                            ),
-                                            Text(
-                                              gerenciarEquipeStore
-                                                  .userMap[index].key,
-                                            ),
-                                            Expanded(
-                                              child: Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: 20.0, right: 10.0),
-                                                child: const Divider(
-                                                  color: Colors.black,
-                                                  height: 36,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 5.0, right: 5.0),
+                                      child: const Divider(
+                                        color: Constants.kGreyText2,
+                                        height: 25,
                                       ),
-                                      // SliverGrid.count(
-                                      //   crossAxisCount: 2,
-                                      //   crossAxisSpacing: 2,
-                                      //   mainAxisSpacing: 2,
-                                      //   children: List.generate(
-                                      //     gerenciarEquipeStore
-                                      //         .userMap[index].values.length,
-                                      //     (indexUser) => Text(
-                                      //       gerenciarEquipeStore.userMap[index]
-                                      //               .values[indexUser].nome ??
-                                      //           'Não informado',
-                                      //     ),
-                                      //   ),
-                                      // ),
-                                    ],
+                                    ),
                                   ),
-                                );
-                              },
-                            ),
-                          )
-                        ],
+                                  Text(
+                                    gerenciarEquipeStore.userMap[index].key,
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 5.0, right: 5.0),
+                                      child: const Divider(
+                                        color: Constants.kGreyText2,
+                                        height: 25,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: GridView.count(
+                                  childAspectRatio: 1.3,
+                                  shrinkWrap: true,
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 2,
+                                  mainAxisSpacing: 2,
+                                  children: List.generate(
+                                    gerenciarEquipeStore
+                                        .userMap[index].values.length,
+                                    (indexUser) => CardUsuario(
+                                      user: gerenciarEquipeStore
+                                          .userMap[index].values[indexUser],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     );
                   }
-
                   return SliverPadding(
                     padding: const EdgeInsets.all(8.0),
                     sliver: SliverGrid.count(
+                      childAspectRatio: 1.4,
                       crossAxisCount: 2,
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 2,
@@ -324,9 +319,6 @@ class _CardUsuarioState extends State<CardUsuario> {
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: Constants.kPrimaryColor),
-              ),
-              const SizedBox(
-                height: 10,
               ),
             ],
           ),
