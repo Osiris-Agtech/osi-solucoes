@@ -101,4 +101,10 @@ abstract class _GerenciarEquipeBase with Store {
   }
 
   //####################### END PESQUISAR ##########################
+
+  @observable
+  Usuario? usuarioSelecionado;
+
+  @action
+  setUsuarioSelecionado(Usuario value) => usuarioSelecionado = value;
 }

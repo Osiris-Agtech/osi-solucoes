@@ -2,8 +2,10 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
+import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/detalhes_usuario_page.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
@@ -42,7 +44,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
       child: SafeArea(
         child: Scaffold(
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-          backgroundColor: Constants.kSecondBackgroundColor,
+          backgroundColor: Constants.kCardColor,
           floatingActionButton: const NewFloatingActionButton(
             nivel: 3,
           ),
@@ -89,6 +91,9 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                         itemBuilder: (context, index) {
                           return Column(
                             children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
                               Row(
                                 children: <Widget>[
                                   Expanded(
@@ -97,12 +102,17 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                                           left: 5.0, right: 5.0),
                                       child: const Divider(
                                         color: Constants.kGreyText2,
-                                        height: 25,
+                                        height: 2,
                                       ),
                                     ),
                                   ),
                                   Text(
                                     gerenciarEquipeStore.userMap[index].key,
+                                    style: const TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: 10,
+                                      color: Constants.kText2,
+                                    ),
                                   ),
                                   Expanded(
                                     child: Container(
@@ -110,11 +120,14 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                                           left: 5.0, right: 5.0),
                                       child: const Divider(
                                         color: Constants.kGreyText2,
-                                        height: 25,
+                                        height: 2,
                                       ),
                                     ),
                                   ),
                                 ],
+                              ),
+                              const SizedBox(
+                                height: 10,
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -192,7 +205,7 @@ class _AppBarState extends State<AppBar> {
         floating: true,
         automaticallyImplyLeading: false,
         forceElevated: true,
-        elevation: 1,
+        elevation: 0,
         flexibleSpace: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -248,7 +261,13 @@ class _CardUsuarioState extends State<CardUsuario> {
     return InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: () {},
+      onTap: () {
+        store.setUsuarioSelecionado(widget.user);
+        Get.to(
+          () => const DetalhesUsuarioPage(),
+          transition: Transition.rightToLeft,
+        );
+      },
       child: Card(
         elevation: 2,
         shape:
@@ -275,8 +294,9 @@ class _CardUsuarioState extends State<CardUsuario> {
                       const Text(
                         'Status',
                         style: TextStyle(
-                          fontSize: 10,
-                          color: Constants.kGreyText,
+                          fontSize: 12,
+                          color: Constants.kText2,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       Row(
@@ -291,10 +311,11 @@ class _CardUsuarioState extends State<CardUsuario> {
                           ),
                           Text(
                             widget.user.ativo != null && widget.user.ativo!
-                                ? ' Inativo'
-                                : ' Ativo',
+                                ? ' INATIVO'
+                                : ' ATIVO',
                             style: const TextStyle(
-                              fontSize: 9,
+                              fontSize: 10,
+                              color: Constants.kText2,
                             ),
                           ),
                         ],
@@ -308,6 +329,7 @@ class _CardUsuarioState extends State<CardUsuario> {
               ),
               Text(
                 widget.user.nome ?? '',
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w600,

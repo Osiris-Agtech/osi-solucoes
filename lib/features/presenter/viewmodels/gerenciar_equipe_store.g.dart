@@ -95,6 +95,22 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
+  final _$usuarioSelecionadoAtom =
+      Atom(name: '_GerenciarEquipeBase.usuarioSelecionado');
+
+  @override
+  Usuario? get usuarioSelecionado {
+    _$usuarioSelecionadoAtom.reportRead();
+    return super.usuarioSelecionado;
+  }
+
+  @override
+  set usuarioSelecionado(Usuario? value) {
+    _$usuarioSelecionadoAtom.reportWrite(value, super.usuarioSelecionado, () {
+      super.usuarioSelecionado = value;
+    });
+  }
+
   final _$buscarUsuariosAsyncAction =
       AsyncAction('_GerenciarEquipeBase.buscarUsuarios');
 
@@ -129,6 +145,17 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
   }
 
   @override
+  dynamic setUsuarioSelecionado(Usuario value) {
+    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
+        name: '_GerenciarEquipeBase.setUsuarioSelecionado');
+    try {
+      return super.setUsuarioSelecionado(value);
+    } finally {
+      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
@@ -136,6 +163,7 @@ isSolucaoListLoading: ${isSolucaoListLoading},
 userList: ${userList},
 userMap: ${userMap},
 searchUserText: ${searchUserText},
+usuarioSelecionado: ${usuarioSelecionado},
 searchUser: ${searchUser}
     ''';
   }
