@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../../core/constants/constants.dart';
@@ -27,6 +28,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Constants.kBackgroundColor,
@@ -39,33 +41,29 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
           backgroundColor: Constants.kBackgroundColor,
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                titulo(),
-                subtitulo(),
-                const SizedBox(height: 20),
-                cargo(context),
-                const Divider(),
-                email(context, store),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  titulo(),
+                  subtitulo(),
+                  const SizedBox(height: 20),
+                  image(context),
+                  email(context, store),
+                  cargo(context),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 10),
+                    child: Divider(
+                      color: Constants.kGreyText2.withOpacity(0.3),
+                    ),
+                  ),
+                  info(context),
+                  saveButton(size),
+                ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget subtitulo() {
-    return const Padding(
-      padding: EdgeInsets.only(top: 10, left: 20),
-      child: Text(
-        'Novo Colaborador',
-        style: TextStyle(
-          fontSize: 14,
-          color: Color(0xff6F6464),
-          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -87,6 +85,71 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
     );
   }
 
+  Widget subtitulo() {
+    return const Padding(
+      padding: EdgeInsets.only(top: 10, left: 20),
+      child: Text(
+        'Novo Colaborador',
+        style: TextStyle(
+          fontSize: 14,
+          color: Color(0xff6F6464),
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  Widget image(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.only(
+          left: 20,
+          right: 10,
+          bottom: 25,
+          top: 10,
+        ),
+        child: Column(
+          children: [
+            SizedBox(
+                child: Image.asset(
+                  "assets/images/cadastro_usuario.png",
+                ),
+                height: MediaQuery.of(context).size.height * 0.25),
+            const SizedBox(
+              height: 10,
+            ),
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                text: 'O convite será enviado no ',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                  color: Constants.kText2.withOpacity(0.75),
+                ),
+                children: <TextSpan>[
+                  const TextSpan(
+                    text: 'e-mail ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Constants.kPrimaryColor,
+                    ),
+                  ),
+                  TextSpan(
+                    text:
+                        ' do colaborador. Basta apenas aceitá-lo, para ter acesso aos cultivos',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      color: Constants.kText2.withOpacity(0.75),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+
   Widget cargo(BuildContext context) {
     // Initial Selected Value
     String dropdownvalue = 'Item 1';
@@ -103,8 +166,6 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
       padding: const EdgeInsets.only(
         left: 20,
         right: 10,
-        top: 5,
-        bottom: 5,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,17 +220,359 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
               fontSize: 18,
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            store.usuarioSelecionado.email ?? 'E-mail não encontrado',
+          TextFormField(
+            onChanged: (value) => {},
+            textCapitalization: TextCapitalization.words,
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
-          )
+            decoration: InputDecoration(
+              hintStyle: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: Constants.kGreyText2.withOpacity(0.3)),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: Constants.kGreyText2.withOpacity(0.3)),
+              ),
+            ),
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget dialog() {
+    return SimpleDialog(
+      title: Row(
+        children: const [
+          Icon(
+            Icons.group_add,
+            color: Constants.kPrimaryColor,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Text('Permissões'),
+        ],
+      ),
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: MediaQuery.of(context).size.height * 0.025),
+          child: Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            color: Constants.kCardColor,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.height * 0.025,
+              ),
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  Theme(
+                    data: Theme.of(context)
+                        .copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                      title: const Text(
+                        'Administrador',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            children: const [
+                              ListTile(
+                                title: Text(
+                                  'Cultivos',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                trailing: Text(
+                                  'Ver e Editar',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'Caderno',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                trailing: Text(
+                                  'Ver e Editar',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'Cargos',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                trailing: Text(
+                                  'Ver e Editar',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'Inventario',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                trailing: Text(
+                                  'Ver e Editar',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'Equipamentos',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                trailing: Text(
+                                  'Ver e Editar',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Theme(
+                    data: Theme.of(context)
+                        .copyWith(dividerColor: Colors.transparent),
+                    child: const ExpansionTile(
+                      title: Text(
+                        'Funcionário',
+                        style: TextStyle(
+                            fontSize: 16.0, fontWeight: FontWeight.w500),
+                      ),
+                      children: <Widget>[
+                        ListTile(
+                          title: Text(
+                            'Cultivos',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                          trailing: Text(
+                            'Ver e Editar',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            'Caderno',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                          trailing: Text(
+                            'Ver e Editar',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            'Inventario',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                          trailing: Text(
+                            'Ver e Editar',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            'Equipamentos',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                          trailing: Text(
+                            'Somente ver',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Theme(
+                    data: Theme.of(context)
+                        .copyWith(dividerColor: Colors.transparent),
+                    child: const ExpansionTile(
+                      title: Text(
+                        'Convidado',
+                        style: TextStyle(
+                            fontSize: 16.0, fontWeight: FontWeight.w500),
+                      ),
+                      children: <Widget>[
+                        ListTile(
+                          title: Text(
+                            'Cultivos',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                          trailing: Text(
+                            'Somente ver',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            'Caderno',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                          trailing: Text(
+                            'Somente ver',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            'Equipamentos',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                          trailing: Text(
+                            'Somente ver',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget info(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
+      child: InkWell(
+        onTap: () => showDialog<String>(
+            context: context,
+            builder: (BuildContext context) {
+              return dialog();
+            }),
+        child: Row(
+          children: const [
+            Icon(
+              Icons.help_outline_outlined,
+              color: Constants.kPrimaryColor,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              'Permissões do Cargo',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Constants.kPrimaryColor,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding saveButton(Size size) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Center(
+        child: SizedBox(
+          width: size.width * .75,
+          height: 30,
+          child: Observer(builder: (_) {
+            return ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Constants.kPrimaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              child: const Text(
+                "Enviar Convite",
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+              onPressed: () {}, //store.registrarReservatorio(),
+            );
+          }),
+        ),
       ),
     );
   }
