@@ -101,10 +101,23 @@ abstract class _GerenciarEquipeBase with Store {
   }
 
   //####################### END PESQUISAR ##########################
+  //####################### START DETALHES DO USUARIO  ##########################
+  @observable
+  Usuario usuarioSelecionado = Usuario();
 
   @observable
-  Usuario? usuarioSelecionado;
+  bool? ativoIsChanged;
 
   @action
   setUsuarioSelecionado(Usuario value) => usuarioSelecionado = value;
+
+  @action
+  setAtivo(bool value) => ativoIsChanged = value;
+
+  @action
+  clearDatalhes() {
+    ativoIsChanged = null;
+  }
+  //####################### END DETALHES DO USUARIO  ##########################
+
 }

@@ -5,9 +5,9 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
+import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/cadastrar_usuario_page.dart';
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/detalhes_usuario_page.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
-import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/gerenciar_equipe_store.dart';
@@ -43,10 +43,20 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+          // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           backgroundColor: Constants.kCardColor,
-          floatingActionButton: const NewFloatingActionButton(
-            nivel: 3,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Get.to(
+                () => const CadastrarUsuarioPage(),
+                transition: Transition.rightToLeft,
+              );
+            },
+            child: const Icon(
+              Icons.add,
+              size: 32,
+            ),
+            backgroundColor: Constants.kPrimaryColor,
           ),
           body: Form(
             key: formKey,
@@ -305,14 +315,14 @@ class _CardUsuarioState extends State<CardUsuario> {
                             Icons.circle,
                             color:
                                 widget.user.ativo != null && widget.user.ativo!
-                                    ? Constants.kGreyText2
-                                    : Constants.kPrimaryColor,
+                                    ? Constants.kPrimaryColor
+                                    : Constants.kGreyText2,
                             size: 10,
                           ),
                           Text(
                             widget.user.ativo != null && widget.user.ativo!
-                                ? ' INATIVO'
-                                : ' ATIVO',
+                                ? ' ATIVO'
+                                : ' INATIVO',
                             style: const TextStyle(
                               fontSize: 10,
                               color: Constants.kText2,

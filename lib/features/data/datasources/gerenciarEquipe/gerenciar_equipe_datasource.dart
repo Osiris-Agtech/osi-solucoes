@@ -30,6 +30,7 @@ class GerenciarEquipeDatasource implements IGerenciarEquipeDatasource {
                   id
                   nome
                   email
+                  ativo
                   contas {
                     id
                     conta {

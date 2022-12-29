@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/gerenciar_equipe_store.dart';
 
-class DetalhesUsuarioPage extends StatefulWidget {
-  const DetalhesUsuarioPage({Key? key}) : super(key: key);
+class CadastrarUsuarioPage extends StatefulWidget {
+  const CadastrarUsuarioPage({Key? key}) : super(key: key);
 
   @override
-  State<DetalhesUsuarioPage> createState() => _DetalhesUsuarioPageState();
+  State<CadastrarUsuarioPage> createState() => _CadastrarUsuarioPageState();
 }
 
-class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
+class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
   GerenciarEquipeStore store = GetIt.I<GerenciarEquipeStore>();
 
   @override
@@ -24,7 +23,6 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
   @override
   void dispose() {
     super.dispose();
-    store.clearDatalhes();
   }
 
   @override
@@ -36,18 +34,6 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          floatingActionButton: const FloatingActionButton.extended(
-            backgroundColor: Constants.kPrimaryColor,
-            label: Text(
-              'Salvar',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Constants.kBackgroundColor,
-              ),
-            ),
-            onPressed: null,
-          ),
           resizeToAvoidBottomInset: false,
           appBar: appBar(),
           backgroundColor: Constants.kBackgroundColor,
@@ -60,9 +46,6 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
                 titulo(),
                 subtitulo(),
                 const SizedBox(height: 20),
-                nome(context, store),
-                ativo(context),
-                const Divider(),
                 cargo(context),
                 const Divider(),
                 email(context, store),
@@ -78,7 +61,7 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
     return const Padding(
       padding: EdgeInsets.only(top: 10, left: 20),
       child: Text(
-        'Visualização de Informações',
+        'Novo Colaborador',
         style: TextStyle(
           fontSize: 14,
           color: Color(0xff6F6464),
@@ -95,54 +78,12 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
         right: 10,
       ),
       child: Text(
-        'Detalhes',
+        'Cadastrar Colaborador',
         style: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.w600,
         ),
       ),
-    );
-  }
-
-  Widget nome(BuildContext context, GerenciarEquipeStore store) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 20,
-        right: 10,
-        top: 10,
-        bottom: 15,
-      ),
-      child: Text(
-        store.usuarioSelecionado.nome ?? '',
-        style: const TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  InkWell ativo(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          title: const Text(
-            'Ativo',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
-          onTap: () {},
-          trailing: Switch(
-            value: store.ativoIsChanged ?? store.usuarioSelecionado.ativo!,
-            onChanged: (value) {
-              store.setAtivo(value);
-            },
-            activeTrackColor: Constants.kPrimaryColor,
-            activeColor: Constants.kCardColor,
-            inactiveTrackColor: Constants.kGreyText2,
-            inactiveThumbColor: Constants.kCardColor,
-          ),
-        );
-      }),
     );
   }
 

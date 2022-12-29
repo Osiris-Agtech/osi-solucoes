@@ -99,15 +99,31 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
       Atom(name: '_GerenciarEquipeBase.usuarioSelecionado');
 
   @override
-  Usuario? get usuarioSelecionado {
+  Usuario get usuarioSelecionado {
     _$usuarioSelecionadoAtom.reportRead();
     return super.usuarioSelecionado;
   }
 
   @override
-  set usuarioSelecionado(Usuario? value) {
+  set usuarioSelecionado(Usuario value) {
     _$usuarioSelecionadoAtom.reportWrite(value, super.usuarioSelecionado, () {
       super.usuarioSelecionado = value;
+    });
+  }
+
+  final _$ativoIsChangedAtom =
+      Atom(name: '_GerenciarEquipeBase.ativoIsChanged');
+
+  @override
+  bool? get ativoIsChanged {
+    _$ativoIsChangedAtom.reportRead();
+    return super.ativoIsChanged;
+  }
+
+  @override
+  set ativoIsChanged(bool? value) {
+    _$ativoIsChangedAtom.reportWrite(value, super.ativoIsChanged, () {
+      super.ativoIsChanged = value;
     });
   }
 
@@ -156,6 +172,28 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
   }
 
   @override
+  dynamic setAtivo(bool value) {
+    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
+        name: '_GerenciarEquipeBase.setAtivo');
+    try {
+      return super.setAtivo(value);
+    } finally {
+      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic clearDatalhes() {
+    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
+        name: '_GerenciarEquipeBase.clearDatalhes');
+    try {
+      return super.clearDatalhes();
+    } finally {
+      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
@@ -164,6 +202,7 @@ userList: ${userList},
 userMap: ${userMap},
 searchUserText: ${searchUserText},
 usuarioSelecionado: ${usuarioSelecionado},
+ativoIsChanged: ${ativoIsChanged},
 searchUser: ${searchUser}
     ''';
   }
