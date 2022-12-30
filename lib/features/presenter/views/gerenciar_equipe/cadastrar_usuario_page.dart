@@ -110,10 +110,11 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
         child: Column(
           children: [
             SizedBox(
-                child: Image.asset(
-                  "assets/images/cadastro_usuario.png",
-                ),
-                height: MediaQuery.of(context).size.height * 0.25),
+              child: Image.asset(
+                "assets/images/cadastro_usuario.png",
+              ),
+              height: MediaQuery.of(context).size.height * 0.25,
+            ),
             const SizedBox(
               height: 10,
             ),
@@ -247,6 +248,39 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
     );
   }
 
+  Widget info(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
+      child: InkWell(
+        onTap: () => showDialog<String>(
+            context: context,
+            builder: (BuildContext context) {
+              return dialog();
+            }),
+        child: Row(
+          children: const [
+            Icon(
+              Icons.help_outline_outlined,
+              color: Constants.kPrimaryColor,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              'Permissões do Cargo',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Constants.kPrimaryColor,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget dialog() {
     return SimpleDialog(
       title: Row(
@@ -263,8 +297,9 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
       ),
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: MediaQuery.of(context).size.height * 0.025),
+          padding: const EdgeInsets.symmetric(
+            vertical: 20,
+          ),
           child: Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
@@ -272,17 +307,18 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
             ),
             color: Constants.kCardColor,
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: MediaQuery.of(context).size.height * 0.025,
+              padding: const EdgeInsets.symmetric(
+                vertical: 20,
               ),
-              child: ListView(
-                shrinkWrap: true,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Theme(
                     data: Theme.of(context)
                         .copyWith(dividerColor: Colors.transparent),
-                    child: ExpansionTile(
-                      title: const Text(
+                    child: const ExpansionTile(
+                      childrenPadding: EdgeInsets.symmetric(horizontal: 10),
+                      title: Text(
                         'Administrador',
                         style: TextStyle(
                           fontSize: 18.0,
@@ -290,88 +326,81 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                         ),
                       ),
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            children: const [
-                              ListTile(
-                                title: Text(
-                                  'Cultivos',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                trailing: Text(
-                                  'Ver e Editar',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                              ListTile(
-                                title: Text(
-                                  'Caderno',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                trailing: Text(
-                                  'Ver e Editar',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                              ListTile(
-                                title: Text(
-                                  'Cargos',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                trailing: Text(
-                                  'Ver e Editar',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                              ListTile(
-                                title: Text(
-                                  'Inventario',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                trailing: Text(
-                                  'Ver e Editar',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                              ListTile(
-                                title: Text(
-                                  'Equipamentos',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                trailing: Text(
-                                  'Ver e Editar',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                            ],
+                        ListTile(
+                          title: Text(
+                            'Cultivos',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
                           ),
-                        )
+                          trailing: Text(
+                            'Ver e Editar',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            'Caderno',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                          trailing: Text(
+                            'Ver e Editar',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            'Cargos',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                          trailing: Text(
+                            'Ver e Editar',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            'Inventario',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                          trailing: Text(
+                            'Ver e Editar',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            'Equipamentos',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                          trailing: Text(
+                            'Ver e Editar',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -379,6 +408,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                     data: Theme.of(context)
                         .copyWith(dividerColor: Colors.transparent),
                     child: const ExpansionTile(
+                      childrenPadding: EdgeInsets.symmetric(horizontal: 10),
                       title: Text(
                         'Funcionário',
                         style: TextStyle(
@@ -452,6 +482,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                     data: Theme.of(context)
                         .copyWith(dividerColor: Colors.transparent),
                     child: const ExpansionTile(
+                      childrenPadding: EdgeInsets.symmetric(horizontal: 10),
                       title: Text(
                         'Convidado',
                         style: TextStyle(
@@ -512,39 +543,6 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget info(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
-      child: InkWell(
-        onTap: () => showDialog<String>(
-            context: context,
-            builder: (BuildContext context) {
-              return dialog();
-            }),
-        child: Row(
-          children: const [
-            Icon(
-              Icons.help_outline_outlined,
-              color: Constants.kPrimaryColor,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              'Permissões do Cargo',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Constants.kPrimaryColor,
-                decoration: TextDecoration.underline,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
