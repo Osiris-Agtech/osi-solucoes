@@ -127,12 +127,68 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
+  final _$cargosListAtom = Atom(name: '_GerenciarEquipeBase.cargosList');
+
+  @override
+  List<Cargo> get cargosList {
+    _$cargosListAtom.reportRead();
+    return super.cargosList;
+  }
+
+  @override
+  set cargosList(List<Cargo> value) {
+    _$cargosListAtom.reportWrite(value, super.cargosList, () {
+      super.cargosList = value;
+    });
+  }
+
+  final _$cargoSelecionadoDetalhesPageAtom =
+      Atom(name: '_GerenciarEquipeBase.cargoSelecionadoDetalhesPage');
+
+  @override
+  Cargo? get cargoSelecionadoDetalhesPage {
+    _$cargoSelecionadoDetalhesPageAtom.reportRead();
+    return super.cargoSelecionadoDetalhesPage;
+  }
+
+  @override
+  set cargoSelecionadoDetalhesPage(Cargo? value) {
+    _$cargoSelecionadoDetalhesPageAtom
+        .reportWrite(value, super.cargoSelecionadoDetalhesPage, () {
+      super.cargoSelecionadoDetalhesPage = value;
+    });
+  }
+
+  final _$cargoSelecionadoAtom =
+      Atom(name: '_GerenciarEquipeBase.cargoSelecionado');
+
+  @override
+  Cargo? get cargoSelecionado {
+    _$cargoSelecionadoAtom.reportRead();
+    return super.cargoSelecionado;
+  }
+
+  @override
+  set cargoSelecionado(Cargo? value) {
+    _$cargoSelecionadoAtom.reportWrite(value, super.cargoSelecionado, () {
+      super.cargoSelecionado = value;
+    });
+  }
+
   final _$buscarUsuariosAsyncAction =
       AsyncAction('_GerenciarEquipeBase.buscarUsuarios');
 
   @override
   Future buscarUsuarios() {
     return _$buscarUsuariosAsyncAction.run(() => super.buscarUsuarios());
+  }
+
+  final _$buscarCargosAsyncAction =
+      AsyncAction('_GerenciarEquipeBase.buscarCargos');
+
+  @override
+  Future buscarCargos() {
+    return _$buscarCargosAsyncAction.run(() => super.buscarCargos());
   }
 
   final _$_GerenciarEquipeBaseActionController =
@@ -194,6 +250,39 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
   }
 
   @override
+  dynamic setInitialCargo() {
+    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
+        name: '_GerenciarEquipeBase.setInitialCargo');
+    try {
+      return super.setInitialCargo();
+    } finally {
+      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setCargoDetalhesPage(Cargo cargo) {
+    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
+        name: '_GerenciarEquipeBase.setCargoDetalhesPage');
+    try {
+      return super.setCargoDetalhesPage(cargo);
+    } finally {
+      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setCargo(Cargo cargo) {
+    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
+        name: '_GerenciarEquipeBase.setCargo');
+    try {
+      return super.setCargo(cargo);
+    } finally {
+      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
@@ -203,6 +292,9 @@ userMap: ${userMap},
 searchUserText: ${searchUserText},
 usuarioSelecionado: ${usuarioSelecionado},
 ativoIsChanged: ${ativoIsChanged},
+cargosList: ${cargosList},
+cargoSelecionadoDetalhesPage: ${cargoSelecionadoDetalhesPage},
+cargoSelecionado: ${cargoSelecionado},
 searchUser: ${searchUser}
     ''';
   }

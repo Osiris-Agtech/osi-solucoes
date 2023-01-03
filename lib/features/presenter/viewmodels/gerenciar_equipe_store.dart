@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe.dart';
+import 'package:osi_solucoes/features/presenter/models/cargo/cargo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/user_map_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
@@ -108,6 +109,12 @@ abstract class _GerenciarEquipeBase with Store {
   @observable
   bool? ativoIsChanged;
 
+  @observable
+  List<Cargo> cargosList = [];
+
+  @observable
+  Cargo? cargoSelecionadoDetalhesPage;
+
   @action
   setUsuarioSelecionado(Usuario value) => usuarioSelecionado = value;
 
@@ -117,7 +124,52 @@ abstract class _GerenciarEquipeBase with Store {
   @action
   clearDatalhes() {
     ativoIsChanged = null;
+    cargoSelecionado = null;
+    cargoSelecionadoDetalhesPage = null;
+    cargosList = [];
+  }
+
+  @action
+  setInitialCargo() {
+    cargoSelecionadoDetalhesPage = null;
+    for (var element in cargosList) {
+      if (element.id == usuarioSelecionado.selected_conta?.cargo?.id) {
+        cargoSelecionadoDetalhesPage = element;
+      }
+    }
+  }
+
+  @action
+  setCargoDetalhesPage(Cargo cargo) => cargoSelecionadoDetalhesPage = cargo;
+
+  @action
+  buscarCargos() async {
+    GerenciarEquipeRepository gerenciarEquipeRepository =
+        GetIt.I<GerenciarEquipeRepository>();
+    isSolucaoListLoading = true;
+
+    var cargos = await gerenciarEquipeRepository.buscarCargos();
+
+    cargos.fold(
+      (err) {
+        cargosList = ObservableList.of([]);
+        toastError(message: err.message);
+      },
+      (data) async {
+        cargosList = ObservableList.of(data);
+      },
+    );
+
+    isSolucaoListLoading = false;
   }
   //####################### END DETALHES DO USUARIO  ##########################
+  //####################### START CADASTRAR USUARIO  ##########################
+
+  @observable
+  Cargo? cargoSelecionado;
+
+  @action
+  setCargo(Cargo cargo) => cargoSelecionado = cargo;
+  //####################### END CADASTRAR USUARIO  ##########################
 
 }

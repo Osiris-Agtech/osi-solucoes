@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:osi_solucoes/features/data/datasources/gerenciarEquipe/gerenciar_equipe_datasource.dart';
 import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe_interface.dart';
+import 'package:osi_solucoes/features/presenter/models/cargo/cargo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import '../../../../core/errors/failure.dart';
 
@@ -13,6 +14,13 @@ class GerenciarEquipeRepository implements IGerenciarEquipeRepository {
   @override
   Future<Either<Failure, List<Usuario>>> buscarUsuarios(int contaId) async {
     var result = await datasource.buscarUsuarios(contaId: contaId);
+
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, List<Cargo>>> buscarCargos() async {
+    var result = await datasource.buscarCargos();
 
     return result;
   }

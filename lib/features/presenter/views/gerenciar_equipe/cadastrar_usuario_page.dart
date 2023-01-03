@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/features/presenter/models/cargo/cargo_model.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/gerenciar_equipe_store.dart';
@@ -19,10 +20,14 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      store.buscarCargos();
+    });
   }
 
   @override
   void dispose() {
+    store.clearDatalhes();
     super.dispose();
   }
 
@@ -42,6 +47,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -101,68 +107,58 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
 
   Widget image(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(
-          left: 20,
-          right: 10,
-          bottom: 25,
-          top: 10,
-        ),
-        child: Column(
-          children: [
-            SizedBox(
-              child: Image.asset(
-                "assets/images/cadastro_usuario.png",
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 10,
+        bottom: 25,
+        top: 10,
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            child: Image.asset(
+              "assets/images/cadastro_usuario.png",
+            ),
+            height: MediaQuery.of(context).size.height * 0.20,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              text: 'O convite será enviado no ',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 18,
+                color: Constants.kText2.withOpacity(0.75),
               ),
-              height: MediaQuery.of(context).size.height * 0.25,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                text: 'O convite será enviado no ',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  color: Constants.kText2.withOpacity(0.75),
+              children: <TextSpan>[
+                const TextSpan(
+                  text: 'e-mail ',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Constants.kPrimaryColor,
+                  ),
                 ),
-                children: <TextSpan>[
-                  const TextSpan(
-                    text: 'e-mail ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Constants.kPrimaryColor,
-                    ),
+                TextSpan(
+                  text:
+                      ' do colaborador. Basta apenas aceitá-lo, para ter acesso aos cultivos',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    color: Constants.kText2.withOpacity(0.75),
                   ),
-                  TextSpan(
-                    text:
-                        ' do colaborador. Basta apenas aceitá-lo, para ter acesso aos cultivos',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      color: Constants.kText2.withOpacity(0.75),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 
   Widget cargo(BuildContext context) {
-    // Initial Selected Value
-    String dropdownvalue = 'Item 1';
-
-    // List of items in our dropdown menu
-    var items = [
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      'Item 4',
-      'Item 5',
-    ];
     return Padding(
       padding: const EdgeInsets.only(
         left: 20,
@@ -170,35 +166,69 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const SizedBox(
+            height: 16,
+          ),
           const Text(
             'Cargo',
             style: TextStyle(
               fontSize: 18,
             ),
           ),
-          DropdownButton(
-            value: dropdownvalue,
-            isExpanded: true,
-            underline: DropdownButtonHideUnderline(child: Container()),
-            icon: const Icon(
-              Icons.arrow_drop_down,
-              color: Constants.kPrimaryColor,
-            ),
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Constants.kPrimaryColor,
-            ),
-            borderRadius: const BorderRadius.all(Radius.circular(5)),
-            items: items.map((String items) {
-              return DropdownMenuItem(
-                value: items,
-                child: Text(items),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {},
-          ),
+          Observer(builder: (_) {
+            return DropdownButton<Cargo>(
+              focusColor: Colors.transparent,
+              value: store.cargoSelecionado,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                overflow: TextOverflow.visible,
+              ),
+              hint: const Text(
+                'Selecione o cargo',
+                style: TextStyle(
+                  overflow: TextOverflow.visible,
+                  color: Constants.kGreyText2,
+                ),
+              ),
+              isExpanded: true,
+              underline: DropdownButtonHideUnderline(child: Container()),
+              icon: const Icon(
+                Icons.arrow_drop_down,
+                color: Constants.kPrimaryColor,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              selectedItemBuilder: (BuildContext context) {
+                return store.cargosList.map((Cargo value) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                    ),
+                    child: Text(
+                      store.cargoSelecionado?.cargo ?? '',
+                      style: const TextStyle(color: Constants.kPrimaryColor),
+                    ),
+                  );
+                }).toList();
+              },
+              items: store.cargosList.map((Cargo cargo) {
+                return DropdownMenuItem<Cargo>(
+                  value: cargo,
+                  child: Text(
+                    cargo.cargo ?? '-',
+                    style: const TextStyle(color: Constants.kGreyText),
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  store.setCargo(value);
+                }
+              },
+            );
+          }),
         ],
       ),
     );
@@ -250,8 +280,11 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
 
   Widget info(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
+      padding: const EdgeInsets.only(top: 15, left: 20, right: 20, bottom: 20),
       child: InkWell(
+        hoverColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         onTap: () => showDialog<String>(
             context: context,
             builder: (BuildContext context) {
@@ -282,6 +315,8 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
   }
 
   Widget dialog() {
+    var size = MediaQuery.of(context).size;
+
     return SimpleDialog(
       title: Row(
         children: const [
@@ -542,17 +577,43 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
             ),
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Center(
+            child: SizedBox(
+              width: size.width * .75,
+              height: 30,
+              child: Observer(
+                builder: (_) {
+                  return TextButton(
+                    style: TextButton.styleFrom(
+                      primary: Constants.kPrimaryColor,
+                      textStyle: const TextStyle(
+                        fontSize: 20,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Fechar'),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
 
   Padding saveButton(Size size) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 30, top: 10),
       child: Center(
         child: SizedBox(
           width: size.width * .75,
-          height: 30,
+          height: 40,
           child: Observer(builder: (_) {
             return ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -564,7 +625,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
               child: const Text(
                 "Enviar Convite",
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 18,
                 ),
               ),
               onPressed: () {}, //store.registrarReservatorio(),

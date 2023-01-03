@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../../core/constants/constants.dart';
+import '../../models/cargo/cargo_model.dart';
 import '../../viewmodels/gerenciar_equipe_store.dart';
 
 class DetalhesUsuarioPage extends StatefulWidget {
@@ -19,6 +20,10 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      await store.buscarCargos();
+      store.setInitialCargo();
+    });
   }
 
   @override
@@ -147,55 +152,69 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
   }
 
   Widget cargo(BuildContext context) {
-    // Initial Selected Value
-    String dropdownvalue = 'Item 1';
-
-    // List of items in our dropdown menu
-    var items = [
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      'Item 4',
-      'Item 5',
-    ];
     return Padding(
       padding: const EdgeInsets.only(
         left: 20,
         right: 10,
-        top: 5,
-        bottom: 5,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const SizedBox(
+            height: 16,
+          ),
           const Text(
             'Cargo',
             style: TextStyle(
               fontSize: 18,
             ),
           ),
-          DropdownButton(
-            value: dropdownvalue,
-            isExpanded: true,
-            underline: DropdownButtonHideUnderline(child: Container()),
-            icon: const Icon(
-              Icons.arrow_drop_down,
-              color: Constants.kPrimaryColor,
-            ),
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Constants.kPrimaryColor,
-            ),
-            borderRadius: const BorderRadius.all(Radius.circular(5)),
-            items: items.map((String items) {
-              return DropdownMenuItem(
-                value: items,
-                child: Text(items),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {},
-          ),
+          Observer(builder: (_) {
+            return DropdownButton<Cargo>(
+              focusColor: Colors.transparent,
+              value: store.cargoSelecionadoDetalhesPage,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                overflow: TextOverflow.visible,
+              ),
+              isExpanded: true,
+              underline: DropdownButtonHideUnderline(child: Container()),
+              icon: const Icon(
+                Icons.arrow_drop_down,
+                color: Constants.kPrimaryColor,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              selectedItemBuilder: (BuildContext context) {
+                return store.cargosList.map((Cargo value) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                    ),
+                    child: Text(
+                      store.cargoSelecionadoDetalhesPage?.cargo ?? '',
+                      style: const TextStyle(color: Constants.kPrimaryColor),
+                    ),
+                  );
+                }).toList();
+              },
+              items: store.cargosList.map((Cargo cargo) {
+                return DropdownMenuItem<Cargo>(
+                  value: cargo,
+                  child: Text(
+                    cargo.cargo ?? '-',
+                    style: const TextStyle(color: Constants.kGreyText),
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  store.setCargoDetalhesPage(value);
+                }
+              },
+            );
+          }),
         ],
       ),
     );
