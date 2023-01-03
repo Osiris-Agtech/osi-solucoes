@@ -9,7 +9,9 @@ import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoN
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/views/solucao/detalhes_solucao.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
+import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
 
 class SolucaoPage extends StatefulWidget {
   const SolucaoPage({Key? key}) : super(key: key);
@@ -179,7 +181,11 @@ class _CardReceitaState extends State<CardReceita> {
     return InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: () {},
+      onTap: () {
+        store.selecionarSolucao(widget.solucaoNutritiva);
+        store.buscarDetalhesSolucao();
+        getBottomSheet(const DetalhesSolucao());
+      },
       child: Card(
         elevation: 2,
         shape:

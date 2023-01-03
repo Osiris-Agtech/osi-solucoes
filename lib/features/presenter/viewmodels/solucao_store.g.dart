@@ -49,6 +49,23 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
+  final _$isSolucaoDetalhesLoadingAtom =
+      Atom(name: '_SolucaoStoreBase.isSolucaoDetalhesLoading');
+
+  @override
+  bool get isSolucaoDetalhesLoading {
+    _$isSolucaoDetalhesLoadingAtom.reportRead();
+    return super.isSolucaoDetalhesLoading;
+  }
+
+  @override
+  set isSolucaoDetalhesLoading(bool value) {
+    _$isSolucaoDetalhesLoadingAtom
+        .reportWrite(value, super.isSolucaoDetalhesLoading, () {
+      super.isSolucaoDetalhesLoading = value;
+    });
+  }
+
   final _$solucaoListAtom = Atom(name: '_SolucaoStoreBase.solucaoList');
 
   @override
@@ -61,6 +78,54 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   set solucaoList(List<SolucaoNutritiva> value) {
     _$solucaoListAtom.reportWrite(value, super.solucaoList, () {
       super.solucaoList = value;
+    });
+  }
+
+  final _$nutrientesListAtom = Atom(name: '_SolucaoStoreBase.nutrientesList');
+
+  @override
+  List<FertilizanteNutrienteMap> get nutrientesList {
+    _$nutrientesListAtom.reportRead();
+    return super.nutrientesList;
+  }
+
+  @override
+  set nutrientesList(List<FertilizanteNutrienteMap> value) {
+    _$nutrientesListAtom.reportWrite(value, super.nutrientesList, () {
+      super.nutrientesList = value;
+    });
+  }
+
+  final _$solucaoSelecionadaAtom =
+      Atom(name: '_SolucaoStoreBase.solucaoSelecionada');
+
+  @override
+  SolucaoNutritiva get solucaoSelecionada {
+    _$solucaoSelecionadaAtom.reportRead();
+    return super.solucaoSelecionada;
+  }
+
+  @override
+  set solucaoSelecionada(SolucaoNutritiva value) {
+    _$solucaoSelecionadaAtom.reportWrite(value, super.solucaoSelecionada, () {
+      super.solucaoSelecionada = value;
+    });
+  }
+
+  final _$condutividadeEletricaAtom =
+      Atom(name: '_SolucaoStoreBase.condutividadeEletrica');
+
+  @override
+  TextEditingController get condutividadeEletrica {
+    _$condutividadeEletricaAtom.reportRead();
+    return super.condutividadeEletrica;
+  }
+
+  @override
+  set condutividadeEletrica(TextEditingController value) {
+    _$condutividadeEletricaAtom.reportWrite(value, super.condutividadeEletrica,
+        () {
+      super.condutividadeEletrica = value;
     });
   }
 
@@ -86,6 +151,15 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   @override
   Future buscarSolucoes() {
     return _$buscarSolucoesAsyncAction.run(() => super.buscarSolucoes());
+  }
+
+  final _$buscarDetalhesSolucaoAsyncAction =
+      AsyncAction('_SolucaoStoreBase.buscarDetalhesSolucao');
+
+  @override
+  Future buscarDetalhesSolucao() {
+    return _$buscarDetalhesSolucaoAsyncAction
+        .run(() => super.buscarDetalhesSolucao());
   }
 
   final _$_SolucaoStoreBaseActionController =
@@ -114,11 +188,26 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   }
 
   @override
+  dynamic selecionarSolucao(SolucaoNutritiva solucaoNutritiva) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.selecionarSolucao');
+    try {
+      return super.selecionarSolucao(solucaoNutritiva);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
 isSolucaoListLoading: ${isSolucaoListLoading},
+isSolucaoDetalhesLoading: ${isSolucaoDetalhesLoading},
 solucaoList: ${solucaoList},
+nutrientesList: ${nutrientesList},
+solucaoSelecionada: ${solucaoSelecionada},
+condutividadeEletrica: ${condutividadeEletrica},
 searchSolucaoText: ${searchSolucaoText},
 searchSolucao: ${searchSolucao}
     ''';
