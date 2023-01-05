@@ -84,6 +84,7 @@ abstract class _SolucaoStoreBase with Store {
     solucoes.fold(
       (err) {
         toastError(message: err.message);
+        nutrientesList.clear();
       },
       (data) async {
         solucaoSelecionada = data;
