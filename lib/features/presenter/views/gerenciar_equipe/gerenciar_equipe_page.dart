@@ -20,9 +20,6 @@ class GerenciarEquipePage extends StatefulWidget {
 }
 
 class _GerenciarEquipePage extends State<GerenciarEquipePage> {
-  final scrollController = ScrollController();
-
-  //mudar conta para usuario
   GerenciarEquipeStore gerenciarEquipeStore = GetIt.I<GerenciarEquipeStore>();
 
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
@@ -61,7 +58,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
           body: Form(
             key: formKey,
             child: CustomScrollView(
-              controller: scrollController,
+              controller: ScrollController(),
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
@@ -96,7 +93,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                     return SliverToBoxAdapter(
                       child: ListView.builder(
                         itemCount: gerenciarEquipeStore.userMap.length,
-                        controller: scrollController,
+                        controller: ScrollController(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           return Column(

@@ -41,9 +41,9 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          floatingActionButton: const FloatingActionButton.extended(
+          floatingActionButton: FloatingActionButton.extended(
             backgroundColor: Constants.kPrimaryColor,
-            label: Text(
+            label: const Text(
               'Salvar',
               style: TextStyle(
                 fontSize: 20,
@@ -51,7 +51,9 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
                 color: Constants.kBackgroundColor,
               ),
             ),
-            onPressed: null,
+            onPressed: () {
+              store.alterarUsuario();
+            },
           ),
           resizeToAvoidBottomInset: false,
           appBar: appBar(),
@@ -81,9 +83,9 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
 
   Widget subtitulo() {
     return const Padding(
-      padding: EdgeInsets.only(top: 10, left: 20),
+      padding: EdgeInsets.only(top: 5, left: 25),
       child: Text(
-        'Visualização de Informações',
+        'Visualização e atualização de Informações',
         style: TextStyle(
           fontSize: 14,
           color: Color(0xff6F6464),
@@ -96,7 +98,7 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
   Widget titulo() {
     return const Padding(
       padding: EdgeInsets.only(
-        left: 20,
+        left: 25,
         right: 10,
       ),
       child: Text(
@@ -112,7 +114,7 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
   Widget nome(BuildContext context, GerenciarEquipeStore store) {
     return Padding(
       padding: const EdgeInsets.only(
-        left: 20,
+        left: 15,
         right: 10,
         top: 10,
         bottom: 15,
@@ -120,6 +122,7 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
       child: Text(
         store.usuarioSelecionado.nome ?? '',
         style: const TextStyle(
+          color: Constants.kText2,
           fontSize: 24,
           fontWeight: FontWeight.bold,
         ),

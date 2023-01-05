@@ -111,6 +111,21 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
+  final _$novoUsuarioAtom = Atom(name: '_GerenciarEquipeBase.novoUsuario');
+
+  @override
+  Usuario get novoUsuario {
+    _$novoUsuarioAtom.reportRead();
+    return super.novoUsuario;
+  }
+
+  @override
+  set novoUsuario(Usuario value) {
+    _$novoUsuarioAtom.reportWrite(value, super.novoUsuario, () {
+      super.novoUsuario = value;
+    });
+  }
+
   final _$ativoIsChangedAtom =
       Atom(name: '_GerenciarEquipeBase.ativoIsChanged');
 
@@ -175,6 +190,21 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
+  final _$emailAtom = Atom(name: '_GerenciarEquipeBase.email');
+
+  @override
+  TextEditingController get email {
+    _$emailAtom.reportRead();
+    return super.email;
+  }
+
+  @override
+  set email(TextEditingController value) {
+    _$emailAtom.reportWrite(value, super.email, () {
+      super.email = value;
+    });
+  }
+
   final _$buscarUsuariosAsyncAction =
       AsyncAction('_GerenciarEquipeBase.buscarUsuarios');
 
@@ -189,6 +219,14 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
   @override
   Future buscarCargos() {
     return _$buscarCargosAsyncAction.run(() => super.buscarCargos());
+  }
+
+  final _$alterarUsuarioAsyncAction =
+      AsyncAction('_GerenciarEquipeBase.alterarUsuario');
+
+  @override
+  Future alterarUsuario() {
+    return _$alterarUsuarioAsyncAction.run(() => super.alterarUsuario());
   }
 
   final _$_GerenciarEquipeBaseActionController =
@@ -283,6 +321,17 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
   }
 
   @override
+  dynamic setEmail(String value) {
+    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
+        name: '_GerenciarEquipeBase.setEmail');
+    try {
+      return super.setEmail(value);
+    } finally {
+      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
@@ -291,10 +340,12 @@ userList: ${userList},
 userMap: ${userMap},
 searchUserText: ${searchUserText},
 usuarioSelecionado: ${usuarioSelecionado},
+novoUsuario: ${novoUsuario},
 ativoIsChanged: ${ativoIsChanged},
 cargosList: ${cargosList},
 cargoSelecionadoDetalhesPage: ${cargoSelecionadoDetalhesPage},
 cargoSelecionado: ${cargoSelecionado},
+email: ${email},
 searchUser: ${searchUser}
     ''';
   }

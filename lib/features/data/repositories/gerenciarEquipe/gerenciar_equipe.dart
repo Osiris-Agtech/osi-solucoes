@@ -24,4 +24,13 @@ class GerenciarEquipeRepository implements IGerenciarEquipeRepository {
 
     return result;
   }
+
+  @override
+  Future<Either<Failure, Usuario>> alterarUsuario(
+      Usuario usuario, int contaId, int cargoId) async {
+    var result = await datasource.alterarUsuario(
+        usuario: usuario, contaId: contaId, cargoId: cargoId);
+
+    return result;
+  }
 }

@@ -6,4 +6,6 @@ import '../../../presenter/models/cargo/cargo_model.dart';
 abstract class IGerenciarEquipeRepository {
   Future<Either<Failure, List<Usuario>>> buscarUsuarios(int contaId);
   Future<Either<Failure, List<Cargo>>> buscarCargos();
+  Future<Either<Failure, Usuario>> alterarUsuario(
+      Usuario usuario, int contaId, int cargoId);
 }

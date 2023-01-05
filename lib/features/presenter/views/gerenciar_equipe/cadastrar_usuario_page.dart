@@ -186,11 +186,18 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                 fontWeight: FontWeight.w600,
                 overflow: TextOverflow.visible,
               ),
-              hint: const Text(
-                'Selecione o cargo',
-                style: TextStyle(
-                  overflow: TextOverflow.visible,
-                  color: Constants.kGreyText2,
+              hint: const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 10,
+                ),
+                child: Text(
+                  'Selecione o cargo',
+                  style: TextStyle(
+                    fontFamily: "Montserrat",
+                    overflow: TextOverflow.visible,
+                    color: Constants.kGreyText2,
+                    fontSize: 18,
+                  ),
                 ),
               ),
               isExpanded: true,
@@ -252,14 +259,18 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
             ),
           ),
           TextFormField(
-            onChanged: (value) => {},
+            onChanged: (String value) {
+              store.setEmail(value);
+            },
             textCapitalization: TextCapitalization.words,
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
             decoration: InputDecoration(
+              hintText: "Escreva seu e-mail",
               hintStyle: const TextStyle(
+                color: Constants.kGreyText2,
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),

@@ -40,4 +40,6 @@ class FailureMessage {
       'Falha ao cadastrar cultura, verifique se o campo está preenchido corretamente';
   static const errorCadastrarAjusteMessage =
       'Falha ao cadastrar ajuste, verifique se os campos estão preenchido corretamente';
+  static const errorUpdateUsuarioMessage =
+      'Falha ao atualizar usuario, verifique se os campos estão preenchido corretamente';
 }

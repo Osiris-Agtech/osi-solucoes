@@ -1,11 +1,14 @@
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe.dart';
 import 'package:osi_solucoes/features/presenter/models/cargo/cargo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/user_map_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import "package:collection/collection.dart";
+import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
 
 import '../../../core/utils/toast.dart';
 
@@ -107,6 +110,9 @@ abstract class _GerenciarEquipeBase with Store {
   Usuario usuarioSelecionado = Usuario();
 
   @observable
+  Usuario novoUsuario = Usuario();
+
+  @observable
   bool? ativoIsChanged;
 
   @observable
@@ -127,6 +133,7 @@ abstract class _GerenciarEquipeBase with Store {
     cargoSelecionado = null;
     cargoSelecionadoDetalhesPage = null;
     cargosList = [];
+    email.clear();
   }
 
   @action
@@ -162,14 +169,55 @@ abstract class _GerenciarEquipeBase with Store {
 
     isSolucaoListLoading = false;
   }
+
+  //update
+  @action
+  alterarUsuario() async {
+    GerenciarEquipeRepository gerenciarEquipeRepository =
+        GetIt.I<GerenciarEquipeRepository>();
+    AuthController authController = GetIt.I<AuthController>();
+
+    novoUsuario.id = usuarioSelecionado.id;
+    novoUsuario.ativo = ativoIsChanged;
+    var contaId = authController.usuario.selected_conta!.conta!.id!;
+
+    var alterarUsuario = await gerenciarEquipeRepository.alterarUsuario(
+        novoUsuario, contaId, cargoSelecionadoDetalhesPage!.id!);
+
+    alterarUsuario.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        toastSuccess(message: "Alterado com sucesso");
+        buscarUsuarios();
+        clearDatalhes();
+        Get.close(2);
+        Get.to(
+          () => const GerenciarEquipePage(),
+          transition: Transition.rightToLeft,
+        );
+      },
+    );
+
+    isSolucaoListLoading = false;
+  }
   //####################### END DETALHES DO USUARIO  ##########################
   //####################### START CADASTRAR USUARIO  ##########################
 
   @observable
   Cargo? cargoSelecionado;
 
+  @observable
+  TextEditingController email = TextEditingController();
+
   @action
   setCargo(Cargo cargo) => cargoSelecionado = cargo;
+
+  @action
+  setEmail(String value) {
+    email = TextEditingController(text: value);
+  }
   //####################### END CADASTRAR USUARIO  ##########################
 
 }
