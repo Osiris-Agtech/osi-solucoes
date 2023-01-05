@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe.dart';
+import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/cargo/cargo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/user_map_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
@@ -113,7 +113,7 @@ abstract class _GerenciarEquipeBase with Store {
   Usuario novoUsuario = Usuario();
 
   @observable
-  bool? ativoIsChanged;
+  bool ativoIsChanged = false;
 
   @observable
   List<Cargo> cargosList = [];
@@ -122,14 +122,17 @@ abstract class _GerenciarEquipeBase with Store {
   Cargo? cargoSelecionadoDetalhesPage;
 
   @action
-  setUsuarioSelecionado(Usuario value) => usuarioSelecionado = value;
+  setUsuarioSelecionado(Usuario value) {
+    usuarioSelecionado = value;
+    ativoIsChanged = usuarioSelecionado.ativo ?? false;
+  }
 
   @action
   setAtivo(bool value) => ativoIsChanged = value;
 
   @action
   clearDatalhes() {
-    ativoIsChanged = null;
+    ativoIsChanged = false;
     cargoSelecionado = null;
     cargoSelecionadoDetalhesPage = null;
     cargosList = [];
@@ -170,7 +173,7 @@ abstract class _GerenciarEquipeBase with Store {
     isSolucaoListLoading = false;
   }
 
-  //update
+  //update de usuarios
   @action
   alterarUsuario() async {
     GerenciarEquipeRepository gerenciarEquipeRepository =

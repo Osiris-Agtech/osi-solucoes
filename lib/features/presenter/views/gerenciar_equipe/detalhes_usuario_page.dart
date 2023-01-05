@@ -140,7 +140,7 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
           ),
           onTap: () {},
           trailing: Switch(
-            value: store.ativoIsChanged ?? store.usuarioSelecionado.ativo!,
+            value: store.ativoIsChanged,
             onChanged: (value) {
               store.setAtivo(value);
             },

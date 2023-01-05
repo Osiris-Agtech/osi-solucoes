@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:osi_solucoes/features/data/datasources/gerenciarEquipe/gerenciar_equipe_datasource.dart';
-import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe_interface.dart';
+import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe_repository_interface.dart';
 import 'package:osi_solucoes/features/presenter/models/cargo/cargo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import '../../../../core/errors/failure.dart';

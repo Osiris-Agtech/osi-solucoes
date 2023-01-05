@@ -130,13 +130,13 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
       Atom(name: '_GerenciarEquipeBase.ativoIsChanged');
 
   @override
-  bool? get ativoIsChanged {
+  bool get ativoIsChanged {
     _$ativoIsChangedAtom.reportRead();
     return super.ativoIsChanged;
   }
 
   @override
-  set ativoIsChanged(bool? value) {
+  set ativoIsChanged(bool value) {
     _$ativoIsChangedAtom.reportWrite(value, super.ativoIsChanged, () {
       super.ativoIsChanged = value;
     });
