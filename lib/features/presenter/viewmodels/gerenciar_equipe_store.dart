@@ -4,6 +4,7 @@ import 'package:mobx/mobx.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/cargo/cargo_model.dart';
+import 'package:osi_solucoes/features/presenter/models/pessoa/pessoa_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/user_map_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
@@ -212,7 +213,24 @@ abstract class _GerenciarEquipeBase with Store {
   Cargo? cargoSelecionado;
 
   @observable
+  Usuario? usuarioEncontrado;
+
+  @observable
   TextEditingController email = TextEditingController();
+
+  @observable
+  TextEditingController nome = TextEditingController();
+
+  @observable
+  TextEditingController sobrenome = TextEditingController();
+
+  @action
+  clearCadastro() {
+    cargoSelecionado = null;
+    email.clear();
+    nome.clear();
+    sobrenome.clear();
+  }
 
   @action
   setCargo(Cargo cargo) => cargoSelecionado = cargo;
@@ -221,6 +239,81 @@ abstract class _GerenciarEquipeBase with Store {
   setEmail(String value) {
     email = TextEditingController(text: value);
   }
+
+  @action
+  setNome(String value) {
+    nome = TextEditingController(text: value);
+  }
+
+  @action
+  setSobrenome(String value) {
+    sobrenome = TextEditingController(text: value);
+  }
+
+  //Encontrar nome e sobrenome pelo email
+  @action
+  buscarPessoa() async {
+    GerenciarEquipeRepository gerenciarEquipeRepository =
+        GetIt.I<GerenciarEquipeRepository>();
+    isSolucaoListLoading = true;
+
+    var pessoa = await gerenciarEquipeRepository.buscarPessoa(email.text);
+
+    pessoa.fold(
+      (err) {
+        usuarioEncontrado = null;
+        toastError(message: err.message);
+      },
+      (data) async {
+        usuarioEncontrado = data;
+        nome = TextEditingController(text: usuarioEncontrado!.pessoa!.nome!);
+        sobrenome =
+            TextEditingController(text: usuarioEncontrado!.pessoa!.sobrenome!);
+      },
+    );
+
+    isSolucaoListLoading = false;
+  }
+
+  @action
+  registrarUsuario() async {
+    GerenciarEquipeRepository gerenciarEquipeRepository =
+        GetIt.I<GerenciarEquipeRepository>();
+    AuthController authController = GetIt.I<AuthController>();
+
+    isSolucaoListLoading = true;
+
+    var contaId = authController.usuario.selected_conta!.conta!.id!;
+
+    novoUsuario = Usuario(
+      email: email.text,
+      pessoa: Pessoa(
+        nome: nome.text,
+        sobrenome: sobrenome.text,
+      ),
+    );
+
+    var registroUsuario = await gerenciarEquipeRepository.registrarUsuario(
+      novoUsuario,
+      contaId,
+      cargoSelecionado!.id!,
+    );
+
+    registroUsuario.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        toastSuccess(message: "Cadastrado com sucesso");
+        buscarUsuarios();
+        clearCadastro();
+        Get.close(1);
+      },
+    );
+
+    isSolucaoListLoading = false;
+  }
+
   //####################### END CADASTRAR USUARIO  ##########################
 
 }

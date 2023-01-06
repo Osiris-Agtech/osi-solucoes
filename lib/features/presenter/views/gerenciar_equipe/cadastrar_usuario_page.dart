@@ -27,7 +27,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
 
   @override
   void dispose() {
-    store.clearDatalhes();
+    store.clearCadastro();
     super.dispose();
   }
 
@@ -46,27 +46,33 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
           backgroundColor: Constants.kBackgroundColor,
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  titulo(),
-                  subtitulo(),
-                  const SizedBox(height: 20),
-                  image(context),
-                  email(context, store),
-                  cargo(context),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 10),
-                    child: Divider(
-                      color: Constants.kGreyText2.withOpacity(0.3),
+            child: ScrollConfiguration(
+              behavior:
+                  ScrollConfiguration.of(context).copyWith(scrollbars: false),
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    titulo(),
+                    subtitulo(),
+                    const SizedBox(height: 20),
+                    image(context),
+                    email(context, store),
+                    nome(context, store),
+                    sobrenome(context, store),
+                    cargo(context),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 10),
+                      child: Divider(
+                        color: Constants.kGreyText2.withOpacity(0.3),
+                      ),
                     ),
-                  ),
-                  info(context),
-                  saveButton(size),
-                ],
+                    info(context),
+                    saveButton(size),
+                  ],
+                ),
               ),
             ),
           ),
@@ -241,6 +247,102 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
     );
   }
 
+  Widget nome(BuildContext context, GerenciarEquipeStore store) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 10,
+        top: 10,
+        bottom: 10,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Nome',
+            style: TextStyle(
+              fontSize: 18,
+            ),
+          ),
+          Observer(builder: (_) {
+            return TextFormField(
+              controller: store.nome,
+              textCapitalization: TextCapitalization.words,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+              decoration: InputDecoration(
+                hintText: "Nome do colaborador",
+                hintStyle: const TextStyle(
+                  color: Constants.kGreyText2,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Constants.kGreyText2.withOpacity(0.3)),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Constants.kGreyText2.withOpacity(0.3)),
+                ),
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget sobrenome(BuildContext context, GerenciarEquipeStore store) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 10,
+        top: 10,
+        bottom: 10,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Sobrenome',
+            style: TextStyle(
+              fontSize: 18,
+            ),
+          ),
+          Observer(builder: (_) {
+            return TextFormField(
+              controller: store.sobrenome,
+              textCapitalization: TextCapitalization.words,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+              decoration: InputDecoration(
+                hintText: "Sobrenome do colaborador",
+                hintStyle: const TextStyle(
+                  color: Constants.kGreyText2,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Constants.kGreyText2.withOpacity(0.3)),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Constants.kGreyText2.withOpacity(0.3)),
+                ),
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
   Widget email(BuildContext context, GerenciarEquipeStore store) {
     return Padding(
       padding: const EdgeInsets.only(
@@ -262,13 +364,16 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
             onChanged: (String value) {
               store.setEmail(value);
             },
+            onEditingComplete: () async {
+              await store.buscarPessoa();
+            },
             textCapitalization: TextCapitalization.words,
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
             decoration: InputDecoration(
-              hintText: "Escreva seu e-mail",
+              hintText: "E-mail do colaborador",
               hintStyle: const TextStyle(
                 color: Constants.kGreyText2,
                 fontSize: 18,
@@ -458,7 +563,9 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                       title: Text(
                         'Funcionário',
                         style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.w500),
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       children: <Widget>[
                         ListTile(
@@ -532,7 +639,9 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                       title: Text(
                         'Convidado',
                         style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.w500),
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       children: <Widget>[
                         ListTile(
@@ -639,7 +748,9 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                   fontSize: 18,
                 ),
               ),
-              onPressed: () {}, //store.registrarReservatorio(),
+              onPressed: () async {
+                await store.registrarUsuario();
+              }, //store.registrarReservatorio(),
             );
           }),
         ),

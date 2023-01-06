@@ -11,6 +11,7 @@ class FailureMessage {
   static const errorLoginEmailMessage = 'E-mail inválido';
   static const errorLoginPasswordMessage = 'Senha inválida';
   static const errorRecoverPasswordMessage = 'E-mail não encontrado';
+  static const errorUserEmailNotFound = 'Esse E-mail ainda não foi cadastrado';
   static const errorValidationCodeMessage = 'Código de ativação incorreto';
   static const errorGetLoggedUserMessage = 'Usuário não logado';
   static const errorLogoutMessage = 'Falha ao sair';

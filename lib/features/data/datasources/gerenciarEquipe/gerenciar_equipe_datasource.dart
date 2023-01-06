@@ -12,6 +12,12 @@ abstract class IGerenciarEquipeDatasource {
   Future<Either<Failure, List<Cargo>>> buscarCargos();
   Future<Either<Failure, Usuario>> alterarUsuario(
       {required int contaId, required Usuario usuario, required int cargoId});
+  Future<Either<Failure, Usuario>> buscarPessoa({required String email});
+  Future<Either<Failure, Usuario>> registrarUsuario({
+    required Usuario usuario,
+    required int contaId,
+    required int cargoId,
+  });
 }
 
 class GerenciarEquipeDatasource implements IGerenciarEquipeDatasource {
@@ -188,6 +194,106 @@ class GerenciarEquipeDatasource implements IGerenciarEquipeDatasource {
       }
     } catch (e) {
       return Left(ErrorArea(message: FailureMessage.errorUpdateUsuarioMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Usuario>> buscarPessoa({required String email}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readPessoa = r'''
+              query Usuarios ($email: String!) {
+              usuarios(where: {
+                email: {
+                  equals: $email
+                }
+              }) {
+                id
+                email
+                pessoa {
+                  nome
+                  sobrenome
+                }
+              }
+            }
+      ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readPessoa),
+      variables: <String, dynamic>{
+        'email': email,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      Usuario usuarioEncontrado = Usuario.fromJson(result.data?['usuarios'][0]);
+      return Right(usuarioEncontrado);
+    } else {
+      return Left(
+          ErrorGerenciarEquipe(message: FailureMessage.errorUserEmailNotFound));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Usuario>> registrarUsuario(
+      {required Usuario usuario,
+      required int contaId,
+      required int cargoId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+        mutation InviteContributor($nome: String!, $sobrenome: String!, $email: String!, $cargoId: Int!, $contaId: Int!) {
+          inviteContributor(nome: $nome, sobrenome: $sobrenome, email: $email, cargoId: $cargoId, contaId: $contaId) {
+            id
+            email
+            senha
+            nome
+            pessoa {
+              nome
+              sobrenome
+            }
+            contas {
+              conta {
+                id
+                nome
+              }
+              cargo {
+                id
+                cargo
+              }
+            }
+          }
+        }
+      ''';
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "email": usuario.email,
+        "nome": usuario.pessoa!.nome!,
+        "sobrenome": usuario.pessoa!.sobrenome!,
+        "cargoId": cargoId,
+        "contaId": contaId,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      Usuario? novoUsuario =
+          Usuario.fromJson(result.data?['inviteContributor']);
+
+      return Right(novoUsuario);
+    } else {
+      return Left(
+        ErrorGerenciarEquipe(message: FailureMessage.errorRegisterMessage),
+      );
     }
   }
 }

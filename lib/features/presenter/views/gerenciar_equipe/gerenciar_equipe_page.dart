@@ -40,7 +40,6 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           backgroundColor: Constants.kCardColor,
           floatingActionButton: FloatingActionButton(
             onPressed: () {

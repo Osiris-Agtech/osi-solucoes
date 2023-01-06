@@ -190,6 +190,22 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
+  final _$usuarioEncontradoAtom =
+      Atom(name: '_GerenciarEquipeBase.usuarioEncontrado');
+
+  @override
+  Usuario? get usuarioEncontrado {
+    _$usuarioEncontradoAtom.reportRead();
+    return super.usuarioEncontrado;
+  }
+
+  @override
+  set usuarioEncontrado(Usuario? value) {
+    _$usuarioEncontradoAtom.reportWrite(value, super.usuarioEncontrado, () {
+      super.usuarioEncontrado = value;
+    });
+  }
+
   final _$emailAtom = Atom(name: '_GerenciarEquipeBase.email');
 
   @override
@@ -202,6 +218,36 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
   set email(TextEditingController value) {
     _$emailAtom.reportWrite(value, super.email, () {
       super.email = value;
+    });
+  }
+
+  final _$nomeAtom = Atom(name: '_GerenciarEquipeBase.nome');
+
+  @override
+  TextEditingController get nome {
+    _$nomeAtom.reportRead();
+    return super.nome;
+  }
+
+  @override
+  set nome(TextEditingController value) {
+    _$nomeAtom.reportWrite(value, super.nome, () {
+      super.nome = value;
+    });
+  }
+
+  final _$sobrenomeAtom = Atom(name: '_GerenciarEquipeBase.sobrenome');
+
+  @override
+  TextEditingController get sobrenome {
+    _$sobrenomeAtom.reportRead();
+    return super.sobrenome;
+  }
+
+  @override
+  set sobrenome(TextEditingController value) {
+    _$sobrenomeAtom.reportWrite(value, super.sobrenome, () {
+      super.sobrenome = value;
     });
   }
 
@@ -227,6 +273,22 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
   @override
   Future alterarUsuario() {
     return _$alterarUsuarioAsyncAction.run(() => super.alterarUsuario());
+  }
+
+  final _$buscarPessoaAsyncAction =
+      AsyncAction('_GerenciarEquipeBase.buscarPessoa');
+
+  @override
+  Future buscarPessoa() {
+    return _$buscarPessoaAsyncAction.run(() => super.buscarPessoa());
+  }
+
+  final _$registrarUsuarioAsyncAction =
+      AsyncAction('_GerenciarEquipeBase.registrarUsuario');
+
+  @override
+  Future registrarUsuario() {
+    return _$registrarUsuarioAsyncAction.run(() => super.registrarUsuario());
   }
 
   final _$_GerenciarEquipeBaseActionController =
@@ -310,6 +372,17 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
   }
 
   @override
+  dynamic clearCadastro() {
+    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
+        name: '_GerenciarEquipeBase.clearCadastro');
+    try {
+      return super.clearCadastro();
+    } finally {
+      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setCargo(Cargo cargo) {
     final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
         name: '_GerenciarEquipeBase.setCargo');
@@ -332,6 +405,28 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
   }
 
   @override
+  dynamic setNome(String value) {
+    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
+        name: '_GerenciarEquipeBase.setNome');
+    try {
+      return super.setNome(value);
+    } finally {
+      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setSobrenome(String value) {
+    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
+        name: '_GerenciarEquipeBase.setSobrenome');
+    try {
+      return super.setSobrenome(value);
+    } finally {
+      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
@@ -345,7 +440,10 @@ ativoIsChanged: ${ativoIsChanged},
 cargosList: ${cargosList},
 cargoSelecionadoDetalhesPage: ${cargoSelecionadoDetalhesPage},
 cargoSelecionado: ${cargoSelecionado},
+usuarioEncontrado: ${usuarioEncontrado},
 email: ${email},
+nome: ${nome},
+sobrenome: ${sobrenome},
 searchUser: ${searchUser}
     ''';
   }

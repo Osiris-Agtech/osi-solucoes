@@ -33,4 +33,20 @@ class GerenciarEquipeRepository implements IGerenciarEquipeRepository {
 
     return result;
   }
+
+  @override
+  Future<Either<Failure, Usuario>> buscarPessoa(String email) async {
+    var result = await datasource.buscarPessoa(email: email);
+
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, Usuario>> registrarUsuario(
+      Usuario usuario, int contaId, int cargoId) async {
+    var result = await datasource.registrarUsuario(
+        usuario: usuario, contaId: contaId, cargoId: cargoId);
+
+    return result;
+  }
 }
