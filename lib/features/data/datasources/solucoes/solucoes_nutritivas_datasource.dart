@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:graphql/client.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/api_source.dart';
+import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 
 import '../../../../core/errors/errors.dart';
@@ -9,6 +10,7 @@ import '../../../../core/errors/errors.dart';
 abstract class ISolucaoDatasource {
   Future<Either<Failure, List<SolucaoNutritiva>>> buscarSolucoes(
       {required int contaId});
+  Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes();
   Future<Either<Failure, SolucaoNutritiva>> detalhesSolucao(
       {required int solucaoId});
 }
@@ -69,6 +71,54 @@ class SolucaoDatasource implements ISolucaoDatasource {
       return Right(solucoesList);
     } else {
       return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes() async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+        query Fertilizantes{
+          fertilizantes {
+            id
+            nome
+            c_eletrica
+            fertilizantes_nutrientes {
+              id
+              teor_nutriente
+              nutriente {
+                id
+                nome
+                sigla
+              }
+            }
+          }
+        }
+      ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: const <String, dynamic>{},
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      List? fertilizantes = result.data?['fertilizantes']
+          ?.map((item) => Fertilizante.fromJson(item))
+          .toList();
+      if (fertilizantes == null || fertilizantes.isEmpty) {
+        return Left(
+            ErrorReservatorio(message: FailureMessage.emptyListMessage));
+      }
+
+      List<Fertilizante> fertilizanteList = fertilizantes.cast<Fertilizante>();
+      return Right(fertilizanteList);
+    } else {
+      return Left(ErrorFertilizante(message: FailureMessage.emptyListMessage));
     }
   }
 

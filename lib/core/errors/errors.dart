@@ -80,6 +80,12 @@ class ErrorReservatorio implements Failure {
   ErrorReservatorio({required this.message});
 }
 
+class ErrorFertilizante implements Failure {
+  @override
+  final String message;
+  ErrorFertilizante({required this.message});
+}
+
 class ErrorGerenciarEquipe implements Failure {
   @override
   final String message;

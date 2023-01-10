@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_repository.dart';
+import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutrienteMap_model.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
@@ -22,13 +23,31 @@ abstract class _SolucaoStoreBase with Store {
   bool isSolucaoListLoading = false;
 
   @observable
+  bool isNovaSolucaoLoading = false;
+
+  @observable
+  bool isFertilizanteListLoading = false;
+
+  @observable
   bool isSolucaoDetalhesLoading = false;
+
+  @observable
+  int dotIndicator = 1;
+
+  @observable
+  SolucaoNutritiva novaSolucao = SolucaoNutritiva();
 
   @observable
   List<SolucaoNutritiva> solucaoList = [];
 
   @observable
+  List<SelecaoFertilizante> fertilizanteList = [];
+
+  @observable
   List<FertilizanteNutrienteMap> nutrientesList = [];
+
+  @observable
+  TextEditingController novaSolucaoName = TextEditingController();
 
   @observable
   SolucaoNutritiva solucaoSelecionada = SolucaoNutritiva();
@@ -42,6 +61,13 @@ abstract class _SolucaoStoreBase with Store {
   @action
   void increment() {
     value++;
+  }
+
+  @action
+  setDotIndicator(int value) {
+    if (value >= 0 && value <= 1) {
+      dotIndicator = value;
+    }
   }
 
   @action
@@ -71,6 +97,41 @@ abstract class _SolucaoStoreBase with Store {
     );
 
     isSolucaoListLoading = false;
+  }
+
+  @action
+  changeSelecaoFertilizante(int index, bool value) {
+    fertilizanteList[index].selected = value;
+    fertilizanteList = List.from(fertilizanteList);
+  }
+
+  @action
+  buscarFertilizantes() async {
+    SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
+    isFertilizanteListLoading = true;
+
+    var fertilizantes = await solucaoRepository.buscarFertilizantes();
+
+    fertilizantes.fold(
+      (err) {
+        fertilizanteList = ObservableList.of([]);
+        toastError(message: err.message);
+      },
+      (data) async {
+        fertilizanteList = [];
+        for (var item in data) {
+          fertilizanteList.add(
+            SelecaoFertilizante(
+              selected: false,
+              fertilizante: item,
+            ),
+          );
+        }
+        fertilizanteList = List.from(fertilizanteList);
+      },
+    );
+
+    isFertilizanteListLoading = false;
   }
 
   @action

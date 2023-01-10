@@ -40,3 +40,13 @@ class Fertilizante {
 
   Map<String, dynamic> toJson() => _$FertilizanteToJson(this);
 }
+
+class SelecaoFertilizante {
+  bool selected;
+  Fertilizante fertilizante;
+
+  SelecaoFertilizante({
+    required this.selected,
+    required this.fertilizante,
+  });
+}

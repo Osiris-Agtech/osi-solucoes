@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/views/solucao/cadastrar_solucao_page.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/detalhes_solucao.dart';
-import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
 
 class SolucaoPage extends StatefulWidget {
@@ -41,11 +42,20 @@ class _SolucaoPage extends State<SolucaoPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-          backgroundColor: Constants.kSecondBackgroundColor,
-          floatingActionButton: const NewFloatingActionButton(
-            nivel: 3,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Get.to(
+                () => const CadastrarSolucaoPage(),
+                transition: Transition.rightToLeft,
+              );
+            },
+            child: const Icon(
+              Icons.add,
+              size: 32,
+            ),
+            backgroundColor: Constants.kPrimaryColor,
           ),
+          backgroundColor: Constants.kSecondBackgroundColor,
           body: Form(
             key: formKey,
             child: CustomScrollView(

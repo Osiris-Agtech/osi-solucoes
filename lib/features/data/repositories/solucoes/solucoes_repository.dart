@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/datasources/solucoes/solucoes_nutritivas_datasource.dart';
 import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_repository_interface.dart';
+import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 
 class SolucaoRepository implements ISolucaoRepository {
@@ -14,6 +15,13 @@ class SolucaoRepository implements ISolucaoRepository {
   Future<Either<Failure, List<SolucaoNutritiva>>> buscarSolucoes(
       int contaId) async {
     var result = await datasource.buscarSolucoes(contaId: contaId);
+
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes() async {
+    var result = await datasource.buscarFertilizantes();
 
     return result;
   }
