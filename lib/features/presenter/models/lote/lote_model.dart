@@ -75,3 +75,25 @@ class Lote {
 
   Map<String, dynamic> toJson() => _$LoteToJson(this);
 }
+
+class LoteByFilter {
+  bool selected;
+  String key;
+  List<LoteSelection> lotesSelection;
+
+  LoteByFilter({
+    required this.selected,
+    required this.key,
+    required this.lotesSelection,
+  });
+}
+
+class LoteSelection {
+  bool selected;
+  Lote lote;
+
+  LoteSelection({
+    required this.selected,
+    required this.lote,
+  });
+}

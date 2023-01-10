@@ -45,7 +45,7 @@ class SetorPageState extends State<SetorPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+          // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           backgroundColor: Constants.kSecondBackgroundColor,
           // floatingActionButton: const NewFloactingButton(),
           floatingActionButton: const NewFloatingActionButton(

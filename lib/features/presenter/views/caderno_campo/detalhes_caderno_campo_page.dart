@@ -4,13 +4,14 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
+import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:timelines/timelines.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert' show jsonDecode, utf8;
 
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
-import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/caderno_campo_store.dart';
@@ -31,8 +32,10 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
 
   @override
   void initState() {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      store.buscarAtividades();
+    });
     super.initState();
-    store.buscarAtividades();
   }
 
   @override
@@ -44,11 +47,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           backgroundColor: Constants.kSecondBackgroundColor,
-          floatingActionButton: const NewFloatingActionButton(
-            nivel: 3,
-          ),
           body: CustomScrollView(
             controller: scrollController,
             primary: false,
@@ -82,8 +81,8 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                 }
                 return SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
+                    padding: const EdgeInsets.only(
+                      left: 24,
                     ),
                     child: Timeline.tileBuilder(
                       controller: scrollController,
@@ -100,34 +99,61 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                         ),
                       ),
                       builder: TimelineTileBuilder.connected(
-                        itemCount:
-                            store.loteSelecionado.lotes_atividades?.length ?? 0,
+                        itemCount: store.getLotesAtividadesFilter.length,
                         contentsBuilder: (_, index) {
                           return Padding(
-                            padding: EdgeInsets.only(
-                                left: 12, top: index == 0 ? 10 : 0),
+                            padding: const EdgeInsets.only(
+                              left: 12,
+                              top: 20,
+                              right: 20,
+                            ),
                             child: SingleChildScrollView(
                               child: Observer(builder: (_) {
-                                return ExpansionPanelList(
-                                  expandedHeaderPadding:
-                                      const EdgeInsets.only(bottom: 5),
-                                  elevation: 0,
-                                  expansionCallback: (__, bool isExpanded) {
-                                    store.setExpandedCard(index);
-                                  },
-                                  children: [
-                                    ExpansionPanel(
-                                      backgroundColor:
-                                          Constants.kSecondBackgroundColor,
-                                      canTapOnHeader: true,
-                                      headerBuilder: (BuildContext context,
-                                          bool isExpanded) {
-                                        return headerCard(index);
-                                      },
-                                      body: bodyCard(index),
-                                      isExpanded: store.expandedCard[index],
+                                return Card(
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                      16.0,
+                                      16.0,
+                                      0.0,
+                                      16.0,
                                     ),
-                                  ],
+                                    child: ExpansionPanelList(
+                                      expandedHeaderPadding:
+                                          const EdgeInsets.only(bottom: 5),
+                                      elevation: 0,
+                                      expansionCallback: (__, bool isExpanded) {
+                                        store.setExpandedCard(index);
+                                      },
+                                      children: [
+                                        ExpansionPanel(
+                                          backgroundColor:
+                                              Constants.kBackgroundColor,
+                                          canTapOnHeader: true,
+                                          headerBuilder: (BuildContext context,
+                                              bool isExpanded) {
+                                            return headerCard(
+                                              store
+                                                  .getLotesAtividadesFilter[
+                                                      index]
+                                                  .atividade,
+                                              store
+                                                  .getLotesAtividadesFilter[
+                                                      index]
+                                                  .usuario,
+                                            );
+                                          },
+                                          body: bodyCard(store
+                                              .getLotesAtividadesFilter[index]
+                                              .atividade),
+                                          isExpanded: store.expandedCard[index],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 );
                               }),
                             ),
@@ -157,32 +183,24 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
     );
   }
 
-  bodyCard(int index) {
-    return Column(
-      children: [
-        Text(
-          utf8.decode(
-            jsonDecode(store.loteSelecionado.lotes_atividades?[index].atividade
-                        ?.descricao ??
-                    '[]')
-                .cast<int>(),
-          ),
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
-            color: Constants.kGreyText,
-            fontStyle: FontStyle.italic,
-          ),
+  bodyCard(Atividade? atividade) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24.0),
+      child: Text(
+        utf8.decode(
+          jsonDecode(atividade?.descricao ?? '[]').cast<int>(),
         ),
-        const Divider(
-          color: Constants.kButtonGrey,
-          height: 35,
-        )
-      ],
+        style: const TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+          color: Constants.kText2,
+          fontStyle: FontStyle.italic,
+        ),
+      ),
     );
   }
 
-  headerCard(int index) {
+  headerCard(Atividade? atividade, Usuario? usuario) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -193,11 +211,12 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '${store.loteSelecionado.lotes_atividades?[index].atividade!.nome}',
+                atividade?.nome ?? 'Não informado',
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 18,
-                  color: Colors.black,
+                  color: Constants.kContentColorLightTheme,
+                  fontStyle: FontStyle.italic,
                 ),
               ),
               const SizedBox(
@@ -214,7 +233,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                 minVerticalPadding: 0,
                 horizontalTitleGap: 10,
                 title: Text(
-                  '${store.loteSelecionado.lotes_atividades?[index].usuario!.nome}',
+                  usuario?.nome ?? 'Não informado',
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -222,7 +241,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                   ),
                 ),
                 subtitle: Text(
-                  '${store.loteSelecionado.lotes_atividades?[index].usuario?.selected_conta?.cargo?.cargo}',
+                  usuario?.selected_conta?.cargo?.cargo ?? 'Não informado',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -233,16 +252,14 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
             ],
           ),
         ),
-        // const Spacer(),
-
+        const SizedBox(width: 4),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
               DateFormat("dd MMM y", 'pt_br')
                       .format(
-                        store.loteSelecionado.lotes_atividades![index]
-                            .atividade!.created_at!,
+                        atividade?.created_at ?? DateTime.now(),
                       )
                       .capitalize ??
                   '',
@@ -255,8 +272,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
             Text(
               DateFormat("HH:mm", 'pt_br')
                       .format(
-                        store.loteSelecionado.lotes_atividades![index]
-                            .atividade!.created_at!,
+                        atividade?.created_at ?? DateTime.now(),
                       )
                       .capitalize ??
                   '',
@@ -415,6 +431,7 @@ class _AppBarState extends State<AppBar> {
                           ),
                           border: InputBorder.none,
                         ),
+                        onChanged: store.setSearchAtividade,
                       ),
                     ),
                   ],
