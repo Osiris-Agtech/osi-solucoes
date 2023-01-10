@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
+import 'package:osi_solucoes/core/middlewares/area_cultivo_permissions.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:osi_solucoes/features/presenter/views/alert/permission_denied_view.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/setor_page.dart';
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
@@ -22,24 +24,60 @@ import '../views/solucao/solucao_page.dart';
 
 class AppPages {
   static final List<GetPage> routes = [
-    GetPage(name: Routes.ajustesPage, page: () => const AjustesPage()),
     GetPage(
-        name: Routes.resultadoajustePage,
-        page: () => const ResultadoajustePage()),
-    GetPage(name: Routes.areaCultivoPage, page: () => const AreaCultivoPage()),
-    GetPage(name: Routes.setorPage, page: () => const SetorPage()),
+      name: Routes.ajustesPage,
+      page: () => const AjustesPage(),
+    ),
     GetPage(
-        name: Routes.cadastrarAreaCultivoPage,
-        page: () => const CadastrarAreaCultivo()),
-    GetPage(name: Routes.cadastroPage, page: () => const CadastroPage()),
+      name: Routes.resultadoajustePage,
+      page: () => const ResultadoajustePage(),
+    ),
     GetPage(
-        name: Routes.confirmsegurancaPage,
-        page: () => const ConfirmaSegurancaPage()),
+      name: Routes.areaCultivoPage,
+      page: () => const AreaCultivoPage(),
+      middlewares: [
+        N1ListPagePermission(),
+      ],
+    ),
     GetPage(
-        name: Routes.cadernoCampoPage, page: () => const CadernoCampoPage()),
-    GetPage(name: Routes.homePage, page: () => const HomePage()),
-    GetPage(name: Routes.modulosPage, page: () => const ModulosPage()),
-    GetPage(name: Routes.loginPage, page: () => const LoginPage()),
+      name: Routes.cadastrarAreaCultivoPage,
+      page: () => const CadastrarAreaCultivo(),
+      middlewares: [
+        N1ListPagePermission(),
+        // N1RegisterPagePermission(),
+      ],
+    ),
+    GetPage(
+      name: Routes.setorPage,
+      page: () => const SetorPage(),
+      middlewares: const [
+        // N2ListPagePermission(),
+      ],
+    ),
+    GetPage(
+      name: Routes.cadastroPage,
+      page: () => const CadastroPage(),
+    ),
+    GetPage(
+      name: Routes.confirmsegurancaPage,
+      page: () => const ConfirmaSegurancaPage(),
+    ),
+    GetPage(
+      name: Routes.cadernoCampoPage,
+      page: () => const CadernoCampoPage(),
+    ),
+    GetPage(
+      name: Routes.homePage,
+      page: () => const HomePage(),
+    ),
+    GetPage(
+      name: Routes.modulosPage,
+      page: () => const ModulosPage(),
+    ),
+    GetPage(
+      name: Routes.loginPage,
+      page: () => const LoginPage(),
+    ),
     GetPage(
       name: Routes.multiAccountsPage,
       page: () => MultiAccountsPage(
@@ -47,15 +85,29 @@ class AppPages {
         isLoggedIn: false,
       ),
     ),
-    GetPage(name: Routes.splashPage, page: () => const SplashPage()),
     GetPage(
-        name: Routes.reservatoriosPage, page: () => const ReservatoriosPage()),
+      name: Routes.splashPage,
+      page: () => const SplashPage(),
+    ),
     GetPage(
-        name: Routes.cadastrarReservatoriosPage,
-        page: () => const CadastrarReservatorioPage()),
-    GetPage(name: Routes.solucaoPage, page: () => const SolucaoPage()),
+      name: Routes.reservatoriosPage,
+      page: () => const ReservatoriosPage(),
+    ),
     GetPage(
-        name: Routes.gerenciarEquipePage,
-        page: () => const GerenciarEquipePage()),
+      name: Routes.cadastrarReservatoriosPage,
+      page: () => const CadastrarReservatorioPage(),
+    ),
+    GetPage(
+      name: Routes.solucaoPage,
+      page: () => const SolucaoPage(),
+    ),
+    GetPage(
+      name: Routes.gerenciarEquipePage,
+      page: () => const GerenciarEquipePage(),
+    ),
+    GetPage(
+      name: Routes.permissaoNegadaPage,
+      page: () => const PermissionDeniedPage(),
+    ),
   ];
 }
