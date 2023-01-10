@@ -174,6 +174,20 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
             ),
           ),
           Observer(builder: (_) {
+            if (store.usuarioSelecionado.selected_conta!.cargo!.cargo ==
+                "Dono") {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                child: Text(
+                  "Dono",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Constants.kPrimaryColor,
+                  ),
+                ),
+              );
+            }
             return DropdownButton<Cargo>(
               focusColor: Colors.transparent,
               value: store.cargoSelecionadoDetalhesPage,

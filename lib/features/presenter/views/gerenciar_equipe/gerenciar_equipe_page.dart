@@ -63,7 +63,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
               slivers: [
                 AppBar(store: gerenciarEquipeStore),
                 Observer(builder: (_) {
-                  if (gerenciarEquipeStore.isSolucaoListLoading) {
+                  if (gerenciarEquipeStore.isUserListLoading) {
                     return const SliverToBoxAdapter(
                       child: Padding(
                         padding:

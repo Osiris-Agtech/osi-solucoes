@@ -32,20 +32,19 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$isSolucaoListLoadingAtom =
-      Atom(name: '_GerenciarEquipeBase.isSolucaoListLoading');
+  final _$isUserListLoadingAtom =
+      Atom(name: '_GerenciarEquipeBase.isUserListLoading');
 
   @override
-  bool get isSolucaoListLoading {
-    _$isSolucaoListLoadingAtom.reportRead();
-    return super.isSolucaoListLoading;
+  bool get isUserListLoading {
+    _$isUserListLoadingAtom.reportRead();
+    return super.isUserListLoading;
   }
 
   @override
-  set isSolucaoListLoading(bool value) {
-    _$isSolucaoListLoadingAtom.reportWrite(value, super.isSolucaoListLoading,
-        () {
-      super.isSolucaoListLoading = value;
+  set isUserListLoading(bool value) {
+    _$isUserListLoadingAtom.reportWrite(value, super.isUserListLoading, () {
+      super.isUserListLoading = value;
     });
   }
 
@@ -251,6 +250,21 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
+  final _$pessoaFoundAtom = Atom(name: '_GerenciarEquipeBase.pessoaFound');
+
+  @override
+  bool get pessoaFound {
+    _$pessoaFoundAtom.reportRead();
+    return super.pessoaFound;
+  }
+
+  @override
+  set pessoaFound(bool value) {
+    _$pessoaFoundAtom.reportWrite(value, super.pessoaFound, () {
+      super.pessoaFound = value;
+    });
+  }
+
   final _$buscarUsuariosAsyncAction =
       AsyncAction('_GerenciarEquipeBase.buscarUsuarios');
 
@@ -430,7 +444,7 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
   String toString() {
     return '''
 value: ${value},
-isSolucaoListLoading: ${isSolucaoListLoading},
+isUserListLoading: ${isUserListLoading},
 userList: ${userList},
 userMap: ${userMap},
 searchUserText: ${searchUserText},
@@ -444,6 +458,7 @@ usuarioEncontrado: ${usuarioEncontrado},
 email: ${email},
 nome: ${nome},
 sobrenome: ${sobrenome},
+pessoaFound: ${pessoaFound},
 searchUser: ${searchUser}
     ''';
   }

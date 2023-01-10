@@ -266,6 +266,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
           ),
           Observer(builder: (_) {
             return TextFormField(
+              enabled: !(store.pessoaFound),
               controller: store.nome,
               textCapitalization: TextCapitalization.words,
               style: const TextStyle(
@@ -314,6 +315,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
           ),
           Observer(builder: (_) {
             return TextFormField(
+              enabled: !(store.pessoaFound),
               controller: store.sobrenome,
               textCapitalization: TextCapitalization.words,
               style: const TextStyle(

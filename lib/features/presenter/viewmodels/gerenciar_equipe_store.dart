@@ -24,7 +24,7 @@ abstract class _GerenciarEquipeBase with Store {
   int value = 0;
 
   @observable
-  bool isSolucaoListLoading = false;
+  bool isUserListLoading = false;
 
   @observable
   List<Usuario> userList = [];
@@ -42,7 +42,7 @@ abstract class _GerenciarEquipeBase with Store {
     AuthController authController = GetIt.I<AuthController>();
     GerenciarEquipeRepository gerenciarEquipeRepository =
         GetIt.I<GerenciarEquipeRepository>();
-    isSolucaoListLoading = true;
+    isUserListLoading = true;
 
     var usuarios = await gerenciarEquipeRepository
         .buscarUsuarios(authController.usuario.selected_conta!.conta!.id!);
@@ -81,7 +81,7 @@ abstract class _GerenciarEquipeBase with Store {
       },
     );
 
-    isSolucaoListLoading = false;
+    isUserListLoading = false;
   }
   //####################### END LISTAGEM DE USUARIOS ##########################
 
@@ -157,7 +157,7 @@ abstract class _GerenciarEquipeBase with Store {
   buscarCargos() async {
     GerenciarEquipeRepository gerenciarEquipeRepository =
         GetIt.I<GerenciarEquipeRepository>();
-    isSolucaoListLoading = true;
+    isUserListLoading = true;
 
     var cargos = await gerenciarEquipeRepository.buscarCargos();
 
@@ -168,10 +168,11 @@ abstract class _GerenciarEquipeBase with Store {
       },
       (data) async {
         cargosList = ObservableList.of(data);
+        cargosList.removeAt(0); // removendo opção de Dono dos dropdowns
       },
     );
 
-    isSolucaoListLoading = false;
+    isUserListLoading = false;
   }
 
   //update de usuarios
@@ -204,7 +205,7 @@ abstract class _GerenciarEquipeBase with Store {
       },
     );
 
-    isSolucaoListLoading = false;
+    isUserListLoading = false;
   }
   //####################### END DETALHES DO USUARIO  ##########################
   //####################### START CADASTRAR USUARIO  ##########################
@@ -224,12 +225,16 @@ abstract class _GerenciarEquipeBase with Store {
   @observable
   TextEditingController sobrenome = TextEditingController();
 
+  @observable
+  bool pessoaFound = false;
+
   @action
   clearCadastro() {
     cargoSelecionado = null;
     email.clear();
     nome.clear();
     sobrenome.clear();
+    pessoaFound = false;
   }
 
   @action
@@ -255,7 +260,7 @@ abstract class _GerenciarEquipeBase with Store {
   buscarPessoa() async {
     GerenciarEquipeRepository gerenciarEquipeRepository =
         GetIt.I<GerenciarEquipeRepository>();
-    isSolucaoListLoading = true;
+    isUserListLoading = true;
 
     var pessoa = await gerenciarEquipeRepository.buscarPessoa(email.text);
 
@@ -269,10 +274,11 @@ abstract class _GerenciarEquipeBase with Store {
         nome = TextEditingController(text: usuarioEncontrado!.pessoa!.nome!);
         sobrenome =
             TextEditingController(text: usuarioEncontrado!.pessoa!.sobrenome!);
+        pessoaFound = true;
       },
     );
 
-    isSolucaoListLoading = false;
+    isUserListLoading = false;
   }
 
   @action
@@ -281,7 +287,7 @@ abstract class _GerenciarEquipeBase with Store {
         GetIt.I<GerenciarEquipeRepository>();
     AuthController authController = GetIt.I<AuthController>();
 
-    isSolucaoListLoading = true;
+    isUserListLoading = true;
 
     var contaId = authController.usuario.selected_conta!.conta!.id!;
 
@@ -307,11 +313,12 @@ abstract class _GerenciarEquipeBase with Store {
         toastSuccess(message: "Cadastrado com sucesso");
         buscarUsuarios();
         clearCadastro();
+
         Get.close(1);
       },
     );
 
-    isSolucaoListLoading = false;
+    isUserListLoading = false;
   }
 
   //####################### END CADASTRAR USUARIO  ##########################
