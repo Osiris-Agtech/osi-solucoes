@@ -17,4 +17,5 @@ abstract class Routes {
   static const solucaoPage = "/solucaoPage";
   static const setorPage = "/setorPage";
   static const gerenciarEquipePage = "/gerenciarEquipePage";
+  static const permissaoNegadaPage = "/permissaoNegada";
 }
