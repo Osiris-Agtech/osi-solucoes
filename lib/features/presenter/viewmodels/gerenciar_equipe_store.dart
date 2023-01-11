@@ -8,9 +8,9 @@ import 'package:osi_solucoes/features/presenter/models/cargo/cargo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/pessoa/pessoa_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/user_map_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import "package:collection/collection.dart";
-import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
 
 import '../../../core/utils/toast.dart';
 
@@ -228,10 +228,7 @@ abstract class _GerenciarEquipeBase with Store {
         buscarUsuarios();
         clearDatalhes();
         Get.close(2);
-        Get.to(
-          () => const GerenciarEquipePage(),
-          transition: Transition.rightToLeft,
-        );
+        Get.toNamed(Routes.gerenciarEquipePage);
       },
     );
 
@@ -269,20 +266,6 @@ abstract class _GerenciarEquipeBase with Store {
 
   @action
   setCargo(Cargo cargo) => cargoSelecionado = cargo;
-
-  @action
-  setPermissao() {
-    List<String> tipo = [
-      'Cultivo',
-      'Caderno',
-      'Equipe',
-      'Reservatorio',
-      'Solução Nutritiva'
-    ];
-    // cargo name - recebo o id
-    // permissao - cargoList[id].permissao.name
-    // parsePermissao()
-  }
 
   @action
   setEmail(String value) {

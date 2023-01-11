@@ -25,4 +25,6 @@ abstract class Routes {
   static const detalhesReservatorio = '/detalhesReservatório';
   static const cadastroCadernoCampoPage = '/cadastroCadernoCampoPage';
   static const detalhesCadernoCampoPage = '/detalhesCadernoCampoPage';
+  static const cadastrarUsuarioPage = '/cadastrarUsuarioPage';
+  static const detalhesUsuarioPage = '/detalhesUsuarioPage';
 }

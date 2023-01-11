@@ -480,23 +480,19 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
           child: Center(
             child: SizedBox(
               width: size.width * .75,
-              height: 30,
-              child: Observer(
-                builder: (_) {
-                  return TextButton(
-                    style: TextButton.styleFrom(
-                      primary: Constants.kPrimaryColor,
-                      textStyle: const TextStyle(
-                        fontSize: 20,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Fechar'),
-                  );
+              height: 38,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  primary: Constants.kPrimaryColor,
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                    color: Constants.kPrimaryColor,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
                 },
+                child: const Text('Fechar'),
               ),
             ),
           ),
@@ -557,25 +553,23 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
         child: SizedBox(
           width: size.width * .75,
           height: 40,
-          child: Observer(builder: (_) {
-            return ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Constants.kPrimaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Constants.kPrimaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
               ),
-              child: const Text(
-                "Enviar Convite",
-                style: TextStyle(
-                  fontSize: 18,
-                ),
+            ),
+            child: const Text(
+              "Enviar Convite",
+              style: TextStyle(
+                fontSize: 18,
               ),
-              onPressed: () async {
-                await store.registrarUsuario();
-              }, //store.registrarReservatorio(),
-            );
-          }),
+            ),
+            onPressed: () async {
+              await store.registrarUsuario();
+            }, //store.registrarReservatorio(),
+          ),
         ),
       ),
     );

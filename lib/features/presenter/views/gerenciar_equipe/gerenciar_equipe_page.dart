@@ -5,8 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
-import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/cadastrar_usuario_page.dart';
-import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/detalhes_usuario_page.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 
 import '../../../../core/constants/constants.dart';
@@ -43,10 +42,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
           backgroundColor: Constants.kCardColor,
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Get.to(
-                () => const CadastrarUsuarioPage(),
-                transition: Transition.rightToLeft,
-              );
+              Get.toNamed(Routes.cadastrarUsuarioPage);
             },
             child: const Icon(
               Icons.add,
@@ -140,6 +136,8 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                                     horizontal: 16.0),
                                 child: GridView.count(
                                   childAspectRatio: 1.3,
+                                  controller: ScrollController(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   crossAxisCount: 2,
                                   crossAxisSpacing: 2,
@@ -269,10 +267,7 @@ class _CardUsuarioState extends State<CardUsuario> {
       highlightColor: Colors.transparent,
       onTap: () {
         store.setUsuarioSelecionado(widget.user);
-        Get.to(
-          () => const DetalhesUsuarioPage(),
-          transition: Transition.rightToLeft,
-        );
+        Get.toNamed(Routes.detalhesUsuarioPage);
       },
       child: Card(
         elevation: 2,

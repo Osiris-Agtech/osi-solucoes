@@ -14,6 +14,8 @@ import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/detalhes_l
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/lote_page.dart';
 import 'package:osi_solucoes/features/presenter/views/caderno_campo/cadastrar_caderno_campo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/caderno_campo/detalhes_caderno_campo_page.dart';
+import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/cadastrar_usuario_page.dart';
+import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/detalhes_usuario_page.dart';
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/cadastrar_resevatorio_page.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/detalhes_reservatorio_page.dart';
@@ -170,6 +172,20 @@ class AppPages {
       page: () => const GerenciarEquipePage(),
       middlewares: [
         EquipeViewPagePermission(),
+      ],
+    ),
+    GetPage(
+      name: Routes.cadastrarUsuarioPage,
+      page: () => const CadastrarUsuarioPage(),
+      middlewares: [
+        EquipeEditPagePermission(),
+      ],
+    ),
+    GetPage(
+      name: Routes.detalhesUsuarioPage,
+      page: () => const DetalhesUsuarioPage(),
+      middlewares: [
+        EquipeEditPagePermission(),
       ],
     ),
     GetPage(

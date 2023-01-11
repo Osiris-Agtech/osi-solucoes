@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
@@ -699,16 +698,12 @@ class _HomePageState extends State<HomePage> {
         ),
         child: InkWell(
           onTap: () async {
-            if (authController.isDevelop && id != 5) {
-              modulosStore.setPageViewController(id);
-              Get.toNamed(
-                Routes.modulosPage,
-                // () => const ModulosPage(),
-                // transition: Transition.rightToLeft,
-              );
-            } else {
-              toastError(message: "Acesso negado a funcionalidade");
-            }
+            modulosStore.setPageViewController(id);
+            Get.toNamed(
+              Routes.modulosPage,
+              // () => const ModulosPage(),
+              // transition: Transition.rightToLeft,
+            );
           },
           child: Card(
             shape: RoundedRectangleBorder(
@@ -773,7 +768,6 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
   ) {
     // final HomeStore store = Modular.get<HomeStore>();
     HomeStore store = GetIt.I<HomeStore>();
-    final AuthController authController = GetIt.I<AuthController>();
     final progress = shrinkOffset / maxExtent;
 
     return Material(

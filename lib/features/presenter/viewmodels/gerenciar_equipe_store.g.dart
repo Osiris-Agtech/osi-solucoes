@@ -408,17 +408,6 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
   }
 
   @override
-  dynamic setPermissao() {
-    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
-        name: '_GerenciarEquipeBase.setPermissao');
-    try {
-      return super.setPermissao();
-    } finally {
-      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic setEmail(String value) {
     final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
         name: '_GerenciarEquipeBase.setEmail');
