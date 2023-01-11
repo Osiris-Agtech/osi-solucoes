@@ -30,7 +30,6 @@ class N1EditPagePermission extends GetMiddleware {
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
         ?.any((element) => element.permissao?.nome == "area-cultivo-N1-edit");
-    print(validate);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);
