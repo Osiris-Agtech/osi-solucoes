@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
@@ -12,7 +11,6 @@ import 'package:intl/intl.dart';
 import 'dart:convert' show jsonDecode, utf8;
 
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
-import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/caderno_campo_store.dart';
@@ -48,11 +46,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           backgroundColor: Constants.kSecondBackgroundColor,
-          floatingActionButton: const NewFloatingActionButton(
-            nivel: 3,
-          ),
           body: CustomScrollView(
             controller: scrollController,
             primary: false,
@@ -109,37 +103,56 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                           return Padding(
                             padding: const EdgeInsets.only(
                               left: 12,
-                              top: 20, //index == 0 ? 10 : 0,
+                              top: 20,
+                              right: 20,
                             ),
                             child: SingleChildScrollView(
                               child: Observer(builder: (_) {
-                                return ExpansionPanelList(
-                                  expandedHeaderPadding:
-                                      const EdgeInsets.only(bottom: 5),
-                                  elevation: 0,
-                                  expansionCallback: (__, bool isExpanded) {
-                                    store.setExpandedCard(index);
-                                  },
-                                  children: [
-                                    ExpansionPanel(
-                                      backgroundColor:
-                                          Constants.kSecondBackgroundColor,
-                                      canTapOnHeader: true,
-                                      headerBuilder: (BuildContext context,
-                                          bool isExpanded) {
-                                        return headerCard(
-                                          store.getLotesAtividadesFilter[index]
-                                              .atividade,
-                                          store.getLotesAtividadesFilter[index]
-                                              .usuario,
-                                        );
-                                      },
-                                      body: bodyCard(store
-                                          .getLotesAtividadesFilter[index]
-                                          .atividade),
-                                      isExpanded: store.expandedCard[index],
+                                return Card(
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                      16.0,
+                                      16.0,
+                                      0.0,
+                                      16.0,
                                     ),
-                                  ],
+                                    child: ExpansionPanelList(
+                                      expandedHeaderPadding:
+                                          const EdgeInsets.only(bottom: 5),
+                                      elevation: 0,
+                                      expansionCallback: (__, bool isExpanded) {
+                                        store.setExpandedCard(index);
+                                      },
+                                      children: [
+                                        ExpansionPanel(
+                                          backgroundColor:
+                                              Constants.kBackgroundColor,
+                                          canTapOnHeader: true,
+                                          headerBuilder: (BuildContext context,
+                                              bool isExpanded) {
+                                            return headerCard(
+                                              store
+                                                  .getLotesAtividadesFilter[
+                                                      index]
+                                                  .atividade,
+                                              store
+                                                  .getLotesAtividadesFilter[
+                                                      index]
+                                                  .usuario,
+                                            );
+                                          },
+                                          body: bodyCard(store
+                                              .getLotesAtividadesFilter[index]
+                                              .atividade),
+                                          isExpanded: store.expandedCard[index],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 );
                               }),
                             ),
@@ -238,8 +251,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
             ],
           ),
         ),
-        // const Spacer(),
-
+        const SizedBox(width: 4),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -339,51 +351,43 @@ class _AppBarState extends State<AppBar> {
         automaticallyImplyLeading: false,
         forceElevated: true,
         elevation: 1,
-        actions: [
-          Align(
-            alignment: const Alignment(0.6, -0.9),
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: Theme(
-                data: Theme.of(context).copyWith(
-                  highlightColor: Colors.transparent,
-                  splashColor: Colors.transparent,
-                ),
-                child: PopupMenuButton(
-                  icon: SvgPicture.asset(
-                    "assets/icons/settings_icon.svg",
-                    color: Constants.kButtonGrey,
-                    height: 20,
-                  ),
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      child: Row(
-                        children: const [
-                          Text('Editar'),
-                        ],
-                      ),
-                      onTap: () async {
-                        // await setorStore.setSetorEditing(widget.setorN2);
-                        // Get.to(
-                        //   () => const CadastrarSetorPage(),
-                        //   transition: Transition.rightToLeft,
-                        // );
-                      },
-                    ),
-                    PopupMenuItem(
-                      child: Row(
-                        children: const [
-                          Text('Deletar'),
-                        ],
-                      ),
-                      onTap: () {},
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
+        // actions: [
+        //   Align(
+        //     alignment: const Alignment(0.6, -0.9),
+        //     child: Padding(
+        //       padding: const EdgeInsets.only(right: 16.0),
+        //       child: Theme(
+        //         data: Theme.of(context).copyWith(
+        //           highlightColor: Colors.transparent,
+        //           splashColor: Colors.transparent,
+        //         ),
+        //         child: PopupMenuButton(
+        //           icon: SvgPicture.asset(
+        //             "assets/icons/settings_icon.svg",
+        //             color: Constants.kButtonGrey,
+        //             height: 20,
+        //           ),
+        //           itemBuilder: (context) => [
+        //             PopupMenuItem(
+        //               child: Row(
+        //                 children: const [
+        //                   Text('Editar'),
+        //                 ],
+        //               ),
+        //               onTap: () async {
+        //                 // await setorStore.setSetorEditing(widget.setorN2);
+        //                 // Get.to(
+        //                 //   () => const CadastrarSetorPage(),
+        //                 //   transition: Transition.rightToLeft,
+        //                 // );
+        //               },
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ],
         flexibleSpace: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

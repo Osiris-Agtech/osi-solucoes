@@ -17,4 +17,14 @@ abstract class Routes {
   static const solucaoPage = "/solucaoPage";
   static const setorPage = "/setorPage";
   static const gerenciarEquipePage = "/gerenciarEquipePage";
+  static const permissaoNegadaPage = "/permissaoNegada";
+  static const lotePage = '/lotePage';
+  static const cadastrarLotePage = '/cadastrarLotePage';
+  static const cadastrarSetorPage = '/cadastrarSetorPage';
+  static const detalhesLotePage = '/detalhesLotePage';
+  static const detalhesReservatorio = '/detalhesReservatório';
+  static const cadastroCadernoCampoPage = '/cadastroCadernoCampoPage';
+  static const detalhesCadernoCampoPage = '/detalhesCadernoCampoPage';
+  static const cadastrarUsuarioPage = '/cadastrarUsuarioPage';
+  static const detalhesUsuarioPage = '/detalhesUsuarioPage';
 }

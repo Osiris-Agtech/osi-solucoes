@@ -7,6 +7,8 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/bottomSheet.dart';
+import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/lotes_bottomsheet.dart';
+import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
 import '../../../../../core/constants/constants.dart';
 import 'package:intl/intl.dart';
 
@@ -73,7 +75,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     titulo(),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     subtitulo(),
                     const SizedBox(height: 10),
                     atividade(context),
@@ -165,12 +167,16 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
   Widget titulo() {
     return const Padding(
       padding: EdgeInsets.only(
-        left: 20,
+        left: 10,
         right: 10,
       ),
       child: Text(
         'Novo Registro',
-        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+        style: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.w600,
+          color: Constants.kText2,
+        ),
       ),
     );
   }
@@ -232,12 +238,12 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                   toastError(message: 'Preencha todos os campos corretamente');
                   return;
                 }
-
-                if (store.isEditing) {
-                  // store.alterarSetor();
-                } else {
-                  store.cadastrarAtividade();
-                }
+                getBottomSheet(const LotesBottomSheet());
+                // if (store.isEditing) {
+                //   // store.alterarSetor();
+                // } else {
+                //   store.cadastrarAtividade();
+                // }
               }, //store.registrarReservatorio(),
             );
           }),

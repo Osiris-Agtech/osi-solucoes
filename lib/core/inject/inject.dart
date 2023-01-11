@@ -10,7 +10,7 @@ import 'package:osi_solucoes/features/data/datasources/setor/setor_datasource.da
 import 'package:osi_solucoes/features/data/datasources/solucoes/solucoes_nutritivas_datasource.dart';
 import 'package:osi_solucoes/features/data/repositories/ajuste/ajuste_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/cadernoCampo/cadeno_campo_repository.dart';
-import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe.dart';
+import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/lote/lote_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/reservatorio/reservatorio_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/setor/setor_repository.dart';

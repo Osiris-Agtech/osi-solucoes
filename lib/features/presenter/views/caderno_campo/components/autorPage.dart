@@ -23,9 +23,10 @@ Container autorPage(BuildContext context, CadernoCampoStore store) {
             text: const TextSpan(
               text: 'Qual',
               style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Constants.kText2,
+              ),
               children: <TextSpan>[
                 TextSpan(
                   text: ' autor ',
@@ -36,7 +37,9 @@ Container autorPage(BuildContext context, CadernoCampoStore store) {
                 TextSpan(
                   text: 'deseja selecionar ?',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Constants.kText2),
+                    fontWeight: FontWeight.bold,
+                    color: Constants.kText2,
+                  ),
                 ),
               ],
             ),
