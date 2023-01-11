@@ -17,15 +17,39 @@ class Cargo {
   List<CargoPermissao>? permissoes;
   @JsonKey(required: false, disallowNullValue: false)
   List<ConectaConta>? usuarios;
+  @JsonKey(required: false, disallowNullValue: false, defaultValue: [])
+  List<ConcatenatedPermission>? concatenatedPermission;
 
   Cargo({
     this.id,
     this.cargo,
     this.permissoes,
     this.usuarios,
+    this.concatenatedPermission,
   });
 
   factory Cargo.fromJson(Map<String, dynamic> json) => _$CargoFromJson(json);
 
   Map<String, dynamic> toJson() => _$CargoToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class ConcatenatedPermission {
+  @JsonKey(required: false, disallowNullValue: false)
+  String? title;
+  @JsonKey(required: false, disallowNullValue: false)
+  bool? permissionWrite;
+  @JsonKey(required: false, disallowNullValue: false)
+  bool? permissionRead;
+
+  ConcatenatedPermission({
+    this.title,
+    this.permissionRead = false,
+    this.permissionWrite = false,
+  });
+
+  factory ConcatenatedPermission.fromJson(Map<String, dynamic> json) =>
+      _$ConcatenatedPermissionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ConcatenatedPermissionToJson(this);
 }

@@ -74,7 +74,6 @@ abstract class _AjustesStoreBase with Store {
     reservatorios.fold(
       (err) {
         reservatorioList = List.from([]);
-        toastError(message: err.message);
       },
       (data) async {
         reservatorioList = List.from(data);
@@ -84,7 +83,7 @@ abstract class _AjustesStoreBase with Store {
   // #################### FIM DROPDOWN RESERVATORIO #######################
 
   // #################### INICIO CALCULO ##################################
-
+  //TODO: adicionar essa info no banco
   @observable
   double ceAgua = 0.1;
 
@@ -156,6 +155,7 @@ abstract class _AjustesStoreBase with Store {
     double quantidadeFertilizanteSN = double.parse(selectedReservatorio
             .solucao?.solucoes_fertilizantes_concentradas?[0].quantidade! ??
         '0.0');
+    //TODO: pegar essa informação do banco
     double fatorConcentracao = 300;
     // obs: Essa condutividade ja deve vir considerando CE da agua
     double ceTeorico =

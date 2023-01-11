@@ -500,14 +500,14 @@ class _HomePageState extends State<HomePage> {
                   gridItems(context, size, "card9Home".i18n(),
                       "assets/icons/ajustes_icon.svg", true,
                       path: "Ajustes", id: 4),
-                  gridItems(
-                    context,
-                    size,
-                    "card10Home".i18n(),
-                    "assets/icons/chat_icon.svg",
-                    false,
-                    id: 5,
-                  ),
+                  // gridItems(
+                  //   context,
+                  //   size,
+                  //   "card10Home".i18n(),
+                  //   "assets/icons/chat_icon.svg",
+                  //   false,
+                  //   id: 5,
+                  // ),
                   const SizedBox(),
                 ],
               ),
@@ -861,13 +861,10 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
               child: AnimatedOpacity(
                 duration: const Duration(milliseconds: 150),
                 opacity: (1 - progress * 1.5) < 0 ? 0 : 1 - progress * 1.5,
-                child: InkWell(
-                  onTap: () => authController.setIsDevelop(),
-                  child: const CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
-                    radius: 30,
-                  ),
+                child: const CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
+                  radius: 30,
                 ),
               ),
             ),
