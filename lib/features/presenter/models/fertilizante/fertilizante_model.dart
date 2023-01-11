@@ -50,3 +50,14 @@ class SelecaoFertilizante {
     required this.fertilizante,
   });
 }
+
+class ItemFertilizante {
+  Fertilizante fertilizante;
+  bool isExpanded;
+  String quantidade;
+  ItemFertilizante({
+    this.isExpanded = false,
+    required this.fertilizante,
+    required this.quantidade,
+  });
+}

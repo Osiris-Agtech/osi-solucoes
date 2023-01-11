@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/bottomSheet.dart';
 import '../../../../../core/constants/constants.dart';
@@ -46,7 +47,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage> {
               padding: EdgeInsets.only(
                 left: 20,
                 right: 20,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+                bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -84,10 +85,86 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage> {
         ),
         child: Observer(
           builder: (_) {
-            return SizedBox(width: double.infinity, child: avisoFertilizante());
+            if (store.expandedFertilizantes.isEmpty) {
+              return SizedBox(
+                width: double.infinity,
+                child: avisoFertilizante(),
+              );
+            }
+            return SingleChildScrollView(
+              child: Observer(builder: (_) {
+                return ExpansionPanelList(
+                  expandedHeaderPadding: const EdgeInsets.only(bottom: 5),
+                  elevation: 0,
+                  expansionCallback: (int index, bool isExpanded) {
+                    store.setExpandedCard(index);
+                  },
+                  children: store.expandedFertilizantes
+                      .map(
+                        (e) => ExpansionPanel(
+                          backgroundColor: Constants.kSecondBackgroundColor,
+                          canTapOnHeader: true,
+                          headerBuilder:
+                              (BuildContext context, bool isExpanded) {
+                            return headerCard(e);
+                          },
+                          body: bodyCard(e),
+                          isExpanded: e.isExpanded,
+                        ),
+                      )
+                      .toList(),
+                );
+              }),
+            );
+            // return ListView.builder(
+            //   itemCount: store.selectedFertilizantes.length,
+            //   itemBuilder: (context, index) => Text(
+            //       store.selectedFertilizantes[index].nome ?? 'Não informado'),
+            // );
           },
         ),
       ),
+    );
+  }
+
+  bodyCard(ItemFertilizante itemFertilizante) {
+    return Padding(
+        padding: const EdgeInsets.only(bottom: 24.0),
+        child: TextFormField(
+          initialValue: itemFertilizante.quantidade,
+          onChanged: (String? value) {
+            store.setFertilizanteQuantidade(
+              itemFertilizante.fertilizante.id ?? 0,
+              value ?? '0',
+            );
+          },
+        ));
+  }
+
+  headerCard(ItemFertilizante itemFertilizante) {
+    return ListTile(
+      contentPadding: const EdgeInsets.only(right: 0),
+      dense: true,
+      minLeadingWidth: 0,
+      minVerticalPadding: 0,
+      title: Text(
+        itemFertilizante.fertilizante.nome ?? 'Não informado',
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          color: Constants.kText2,
+        ),
+      ),
+      subtitle: itemFertilizante.isExpanded
+          ? null
+          : Text(
+              'Quantidade: ${itemFertilizante.quantidade} mg/L',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Constants.kText2.withOpacity(0.8),
+              ),
+            ),
     );
   }
 

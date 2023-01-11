@@ -9,6 +9,14 @@ part of 'solucao_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$SolucaoStore on _SolucaoStoreBase, Store {
+  Computed<List<Fertilizante>>? _$selectedFertilizantesComputed;
+
+  @override
+  List<Fertilizante> get selectedFertilizantes =>
+      (_$selectedFertilizantesComputed ??= Computed<List<Fertilizante>>(
+              () => super.selectedFertilizantes,
+              name: '_SolucaoStoreBase.selectedFertilizantes'))
+          .value;
   Computed<List<SolucaoNutritiva>>? _$searchSolucaoComputed;
 
   @override
@@ -161,6 +169,40 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
+  final _$expandedFertilizantesAtom =
+      Atom(name: '_SolucaoStoreBase.expandedFertilizantes');
+
+  @override
+  List<ItemFertilizante> get expandedFertilizantes {
+    _$expandedFertilizantesAtom.reportRead();
+    return super.expandedFertilizantes;
+  }
+
+  @override
+  set expandedFertilizantes(List<ItemFertilizante> value) {
+    _$expandedFertilizantesAtom.reportWrite(value, super.expandedFertilizantes,
+        () {
+      super.expandedFertilizantes = value;
+    });
+  }
+
+  final _$quantidadeFertilizantesAtom =
+      Atom(name: '_SolucaoStoreBase.quantidadeFertilizantes');
+
+  @override
+  List<String> get quantidadeFertilizantes {
+    _$quantidadeFertilizantesAtom.reportRead();
+    return super.quantidadeFertilizantes;
+  }
+
+  @override
+  set quantidadeFertilizantes(List<String> value) {
+    _$quantidadeFertilizantesAtom
+        .reportWrite(value, super.quantidadeFertilizantes, () {
+      super.quantidadeFertilizantes = value;
+    });
+  }
+
   final _$nutrientesListAtom = Atom(name: '_SolucaoStoreBase.nutrientesList');
 
   @override
@@ -292,6 +334,17 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   }
 
   @override
+  dynamic setExpandedCard(int index) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.setExpandedCard');
+    try {
+      return super.setExpandedCard(index);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setsearchSolucaoText(String value) {
     final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
         name: '_SolucaoStoreBase.setsearchSolucaoText');
@@ -325,6 +378,17 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   }
 
   @override
+  dynamic setFertilizanteQuantidade(int id, String value) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.setFertilizanteQuantidade');
+    try {
+      return super.setFertilizanteQuantidade(id, value);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
@@ -336,11 +400,14 @@ dotIndicator: ${dotIndicator},
 novaSolucao: ${novaSolucao},
 solucaoList: ${solucaoList},
 fertilizanteList: ${fertilizanteList},
+expandedFertilizantes: ${expandedFertilizantes},
+quantidadeFertilizantes: ${quantidadeFertilizantes},
 nutrientesList: ${nutrientesList},
 novaSolucaoName: ${novaSolucaoName},
 solucaoSelecionada: ${solucaoSelecionada},
 condutividadeEletrica: ${condutividadeEletrica},
 searchSolucaoText: ${searchSolucaoText},
+selectedFertilizantes: ${selectedFertilizantes},
 searchSolucao: ${searchSolucao}
     ''';
   }

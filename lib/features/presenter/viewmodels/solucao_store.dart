@@ -44,6 +44,12 @@ abstract class _SolucaoStoreBase with Store {
   List<SelecaoFertilizante> fertilizanteList = [];
 
   @observable
+  List<ItemFertilizante> expandedFertilizantes = [];
+
+  @observable
+  List<String> quantidadeFertilizantes = [];
+
+  @observable
   List<FertilizanteNutrienteMap> nutrientesList = [];
 
   @observable
@@ -68,6 +74,13 @@ abstract class _SolucaoStoreBase with Store {
     if (value >= 0 && value <= 1) {
       dotIndicator = value;
     }
+  }
+
+  @action
+  setExpandedCard(int index) {
+    expandedFertilizantes[index].isExpanded =
+        !expandedFertilizantes[index].isExpanded;
+    expandedFertilizantes = List.from(expandedFertilizantes);
   }
 
   @action
@@ -101,8 +114,39 @@ abstract class _SolucaoStoreBase with Store {
 
   @action
   changeSelecaoFertilizante(int index, bool value) {
+    // Seção para expansão dos Cards
+    int indexList = expandedFertilizantes.indexWhere((element) =>
+        element.fertilizante.id == fertilizanteList[index].fertilizante.id);
+
+    if (indexList != -1) {
+      expandedFertilizantes.removeAt(indexList);
+    }
+
     fertilizanteList[index].selected = value;
     fertilizanteList = List.from(fertilizanteList);
+
+    if (value) {
+      int indexComputedList = selectedFertilizantes.indexWhere(
+          (element) => element.id == fertilizanteList[index].fertilizante.id);
+      expandedFertilizantes.insert(
+        indexComputedList,
+        ItemFertilizante(
+          fertilizante: selectedFertilizantes[indexComputedList],
+          quantidade: '0',
+        ),
+      );
+    }
+    expandedFertilizantes = List.from(expandedFertilizantes);
+  }
+
+  @action
+  setFertilizanteQuantidade(int id, String value) {
+    int index = expandedFertilizantes
+        .indexWhere((element) => element.fertilizante.id == id);
+    if (index != -1) {
+      expandedFertilizantes[index].quantidade = value;
+      expandedFertilizantes = List.from(expandedFertilizantes);
+    }
   }
 
   @action
@@ -179,6 +223,18 @@ abstract class _SolucaoStoreBase with Store {
     );
 
     isSolucaoDetalhesLoading = false;
+  }
+
+  @computed
+  List<Fertilizante> get selectedFertilizantes {
+    List<Fertilizante> list = [];
+    for (var item in fertilizanteList) {
+      if (item.selected) {
+        list.add(item.fertilizante);
+      }
+    }
+
+    return list;
   }
 
   @computed
