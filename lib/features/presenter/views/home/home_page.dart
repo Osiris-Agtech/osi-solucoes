@@ -9,8 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
-import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
-import 'package:osi_solucoes/features/presenter/views/modulos/modulos_page.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
 
@@ -443,10 +442,7 @@ class _HomePageState extends State<HomePage> {
                           size,
                           "card1Home".i18n(),
                           "assets/icons/gerenciar_icon.svg",
-                          onTap: () => Get.to(
-                            () => const GerenciarEquipePage(),
-                            transition: Transition.rightToLeft,
-                          ),
+                          onTap: () => Get.toNamed(Routes.gerenciarEquipePage),
                         ),
                         firstItems(context, size, "card2Home".i18n(),
                             "assets/icons/relatorio_icon.svg"),
@@ -705,9 +701,10 @@ class _HomePageState extends State<HomePage> {
           onTap: () async {
             if (authController.isDevelop && id != 5) {
               modulosStore.setPageViewController(id);
-              Get.to(
-                () => const ModulosPage(),
-                transition: Transition.rightToLeft,
+              Get.toNamed(
+                Routes.modulosPage,
+                // () => const ModulosPage(),
+                // transition: Transition.rightToLeft,
               );
             } else {
               toastError(message: "Acesso negado a funcionalidade");

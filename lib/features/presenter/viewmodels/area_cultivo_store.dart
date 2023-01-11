@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/features/data/repositories/area/area_repository.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/setor_page.dart';
 import 'package:search_cep/search_cep.dart';
 
 import '../../../core/utils/toast.dart';
@@ -276,10 +276,7 @@ abstract class _AreaCultivoStoreBase with Store {
         limparTudo();
         Get.close(2);
         setorStore.setAreaSelecionada(data);
-        Get.to(
-          () => const SetorPage(),
-          transition: Transition.rightToLeft,
-        );
+        Get.toNamed(Routes.setorPage);
       },
     );
 

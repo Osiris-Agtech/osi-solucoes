@@ -7,12 +7,11 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
-import 'package:osi_solucoes/features/presenter/views/caderno_campo/detalhes_caderno_campo_page.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/caderno_campo_store.dart';
-import 'cadastrar_caderno_campo_page.dart';
 
 class CadernoCampoPage extends StatefulWidget {
   final String title;
@@ -59,10 +58,7 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
             child: FloatingActionButton(
               heroTag: 'NovaNota',
               onPressed: () {
-                Get.to(
-                  () => const CadastroCadernoCampoPage(),
-                  transition: Transition.rightToLeft,
-                );
+                Get.toNamed(Routes.cadastroCadernoCampoPage);
               },
               backgroundColor: Constants.kPrimaryColor,
               child: const Icon(Icons.add),
@@ -334,10 +330,7 @@ class _CardLoteState extends State<CardLote> {
       highlightColor: Colors.transparent,
       onTap: () {
         store.setLoteSelecionado(widget.lote);
-        Get.to(
-          () => const DetalhesCadernoCampoPage(),
-          transition: Transition.rightToLeft,
-        );
+        Get.toNamed(Routes.detalhesCadernoCampoPage);
       },
       child: Card(
         elevation: 2,

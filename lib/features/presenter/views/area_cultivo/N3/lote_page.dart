@@ -9,10 +9,9 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/cadastrar_setor_page.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/detalhes_lote_page.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
@@ -164,19 +163,8 @@ class _AppBarState extends State<AppBar> {
                         ),
                         onTap: () async {
                           await setorStore.setSetorEditing(widget.setorN2);
-                          Get.to(
-                            () => const CadastrarSetorPage(),
-                            transition: Transition.rightToLeft,
-                          );
+                          Get.toNamed(Routes.cadastrarSetorPage);
                         },
-                      ),
-                      PopupMenuItem(
-                        child: Row(
-                          children: const [
-                            Text('Deletar'),
-                          ],
-                        ),
-                        onTap: () {},
                       ),
                     ],
                   ),
@@ -419,10 +407,7 @@ class _CardLoteState extends State<CardLote> {
       highlightColor: Colors.transparent,
       onTap: () {
         store.selecionarLote(widget.lote);
-        Get.to(
-          () => const DetalhesLotePage(),
-          transition: Transition.rightToLeft,
-        );
+        Get.toNamed(Routes.detalhesLotePage);
       },
       child: Card(
         elevation: 2,

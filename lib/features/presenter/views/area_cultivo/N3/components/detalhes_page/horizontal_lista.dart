@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/detalhes_reservatorio_page.dart';
 
 import 'custom_dialog.dart';
 
@@ -25,10 +25,7 @@ SingleChildScrollView horizontalList(BuildContext context,
           onTap: () {
             reservatorioStore
                 .setReservatorioDetalhes(store.loteSelecionado.reservatorio!);
-            Get.to(
-              () => const DetalhesReservatorio(),
-              transition: Transition.rightToLeft,
-            );
+            Get.toNamed(Routes.detalhesReservatorio);
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,
