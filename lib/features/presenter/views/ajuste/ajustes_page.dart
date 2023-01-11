@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
-import 'package:osi_solucoes/features/presenter/views/ajuste/resultadoajuste_page.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 
 import '../../viewmodels/ajustes_store.dart';
 import '../home/components/top_app_bar.dart';
@@ -66,10 +66,7 @@ class AjustesPageState extends State<AjustesPage> {
                     ? () async {
                         await store.calculoAjusteReposicao();
                         await store.montandoDescricao();
-                        Get.to(
-                          () => const ResultadoajustePage(),
-                          transition: Transition.rightToLeft,
-                        );
+                        Get.toNamed(Routes.resultadoajustePage);
                       }
                     : () =>
                         ScaffoldMessenger.of(context).showSnackBar(snackBar),
@@ -671,10 +668,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             onPressed: () async {
-              Get.to(
-                () => const ResultadoajustePage(),
-                transition: Transition.rightToLeft,
-              );
+              Get.toNamed(Routes.resultadoajustePage);
               // Modular.to.pushReplacementNamed("/resultadoAjuste/");
             },
           ),

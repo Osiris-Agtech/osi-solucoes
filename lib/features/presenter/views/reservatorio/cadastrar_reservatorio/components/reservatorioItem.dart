@@ -14,13 +14,13 @@ Padding reservatorioItem(int index, ReservatoriosStore store) {
       left: 10,
       right: 10,
     ),
-    child: GestureDetector(
+    child: InkWell(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       onTap: () {
         store.setReservatorioDetalhes(store.reservatorioList[index]);
-        Get.to(
-          () => const DetalhesReservatorio(),
-          transition: Transition.rightToLeft,
-        );
+        // Get.toNamed(Routes.detalhesReservatorio);
+        Get.to(() => const DetalhesReservatorio());
       },
       child: Card(
         shape: RoundedRectangleBorder(

@@ -8,9 +8,9 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/setor_page.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 import '../../../viewmodels/area_cultivo_store.dart';
 import '../../home/components/top_app_bar.dart';
@@ -127,10 +127,7 @@ class _CardAreaState extends State<CardArea> {
       highlightColor: Colors.transparent,
       onTap: () {
         setorStore.setAreaSelecionada(widget.area);
-        Get.to(
-          () => const SetorPage(),
-          transition: Transition.rightToLeft,
-        );
+        Get.toNamed(Routes.setorPage);
       },
       child: SizedBox(
         height: 185,

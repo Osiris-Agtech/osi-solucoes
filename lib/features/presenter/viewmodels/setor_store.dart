@@ -7,9 +7,9 @@ import 'package:osi_solucoes/features/data/repositories/setor/setor_repository.d
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/lote_page.dart';
 
 part 'setor_store.g.dart';
 
@@ -246,10 +246,7 @@ abstract class _SetorStoreBase with Store {
         limparTudo();
         Get.close(2);
         loteStore.setSetorSelecionado(data);
-        Get.to(
-          () => const LotePage(),
-          transition: Transition.rightToLeft,
-        );
+        Get.toNamed(Routes.lotePage);
       },
     );
 

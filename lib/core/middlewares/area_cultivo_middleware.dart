@@ -4,36 +4,43 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
-class N1ListPagePermission extends GetMiddleware {
+class N1ViewPagePermission extends GetMiddleware {
   AuthController authController = GetIt.I<AuthController>();
+
+  @override
+  int? get priority => 1;
 
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
         ?.any((element) => element.permissao?.nome == "area-cultivo-N1-view");
-    print('VALIDATE: $validate');
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);
   }
 }
 
-class N1RegisterPagePermission extends GetMiddleware {
+class N1EditPagePermission extends GetMiddleware {
   AuthController authController = GetIt.I<AuthController>();
+
+  @override
+  int? get priority => 1;
 
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
         ?.any((element) => element.permissao?.nome == "area-cultivo-N1-edit");
-    print('VALIDATE: $validate');
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);
   }
 }
 
-class N2ListPagePermission extends GetMiddleware {
+class N2ViewPagePermission extends GetMiddleware {
   AuthController authController = GetIt.I<AuthController>();
+
+  @override
+  int? get priority => 1;
 
   @override
   RouteSettings? redirect(String? route) {
@@ -45,8 +52,11 @@ class N2ListPagePermission extends GetMiddleware {
   }
 }
 
-class N2RegisterPagePermission extends GetMiddleware {
+class N2EditPagePermission extends GetMiddleware {
   AuthController authController = GetIt.I<AuthController>();
+
+  @override
+  int? get priority => 1;
 
   @override
   RouteSettings? redirect(String? route) {
@@ -58,8 +68,11 @@ class N2RegisterPagePermission extends GetMiddleware {
   }
 }
 
-class N3ListPagePermission extends GetMiddleware {
+class N3ViewPagePermission extends GetMiddleware {
   AuthController authController = GetIt.I<AuthController>();
+
+  @override
+  int? get priority => 1;
 
   @override
   RouteSettings? redirect(String? route) {
@@ -71,8 +84,11 @@ class N3ListPagePermission extends GetMiddleware {
   }
 }
 
-class N3RegisterPagePermission extends GetMiddleware {
+class N3EditPagePermission extends GetMiddleware {
   AuthController authController = GetIt.I<AuthController>();
+
+  @override
+  int? get priority => 1;
 
   @override
   RouteSettings? redirect(String? route) {

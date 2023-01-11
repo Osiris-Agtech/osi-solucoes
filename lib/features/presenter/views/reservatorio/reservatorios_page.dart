@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/cadastrar_resevatorio_page.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/reservatorioItem.dart';
 
 import '../../../../core/constants/constants.dart';
@@ -62,10 +62,7 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
   FloatingActionButton floatingButton() {
     return FloatingActionButton(
       heroTag: "NovoReservatório",
-      onPressed: () => Get.to(
-        () => const CadastrarReservatorioPage(),
-        transition: Transition.rightToLeft,
-      ),
+      onPressed: () => Get.toNamed(Routes.cadastrarReservatoriosPage),
       child: const Icon(
         Icons.add,
         size: 30,

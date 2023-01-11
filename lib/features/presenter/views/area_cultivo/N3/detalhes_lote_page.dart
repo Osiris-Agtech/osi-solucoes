@@ -4,9 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 
 import 'components/detalhes_page/dados_cultivo.dart';
 import 'components/detalhes_page/datas_itens.dart';
@@ -124,19 +124,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     ),
                     onTap: () async {
                       await store.setLoteEditing(store.loteSelecionado);
-                      Get.to(
-                        () => const CadastrarLotePage(),
-                        transition: Transition.rightToLeft,
-                      );
+                      Get.toNamed(Routes.cadastrarLotePage);
                     },
-                  ),
-                  PopupMenuItem(
-                    child: Row(
-                      children: const [
-                        Text('Deletar'),
-                      ],
-                    ),
-                    onTap: () {},
                   ),
                 ],
               ),
@@ -176,10 +165,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
         ),
         onTap: () async {
           await store.setLoteEditing(store.loteSelecionado);
-          Get.to(
-            () => const CadastrarLotePage(),
-            transition: Transition.rightToLeft,
-          );
+          Get.toNamed(Routes.cadastrarLotePage);
         },
       ),
     );
