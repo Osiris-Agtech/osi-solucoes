@@ -436,22 +436,25 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
     var size = MediaQuery.of(context).size;
 
     return SimpleDialog(
-      title: Row(
-        children: const [
-          Icon(
-            Icons.group_add,
-            color: Constants.kPrimaryColor,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Text('Permissões'),
-        ],
+      title: Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Row(
+          children: const [
+            Icon(
+              Icons.group_add,
+              color: Constants.kPrimaryColor,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text('Permissões'),
+          ],
+        ),
       ),
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 20,
+          padding: const EdgeInsets.only(
+            bottom: 20,
           ),
           child: Card(
             elevation: 0,
@@ -461,240 +464,13 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
             color: Constants.kCardColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                vertical: 20,
+                vertical: 10,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: [
-                  Theme(
-                    data: Theme.of(context)
-                        .copyWith(dividerColor: Colors.transparent),
-                    child: const ExpansionTile(
-                      childrenPadding: EdgeInsets.symmetric(horizontal: 10),
-                      title: Text(
-                        'Administrador',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      children: <Widget>[
-                        ListTile(
-                          title: Text(
-                            'Cultivos',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          ),
-                          trailing: Text(
-                            'Ver e Editar',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Caderno',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          ),
-                          trailing: Text(
-                            'Ver e Editar',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Cargos',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          ),
-                          trailing: Text(
-                            'Ver e Editar',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Inventario',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          ),
-                          trailing: Text(
-                            'Ver e Editar',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Equipamentos',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          ),
-                          trailing: Text(
-                            'Ver e Editar',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Theme(
-                    data: Theme.of(context)
-                        .copyWith(dividerColor: Colors.transparent),
-                    child: const ExpansionTile(
-                      childrenPadding: EdgeInsets.symmetric(horizontal: 10),
-                      title: Text(
-                        'Funcionário',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      children: <Widget>[
-                        ListTile(
-                          title: Text(
-                            'Cultivos',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          ),
-                          trailing: Text(
-                            'Ver e Editar',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Caderno',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          ),
-                          trailing: Text(
-                            'Ver e Editar',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Inventario',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          ),
-                          trailing: Text(
-                            'Ver e Editar',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Equipamentos',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          ),
-                          trailing: Text(
-                            'Somente ver',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Theme(
-                    data: Theme.of(context)
-                        .copyWith(dividerColor: Colors.transparent),
-                    child: const ExpansionTile(
-                      childrenPadding: EdgeInsets.symmetric(horizontal: 10),
-                      title: Text(
-                        'Convidado',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      children: <Widget>[
-                        ListTile(
-                          title: Text(
-                            'Cultivos',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          ),
-                          trailing: Text(
-                            'Somente ver',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Caderno',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          ),
-                          trailing: Text(
-                            'Somente ver',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Equipamentos',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          ),
-                          trailing: Text(
-                            'Somente ver',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                children: store.cargosList
+                    .map((cargo) => _contentDialogCard(context, cargo))
+                    .toList(),
               ),
             ),
           ),
@@ -723,6 +499,51 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                 },
               ),
             ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column _contentDialogCard(BuildContext context, Cargo cargo) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
+            childrenPadding: const EdgeInsets.symmetric(horizontal: 10),
+            title: Text(
+              cargo.cargo ?? 'Não informado',
+              style: const TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            children: cargo.concatenatedPermission != null
+                ? cargo.concatenatedPermission!
+                    .map(
+                      (concatenatedPermission) => ListTile(
+                        title: Text(
+                          concatenatedPermission.title ?? "Não encontrado",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                          ),
+                        ),
+                        trailing: Text(
+                          (concatenatedPermission.permissionRead! &&
+                                  concatenatedPermission.permissionWrite!)
+                              ? 'Ver e Editar'
+                              : 'Somente ver',
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList()
+                : [],
           ),
         ),
       ],

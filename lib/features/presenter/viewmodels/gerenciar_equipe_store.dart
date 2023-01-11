@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:osi_solucoes/core/utils/parse_permissao.dart';
 import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/cargo/cargo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/pessoa/pessoa_model.dart';
@@ -169,6 +170,35 @@ abstract class _GerenciarEquipeBase with Store {
       (data) async {
         cargosList = ObservableList.of(data);
         cargosList.removeAt(0); // removendo opção de Dono dos dropdowns
+        for (var item in cargosList) {
+          for (var i = 0; i < item.permissoes!.length; i++) {
+            var lista = parsePermissao(item.permissoes![i].permissao!.nome!);
+            if (lista.length > 1) {
+              //verificando se ja existe o modulo na lista
+              int? index = item.concatenatedPermission
+                  ?.indexWhere((element) => element.title == lista[0]);
+              //existe o modulo cadastrado
+              if (index != null && index != -1) {
+                // verificação de Read e Write
+                if (lista[1] == 'view') {
+                  item.concatenatedPermission?[index].permissionRead = true;
+                } else {
+                  item.concatenatedPermission?[index].permissionWrite = true;
+                }
+              }
+              // Modeulo não existe
+              else {
+                item.concatenatedPermission?.add(
+                  ConcatenatedPermission(
+                    title: lista[0],
+                    permissionRead: lista[1] == 'view',
+                    permissionWrite: lista[1] == 'edit',
+                  ),
+                );
+              }
+            }
+          }
+        }
       },
     );
 
@@ -239,6 +269,20 @@ abstract class _GerenciarEquipeBase with Store {
 
   @action
   setCargo(Cargo cargo) => cargoSelecionado = cargo;
+
+  @action
+  setPermissao() {
+    List<String> tipo = [
+      'Cultivo',
+      'Caderno',
+      'Equipe',
+      'Reservatorio',
+      'Solução Nutritiva'
+    ];
+    // cargo name - recebo o id
+    // permissao - cargoList[id].permissao.name
+    // parsePermissao()
+  }
 
   @action
   setEmail(String value) {

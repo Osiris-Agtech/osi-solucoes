@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
 import 'package:osi_solucoes/features/presenter/views/modulos/modulos_page.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
@@ -504,14 +503,14 @@ class _HomePageState extends State<HomePage> {
                   gridItems(context, size, "card9Home".i18n(),
                       "assets/icons/ajustes_icon.svg", true,
                       path: "Ajustes", id: 4),
-                  gridItems(
-                    context,
-                    size,
-                    "card10Home".i18n(),
-                    "assets/icons/chat_icon.svg",
-                    false,
-                    id: 5,
-                  ),
+                  // gridItems(
+                  //   context,
+                  //   size,
+                  //   "card10Home".i18n(),
+                  //   "assets/icons/chat_icon.svg",
+                  //   false,
+                  //   id: 5,
+                  // ),
                   const SizedBox(),
                 ],
               ),
@@ -703,15 +702,11 @@ class _HomePageState extends State<HomePage> {
         ),
         child: InkWell(
           onTap: () async {
-            if (authController.isDevelop && id != 5) {
-              modulosStore.setPageViewController(id);
-              Get.to(
-                () => const ModulosPage(),
-                transition: Transition.rightToLeft,
-              );
-            } else {
-              toastError(message: "Acesso negado a funcionalidade");
-            }
+            modulosStore.setPageViewController(id);
+            Get.to(
+              () => const ModulosPage(),
+              transition: Transition.rightToLeft,
+            );
           },
           child: Card(
             shape: RoundedRectangleBorder(
@@ -864,13 +859,10 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
               child: AnimatedOpacity(
                 duration: const Duration(milliseconds: 150),
                 opacity: (1 - progress * 1.5) < 0 ? 0 : 1 - progress * 1.5,
-                child: InkWell(
-                  onTap: () => authController.setIsDevelop(),
-                  child: const CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
-                    radius: 30,
-                  ),
+                child: const CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
+                  radius: 30,
                 ),
               ),
             ),

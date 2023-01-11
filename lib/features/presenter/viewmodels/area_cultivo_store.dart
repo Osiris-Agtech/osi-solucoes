@@ -73,7 +73,7 @@ abstract class _AreaCultivoStoreBase with Store {
 
     areaListResult.fold(
       (err) {
-        //toastError(message: err.message);
+        areaList = List.from([]);
       },
       (data) async {
         areaList = List.from(data);

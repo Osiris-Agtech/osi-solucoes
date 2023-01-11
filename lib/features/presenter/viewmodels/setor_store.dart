@@ -169,7 +169,6 @@ abstract class _SetorStoreBase with Store {
     reservatorios.fold(
       (err) {
         reservatorioList = List.from([]);
-        toastError(message: err.message);
       },
       (data) async {
         reservatorioList = List.from(data);
