@@ -113,6 +113,21 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
+  removeFromExpendedList(int id) {
+    expandedFertilizantes
+        .removeWhere((element) => element.fertilizante.id == id);
+
+    int index =
+        fertilizanteList.indexWhere((element) => element.fertilizante.id == id);
+    if (index != -1) {
+      fertilizanteList[index].selected = false;
+    }
+
+    fertilizanteList = List.from(fertilizanteList);
+    expandedFertilizantes = List.from(expandedFertilizantes);
+  }
+
+  @action
   changeSelecaoFertilizante(int index, bool value) {
     // Seção para expansão dos Cards
     int indexList = expandedFertilizantes.indexWhere((element) =>
@@ -153,6 +168,9 @@ abstract class _SolucaoStoreBase with Store {
   buscarFertilizantes() async {
     SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
     isFertilizanteListLoading = true;
+    fertilizanteList = [];
+    expandedFertilizantes = [];
+    quantidadeFertilizantes = [];
 
     var fertilizantes = await solucaoRepository.buscarFertilizantes();
 
@@ -162,7 +180,6 @@ abstract class _SolucaoStoreBase with Store {
         toastError(message: err.message);
       },
       (data) async {
-        fertilizanteList = [];
         for (var item in data) {
           fertilizanteList.add(
             SelecaoFertilizante(
@@ -171,6 +188,8 @@ abstract class _SolucaoStoreBase with Store {
             ),
           );
         }
+        expandedFertilizantes = List.from(expandedFertilizantes);
+        quantidadeFertilizantes = List.from(quantidadeFertilizantes);
         fertilizanteList = List.from(fertilizanteList);
       },
     );

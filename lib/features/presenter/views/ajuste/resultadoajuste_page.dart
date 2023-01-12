@@ -562,35 +562,37 @@ class AppBarCustom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverOverlapAbsorber(
-        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-        sliver: SliverAppBar(
-          backgroundColor: Colors.white,
-          toolbarHeight: 120,
-          pinned: true,
-          forceElevated: true,
-          elevation: 1,
-          flexibleSpace: const TopAppBar(
-            path: "/Tab/Ajustes/",
-            namePage: "Resultado\n Ajuste",
-          ),
-          bottom: TabBar(
-              controller: tabController,
-              unselectedLabelColor: const Color(0xFF929292),
-              unselectedLabelStyle:
-                  const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-              labelStyle:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              labelColor: Constants.kPrimaryColor,
-              tabs: const [
-                Tab(text: "Fertilizantes"),
-                Tab(
-                  child: Text(
-                    "Solução \n Concentrada",
-                    textAlign: TextAlign.center,
-                  ),
-                )
-              ]),
-        ));
+      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+      sliver: SliverAppBar(
+        backgroundColor: Colors.white,
+        toolbarHeight: 120,
+        pinned: true,
+        forceElevated: true,
+        elevation: 1,
+        flexibleSpace: const TopAppBar(
+          path: "/Tab/Ajustes/",
+          namePage: "Resultado\n Ajuste",
+        ),
+        bottom: TabBar(
+          controller: tabController,
+          unselectedLabelColor: const Color(0xFF929292),
+          unselectedLabelStyle:
+              const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          labelStyle:
+              const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          labelColor: Constants.kPrimaryColor,
+          tabs: const [
+            Tab(text: "Fertilizantes"),
+            Tab(
+              child: Text(
+                "Solução \n Concentrada",
+                textAlign: TextAlign.center,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 

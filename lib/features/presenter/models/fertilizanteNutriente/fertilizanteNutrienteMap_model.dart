@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
 
 class FertilizanteNutrienteMap {

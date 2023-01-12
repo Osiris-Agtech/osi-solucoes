@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/bottomSheet.dart';
+import 'package:osi_solucoes/features/presenter/views/solucao/components/customTextFormField.dart';
 import '../../../../../core/constants/constants.dart';
 
 class CadastrarSolucaoPage extends StatefulWidget {
@@ -16,15 +17,24 @@ class CadastrarSolucaoPage extends StatefulWidget {
   State<CadastrarSolucaoPage> createState() => _CadastrarSolucaoPageState();
 }
 
-class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage> {
+class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
+    with TickerProviderStateMixin {
   CarouselController carouselController = CarouselController();
   CarouselController controlerPages = CarouselController();
   SolucaoStore store = GetIt.I<SolucaoStore>();
+  late TabController tabController;
 
   @override
   void initState() {
+    tabController = TabController(length: 2, initialIndex: 0, vsync: this);
     store.buscarFertilizantes();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -39,18 +49,16 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage> {
       child: GestureDetector(
         onTap: () {},
         child: SafeArea(
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: appBar(),
-            backgroundColor: Constants.kBackgroundColor,
-            body: Padding(
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
+          child: DefaultTabController(
+            length: tabController.length,
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: appBar(),
+              backgroundColor: Constants.kBackgroundColor,
+              body: Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -59,14 +67,34 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage> {
                     const SizedBox(height: 20),
                     subtitulo(),
                     const SizedBox(height: 10),
-                    nome(context),
+                    _nome(context),
                     const Divider(),
-                    fertilizantes(context),
-                    _descricaoTextFormField(),
-                    saveButton(size)
+                    _fertilizantes(context),
+                    Expanded(
+                      child: Observer(builder: (_) {
+                        if (store.expandedFertilizantes.isEmpty) {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 20, bottom: 20),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xffF5F5F5),
+                              ),
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: avisoFertilizante(),
+                              ),
+                            ),
+                          );
+                        }
+
+                        return _cardListWithData();
+                      }),
+                    ),
                   ],
                 ),
               ),
+              bottomNavigationBar: _saveButton(size),
             ),
           ),
         ),
@@ -74,11 +102,70 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage> {
     );
   }
 
-  Padding _descricaoTextFormField() {
+  _cardListWithData() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            16.0,
+            16.0,
+            16.0,
+            8.0,
+          ),
+          child: TabBar(
+            controller: tabController,
+            unselectedLabelColor: const Color(0xFF929292),
+            unselectedLabelStyle:
+                const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+            labelStyle:
+                const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            labelColor: Constants.kPrimaryColor,
+            labelPadding: const EdgeInsets.all(0),
+            indicatorPadding: const EdgeInsets.all(0),
+            tabs: const [
+              Tab(
+                child: Text(
+                  "Fertilizantes\nSelecionados",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Tab(
+                child: Text(
+                  "Relação\nde Nutrientes",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Expanded(
+          child: TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: tabController,
+            children: [
+              // Text('1'),
+              // Text('2'),
+              _fertilizanteCardList(),
+              _fertilizanteCardList()
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  _fertilizanteCardList() {
     return Padding(
       padding: const EdgeInsets.only(top: 10, bottom: 20),
       child: Container(
-        height: 200,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: const Color(0xffF5F5F5),
@@ -91,54 +178,96 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage> {
                 child: avisoFertilizante(),
               );
             }
-            return SingleChildScrollView(
-              child: Observer(builder: (_) {
-                return ExpansionPanelList(
-                  expandedHeaderPadding: const EdgeInsets.only(bottom: 5),
-                  elevation: 0,
-                  expansionCallback: (int index, bool isExpanded) {
-                    store.setExpandedCard(index);
-                  },
-                  children: store.expandedFertilizantes
-                      .map(
-                        (e) => ExpansionPanel(
-                          backgroundColor: Constants.kSecondBackgroundColor,
-                          canTapOnHeader: true,
-                          headerBuilder:
-                              (BuildContext context, bool isExpanded) {
-                            return headerCard(e);
-                          },
-                          body: bodyCard(e),
-                          isExpanded: e.isExpanded,
+            return Observer(builder: (_) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: store.expandedFertilizantes.length,
+                  itemBuilder: (context, indexExpended) {
+                    return Padding(
+                      padding:
+                          EdgeInsets.only(top: indexExpended == 0 ? 16.0 : 4.0),
+                      child: Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                      )
-                      .toList(),
-                );
-              }),
-            );
-            // return ListView.builder(
-            //   itemCount: store.selectedFertilizantes.length,
-            //   itemBuilder: (context, index) => Text(
-            //       store.selectedFertilizantes[index].nome ?? 'Não informado'),
-            // );
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 10, 0, 10),
+                          child: ExpansionPanelList(
+                            expandedHeaderPadding:
+                                const EdgeInsets.only(bottom: 5),
+                            elevation: 0,
+                            expansionCallback: (_, bool isExpanded) {
+                              store.setExpandedCard(indexExpended);
+                            },
+                            children: [
+                              ExpansionPanel(
+                                backgroundColor: Constants.kBackgroundColor,
+                                canTapOnHeader: true,
+                                headerBuilder:
+                                    (BuildContext context, bool isExpanded) {
+                                  return headerCard(
+                                    store.expandedFertilizantes[indexExpended],
+                                  );
+                                },
+                                body: bodyCard(
+                                  store.expandedFertilizantes[indexExpended],
+                                  indexExpended,
+                                ),
+                                isExpanded: store
+                                    .expandedFertilizantes[indexExpended]
+                                    .isExpanded,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            });
           },
         ),
       ),
     );
   }
 
-  bodyCard(ItemFertilizante itemFertilizante) {
+  bodyCard(ItemFertilizante itemFertilizante, int index) {
     return Padding(
-        padding: const EdgeInsets.only(bottom: 24.0),
-        child: TextFormField(
-          initialValue: itemFertilizante.quantidade,
-          onChanged: (String? value) {
-            store.setFertilizanteQuantidade(
-              itemFertilizante.fertilizante.id ?? 0,
-              value ?? '0',
-            );
-          },
-        ));
+      padding: const EdgeInsets.only(bottom: 8.0, right: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          CustomTextFormField(
+            value: itemFertilizante.quantidade,
+            onChanged: (String value) {
+              store.setFertilizanteQuantidade(
+                itemFertilizante.fertilizante.id ?? 0,
+                value,
+              );
+            },
+          ),
+          const SizedBox(height: 8),
+          TextButton(
+            onPressed: () {
+              store.removeFromExpendedList(
+                  itemFertilizante.fertilizante.id ?? 0);
+            },
+            child: const Text(
+              'Remover',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Constants.kErrorColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   headerCard(ItemFertilizante itemFertilizante) {
@@ -150,7 +279,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage> {
       title: Text(
         itemFertilizante.fertilizante.nome ?? 'Não informado',
         style: const TextStyle(
-          fontSize: 14,
+          fontSize: 18,
           fontWeight: FontWeight.w600,
           color: Constants.kText2,
         ),
@@ -159,10 +288,10 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage> {
           ? null
           : Text(
               'Quantidade: ${itemFertilizante.quantidade} mg/L',
-              style: TextStyle(
-                fontSize: 14,
+              style: const TextStyle(
+                fontSize: 15,
                 fontWeight: FontWeight.w500,
-                color: Constants.kText2.withOpacity(0.8),
+                color: Constants.kGreyMedium,
               ),
             ),
     );
@@ -170,7 +299,10 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage> {
 
   Widget subtitulo() {
     return const Padding(
-      padding: EdgeInsets.only(left: 10),
+      padding: EdgeInsets.only(
+        left: 30,
+        right: 20,
+      ),
       child: Text(
         'Cadastrar informações',
         style: TextStyle(
@@ -186,8 +318,8 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage> {
   Widget titulo() {
     return const Padding(
       padding: EdgeInsets.only(
-        left: 20,
-        right: 10,
+        left: 40,
+        right: 30,
       ),
       child: Text(
         'Nova Solução Nutritiva',
@@ -206,67 +338,78 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage> {
     );
   }
 
-  InkWell nome(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          leading: const Icon(Icons.label),
-          title: const Text(
-            'Nome',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
-          trailing: store.novaSolucaoName.text.isNotEmpty
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      store.novaSolucaoName.text,
-                      textAlign: TextAlign.end,
-                      style: const TextStyle(
-                        color: Constants.kPrimaryColor,
-                        fontWeight: FontWeight.w600,
+  _nome(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 20,
+      ),
+      child: InkWell(
+        child: Observer(builder: (_) {
+          return ListTile(
+            leading: const Icon(Icons.label),
+            title: const Text(
+              'Nome',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+            ),
+            trailing: store.novaSolucaoName.text.isNotEmpty
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        store.novaSolucaoName.text,
+                        textAlign: TextAlign.end,
+                        style: const TextStyle(
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const Icon(
-                      Icons.chevron_right,
-                      color: Constants.kPrimaryColor,
-                    ),
-                  ],
-                )
-              : Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    Text(
-                      "Preencher",
-                      style: TextStyle(
-                        fontSize: 12,
+                      const Icon(
+                        Icons.chevron_right,
                         color: Constants.kPrimaryColor,
-                        fontWeight: FontWeight.w600,
                       ),
-                    ),
-                    Icon(
-                      Icons.chevron_right,
-                      size: 18,
-                      color: Constants.kPrimaryColor,
-                    ),
-                  ],
-                ),
-          onTap: () {
-            store.setDotIndicator(0);
-            bottomSheet(context, carouselController, controlerPages, store);
-          },
-        );
-      }),
+                    ],
+                  )
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Text(
+                        "Preencher",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        size: 18,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  ),
+            onTap: () {
+              store.setDotIndicator(0);
+              bottomSheet(context, carouselController, controlerPages, store);
+            },
+          );
+        }),
+      ),
     );
   }
 
-  InkWell fertilizantes(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
+  _fertilizantes(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 20,
+      ),
+      child: InkWell(
+        child: Observer(builder: (_) {
+          return ListTile(
             leading: const Icon(Icons.invert_colors),
             title: const Text(
               'Fertilizantes',
@@ -316,8 +459,10 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage> {
             onTap: () {
               store.setDotIndicator(1);
               bottomSheet(context, carouselController, controlerPages, store);
-            });
-      }),
+            },
+          );
+        }),
+      ),
     );
   }
 
@@ -342,31 +487,27 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage> {
     );
   }
 
-  Padding saveButton(Size size) {
+  _saveButton(Size size) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 30),
-      child: Center(
-        child: SizedBox(
-          width: size.width * .8,
-          height: 40,
-          child: Observer(builder: (_) {
-            return ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Constants.kPrimaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              child: const Text(
-                "Salvar",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              onPressed: () {}, //store.registrarReservatorio(),
-            );
-          }),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: SizedBox(
+        width: size.width * .8,
+        height: 40,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Constants.kPrimaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          child: const Text(
+            "Salvar",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          onPressed: () {}, //store.registrarReservatorio(),
         ),
       ),
     );
