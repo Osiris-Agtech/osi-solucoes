@@ -20,8 +20,6 @@ class AjustesPage extends StatefulWidget {
 }
 
 class AjustesPageState extends State<AjustesPage> {
-  // final ModulosStore modulosStore = Modular.get();
-  // final AjustesStore store = Modular.get();
   AjustesStore store = GetIt.I<AjustesStore>();
   final formKey = GlobalKey<FormState>();
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
