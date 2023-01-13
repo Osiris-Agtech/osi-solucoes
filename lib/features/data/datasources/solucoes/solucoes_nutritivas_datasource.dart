@@ -3,6 +3,7 @@ import 'package:graphql/client.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/api_source.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
+import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 
 import '../../../../core/errors/errors.dart';
@@ -10,6 +11,8 @@ import '../../../../core/errors/errors.dart';
 abstract class ISolucaoDatasource {
   Future<Either<Failure, List<SolucaoNutritiva>>> buscarSolucoes(
       {required int contaId});
+  Future<Either<Failure, SolucaoNutritiva>> registrarSolucaoNutritiva(
+      {required SolucaoNutritiva solucao, required int contaId});
   Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes();
   Future<Either<Failure, SolucaoNutritiva>> detalhesSolucao(
       {required int solucaoId});
@@ -71,6 +74,85 @@ class SolucaoDatasource implements ISolucaoDatasource {
       return Right(solucoesList);
     } else {
       return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SolucaoNutritiva>> registrarSolucaoNutritiva(
+      {required SolucaoNutritiva solucao, required int contaId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    //Criando a query para varios lotes
+    String query = '';
+    for (SolucaoFertilizanteConcentrada element
+        in solucao.solucoes_fertilizantes_concentradas ?? []) {
+      if (element ==
+          solucao.solucoes_fertilizantes_concentradas![
+              solucao.solucoes_fertilizantes_concentradas!.length - 1]) {
+        query += """{
+          fk_fertilizantes_id: ${element.fertilizante!.id},
+          quantidade: ${element.quantidade}
+        }""";
+      } else {
+        query += """{
+          fk_fertilizantes_id: ${element.fertilizante!.id},
+          quantidade: ${element.quantidade}
+        },""";
+      }
+    }
+
+    String readRepositories = """
+        mutation CreateOneSNutritiva {
+          createOneSNutritiva(data: {
+            nome: ${solucao.nome},
+            c_eletrica: ${solucao.c_eletrica},
+            solucoes_contas: {
+              connect: [
+                {
+                  id: $contaId
+                }
+              ]
+            },
+            solucoes_fertilizantes_concentradas: {
+              createMany: {
+                data: [
+                  $query
+                ]
+              }
+            }
+          }) {
+            id
+            nome
+            c_eletrica
+            solucoes_fertilizantes_concentradas {
+              id
+              quantidade
+              fertilizante {
+                nome
+              }
+            }
+          }
+        }
+      """;
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'contaId': contaId,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      SolucaoNutritiva novaSolucao =
+          SolucaoNutritiva.fromJson(result.data?['createOneSNutritiva']);
+      return Right(novaSolucao);
+    } else {
+      return Left(
+          ErrorReservatorio(message: FailureMessage.internalErrorMessage));
     }
   }
 

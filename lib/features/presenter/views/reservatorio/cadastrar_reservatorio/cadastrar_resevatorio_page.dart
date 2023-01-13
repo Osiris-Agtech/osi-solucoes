@@ -153,11 +153,15 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      store.novoReservatorioName.text,
-                      style: const TextStyle(
-                        color: Constants.kPrimaryColor,
-                        fontWeight: FontWeight.w600,
+                    SizedBox(
+                      width: 126,
+                      child: Text(
+                        store.novoReservatorioName.text,
+                        style: const TextStyle(
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     const Icon(

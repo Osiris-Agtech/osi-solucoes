@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
@@ -244,6 +245,33 @@ abstract class _SolucaoStoreBase with Store {
     isSolucaoDetalhesLoading = false;
   }
 
+  @action
+  cadastrarSolucaoNutritiva() async {
+    isNovaSolucaoLoading = true;
+    SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
+    AuthController authController = GetIt.I<AuthController>();
+
+    /// ##### Preencher aqui #####
+    SolucaoNutritiva novaSolucao = SolucaoNutritiva(
+      nome: novaSolucaoName.text,
+    );
+
+    var fertilizantes = await solucaoRepository.registrarSolucaoNutritiva(
+        novaSolucao, authController.usuario.selected_conta!.conta!.id!);
+
+    fertilizantes.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        Get.back();
+        buscarSolucoes();
+      },
+    );
+
+    isNovaSolucaoLoading = false;
+  }
+
   @computed
   List<Fertilizante> get selectedFertilizantes {
     List<Fertilizante> list = [];
@@ -259,27 +287,63 @@ abstract class _SolucaoStoreBase with Store {
   @computed
   List<FertilizanteNutriente> get nutrientesCalculados {
     List<FertilizanteNutriente> list = [];
-    for (Fertilizante fertilizante in selectedFertilizantes) {
-      var map = groupBy(
-          fertilizante.fertilizantes_nutrientes!,
-          (FertilizanteNutriente obj) =>
-              obj.nutriente?.sigla ?? 'Não informado');
-      map.forEach(
-        (key, value) {
-          int index =
-              nutrientesList.indexWhere((element) => element.key == key);
-          if (index != -1) {
-            double teor = double.parse(
-                    nutrientesList[index].values[0].teor_nutriente ?? '0.0') +
-                double.parse(value[0].teor_nutriente ?? '0.0');
-            nutrientesList[index].values[0].teor_nutriente = teor.toString();
-            return;
-          }
-          nutrientesList.add(FertilizanteNutrienteMap(key: key, values: value));
-        },
-      );
-    }
+    int indexSelectedFertilizantes = 0;
 
+    for (Fertilizante fertilizante in selectedFertilizantes) {
+      print(fertilizante.nome);
+      for (FertilizanteNutriente item
+          in fertilizante.fertilizantes_nutrientes ?? []) {
+        /// Verifica se o nitriente já existe na lista final
+        int index = list.indexWhere(
+          (element) => element.nutriente?.sigla == item.nutriente?.sigla,
+        );
+
+        /// Caso exista
+        if (index != -1) {
+          /// Somar o teor do nitriente que já está na lista, com o nutriente
+          ///
+          list[index].teor_nutriente =
+              (double.parse(list[index].teor_nutriente ?? '0.0') +
+                      (double.parse(item.teor_nutriente ?? '0.0') *
+                              double.parse(
+                                expandedFertilizantes[
+                                        indexSelectedFertilizantes]
+                                    .quantidade
+                                    .replaceAll('.', '')
+                                    .replaceAll(',', '.'),
+                              )) /
+                          100)
+                  .toStringAsFixed(2);
+        } else {
+          list.add(
+            FertilizanteNutriente(
+              nutriente: item.nutriente,
+              teor_nutriente: ((double.parse(item.teor_nutriente ?? '0.0') *
+                          double.parse(
+                            expandedFertilizantes[indexSelectedFertilizantes]
+                                .quantidade
+                                .replaceAll('.', '')
+                                .replaceAll(',', '.'),
+                          )) /
+                      100)
+                  .toStringAsFixed(2),
+            ),
+          );
+        }
+      }
+      indexSelectedFertilizantes++;
+    }
+    list.sort(
+      (a, b) => double.parse(b.teor_nutriente ?? '0.0').compareTo(
+        double.parse(a.teor_nutriente ?? '0.0'),
+      ),
+    );
+    // list.sort((a, b) {
+    //   double valueA = double.parse(a.teor_nutriente ?? '0');
+    //   double valueB = double.parse(b.teor_nutriente ?? '0');
+    //   if (valueA >
+    //       double.parse(b.teor_nutriente ?? '0')) return -1;
+    // });
     return list;
   }
 

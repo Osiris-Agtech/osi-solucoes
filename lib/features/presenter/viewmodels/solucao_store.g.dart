@@ -17,6 +17,14 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
               () => super.selectedFertilizantes,
               name: '_SolucaoStoreBase.selectedFertilizantes'))
           .value;
+  Computed<List<FertilizanteNutriente>>? _$nutrientesCalculadosComputed;
+
+  @override
+  List<FertilizanteNutriente> get nutrientesCalculados =>
+      (_$nutrientesCalculadosComputed ??= Computed<List<FertilizanteNutriente>>(
+              () => super.nutrientesCalculados,
+              name: '_SolucaoStoreBase.nutrientesCalculados'))
+          .value;
   Computed<List<SolucaoNutritiva>>? _$searchSolucaoComputed;
 
   @override
@@ -308,6 +316,15 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
         .run(() => super.buscarDetalhesSolucao());
   }
 
+  final _$cadastrarSolucaoNutritivaAsyncAction =
+      AsyncAction('_SolucaoStoreBase.cadastrarSolucaoNutritiva');
+
+  @override
+  Future cadastrarSolucaoNutritiva() {
+    return _$cadastrarSolucaoNutritivaAsyncAction
+        .run(() => super.cadastrarSolucaoNutritiva());
+  }
+
   final _$_SolucaoStoreBaseActionController =
       ActionController(name: '_SolucaoStoreBase');
 
@@ -419,6 +436,7 @@ solucaoSelecionada: ${solucaoSelecionada},
 condutividadeEletrica: ${condutividadeEletrica},
 searchSolucaoText: ${searchSolucaoText},
 selectedFertilizantes: ${selectedFertilizantes},
+nutrientesCalculados: ${nutrientesCalculados},
 searchSolucao: ${searchSolucao}
     ''';
   }

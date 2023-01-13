@@ -450,21 +450,16 @@ class _CardSetorState extends State<CardSetor> {
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            widget.setor.nome ?? '',
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w700,
-                              color: Constants.kGreyText,
-                            ),
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        widget.setor.nome ?? '',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: Constants.kGreyText,
                         ),
-                        const Spacer(),
-                      ],
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),

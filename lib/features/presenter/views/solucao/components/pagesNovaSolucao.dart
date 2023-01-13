@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
@@ -156,7 +157,7 @@ class _NextStepButtonState extends State<NextStepButton> {
       ),
       onPressed: () {
         if (store.dotIndicator == 1) {
-          widget.controlerPages.nextPage();
+          Get.back();
         } else {
           store.setDotIndicator(store.dotIndicator + 1);
           widget.carouselController.nextPage(

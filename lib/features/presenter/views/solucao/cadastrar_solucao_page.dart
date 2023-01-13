@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/core/utils/decimal_format.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/bottomSheet.dart';
@@ -151,7 +152,10 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
           child: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             controller: tabController,
-            children: [_fertilizanteCardList(), _relacaoList()],
+            children: [
+              _fertilizanteCardList(),
+              _relacaoList(),
+            ],
           ),
         ),
       ],
@@ -255,19 +259,58 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
                   itemCount: store.nutrientesCalculados.length,
                   itemBuilder: (context, indexExpended) {
                     return Padding(
-                      padding:
-                          EdgeInsets.only(top: indexExpended == 0 ? 16.0 : 4.0),
-                      child: Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.fromLTRB(16, 10, 0, 10),
-                          child: Text(
-                            'salve',
+                      padding: EdgeInsets.only(
+                        left: 16.0,
+                        right: 16.0,
+                        top: indexExpended == 0 ? 28 : 8,
+                        bottom: indexExpended ==
+                                store.nutrientesCalculados.length - 1
+                            ? 28
+                            : 8.0,
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  store.nutrientesCalculados[indexExpended]
+                                          .nutriente?.sigla ??
+                                      'Não informado',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Constants.kText2,
+                                  ),
+                                ),
+                                Text(
+                                  getCurrency(store
+                                          .nutrientesCalculados[indexExpended]
+                                          .teor_nutriente ??
+                                      '0.0'),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Constants.kText2,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
+                          Visibility(
+                            visible: indexExpended !=
+                                store.nutrientesCalculados.length - 1,
+                            child: const Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: Divider(
+                                thickness: 2,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -460,47 +503,45 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
               'Fertilizantes',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
             ),
-            trailing:
-                // store.novoAutorName.text.isNotEmpty
-                //     ? Row(
-                //         mainAxisSize: MainAxisSize.min,
-                //         mainAxisAlignment: MainAxisAlignment.end,
-                //         children: [
-                //           Text(
-                //             store.novoAutorName.text,
-                //             textAlign: TextAlign.end,
-                //             style: const TextStyle(
-                //               color: Constants.kPrimaryColor,
-                //               fontWeight: FontWeight.w600,
-                //             ),
-                //             overflow: TextOverflow.ellipsis,
-                //           ),
-                //           const Icon(
-                //             Icons.chevron_right,
-                //             color: Constants.kPrimaryColor,
-                //           ),
-                //         ],
-                //       )
-                //     :
-                Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: const [
-                Text(
-                  "Selecionar",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Constants.kPrimaryColor,
-                    fontWeight: FontWeight.w600,
+            trailing: store.selectedFertilizantes.isNotEmpty
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        '${store.selectedFertilizantes.length} unidades',
+                        textAlign: TextAlign.end,
+                        style: const TextStyle(
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  )
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Text(
+                        "Selecionar",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        size: 18,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
                   ),
-                ),
-                Icon(
-                  Icons.chevron_right,
-                  size: 18,
-                  color: Constants.kPrimaryColor,
-                ),
-              ],
-            ),
             onTap: () {
               store.setDotIndicator(1);
               bottomSheet(context, carouselController, controlerPages, store);
@@ -545,13 +586,21 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
               borderRadius: BorderRadius.circular(8.0),
             ),
           ),
-          child: const Text(
-            "Salvar",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+          child: Observer(builder: (_) {
+            if (store.isNovaSolucaoLoading) {
+              return const CircularProgressIndicator(
+                color: Constants.kBackgroundColor,
+              );
+            }
+
+            return const Text(
+              "Salvar",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            );
+          }),
           onPressed: () {}, //store.registrarReservatorio(),
         ),
       ),

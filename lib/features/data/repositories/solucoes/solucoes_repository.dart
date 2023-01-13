@@ -20,6 +20,17 @@ class SolucaoRepository implements ISolucaoRepository {
   }
 
   @override
+  Future<Either<Failure, SolucaoNutritiva>> registrarSolucaoNutritiva(
+      SolucaoNutritiva solucao, int contaId) async {
+    var result = await datasource.registrarSolucaoNutritiva(
+      solucao: solucao,
+      contaId: contaId,
+    );
+
+    return result;
+  }
+
+  @override
   Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes() async {
     var result = await datasource.buscarFertilizantes();
 
