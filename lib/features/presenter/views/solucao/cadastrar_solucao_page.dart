@@ -40,6 +40,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0.0;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -94,7 +95,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
                   ],
                 ),
               ),
-              bottomNavigationBar: _saveButton(size),
+              bottomNavigationBar: isKeyboardOpen ? null : _saveButton(size),
             ),
           ),
         ),
@@ -150,12 +151,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
           child: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             controller: tabController,
-            children: [
-              // Text('1'),
-              // Text('2'),
-              _fertilizanteCardList(),
-              _fertilizanteCardList()
-            ],
+            children: [_fertilizanteCardList(), _relacaoList()],
           ),
         ),
       ],
@@ -221,6 +217,55 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
                                     .isExpanded,
                               ),
                             ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  _relacaoList() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, bottom: 20),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: const Color(0xffF5F5F5),
+        ),
+        child: Observer(
+          builder: (_) {
+            if (store.nutrientesCalculados.isEmpty) {
+              return SizedBox(
+                width: double.infinity,
+                child: avisoFertilizante(),
+              );
+            }
+            return Observer(builder: (_) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: store.nutrientesCalculados.length,
+                  itemBuilder: (context, indexExpended) {
+                    return Padding(
+                      padding:
+                          EdgeInsets.only(top: indexExpended == 0 ? 16.0 : 4.0),
+                      child: Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.fromLTRB(16, 10, 0, 10),
+                          child: Text(
+                            'salve',
                           ),
                         ),
                       ),
@@ -489,7 +534,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
 
   _saveButton(Size size) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       child: SizedBox(
         width: size.width * .8,
         height: 40,

@@ -257,6 +257,33 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @computed
+  List<FertilizanteNutriente> get nutrientesCalculados {
+    List<FertilizanteNutriente> list = [];
+    for (Fertilizante fertilizante in selectedFertilizantes) {
+      var map = groupBy(
+          fertilizante.fertilizantes_nutrientes!,
+          (FertilizanteNutriente obj) =>
+              obj.nutriente?.sigla ?? 'Não informado');
+      map.forEach(
+        (key, value) {
+          int index =
+              nutrientesList.indexWhere((element) => element.key == key);
+          if (index != -1) {
+            double teor = double.parse(
+                    nutrientesList[index].values[0].teor_nutriente ?? '0.0') +
+                double.parse(value[0].teor_nutriente ?? '0.0');
+            nutrientesList[index].values[0].teor_nutriente = teor.toString();
+            return;
+          }
+          nutrientesList.add(FertilizanteNutrienteMap(key: key, values: value));
+        },
+      );
+    }
+
+    return list;
+  }
+
+  @computed
   List<SolucaoNutritiva> get searchSolucao {
     List<SolucaoNutritiva> result = solucaoList
         .where((element) =>
