@@ -12,4 +12,6 @@ abstract class IReservatorioRepository {
       int reservatorioId);
   Future<Either<Failure, Reservatorio>> registrarReservatorio(
       Reservatorio novoReservatorio);
+  Future<Either<Failure, Reservatorio>> updateReservatorio(
+      {required Reservatorio novoReservatorio});
 }

@@ -125,14 +125,16 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
                   ? const CircularProgressIndicator(
                       color: Colors.white,
                     )
-                  : const Text(
-                      "Salvar",
-                      style: TextStyle(
+                  : Text(
+                      store.isEditing ? "Alterar" : "Salvar",
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-              onPressed: () => store.registrarReservatorio(),
+              onPressed: () => store.isEditing
+                  ? store.updateReservatorio()
+                  : store.registrarReservatorio(),
             );
           }),
         ),

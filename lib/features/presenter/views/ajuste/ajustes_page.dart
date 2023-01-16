@@ -94,10 +94,13 @@ class AjustesPageState extends State<AjustesPage> {
                   flexibleSpace: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TopAppBar(
+                      TopAppBar(
                         path: "/Home/",
                         namePage: "Ajustes",
                         subtitle: "Selecione e ajuste seu reservatório",
+                        onPressed: () {
+                          Get.offNamedUntil(Routes.homePage, (route) => false);
+                        },
                       ),
                       const SizedBox(
                         height: 30,

@@ -87,6 +87,9 @@ abstract class _ReservatoriosStoreBase with Store {
   bool isDetalhesSolucaoLoading = false;
 
   @observable
+  bool isEditing = false;
+
+  @observable
   SolucaoNutritiva? solucaoDetalhes;
 
   @observable
@@ -137,6 +140,9 @@ abstract class _ReservatoriosStoreBase with Store {
       dotIndicator = value;
     }
   }
+
+  @action
+  setIsEditing(bool value) => isEditing = value;
 
   @action
   setSolucaoDetalhes(SolucaoNutritiva solucao) async {
@@ -345,8 +351,51 @@ abstract class _ReservatoriosStoreBase with Store {
   }
 
   @action
+  carregarDadosReservatorio(Reservatorio reservatorio) {
+    novoReservatorioName = TextEditingController(text: reservatorio.nome ?? '');
+    novoReservatorioVolume =
+        TextEditingController(text: reservatorio.volume ?? '');
+    if (reservatorio.solucao?.id != null) {
+      setSolucaoNutritiva(reservatorio.solucao!);
+    }
+    print(isSolucaoNutritivaValid);
+  }
+
+  @action
+  updateReservatorio() async {
+    isNovoReservatorioLoading = true;
+
+    novoReservatorio = Reservatorio(
+      id: reservatorioDetalhes.id,
+      nome: novoReservatorioName.text,
+      volume: novoReservatorioVolume.text,
+      solucao: solucaoNutritiva,
+      conta: authController.usuario.selected_conta?.conta,
+    );
+
+    var updateReservatorio = await reservatorioRepository.updateReservatorio(
+        novoReservatorio: novoReservatorio);
+
+    updateReservatorio.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        toastSuccess(message: "Alterado com sucesso");
+        buscarReservatorioDetalhes();
+        buscarReservatorios();
+        limparNovoReservatorio();
+        Get.close(1);
+      },
+    );
+
+    isNovoReservatorioLoading = false;
+  }
+
+  @action
   limparNovoReservatorio() {
     isSolucaoNutritivaValid = false;
+    isEditing = false;
     novoReservatorio = Reservatorio();
     solucaoNutritiva = SolucaoNutritiva();
     novoReservatorioName.clear();

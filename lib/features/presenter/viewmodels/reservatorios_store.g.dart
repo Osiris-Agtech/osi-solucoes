@@ -144,6 +144,21 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
     });
   }
 
+  final _$isEditingAtom = Atom(name: '_ReservatoriosStoreBase.isEditing');
+
+  @override
+  bool get isEditing {
+    _$isEditingAtom.reportRead();
+    return super.isEditing;
+  }
+
+  @override
+  set isEditing(bool value) {
+    _$isEditingAtom.reportWrite(value, super.isEditing, () {
+      super.isEditing = value;
+    });
+  }
+
   final _$solucaoDetalhesAtom =
       Atom(name: '_ReservatoriosStoreBase.solucaoDetalhes');
 
@@ -381,6 +396,15 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
         .run(() => super.registrarReservatorio());
   }
 
+  final _$updateReservatorioAsyncAction =
+      AsyncAction('_ReservatoriosStoreBase.updateReservatorio');
+
+  @override
+  Future updateReservatorio() {
+    return _$updateReservatorioAsyncAction
+        .run(() => super.updateReservatorio());
+  }
+
   final _$_ReservatoriosStoreBaseActionController =
       ActionController(name: '_ReservatoriosStoreBase');
 
@@ -418,6 +442,17 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
   }
 
   @override
+  dynamic setIsEditing(bool value) {
+    final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
+        name: '_ReservatoriosStoreBase.setIsEditing');
+    try {
+      return super.setIsEditing(value);
+    } finally {
+      _$_ReservatoriosStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setSolucaoNutritiva(SolucaoNutritiva solucao) {
     final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
         name: '_ReservatoriosStoreBase.setSolucaoNutritiva');
@@ -434,6 +469,17 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
         name: '_ReservatoriosStoreBase.desvincularSolucaoNutritiva');
     try {
       return super.desvincularSolucaoNutritiva();
+    } finally {
+      _$_ReservatoriosStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic carregarDadosReservatorio(Reservatorio reservatorio) {
+    final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
+        name: '_ReservatoriosStoreBase.carregarDadosReservatorio');
+    try {
+      return super.carregarDadosReservatorio(reservatorio);
     } finally {
       _$_ReservatoriosStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -461,6 +507,7 @@ isSolucaoListLoading: ${isSolucaoListLoading},
 isReservatorioListLoading: ${isReservatorioListLoading},
 isNovoReservatorioLoading: ${isNovoReservatorioLoading},
 isDetalhesSolucaoLoading: ${isDetalhesSolucaoLoading},
+isEditing: ${isEditing},
 solucaoDetalhes: ${solucaoDetalhes},
 teorNutrientes: ${teorNutrientes},
 relacaoNutrientes: ${relacaoNutrientes},

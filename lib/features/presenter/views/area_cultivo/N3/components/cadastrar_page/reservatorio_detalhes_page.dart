@@ -46,11 +46,11 @@ reservatorioDetalhesPage(LoteStore store) {
       const SizedBox(
         height: 10,
       ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+      const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 30.0),
         child: ListTile(
-          contentPadding: const EdgeInsets.only(left: 0.0, right: 0.0),
-          title: const Text(
+          contentPadding: EdgeInsets.only(left: 0.0, right: 0.0),
+          title: Text(
             'Receita Vinculada',
             style: TextStyle(
               fontSize: 16,
@@ -58,14 +58,14 @@ reservatorioDetalhesPage(LoteStore store) {
               fontWeight: FontWeight.bold,
             ),
           ),
-          trailing: Text(
-            "Furlani",
-            style: TextStyle(
-              fontSize: 18,
-              color: Constants.kContentColorLightTheme.withOpacity(.8),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          // trailing: Text(
+          //   "Furlani",
+          //   style: TextStyle(
+          //     fontSize: 18,
+          //     color: Constants.kContentColorLightTheme.withOpacity(.8),
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
         ),
       ),
       Observer(builder: (_) {

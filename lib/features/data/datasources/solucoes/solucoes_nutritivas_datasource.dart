@@ -104,7 +104,7 @@ class SolucaoDatasource implements ISolucaoDatasource {
     String readRepositories = """
         mutation CreateOneSNutritiva {
           createOneSNutritiva(data: {
-            nome: ${solucao.nome},
+            nome: "${solucao.nome}",
             c_eletrica: ${solucao.c_eletrica},
             solucoes_contas: {
               connect: [
@@ -139,9 +139,6 @@ class SolucaoDatasource implements ISolucaoDatasource {
 
     options = MutationOptions(
       document: gql(readRepositories),
-      variables: <String, dynamic>{
-        'contaId': contaId,
-      },
     );
 
     final QueryResult result = await client.mutate(options);

@@ -39,9 +39,10 @@ registroItem(LoteStore store, BuildContext context) {
           onTap: () async {
             final data = await showDatePicker(
               context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2022),
-              lastDate: DateTime(2030),
+              initialDate:
+                  store.loteSelecionado.registro_data ?? DateTime.now(),
+              firstDate: DateTime(DateTime.now().year - 2),
+              lastDate: DateTime(DateTime.now().year + 3),
               locale: const Locale("pt", "BR"),
             );
 
@@ -95,9 +96,10 @@ semeaduraItem(LoteStore store, BuildContext context) {
           onTap: () async {
             final data = await showDatePicker(
               context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2022),
-              lastDate: DateTime(2030),
+              initialDate:
+                  store.loteSelecionado.semeadura_data ?? DateTime.now(),
+              firstDate: DateTime(DateTime.now().year - 2),
+              lastDate: DateTime(DateTime.now().year + 3),
               locale: const Locale("pt", "BR"),
             );
 
@@ -150,9 +152,10 @@ transplantioItem(LoteStore store, BuildContext context) {
           onTap: () async {
             final data = await showDatePicker(
               context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2022),
-              lastDate: DateTime(2030),
+              initialDate:
+                  store.loteSelecionado.transplantio_data ?? DateTime.now(),
+              firstDate: DateTime(DateTime.now().year - 2),
+              lastDate: DateTime(DateTime.now().year + 3),
               locale: const Locale("pt", "BR"),
             );
 
@@ -208,9 +211,10 @@ colheitaItem(LoteStore store, BuildContext context) {
           onTap: () async {
             final data = await showDatePicker(
               context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2022),
-              lastDate: DateTime(2030),
+              initialDate:
+                  store.loteSelecionado.colheita_data ?? DateTime.now(),
+              firstDate: DateTime(DateTime.now().year - 2),
+              lastDate: DateTime(DateTime.now().year + 3),
               locale: const Locale("pt", "BR"),
             );
 

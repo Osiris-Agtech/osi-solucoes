@@ -62,7 +62,10 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
   FloatingActionButton floatingButton() {
     return FloatingActionButton(
       heroTag: "NovoReservatório",
-      onPressed: () => Get.toNamed(Routes.cadastrarReservatoriosPage),
+      onPressed: () {
+        store.setIsEditing(true);
+        Get.toNamed(Routes.cadastrarReservatoriosPage);
+      },
       child: const Icon(
         Icons.add,
         size: 30,
@@ -133,10 +136,13 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
       automaticallyImplyLeading: false,
       forceElevated: true,
       elevation: 1,
-      flexibleSpace: const TopAppBar(
+      flexibleSpace: TopAppBar(
         path: "/Home/",
         namePage: "Meus Reservatórios",
         subtitle: "Lista de reservatórios cadastrados",
+        onPressed: () {
+          Get.offNamedUntil(Routes.homePage, (route) => false);
+        },
       ),
       bottom: PreferredSize(
         child: filterWidget(context),

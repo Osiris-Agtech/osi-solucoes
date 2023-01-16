@@ -427,13 +427,13 @@ class LoteDatasource implements ILoteDatasource {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     const String readRepositories = r'''
-        mutation CreateOneLote($nome: String!, $setorId: Int!, $culturaId: Int!, $reservatorioId: Int!, $registro: String!, $semeadura: String, $transplantio: String, $colheita: String) {
+        mutation CreateOneLote($nome: String!, $setorId: Int!, $culturaId: Int!, $reservatorioId: Int, $registroData: DateTime!, $semeaduraData: DateTime, $transplantioData: DateTime, $colheitaData: DateTime) {
           createOneLote(
             nome: $nome,
-            registro_data: $registro,
-            semeadura_data: $semeadura,
-            transplantio_data: $transplantio,
-            colheita_data: $colheita,
+            registroData: $registroData,
+            semeaduraData: $semeaduraData,
+            transplantioData: $transplantioData,
+            colheitaData: $colheitaData,
             setorId: $setorId,
             culturaId: $culturaId,
             reservatorioId: $reservatorioId,
@@ -477,16 +477,19 @@ class LoteDatasource implements ILoteDatasource {
         "nome": lote.nome,
         "setorId": lote.setor!.id,
         "culturaId": lote.cultura!.id,
-        "reservatorioId": lote.reservatorio!.id,
-        "registro":
-            lote.registro_data != null ? lote.registro_data.toString() : null,
-        "semeadura":
-            lote.semeadura_data != null ? lote.semeadura_data.toString() : null,
-        "transplantio": lote.transplantio_data != null
-            ? lote.transplantio_data.toString()
+        "reservatorioId": lote.reservatorio?.id,
+        "registroData": lote.registro_data != null
+            ? lote.registro_data?.toIso8601String()
             : null,
-        "colheita":
-            lote.colheita_data != null ? lote.colheita_data.toString() : null,
+        "semeaduraData": lote.semeadura_data != null
+            ? lote.semeadura_data?.toIso8601String()
+            : null,
+        "transplantioData": lote.transplantio_data != null
+            ? lote.transplantio_data?.toIso8601String()
+            : null,
+        "colheitaData": lote.colheita_data != null
+            ? lote.colheita_data?.toIso8601String()
+            : null,
       },
     );
 
@@ -507,8 +510,36 @@ class LoteDatasource implements ILoteDatasource {
 
     try {
       const String readRepositories = r'''
-        mutation UpdateLote($loteId: Int!, $loteNome: String!, $setorId: Int!, $culturaId: Int!, $reservatorioId: Int!, $bandeijaSemeadas: Int, $mudasTransplantadas: Int, $plantasColhidas: Int, $embalagensProduzidas: Int) {
-          updateLote(loteId: $loteId, loteNome: $loteNome, setorId: $setorId, culturaId: $culturaId, reservatorioId: $reservatorioId, bandeijaSemeadas: $bandeijaSemeadas, mudasTransplantadas: $mudasTransplantadas, plantasColhidas: $plantasColhidas, embalagensProduzidas: $embalagensProduzidas) {
+        mutation UpdateLote(
+          $loteId: Int!, 
+          $loteNome: String!, 
+          $setorId: Int!, 
+          $culturaId: Int!,
+          $reservatorioId: Int, 
+          $bandeijaSemeadas: Int, 
+          $mudasTransplantadas: Int, 
+          $plantasColhidas: Int, 
+          $embalagensProduzidas: Int, 
+          $registroData: DateTime!,
+          $semeaduraData: DateTime, 
+          $transplantioData: DateTime, 
+          $colheitaData: DateTime
+        ) {
+          updateLote(
+            loteId: $loteId, 
+            loteNome: $loteNome, 
+            setorId: $setorId, 
+            culturaId: $culturaId, 
+            reservatorioId: $reservatorioId, 
+            bandeijaSemeadas: $bandeijaSemeadas, 
+            mudasTransplantadas: $mudasTransplantadas, 
+            plantasColhidas: $plantasColhidas, 
+            embalagensProduzidas: $embalagensProduzidas,
+            registroData: $registroData,
+            semeaduraData: $semeaduraData,
+            transplantioData: $transplantioData,
+            colheitaData: $colheitaData
+          ) {
             id
             nome
             cultura {
@@ -519,6 +550,10 @@ class LoteDatasource implements ILoteDatasource {
               id
               nome
             }
+            registro_data
+            semeadura_data
+            transplantio_data
+            colheita_data
             bandeijas_semeadas
             mudas_transplantadas
             plantas_colhidas
@@ -536,11 +571,15 @@ class LoteDatasource implements ILoteDatasource {
           "loteNome": alterarLote.nome,
           "setorId": alterarLote.setor!.id,
           "culturaId": alterarLote.cultura!.id,
-          "reservatorioId": alterarLote.reservatorio!.id,
+          "reservatorioId": alterarLote.reservatorio?.id,
           "plantasColhidas": alterarLote.plantas_colhidas,
           "mudasTransplantadas": alterarLote.mudas_transplantadas,
           "bandeijaSemeadas": alterarLote.bandeijas_semeadas,
           "embalagensProduzidas": alterarLote.embalagens_produzidas,
+          "registroData": alterarLote.registro_data?.toIso8601String(),
+          "semeaduraData": alterarLote.semeadura_data?.toIso8601String(),
+          "transplantioData": alterarLote.transplantio_data?.toIso8601String(),
+          "colheitaData": alterarLote.colheita_data?.toIso8601String(),
         },
       );
 

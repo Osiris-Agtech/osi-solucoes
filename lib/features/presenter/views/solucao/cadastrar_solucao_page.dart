@@ -35,6 +35,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
   @override
   void dispose() {
     tabController.dispose();
+    store.clearAll();
     super.dispose();
   }
 
@@ -347,7 +348,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
             child: const Text(
               'Remover',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Constants.kErrorColor,
               ),
@@ -601,7 +602,9 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
               ),
             );
           }),
-          onPressed: () {}, //store.registrarReservatorio(),
+          onPressed: () {
+            store.cadastrarSolucaoNutritiva();
+          },
         ),
       ),
     );

@@ -142,7 +142,7 @@ abstract class _SetorStoreBase with Store {
   setSetorEditing(Setor setor) {
     novoSetorName = TextEditingController(text: setor.nome);
     novoSetorDescription = TextEditingController(text: setor.descricao);
-    novoSetorReservatorio = setor.reservatorio!;
+    novoSetorReservatorio = setor.reservatorio ?? Reservatorio();
     areaSelecionada = setor.area!;
     novoSetor = setor;
     setIsEditing(true);

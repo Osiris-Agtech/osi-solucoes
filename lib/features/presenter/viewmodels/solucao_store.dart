@@ -252,8 +252,12 @@ abstract class _SolucaoStoreBase with Store {
     AuthController authController = GetIt.I<AuthController>();
 
     /// ##### Preencher aqui #####
+
     SolucaoNutritiva novaSolucao = SolucaoNutritiva(
       nome: novaSolucaoName.text,
+      c_eletrica: calcularCoeficienteEletrico().toString(),
+      solucoes_fertilizantes_concentradas:
+          generateSolucaoFertilizanteConcentrada(),
     );
 
     var fertilizantes = await solucaoRepository.registrarSolucaoNutritiva(
@@ -270,6 +274,38 @@ abstract class _SolucaoStoreBase with Store {
     );
 
     isNovaSolucaoLoading = false;
+  }
+
+  @action
+  double calcularCoeficienteEletrico() {
+    double coeficiente = 0.0;
+    for (var item in expandedFertilizantes) {
+      coeficiente += double.parse(item.fertilizante.c_eletrica ?? '0.0') *
+          double.parse(
+              item.quantidade.replaceAll('.', '').replaceAll(',', '.'));
+    }
+    return coeficiente;
+  }
+
+  @action
+  generateSolucaoFertilizanteConcentrada() {
+    List<SolucaoFertilizanteConcentrada> list = [];
+    for (var item in expandedFertilizantes) {
+      list.add(
+        SolucaoFertilizanteConcentrada(
+          fertilizante: item.fertilizante,
+          quantidade: item.quantidade.replaceAll('.', '').replaceAll(',', '.'),
+        ),
+      );
+    }
+    return list;
+  }
+
+  @action
+  clearAll() {
+    novaSolucaoName.clear();
+    expandedFertilizantes.clear();
+    quantidadeFertilizantes.clear();
   }
 
   @computed

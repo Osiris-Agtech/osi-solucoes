@@ -860,6 +860,14 @@ mixin _$LoteStore on _LoteStoreBase, Store {
         .run(() => super.alterarProducaoLote());
   }
 
+  final _$alterarDatasLoteAsyncAction =
+      AsyncAction('_LoteStoreBase.alterarDatasLote');
+
+  @override
+  Future alterarDatasLote() {
+    return _$alterarDatasLoteAsyncAction.run(() => super.alterarDatasLote());
+  }
+
   final _$_LoteStoreBaseActionController =
       ActionController(name: '_LoteStoreBase');
 
@@ -979,6 +987,17 @@ mixin _$LoteStore on _LoteStoreBase, Store {
         name: '_LoteStoreBase.selecionarNovoLoteSetor');
     try {
       return super.selecionarNovoLoteSetor(setor);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic carregarAreaSetor() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.carregarAreaSetor');
+    try {
+      return super.carregarAreaSetor();
     } finally {
       _$_LoteStoreBaseActionController.endAction(_$actionInfo);
     }

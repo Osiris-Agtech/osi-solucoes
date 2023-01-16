@@ -417,6 +417,39 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   }
 
   @override
+  double calcularCoeficienteEletrico() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.calcularCoeficienteEletrico');
+    try {
+      return super.calcularCoeficienteEletrico();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic generateSolucaoFertilizanteConcentrada() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.generateSolucaoFertilizanteConcentrada');
+    try {
+      return super.generateSolucaoFertilizanteConcentrada();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic clearAll() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.clearAll');
+    try {
+      return super.clearAll();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},

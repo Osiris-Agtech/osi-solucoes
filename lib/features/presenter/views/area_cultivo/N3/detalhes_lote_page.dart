@@ -31,6 +31,12 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
   }
 
   @override
+  void dispose() {
+    store.limparTudo();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -57,10 +63,10 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                 const SizedBox(
                   height: 10,
                 ),
-                registro(store),
-                semeadura(store),
-                transplantio(store),
-                colheita(store),
+                registro(context, store),
+                semeadura(context, store),
+                transplantio(context, store),
+                colheita(context, store),
                 const SizedBox(height: 16),
                 Divider(
                   color: const Color(0xFF9F9F9F).withOpacity(.6),

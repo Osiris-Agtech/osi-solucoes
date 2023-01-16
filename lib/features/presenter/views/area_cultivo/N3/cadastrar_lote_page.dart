@@ -30,7 +30,9 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
   @override
   void initState() {
     super.initState();
-    store.buscarAreasList();
+    store.buscarAreasList().then(
+          (value) => store.carregarAreaSetor(),
+        );
     store.buscarCulturas();
     store.buscarReservatorios();
     store.setIsNovaCultura(false);
@@ -39,6 +41,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
   @override
   void dispose() {
     key.currentState?.reset();
+    store.limparTudo();
     super.dispose();
   }
 
@@ -418,9 +421,13 @@ class _NextStepButtonState extends State<NextStepButton> {
         }),
       ),
       onPressed: () {
-        if (store.dotIndicator == 3 && store.showReservatorioDetalhes) {
-          store.selecionarNovoLoteReservatorio();
-          Navigator.pop(context);
+        if (store.dotIndicator == 3) {
+          if (store.showReservatorioDetalhes) {
+            store.selecionarNovoLoteReservatorio();
+            Navigator.pop(context);
+          } else {
+            Navigator.pop(context);
+          }
         }
         if (store.dotIndicator < 3) {
           store.setDotIndicator(store.dotIndicator + 1);

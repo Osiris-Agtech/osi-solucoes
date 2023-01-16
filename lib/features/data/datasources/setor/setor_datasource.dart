@@ -141,52 +141,92 @@ class SetorDatasource implements ISetorDatasource {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     try {
-      const String readRepositories = r'''
-      mutation CreateOneSetor ($nome: String!, $descricao: String!, $reservatorioId: Int!, $areaId: Int!) {
-        createOneSetor(data: {
-          area: {
-            connect: {
-              id: $areaId
+      String readRepositories;
+      if (setor.reservatorio?.id != null) {
+        readRepositories = r'''
+          mutation CreateOneSetor ($nome: String!, $descricao: String!, $reservatorioId: Int, $areaId: Int!) {
+            createOneSetor(data: {
+              area: {
+                connect: {
+                  id: $areaId
+                }
+              },
+              nome: $nome,
+              descricao: $descricao,
+              reservatorio: {
+                connect: {
+                  id: $reservatorioId
+                }
+              }
+            }) {
+              id
+              nome
+              descricao
+              area {
+                id
+                nome
+              }
+              reservatorio {
+                id
+                nome
+                volume
+              }
+              lotes {
+                id
+                nome
+              }
             }
-          },
-          nome: $nome,
-          descricao: $descricao,
-          reservatorio: {
-            connect: {
-              id: $reservatorioId
+          }
+          ''';
+      } else {
+        readRepositories = r'''
+          mutation CreateOneSetor ($nome: String!, $descricao: String!, $areaId: Int!) {
+            createOneSetor(data: {
+              area: {
+                connect: {
+                  id: $areaId
+                }
+              },
+              nome: $nome,
+              descricao: $descricao,
+            }) {
+              id
+              nome
+              descricao
+              area {
+                id
+                nome
+              }
+              reservatorio {
+                id
+                nome
+                volume
+              }
+              lotes {
+                id
+                nome
+              }
             }
           }
-        }) {
-          id
-          nome
-          descricao
-          area {
-            id
-            nome
-          }
-          reservatorio {
-            id
-            nome
-            volume
-          }
-          lotes {
-            id
-            nome
-          }
-        }
+          ''';
       }
-      ''';
 
       final MutationOptions? options;
 
       options = MutationOptions(
         document: gql(readRepositories),
-        variables: <String, dynamic>{
-          'nome': setor.nome,
-          'descricao': setor.descricao,
-          'reservatorioId': setor.reservatorio!.id,
-          'areaId': setor.area!.id,
-        },
+        variables: setor.reservatorio?.id != null
+            ? <String, dynamic>{
+                'nome': setor.nome,
+                'descricao': setor.descricao,
+                'reservatorioId': setor.reservatorio?.id,
+                'areaId': setor.area!.id,
+              }
+            : <String, dynamic>{
+                'nome': setor.nome,
+                'descricao': setor.descricao,
+                'areaId': setor.area!.id,
+              },
       );
 
       final QueryResult result = await client.mutate(options);
@@ -209,37 +249,66 @@ class SetorDatasource implements ISetorDatasource {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     try {
-      const String readRepositories = r'''
-        mutation UpdateSetor($setorId: Int!, $setorNome: String!, $setorDescricao: String!, $areaId: Int!, $reservatorioId: Int!) {
-          updateSetor(setorId: $setorId, setorNome: $setorNome, setorDescricao: $setorDescricao, areaId: $areaId, reservatorioId: $reservatorioId) {
-            id
-            nome
-            descricao
-            area {
+      String readRepositories;
+
+      if (alterarSetor.reservatorio?.id != null) {
+        readRepositories = r'''
+          mutation UpdateSetor($setorId: Int!, $setorNome: String!, $setorDescricao: String!, $areaId: Int!, $reservatorioId: Int) {
+            updateSetor(setorId: $setorId, setorNome: $setorNome, setorDescricao: $setorDescricao, areaId: $areaId, reservatorioId: $reservatorioId) {
               id
               nome
-            }
-            reservatorio {
-              id
-              nome
-              volume
+              descricao
+              area {
+                id
+                nome
+              }
+              reservatorio {
+                id
+                nome
+                volume
+              }
             }
           }
-        }
-      ''';
+        ''';
+      } else {
+        readRepositories = r'''
+          mutation UpdateSetor($setorId: Int!, $setorNome: String!, $setorDescricao: String!, $areaId: Int!) {
+            updateSetor(setorId: $setorId, setorNome: $setorNome, setorDescricao: $setorDescricao, areaId: $areaId) {
+              id
+              nome
+              descricao
+              area {
+                id
+                nome
+              }
+              reservatorio {
+                id
+                nome
+                volume
+              }
+            }
+          }
+        ''';
+      }
 
       final MutationOptions? options;
 
       options = MutationOptions(
         document: gql(readRepositories),
-        variables: <String, dynamic>{
-          "setorId": alterarSetor.id,
-          "setorNome": alterarSetor.nome,
-          "setorDescricao": alterarSetor.descricao,
-          "reservatorioId": alterarSetor.reservatorio!.id,
-          "areaId": alterarSetor.area!.id,
-          //verificar
-        },
+        variables: alterarSetor.reservatorio?.id != null
+            ? <String, dynamic>{
+                "setorId": alterarSetor.id,
+                "setorNome": alterarSetor.nome,
+                "setorDescricao": alterarSetor.descricao,
+                "reservatorioId": alterarSetor.reservatorio!.id,
+                "areaId": alterarSetor.area!.id,
+              }
+            : <String, dynamic>{
+                "setorId": alterarSetor.id,
+                "setorNome": alterarSetor.nome,
+                "setorDescricao": alterarSetor.descricao,
+                "areaId": alterarSetor.area!.id,
+              },
       );
 
       final QueryResult result = await client.mutate(options);
