@@ -7,7 +7,8 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
-import 'package:osi_solucoes/features/presenter/views/ajuste/resultadoajuste_page.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:brasil_fields/brasil_fields.dart';
 
 import '../../viewmodels/ajustes_store.dart';
 import '../home/components/top_app_bar.dart';
@@ -20,8 +21,6 @@ class AjustesPage extends StatefulWidget {
 }
 
 class AjustesPageState extends State<AjustesPage> {
-  // final ModulosStore modulosStore = Modular.get();
-  // final AjustesStore store = Modular.get();
   AjustesStore store = GetIt.I<AjustesStore>();
   final formKey = GlobalKey<FormState>();
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
@@ -66,10 +65,7 @@ class AjustesPageState extends State<AjustesPage> {
                     ? () async {
                         await store.calculoAjusteReposicao();
                         await store.montandoDescricao();
-                        Get.to(
-                          () => const ResultadoajustePage(),
-                          transition: Transition.rightToLeft,
-                        );
+                        Get.toNamed(Routes.resultadoajustePage);
                       }
                     : () =>
                         ScaffoldMessenger.of(context).showSnackBar(snackBar),
@@ -97,22 +93,25 @@ class AjustesPageState extends State<AjustesPage> {
                   flexibleSpace: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TopAppBar(
+                      TopAppBar(
                         path: "/Home/",
                         namePage: "Ajustes",
                         subtitle: "Selecione e ajuste seu reservatório",
+                        onPressed: () {
+                          Get.offNamedUntil(Routes.homePage, (route) => false);
+                        },
                       ),
                       const SizedBox(
                         height: 30,
                       ),
                       Container(
-                          height: 50,
-                          color: const Color(0xFFF8F8F6),
-                          padding: EdgeInsets.symmetric(
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.04,
-                          ),
-                          child: Observer(builder: (_) {
+                        height: 50,
+                        color: const Color(0xFFF8F8F6),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width * 0.04,
+                        ),
+                        child: Observer(
+                          builder: (_) {
                             return DropdownSearch<Reservatorio>(
                               key: dropDownKey,
                               mode: Mode.MENU,
@@ -192,7 +191,9 @@ class AjustesPageState extends State<AjustesPage> {
                               showSearchBox: true,
                               showAsSuffixIcons: true,
                             );
-                          })),
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -200,10 +201,11 @@ class AjustesPageState extends State<AjustesPage> {
                   delegate: SliverChildListDelegate([
                     Padding(
                       padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.023,
-                          right: MediaQuery.of(context).size.width * 0.058,
-                          left: MediaQuery.of(context).size.width * 0.058,
-                          bottom: 0),
+                        top: MediaQuery.of(context).size.height * 0.023,
+                        right: MediaQuery.of(context).size.width * 0.058,
+                        left: MediaQuery.of(context).size.width * 0.058,
+                        bottom: 0,
+                      ),
                       child: ListView(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
@@ -273,6 +275,11 @@ class AjustesPageState extends State<AjustesPage> {
                                               controller: store.cEletricoAtual,
                                               keyboardType:
                                                   TextInputType.number,
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .digitsOnly,
+                                                CentavosInputFormatter(),
+                                              ],
                                               decoration: const InputDecoration(
                                                 contentPadding: EdgeInsets.only(
                                                   bottom: 10,
@@ -330,6 +337,11 @@ class AjustesPageState extends State<AjustesPage> {
                                                   store.cEletricoDesejado,
                                               keyboardType:
                                                   TextInputType.number,
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .digitsOnly,
+                                                CentavosInputFormatter(),
+                                              ],
                                               decoration: const InputDecoration(
                                                 contentPadding: EdgeInsets.only(
                                                   bottom: 10,
@@ -397,6 +409,11 @@ class AjustesPageState extends State<AjustesPage> {
                                                 controller: store.volumeAtual,
                                                 keyboardType:
                                                     TextInputType.number,
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter
+                                                      .digitsOnly,
+                                                  CentavosInputFormatter(),
+                                                ],
                                                 decoration:
                                                     const InputDecoration(
                                                         contentPadding:
@@ -453,6 +470,11 @@ class AjustesPageState extends State<AjustesPage> {
                                                     store.volumeDesejado,
                                                 keyboardType:
                                                     TextInputType.number,
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter
+                                                      .digitsOnly,
+                                                  CentavosInputFormatter(),
+                                                ],
                                                 decoration:
                                                     const InputDecoration(
                                                         contentPadding:
@@ -532,12 +554,17 @@ class AjustesPageState extends State<AjustesPage> {
                                       child: TextFormField(
                                         controller: store.pH,
                                         keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                          CentavosInputFormatter(),
+                                        ],
                                         textAlign: TextAlign.center,
                                         decoration: const InputDecoration(
                                             alignLabelWithHint: true,
                                             contentPadding:
                                                 EdgeInsets.only(bottom: 10),
-                                            hintText: "8.4",
+                                            hintText: "8,4",
                                             hintStyle: TextStyle(
                                               fontWeight: FontWeight.w100,
                                               fontStyle: FontStyle.italic,
@@ -671,10 +698,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             onPressed: () async {
-              Get.to(
-                () => const ResultadoajustePage(),
-                transition: Transition.rightToLeft,
-              );
+              Get.toNamed(Routes.resultadoajustePage);
               // Modular.to.pushReplacementNamed("/resultadoAjuste/");
             },
           ),

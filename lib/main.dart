@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:get/get.dart';
+import 'package:osi_solucoes/core/services/auth_service.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 
 import 'core/inject/inject.dart';
@@ -11,6 +12,7 @@ import 'features/presenter/routes/app_pages.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Get.putAsync(() => AuthService().init());
   await initInject();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(

@@ -48,7 +48,11 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
           appBar: appBar(),
           backgroundColor: Constants.kBackgroundColor,
           body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: EdgeInsets.only(
+              left: 10,
+              right: 10,
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,

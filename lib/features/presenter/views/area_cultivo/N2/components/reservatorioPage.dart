@@ -7,13 +7,18 @@ import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 
 Widget reservatorioPage(BuildContext context, SetorStore store) {
-  return SizedBox(
+  return Container(
     height: MediaQuery.of(context).size.height * 0.9,
+    margin: EdgeInsets.only(
+      top: 0,
+      left: MediaQuery.of(context).size.width * 0.08,
+      right: MediaQuery.of(context).size.width * 0.08,
+    ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 10, left: 40),
+          padding: const EdgeInsets.only(top: 10),
           child: RichText(
             textAlign: TextAlign.start,
             text: const TextSpan(
@@ -40,73 +45,73 @@ Widget reservatorioPage(BuildContext context, SetorStore store) {
             ),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(top: 30),
-          child: Center(
-            child: Text(
-              'Importante',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic,
-                decoration: TextDecoration.underline,
-                color: Constants.kText2,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
+        // const Padding(
+        //   padding: EdgeInsets.only(top: 30),
+        //   child: Center(
+        //     child: Text(
+        //       'Importante',
+        //       style: TextStyle(
+        //         fontSize: 18,
+        //         fontWeight: FontWeight.bold,
+        //         fontStyle: FontStyle.italic,
+        //         decoration: TextDecoration.underline,
+        //         color: Constants.kText2,
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(
+        //   height: 10,
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 16),
+        //   child: RichText(
+        //     textAlign: TextAlign.center,
+        //     text: const TextSpan(
+        //       text: 'Ao vincular o reservatório, todos os ',
+        //       style: TextStyle(
+        //         fontSize: 18,
+        //         fontWeight: FontWeight.w600,
+        //         color: Constants.kText2,
+        //       ),
+        //       children: <TextSpan>[
+        //         TextSpan(
+        //           text: 'lotes',
+        //           style: TextStyle(color: Constants.kPrimaryColor),
+        //         ),
+        //         TextSpan(
+        //           text: ' criados ou migrados para este setor, serão ',
+        //           style: TextStyle(
+        //             fontSize: 18,
+        //             color: Constants.kText2,
+        //           ),
+        //         ),
+        //         TextSpan(
+        //           text: 'automaticamente',
+        //           style: TextStyle(color: Constants.kPrimaryColor),
+        //         ),
+        //         TextSpan(
+        //           text: ' vinculados ao reservatório \nescolhido.',
+        //           style: TextStyle(color: Constants.kText2),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+        // const Padding(
+        //   padding: EdgeInsets.only(top: 90, left: 40),
+        //   child: Text(
+        //     'Vincular Reservatório',
+        //     style: TextStyle(
+        //       fontSize: 14,
+        //       color: Color(0xff6F6464),
+        //       fontWeight: FontWeight.w600,
+        //       fontStyle: FontStyle.italic,
+        //     ),
+        //   ),
+        // ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: RichText(
-            textAlign: TextAlign.center,
-            text: const TextSpan(
-              text: 'Ao vincular o reservatório, todos os ',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Constants.kText2,
-              ),
-              children: <TextSpan>[
-                TextSpan(
-                  text: 'lotes',
-                  style: TextStyle(color: Constants.kPrimaryColor),
-                ),
-                TextSpan(
-                  text: ' criados ou migrados para este setor, serão ',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Constants.kText2,
-                  ),
-                ),
-                TextSpan(
-                  text: 'automaticamente',
-                  style: TextStyle(color: Constants.kPrimaryColor),
-                ),
-                TextSpan(
-                  text: ' vinculados ao reservatório \nescolhido.',
-                  style: TextStyle(color: Constants.kText2),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.only(top: 90, left: 40),
-          child: Text(
-            'Vincular Reservatório',
-            style: TextStyle(
-              fontSize: 14,
-              color: Color(0xff6F6464),
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 5, left: 40, right: 40),
+          padding: const EdgeInsets.only(top: 45, left: 10, right: 10),
           child: Observer(builder: (_) {
             return DropdownButtonFormField<Reservatorio>(
               value: store.novoSetorReservatorio.id != null

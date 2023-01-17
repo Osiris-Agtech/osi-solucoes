@@ -30,6 +30,8 @@ class SolucaoNutritiva {
     this.c_eletrica,
     this.created_at,
     this.reservatorios,
+    this.solucoes_contas,
+    this.solucoes_fertilizantes_concentradas,
   });
 
   factory SolucaoNutritiva.fromJson(Map<String, dynamic> json) =>

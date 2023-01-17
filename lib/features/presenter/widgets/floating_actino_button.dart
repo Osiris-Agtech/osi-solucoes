@@ -3,13 +3,10 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
-
-import '../views/area_cultivo/N2/cadastrar_setor_page.dart';
 
 class NewFloatingActionButton extends StatefulWidget {
   final int nivel;
@@ -53,10 +50,7 @@ class _NewFloatingActionButtonState extends State<NewFloatingActionButton> {
             onTap: widget.nivel <= 3
                 ? () {
                     loteStore.setIsEditing(false);
-                    Get.to(
-                      () => const CadastrarLotePage(),
-                      transition: Transition.rightToLeft,
-                    );
+                    Get.toNamed(Routes.cadastrarLotePage);
                   }
                 : null,
           ),
@@ -71,10 +65,7 @@ class _NewFloatingActionButtonState extends State<NewFloatingActionButton> {
             onTap: widget.nivel <= 2
                 ? () {
                     setorStore.setIsEditing(false);
-                    Get.to(
-                      () => const CadastrarSetorPage(),
-                      transition: Transition.rightToLeft,
-                    );
+                    Get.toNamed(Routes.cadastrarSetorPage);
                   }
                 : null,
           ),
@@ -89,10 +80,7 @@ class _NewFloatingActionButtonState extends State<NewFloatingActionButton> {
             onTap: widget.nivel <= 1
                 ? () {
                     areaStore.setIsEditing(false);
-                    Get.to(
-                      () => const CadastrarAreaCultivo(),
-                      transition: Transition.rightToLeft,
-                    );
+                    Get.toNamed(Routes.cadastrarAreaCultivoPage);
                   }
                 : null,
           ),

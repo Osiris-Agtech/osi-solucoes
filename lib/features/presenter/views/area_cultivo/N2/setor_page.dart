@@ -9,11 +9,10 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/lote_page.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 import '../../home/components/top_app_bar.dart';
 
@@ -168,19 +167,8 @@ class _AppBarState extends State<AppBar> {
                           ),
                           onTap: () async {
                             await areaStore.setAreaEditing(widget.areaN1);
-                            Get.to(
-                              () => const CadastrarAreaCultivo(),
-                              transition: Transition.rightToLeft,
-                            );
+                            Get.toNamed(Routes.cadastrarAreaCultivoPage);
                           },
-                        ),
-                        PopupMenuItem(
-                          child: Row(
-                            children: const [
-                              Text('Deletar'),
-                            ],
-                          ),
-                          onTap: () {},
                         ),
                       ],
                     ),
@@ -422,10 +410,7 @@ class _CardSetorState extends State<CardSetor> {
       highlightColor: Colors.transparent,
       onTap: () {
         loteStore.setSetorSelecionado(widget.setor);
-        Get.to(
-          () => const LotePage(),
-          transition: Transition.rightToLeft,
-        );
+        Get.toNamed(Routes.lotePage);
       },
       child: Card(
         elevation: 2,
@@ -465,21 +450,16 @@ class _CardSetorState extends State<CardSetor> {
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            widget.setor.nome ?? '',
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w700,
-                              color: Constants.kGreyText,
-                            ),
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        widget.setor.nome ?? '',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: Constants.kGreyText,
                         ),
-                        const Spacer(),
-                      ],
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),

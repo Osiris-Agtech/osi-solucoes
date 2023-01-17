@@ -3,8 +3,11 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/modulos_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 
@@ -19,6 +22,7 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
   ReservatoriosStore store = GetIt.I<ReservatoriosStore>();
   final ScrollController _scrollController = ScrollController();
   CarouselController carouselController = CarouselController();
+  ModulosStore modulosStore = GetIt.I<ModulosStore>();
 
   @override
   void initState() {
@@ -48,6 +52,46 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                     automaticallyImplyLeading: false,
                     forceElevated: true,
                     elevation: 0,
+                    actions: [
+                      Align(
+                        alignment: const Alignment(0.6, -0.9),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: Theme(
+                            data: Theme.of(context).copyWith(
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: PopupMenuButton(
+                                icon: SvgPicture.asset(
+                                  "assets/icons/settings_icon.svg",
+                                  color: Constants.kButtonGrey,
+                                  height: 20,
+                                ),
+                                itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    child: Row(
+                                      children: const [
+                                        Text('Editar'),
+                                      ],
+                                    ),
+                                    onTap: () async {
+                                      await store.carregarDadosReservatorio(
+                                          store.reservatorioDetalhes);
+                                      store.setIsEditing(true);
+                                      Get.toNamed(
+                                          Routes.cadastrarReservatoriosPage);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                     flexibleSpace: TopAppBar(
                       path: "",
                       namePage: store.reservatorioDetalhes.nome ?? "...",
@@ -72,7 +116,12 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                             InkWell(
                               splashColor: Colors.transparent,
                               hoverColor: Colors.transparent,
-                              onTap: () {},
+                              onTap: () async {
+                                await modulosStore.setPageViewController(4);
+                                Get.toNamed(
+                                  Routes.modulosPage,
+                                );
+                              },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [

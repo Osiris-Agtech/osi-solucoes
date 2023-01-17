@@ -125,14 +125,16 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
                   ? const CircularProgressIndicator(
                       color: Colors.white,
                     )
-                  : const Text(
-                      "Salvar",
-                      style: TextStyle(
+                  : Text(
+                      store.isEditing ? "Alterar" : "Salvar",
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-              onPressed: () => store.registrarReservatorio(),
+              onPressed: () => store.isEditing
+                  ? store.updateReservatorio()
+                  : store.registrarReservatorio(),
             );
           }),
         ),
@@ -153,11 +155,15 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      store.novoReservatorioName.text,
-                      style: const TextStyle(
-                        color: Constants.kPrimaryColor,
-                        fontWeight: FontWeight.w600,
+                    SizedBox(
+                      width: 126,
+                      child: Text(
+                        store.novoReservatorioName.text,
+                        style: const TextStyle(
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     const Icon(

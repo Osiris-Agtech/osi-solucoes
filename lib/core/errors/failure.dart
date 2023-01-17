@@ -11,6 +11,7 @@ class FailureMessage {
   static const errorLoginEmailMessage = 'E-mail inválido';
   static const errorLoginPasswordMessage = 'Senha inválida';
   static const errorRecoverPasswordMessage = 'E-mail não encontrado';
+  static const errorUserEmailNotFound = 'Esse E-mail ainda não foi cadastrado';
   static const errorValidationCodeMessage = 'Código de ativação incorreto';
   static const errorGetLoggedUserMessage = 'Usuário não logado';
   static const errorLogoutMessage = 'Falha ao sair';
@@ -39,5 +40,7 @@ class FailureMessage {
   static const errorCadastrarCulturaMessage =
       'Falha ao cadastrar cultura, verifique se o campo está preenchido corretamente';
   static const errorCadastrarAjusteMessage =
-      'Falha ao cadastrar atividade, verifique se os campos estão preenchido corretamente';
+      'Falha ao cadastrar ajuste, verifique se os campos estão preenchido corretamente';
+  static const errorUpdateUsuarioMessage =
+      'Falha ao atualizar usuario, verifique se os campos estão preenchido corretamente';
 }

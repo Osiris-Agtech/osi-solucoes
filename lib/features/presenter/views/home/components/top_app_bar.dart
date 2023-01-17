@@ -9,11 +9,13 @@ class TopAppBar extends StatelessWidget {
     this.navigate,
     required this.namePage,
     this.subtitle,
+    this.onPressed,
   }) : super(key: key);
   final bool? navigate;
   final String? path;
   final String namePage;
   final String? subtitle;
+  final Function? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,11 @@ class TopAppBar extends StatelessWidget {
             padding: EdgeInsets.zero,
             alignment: Alignment.centerLeft,
             onPressed: () {
-              Get.close(1);
+              if (onPressed != null) {
+                onPressed!.call();
+              } else {
+                Get.close(1);
+              }
             },
             icon: const Icon(Icons.arrow_back),
             color: Constants.kPrimaryColor,

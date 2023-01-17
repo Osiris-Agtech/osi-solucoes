@@ -160,8 +160,6 @@ showConfirmDialog(BuildContext context) {
                             const Duration(milliseconds: 1500));
                         store.clearAll();
                         Get.close(3);
-                        // Modular.to.popUntil(ModalRoute.withName('/Home'));
-                        // Modular.to.pushReplacementNamed("/Tab/Ajustes/");
                       },
                     ),
                   ),
@@ -197,137 +195,6 @@ showConfirmDialog(BuildContext context) {
               ],
             ));
       });
-
-  // showDialog(
-  //   barrierDismissible: true,
-  //   useSafeArea: false,
-  //   context: context,
-  //   builder: (BuildContext context) {
-  //     return AlertDialog(
-  //       shape: const RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.only(
-  //             topLeft: Radius.circular(25), topRight: Radius.circular(25)),
-  //       ),
-  //       alignment: Alignment.bottomCenter,
-  //       contentPadding: EdgeInsets.zero,
-  //       insetPadding: EdgeInsets.zero,
-  //       content: Container(
-  //           height: MediaQuery.of(context).size.height * 0.4,
-  //           width: MediaQuery.of(context).size.width,
-  //           decoration: const BoxDecoration(
-  //             color: Colors.white,
-  //           ),
-  //           margin: EdgeInsets.only(
-  //             top: MediaQuery.of(context).size.height * 0.040,
-  //             left: MediaQuery.of(context).size.width * 0.08,
-  //             right: MediaQuery.of(context).size.width * 0.08,
-  //           ),
-  //           child: Column(
-  //             children: [
-  //               RichText(
-  //                 textAlign: TextAlign.center,
-  //                 text: const TextSpan(
-  //                   text: 'Deseja ',
-  //                   style: TextStyle(
-  //                       fontSize: 28,
-  //                       fontWeight: FontWeight.bold,
-  //                       color: Colors.black),
-  //                   children: <TextSpan>[
-  //                     TextSpan(
-  //                         text: 'registrar',
-  //                         style: TextStyle(
-  //                             fontWeight: FontWeight.bold,
-  //                             color: kPrimaryColor)),
-  //                     TextSpan(
-  //                       text: ' o ajuste?',
-  //                       style: TextStyle(
-  //                           fontSize: 28,
-  //                           fontWeight: FontWeight.bold,
-  //                           color: Colors.black),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //               Expanded(
-  //                 child: Container(),
-  //                 flex: 1,
-  //               ),
-  //               Padding(
-  //                 padding: EdgeInsets.only(
-  //                   top: MediaQuery.of(context).size.height * 0.033,
-  //                 ),
-  //                 child: const Text(
-  //                   'Caso registre, o ajuste ficará salvo no caderno de campo',
-  //                   textAlign: TextAlign.center,
-  //                   style: TextStyle(
-  //                       fontSize: 18,
-  //                       fontWeight: FontWeight.normal,
-  //                       color: Color(0xB2333333)),
-  //                 ),
-  //               ),
-  //               Expanded(
-  //                 child: Container(),
-  //                 flex: 1,
-  //               ),
-  //               Padding(
-  //                   padding: EdgeInsets.only(
-  //                       // top: MediaQuery.of(context).size.height * .03,
-  //                       bottom: MediaQuery.of(context).size.width * 0.01),
-  //                   child: Center(
-  //                     child: SizedBox(
-  //                       width: MediaQuery.of(context).size.width * .69,
-  //                       height: 30,
-  //                       child: ElevatedButton(
-  //                         style:
-  //                             ElevatedButton.styleFrom(primary: kPrimaryColor),
-  //                         child: const Text(
-  //                           "Sim",
-  //                           style: TextStyle(
-  //                               fontSize: 14, fontWeight: FontWeight.w600),
-  //                         ),
-  //                         onPressed: () async {
-  //                           showDoneAnimation(context);
-  //                           await Future.delayed(
-  //                               const Duration(milliseconds: 1400));
-  //                           Navigator.pop(context);
-  //                           Modular.to.popUntil(ModalRoute.withName('/Home'));
-  //                           Modular.to.pushReplacementNamed("/Tab/Ajustes/");
-  //                         },
-  //                       ),
-  //                     ),
-  //                   )),
-  //               Padding(
-  //                 padding: EdgeInsets.only(
-  //                     top: MediaQuery.of(context).size.height * .001,
-  //                     bottom: MediaQuery.of(context).size.width * 0.01),
-  //                 child: Center(
-  //                   child: SizedBox(
-  //                     width: MediaQuery.of(context).size.width * .69,
-  //                     height: 30,
-  //                     child: TextButton(
-  //                       onPressed: () {
-  //                         Navigator.of(context).pop();
-  //                       },
-  //                       child: const Text(
-  //                         "Não",
-  //                         style: TextStyle(
-  //                             fontSize: 14,
-  //                             fontWeight: FontWeight.w600,
-  //                             color: Color(0xff767676)),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //               Expanded(
-  //                 child: Container(),
-  //                 flex: 5,
-  //               ),
-  //             ],
-  //           )),
-  //     );
-  //   },
-  //);
 }
 
 showDoneAnimation(BuildContext context) {
@@ -562,35 +429,38 @@ class AppBarCustom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverOverlapAbsorber(
-        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-        sliver: SliverAppBar(
-          backgroundColor: Colors.white,
-          toolbarHeight: 120,
-          pinned: true,
-          forceElevated: true,
-          elevation: 1,
-          flexibleSpace: const TopAppBar(
-            path: "/Tab/Ajustes/",
-            namePage: "Resultado\n Ajuste",
-          ),
-          bottom: TabBar(
-              controller: tabController,
-              unselectedLabelColor: const Color(0xFF929292),
-              unselectedLabelStyle:
-                  const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-              labelStyle:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              labelColor: Constants.kPrimaryColor,
-              tabs: const [
-                Tab(text: "Fertilizantes"),
-                Tab(
-                  child: Text(
-                    "Solução \n Concentrada",
-                    textAlign: TextAlign.center,
-                  ),
-                )
-              ]),
-        ));
+      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+      sliver: SliverAppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        toolbarHeight: 120,
+        pinned: true,
+        forceElevated: true,
+        elevation: 1,
+        flexibleSpace: const TopAppBar(
+          path: "/Tab/Ajustes/",
+          namePage: "Resultado\n Ajuste",
+        ),
+        bottom: TabBar(
+          controller: tabController,
+          unselectedLabelColor: const Color(0xFF929292),
+          unselectedLabelStyle:
+              const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          labelStyle:
+              const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          labelColor: Constants.kPrimaryColor,
+          tabs: const [
+            Tab(text: "Fertilizantes"),
+            Tab(
+              child: Text(
+                "Solução \n Concentrada",
+                textAlign: TextAlign.center,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -657,7 +527,7 @@ class TabFertilizantes extends StatelessWidget {
             padding: EdgeInsets.only(
                 top: MediaQuery.of(context).size.height * 0.028),
             child: const Text(
-              "Quant. de fertilizantes para \n reposisição de nutrientes.",
+              "Quant. de fertilizantes para reposisição de nutrientes.",
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontWeight: FontWeight.normal,
@@ -690,9 +560,10 @@ class TabFertilizantes extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.only(
-                            top: index != 0
-                                ? MediaQuery.of(context).size.height * 0.018
-                                : 0),
+                          top: index != 0
+                              ? MediaQuery.of(context).size.height * 0.018
+                              : 0,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           mainAxisSize: MainAxisSize.max,
@@ -721,6 +592,20 @@ class TabFertilizantes extends StatelessWidget {
                     },
                   ),
                 ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.028),
+            child: const Text(
+              "*Os cálculos realizados nessa versão consideram o CE da Água como 0.1 mS cm-1",
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontStyle: FontStyle.italic,
+                fontSize: 12,
+                color: Color(0xB2333333),
               ),
             ),
           ),

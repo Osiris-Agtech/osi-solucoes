@@ -7,12 +7,14 @@ import 'package:osi_solucoes/features/data/datasources/login/login_datasource.da
 import 'package:osi_solucoes/features/data/datasources/lote/lote_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/reservatorio/reservatorio_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/setor/setor_datasource.dart';
+import 'package:osi_solucoes/features/data/datasources/solucoes/solucoes_nutritivas_datasource.dart';
 import 'package:osi_solucoes/features/data/repositories/ajuste/ajuste_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/cadernoCampo/cadeno_campo_repository.dart';
-import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe.dart';
+import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/lote/lote_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/reservatorio/reservatorio_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/setor/setor_repository.dart';
+import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/gerenciar_equipe_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
@@ -56,6 +58,7 @@ Future<void> initInject() async {
   sl.registerLazySingleton<IAjusteDatasource>(() => AjusteDatasource());
   sl.registerLazySingleton<ICadernoCampoDatasource>(
       () => CadernoCampoDatasource());
+  sl.registerLazySingleton<ISolucaoDatasource>(() => SolucaoDatasource());
   sl.registerLazySingleton<IGerenciarEquipeDatasource>(
       () => GerenciarEquipeDatasource());
 
@@ -76,6 +79,9 @@ Future<void> initInject() async {
       () => AjusteRepository(datasource: sl()));
   sl.registerLazySingleton<CadernoCampoRepository>(
       () => CadernoCampoRepository(datasource: sl()));
+  sl.registerLazySingleton<SolucaoRepository>(
+      () => SolucaoRepository(datasource: sl()));
+
   sl.registerLazySingleton<GerenciarEquipeRepository>(
       () => GerenciarEquipeRepository(datasource: sl()));
   //viewmodels

@@ -18,5 +18,6 @@ abstract class _ModulosStoreBase with Store {
     if (id == 1) {
       reservatoriosStore.buscarReservatorios();
     }
+    return;
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/login_store.dart';
 import 'package:osi_solucoes/features/presenter/views/home/home_page.dart';
 import 'package:osi_solucoes/features/presenter/views/login/login_page.dart';
 
@@ -18,6 +19,7 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   final AuthController authController = GetIt.I<AuthController>();
+  final LoginStore loginStore = GetIt.I<LoginStore>();
 
   @override
   void initState() {
@@ -26,19 +28,37 @@ class _SplashPageState extends State<SplashPage> {
       var usuario = await LocalStorage().getUser();
 
       if (usuario != null) {
-        authController.setUser(usuario);
-
-        if (usuario.contas!.length > 1) {
+        loginStore.setEmailController(usuario.email ?? '');
+        loginStore.setSenhaController(usuario.senha ?? '');
+        String response = await loginStore.login();
+        if (response == "sucesso") {
+          Get.to(() => const HomePage());
+          // Modular.to.pushReplacementNamed("/Home/");
+        } else if (response == "multiple") {
           Get.to(
             () => MultiAccountsPage(
-              user: usuario,
+              user: loginStore.userList[0],
               isLoggedIn: false,
             ),
           );
         } else {
-          authController.usuario.selected_conta = usuario.contas![0];
-          Get.off(() => const HomePage());
+          LocalStorage().deleteUser();
+          Get.to(() => const LoginPage());
         }
+
+        // authController.setUser(usuario);
+
+        // if (usuario.contas!.length > 1) {
+        //   Get.to(
+        //     () => MultiAccountsPage(
+        //       user: usuario,
+        //       isLoggedIn: false,
+        //     ),
+        //   );
+        // } else {
+        //   authController.usuario.selected_conta = usuario.contas![0];
+        //   Get.off(() => const HomePage());
+        // }
       } else {
         Get.to(() => const LoginPage());
       }

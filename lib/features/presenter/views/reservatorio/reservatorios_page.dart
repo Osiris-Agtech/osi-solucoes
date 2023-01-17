@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/cadastrar_resevatorio_page.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/reservatorioItem.dart';
 
 import '../../../../core/constants/constants.dart';
@@ -62,10 +62,10 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
   FloatingActionButton floatingButton() {
     return FloatingActionButton(
       heroTag: "NovoReservatório",
-      onPressed: () => Get.to(
-        () => const CadastrarReservatorioPage(),
-        transition: Transition.rightToLeft,
-      ),
+      onPressed: () {
+        store.setIsEditing(false);
+        Get.toNamed(Routes.cadastrarReservatoriosPage);
+      },
       child: const Icon(
         Icons.add,
         size: 30,
@@ -136,10 +136,13 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
       automaticallyImplyLeading: false,
       forceElevated: true,
       elevation: 1,
-      flexibleSpace: const TopAppBar(
+      flexibleSpace: TopAppBar(
         path: "/Home/",
         namePage: "Meus Reservatórios",
         subtitle: "Lista de reservatórios cadastrados",
+        onPressed: () {
+          Get.offNamedUntil(Routes.homePage, (route) => false);
+        },
       ),
       bottom: PreferredSize(
         child: filterWidget(context),

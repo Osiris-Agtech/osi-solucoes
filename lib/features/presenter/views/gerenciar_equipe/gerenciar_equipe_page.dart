@@ -2,10 +2,11 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
-import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/gerenciar_equipe_store.dart';
@@ -18,7 +19,6 @@ class GerenciarEquipePage extends StatefulWidget {
 }
 
 class _GerenciarEquipePage extends State<GerenciarEquipePage> {
-  //mudar conta para usuario
   GerenciarEquipeStore gerenciarEquipeStore = GetIt.I<GerenciarEquipeStore>();
 
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
@@ -39,20 +39,27 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-          backgroundColor: Constants.kSecondBackgroundColor,
-          floatingActionButton: const NewFloatingActionButton(
-            nivel: 3,
+          backgroundColor: Constants.kCardColor,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Get.toNamed(Routes.cadastrarUsuarioPage);
+            },
+            child: const Icon(
+              Icons.add,
+              size: 32,
+            ),
+            backgroundColor: Constants.kPrimaryColor,
           ),
           body: Form(
             key: formKey,
             child: CustomScrollView(
+              controller: ScrollController(),
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
                 AppBar(store: gerenciarEquipeStore),
                 Observer(builder: (_) {
-                  if (gerenciarEquipeStore.isSolucaoListLoading) {
+                  if (gerenciarEquipeStore.isUserListLoading) {
                     return const SliverToBoxAdapter(
                       child: Padding(
                         padding:
@@ -77,17 +84,93 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                       ),
                     );
                   }
+                  if (gerenciarEquipeStore.searchUserText.isEmpty) {
+                    return SliverToBoxAdapter(
+                      child: ListView.builder(
+                        itemCount: gerenciarEquipeStore.userMap.length,
+                        controller: ScrollController(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 5.0, right: 5.0),
+                                      child: const Divider(
+                                        color: Constants.kGreyText2,
+                                        height: 2,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    gerenciarEquipeStore.userMap[index].key,
+                                    style: const TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: 10,
+                                      color: Constants.kText2,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 5.0, right: 5.0),
+                                      child: const Divider(
+                                        color: Constants.kGreyText2,
+                                        height: 2,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: GridView.count(
+                                  childAspectRatio: 1.3,
+                                  controller: ScrollController(),
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 2,
+                                  mainAxisSpacing: 2,
+                                  children: List.generate(
+                                    gerenciarEquipeStore
+                                        .userMap[index].values.length,
+                                    (indexUser) => CardUsuario(
+                                      user: gerenciarEquipeStore
+                                          .userMap[index].values[indexUser],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  }
                   return SliverPadding(
                     padding: const EdgeInsets.all(8.0),
                     sliver: SliverGrid.count(
+                      childAspectRatio: 1.4,
                       crossAxisCount: 2,
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 2,
                       children: List.generate(
-                          gerenciarEquipeStore.userList.length,
-                          (index) => CardUsuario(
-                                user: gerenciarEquipeStore.userList[index],
-                              )),
+                        gerenciarEquipeStore.searchUser.length,
+                        (index) => CardUsuario(
+                          user: gerenciarEquipeStore.searchUser[index],
+                        ),
+                      ),
                     ),
                   );
                 }),
@@ -126,7 +209,7 @@ class _AppBarState extends State<AppBar> {
         floating: true,
         automaticallyImplyLeading: false,
         forceElevated: true,
-        elevation: 1,
+        elevation: 0,
         flexibleSpace: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -137,22 +220,27 @@ class _AppBarState extends State<AppBar> {
             const SizedBox(
               height: 10,
             ),
-            Container(
-              color: const Color(0xFFF8F8F6),
-              padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+              child: TextFormField(
+                onChanged: (value) =>
+                    gerenciarEquipeStore.setsearchUserText(value),
+                textCapitalization: TextCapitalization.words,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.normal,
+                  fontStyle: FontStyle.italic,
+                ),
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  hintText: 'Pesquisar',
+                  hintStyle: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
               ),
-              child: SizedBox(
-                  width: double.infinity,
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: "Buscar...",
-                      hintStyle: TextStyle(
-                        fontFamily: "Roboto",
-                      ),
-                      border: InputBorder.none,
-                    ),
-                  )),
             ),
           ],
         ),
@@ -177,7 +265,10 @@ class _CardUsuarioState extends State<CardUsuario> {
     return InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: () {},
+      onTap: () {
+        store.setUsuarioSelecionado(widget.user);
+        Get.toNamed(Routes.detalhesUsuarioPage);
+      },
       child: Card(
         elevation: 2,
         shape:
@@ -204,8 +295,9 @@ class _CardUsuarioState extends State<CardUsuario> {
                       const Text(
                         'Status',
                         style: TextStyle(
-                          fontSize: 10,
-                          color: Constants.kGreyText,
+                          fontSize: 12,
+                          color: Constants.kText2,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       Row(
@@ -214,16 +306,17 @@ class _CardUsuarioState extends State<CardUsuario> {
                             Icons.circle,
                             color:
                                 widget.user.ativo != null && widget.user.ativo!
-                                    ? Constants.kGreyText2
-                                    : Constants.kPrimaryColor,
+                                    ? Constants.kPrimaryColor
+                                    : Constants.kGreyText2,
                             size: 10,
                           ),
                           Text(
                             widget.user.ativo != null && widget.user.ativo!
-                                ? ' Inativo'
-                                : ' Ativo',
+                                ? ' ATIVO'
+                                : ' INATIVO',
                             style: const TextStyle(
-                              fontSize: 9,
+                              fontSize: 10,
+                              color: Constants.kText2,
                             ),
                           ),
                         ],
@@ -237,6 +330,7 @@ class _CardUsuarioState extends State<CardUsuario> {
               ),
               Text(
                 widget.user.nome ?? '',
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
@@ -248,9 +342,6 @@ class _CardUsuarioState extends State<CardUsuario> {
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: Constants.kPrimaryColor),
-              ),
-              const SizedBox(
-                height: 10,
               ),
             ],
           ),

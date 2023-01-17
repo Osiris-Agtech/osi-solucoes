@@ -52,4 +52,13 @@ class ReservatorioRepository implements IReservatorioRepository {
 
     return result;
   }
+
+  @override
+  Future<Either<Failure, Reservatorio>> updateReservatorio(
+      {required Reservatorio novoReservatorio}) async {
+    var result =
+        await datasource.updateReservatorio(novoReservatorio: novoReservatorio);
+
+    return result;
+  }
 }

@@ -192,6 +192,10 @@ abstract class _LoteStoreBase with Store {
         embalagensProduzidasController = TextEditingController(
           text: (loteSelecionado.embalagens_produzidas ?? 0).toString(),
         );
+        registroData = loteSelecionado.registro_data ?? DateTime.now();
+        semeaduraData = loteSelecionado.semeadura_data;
+        transplantioData = loteSelecionado.transplantio_data;
+        colheitaData = loteSelecionado.colheita_data;
       },
     );
 
@@ -330,6 +334,25 @@ abstract class _LoteStoreBase with Store {
   selecionarNovoLoteSetor(Setor setor) => novoLoteSetor = setor;
 
   @action
+  carregarAreaSetor() {
+    SetorStore setorStore = GetIt.I<SetorStore>();
+
+    if (setorStore.areaSelecionada.id != null) {
+      int index = areaList
+          .indexWhere((element) => element.id == setorStore.areaSelecionada.id);
+      if (index != -1) {
+        selecionarNovoLoteArea(areaList[index]);
+
+        int indexSetor = (novoLoteArea.setores ?? [])
+            .indexWhere((element) => element.id == setorSelecionado.id);
+        if (indexSetor != -1) {
+          selecionarNovoLoteSetor(novoLoteArea.setores![indexSetor]);
+        }
+      }
+    }
+  }
+
+  @action
   setNovoLoteCultura(int index) => novoLoteCultura = culturaList[index];
 
   @action
@@ -453,7 +476,6 @@ abstract class _LoteStoreBase with Store {
     reservatorios.fold(
       (err) {
         reservatorioList = List.from([]);
-        toastError(message: err.message);
       },
       (data) async {
         reservatorioList = List.from(data);
@@ -512,7 +534,8 @@ abstract class _LoteStoreBase with Store {
         nome: novoLoteName.text,
         setor: novoLoteSetor,
         cultura: novoLoteCultura,
-        reservatorio: novoLoteReservatorio,
+        reservatorio:
+            novoLoteReservatorio.id != null ? novoLoteReservatorio : null,
         registro_data: registroData,
         semeadura_data: semeaduraData,
         transplantio_data: transplantioData,
@@ -565,8 +588,8 @@ abstract class _LoteStoreBase with Store {
   validarRegistro() {
     bool isValid = novoLoteName.text.isNotEmpty &&
         novoLoteSetor.id != null &&
-        novoLoteCultura.id != null &&
-        novoLoteReservatorio.id != null;
+        novoLoteCultura.id != null; // &&
+    // novoLoteReservatorio.id != null;
 
     if (isValid) {
       return true;
@@ -622,6 +645,31 @@ abstract class _LoteStoreBase with Store {
         int.parse(plantasColhidasController.text);
     loteSelecionado.embalagens_produzidas =
         int.parse(embalagensProduzidasController.text);
+
+    var alterarLote = await loteRepository.alterarLote(loteSelecionado);
+
+    alterarLote.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        toastSuccess(message: "Alterado com sucesso");
+        buscarDetalhesLote();
+      },
+    );
+
+    isNovoLoteLoading = false;
+  }
+
+  @action
+  alterarDatasLote() async {
+    LoteRepository loteRepository = GetIt.I<LoteRepository>();
+    isNovoLoteLoading = true;
+
+    loteSelecionado.registro_data = registroData;
+    loteSelecionado.semeadura_data = semeaduraData;
+    loteSelecionado.transplantio_data = transplantioData;
+    loteSelecionado.colheita_data = colheitaData;
 
     var alterarLote = await loteRepository.alterarLote(loteSelecionado);
 

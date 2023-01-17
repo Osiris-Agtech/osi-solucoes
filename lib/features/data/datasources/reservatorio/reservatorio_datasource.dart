@@ -18,6 +18,8 @@ abstract class IReservatorioDatasource {
       {required int reservatorioId});
   Future<Either<Failure, Reservatorio>> registrarReservatorio(
       {required Reservatorio novoReservatorio});
+  Future<Either<Failure, Reservatorio>> updateReservatorio(
+      {required Reservatorio novoReservatorio});
 }
 
 class ReservatorioDatasource implements IReservatorioDatasource {
@@ -85,6 +87,7 @@ class ReservatorioDatasource implements IReservatorioDatasource {
           sNutritiva(where: {
             id: $id
           }) {
+            id
             nome
             c_eletrica
             solucoes_contas {
@@ -157,6 +160,10 @@ class ReservatorioDatasource implements IReservatorioDatasource {
               id
               nome
             }
+            solucao {
+              id
+              nome
+            }
           }
         }
       ''';
@@ -214,6 +221,8 @@ class ReservatorioDatasource implements IReservatorioDatasource {
               }
             }
             solucao {
+              id
+              nome
               solucoes_fertilizantes_concentradas {
                 id
                 fertilizante {
@@ -256,7 +265,10 @@ class ReservatorioDatasource implements IReservatorioDatasource {
       {required Reservatorio novoReservatorio}) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-    const String readRepositories = r'''
+    String readRepositories;
+
+    if (novoReservatorio.solucao?.id != null) {
+      readRepositories = r'''
         mutation CreateOneReservatorio($nome: String, $volume: Decimal, $contaId: Int, $solucaoId: Int) {
           createOneReservatorio(data: {
             nome: $nome,
@@ -287,17 +299,51 @@ class ReservatorioDatasource implements IReservatorioDatasource {
           }
         }
       ''';
+    } else {
+      readRepositories = r'''
+        mutation CreateOneReservatorio($nome: String, $volume: Decimal, $contaId: Int) {
+          createOneReservatorio(data: {
+            nome: $nome,
+            volume: $volume,
+            conta: {
+              connect: {
+                id: $contaId
+              }
+            },
+          }) {
+            id
+            nome
+            volume
+            created_at
+            conta {
+              id
+              nome
+            }
+            solucao {
+              id
+              nome
+            }
+          }
+        }
+      ''';
+    }
 
     final MutationOptions? options;
 
     options = MutationOptions(
       document: gql(readRepositories),
-      variables: <String, dynamic>{
-        "nome": novoReservatorio.nome,
-        "volume": novoReservatorio.volume,
-        "contaId": novoReservatorio.conta!.id,
-        "solucaoId": novoReservatorio.solucao!.id
-      },
+      variables: novoReservatorio.solucao?.id != null
+          ? <String, dynamic>{
+              "nome": novoReservatorio.nome,
+              "volume": novoReservatorio.volume,
+              "contaId": novoReservatorio.conta!.id,
+              "solucaoId": novoReservatorio.solucao!.id
+            }
+          : <String, dynamic>{
+              "nome": novoReservatorio.nome,
+              "volume": novoReservatorio.volume,
+              "contaId": novoReservatorio.conta!.id
+            },
     );
 
     final QueryResult result = await client.mutate(options);
@@ -305,6 +351,84 @@ class ReservatorioDatasource implements IReservatorioDatasource {
     if (!result.hasException) {
       Reservatorio? reservatorio =
           Reservatorio.fromJson(result.data?['createOneReservatorio']);
+
+      return Right(reservatorio);
+    } else {
+      return Left(ErrorReservatorio(
+          message: FailureMessage.errorNovoReservatorioMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Reservatorio>> updateReservatorio(
+      {required Reservatorio novoReservatorio}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    String readRepositories;
+    print(novoReservatorio.solucao?.id);
+    if (novoReservatorio.solucao?.id != null) {
+      readRepositories = r'''
+        mutation UpdateReservatorio($reservatorioId: Int!, $reservatorioNome: String!, $reservatorioVolume: String!, $contaId: Int!, $solucaoId: Int) {
+          updateReservatorio(reservatorioId: $reservatorioId, reservatorioNome: $reservatorioNome, reservatorioVolume: $reservatorioVolume, contaId: $contaId, solucaoId: $solucaoId) {
+            id
+            nome
+            volume
+            conta {
+              id
+              nome
+            }
+            solucao {
+              id
+              nome
+            }
+          }
+        }
+      ''';
+    } else {
+      readRepositories = r'''
+        mutation UpdateReservatorio($reservatorioId: Int!, $reservatorioNome: String!, $reservatorioVolume: String!, $contaId: Int!) {
+          updateReservatorio(reservatorioId: $reservatorioId, reservatorioNome: $reservatorioNome, reservatorioVolume: $reservatorioVolume, contaId: $contaId) {
+            id
+            nome
+            volume
+            conta {
+              id
+              nome
+            }
+            solucao {
+              id
+              nome
+            }
+          }
+        }
+      ''';
+    }
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: novoReservatorio.solucao?.id != null
+          ? <String, dynamic>{
+              "reservatorioId": novoReservatorio.id,
+              "reservatorioNome": novoReservatorio.nome,
+              "reservatorioVolume": novoReservatorio.volume,
+              "contaId": novoReservatorio.conta?.id,
+              "solucaoId": novoReservatorio.solucao?.id,
+            }
+          : <String, dynamic>{
+              "reservatorioId": novoReservatorio.id,
+              "reservatorioNome": novoReservatorio.nome,
+              "reservatorioVolume": novoReservatorio.volume,
+              "contaId": novoReservatorio.conta?.id,
+            },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      Reservatorio? reservatorio =
+          Reservatorio.fromJson(result.data?['updateReservatorio']);
 
       return Right(reservatorio);
     } else {

@@ -38,6 +38,12 @@ abstract class _LoginStoreBase with Store {
   }
 
   @action
+  setEmailController(String value) => email.text = value;
+
+  @action
+  setSenhaController(String value) => senha.text = value;
+
+  @action
   clearFields() {
     email.clear();
     senha.clear();

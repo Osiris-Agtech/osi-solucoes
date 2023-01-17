@@ -40,3 +40,24 @@ class Fertilizante {
 
   Map<String, dynamic> toJson() => _$FertilizanteToJson(this);
 }
+
+class SelecaoFertilizante {
+  bool selected;
+  Fertilizante fertilizante;
+
+  SelecaoFertilizante({
+    required this.selected,
+    required this.fertilizante,
+  });
+}
+
+class ItemFertilizante {
+  Fertilizante fertilizante;
+  bool isExpanded;
+  String quantidade;
+  ItemFertilizante({
+    this.isExpanded = false,
+    required this.fertilizante,
+    required this.quantidade,
+  });
+}

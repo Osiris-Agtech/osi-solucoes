@@ -8,7 +8,7 @@ import 'package:localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
-import 'package:osi_solucoes/features/presenter/views/cadastro/confirmseguranca_page.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 
 import '../../viewmodels/cadastro_store.dart';
 
@@ -304,10 +304,8 @@ class CadastroPageState extends State<CadastroPage> {
                                           await store.enviarCodigoEmail();
                                       if (response2 == "sucesso") {
                                         Navigator.pop(context);
-                                        Get.to(() =>
-                                            const ConfirmaSegurancaPage());
-                                        // Modular.to
-                                        //     .pushNamed("/Cadastro/Confirma");
+                                        Get.toNamed(
+                                            Routes.confirmsegurancaPage);
                                       } else {
                                         showErrorDialog(context, response2);
                                         await Future.delayed(
