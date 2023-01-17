@@ -83,13 +83,13 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                 const SizedBox(
                   height: 16,
                 ),
-                Divider(
-                  color: const Color(0xFF9F9F9F).withOpacity(.6),
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                const SizedBox(height: 8),
-                configuracaoButton(),
+                // Divider(
+                //   color: const Color(0xFF9F9F9F).withOpacity(.6),
+                //   indent: 20,
+                //   endIndent: 20,
+                // ),
+                // const SizedBox(height: 8),
+                // configuracaoButton(),
               ],
             );
           }),
