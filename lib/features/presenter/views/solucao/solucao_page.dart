@@ -208,7 +208,7 @@ class _CardReceitaState extends State<CardReceita> {
             children: [
               SvgPicture.asset(
                 "assets/icons/solucoes_nutritivas_icon.svg",
-                color: Constants.kButtonGrey,
+                // color: Constants.kButtonGrey,
                 height: 35,
               ),
               const SizedBox(

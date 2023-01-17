@@ -63,7 +63,7 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
     return FloatingActionButton(
       heroTag: "NovoReservatório",
       onPressed: () {
-        store.setIsEditing(true);
+        store.setIsEditing(false);
         Get.toNamed(Routes.cadastrarReservatoriosPage);
       },
       child: const Icon(

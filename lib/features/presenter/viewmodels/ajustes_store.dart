@@ -76,6 +76,8 @@ abstract class _AjustesStoreBase with Store {
         reservatorioList = List.from([]);
       },
       (data) async {
+        reservatorioList = data;
+        reservatorioList.removeWhere((element) => element.solucao == null);
         reservatorioList = List.from(data);
       },
     );
@@ -98,7 +100,8 @@ abstract class _AjustesStoreBase with Store {
   calculoLado(SolucaoFertilizanteConcentrada fertilizante, String ce) {
     // Parse - string to double
     double quantidadeFertilizanteSN = double.parse(fertilizante.quantidade!);
-    double ceDesejado = double.parse(cEletricoDesejado.text);
+    double ceDesejado = double.parse(
+        cEletricoDesejado.text.replaceAll('.', '').replaceAll(',', '.'));
     // obs: Essa condutividade ja deve vir considerando CE da agua
     double ceTeorico =
         double.parse(selectedReservatorio.solucao?.c_eletrica ?? '0.0');
@@ -128,11 +131,17 @@ abstract class _AjustesStoreBase with Store {
         ?.forEach((fertilizante) {
       if (fertilizante.fertilizante != null) {
         //calculo lado atual
-        double x = calculoLado(fertilizante, cEletricoAtual.text);
-        double ladoMedido = x * double.parse(volumeAtual.text);
+        double x = calculoLado(fertilizante,
+            cEletricoAtual.text.replaceAll('.', '').replaceAll(',', '.'));
+        double ladoMedido = x *
+            double.parse(
+                volumeAtual.text.replaceAll('.', '').replaceAll(',', '.'));
         //calculo lado desejado
-        double y = calculoLado(fertilizante, cEletricoDesejado.text);
-        double ladoDesejado = y * double.parse(volumeDesejado.text);
+        double y = calculoLado(fertilizante,
+            cEletricoDesejado.text.replaceAll('.', '').replaceAll(',', '.'));
+        double ladoDesejado = y *
+            double.parse(
+                volumeDesejado.text.replaceAll('.', '').replaceAll(',', '.'));
         //valor de reposição para o fertilizante em gramas
         double reposicao = (ladoDesejado - ladoMedido) / 1000;
         reposicaoFert.add(ReposicaoFert(
@@ -150,7 +159,8 @@ abstract class _AjustesStoreBase with Store {
   @action
   calculoAjusteConcentrada(double reposicaoFert) {
     //parses string to double
-    double ceDesejado = double.parse(cEletricoDesejado.text);
+    double ceDesejado = double.parse(
+        cEletricoDesejado.text.replaceAll('.', '').replaceAll(',', '.'));
     double quantidadeFertilizanteSN = double.parse(selectedReservatorio
             .solucao?.solucoes_fertilizantes_concentradas?[0].quantidade! ??
         '0.0');
@@ -212,9 +222,11 @@ abstract class _AjustesStoreBase with Store {
   @action
   montandoDescricao() {
     // Construindo strings para descrição
-    var volumeAjuste =
-        (double.parse(volumeDesejado.text) - double.parse(volumeAtual.text))
-            .toString();
+    var volumeAjuste = (double.parse(
+                volumeDesejado.text.replaceAll('.', '').replaceAll(',', '.')) -
+            double.parse(
+                volumeAtual.text.replaceAll('.', '').replaceAll(',', '.')))
+        .toString();
     var fertDescrition = '';
     String ph = "PH: Não Informado";
 

@@ -562,8 +562,8 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
         children: [
           SvgPicture.asset(
             "assets/icons/alert-triangle.svg",
-            color: Constants.kButtonGrey,
-            height: 20,
+            // color: Constants.kButtonGrey,
+            height: 32,
           ),
           const Text(
             'Nenhum fertilizante\nselecionado',
