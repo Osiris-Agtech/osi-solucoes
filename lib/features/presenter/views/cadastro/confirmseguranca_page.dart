@@ -256,13 +256,14 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
                   ),
                 ),
                 TextButton(
-                    onPressed: () {
-                      Get.offAll(() => const SplashPage());
-                    },
-                    child: Text(
-                      "confirmaText6".i18n(),
-                      style: const TextStyle(fontSize: 14, color: Colors.grey),
-                    )),
+                  onPressed: () {
+                    Get.offAll(() => const SplashPage());
+                  },
+                  child: Text(
+                    "confirmaText6".i18n(),
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                ),
               ],
             ),
           ),
@@ -288,11 +289,12 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
       context: context,
       builder: (BuildContext context) {
         return const Center(
-            child: SizedBox(
-                height: 250,
-                width: 250,
-                child:
-                    RiveAnimation.asset("assets/animation/doneAnimation.riv")));
+          child: SizedBox(
+            height: 250,
+            width: 250,
+            child: RiveAnimation.asset("assets/animation/doneAnimation.riv"),
+          ),
+        );
       },
     );
   }

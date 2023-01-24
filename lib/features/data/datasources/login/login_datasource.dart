@@ -58,6 +58,7 @@ class LoginDatasource implements ILoginDatasource {
               conta {
                 id
                 nome
+                nivel
               }
               cargo {
                 id

@@ -39,14 +39,17 @@ class AppPages {
     GetPage(
       name: Routes.ajustesPage,
       page: () => const AjustesPage(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: Routes.resultadoajustePage,
       page: () => const ResultadoajustePage(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: Routes.areaCultivoPage,
       page: () => const AreaCultivoPage(),
+      transition: Transition.rightToLeft,
       middlewares: [
         N1ViewPagePermission(),
       ],
@@ -54,6 +57,7 @@ class AppPages {
     GetPage(
       name: Routes.cadastrarAreaCultivoPage,
       page: () => const CadastrarAreaCultivo(),
+      transition: Transition.rightToLeft,
       middlewares: [
         N1EditPagePermission(),
       ],
@@ -61,6 +65,7 @@ class AppPages {
     GetPage(
       name: Routes.setorPage,
       page: () => const SetorPage(),
+      transition: Transition.rightToLeft,
       middlewares: [
         N2ViewPagePermission(),
       ],
@@ -68,6 +73,7 @@ class AppPages {
     GetPage(
       name: Routes.cadastrarSetorPage,
       page: () => const CadastrarSetorPage(),
+      transition: Transition.rightToLeft,
       middlewares: [
         N2EditPagePermission(),
       ],
@@ -75,6 +81,7 @@ class AppPages {
     GetPage(
       name: Routes.lotePage,
       page: () => const LotePage(),
+      transition: Transition.rightToLeft,
       middlewares: [
         N3ViewPagePermission(),
       ],
@@ -82,6 +89,7 @@ class AppPages {
     GetPage(
       name: Routes.cadastrarLotePage,
       page: () => const CadastrarLotePage(),
+      transition: Transition.rightToLeft,
       middlewares: [
         N3EditPagePermission(),
       ],
@@ -89,6 +97,7 @@ class AppPages {
     GetPage(
       name: Routes.detalhesLotePage,
       page: () => const DetalhesLotePage(),
+      transition: Transition.rightToLeft,
       middlewares: [
         N3EditPagePermission(),
       ],
@@ -96,14 +105,17 @@ class AppPages {
     GetPage(
       name: Routes.cadastroPage,
       page: () => const CadastroPage(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: Routes.confirmsegurancaPage,
       page: () => const ConfirmaSegurancaPage(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: Routes.cadernoCampoPage,
       page: () => const CadernoCampoPage(),
+      transition: Transition.rightToLeft,
       middlewares: [
         CadernoCampoViewPagePermission(),
       ],
@@ -111,6 +123,7 @@ class AppPages {
     GetPage(
       name: Routes.detalhesCadernoCampoPage,
       page: () => const DetalhesCadernoCampoPage(),
+      transition: Transition.rightToLeft,
       middlewares: [
         CadernoCampoViewPagePermission(),
       ],
@@ -118,6 +131,7 @@ class AppPages {
     GetPage(
       name: Routes.cadastroCadernoCampoPage,
       page: () => const CadastroCadernoCampoPage(),
+      transition: Transition.rightToLeft,
       middlewares: [
         CadernoCampoEditPagePermission(),
       ],
@@ -125,14 +139,17 @@ class AppPages {
     GetPage(
       name: Routes.homePage,
       page: () => const HomePage(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: Routes.modulosPage,
       page: () => const ModulosPage(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: Routes.loginPage,
       page: () => const LoginPage(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: Routes.multiAccountsPage,
@@ -140,18 +157,22 @@ class AppPages {
         user: Usuario(),
         isLoggedIn: false,
       ),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: Routes.splashPage,
       page: () => const SplashPage(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: Routes.reservatoriosPage,
       page: () => const ReservatoriosPage(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: Routes.cadastrarReservatoriosPage,
       page: () => const CadastrarReservatorioPage(),
+      transition: Transition.rightToLeft,
       middlewares: [
         ReservatorioEditPagePermission(),
       ],
@@ -159,6 +180,7 @@ class AppPages {
     GetPage(
       name: Routes.detalhesReservatorio,
       page: () => const DetalhesReservatorio(),
+      transition: Transition.rightToLeft,
       middlewares: [
         ReservatorioViewPagePermission(),
       ],
@@ -166,10 +188,12 @@ class AppPages {
     GetPage(
       name: Routes.solucaoPage,
       page: () => const SolucaoPage(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: Routes.gerenciarEquipePage,
       page: () => const GerenciarEquipePage(),
+      transition: Transition.rightToLeft,
       middlewares: [
         EquipeViewPagePermission(),
       ],
@@ -177,6 +201,7 @@ class AppPages {
     GetPage(
       name: Routes.cadastrarUsuarioPage,
       page: () => const CadastrarUsuarioPage(),
+      transition: Transition.rightToLeft,
       middlewares: [
         EquipeEditPagePermission(),
       ],
@@ -184,6 +209,7 @@ class AppPages {
     GetPage(
       name: Routes.detalhesUsuarioPage,
       page: () => const DetalhesUsuarioPage(),
+      transition: Transition.rightToLeft,
       middlewares: [
         EquipeEditPagePermission(),
       ],
@@ -191,6 +217,7 @@ class AppPages {
     GetPage(
       name: Routes.permissaoNegadaPage,
       page: () => const PermissionDeniedPage(),
+      transition: Transition.rightToLeft,
     ),
   ];
 }

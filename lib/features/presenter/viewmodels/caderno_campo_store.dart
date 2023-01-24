@@ -254,6 +254,9 @@ abstract class _CadernoCampoStoreBase with Store {
   int dotIndicator = 0;
 
   @observable
+  bool mostrarErroFormulario = false;
+
+  @observable
   bool isCadastroLoteLoading = false;
 
   @observable
@@ -415,6 +418,8 @@ abstract class _CadernoCampoStoreBase with Store {
     bool validate = novoAtividadeName.text.isNotEmpty &&
         novaDescricao.text.isNotEmpty &&
         selectedUsuario != null;
+
+    mostrarErroFormulario = !validate;
     return validate;
   }
 
