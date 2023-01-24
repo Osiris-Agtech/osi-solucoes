@@ -42,65 +42,80 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
         statusBarColor: Constants.kBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
       ),
-      child: SafeArea(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: appBar(),
-          backgroundColor: Constants.kBackgroundColor,
-          body: Padding(
-            padding: EdgeInsets.only(
-              left: 10,
-              right: 10,
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                titulo(),
-                const SizedBox(height: 20),
-                local(),
-                subtitulo(),
-                const SizedBox(height: 10),
-                nome(context),
-                const Divider(),
-                warning(),
-                reservatorio(context),
-                const Divider(),
-                descricao(context),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 20, bottom: 20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: const Color(0xffF5F5F5),
-                      ),
-                      child: Observer(
-                        builder: (_) {
-                          return SizedBox(
-                            width: double.infinity,
-                            child: store.novoSetorDescription.text.isEmpty &&
-                                    !store.showTextFormField
-                                ? botaoDescricao()
-                                : Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: TextFormField(
-                                      autofocus: true,
-                                      maxLines: 20,
-                                      decoration: const InputDecoration(
-                                          border: InputBorder.none),
-                                      controller: store.novoSetorDescription,
-                                    ),
-                                  ),
-                          );
-                        },
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+          if (store.novoSetorDescription.text.isEmpty) {
+            store.setShowTextFormField(false);
+          }
+        },
+        child: SafeArea(
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: appBar(),
+            backgroundColor: Constants.kBackgroundColor,
+            body: Padding(
+              padding: EdgeInsets.only(
+                left: 10,
+                right: 10,
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    titulo(),
+                    const SizedBox(height: 20),
+                    local(),
+                    subtitulo(),
+                    const SizedBox(height: 10),
+                    nome(context),
+                    const Divider(),
+                    warning(),
+                    reservatorio(context),
+                    const Divider(),
+                    descricao(context),
+                    SizedBox(
+                      height: 200,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 20, bottom: 20),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color(0xffF5F5F5),
+                          ),
+                          child: Observer(
+                            builder: (_) {
+                              return SizedBox(
+                                width: double.infinity,
+                                child:
+                                    store.novoSetorDescription.text.isEmpty &&
+                                            !store.showTextFormField
+                                        ? botaoDescricao()
+                                        : Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: TextFormField(
+                                              autofocus: true,
+                                              maxLines: 20,
+                                              decoration: const InputDecoration(
+                                                  border: InputBorder.none),
+                                              controller:
+                                                  store.novoSetorDescription,
+                                            ),
+                                          ),
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    saveButton(size),
+                  ],
                 ),
-                saveButton(size),
-              ],
+              ),
             ),
           ),
         ),
@@ -372,22 +387,22 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
   Padding botaoDescricao() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          IconButton(
-            onPressed: () {
-              store.setShowTextFormField(true);
-            },
-            icon: const Icon(
+      child: InkWell(
+        onTap: () {
+          store.setShowTextFormField(true);
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            Icon(
               Icons.add,
               color: Colors.green,
             ),
-          ),
-          const Text('Adicionar descrição'),
-          const Text('(opcional)')
-        ],
+            Text('Adicionar descrição'),
+            Text('(opcional)')
+          ],
+        ),
       ),
     );
   }
