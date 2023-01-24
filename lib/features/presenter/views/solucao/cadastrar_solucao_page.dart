@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/utils/decimal_format.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
@@ -10,6 +11,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/customTextFormField.dart';
 import '../../../../../core/constants/constants.dart';
+import '../../routes/routes.dart';
 
 class CadastrarSolucaoPage extends StatefulWidget {
   const CadastrarSolucaoPage({Key? key}) : super(key: key);
@@ -97,7 +99,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
                   ],
                 ),
               ),
-              bottomNavigationBar: isKeyboardOpen ? null : _saveButton(size),
+              bottomNavigationBar: isKeyboardOpen ? null : _nextButton(size),
             ),
           ),
         ),
@@ -574,7 +576,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     );
   }
 
-  _saveButton(Size size) {
+  _nextButton(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       child: SizedBox(
@@ -595,7 +597,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
             }
 
             return const Text(
-              "Salvar",
+              "Avançar",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -603,7 +605,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
             );
           }),
           onPressed: () {
-            store.cadastrarSolucaoNutritiva();
+            Get.toNamed(Routes.cadastrarSolucaoConcentradaPage);
           },
         ),
       ),

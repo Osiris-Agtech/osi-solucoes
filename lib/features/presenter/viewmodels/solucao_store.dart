@@ -395,4 +395,9 @@ abstract class _SolucaoStoreBase with Store {
 
     return result;
   }
+
+  // #################### INICIO CADASTRO SOLUÇÃO CONCENTRADA #######################
+
+  @observable
+  TextEditingController fatorConcentracao = TextEditingController();
 }

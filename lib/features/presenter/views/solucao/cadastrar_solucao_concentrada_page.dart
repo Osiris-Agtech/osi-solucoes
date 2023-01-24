@@ -1,0 +1,295 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
+
+class CadastrarSolucaoConcentradaPage extends StatefulWidget {
+  const CadastrarSolucaoConcentradaPage({Key? key}) : super(key: key);
+
+  @override
+  State<CadastrarSolucaoConcentradaPage> createState() =>
+      _CadastrarSolucaoConcentradaPageState();
+}
+
+class _CadastrarSolucaoConcentradaPageState
+    extends State<CadastrarSolucaoConcentradaPage>
+    with TickerProviderStateMixin {
+  SolucaoStore store = GetIt.I<SolucaoStore>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    store.clearAll();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0.0;
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Constants.kBackgroundColor,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+      child: GestureDetector(
+        onTap: () {},
+        child: SafeArea(
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: appBar(),
+            backgroundColor: Constants.kBackgroundColor,
+            body: Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  titulo(),
+                  const SizedBox(height: 20),
+                  subtitulo(),
+                  const SizedBox(height: 10),
+                  _fator(context),
+                  const Divider(),
+                ],
+              ),
+            ),
+            bottomNavigationBar: isKeyboardOpen ? null : _saveButton(size),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget subtitulo() {
+    return const Padding(
+      padding: EdgeInsets.only(
+        left: 30,
+        right: 20,
+      ),
+      child: Text(
+        'Cadastre sua solução concentrada',
+        style: TextStyle(
+          fontSize: 14,
+          color: Constants.kGreyText,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  Widget titulo() {
+    return const Padding(
+      padding: EdgeInsets.only(
+        left: 40,
+        right: 30,
+      ),
+      child: Text(
+        'Nova Solução Nutritiva',
+        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+
+  AppBar appBar() {
+    return AppBar(
+      backgroundColor: Constants.kBackgroundColor,
+      elevation: 0,
+      leading: const BackButton(
+        color: Constants.kPrimaryColor,
+      ),
+    );
+  }
+
+  _fator(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 20,
+        top: 15,
+      ),
+      child: InkWell(
+        child: Observer(builder: (_) {
+          return ListTile(
+            leading: const Icon(Icons.invert_colors),
+            title: const Text(
+              'Fator de concentração',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            trailing: store.fatorConcentracao.text.isNotEmpty
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        store.fatorConcentracao.text,
+                        textAlign: TextAlign.end,
+                        style: const TextStyle(
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  )
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Text(
+                        "Preencher",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        size: 18,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  ),
+            onTap: () {
+              _fatorTextField(context);
+            },
+          );
+        }),
+      ),
+    );
+  }
+
+  _fatorTextField(BuildContext context) {
+    return showModalBottomSheet<void>(
+      backgroundColor: Constants.kBackgroundColor,
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+      ),
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.9,
+          padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(
+                  Icons.close,
+                  size: 32,
+                ),
+                color: Constants.kPrimaryColor,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
+                child: RichText(
+                  textAlign: TextAlign.start,
+                  text: const TextSpan(
+                    text: 'Qual ',
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'Fator de concentração',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Constants.kPrimaryColor),
+                      ),
+                      TextSpan(text: ' você deseja ?'),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+                child: Observer(
+                  builder: (_) {
+                    return TextFormField(
+                      controller: store.fatorConcentracao,
+                      textCapitalization: TextCapitalization.words,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.normal,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      decoration: const InputDecoration(
+                        hintText: 'EX. 300',
+                        hintStyle: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.normal,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const Spacer(),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  _saveButton(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+      child: SizedBox(
+        width: size.width * .8,
+        height: 40,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Constants.kPrimaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          child: Observer(builder: (_) {
+            if (store.isNovaSolucaoLoading) {
+              return const CircularProgressIndicator(
+                color: Constants.kBackgroundColor,
+              );
+            }
+
+            return const Text(
+              "Salvar",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            );
+          }),
+          onPressed: () {
+            // store.cadastrarSolucaoNutritiva();
+          },
+        ),
+      ),
+    );
+  }
+}

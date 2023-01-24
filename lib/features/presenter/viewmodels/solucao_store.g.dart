@@ -290,6 +290,22 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
+  final _$fatorConcentracaoAtom =
+      Atom(name: '_SolucaoStoreBase.fatorConcentracao');
+
+  @override
+  TextEditingController get fatorConcentracao {
+    _$fatorConcentracaoAtom.reportRead();
+    return super.fatorConcentracao;
+  }
+
+  @override
+  set fatorConcentracao(TextEditingController value) {
+    _$fatorConcentracaoAtom.reportWrite(value, super.fatorConcentracao, () {
+      super.fatorConcentracao = value;
+    });
+  }
+
   final _$buscarSolucoesAsyncAction =
       AsyncAction('_SolucaoStoreBase.buscarSolucoes');
 
@@ -468,6 +484,7 @@ novaSolucaoName: ${novaSolucaoName},
 solucaoSelecionada: ${solucaoSelecionada},
 condutividadeEletrica: ${condutividadeEletrica},
 searchSolucaoText: ${searchSolucaoText},
+fatorConcentracao: ${fatorConcentracao},
 selectedFertilizantes: ${selectedFertilizantes},
 nutrientesCalculados: ${nutrientesCalculados},
 searchSolucao: ${searchSolucao}

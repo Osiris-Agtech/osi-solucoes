@@ -19,6 +19,7 @@ import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/detalhes_
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/cadastrar_resevatorio_page.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/detalhes_reservatorio_page.dart';
+import 'package:osi_solucoes/features/presenter/views/solucao/cadastrar_solucao_concentrada_page.dart';
 
 import '../views/ajuste/ajustes_page.dart';
 import '../views/ajuste/resultadoajuste_page.dart';
@@ -191,6 +192,10 @@ class AppPages {
     GetPage(
       name: Routes.permissaoNegadaPage,
       page: () => const PermissionDeniedPage(),
+    ),
+    GetPage(
+      name: Routes.cadastrarSolucaoConcentradaPage,
+      page: () => const CadastrarSolucaoConcentradaPage(),
     ),
   ];
 }
