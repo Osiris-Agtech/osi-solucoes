@@ -104,6 +104,9 @@ abstract class _AreaCultivoStoreBase with Store {
   //####################### START CADASTRAR AREA DE CULTIVO ##########################
 
   @observable
+  bool mostrarErroFormulario = false;
+
+  @observable
   bool isNovaAreaLoading = false;
 
   @observable
@@ -159,6 +162,9 @@ abstract class _AreaCultivoStoreBase with Store {
 
   @action
   setIsEditing(bool value) => isEditing = value;
+
+  @action
+  setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
 
   @action
   setAreaEditing(Area area) {
@@ -217,6 +223,14 @@ abstract class _AreaCultivoStoreBase with Store {
         localizacaoList = List.from(data);
       },
     );
+  }
+
+  @action
+  validarCadastro() {
+    bool validate = novaAreaName.text.isNotEmpty;
+
+    mostrarErroFormulario = !validate;
+    return validate;
   }
 
   @action
