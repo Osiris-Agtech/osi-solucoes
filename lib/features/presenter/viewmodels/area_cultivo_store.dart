@@ -295,6 +295,7 @@ abstract class _AreaCultivoStoreBase with Store {
     cidade.clear();
     numero.clear();
     pais.clear();
+    estado.clear();
     complemento.clear();
   }
 

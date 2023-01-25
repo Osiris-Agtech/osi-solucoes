@@ -78,7 +78,7 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
                     const Divider(),
                     descricao(context),
                     SizedBox(
-                      height: 200,
+                      height: MediaQuery.of(context).size.height * .4,
                       child: Padding(
                         padding: const EdgeInsets.only(top: 20, bottom: 20),
                         child: Container(

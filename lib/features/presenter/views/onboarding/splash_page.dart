@@ -74,8 +74,8 @@ class _SplashPageState extends State<SplashPage> {
       color: Constants.kBackgroundColor,
       child: Center(
         child: Image.asset(
-          "assets/images/osiris-logo.png",
-          width: MediaQuery.of(context).size.width * .5,
+          "assets/images/logo_ufmt.png",
+          width: MediaQuery.of(context).size.width * .6,
         ),
       ),
     );
