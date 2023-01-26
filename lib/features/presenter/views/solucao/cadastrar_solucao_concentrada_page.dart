@@ -20,12 +20,13 @@ class _CadastrarSolucaoConcentradaPageState
 
   @override
   void initState() {
+    store.addToSolucaoConcentradaList();
     super.initState();
   }
 
   @override
   void dispose() {
-    store.clearAll();
+    store.clearSolucaoConcentrada();
     super.dispose();
   }
 
@@ -134,6 +135,8 @@ class _CadastrarSolucaoConcentradaPageState
         top: 15,
       ),
       child: InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         child: Observer(builder: (_) {
           return ListTile(
             leading: const Icon(Icons.invert_colors),
@@ -290,7 +293,6 @@ class _CadastrarSolucaoConcentradaPageState
                 color: Constants.kBackgroundColor,
               );
             }
-
             return const Text(
               "Salvar",
               style: TextStyle(
@@ -308,116 +310,341 @@ class _CadastrarSolucaoConcentradaPageState
   }
 
   _cardListSolucao() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 20),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: const Color(0xffF5F5F5),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: 2,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (_, index) {
-              return Padding(
-                padding: const EdgeInsets.only(
-                  top: 10,
-                ),
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 0, 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Text(
-                            'Nome',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 40),
-                          child: TextFormField(
-                            controller: store.fatorConcentracao,
-                            textCapitalization: TextCapitalization.words,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.normal,
-                              fontStyle: FontStyle.italic,
-                            ),
-                            decoration: const InputDecoration(
-                              hintText: 'EX. Solução A',
-                              hintStyle: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.normal,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        const Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Text(
-                            'Fertilizantes',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: 2,
-                            itemBuilder: (_, indexFert) {
-                              return const Text(
-                                'Fertilizante #1',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: const Padding(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Text(
-                              '+ Adicionar fertilizante',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                                color: Constants.kPrimaryColor,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: const Color(0xffF5F5F5),
+      ),
+      child: Observer(builder: (_) {
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: store.solucaoConcentradaList.length,
+          physics: const BouncingScrollPhysics(),
+          itemBuilder: (_, index) {
+            if (index == (store.solucaoConcentradaList.length - 1)) {
+              return Column(
+                children: [
+                  _cardSolucaoConcentrada(index),
+                  _addCard(),
+                ],
               );
-            },
+            }
+            return _cardSolucaoConcentrada(index);
+          },
+        );
+      }),
+    );
+  }
+
+  Padding _addCard() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 10,
+        right: 16,
+        left: 16,
+      ),
+      child: InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onTap: () {
+          store.addToSolucaoConcentradaList();
+        },
+        child: SizedBox(
+          width: double.infinity,
+          child: Card(
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                children: const [
+                  Icon(
+                    Icons.add_circle_outline,
+                    color: Constants.kPrimaryColor,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Adicionar concentrada",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Constants.kGreyText,
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Padding _cardSolucaoConcentrada(int index) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 10,
+        right: 16,
+        left: 16,
+      ),
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 0, 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      'Nome',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 14.0),
+                    child: InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () {
+                        store.deleteSolucaoConcentradaToTheList(index);
+                      },
+                      child: const Icon(
+                        Icons.delete,
+                        color: Constants.kGreyText2,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 40),
+                child: Observer(builder: (_) {
+                  return TextFormField(
+                    initialValue: store.solucaoConcentradaList[index].nome,
+                    onChanged: (nome) {
+                      store.setNomeSolucaoConcentrada(nome, index);
+                    },
+                    textCapitalization: TextCapitalization.words,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.normal,
+                      fontStyle: FontStyle.italic,
+                    ),
+                    decoration: const InputDecoration(
+                      hintText: 'EX. Solução A',
+                      hintStyle: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.normal,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  );
+                }),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              const Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  'Fertilizantes',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: 2,
+                  itemBuilder: (_, indexFert) {
+                    return Row(
+                      children: const [
+                        Text(
+                          "• ",
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: Constants.kGreyMedium,
+                          ),
+                        ),
+                        Text(
+                          'Fertilizante #1',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontStyle: FontStyle.italic,
+                            color: Constants.kGreyMedium,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () {
+                    _solucaoConcentradaFertList(
+                        store.solucaoConcentradaList[index].nome);
+                  },
+                  child: const Text(
+                    '+ Adicionar fertilizante',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      color: Constants.kPrimaryColor,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _solucaoConcentradaFertList(String? nome) {
+    return showModalBottomSheet<void>(
+      constraints:
+          BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.6),
+      backgroundColor: Constants.kBackgroundColor,
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+      ),
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    alignment: Alignment.centerLeft,
+                    icon: const Icon(
+                      Icons.close,
+                      size: 28,
+                      color: Constants.kPrimaryColor,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    nome != null && nome.isNotEmpty ? nome : 'Sua solução',
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Constants.kText2,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Observer(builder: (_) {
+                    if (store.expandedFertilizantes.isEmpty) {
+                      return const Center(
+                        child: Text(
+                          'Atenção: Ainda não foi adicionado nenhum fertilizante na etapa anterior',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                            color: Constants.kGreyMedium,
+                          ),
+                        ),
+                      );
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: store.expandedFertilizantes.length,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          children: [
+                            IconButton(
+                              padding: EdgeInsets.zero,
+                              alignment: Alignment.centerLeft,
+                              icon: const Icon(
+                                Icons.check_box,
+                                color: Constants.kPrimaryColor,
+                              ),
+                              onPressed: () {
+                                // store.selectLotesByLote(
+                                //     store.selectedLotes[index], false);
+                              },
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                store.expandedFertilizantes[index].fertilizante
+                                        .nome ??
+                                    'Não informado',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Constants.kText2,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 32),
+                    child: SizedBox(
+                      height: 40,
+                      width: double.infinity,
+                      child: Observer(builder: (_) {
+                        return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Constants.kPrimaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                            child: const Text(
+                              "Confirmar",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            onPressed: () {});
+                      }),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

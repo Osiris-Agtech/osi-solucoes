@@ -7,6 +7,7 @@ import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_reposi
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutrienteMap_model.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
+import 'package:osi_solucoes/features/presenter/models/solucaoConcentrada/solucaoConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
@@ -400,4 +401,38 @@ abstract class _SolucaoStoreBase with Store {
 
   @observable
   TextEditingController fatorConcentracao = TextEditingController();
+
+  @observable
+  List<SolucaoConcentrada> solucaoConcentradaList = [];
+
+  @action
+  clearSolucaoConcentrada() {
+    solucaoConcentradaList = [];
+    fatorConcentracao = TextEditingController();
+  }
+
+  @action
+  setNomeSolucaoConcentrada(String nomeSolucaoConcentrada, int index) {
+    if (nomeSolucaoConcentrada.isEmpty) return;
+    solucaoConcentradaList[index].nome = nomeSolucaoConcentrada.trim();
+    solucaoConcentradaList = List.from(solucaoConcentradaList);
+  }
+
+  @action
+  addToSolucaoConcentradaList() {
+    solucaoConcentradaList.add(SolucaoConcentrada());
+    solucaoConcentradaList = List.from(solucaoConcentradaList);
+  }
+
+  @action
+  deleteSolucaoConcentradaToTheList(int index) {
+    if (solucaoConcentradaList.length == 1) {
+      solucaoConcentradaList.clear();
+      solucaoConcentradaList.add(SolucaoConcentrada());
+      solucaoConcentradaList = List.from(solucaoConcentradaList);
+    } else {
+      solucaoConcentradaList.removeAt(index);
+      solucaoConcentradaList = List.from(solucaoConcentradaList);
+    }
+  }
 }

@@ -306,6 +306,23 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
+  final _$solucaoConcentradaListAtom =
+      Atom(name: '_SolucaoStoreBase.solucaoConcentradaList');
+
+  @override
+  List<SolucaoConcentrada> get solucaoConcentradaList {
+    _$solucaoConcentradaListAtom.reportRead();
+    return super.solucaoConcentradaList;
+  }
+
+  @override
+  set solucaoConcentradaList(List<SolucaoConcentrada> value) {
+    _$solucaoConcentradaListAtom
+        .reportWrite(value, super.solucaoConcentradaList, () {
+      super.solucaoConcentradaList = value;
+    });
+  }
+
   final _$buscarSolucoesAsyncAction =
       AsyncAction('_SolucaoStoreBase.buscarSolucoes');
 
@@ -466,6 +483,50 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   }
 
   @override
+  dynamic clearSolucaoConcentrada() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.clearSolucaoConcentrada');
+    try {
+      return super.clearSolucaoConcentrada();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setNomeSolucaoConcentrada(String nomeSolucaoConcentrada, int index) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.setNomeSolucaoConcentrada');
+    try {
+      return super.setNomeSolucaoConcentrada(nomeSolucaoConcentrada, index);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic addToSolucaoConcentradaList() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.addToSolucaoConcentradaList');
+    try {
+      return super.addToSolucaoConcentradaList();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic deleteSolucaoConcentradaToTheList(int index) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.deleteSolucaoConcentradaToTheList');
+    try {
+      return super.deleteSolucaoConcentradaToTheList(index);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
@@ -485,6 +546,7 @@ solucaoSelecionada: ${solucaoSelecionada},
 condutividadeEletrica: ${condutividadeEletrica},
 searchSolucaoText: ${searchSolucaoText},
 fatorConcentracao: ${fatorConcentracao},
+solucaoConcentradaList: ${solucaoConcentradaList},
 selectedFertilizantes: ${selectedFertilizantes},
 nutrientesCalculados: ${nutrientesCalculados},
 searchSolucao: ${searchSolucao}
