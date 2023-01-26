@@ -76,6 +76,23 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
     });
   }
 
+  final _$mostrarErroFormularioAtom =
+      Atom(name: '_ReservatoriosStoreBase.mostrarErroFormulario');
+
+  @override
+  bool get mostrarErroFormulario {
+    _$mostrarErroFormularioAtom.reportRead();
+    return super.mostrarErroFormulario;
+  }
+
+  @override
+  set mostrarErroFormulario(bool value) {
+    _$mostrarErroFormularioAtom.reportWrite(value, super.mostrarErroFormulario,
+        () {
+      super.mostrarErroFormulario = value;
+    });
+  }
+
   final _$isSolucaoListLoadingAtom =
       Atom(name: '_ReservatoriosStoreBase.isSolucaoListLoading');
 
@@ -453,6 +470,17 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
   }
 
   @override
+  dynamic setMostrarErroFormulario(bool value) {
+    final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
+        name: '_ReservatoriosStoreBase.setMostrarErroFormulario');
+    try {
+      return super.setMostrarErroFormulario(value);
+    } finally {
+      _$_ReservatoriosStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setSolucaoNutritiva(SolucaoNutritiva solucao) {
     final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
         name: '_ReservatoriosStoreBase.setSolucaoNutritiva');
@@ -469,6 +497,17 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
         name: '_ReservatoriosStoreBase.desvincularSolucaoNutritiva');
     try {
       return super.desvincularSolucaoNutritiva();
+    } finally {
+      _$_ReservatoriosStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic validarReservatorio() {
+    final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
+        name: '_ReservatoriosStoreBase.validarReservatorio');
+    try {
+      return super.validarReservatorio();
     } finally {
       _$_ReservatoriosStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -503,6 +542,7 @@ reservatorioDetalhes: ${reservatorioDetalhes},
 solucaoNutritivaList: ${solucaoNutritivaList},
 solucaoConcentradaList: ${solucaoConcentradaList},
 indexDotDetalhe: ${indexDotDetalhe},
+mostrarErroFormulario: ${mostrarErroFormulario},
 isSolucaoListLoading: ${isSolucaoListLoading},
 isReservatorioListLoading: ${isReservatorioListLoading},
 isNovoReservatorioLoading: ${isNovoReservatorioLoading},
