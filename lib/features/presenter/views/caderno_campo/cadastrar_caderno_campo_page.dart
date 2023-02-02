@@ -105,7 +105,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 10, bottom: 20),
       child: Container(
-        height: 200,
+        height: MediaQuery.of(context).size.height * .4,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: const Color(0xffF5F5F5),
@@ -540,21 +540,21 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
   Padding botaoDescricao() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          IconButton(
-            onPressed: () {
-              store.setShowTextFormField(true);
-            },
-            icon: const Icon(
+      child: InkWell(
+        onTap: () {
+          store.setShowTextFormField(true);
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            Icon(
               Icons.add_circle_outline,
               color: Colors.green,
             ),
-          ),
-          const Text('Adicionar descrição'),
-        ],
+            Text('Adicionar descrição'),
+          ],
+        ),
       ),
     );
   }

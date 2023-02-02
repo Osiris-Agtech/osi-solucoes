@@ -39,39 +39,44 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
         statusBarColor: Constants.kBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
       ),
-      child: SafeArea(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: appBar(),
-          backgroundColor: Constants.kBackgroundColor,
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: ScrollConfiguration(
-              behavior:
-                  ScrollConfiguration.of(context).copyWith(scrollbars: false),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    titulo(),
-                    subtitulo(),
-                    const SizedBox(height: 20),
-                    image(context),
-                    email(context, store),
-                    nome(context, store),
-                    sobrenome(context, store),
-                    cargo(context),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 10),
-                      child: Divider(
-                        color: Constants.kGreyText2.withOpacity(0.3),
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SafeArea(
+          child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            appBar: appBar(),
+            backgroundColor: Constants.kBackgroundColor,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: ScrollConfiguration(
+                behavior:
+                    ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      titulo(),
+                      subtitulo(),
+                      const SizedBox(height: 20),
+                      image(context),
+                      email(context, store),
+                      nome(context, store),
+                      sobrenome(context, store),
+                      cargo(context),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 10),
+                        child: Divider(
+                          color: Constants.kGreyText2.withOpacity(0.3),
+                        ),
                       ),
-                    ),
-                    info(context),
-                    saveButton(size),
-                  ],
+                      info(context),
+                      saveButton(size),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -363,10 +368,17 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
             ),
           ),
           TextFormField(
+            keyboardType: TextInputType.emailAddress,
             onChanged: (String value) {
               store.setEmail(value);
             },
             onEditingComplete: () async {
+              await store.buscarPessoa();
+            },
+            onFieldSubmitted: (String value) async {
+              await store.buscarPessoa();
+            },
+            onSaved: (String? value) async {
               await store.buscarPessoa();
             },
             textCapitalization: TextCapitalization.words,
