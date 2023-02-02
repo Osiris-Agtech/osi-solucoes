@@ -188,7 +188,7 @@ reservatorioDetalhesPage(LoteStore store) {
                   ),
                 ),
                 trailing: Text(
-                  '${store.reservatorioDetalhes.lotes![index].bandeijas_semeadas ?? '--'}\nbandeijas',
+                  '${store.reservatorioDetalhes.lotes![index].bandeijas_semeadas ?? '--'}\nbandejas',
                   style: TextStyle(
                     fontSize: 14,
                     color: Constants.kContentColorLightTheme.withOpacity(.7),
