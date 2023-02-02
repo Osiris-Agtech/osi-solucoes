@@ -47,6 +47,24 @@ class _LotesBottomSheetState extends State<LotesBottomSheet> {
               ),
               const SizedBox(height: 16),
               Observer(builder: (_) {
+                if (store.selectedLotes.isEmpty) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        'É preciso selecionar pelos menos 1 lote que esteja sendo afetado pela atividade',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Constants.kGreyMedium,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+
                 return ListView.builder(
                   shrinkWrap: true,
                   itemCount: store.selectedLotes.length,

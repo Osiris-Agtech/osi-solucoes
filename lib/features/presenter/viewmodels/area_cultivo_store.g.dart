@@ -138,6 +138,23 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
+  final _$mostrarErroFormularioAtom =
+      Atom(name: '_AreaCultivoStoreBase.mostrarErroFormulario');
+
+  @override
+  bool get mostrarErroFormulario {
+    _$mostrarErroFormularioAtom.reportRead();
+    return super.mostrarErroFormulario;
+  }
+
+  @override
+  set mostrarErroFormulario(bool value) {
+    _$mostrarErroFormularioAtom.reportWrite(value, super.mostrarErroFormulario,
+        () {
+      super.mostrarErroFormulario = value;
+    });
+  }
+
   final _$isNovaAreaLoadingAtom =
       Atom(name: '_AreaCultivoStoreBase.isNovaAreaLoading');
 
@@ -544,11 +561,33 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
   }
 
   @override
+  dynamic setMostrarErroFormulario(bool value) {
+    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
+        name: '_AreaCultivoStoreBase.setMostrarErroFormulario');
+    try {
+      return super.setMostrarErroFormulario(value);
+    } finally {
+      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setAreaEditing(Area area) {
     final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
         name: '_AreaCultivoStoreBase.setAreaEditing');
     try {
       return super.setAreaEditing(area);
+    } finally {
+      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic validarCadastro() {
+    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
+        name: '_AreaCultivoStoreBase.validarCadastro');
+    try {
+      return super.validarCadastro();
     } finally {
       _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -631,6 +670,7 @@ data1: ${data1},
 value: ${value},
 areaList: ${areaList},
 searchAreaText: ${searchAreaText},
+mostrarErroFormulario: ${mostrarErroFormulario},
 isNovaAreaLoading: ${isNovaAreaLoading},
 showTextFormField: ${showTextFormField},
 isEditing: ${isEditing},

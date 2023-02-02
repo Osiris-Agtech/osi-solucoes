@@ -225,6 +225,9 @@ abstract class _LoteStoreBase with Store {
   // #################### START CADASTRAR LOTE ######################
 
   @observable
+  bool mostrarErroFormulario = false;
+
+  @observable
   bool showTextFormField = false;
 
   @observable
@@ -332,6 +335,9 @@ abstract class _LoteStoreBase with Store {
 
   @action
   selecionarNovoLoteSetor(Setor setor) => novoLoteSetor = setor;
+
+  @action
+  setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
 
   @action
   carregarAreaSetor() {
@@ -529,34 +535,32 @@ abstract class _LoteStoreBase with Store {
   registrarLote() async {
     isNovoLoteLoading = true;
     await Future.delayed(const Duration(seconds: 1));
-    if (validarRegistro()) {
-      novoLote = Lote(
-        nome: novoLoteName.text,
-        setor: novoLoteSetor,
-        cultura: novoLoteCultura,
-        reservatorio:
-            novoLoteReservatorio.id != null ? novoLoteReservatorio : null,
-        registro_data: registroData,
-        semeadura_data: semeaduraData,
-        transplantio_data: transplantioData,
-        colheita_data: colheitaData,
-      );
+    novoLote = Lote(
+      nome: novoLoteName.text,
+      setor: novoLoteSetor,
+      cultura: novoLoteCultura,
+      reservatorio:
+          novoLoteReservatorio.id != null ? novoLoteReservatorio : null,
+      registro_data: registroData,
+      semeadura_data: semeaduraData,
+      transplantio_data: transplantioData,
+      colheita_data: colheitaData,
+    );
 
-      var lote = await loteRepository.registrarLote(novoLote);
+    var lote = await loteRepository.registrarLote(novoLote);
 
-      lote.fold(
-        (err) {
-          toastError(message: err.message);
-        },
-        (data) async {
-          limparTudo();
-          Get.close(1);
-          if (setorSelecionado.id != null) {
-            buscarLotes();
-          }
-        },
-      );
-    }
+    lote.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        limparTudo();
+        Get.close(1);
+        if (setorSelecionado.id != null) {
+          buscarLotes();
+        }
+      },
+    );
 
     isNovoLoteLoading = false;
   }
@@ -588,8 +592,9 @@ abstract class _LoteStoreBase with Store {
   validarRegistro() {
     bool isValid = novoLoteName.text.isNotEmpty &&
         novoLoteSetor.id != null &&
-        novoLoteCultura.id != null; // &&
-    // novoLoteReservatorio.id != null;
+        novoLoteCultura.id != null;
+
+    mostrarErroFormulario = !isValid;
 
     if (isValid) {
       return true;
