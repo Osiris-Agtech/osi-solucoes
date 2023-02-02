@@ -25,6 +25,7 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
     super.initState();
     store.buscarReservatorios();
     store.setShowTextFormField(false);
+    store.setMostrarErroFormulario(false);
   }
 
   @override
@@ -72,6 +73,27 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
                     subtitulo(),
                     const SizedBox(height: 10),
                     nome(context),
+                    Observer(builder: (_) {
+                      return Visibility(
+                        visible: store.mostrarErroFormulario &&
+                            store.novoSetorName.text.isEmpty,
+                        child: const Padding(
+                          padding: EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 8.0,
+                          ),
+                          child: Text(
+                            'Nome obrigatório',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Constants.kErrorColor,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                     const Divider(),
                     warning(),
                     reservatorio(context),
@@ -253,10 +275,12 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
                           ),
                         ),
               onPressed: () {
-                if (store.isEditing) {
-                  store.alterarSetor();
-                } else {
-                  store.registrarSetor();
+                if (store.validarCadastro()) {
+                  if (store.isEditing) {
+                    store.alterarSetor();
+                  } else {
+                    store.registrarSetor();
+                  }
                 }
               }, //store.registrarReservatorio(),
             );

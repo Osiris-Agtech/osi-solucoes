@@ -53,8 +53,50 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
                 subtitulo(),
                 const SizedBox(height: 20),
                 nome(context),
+                Observer(builder: (_) {
+                  return Visibility(
+                    visible: store.mostrarErroFormulario &&
+                        store.novoReservatorioName.text.isEmpty,
+                    child: const Padding(
+                      padding: EdgeInsets.only(
+                        left: 16.0,
+                        bottom: 8.0,
+                      ),
+                      child: Text(
+                        'Nome obrigatório',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Constants.kErrorColor,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
                 const Divider(),
                 volume(context),
+                Observer(builder: (_) {
+                  return Visibility(
+                    visible: store.mostrarErroFormulario &&
+                        store.novoReservatorioVolume.text.isEmpty,
+                    child: const Padding(
+                      padding: EdgeInsets.only(
+                        left: 16.0,
+                        bottom: 8.0,
+                      ),
+                      child: Text(
+                        'Volume obrigatório',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Constants.kErrorColor,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
                 const Divider(),
                 solucaoNutritiva(context),
                 const Divider(),
@@ -132,9 +174,15 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-              onPressed: () => store.isEditing
-                  ? store.updateReservatorio()
-                  : store.registrarReservatorio(),
+              onPressed: () {
+                if (store.validarReservatorio()) {
+                  if (store.isEditing) {
+                    store.updateReservatorio();
+                  } else {
+                    store.registrarReservatorio();
+                  }
+                }
+              },
             );
           }),
         ),
@@ -154,11 +202,13 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
           trailing: store.novoReservatorioName.text.isNotEmpty
               ? Row(
                   mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SizedBox(
                       width: 126,
                       child: Text(
                         store.novoReservatorioName.text,
+                        textAlign: TextAlign.end,
                         style: const TextStyle(
                           color: Constants.kPrimaryColor,
                           fontWeight: FontWeight.w600,

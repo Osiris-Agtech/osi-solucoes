@@ -54,8 +54,10 @@ class CadastroConta implements ICadastroConta {
     const String readRepositories = r'''
       mutation CreateUserAccount($nome: String!, $sobrenome: String!, $nivelConta: String!, $email: String!, $senha: String!, $endereco: String, $bairro: String, $cidade: String, $telefone: String, $imagem: String, $cep: String, $estado: String, $pais: String, $complemento: String, $imagemConta: String, $cnpjConta: String) {
         createUserAccount(nome: $nome, sobrenome: $sobrenome, nivelConta: $nivelConta, email: $email, senha: $senha, endereco: $endereco, bairro: $bairro, cidade: $cidade, telefone: $telefone, imagem: $imagem, cep: $cep, estado: $estado, pais: $pais, complemento: $complemento, imagemConta: $imagemConta, cnpjConta: $cnpjConta) {
-          email
+          id
           nome
+          email
+          senha
           pessoa {
             nome
             sobrenome
@@ -66,11 +68,19 @@ class CadastroConta implements ICadastroConta {
           }
           contas {
             conta {
+              id
               nome
               nivel
             }
             cargo {
+              id
               cargo
+              permissoes {
+                permissao {
+                  id
+                  nome
+                }
+              }
             }
           }
         }

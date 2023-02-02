@@ -24,6 +24,7 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
     super.initState();
     store.buscarLocalizacoes();
     store.setShowTextFormField(false);
+    store.setMostrarErroFormulario(false);
   }
 
   @override
@@ -65,6 +66,27 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
                     subtitulo(),
                     const SizedBox(height: 20),
                     nome(context),
+                    Observer(builder: (_) {
+                      return Visibility(
+                        visible: store.mostrarErroFormulario &&
+                            store.novaAreaName.text.isEmpty,
+                        child: const Padding(
+                          padding: EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 8.0,
+                          ),
+                          child: Text(
+                            'Nome obrigatório',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Constants.kErrorColor,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                     const Divider(),
                     localizacao(context),
                     const Divider(),
@@ -188,10 +210,12 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
                           ),
                         ),
               onPressed: () {
-                if (store.isEditing) {
-                  store.alterarArea();
-                } else {
-                  store.registrarArea();
+                if (store.validarCadastro()) {
+                  if (store.isEditing) {
+                    store.alterarArea();
+                  } else {
+                    store.registrarArea();
+                  }
                 }
               }, //store.registrarReservatorio(),
             );

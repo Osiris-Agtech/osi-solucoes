@@ -226,6 +226,23 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
     });
   }
 
+  final _$mostrarErroFormularioAtom =
+      Atom(name: '_CadernoCampoStoreBase.mostrarErroFormulario');
+
+  @override
+  bool get mostrarErroFormulario {
+    _$mostrarErroFormularioAtom.reportRead();
+    return super.mostrarErroFormulario;
+  }
+
+  @override
+  set mostrarErroFormulario(bool value) {
+    _$mostrarErroFormularioAtom.reportWrite(value, super.mostrarErroFormulario,
+        () {
+      super.mostrarErroFormulario = value;
+    });
+  }
+
   final _$isCadastroLoteLoadingAtom =
       Atom(name: '_CadernoCampoStoreBase.isCadastroLoteLoading');
 
@@ -765,6 +782,7 @@ expandedCard: ${expandedCard},
 searchAtividade: ${searchAtividade},
 searchLote: ${searchLote},
 dotIndicator: ${dotIndicator},
+mostrarErroFormulario: ${mostrarErroFormulario},
 isCadastroLoteLoading: ${isCadastroLoteLoading},
 showTextFormField: ${showTextFormField},
 isNovoRegistroLoading: ${isNovoRegistroLoading},

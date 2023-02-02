@@ -75,6 +75,9 @@ abstract class _ReservatoriosStoreBase with Store {
 // ######################## NOVO RESERVATÓRIO ##################################
 
   @observable
+  bool mostrarErroFormulario = false;
+
+  @observable
   bool isSolucaoListLoading = false;
 
   @observable
@@ -143,6 +146,9 @@ abstract class _ReservatoriosStoreBase with Store {
 
   @action
   setIsEditing(bool value) => isEditing = value;
+
+  @action
+  setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
 
   @action
   setSolucaoDetalhes(SolucaoNutritiva solucao) async {
@@ -322,6 +328,15 @@ abstract class _ReservatoriosStoreBase with Store {
   }
 
   @action
+  validarReservatorio() {
+    bool validate = novoReservatorioName.text.isNotEmpty &&
+        novoReservatorioVolume.text.isNotEmpty;
+
+    mostrarErroFormulario = !validate;
+    return validate;
+  }
+
+  @action
   registrarReservatorio() async {
     isNovoReservatorioLoading = true;
 
@@ -358,7 +373,6 @@ abstract class _ReservatoriosStoreBase with Store {
     if (reservatorio.solucao?.id != null) {
       setSolucaoNutritiva(reservatorio.solucao!);
     }
-    print(isSolucaoNutritivaValid);
   }
 
   @action

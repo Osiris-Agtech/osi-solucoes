@@ -365,7 +365,6 @@ class ReservatorioDatasource implements IReservatorioDatasource {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     String readRepositories;
-    print(novoReservatorio.solucao?.id);
     if (novoReservatorio.solucao?.id != null) {
       readRepositories = r'''
         mutation UpdateReservatorio($reservatorioId: Int!, $reservatorioNome: String!, $reservatorioVolume: String!, $contaId: Int!, $solucaoId: Int) {

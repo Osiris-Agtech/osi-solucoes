@@ -36,6 +36,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
     store.buscarCulturas();
     store.buscarReservatorios();
     store.setIsNovaCultura(false);
+    store.setMostrarErroFormulario(false);
   }
 
   @override
@@ -69,16 +70,79 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                 subtitulo(),
                 const SizedBox(height: 20),
                 setor(context, carouselController, store, key),
+                Observer(builder: (_) {
+                  return Visibility(
+                    visible: store.mostrarErroFormulario &&
+                        store.novoLoteSetor.id == null,
+                    child: const Padding(
+                      padding: EdgeInsets.only(
+                        left: 16.0,
+                        bottom: 8.0,
+                      ),
+                      child: Text(
+                        'Setor obrigatório',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Constants.kErrorColor,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
                 const Divider(
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
                 lote(context, carouselController, store, key),
+                Observer(builder: (_) {
+                  return Visibility(
+                    visible: store.mostrarErroFormulario &&
+                        store.novoLoteName.text.isEmpty,
+                    child: const Padding(
+                      padding: EdgeInsets.only(
+                        left: 16.0,
+                        bottom: 8.0,
+                      ),
+                      child: Text(
+                        'Nome obrigatório',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Constants.kErrorColor,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
                 const Divider(
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
                 cultura(context, carouselController, store, key),
+                Observer(builder: (_) {
+                  return Visibility(
+                    visible: store.mostrarErroFormulario &&
+                        store.novoLoteCultura.id == null,
+                    child: const Padding(
+                      padding: EdgeInsets.only(
+                        left: 16.0,
+                        bottom: 8.0,
+                      ),
+                      child: Text(
+                        'Cultura obrigatória',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Constants.kErrorColor,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
                 const Divider(
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
@@ -181,10 +245,12 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
               },
             ),
             onPressed: () {
-              if (store.isEditing) {
-                store.alterarLote();
-              } else {
-                store.registrarLote();
+              if (store.validarRegistro()) {
+                // if (store.isEditing) {
+                //   store.alterarLote();
+                // } else {
+                //   store.registrarLote();
+                // }
               }
             },
           ),
