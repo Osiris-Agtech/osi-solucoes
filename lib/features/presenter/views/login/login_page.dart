@@ -130,7 +130,7 @@ class LoginPageState extends State<LoginPage> {
   _logo(Size size) {
     return SizedBox(
       child: Image.asset(
-        "assets/images/osiris-logo.png",
+        "assets/images/logo_ufmt.png",
         width: size.width * 0.42,
         // height: size.height * 0.082,
       ),

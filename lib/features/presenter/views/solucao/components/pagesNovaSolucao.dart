@@ -142,18 +142,16 @@ class _NextStepButtonState extends State<NextStepButton> {
         primary: Constants.kPrimaryColor,
       ),
       child: Center(
-        child: Observer(builder: (_) {
-          return Row(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              Text(
-                'Avançar',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              Icon(Icons.chevron_right),
-            ],
-          );
-        }),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Text(
+              'Avançar',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+            Icon(Icons.chevron_right),
+          ],
+        ),
       ),
       onPressed: () {
         if (store.dotIndicator == 1) {

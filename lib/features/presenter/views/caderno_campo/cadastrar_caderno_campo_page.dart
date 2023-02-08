@@ -79,8 +79,44 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                     subtitulo(),
                     const SizedBox(height: 10),
                     atividade(context),
+                    Observer(builder: (_) {
+                      return Visibility(
+                        visible: store.mostrarErroFormulario &&
+                            store.novoAtividadeName.text.isEmpty,
+                        child: const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            'Título obrigatório',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Constants.kErrorColor,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                     const Divider(),
                     autor(context),
+                    Observer(builder: (_) {
+                      return Visibility(
+                        visible: store.mostrarErroFormulario &&
+                            store.selectedUsuario == null,
+                        child: const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            'É preciso selecionar o autor',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Constants.kErrorColor,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                     const Divider(),
                     data(context),
                     const Divider(),
@@ -90,6 +126,27 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                     const Divider(),
                     descricao(),
                     _descricaoTextFormField(),
+                    Observer(builder: (_) {
+                      return Visibility(
+                        visible: store.mostrarErroFormulario &&
+                            store.novaDescricao.text.isEmpty,
+                        child: const Padding(
+                          padding: EdgeInsets.only(
+                            left: 8.0,
+                            bottom: 16.0,
+                          ),
+                          child: Text(
+                            'Descrição da atividade obrigatório',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Constants.kErrorColor,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                     saveButton(size),
                   ],
                 ),
@@ -105,7 +162,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 10, bottom: 20),
       child: Container(
-        height: 200,
+        height: MediaQuery.of(context).size.height * .4,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: const Color(0xffF5F5F5),
@@ -540,21 +597,21 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
   Padding botaoDescricao() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          IconButton(
-            onPressed: () {
-              store.setShowTextFormField(true);
-            },
-            icon: const Icon(
+      child: InkWell(
+        onTap: () {
+          store.setShowTextFormField(true);
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            Icon(
               Icons.add_circle_outline,
               color: Colors.green,
             ),
-          ),
-          const Text('Adicionar descrição'),
-        ],
+            Text('Adicionar descrição'),
+          ],
+        ),
       ),
     );
   }

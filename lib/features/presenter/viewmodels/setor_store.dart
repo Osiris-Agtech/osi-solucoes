@@ -112,6 +112,9 @@ abstract class _SetorStoreBase with Store {
   bool isEditing = false;
 
   @observable
+  bool mostrarErroFormulario = false;
+
+  @observable
   List<Reservatorio> reservatorioList = [];
 
   @observable
@@ -137,6 +140,9 @@ abstract class _SetorStoreBase with Store {
 
   @action
   setIsEditing(bool value) => isEditing = value;
+
+  @action
+  setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
 
   @action
   setSetorEditing(Setor setor) {
@@ -193,6 +199,14 @@ abstract class _SetorStoreBase with Store {
   @action
   setReservatorioSelecionada(Reservatorio reservatorio) =>
       novoSetorReservatorio = reservatorio;
+
+  @action
+  validarCadastro() {
+    bool validate = novoSetorName.text.isNotEmpty;
+
+    mostrarErroFormulario = !validate;
+    return validate;
+  }
 
   @action
   registrarSetor() async {

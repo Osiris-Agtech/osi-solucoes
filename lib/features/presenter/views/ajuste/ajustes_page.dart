@@ -51,328 +51,207 @@ class AjustesPageState extends State<AjustesPage> {
         statusBarColor: Colors.white,
         statusBarIconBrightness: Brightness.dark,
       ),
-      child: SafeArea(
-        child: Scaffold(
-          // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-          backgroundColor: Constants.kSecondBackgroundColor,
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 18.0),
-            child: Observer(builder: (_) {
-              return FloatingActionButton.extended(
-                heroTag: 'CalcularAJuste',
-                onPressed: store.selectedReservatorio.nome != null &&
-                        store.selectedReservatorio.nome!.isNotEmpty
-                    ? () async {
-                        await store.calculoAjusteReposicao();
-                        await store.montandoDescricao();
-                        Get.toNamed(Routes.resultadoajustePage);
-                      }
-                    : () =>
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar),
-                backgroundColor: Constants.kPrimaryColor,
-                label: const Text(
-                  'Calcular',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                ),
-              );
-            }),
-          ),
-          body: Form(
-            key: formKey,
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                SliverAppBar(
-                  pinned: true,
-                  backgroundColor: Colors.white,
-                  toolbarHeight: 175,
-                  floating: true,
-                  automaticallyImplyLeading: false,
-                  forceElevated: true,
-                  elevation: 1,
-                  flexibleSpace: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TopAppBar(
-                        path: "/Home/",
-                        namePage: "Ajustes",
-                        subtitle: "Selecione e ajuste seu reservatório",
-                        onPressed: () {
-                          Get.offNamedUntil(Routes.homePage, (route) => false);
-                        },
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      Container(
-                        height: 50,
-                        color: const Color(0xFFF8F8F6),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width * 0.04,
-                        ),
-                        child: Observer(
-                          builder: (_) {
-                            return DropdownSearch<Reservatorio>(
-                              key: dropDownKey,
-                              mode: Mode.MENU,
-                              items: store.reservatorioList,
-                              dropdownBuilder: (context, selectedItem) {
-                                if (selectedItem != null) {
-                                  return Text(
-                                    selectedItem.nome!,
-                                    overflow: TextOverflow.visible,
-                                  );
-                                }
-                                return const Text(
-                                  'Selecione o Reservatório',
-                                  overflow: TextOverflow.visible,
-                                  style: TextStyle(color: Constants.kGreyText2),
-                                );
-                              },
-                              filterFn: (reservatorio, nome) {
-                                bool contains = reservatorio!.nome!
-                                    .toLowerCase()
-                                    .contains(nome!.toLowerCase());
-                                return contains;
-                              },
-                              popupItemBuilder: (ctx, reservatorio, selected) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0),
-                                  child: DropdownMenuItem<Reservatorio>(
-                                    value: reservatorio,
-                                    child: Text(
-                                      reservatorio.nome!,
-                                      overflow: TextOverflow.visible,
-                                    ),
-                                  ),
-                                );
-                              },
-                              emptyBuilder: (ctx, _) {
-                                return const Center(
-                                  child: Text('Nenhum reservatório encontrado'),
-                                );
-                              },
-                              dropDownButton: const Icon(
-                                Icons.arrow_drop_down,
-                                size: 30,
-                                color: Constants.kPrimaryColor,
-                              ),
-                              dropdownSearchDecoration: InputDecoration(
-                                border: InputBorder.none,
-                                prefixIconConstraints: const BoxConstraints(
-                                    maxHeight: 50, maxWidth: 50),
-                                contentPadding: const EdgeInsets.only(top: 15),
-                                alignLabelWithHint: true,
-                                hintText: "Buscar Reservatório...",
-                                prefixIcon: Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 10.0, left: 10, top: 5),
-                                  child: Observer(builder: (_) {
-                                    return store.selectedReservatorio.nome !=
-                                                null &&
-                                            store.selectedReservatorio.nome!
-                                                .isNotEmpty
-                                        ? SvgPicture.asset(
-                                            "assets/icons/reservatorio_icon.svg",
-                                          )
-                                        : Opacity(
-                                            opacity: 0.6,
-                                            child: SvgPicture.asset(
-                                              "assets/icons/reservatorio_icon.svg",
-                                            ),
-                                          );
-                                  }),
-                                ),
-                              ),
-                              onChanged: (reservatorio) {
-                                store.selectReservatorio(reservatorio!);
-                              },
-                              showSearchBox: true,
-                              showAsSuffixIcons: true,
-                            );
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SafeArea(
+          child: Scaffold(
+            // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+            backgroundColor: Constants.kSecondBackgroundColor,
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.only(bottom: 18.0),
+              child: Observer(builder: (_) {
+                return FloatingActionButton.extended(
+                  heroTag: 'CalcularAJuste',
+                  onPressed: store.selectedReservatorio.nome != null &&
+                          store.selectedReservatorio.nome!.isNotEmpty
+                      ? () async {
+                          await store.calculoAjusteReposicao();
+                          await store.montandoDescricao();
+                          Get.toNamed(Routes.resultadoajustePage);
+                        }
+                      : () =>
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar),
+                  backgroundColor: Constants.kPrimaryColor,
+                  label: const Text(
+                    'Calcular',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+                );
+              }),
+            ),
+            body: Form(
+              key: formKey,
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  SliverAppBar(
+                    pinned: true,
+                    backgroundColor: Colors.white,
+                    toolbarHeight: 175,
+                    floating: true,
+                    automaticallyImplyLeading: false,
+                    forceElevated: true,
+                    elevation: 1,
+                    flexibleSpace: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TopAppBar(
+                          path: "/Home/",
+                          namePage: "Ajustes",
+                          subtitle: "Selecione e ajuste seu reservatório",
+                          onPressed: () {
+                            Get.offNamedUntil(
+                                Routes.homePage, (route) => false);
                           },
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * 0.023,
-                        right: MediaQuery.of(context).size.width * 0.058,
-                        left: MediaQuery.of(context).size.width * 0.058,
-                        bottom: 0,
-                      ),
-                      child: ListView(
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left:
-                                    MediaQuery.of(context).size.width * 0.015),
-                            child: const Text(
-                              'Obrigatório',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontStyle: FontStyle.italic,
-                                  color: Color(0xB2333333),
-                                  fontWeight: FontWeight.w600),
-                            ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Container(
+                          height: 50,
+                          color: const Color(0xFFF8F8F6),
+                          padding: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.04,
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height * 0.01),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              color: Colors.white,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        MediaQuery.of(context).size.width *
-                                            0.058,
-                                    vertical:
-                                        MediaQuery.of(context).size.height *
-                                            0.025),
-                                child: Column(children: [
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: const [
-                                              Text(
-                                                "C. Elétrico ",
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                              Text(
-                                                "Atual",
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontStyle: FontStyle.italic,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: TextFormField(
-                                              controller: store.cEletricoAtual,
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              inputFormatters: [
-                                                FilteringTextInputFormatter
-                                                    .digitsOnly,
-                                                CentavosInputFormatter(),
-                                              ],
-                                              decoration: const InputDecoration(
-                                                contentPadding: EdgeInsets.only(
-                                                  bottom: 10,
-                                                ),
-                                                hintText: "S.m/mm2",
-                                                hintStyle: TextStyle(
-                                                  fontWeight: FontWeight.w100,
-                                                  color: Colors.black38,
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        ],
+                          child: Observer(
+                            builder: (_) {
+                              return DropdownSearch<Reservatorio>(
+                                key: dropDownKey,
+                                mode: Mode.MENU,
+                                items: store.reservatorioList,
+                                dropdownBuilder: (context, selectedItem) {
+                                  if (selectedItem != null) {
+                                    return Text(
+                                      selectedItem.nome!,
+                                      overflow: TextOverflow.visible,
+                                    );
+                                  }
+                                  return const Text(
+                                    'Selecione o Reservatório',
+                                    overflow: TextOverflow.visible,
+                                    style:
+                                        TextStyle(color: Constants.kGreyText2),
+                                  );
+                                },
+                                filterFn: (reservatorio, nome) {
+                                  bool contains = reservatorio!.nome!
+                                      .toLowerCase()
+                                      .contains(nome!.toLowerCase());
+                                  return contains;
+                                },
+                                popupItemBuilder:
+                                    (ctx, reservatorio, selected) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    child: DropdownMenuItem<Reservatorio>(
+                                      value: reservatorio,
+                                      child: Text(
+                                        reservatorio.nome!,
+                                        overflow: TextOverflow.visible,
                                       ),
-                                      const Center(
-                                        child: Padding(
-                                          padding: EdgeInsets.all(10.0),
-                                          child: Icon(
-                                            Icons.arrow_forward_ios,
-                                            size: 20,
-                                            color: Constants.kPrimaryColor,
-                                          ),
-                                        ),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: const [
-                                              Text(
-                                                "C. Elétrico ",
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                              Text(
-                                                "Desejado",
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontStyle: FontStyle.italic,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 90,
-                                            child: TextFormField(
-                                              controller:
-                                                  store.cEletricoDesejado,
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              inputFormatters: [
-                                                FilteringTextInputFormatter
-                                                    .digitsOnly,
-                                                CentavosInputFormatter(),
-                                              ],
-                                              decoration: const InputDecoration(
-                                                contentPadding: EdgeInsets.only(
-                                                  bottom: 10,
-                                                ),
-                                                hintText: "S.m/mm2",
-                                                hintStyle: TextStyle(
-                                                  fontWeight: FontWeight.w100,
-                                                  color: Colors.black38,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        top:
-                                            MediaQuery.of(context).size.height *
-                                                0.025),
-                                    child: const MySeparator(
-                                      color: Colors.grey,
                                     ),
+                                  );
+                                },
+                                emptyBuilder: (ctx, _) {
+                                  return const Center(
+                                    child:
+                                        Text('Nenhum reservatório encontrado'),
+                                  );
+                                },
+                                dropDownButton: const Icon(
+                                  Icons.arrow_drop_down,
+                                  size: 30,
+                                  color: Constants.kPrimaryColor,
+                                ),
+                                dropdownSearchDecoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  prefixIconConstraints: const BoxConstraints(
+                                      maxHeight: 50, maxWidth: 50),
+                                  contentPadding:
+                                      const EdgeInsets.only(top: 15),
+                                  alignLabelWithHint: true,
+                                  hintText: "Buscar Reservatório...",
+                                  prefixIcon: Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 10.0, left: 10, top: 5),
+                                    child: Observer(builder: (_) {
+                                      return store.selectedReservatorio.nome !=
+                                                  null &&
+                                              store.selectedReservatorio.nome!
+                                                  .isNotEmpty
+                                          ? SvgPicture.asset(
+                                              "assets/icons/reservatorio_icon.svg",
+                                            )
+                                          : Opacity(
+                                              opacity: 0.6,
+                                              child: SvgPicture.asset(
+                                                "assets/icons/reservatorio_icon.svg",
+                                              ),
+                                            );
+                                    }),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        top:
-                                            MediaQuery.of(context).size.height *
-                                                0.019),
-                                    child: Row(
+                                ),
+                                onChanged: (reservatorio) {
+                                  store.selectReservatorio(reservatorio!);
+                                },
+                                showSearchBox: true,
+                                showAsSuffixIcons: true,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.023,
+                          right: MediaQuery.of(context).size.width * 0.058,
+                          left: MediaQuery.of(context).size.width * 0.058,
+                          bottom: 0,
+                        ),
+                        child: ListView(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: MediaQuery.of(context).size.width *
+                                      0.015),
+                              child: const Text(
+                                'Obrigatório',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontStyle: FontStyle.italic,
+                                    color: Color(0xB2333333),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height *
+                                      0.01),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal:
+                                          MediaQuery.of(context).size.width *
+                                              0.058,
+                                      vertical:
+                                          MediaQuery.of(context).size.height *
+                                              0.025),
+                                  child: Column(children: [
+                                    Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       mainAxisAlignment:
@@ -383,30 +262,30 @@ class AjustesPageState extends State<AjustesPage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
                                               children: const [
                                                 Text(
-                                                  "Volume ",
+                                                  "C. Elétrico ",
                                                   style: TextStyle(
                                                     fontSize: 14,
                                                     fontStyle: FontStyle.italic,
                                                   ),
                                                 ),
-                                                Text("Atual",
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontStyle:
-                                                            FontStyle.italic,
-                                                        fontWeight:
-                                                            FontWeight.bold))
+                                                Text(
+                                                  "Atual",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontStyle: FontStyle.italic,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                             SizedBox(
                                               height: 30,
                                               width: 100,
                                               child: TextFormField(
-                                                controller: store.volumeAtual,
+                                                controller:
+                                                    store.cEletricoAtual,
                                                 keyboardType:
                                                     TextInputType.number,
                                                 inputFormatters: [
@@ -416,28 +295,30 @@ class AjustesPageState extends State<AjustesPage> {
                                                 ],
                                                 decoration:
                                                     const InputDecoration(
-                                                        contentPadding:
-                                                            EdgeInsets.only(
-                                                                bottom: 10),
-                                                        hintText: "S.m/mm2",
-                                                        hintStyle: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w100,
-                                                          color: Colors.black38,
-                                                        )),
+                                                  contentPadding:
+                                                      EdgeInsets.only(
+                                                    bottom: 10,
+                                                  ),
+                                                  hintText: "S.m/mm2",
+                                                  hintStyle: TextStyle(
+                                                    fontWeight: FontWeight.w100,
+                                                    color: Colors.black38,
+                                                  ),
+                                                ),
                                               ),
                                             )
                                           ],
                                         ),
                                         const Center(
-                                            child: Padding(
-                                          padding: EdgeInsets.all(10.0),
-                                          child: Icon(
-                                            Icons.arrow_forward_ios,
-                                            size: 20,
-                                            color: Constants.kPrimaryColor,
+                                          child: Padding(
+                                            padding: EdgeInsets.all(10.0),
+                                            child: Icon(
+                                              Icons.arrow_forward_ios,
+                                              size: 20,
+                                              color: Constants.kPrimaryColor,
+                                            ),
                                           ),
-                                        )),
+                                        ),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -447,19 +328,20 @@ class AjustesPageState extends State<AjustesPage> {
                                                   CrossAxisAlignment.start,
                                               children: const [
                                                 Text(
-                                                  "Volume ",
+                                                  "C. Elétrico ",
                                                   style: TextStyle(
                                                     fontSize: 14,
                                                     fontStyle: FontStyle.italic,
                                                   ),
                                                 ),
-                                                Text("Desejado",
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontStyle:
-                                                            FontStyle.italic,
-                                                        fontWeight:
-                                                            FontWeight.bold))
+                                                Text(
+                                                  "Desejado",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontStyle: FontStyle.italic,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                             SizedBox(
@@ -467,7 +349,7 @@ class AjustesPageState extends State<AjustesPage> {
                                               width: 90,
                                               child: TextFormField(
                                                 controller:
-                                                    store.volumeDesejado,
+                                                    store.cEletricoDesejado,
                                                 keyboardType:
                                                     TextInputType.number,
                                                 inputFormatters: [
@@ -477,185 +359,332 @@ class AjustesPageState extends State<AjustesPage> {
                                                 ],
                                                 decoration:
                                                     const InputDecoration(
-                                                        contentPadding:
-                                                            EdgeInsets.only(
-                                                                bottom: 10),
-                                                        hintText: "S.m/mm2",
-                                                        hintStyle: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w100,
-                                                          color: Colors.black38,
-                                                        )),
+                                                  contentPadding:
+                                                      EdgeInsets.only(
+                                                    bottom: 10,
+                                                  ),
+                                                  hintText: "S.m/mm2",
+                                                  hintStyle: TextStyle(
+                                                    fontWeight: FontWeight.w100,
+                                                    color: Colors.black38,
+                                                  ),
+                                                ),
                                               ),
-                                            )
+                                            ),
                                           ],
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ]),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height * 0.03,
-                                left:
-                                    MediaQuery.of(context).size.width * 0.015),
-                            child: const Text(
-                              'Opcional',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontStyle: FontStyle.italic,
-                                  color: Color(0xB2333333),
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top:
-                                    MediaQuery.of(context).size.height * 0.015),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              color: Colors.white,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        MediaQuery.of(context).size.width *
-                                            0.042,
-                                    vertical:
-                                        MediaQuery.of(context).size.height *
-                                            0.015),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: const [
-                                        Text("Registrar ",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontStyle: FontStyle.italic,
-                                            )),
-                                        Text("PH",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontStyle: FontStyle.italic,
-                                                fontWeight: FontWeight.bold)),
-                                      ],
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.only(bottom: 5),
-                                      height: 30,
-                                      width: 88,
-                                      child: TextFormField(
-                                        controller: store.pH,
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter
-                                              .digitsOnly,
-                                          CentavosInputFormatter(),
-                                        ],
-                                        textAlign: TextAlign.center,
-                                        decoration: const InputDecoration(
-                                            alignLabelWithHint: true,
-                                            contentPadding:
-                                                EdgeInsets.only(bottom: 10),
-                                            hintText: "8,4",
-                                            hintStyle: TextStyle(
-                                              fontWeight: FontWeight.w100,
-                                              fontStyle: FontStyle.italic,
-                                              color: Colors.black38,
-                                            )),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.025),
+                                      child: const MySeparator(
+                                        color: Colors.grey,
                                       ),
-                                    )
-                                  ],
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.019),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: const [
+                                                  Text(
+                                                    "Volume ",
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                    ),
+                                                  ),
+                                                  Text("Atual",
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          fontWeight:
+                                                              FontWeight.bold))
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 30,
+                                                width: 100,
+                                                child: TextFormField(
+                                                  controller: store.volumeAtual,
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .digitsOnly,
+                                                    CentavosInputFormatter(),
+                                                  ],
+                                                  decoration:
+                                                      const InputDecoration(
+                                                          contentPadding:
+                                                              EdgeInsets.only(
+                                                                  bottom: 10),
+                                                          hintText: "S.m/mm2",
+                                                          hintStyle: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w100,
+                                                            color:
+                                                                Colors.black38,
+                                                          )),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          const Center(
+                                              child: Padding(
+                                            padding: EdgeInsets.all(10.0),
+                                            child: Icon(
+                                              Icons.arrow_forward_ios,
+                                              size: 20,
+                                              color: Constants.kPrimaryColor,
+                                            ),
+                                          )),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: const [
+                                                  Text(
+                                                    "Volume ",
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                    ),
+                                                  ),
+                                                  Text("Desejado",
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          fontWeight:
+                                                              FontWeight.bold))
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 30,
+                                                width: 90,
+                                                child: TextFormField(
+                                                  controller:
+                                                      store.volumeDesejado,
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .digitsOnly,
+                                                    CentavosInputFormatter(),
+                                                  ],
+                                                  decoration:
+                                                      const InputDecoration(
+                                                          contentPadding:
+                                                              EdgeInsets.only(
+                                                                  bottom: 10),
+                                                          hintText: "S.m/mm2",
+                                                          hintStyle: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w100,
+                                                            color:
+                                                                Colors.black38,
+                                                          )),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ]),
                                 ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height * 0.01,
-                                bottom: 75),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top:
+                                      MediaQuery.of(context).size.height * 0.03,
+                                  left: MediaQuery.of(context).size.width *
+                                      0.015),
+                              child: const Text(
+                                'Opcional',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontStyle: FontStyle.italic,
+                                    color: Color(0xB2333333),
+                                    fontWeight: FontWeight.w600),
                               ),
-                              color: Colors.white,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        MediaQuery.of(context).size.width *
-                                            0.042,
-                                    vertical:
-                                        MediaQuery.of(context).size.height *
-                                            0.015),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: const [
-                                        Text("Registrar ",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontStyle: FontStyle.italic,
-                                            )),
-                                        Text("Temperatura",
-                                            style: TextStyle(
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height *
+                                      0.015),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal:
+                                          MediaQuery.of(context).size.width *
+                                              0.042,
+                                      vertical:
+                                          MediaQuery.of(context).size.height *
+                                              0.015),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: const [
+                                          Text("Registrar ",
+                                              style: TextStyle(
                                                 fontSize: 14,
                                                 fontStyle: FontStyle.italic,
-                                                fontWeight: FontWeight.bold)),
-                                      ],
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.only(top: 5),
-                                      height: 30,
-                                      width: 88,
-                                      child: Observer(builder: (_) {
-                                        return DropdownButton<int>(
-                                          isExpanded: true,
-                                          iconEnabledColor:
-                                              Constants.kPrimaryColor,
-                                          value: store.selectedItem,
-                                          items: store.quantityList
-                                              .map((int e) =>
-                                                  DropdownMenuItem<int>(
-                                                    alignment:
-                                                        AlignmentDirectional
-                                                            .center,
-                                                    value: e,
-                                                    child: Text(
-                                                      "$e ºC",
-                                                      style: const TextStyle(
-                                                        fontStyle:
-                                                            FontStyle.italic,
-                                                      ),
-                                                    ),
-                                                  ))
-                                              .toList(),
-                                          onChanged: (int? newValue) {
-                                            store.newValueItem(newValue!);
-                                          },
-                                        );
-                                      }),
-                                    )
-                                  ],
+                                              )),
+                                          Text("PH",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.bold)),
+                                        ],
+                                      ),
+                                      Container(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 5),
+                                        height: 30,
+                                        width: 88,
+                                        child: TextFormField(
+                                          controller: store.pH,
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter
+                                                .digitsOnly,
+                                            CentavosInputFormatter(),
+                                          ],
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                              alignLabelWithHint: true,
+                                              contentPadding:
+                                                  EdgeInsets.only(bottom: 10),
+                                              hintText: "8,4",
+                                              hintStyle: TextStyle(
+                                                fontWeight: FontWeight.w100,
+                                                fontStyle: FontStyle.italic,
+                                                color: Colors.black38,
+                                              )),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top:
+                                      MediaQuery.of(context).size.height * 0.01,
+                                  bottom: 75),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal:
+                                          MediaQuery.of(context).size.width *
+                                              0.042,
+                                      vertical:
+                                          MediaQuery.of(context).size.height *
+                                              0.015),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: const [
+                                          Text("Registrar ",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontStyle: FontStyle.italic,
+                                              )),
+                                          Text("Temperatura",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.bold)),
+                                        ],
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.only(top: 5),
+                                        height: 30,
+                                        width: 88,
+                                        child: Observer(builder: (_) {
+                                          return DropdownButton<int>(
+                                            isExpanded: true,
+                                            iconEnabledColor:
+                                                Constants.kPrimaryColor,
+                                            value: store.selectedItem,
+                                            items: store.quantityList
+                                                .map((int e) =>
+                                                    DropdownMenuItem<int>(
+                                                      alignment:
+                                                          AlignmentDirectional
+                                                              .center,
+                                                      value: e,
+                                                      child: Text(
+                                                        "$e ºC",
+                                                        style: const TextStyle(
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                        ),
+                                                      ),
+                                                    ))
+                                                .toList(),
+                                            onChanged: (int? newValue) {
+                                              store.newValueItem(newValue!);
+                                            },
+                                          );
+                                        }),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ]),
-                ),
-              ],
+                    ]),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

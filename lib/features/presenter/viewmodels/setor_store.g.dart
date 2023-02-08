@@ -153,6 +153,23 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
+  final _$mostrarErroFormularioAtom =
+      Atom(name: '_SetorStoreBase.mostrarErroFormulario');
+
+  @override
+  bool get mostrarErroFormulario {
+    _$mostrarErroFormularioAtom.reportRead();
+    return super.mostrarErroFormulario;
+  }
+
+  @override
+  set mostrarErroFormulario(bool value) {
+    _$mostrarErroFormularioAtom.reportWrite(value, super.mostrarErroFormulario,
+        () {
+      super.mostrarErroFormulario = value;
+    });
+  }
+
   final _$reservatorioListAtom = Atom(name: '_SetorStoreBase.reservatorioList');
 
   @override
@@ -392,6 +409,17 @@ mixin _$SetorStore on _SetorStoreBase, Store {
   }
 
   @override
+  dynamic setMostrarErroFormulario(bool value) {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.setMostrarErroFormulario');
+    try {
+      return super.setMostrarErroFormulario(value);
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setSetorEditing(Setor setor) {
     final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
         name: '_SetorStoreBase.setSetorEditing');
@@ -458,6 +486,17 @@ mixin _$SetorStore on _SetorStoreBase, Store {
   }
 
   @override
+  dynamic validarCadastro() {
+    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
+        name: '_SetorStoreBase.validarCadastro');
+    try {
+      return super.validarCadastro();
+    } finally {
+      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 searchSetorText: ${searchSetorText},
@@ -469,6 +508,7 @@ setorList: ${setorList},
 data1: ${data1},
 data2: ${data2},
 isEditing: ${isEditing},
+mostrarErroFormulario: ${mostrarErroFormulario},
 reservatorioList: ${reservatorioList},
 novoSetorName: ${novoSetorName},
 novoSetorDescription: ${novoSetorDescription},

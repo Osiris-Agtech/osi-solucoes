@@ -382,6 +382,14 @@ class _AppBarState extends State<AppBar> {
         //                 // );
         //               },
         //             ),
+        //             PopupMenuItem(
+        //               child: Row(
+        //                 children: const [
+        //                   Text('Deletar'),
+        //                 ],
+        //               ),
+        //               onTap: () {},
+        //             ),
         //           ],
         //         ),
         //       ),

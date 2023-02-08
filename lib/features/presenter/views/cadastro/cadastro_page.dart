@@ -393,6 +393,14 @@ class CadastroPageState extends State<CadastroPage> {
           focusNode.nextFocus();
         }
       },
+      onChanged: (String value) async {
+        if (labelText == "labelTextConsult3".i18n() && value.length == 10) {
+          showCircularProgressIndicator(context);
+          await store.buscaCEP();
+          Navigator.pop(context);
+          focusNode.nextFocus();
+        }
+      },
       inputFormatters: labelText == "labelTextConsult3".i18n()
           ? [
               FilteringTextInputFormatter.digitsOnly,

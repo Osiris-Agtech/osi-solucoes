@@ -200,7 +200,7 @@ bandeijasSemeadas(LoteStore store) {
     padding: const EdgeInsets.symmetric(horizontal: 20.0),
     child: ListTile(
       title: const Text(
-        'Bandeijas\nSemeadas',
+        'Bandejas\nSemeadas',
         textAlign: TextAlign.start,
         style: TextStyle(
           color: Constants.kText2,

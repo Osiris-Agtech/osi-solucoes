@@ -249,6 +249,23 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$mostrarErroFormularioAtom =
+      Atom(name: '_LoteStoreBase.mostrarErroFormulario');
+
+  @override
+  bool get mostrarErroFormulario {
+    _$mostrarErroFormularioAtom.reportRead();
+    return super.mostrarErroFormulario;
+  }
+
+  @override
+  set mostrarErroFormulario(bool value) {
+    _$mostrarErroFormularioAtom.reportWrite(value, super.mostrarErroFormulario,
+        () {
+      super.mostrarErroFormulario = value;
+    });
+  }
+
   final _$showTextFormFieldAtom =
       Atom(name: '_LoteStoreBase.showTextFormField');
 
@@ -993,6 +1010,17 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic setMostrarErroFormulario(bool value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setMostrarErroFormulario');
+    try {
+      return super.setMostrarErroFormulario(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic carregarAreaSetor() {
     final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
         name: '_LoteStoreBase.carregarAreaSetor');
@@ -1219,6 +1247,7 @@ isMigrateLoteLoading: ${isMigrateLoteLoading},
 loteSelecionado: ${loteSelecionado},
 areaSelecionada: ${areaSelecionada},
 setorSelecionadoMigrar: ${setorSelecionadoMigrar},
+mostrarErroFormulario: ${mostrarErroFormulario},
 showTextFormField: ${showTextFormField},
 isEditing: ${isEditing},
 isBandeijasEditing: ${isBandeijasEditing},
