@@ -358,7 +358,6 @@ abstract class _ReservatoriosStoreBase with Store {
     if (reservatorio.solucao?.id != null) {
       setSolucaoNutritiva(reservatorio.solucao!);
     }
-    print(isSolucaoNutritivaValid);
   }
 
   @action

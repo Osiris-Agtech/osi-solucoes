@@ -327,7 +327,6 @@ abstract class _SolucaoStoreBase with Store {
     int indexSelectedFertilizantes = 0;
 
     for (Fertilizante fertilizante in selectedFertilizantes) {
-      print(fertilizante.nome);
       for (FertilizanteNutriente item
           in fertilizante.fertilizantes_nutrientes ?? []) {
         /// Verifica se o nitriente já existe na lista final
