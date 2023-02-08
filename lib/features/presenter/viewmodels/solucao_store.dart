@@ -34,6 +34,9 @@ abstract class _SolucaoStoreBase with Store {
   bool isSolucaoDetalhesLoading = false;
 
   @observable
+  bool mostrarErroFormulario = false;
+
+  @observable
   int dotIndicator = 1;
 
   @observable
@@ -77,6 +80,9 @@ abstract class _SolucaoStoreBase with Store {
       dotIndicator = value;
     }
   }
+
+  @action
+  setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
 
   @action
   setExpandedCard(int index) {
@@ -303,6 +309,37 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
+  validateNewSN() {
+    bool validate =
+        novaSolucaoName.text.isNotEmpty && expandedFertilizantes.isNotEmpty;
+
+    for (var item in expandedFertilizantes) {
+      try {
+        if (item.quantidade.isEmpty ||
+            double.parse(
+                    item.quantidade.replaceAll('.', '').replaceAll(',', '.')) ==
+                0) {
+          validate = false;
+          toastError(
+              message:
+                  'A quantidade do fertilizante não pode ser 0, verifique sua lista e preencha corretamente.');
+          return validate;
+        }
+      } catch (e) {
+        e.printError();
+        validate = false;
+        toastError(
+            message:
+                'Quantidade do fertilizante com valor inválido, verifique sua lista e preencha corretamente.');
+        return validate;
+      }
+    }
+
+    mostrarErroFormulario = !validate;
+    return validate;
+  }
+
+  @action
   clearAll() {
     novaSolucaoName.clear();
     expandedFertilizantes.clear();
@@ -425,13 +462,7 @@ abstract class _SolucaoStoreBase with Store {
 
   @action
   deleteSolucaoConcentradaToTheList(int index) {
-    if (solucaoConcentradaList.length == 1) {
-      solucaoConcentradaList.clear();
-      solucaoConcentradaList.add(SolucaoConcentrada());
-      solucaoConcentradaList = List.from(solucaoConcentradaList);
-    } else {
-      solucaoConcentradaList.removeAt(index);
-      solucaoConcentradaList = List.from(solucaoConcentradaList);
-    }
+    solucaoConcentradaList.removeAt(index);
+    solucaoConcentradaList = List.from(solucaoConcentradaList);
   }
 }

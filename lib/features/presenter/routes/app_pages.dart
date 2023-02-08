@@ -223,6 +223,7 @@ class AppPages {
     GetPage(
       name: Routes.cadastrarSolucaoConcentradaPage,
       page: () => const CadastrarSolucaoConcentradaPage(),
+      transition: Transition.rightToLeft,
     ),
   ];
 }

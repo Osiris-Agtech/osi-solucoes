@@ -116,6 +116,23 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
+  final _$mostrarErroFormularioAtom =
+      Atom(name: '_SolucaoStoreBase.mostrarErroFormulario');
+
+  @override
+  bool get mostrarErroFormulario {
+    _$mostrarErroFormularioAtom.reportRead();
+    return super.mostrarErroFormulario;
+  }
+
+  @override
+  set mostrarErroFormulario(bool value) {
+    _$mostrarErroFormularioAtom.reportWrite(value, super.mostrarErroFormulario,
+        () {
+      super.mostrarErroFormulario = value;
+    });
+  }
+
   final _$dotIndicatorAtom = Atom(name: '_SolucaoStoreBase.dotIndicator');
 
   @override
@@ -384,6 +401,17 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   }
 
   @override
+  dynamic setMostrarErroFormulario(bool value) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.setMostrarErroFormulario');
+    try {
+      return super.setMostrarErroFormulario(value);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setExpandedCard(int index) {
     final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
         name: '_SolucaoStoreBase.setExpandedCard');
@@ -472,6 +500,17 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   }
 
   @override
+  dynamic validateNewSN() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.validateNewSN');
+    try {
+      return super.validateNewSN();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic clearAll() {
     final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
         name: '_SolucaoStoreBase.clearAll');
@@ -534,6 +573,7 @@ isSolucaoListLoading: ${isSolucaoListLoading},
 isNovaSolucaoLoading: ${isNovaSolucaoLoading},
 isFertilizanteListLoading: ${isFertilizanteListLoading},
 isSolucaoDetalhesLoading: ${isSolucaoDetalhesLoading},
+mostrarErroFormulario: ${mostrarErroFormulario},
 dotIndicator: ${dotIndicator},
 novaSolucao: ${novaSolucao},
 solucaoList: ${solucaoList},

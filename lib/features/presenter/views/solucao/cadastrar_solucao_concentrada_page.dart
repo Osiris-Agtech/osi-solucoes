@@ -20,7 +20,6 @@ class _CadastrarSolucaoConcentradaPageState
 
   @override
   void initState() {
-    store.addToSolucaoConcentradaList();
     super.initState();
   }
 
@@ -65,14 +64,12 @@ class _CadastrarSolucaoConcentradaPageState
                     child: Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 20),
                       child: Container(
+                        width: double.infinity,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: const Color(0xffF5F5F5),
                         ),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: _cardListSolucao(),
-                        ),
+                        child: _cardListSolucao(),
                       ),
                     ),
                   ),
@@ -310,33 +307,35 @@ class _CadastrarSolucaoConcentradaPageState
   }
 
   _cardListSolucao() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: const Color(0xffF5F5F5),
-      ),
-      child: Observer(builder: (_) {
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: store.solucaoConcentradaList.length,
-          physics: const BouncingScrollPhysics(),
-          itemBuilder: (_, index) {
-            if (index == (store.solucaoConcentradaList.length - 1)) {
-              return Column(
-                children: [
-                  _cardSolucaoConcentrada(index),
-                  _addCard(),
-                ],
-              );
-            }
-            return _cardSolucaoConcentrada(index);
-          },
+    return Observer(builder: (_) {
+      if (store.solucaoConcentradaList.isEmpty) {
+        return Column(
+          children: [
+            _addCard(),
+          ],
         );
-      }),
-    );
+      }
+
+      return ListView.builder(
+        shrinkWrap: true,
+        itemCount: store.solucaoConcentradaList.length,
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (_, index) {
+          if (index == (store.solucaoConcentradaList.length - 1)) {
+            return Column(
+              children: [
+                _cardSolucaoConcentrada(index),
+                _addCard(),
+              ],
+            );
+          }
+          return _cardSolucaoConcentrada(index);
+        },
+      );
+    });
   }
 
-  Padding _addCard() {
+  _addCard() {
     return Padding(
       padding: const EdgeInsets.only(
         top: 10,
@@ -359,6 +358,7 @@ class _CadastrarSolucaoConcentradaPageState
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: const [
                   Icon(
                     Icons.add_circle_outline,

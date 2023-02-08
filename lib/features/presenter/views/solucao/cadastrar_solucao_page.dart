@@ -73,8 +73,50 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
                     subtitulo(),
                     const SizedBox(height: 10),
                     _nome(context),
+                    Observer(builder: (_) {
+                      return Visibility(
+                        visible: store.mostrarErroFormulario &&
+                            store.novaSolucaoName.text.isEmpty,
+                        child: const Padding(
+                          padding: EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 8.0,
+                          ),
+                          child: Text(
+                            'Nome obrigatório',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Constants.kErrorColor,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                     const Divider(),
                     _fertilizantes(context),
+                    Observer(builder: (_) {
+                      return Visibility(
+                        visible: store.mostrarErroFormulario &&
+                            store.expandedFertilizantes.isEmpty,
+                        child: const Padding(
+                          padding: EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 8.0,
+                          ),
+                          child: Text(
+                            'Adicione fertilizante à lista',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Constants.kErrorColor,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                     Expanded(
                       child: Observer(builder: (_) {
                         if (store.expandedFertilizantes.isEmpty) {
@@ -605,7 +647,10 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
             );
           }),
           onPressed: () {
-            Get.toNamed(Routes.cadastrarSolucaoConcentradaPage);
+            // Validate Page
+            if (store.validateNewSN()) {
+              Get.toNamed(Routes.cadastrarSolucaoConcentradaPage);
+            }
           },
         ),
       ),
