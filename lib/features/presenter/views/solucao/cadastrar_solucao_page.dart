@@ -649,6 +649,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
           onPressed: () {
             // Validate Page
             if (store.validateNewSN()) {
+              store.setFertilizantesEscolhidos();
               Get.toNamed(Routes.cadastrarSolucaoConcentradaPage);
             }
           },

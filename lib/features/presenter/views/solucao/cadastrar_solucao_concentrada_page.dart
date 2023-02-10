@@ -467,32 +467,50 @@ class _CadastrarSolucaoConcentradaPageState
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 2,
-                  itemBuilder: (_, indexFert) {
-                    return Row(
-                      children: const [
-                        Text(
-                          "• ",
-                          style: TextStyle(
-                            fontSize: 30,
-                            color: Constants.kGreyMedium,
-                          ),
+                child: Observer(builder: (_) {
+                  if (store.solucaoConcentradaList[index]
+                          .solucoes_fertilizantes_concentradas?.isEmpty ??
+                      true) {
+                    return const Center(
+                      child: Text(
+                        'Nenhum fertilizante\nadicionado',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontStyle: FontStyle.italic,
+                          color: Constants.kGreyMedium,
                         ),
-                        Text(
-                          'Fertilizante #1',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontStyle: FontStyle.italic,
-                            color: Constants.kGreyMedium,
-                          ),
-                        ),
-                      ],
+                      ),
                     );
-                  },
-                ),
+                  }
+                  return ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: store.solucaoConcentradaList[index]
+                        .solucoes_fertilizantes_concentradas?.length,
+                    itemBuilder: (_, indexFert) {
+                      return Row(
+                        children: const [
+                          Text(
+                            "• ",
+                            style: TextStyle(
+                              fontSize: 30,
+                              color: Constants.kGreyMedium,
+                            ),
+                          ),
+                          Text(
+                            'Fertilizante #1',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontStyle: FontStyle.italic,
+                              color: Constants.kGreyMedium,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -565,51 +583,61 @@ class _CadastrarSolucaoConcentradaPageState
                   ),
                   const SizedBox(height: 16),
                   Observer(builder: (_) {
-                    if (store.expandedFertilizantes.isEmpty) {
+                    if (store.showFertilizantesNaoUtilizados.isEmpty) {
                       return const Center(
-                        child: Text(
-                          'Atenção: Ainda não foi adicionado nenhum fertilizante na etapa anterior',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                            color: Constants.kGreyMedium,
+                        child: Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Text(
+                            'Nenhum fertilizantes disponível para adição',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal,
+                              color: Constants.kGreyMedium,
+                            ),
                           ),
                         ),
                       );
                     }
                     return ListView.builder(
                       shrinkWrap: true,
-                      itemCount: store.expandedFertilizantes.length,
+                      itemCount: store.showFertilizantesNaoUtilizados.length,
                       itemBuilder: (context, index) {
-                        return Row(
-                          children: [
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              alignment: Alignment.centerLeft,
-                              icon: const Icon(
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            right: 10,
+                            top: index == 0 ? 10 : 0,
+                          ),
+                          child: ListTile(
+                            leading: Observer(builder: (_) {
+                              if (!store.showFertilizantesNaoUtilizados[index]
+                                  .selected) {
+                                return const Icon(
+                                    Icons.check_box_outline_blank_rounded);
+                              }
+                              return const Icon(
                                 Icons.check_box,
                                 color: Constants.kPrimaryColor,
-                              ),
-                              onPressed: () {
-                                // store.selectLotesByLote(
-                                //     store.selectedLotes[index], false);
-                              },
+                              );
+                            }),
+                            dense: true,
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 10),
+                            title: Text(
+                              store.showFertilizantesNaoUtilizados[index]
+                                      .fertilizante.nome ??
+                                  "---",
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w500),
                             ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                store.expandedFertilizantes[index].fertilizante
-                                        .nome ??
-                                    'Não informado',
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  color: Constants.kText2,
-                                ),
-                              ),
-                            ),
-                          ],
+                            onTap: () {
+                              store.changeSelecaoFertilizantesEscolhidos(
+                                index,
+                                !store.showFertilizantesNaoUtilizados[index]
+                                    .selected,
+                              );
+                            },
+                          ),
                         );
                       },
                     );
@@ -622,20 +650,21 @@ class _CadastrarSolucaoConcentradaPageState
                       width: double.infinity,
                       child: Observer(builder: (_) {
                         return ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Constants.kPrimaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Constants.kPrimaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
-                            child: const Text(
-                              "Confirmar",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
+                          ),
+                          child: const Text(
+                            "Confirmar",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
                             ),
-                            onPressed: () {});
+                          ),
+                          onPressed: () {},
+                        );
                       }),
                     ),
                   )

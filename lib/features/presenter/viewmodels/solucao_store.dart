@@ -434,12 +434,56 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   // #################### INICIO CADASTRO SOLUÇÃO CONCENTRADA #######################
+  @observable
+  List<SelecaoFertilizante> fertilizantesEscolhidos = [];
 
   @observable
   TextEditingController fatorConcentracao = TextEditingController();
 
   @observable
   List<SolucaoConcentrada> solucaoConcentradaList = [];
+
+  @action
+  setFertilizantesEscolhidos() {
+    fertilizantesEscolhidos = [];
+    for (var item in expandedFertilizantes) {
+      fertilizantesEscolhidos.add(
+        SelecaoFertilizante(
+          selected: false,
+          fertilizante: item.fertilizante,
+        ),
+      );
+    }
+    fertilizantesEscolhidos = List.from(fertilizantesEscolhidos);
+  }
+
+  @action
+  changeSelecaoFertilizantesEscolhidos(int index, bool value) {
+    fertilizantesEscolhidos[index].selected = value;
+    fertilizantesEscolhidos = List.from(fertilizantesEscolhidos);
+  }
+
+  @action
+  addFertilizanteParaSolucao(int indexSolucaoConcentrada) {
+    for (var item in showFertilizantesNaoUtilizados) {
+      if (item.selected) {
+        if (solucaoConcentradaList[indexSolucaoConcentrada]
+                .solucoes_fertilizantes_concentradas ==
+            null) {
+          solucaoConcentradaList[indexSolucaoConcentrada]
+              .solucoes_fertilizantes_concentradas = [];
+        }
+        solucaoConcentradaList[indexSolucaoConcentrada]
+            .solucoes_fertilizantes_concentradas!
+            .add(SolucaoFertilizanteConcentrada());
+
+        /// ARRUMAR PRIMEIRO A LÓGICA DA SOLUÇÃO CONCENTRADA NO APP.
+        /// AO INVÉS DE FAZER O ADD DE NOVA LINHA NO BANCO COM A SC
+        /// É PRECISO EDITAR A LINHA QUE JÁ VAI SER ADICIONADA DO FERTILIZANTES
+        /// COM O ID DESSA SOLUÇÃO CONCENTRADA
+      }
+    }
+  }
 
   @action
   clearSolucaoConcentrada() {
@@ -464,5 +508,19 @@ abstract class _SolucaoStoreBase with Store {
   deleteSolucaoConcentradaToTheList(int index) {
     solucaoConcentradaList.removeAt(index);
     solucaoConcentradaList = List.from(solucaoConcentradaList);
+  }
+
+  @computed
+  List<SelecaoFertilizante> get showFertilizantesNaoUtilizados {
+    List<SelecaoFertilizante> list = fertilizantesEscolhidos;
+
+    for (var solucaoConcentrada in solucaoConcentradaList) {
+      for (SolucaoFertilizanteConcentrada item
+          in solucaoConcentrada.solucoes_fertilizantes_concentradas ?? []) {
+        list.removeWhere((element) => element.fertilizante.id == item.id);
+      }
+    }
+
+    return list;
   }
 }

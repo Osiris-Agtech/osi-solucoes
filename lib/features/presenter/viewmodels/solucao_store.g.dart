@@ -32,6 +32,15 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
           Computed<List<SolucaoNutritiva>>(() => super.searchSolucao,
               name: '_SolucaoStoreBase.searchSolucao'))
       .value;
+  Computed<List<SelecaoFertilizante>>? _$showFertilizantesNaoUtilizadosComputed;
+
+  @override
+  List<SelecaoFertilizante> get showFertilizantesNaoUtilizados =>
+      (_$showFertilizantesNaoUtilizadosComputed ??=
+              Computed<List<SelecaoFertilizante>>(
+                  () => super.showFertilizantesNaoUtilizados,
+                  name: '_SolucaoStoreBase.showFertilizantesNaoUtilizados'))
+          .value;
 
   final _$valueAtom = Atom(name: '_SolucaoStoreBase.value');
 
@@ -307,6 +316,23 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
+  final _$fertilizantesEscolhidosAtom =
+      Atom(name: '_SolucaoStoreBase.fertilizantesEscolhidos');
+
+  @override
+  List<SelecaoFertilizante> get fertilizantesEscolhidos {
+    _$fertilizantesEscolhidosAtom.reportRead();
+    return super.fertilizantesEscolhidos;
+  }
+
+  @override
+  set fertilizantesEscolhidos(List<SelecaoFertilizante> value) {
+    _$fertilizantesEscolhidosAtom
+        .reportWrite(value, super.fertilizantesEscolhidos, () {
+      super.fertilizantesEscolhidos = value;
+    });
+  }
+
   final _$fatorConcentracaoAtom =
       Atom(name: '_SolucaoStoreBase.fatorConcentracao');
 
@@ -522,6 +548,39 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   }
 
   @override
+  dynamic setFertilizantesEscolhidos() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.setFertilizantesEscolhidos');
+    try {
+      return super.setFertilizantesEscolhidos();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic changeSelecaoFertilizantesEscolhidos(int index, bool value) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.changeSelecaoFertilizantesEscolhidos');
+    try {
+      return super.changeSelecaoFertilizantesEscolhidos(index, value);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic addFertilizanteParaSolucao(int indexSolucaoConcentrada) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.addFertilizanteParaSolucao');
+    try {
+      return super.addFertilizanteParaSolucao(indexSolucaoConcentrada);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic clearSolucaoConcentrada() {
     final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
         name: '_SolucaoStoreBase.clearSolucaoConcentrada');
@@ -585,11 +644,13 @@ novaSolucaoName: ${novaSolucaoName},
 solucaoSelecionada: ${solucaoSelecionada},
 condutividadeEletrica: ${condutividadeEletrica},
 searchSolucaoText: ${searchSolucaoText},
+fertilizantesEscolhidos: ${fertilizantesEscolhidos},
 fatorConcentracao: ${fatorConcentracao},
 solucaoConcentradaList: ${solucaoConcentradaList},
 selectedFertilizantes: ${selectedFertilizantes},
 nutrientesCalculados: ${nutrientesCalculados},
-searchSolucao: ${searchSolucao}
+searchSolucao: ${searchSolucao},
+showFertilizantesNaoUtilizados: ${showFertilizantesNaoUtilizados}
     ''';
   }
 }
