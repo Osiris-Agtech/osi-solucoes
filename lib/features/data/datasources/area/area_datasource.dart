@@ -139,7 +139,40 @@ class AreaDatasource implements IAreaDatasource {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     try {
-      const String readRepositories = r'''
+      String readRepositories = '';
+      if (novaArea.localizacao?.id == null) {
+        readRepositories = r'''
+        mutation CreateOneArea ($nome: String!, $descricao: String!, $tipo: String!, $contaId: Int!) {
+          createOneArea(data: {
+            nome: $nome,
+            descricao: $descricao,
+            tipo: $tipo,
+            conta: {
+              connect: {
+                id: $contaId
+              }
+            },
+          }) {
+            id
+            nome
+            descricao
+            tipo
+            conta {
+              nome
+            }
+            localizacao {
+              id
+              cep
+              endereco
+            }
+            setores {
+              nome
+            }
+          }
+        } 
+      ''';
+      } else {
+        readRepositories = r'''
         mutation CreateOneArea ($nome: String!, $descricao: String!, $tipo: String!, $contaId: Int!, $localizacaoId: Int!) {
           createOneArea(data: {
             nome: $nome,
@@ -174,6 +207,7 @@ class AreaDatasource implements IAreaDatasource {
           }
         } 
       ''';
+      }
 
       final MutationOptions? options;
 
@@ -186,7 +220,8 @@ class AreaDatasource implements IAreaDatasource {
           'tipo': novaArea.tipo,
           'creat_at': novaArea.created_at,
           'contaId': novaArea.conta!.id,
-          'localizacaoId': novaArea.localizacao!.id,
+          if (novaArea.localizacao?.id != null)
+            'localizacaoId': novaArea.localizacao?.id,
         },
       );
 

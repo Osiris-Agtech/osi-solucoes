@@ -82,17 +82,18 @@ Widget fertilizantePage(
                 color: const Color(0xffF5F5F5),
               ),
               child: Observer(builder: (_) {
-                if (store.isSolucaoListLoading) {
+                if (store.isFertilizanteListLoading) {
                   return const Center(
                     child: CircularProgressIndicator(
                       strokeWidth: 1,
                     ),
                   );
                 }
-                if (store.solucaoList.isEmpty) {
+                if (store.fertilizanteList.isEmpty) {
                   return const Center(
                     child: Text(
                       'Não há soluções\ncadastradas em sua conta',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
                         color: Color(0xff6F6464),

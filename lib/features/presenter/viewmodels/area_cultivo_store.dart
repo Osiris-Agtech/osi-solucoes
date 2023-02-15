@@ -218,6 +218,7 @@ abstract class _AreaCultivoStoreBase with Store {
     localizaoListResult.fold(
       (err) {
         //toastError(message: err.message);
+        localizacaoList = List.from([]);
       },
       (data) async {
         localizacaoList = List.from(data);

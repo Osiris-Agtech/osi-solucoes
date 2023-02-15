@@ -10,7 +10,7 @@ colheita(BuildContext context, LoteStore store) {
         'Colheita',
         style: TextStyle(
           color: Constants.kText2,
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -62,7 +62,7 @@ transplantio(BuildContext context, LoteStore store) {
         'Transplantio',
         style: TextStyle(
           color: Constants.kText2,
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -115,7 +115,7 @@ semeadura(BuildContext context, LoteStore store) {
         'Semeadura',
         style: TextStyle(
           color: Constants.kText2,
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -167,7 +167,7 @@ registro(BuildContext context, LoteStore store) {
         'Registro',
         style: TextStyle(
           color: Constants.kText2,
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: FontWeight.w500,
         ),
       ),

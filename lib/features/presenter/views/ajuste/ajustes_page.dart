@@ -158,8 +158,14 @@ class AjustesPageState extends State<AjustesPage> {
                                 },
                                 emptyBuilder: (ctx, _) {
                                   return const Center(
-                                    child:
-                                        Text('Nenhum reservatório encontrado'),
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 8.0),
+                                      child: Text(
+                                        'Nenhum reservatório com solução nutritiva encontrado',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
                                   );
                                 },
                                 dropDownButton: const Icon(

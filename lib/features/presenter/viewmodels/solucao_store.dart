@@ -110,7 +110,7 @@ abstract class _SolucaoStoreBase with Store {
     solucoes.fold(
       (err) {
         solucaoList = ObservableList.of([]);
-        toastError(message: err.message);
+        // toastError(message: err.message);
       },
       (data) async {
         solucaoList = ObservableList.of(data);
@@ -185,7 +185,7 @@ abstract class _SolucaoStoreBase with Store {
     fertilizantes.fold(
       (err) {
         fertilizanteList = ObservableList.of([]);
-        toastError(message: err.message);
+        // toastError(message: err.message);
       },
       (data) async {
         for (var item in data) {

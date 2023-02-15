@@ -317,7 +317,7 @@ abstract class _ReservatoriosStoreBase with Store {
     solucoes.fold(
       (err) {
         solucaoList = ObservableList.of([]);
-        toastError(message: err.message);
+        // toastError(message: err.message);
       },
       (data) async {
         solucaoList = ObservableList.of(data);
