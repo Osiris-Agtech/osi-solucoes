@@ -8,7 +8,8 @@ import 'package:localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:osi_solucoes/features/presenter/views/ajuste/resultadoajuste_page.dart';
+import 'package:osi_solucoes/features/presenter/views/home/home_page.dart';
 
 import '../../viewmodels/cadastro_store.dart';
 
@@ -91,8 +92,8 @@ class CadastroPageState extends State<CadastroPage> {
                         padding: EdgeInsets.only(top: size.height * 0.02),
                         child: Center(
                           child: Stack(
-                            children: [
-                              const CircleAvatar(
+                            children: const [
+                              CircleAvatar(
                                 backgroundColor: Constants.kPrimaryColor,
                                 child: Icon(
                                   Icons.person,
@@ -101,19 +102,19 @@ class CadastroPageState extends State<CadastroPage> {
                                 ),
                                 minRadius: 45,
                               ),
-                              Positioned(
-                                bottom: 0,
-                                right: (size.width * 0.5 - 55),
-                                child: Material(
-                                  borderRadius: BorderRadius.circular(50),
-                                  elevation: 3,
-                                  child: const CircleAvatar(
-                                    backgroundColor:
-                                        Constants.kSecondBackgroundColor,
-                                    child: Icon(Icons.edit_outlined),
-                                  ),
-                                ),
-                              )
+                              // Positioned(
+                              //   bottom: 0,
+                              //   right: (size.width * 0.5 - 55),
+                              //   child: Material(
+                              //     borderRadius: BorderRadius.circular(50),
+                              //     elevation: 3,
+                              //     child: const CircleAvatar(
+                              //       backgroundColor:
+                              //           Constants.kSecondBackgroundColor,
+                              //       child: Icon(Icons.edit_outlined),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
@@ -255,25 +256,30 @@ class CadastroPageState extends State<CadastroPage> {
                       }),
                       Padding(
                         padding: EdgeInsets.only(
-                            top: size.height * 0.02,
-                            left: size.width * 0.1,
-                            right: size.width * 0.1),
+                          top: size.height * 0.02,
+                          left: size.width * 0.1,
+                          right: size.width * 0.1,
+                        ),
                         child: formCadastro(
-                            controller: store.email,
-                            labelText: "formEmail".i18n()),
+                          controller: store.email,
+                          labelText: "formEmail".i18n(),
+                        ),
                       ),
                       Padding(
-                          padding: EdgeInsets.only(
-                              top: size.height * 0.02,
-                              left: size.width * 0.1,
-                              right: size.width * 0.1),
-                          child: Observer(
-                            builder: (_) {
-                              return formCadastro(
-                                  controller: store.senha,
-                                  labelText: "formSenha".i18n());
-                            },
-                          )),
+                        padding: EdgeInsets.only(
+                          top: size.height * 0.02,
+                          left: size.width * 0.1,
+                          right: size.width * 0.1,
+                        ),
+                        child: Observer(
+                          builder: (_) {
+                            return formCadastro(
+                              controller: store.senha,
+                              labelText: "formSenha".i18n(),
+                            );
+                          },
+                        ),
+                      ),
                       Padding(
                           padding: EdgeInsets.only(
                               top: size.height * .04, bottom: 30),
@@ -299,20 +305,42 @@ class CadastroPageState extends State<CadastroPage> {
                                         const Duration(seconds: 2));
                                     if (response ==
                                         FailureMessage.userNotFoundMessage) {
-                                      store.gerarCodigo();
-                                      var response2 =
-                                          await store.enviarCodigoEmail();
-                                      if (response2 == "sucesso") {
-                                        Navigator.pop(context);
-                                        Get.toNamed(
-                                            Routes.confirmsegurancaPage);
-                                      } else {
-                                        showErrorDialog(context, response2);
-                                        await Future.delayed(
-                                            const Duration(seconds: 2));
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                      }
+                                      /// #### FLUXO SEM VALIDAÇÃO DE E-MAIL ####
+                                      String res = await store.cadastraUser();
+                                      await Future.delayed(
+                                          const Duration(seconds: 2));
+                                      res == "sucesso"
+                                          ? {
+                                              showDoneAnimation(context),
+                                              await Future.delayed(
+                                                  const Duration(
+                                                      milliseconds: 1400)),
+                                              Get.offAll(
+                                                  () => const HomePage()),
+                                            }
+                                          : {
+                                              showErrorDialog(context, res),
+                                              await Future.delayed(
+                                                  const Duration(seconds: 2)),
+                                              Navigator.pop(context),
+                                              Navigator.pop(context),
+                                            };
+
+                                      /// ###### FLUXO COM VALIDAÇÃO DE E-MAIL #####
+                                      // store.gerarCodigo();
+                                      // var response2 =
+                                      //     await store.enviarCodigoEmail();
+                                      // if (response2 == "sucesso") {
+                                      //   Navigator.pop(context);
+                                      //   Get.toNamed(
+                                      //       Routes.confirmsegurancaPage);
+                                      // } else {
+                                      //   showErrorDialog(context, response2);
+                                      //   await Future.delayed(
+                                      //       const Duration(seconds: 2));
+                                      //   Navigator.pop(context);
+                                      //   Navigator.pop(context);
+                                      // }
                                     } else {
                                       showErrorDialog(context, response);
                                       await Future.delayed(

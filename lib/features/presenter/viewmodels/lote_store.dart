@@ -534,7 +534,7 @@ abstract class _LoteStoreBase with Store {
   @action
   registrarLote() async {
     isNovoLoteLoading = true;
-    await Future.delayed(const Duration(seconds: 1));
+
     novoLote = Lote(
       nome: novoLoteName.text,
       setor: novoLoteSetor,

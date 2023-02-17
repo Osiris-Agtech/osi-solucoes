@@ -48,6 +48,23 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
+  final _$mostrarErroFormularioAtom =
+      Atom(name: '_SolucaoStoreBase.mostrarErroFormulario');
+
+  @override
+  bool get mostrarErroFormulario {
+    _$mostrarErroFormularioAtom.reportRead();
+    return super.mostrarErroFormulario;
+  }
+
+  @override
+  set mostrarErroFormulario(bool value) {
+    _$mostrarErroFormularioAtom.reportWrite(value, super.mostrarErroFormulario,
+        () {
+      super.mostrarErroFormulario = value;
+    });
+  }
+
   final _$isSolucaoListLoadingAtom =
       Atom(name: '_SolucaoStoreBase.isSolucaoListLoading');
 
@@ -417,6 +434,28 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   }
 
   @override
+  dynamic validarFertilizantes() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.validarFertilizantes');
+    try {
+      return super.validarFertilizantes();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic validarCadastro() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.validarCadastro');
+    try {
+      return super.validarCadastro();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   double calcularCoeficienteEletrico() {
     final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
         name: '_SolucaoStoreBase.calcularCoeficienteEletrico');
@@ -453,6 +492,7 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   String toString() {
     return '''
 value: ${value},
+mostrarErroFormulario: ${mostrarErroFormulario},
 isSolucaoListLoading: ${isSolucaoListLoading},
 isNovaSolucaoLoading: ${isNovaSolucaoLoading},
 isFertilizanteListLoading: ${isFertilizanteListLoading},

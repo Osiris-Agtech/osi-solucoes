@@ -41,6 +41,56 @@ abstract class _AjustesStoreBase with Store {
   TextEditingController reservatorio = TextEditingController();
 
   @action
+  volumeAjusteAgua() =>
+      double.parse(
+          volumeDesejado.text.replaceAll('.', '').replaceAll(',', '.')) -
+      double.parse(volumeAtual.text.replaceAll('.', '').replaceAll(',', '.'));
+
+  @action
+  validarCampos() {
+    // Condutividade Elétrica Atual
+    if (cEletricoAtual.text.isEmpty ||
+        double.parse(
+                cEletricoAtual.text.replaceAll('.', '').replaceAll(',', '.')) <=
+            0) {
+      toastError(
+          message: 'Preencha um valor para "Condutividade Elétrica Atual"');
+      return false;
+    }
+
+    // Volume Desejado
+    if (cEletricoDesejado.text.isEmpty ||
+        double.parse(cEletricoDesejado.text
+                .replaceAll('.', '')
+                .replaceAll(',', '.')) <=
+            0) {
+      toastError(
+          message: 'Preencha um valor para "Condutividade Elétrica Desejado"');
+      return false;
+    }
+
+    // Volume Atual
+    if (volumeAtual.text.isEmpty ||
+        double.parse(
+                volumeAtual.text.replaceAll('.', '').replaceAll(',', '.')) <=
+            0) {
+      toastError(message: 'Preencha um valor para "Volume Atual"');
+      return false;
+    }
+
+    // Volume Desejado
+    if (volumeDesejado.text.isEmpty ||
+        double.parse(
+                volumeDesejado.text.replaceAll('.', '').replaceAll(',', '.')) <=
+            0) {
+      toastError(message: 'Preencha um valor para "Volume Desejado"');
+      return false;
+    }
+
+    return true;
+  }
+
+  @action
   clearAll() {
     cEletricoAtual.clear();
     cEletricoDesejado.clear();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/utils/decimal_format.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/ajustes_store.dart';
 import 'package:rive/rive.dart';
 
@@ -267,9 +268,12 @@ class TabSolucaoConcentrada extends StatelessWidget {
                 top: MediaQuery.of(context).size.height * 0.007),
             child: Row(
               children: [
-                const Text(
-                  "500 Litros",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                Text(
+                  "${getCurrency(store.volumeAjusteAgua())} Litros",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
@@ -499,9 +503,12 @@ class TabFertilizantes extends StatelessWidget {
                 top: MediaQuery.of(context).size.height * 0.007),
             child: Row(
               children: [
-                const Text(
-                  "500 Litros",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                Text(
+                  "${getCurrency(store.volumeAjusteAgua())} Litros",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(

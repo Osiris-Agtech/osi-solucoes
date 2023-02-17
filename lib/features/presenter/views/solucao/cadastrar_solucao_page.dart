@@ -71,6 +71,27 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
                     subtitulo(),
                     const SizedBox(height: 10),
                     _nome(context),
+                    Observer(builder: (_) {
+                      return Visibility(
+                        visible: store.mostrarErroFormulario &&
+                            store.novaSolucaoName.text.isEmpty,
+                        child: const Padding(
+                          padding: EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 8.0,
+                          ),
+                          child: Text(
+                            'Nome obrigatório',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Constants.kErrorColor,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                     const Divider(),
                     _fertilizantes(context),
                     Expanded(
@@ -603,7 +624,9 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
             );
           }),
           onPressed: () {
-            store.cadastrarSolucaoNutritiva();
+            if (store.validarCadastro()) {
+              store.cadastrarSolucaoNutritiva();
+            }
           },
         ),
       ),

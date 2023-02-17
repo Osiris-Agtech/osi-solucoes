@@ -246,11 +246,11 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
             ),
             onPressed: () {
               if (store.validarRegistro()) {
-                // if (store.isEditing) {
-                //   store.alterarLote();
-                // } else {
-                //   store.registrarLote();
-                // }
+                if (store.isEditing) {
+                  store.alterarLote();
+                } else {
+                  store.registrarLote();
+                }
               }
             },
           ),

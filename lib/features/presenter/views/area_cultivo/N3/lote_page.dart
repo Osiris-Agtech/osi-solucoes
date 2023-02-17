@@ -76,6 +76,12 @@ class _LotePageState extends State<LotePage> {
                         child: Center(
                           child: Text(
                             "Não há lotes cadastrados neste setor",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xff6F6464),
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w800,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ),

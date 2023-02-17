@@ -28,7 +28,7 @@ Widget receitaPage(BuildContext context, CarouselController controlerPages) {
                   color: Colors.black),
               children: <TextSpan>[
                 TextSpan(
-                    text: 'receita base ',
+                    text: 'solução base ',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Constants.kPrimaryColor)),
@@ -63,7 +63,7 @@ Widget receitaPage(BuildContext context, CarouselController controlerPages) {
         const Padding(
           padding: EdgeInsets.only(top: 15, left: 20),
           child: Text(
-            'Todas as Receitas Cadastradas',
+            'Todas as Soluções Nutritivas Cadastradas',
             style: TextStyle(
               fontSize: 14,
               color: Color(0xff6F6464),
@@ -92,6 +92,7 @@ Widget receitaPage(BuildContext context, CarouselController controlerPages) {
                   return const Center(
                     child: Text(
                       'Não há soluções\ncadastradas em sua conta',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
                         color: Color(0xff6F6464),

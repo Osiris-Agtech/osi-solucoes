@@ -242,6 +242,28 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
   }
 
   @override
+  dynamic volumeAjusteAgua() {
+    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
+        name: '_AjustesStoreBase.volumeAjusteAgua');
+    try {
+      return super.volumeAjusteAgua();
+    } finally {
+      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic validarCampos() {
+    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
+        name: '_AjustesStoreBase.validarCampos');
+    try {
+      return super.validarCampos();
+    } finally {
+      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic clearAll() {
     final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
         name: '_AjustesStoreBase.clearAll');

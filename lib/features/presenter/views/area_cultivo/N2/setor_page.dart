@@ -77,6 +77,12 @@ class SetorPageState extends State<SetorPage> {
                         child: Center(
                           child: Text(
                             "Não há setores cadastrados nesta área de cultivo",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xff6F6464),
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w800,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ),
