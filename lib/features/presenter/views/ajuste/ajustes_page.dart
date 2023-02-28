@@ -40,13 +40,6 @@ class AjustesPageState extends State<AjustesPage> {
 
   @override
   Widget build(BuildContext context) {
-    const snackBar = SnackBar(
-      backgroundColor: Colors.white,
-      content: Text(
-        "Campo 'Buscar Reservatório...' obrigatório!",
-        style: TextStyle(color: Constants.kErrorColor),
-      ),
-    );
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.white,
