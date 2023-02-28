@@ -27,4 +27,7 @@ abstract class Routes {
   static const detalhesCadernoCampoPage = '/detalhesCadernoCampoPage';
   static const cadastrarUsuarioPage = '/cadastrarUsuarioPage';
   static const detalhesUsuarioPage = '/detalhesUsuarioPage';
+  static const recuperarSenha = '/recuperarSenha';
+  static const codigoSeguranca = '/codigoSeguranca';
+  static const novaSenha = '/novaSenha';
 }

@@ -18,6 +18,7 @@ import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_reposi
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/gerenciar_equipe_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/recuperar_senha_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 
 import '../../features/data/datasources/area/area_datasource.dart';
@@ -91,6 +92,7 @@ Future<void> initInject() async {
   sl.registerLazySingleton<LoteStore>(() => LoteStore());
   sl.registerLazySingleton<AuthController>(() => AuthController());
   sl.registerLazySingleton<CadastroStore>(() => CadastroStore());
+  sl.registerLazySingleton<RecuperarSenhaStore>(() => RecuperarSenhaStore());
   sl.registerLazySingleton<CadernoCampoStore>(() => CadernoCampoStore());
   sl.registerLazySingleton<HomeStore>(() => HomeStore());
   sl.registerLazySingleton<LoginStore>(() => LoginStore());
