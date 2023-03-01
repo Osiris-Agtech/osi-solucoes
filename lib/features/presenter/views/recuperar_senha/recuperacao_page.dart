@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/recuperar_senha_store.dart';
 
 class RecuperarSenhaPage extends StatefulWidget {
@@ -126,16 +126,24 @@ class _RecuperarSenhaPageState extends State<RecuperarSenhaPage> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  child: const Text(
-                    "Enviar",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Observer(builder: (_) {
+                    if (recuperarSenhaStore.isLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    return const Text(
+                      "Enviar",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  }),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      Get.toNamed(Routes.codigoSeguranca);
+                      recuperarSenhaStore.verificarEmail();
                     }
                     // progressDialog.style(message: 'Enviando...');
                     // progressDialog.show();

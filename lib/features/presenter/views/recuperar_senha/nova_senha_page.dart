@@ -61,7 +61,7 @@ class _NovaSenhaPageState extends State<NovaSenhaPage> {
                   child: Observer(builder: (_) {
                     return TextFormField(
                       controller: recuperarSenhaStore.novaSenha,
-                      obscureText: true, //controller.mostrarSenha,
+                      obscureText: recuperarSenhaStore.mostrarSenha,
                       onChanged: (value) {
                         // controller.setnovaSenha(value);
                       },
@@ -102,7 +102,7 @@ class _NovaSenhaPageState extends State<NovaSenhaPage> {
                   child: Observer(builder: (_) {
                     return TextFormField(
                       controller: recuperarSenhaStore.confirmarNovaSenha,
-                      obscureText: true,
+                      obscureText: recuperarSenhaStore.mostrarConfirmarSenha,
                       onChanged: (value) {
                         // controller.setconfirmarSenha(value);
                       },
@@ -148,29 +148,25 @@ class _NovaSenhaPageState extends State<NovaSenhaPage> {
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
-                    child: const Text(
-                      "Alterar",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    child: Observer(builder: (_) {
+                      if (recuperarSenhaStore.isLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      return const Text(
+                        "Alterar",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    }),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        Get.close(3);
+                        recuperarSenhaStore.alterarSenha();
                       }
-                      // progressDialog.style(message: 'Enviando...');
-                      // progressDialog.show();
-                      // int resp =
-                      //     await controller.gerarToken(tabController.index);
-                      // Future.delayed(Duration(seconds: 2), () {
-                      //   progressDialog.hide();
-                      //   if (resp == 200) {
-                      //     Modular.to.pushNamed("/recuperar/recuperarCod/");
-                      //   } else {
-                      //     buildShowGeneralDialog(context);
-                      //   }
-                      // });
                     }, //store.registrarReservatorio(),
                   ),
                 ),

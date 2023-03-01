@@ -57,6 +57,22 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
     });
   }
 
+  final _$usuarioEncontradoAtom =
+      Atom(name: '_RecuperarSenhaStoreBase.usuarioEncontrado');
+
+  @override
+  Usuario? get usuarioEncontrado {
+    _$usuarioEncontradoAtom.reportRead();
+    return super.usuarioEncontrado;
+  }
+
+  @override
+  set usuarioEncontrado(Usuario? value) {
+    _$usuarioEncontradoAtom.reportWrite(value, super.usuarioEncontrado, () {
+      super.usuarioEncontrado = value;
+    });
+  }
+
   final _$emailAtom = Atom(name: '_RecuperarSenhaStoreBase.email');
 
   @override
@@ -179,6 +195,38 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
     });
   }
 
+  final _$verificarEmailAsyncAction =
+      AsyncAction('_RecuperarSenhaStoreBase.verificarEmail');
+
+  @override
+  Future verificarEmail() {
+    return _$verificarEmailAsyncAction.run(() => super.verificarEmail());
+  }
+
+  final _$gerarCodigoAsyncAction =
+      AsyncAction('_RecuperarSenhaStoreBase.gerarCodigo');
+
+  @override
+  Future gerarCodigo() {
+    return _$gerarCodigoAsyncAction.run(() => super.gerarCodigo());
+  }
+
+  final _$enviarCodigoAsyncAction =
+      AsyncAction('_RecuperarSenhaStoreBase.enviarCodigo');
+
+  @override
+  Future<bool> enviarCodigo() {
+    return _$enviarCodigoAsyncAction.run(() => super.enviarCodigo());
+  }
+
+  final _$alterarSenhaAsyncAction =
+      AsyncAction('_RecuperarSenhaStoreBase.alterarSenha');
+
+  @override
+  Future alterarSenha() {
+    return _$alterarSenhaAsyncAction.run(() => super.alterarSenha());
+  }
+
   final _$_RecuperarSenhaStoreBaseActionController =
       ActionController(name: '_RecuperarSenhaStoreBase');
 
@@ -238,22 +286,11 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
   }
 
   @override
-  dynamic verificarEmail() {
+  dynamic validarCodigo() {
     final _$actionInfo = _$_RecuperarSenhaStoreBaseActionController.startAction(
-        name: '_RecuperarSenhaStoreBase.verificarEmail');
+        name: '_RecuperarSenhaStoreBase.validarCodigo');
     try {
-      return super.verificarEmail();
-    } finally {
-      _$_RecuperarSenhaStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic gerarCodigo() {
-    final _$actionInfo = _$_RecuperarSenhaStoreBaseActionController.startAction(
-        name: '_RecuperarSenhaStoreBase.gerarCodigo');
-    try {
-      return super.gerarCodigo();
+      return super.validarCodigo();
     } finally {
       _$_RecuperarSenhaStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -265,6 +302,7 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
 isLoading: ${isLoading},
 mostrarSenha: ${mostrarSenha},
 mostrarConfirmarSenha: ${mostrarConfirmarSenha},
+usuarioEncontrado: ${usuarioEncontrado},
 email: ${email},
 codigoGerado: ${codigoGerado},
 codigo1: ${codigo1},

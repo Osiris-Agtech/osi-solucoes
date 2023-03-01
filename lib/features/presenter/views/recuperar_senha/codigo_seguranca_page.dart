@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/recuperar_senha_store.dart';
 
 class CodigoSegurancaPage extends StatefulWidget {
@@ -268,8 +267,7 @@ class _CodigoSegurancaPageState extends State<CodigoSegurancaPage> {
                     child: FittedBox(
                       child: InkWell(
                         onTap: () async {
-                          // int resp = await controller.reenviarToken();
-                          // print(resp);
+                          recuperarSenhaStore.enviarCodigo();
                         },
                         child: const Text(
                           'clique aqui',
@@ -314,7 +312,7 @@ class _CodigoSegurancaPageState extends State<CodigoSegurancaPage> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      Get.toNamed(Routes.novaSenha);
+                      recuperarSenhaStore.validarCodigo();
                     }
                     // progressDialog.style(message: 'Enviando...');
                     // progressDialog.show();
