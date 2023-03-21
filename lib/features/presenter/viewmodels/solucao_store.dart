@@ -37,9 +37,6 @@ abstract class _SolucaoStoreBase with Store {
   bool isSolucaoDetalhesLoading = false;
 
   @observable
-  bool mostrarErroFormulario = false;
-
-  @observable
   int dotIndicator = 1;
 
   @observable
@@ -326,6 +323,10 @@ abstract class _SolucaoStoreBase with Store {
   @action
   generateSolucaoFertilizanteConcentrada() {
     List<SolucaoFertilizanteConcentrada> list = [];
+
+    /// VERIFICAR SE A LISTA DE CONCENTRADA NÃO ESTÁ VAZIA, PARA PODER ADD O ID
+    /// DA CONCENTRADA NA LISTA ABAIXO
+
     for (var item in expandedFertilizantes) {
       list.add(
         SolucaoFertilizanteConcentrada(
@@ -512,6 +513,31 @@ abstract class _SolucaoStoreBase with Store {
         /// COM O ID DESSA SOLUÇÃO CONCENTRADA
       }
     }
+  }
+
+  @action
+  criarSolucaoConcentrada() async {
+    SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
+
+    for (var i = 0; i < solucaoConcentradaList.length; i++) {
+      SolucaoConcentrada novaConcentrada = SolucaoConcentrada(
+        nome: solucaoConcentradaList[i].nome,
+        fator_concentracao: double.tryParse(fatorConcentracao.text),
+      );
+
+      var solucaoConcentrada = await solucaoRepository
+          .cadastrarSolucaoConcentrada(novaSolucaoConcentrada: novaConcentrada);
+
+      solucaoConcentrada.fold(
+        (err) {
+          toastError(message: err.message);
+        },
+        (data) async {
+          solucaoConcentradaList[i].id = data.id;
+        },
+      );
+    }
+    return;
   }
 
   @action

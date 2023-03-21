@@ -150,7 +150,7 @@ class _CadastrarSolucaoConcentradaPageState
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        store.fatorConcentracao.text,
+                        store.fatorConcentracao.text + 'x',
                         textAlign: TextAlign.end,
                         style: const TextStyle(
                           color: Constants.kPrimaryColor,
@@ -246,7 +246,10 @@ class _CadastrarSolucaoConcentradaPageState
                   builder: (_) {
                     return TextFormField(
                       controller: store.fatorConcentracao,
-                      textCapitalization: TextCapitalization.words,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.normal,
@@ -299,6 +302,7 @@ class _CadastrarSolucaoConcentradaPageState
             );
           }),
           onPressed: () {
+            store.criarSolucaoConcentrada();
             // store.cadastrarSolucaoNutritiva();
           },
         ),

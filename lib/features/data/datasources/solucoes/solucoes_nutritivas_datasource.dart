@@ -3,6 +3,7 @@ import 'package:graphql/client.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/api_source.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
+import 'package:osi_solucoes/features/presenter/models/solucaoConcentrada/solucaoConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 
@@ -16,6 +17,8 @@ abstract class ISolucaoDatasource {
   Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes();
   Future<Either<Failure, SolucaoNutritiva>> detalhesSolucao(
       {required int solucaoId});
+  Future<Either<Failure, SolucaoConcentrada>> cadastrarSolucaoConcentrada(
+      {required SolucaoConcentrada novaSolucaoConcentrada});
 }
 
 class SolucaoDatasource implements ISolucaoDatasource {
@@ -81,6 +84,9 @@ class SolucaoDatasource implements ISolucaoDatasource {
   Future<Either<Failure, SolucaoNutritiva>> registrarSolucaoNutritiva(
       {required SolucaoNutritiva solucao, required int contaId}) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    /// MODIFICAR ESSA LÓGICA PARA EXECUTAR APENAS QUANDO NÃO TEM CONCENTRADA
+    /// CASO TENHA, ADICIONAR O ID DELA NA LISTA
 
     //Criando a query para varios lotes
     String query = '';
@@ -255,6 +261,44 @@ class SolucaoDatasource implements ISolucaoDatasource {
     if (!result.hasException) {
       SolucaoNutritiva? solucao =
           SolucaoNutritiva.fromJson(result.data?['sNutritiva']);
+
+      return Right(solucao);
+    } else {
+      return Left(ErrorReservatorio(message: FailureMessage.errorInfoMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SolucaoConcentrada>> cadastrarSolucaoConcentrada(
+      {required SolucaoConcentrada novaSolucaoConcentrada}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    String readRepositories = """
+        mutation CreateOneConcentrada {
+          createOneConcentrada(data: {
+            nome: "${novaSolucaoConcentrada.nome}",
+            fator_concentracao: ${novaSolucaoConcentrada.fator_concentracao}
+          }) {
+            id
+            nome
+            volume
+            fator_concentracao
+            created_at
+          }
+        }
+     """;
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      SolucaoConcentrada? solucao =
+          SolucaoConcentrada.fromJson(result.data?['createOneConcentrada']);
 
       return Right(solucao);
     } else {

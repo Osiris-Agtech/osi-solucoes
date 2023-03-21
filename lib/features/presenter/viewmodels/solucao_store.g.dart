@@ -142,23 +142,6 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$mostrarErroFormularioAtom =
-      Atom(name: '_SolucaoStoreBase.mostrarErroFormulario');
-
-  @override
-  bool get mostrarErroFormulario {
-    _$mostrarErroFormularioAtom.reportRead();
-    return super.mostrarErroFormulario;
-  }
-
-  @override
-  set mostrarErroFormulario(bool value) {
-    _$mostrarErroFormularioAtom.reportWrite(value, super.mostrarErroFormulario,
-        () {
-      super.mostrarErroFormulario = value;
-    });
-  }
-
   final _$dotIndicatorAtom = Atom(name: '_SolucaoStoreBase.dotIndicator');
 
   @override
@@ -418,6 +401,15 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
         .run(() => super.cadastrarSolucaoNutritiva());
   }
 
+  final _$criarSolucaoConcentradaAsyncAction =
+      AsyncAction('_SolucaoStoreBase.criarSolucaoConcentrada');
+
+  @override
+  Future criarSolucaoConcentrada() {
+    return _$criarSolucaoConcentradaAsyncAction
+        .run(() => super.criarSolucaoConcentrada());
+  }
+
   final _$_SolucaoStoreBaseActionController =
       ActionController(name: '_SolucaoStoreBase');
 
@@ -672,7 +664,6 @@ isSolucaoListLoading: ${isSolucaoListLoading},
 isNovaSolucaoLoading: ${isNovaSolucaoLoading},
 isFertilizanteListLoading: ${isFertilizanteListLoading},
 isSolucaoDetalhesLoading: ${isSolucaoDetalhesLoading},
-mostrarErroFormulario: ${mostrarErroFormulario},
 dotIndicator: ${dotIndicator},
 novaSolucao: ${novaSolucao},
 solucaoList: ${solucaoList},

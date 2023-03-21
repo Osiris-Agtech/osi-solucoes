@@ -15,7 +15,7 @@ class SolucaoConcentrada {
   double? volume;
   @JsonKey(required: false, disallowNullValue: false)
   DateTime? created_at;
-  @JsonKey(required: false, disallowNullValue: false)
+  @JsonKey(required: false, disallowNullValue: false, fromJson: _fatorFromJson)
   double? fator_concentracao;
   @JsonKey(required: false, disallowNullValue: false)
   List<SolucaoFertilizanteConcentrada>? solucoes_fertilizantes_concentradas;
@@ -33,4 +33,12 @@ class SolucaoConcentrada {
       _$SolucaoConcentradaFromJson(json);
 
   Map<String, dynamic> toJson() => _$SolucaoConcentradaToJson(this);
+
+  static double _fatorFromJson(Object json) {
+    if (json is String) {
+      return double.tryParse(json) ?? 0.0;
+    }
+
+    return (json as num) * 1.0;
+  }
 }
