@@ -82,7 +82,13 @@ class _SolucaoPage extends State<SolucaoPage> {
                             EdgeInsets.only(top: 200.0, left: 60, right: 60),
                         child: Center(
                           child: Text(
-                            "Não há receitas cadastradas neste setor",
+                            "Não há soluções cadastradas na sua conta",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xff6F6464),
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w800,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -96,11 +102,11 @@ class _SolucaoPage extends State<SolucaoPage> {
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 2,
                       children: List.generate(
-                          solucaoStore.solucaoList.length,
-                          (index) => CardReceita(
-                                solucaoNutritiva:
-                                    solucaoStore.searchSolucao[index],
-                              )),
+                        solucaoStore.solucaoList.length,
+                        (index) => CardReceita(
+                          solucaoNutritiva: solucaoStore.searchSolucao[index],
+                        ),
+                      ),
                     ),
                   );
                 }),
@@ -212,20 +218,49 @@ class _CardReceitaState extends State<CardReceita> {
                 height: 35,
               ),
               const SizedBox(
-                height: 5,
+                height: 8,
               ),
               Text(
                 widget.solucaoNutritiva.nome ?? '',
+                maxLines: 2,
                 style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    color: Constants.kGreyText),
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                  color: Constants.kGreyText,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-              const SizedBox(
-                height: 10,
+              // const SizedBox(
+              //   height: 10,
+              // ),
+              const Spacer(),
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    const TextSpan(
+                      text: 'Reservatórios\nativos: ',
+                      style: TextStyle(
+                        color: Constants.kGreyMedium,
+                      ),
+                    ),
+                    TextSpan(
+                      text:
+                          '${widget.solucaoNutritiva.reservatorios?.length ?? 0}',
+                      style: const TextStyle(
+                        color: Constants.kPrimaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                  'Reservatórios\nativos: ${widget.solucaoNutritiva.reservatorios?.length ?? 0} '),
+              // Text(
+              //   'Reservatórios\nativos: ${widget.solucaoNutritiva.reservatorios?.length ?? 0}',
+              //   style: const TextStyle(
+              //     color: Constants.kGreyMedium,
+              //   ),
+              // ),
+              const SizedBox(height: 8),
             ],
           ),
         ),

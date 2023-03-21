@@ -266,14 +266,25 @@ Widget receitaDetalhe(BuildContext context, CarouselController controlerPages,
                               itemBuilder: (context, index) {
                                 FertilizanteNutriente? item =
                                     store.teorNutrientes[index];
-                                return ListTile(
-                                  dense: true,
-                                  title: Text(item.nutriente?.nome ?? ''),
-                                  trailing: Text(
-                                      double.parse(item.teor_nutriente!)
-                                              .toStringAsFixed(2)
-                                              .replaceAll(".", ",") +
-                                          ' mg/L'),
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom:
+                                        index == store.teorNutrientes.length - 1
+                                            ? 80.0
+                                            : 0.0,
+                                  ),
+                                  child: ListTile(
+                                    dense: true,
+                                    title: Text('(' +
+                                        (item.nutriente?.sigla ?? '-') +
+                                        ') ' +
+                                        (item.nutriente?.nome ?? '-')),
+                                    trailing: Text(
+                                        double.parse(item.teor_nutriente!)
+                                                .toStringAsFixed(2)
+                                                .replaceAll(".", ",") +
+                                            ' mg/L'),
+                                  ),
                                 );
                               },
                             );

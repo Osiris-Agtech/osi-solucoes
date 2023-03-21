@@ -105,7 +105,7 @@ reservatorioDetalhesPage(LoteStore store) {
                     ),
                   ),
                   Text(
-                    '${store.solucaoNutritivaList[index].quantidade ?? '-'}g',
+                    '${store.solucaoNutritivaList[index].quantidade ?? '-'} mg/L',
                     style: const TextStyle(
                       fontSize: 16,
                       color: Constants.kButtonGrey,

@@ -73,6 +73,12 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
                         child: Center(
                           child: Text(
                             'Nenhuma área de cultivo cadastrada',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xff6F6464),
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w800,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -213,7 +219,9 @@ class _CardAreaState extends State<CardArea> {
                             SizedBox(
                               width: 190,
                               child: Text(
-                                '${widget.area.localizacao?.endereco}, ${widget.area.localizacao?.bairro}, ${widget.area.localizacao?.cidade} - ${widget.area.localizacao?.estado}',
+                                widget.area.localizacao?.endereco != null
+                                    ? '${widget.area.localizacao?.endereco}, ${widget.area.localizacao?.bairro}, ${widget.area.localizacao?.cidade} - ${widget.area.localizacao?.estado}'
+                                    : 'Endereço não informado',
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(

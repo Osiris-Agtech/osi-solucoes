@@ -158,43 +158,43 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                             const SizedBox(
                               width: 30,
                             ),
-                            InkWell(
-                              splashColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              onTap: () {},
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Material(
-                                    elevation: 0.3,
-                                    color: Constants.kSecondBackgroundColor,
-                                    borderRadius: BorderRadius.circular(80),
-                                    child: CircleAvatar(
-                                      radius: 25,
-                                      backgroundColor:
-                                          Constants.kSecondBackgroundColor,
-                                      child: SvgPicture.asset(
-                                        "assets/icons/alter_infos_icon.svg",
-                                        height: 25,
-                                        width: 25,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  const Text(
-                                    'Alterar\nInfos',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
+                            // InkWell(
+                            //   splashColor: Colors.transparent,
+                            //   hoverColor: Colors.transparent,
+                            //   onTap: () {},
+                            //   child: Column(
+                            //     crossAxisAlignment: CrossAxisAlignment.center,
+                            //     children: [
+                            //       Material(
+                            //         elevation: 0.3,
+                            //         color: Constants.kSecondBackgroundColor,
+                            //         borderRadius: BorderRadius.circular(80),
+                            //         child: CircleAvatar(
+                            //           radius: 25,
+                            //           backgroundColor:
+                            //               Constants.kSecondBackgroundColor,
+                            //           child: SvgPicture.asset(
+                            //             "assets/icons/alter_infos_icon.svg",
+                            //             height: 25,
+                            //             width: 25,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //       const SizedBox(
+                            //         height: 10,
+                            //       ),
+                            //       const Text(
+                            //         'Alterar\nInfos',
+                            //         style: TextStyle(
+                            //           fontSize: 16,
+                            //           color: Colors.black87,
+                            //           fontWeight: FontWeight.bold,
+                            //         ),
+                            //         textAlign: TextAlign.center,
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

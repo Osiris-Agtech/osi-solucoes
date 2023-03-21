@@ -107,12 +107,12 @@ class SolucaoDatasource implements ISolucaoDatasource {
             nome: "${solucao.nome}",
             c_eletrica: ${solucao.c_eletrica},
             solucoes_contas: {
-              "create": [
+              create: [
                 {
-                  "conta_original": $contaId,
-                  "conta": {
-                    "connect": {
-                      "id": $contaId
+                  conta_original: $contaId,
+                  conta: {
+                    connect: {
+                      id: $contaId
                     }
                   }
                 }

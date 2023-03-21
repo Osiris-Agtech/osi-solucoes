@@ -77,7 +77,13 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                             EdgeInsets.only(top: 200.0, left: 60, right: 60),
                         child: Center(
                           child: Text(
-                            "Não há usuário cadastrados",
+                            "Não há usuários cadastrados",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xff6F6464),
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w800,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ),

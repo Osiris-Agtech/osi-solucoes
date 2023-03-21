@@ -22,6 +22,9 @@ abstract class _SolucaoStoreBase with Store {
   int value = 0;
 
   @observable
+  bool mostrarErroFormulario = false;
+
+  @observable
   bool isSolucaoListLoading = false;
 
   @observable
@@ -253,12 +256,38 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
+  validarFertilizantes() {
+    if (expandedFertilizantes.isEmpty) {
+      toastError(
+          message: 'Selecione pelo menos um fertilizante para a solução');
+      return false;
+    }
+
+    for (var item in expandedFertilizantes) {
+      if (double.parse(
+              item.quantidade.replaceAll('.', '').replaceAll(',', '.')) <=
+          0) {
+        toastError(
+            message: 'Preencha o valor em todos os fertilizantes selecionados');
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @action
+  validarCadastro() {
+    bool validate = novaSolucaoName.text.isNotEmpty && validarFertilizantes();
+
+    mostrarErroFormulario = !validate;
+    return validate;
+  }
+
+  @action
   cadastrarSolucaoNutritiva() async {
     isNovaSolucaoLoading = true;
     SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
     AuthController authController = GetIt.I<AuthController>();
-
-    /// ##### Preencher aqui #####
 
     SolucaoNutritiva novaSolucao = SolucaoNutritiva(
       nome: novaSolucaoName.text,

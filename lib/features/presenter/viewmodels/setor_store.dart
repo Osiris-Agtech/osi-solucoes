@@ -188,7 +188,6 @@ abstract class _SetorStoreBase with Store {
     novoSetorName.clear();
     novoSetorDescription.clear();
     novoSetorReservatorio = Reservatorio();
-    areaSelecionada = Area();
   }
 
   @action

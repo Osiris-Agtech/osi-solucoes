@@ -142,71 +142,71 @@ class AreaDatasource implements IAreaDatasource {
       String readRepositories = '';
       if (novaArea.localizacao?.id == null) {
         readRepositories = r'''
-        mutation CreateOneArea ($nome: String!, $descricao: String!, $tipo: String!, $contaId: Int!) {
-          createOneArea(data: {
-            nome: $nome,
-            descricao: $descricao,
-            tipo: $tipo,
-            conta: {
-              connect: {
-                id: $contaId
-              }
-            },
-          }) {
-            id
-            nome
-            descricao
-            tipo
-            conta {
-              nome
-            }
-            localizacao {
+          mutation CreateOneArea ($nome: String!, $descricao: String!, $tipo: String!, $contaId: Int!) {
+            createOneArea(data: {
+              nome: $nome,
+              descricao: $descricao,
+              tipo: $tipo,
+              conta: {
+                connect: {
+                  id: $contaId
+                }
+              },
+            }) {
               id
-              cep
-              endereco
-            }
-            setores {
               nome
+              descricao
+              tipo
+              conta {
+                nome
+              }
+              localizacao {
+                id
+                cep
+                endereco
+              }
+              setores {
+                nome
+              }
             }
-          }
-        } 
-      ''';
+          } 
+        ''';
       } else {
         readRepositories = r'''
-        mutation CreateOneArea ($nome: String!, $descricao: String!, $tipo: String!, $contaId: Int!, $localizacaoId: Int!) {
-          createOneArea(data: {
-            nome: $nome,
-            descricao: $descricao,
-            tipo: $tipo,
-            conta: {
-              connect: {
-                id: $contaId
+          mutation CreateOneArea ($nome: String!, $descricao: String!, $tipo: String!, $contaId: Int!, $localizacaoId: Int!) {
+            createOneArea(data: {
+              nome: $nome,
+              descricao: $descricao,
+              tipo: $tipo,
+              conta: {
+                connect: {
+                  id: $contaId
+                }
+              },
+              localizacao: {
+                connect: {
+                  id: $localizacaoId
+                }
               }
-            },
-            localizacao: {
-              connect: {
-                id: $localizacaoId
-              }
-            }
-          }) {
-            id
-            nome
-            descricao
-            tipo
-            conta {
-              nome
-            }
-            localizacao {
+            }) {
               id
-              cep
-              endereco
-            }
-            setores {
               nome
+              descricao
+              tipo
+              conta {
+                nome
+              }
+              localizacao {
+                id
+                cep
+                endereco
+              }
+              setores {
+                nome
+              }
             }
-          }
-        } 
-      ''';
+          } 
+        ''';
       }
 
       final MutationOptions? options;

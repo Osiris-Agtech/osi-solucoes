@@ -92,7 +92,7 @@ Widget fertilizantePage(
                 if (store.fertilizanteList.isEmpty) {
                   return const Center(
                     child: Text(
-                      'Não há soluções\ncadastradas em sua conta',
+                      'Não há fertilizantes\ncadastrados em sua conta',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,

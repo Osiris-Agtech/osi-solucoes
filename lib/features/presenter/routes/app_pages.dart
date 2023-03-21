@@ -17,6 +17,9 @@ import 'package:osi_solucoes/features/presenter/views/caderno_campo/detalhes_cad
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/cadastrar_usuario_page.dart';
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/detalhes_usuario_page.dart';
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
+import 'package:osi_solucoes/features/presenter/views/recuperar_senha/codigo_seguranca_page.dart';
+import 'package:osi_solucoes/features/presenter/views/recuperar_senha/nova_senha_page.dart';
+import 'package:osi_solucoes/features/presenter/views/recuperar_senha/recuperacao_page.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/cadastrar_resevatorio_page.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/detalhes_reservatorio_page.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/cadastrar_solucao_concentrada_page.dart';
@@ -223,6 +226,21 @@ class AppPages {
     GetPage(
       name: Routes.cadastrarSolucaoConcentradaPage,
       page: () => const CadastrarSolucaoConcentradaPage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.recuperarSenha,
+      page: () => const RecuperarSenhaPage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.codigoSeguranca,
+      page: () => const CodigoSegurancaPage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.novaSenha,
+      page: () => const NovaSenhaPage(),
       transition: Transition.rightToLeft,
     ),
   ];

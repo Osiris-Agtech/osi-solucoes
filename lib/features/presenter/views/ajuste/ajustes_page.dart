@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:brasil_fields/brasil_fields.dart';
@@ -39,13 +40,6 @@ class AjustesPageState extends State<AjustesPage> {
 
   @override
   Widget build(BuildContext context) {
-    const snackBar = SnackBar(
-      backgroundColor: Colors.white,
-      content: Text(
-        "Campo 'Buscar Reservatório...' obrigatório!",
-        style: TextStyle(color: Constants.kErrorColor),
-      ),
-    );
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.white,
@@ -67,12 +61,15 @@ class AjustesPageState extends State<AjustesPage> {
                   onPressed: store.selectedReservatorio.nome != null &&
                           store.selectedReservatorio.nome!.isNotEmpty
                       ? () async {
-                          await store.calculoAjusteReposicao();
-                          await store.montandoDescricao();
-                          Get.toNamed(Routes.resultadoajustePage);
+                          if (store.validarCampos()) {
+                            await store.calculoAjusteReposicao();
+                            await store.montandoDescricao();
+                            Get.toNamed(Routes.resultadoajustePage);
+                          }
                         }
-                      : () =>
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar),
+                      : () => toastError(
+                          message: 'Selecione um reservatório para o ajuste'),
+                  //ScaffoldMessenger.of(context).showSnackBar(snackBar),
                   backgroundColor: Constants.kPrimaryColor,
                   label: const Text(
                     'Calcular',
