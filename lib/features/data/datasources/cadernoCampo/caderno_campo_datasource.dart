@@ -49,6 +49,8 @@ class CadernoCampoDatasource implements ICadernoCampoDatasource {
           }) {
             id
             nome
+            registro_data
+            colheita_data
             setor {
               id
               nome
@@ -114,6 +116,8 @@ class CadernoCampoDatasource implements ICadernoCampoDatasource {
           }) {
             id
             nome
+            registro_data
+            colheita_data
             setor {
               id
               nome
@@ -184,6 +188,8 @@ class CadernoCampoDatasource implements ICadernoCampoDatasource {
             setor {
               id
               nome
+              registro_data
+              colheita_data
               area {
                 id
                 nome
@@ -366,6 +372,8 @@ class CadernoCampoDatasource implements ICadernoCampoDatasource {
         }) {
           id
           nome
+          registro_data
+          colheita_data
           lotes_atividades {
             atividade {
               id
