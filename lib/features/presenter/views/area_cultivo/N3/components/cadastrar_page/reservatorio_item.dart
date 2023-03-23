@@ -18,44 +18,60 @@ reservatorio(
           Icons.waves,
           color: Constants.kPrimaryColor,
         ),
-        title: const Text(
-          'Reservatório',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-        ),
-        trailing: store.novoLoteReservatorio.nome != null &&
-                store.novoLoteReservatorio.nome!.isNotEmpty
-            ? SizedBox(
-                width: 150,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      width: 126,
-                      child: Text(
-                        store.novoLoteReservatorio.nome ?? '---',
-                        textAlign: TextAlign.end,
-                        style: const TextStyle(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(right: 8),
+              child: Text(
+                'Reservatório',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+              ),
+            ),
+            store.novoLoteReservatorio.nome != null &&
+                    store.novoLoteReservatorio.nome!.isNotEmpty
+                ? Expanded(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            store.novoLoteReservatorio.nome ?? '---',
+                            textAlign: TextAlign.end,
+                            style: const TextStyle(
+                              color: Constants.kPrimaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const Icon(
+                          Icons.chevron_right,
+                          color: Constants.kPrimaryColor,
+                        ),
+                      ],
+                    ),
+                  )
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Text(
+                        "Selecionar",
+                        style: TextStyle(
                           color: Constants.kPrimaryColor,
                           fontWeight: FontWeight.w600,
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    const Icon(
-                      Icons.chevron_right,
-                      color: Constants.kPrimaryColor,
-                    ),
-                  ],
-                ),
-              )
-            : const Text(
-                "Preencher",
-                style: TextStyle(
-                  color: Constants.kPrimaryColor,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+                      Icon(
+                        Icons.chevron_right,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  ),
+          ],
+        ),
         onTap: () {
           store.setDotIndicator(3);
           bottomSheetN3(context, carouselController, store, key);

@@ -180,7 +180,7 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
         const Padding(
           padding: EdgeInsets.only(top: 10, left: 20),
           child: Text(
-            'Local: ',
+            'Área: ',
             style: TextStyle(
               fontSize: 18,
               color: Constants.kText2,
