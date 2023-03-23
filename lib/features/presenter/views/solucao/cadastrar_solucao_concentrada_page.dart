@@ -303,8 +303,10 @@ class _CadastrarSolucaoConcentradaPageState
             );
           }),
           onPressed: () async {
-            await store.criarSolucaoConcentrada();
-            store.cadastrarSolucaoNutritiva();
+            if (store.validarCadastroConcentrada()) {
+              await store.criarSolucaoConcentrada();
+              store.cadastrarSolucaoNutritiva();
+            }
           },
         ),
       ),

@@ -273,14 +273,6 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  validarCadastro() {
-    bool validate = novaSolucaoName.text.isNotEmpty && validarFertilizantes();
-
-    mostrarErroFormulario = !validate;
-    return validate;
-  }
-
-  @action
   cadastrarSolucaoNutritiva() async {
     isNovaSolucaoLoading = true;
     SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
@@ -395,6 +387,31 @@ abstract class _SolucaoStoreBase with Store {
 
     mostrarErroFormulario = !validate;
     return validate;
+  }
+
+  @action
+  bool validarCadastroConcentrada() {
+    if (fatorConcentracao.text.isEmpty) {
+      toastError(message: 'Preencha o fator de concentração');
+      return false;
+    }
+
+    for (var item in solucaoConcentradaList) {
+      if ((item.nome ?? '').isEmpty) {
+        toastError(
+            message: 'Preencha o nome em todas as soluções concentradas');
+        return false;
+      }
+
+      if ((item.solucoes_fertilizantes_concentradas ?? []).isEmpty) {
+        toastError(
+            message:
+                'Solução concentrada precisa ter pelo menos um fertilizante');
+        return false;
+      }
+    }
+
+    return true;
   }
 
   @action
@@ -591,18 +608,17 @@ abstract class _SolucaoStoreBase with Store {
   deleteSolucaoConcentradaToTheList(int index) {
     solucaoConcentradaList.removeAt(index);
     solucaoConcentradaList = List.from(solucaoConcentradaList);
+    setFertilizantesEscolhidos();
   }
 
   @computed
   List<SelecaoFertilizante> get showFertilizantesNaoUtilizados {
     List<SelecaoFertilizante> list = fertilizantesEscolhidos;
-
     // Para cada solução concentrada na lista
     for (var solucaoConcentrada in solucaoConcentradaList) {
       // Para cada fertilizante na solução concentrada
       for (SolucaoFertilizanteConcentrada item
           in solucaoConcentrada.solucoes_fertilizantes_concentradas ?? []) {
-        print('Encontrou');
         int index = list.indexWhere(
             (element) => element.fertilizante.id == item.fertilizante?.id);
         if (index != -1) {

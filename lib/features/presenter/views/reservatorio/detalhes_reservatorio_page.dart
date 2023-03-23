@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/modulos_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
@@ -366,14 +367,56 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                                                     const VisualDensity(
                                                         horizontal: 0,
                                                         vertical: -4),
-                                                title: Text(store
-                                                        .solucaoConcentradaList[
-                                                            index]
-                                                        .concentrada
-                                                        ?.nome ??
-                                                    "..."),
-                                                trailing: Text(
-                                                    "${store.solucaoConcentradaList[index].quantidade} mg/L"),
+                                                title: Text(
+                                                  store
+                                                          .solucaoConcentradaList[
+                                                              index]
+                                                          .concentrada
+                                                          ?.nome ??
+                                                      "...",
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                                subtitle: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    left: 16.0,
+                                                    bottom: 8.0,
+                                                  ),
+                                                  child: ListView.builder(
+                                                    shrinkWrap: true,
+                                                    itemCount: store
+                                                            .solucaoConcentradaList[
+                                                                index]
+                                                            .concentrada
+                                                            ?.solucoes_fertilizantes_concentradas
+                                                            ?.length ??
+                                                        0,
+                                                    itemBuilder:
+                                                        (_, indexFert) {
+                                                      SolucaoFertilizanteConcentrada?
+                                                          fertilizanteConcentrada =
+                                                          store
+                                                                  .solucaoConcentradaList[
+                                                                      index]
+                                                                  .concentrada
+                                                                  ?.solucoes_fertilizantes_concentradas?[
+                                                              indexFert];
+                                                      return Text(
+                                                        fertilizanteConcentrada
+                                                                ?.fertilizante
+                                                                ?.nome ??
+                                                            'Não informado',
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                                // trailing: Text(
+                                                //     "${store.solucaoConcentradaList[index].quantidade} mg/L"),
                                               );
                                             },
                                           );

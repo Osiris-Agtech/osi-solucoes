@@ -58,10 +58,13 @@ abstract class _ReservatoriosStoreBase with Store {
         reservatorioDetalhes.solucao?.solucoes_fertilizantes_concentradas
             ?.forEach(
           (element) {
-            if (element.concentrada == null) {
-              solucaoNutritivaList.add(element);
-            } else {
-              solucaoConcentradaList.add(element);
+            solucaoNutritivaList.add(element);
+            if (element.concentrada != null) {
+              if (solucaoConcentradaList.indexWhere((solucao) =>
+                      solucao.concentrada?.id == element.concentrada?.id) ==
+                  -1) {
+                solucaoConcentradaList.add(element);
+              }
             }
           },
         );

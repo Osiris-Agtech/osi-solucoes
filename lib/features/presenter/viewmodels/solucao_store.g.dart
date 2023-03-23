@@ -524,17 +524,6 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   }
 
   @override
-  dynamic validarCadastro() {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.validarCadastro');
-    try {
-      return super.validarCadastro();
-    } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   double calcularCoeficienteEletrico() {
     final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
         name: '_SolucaoStoreBase.calcularCoeficienteEletrico');
@@ -562,6 +551,17 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
         name: '_SolucaoStoreBase.validateNewSN');
     try {
       return super.validateNewSN();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool validarCadastroConcentrada() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.validarCadastroConcentrada');
+    try {
+      return super.validarCadastroConcentrada();
     } finally {
       _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
