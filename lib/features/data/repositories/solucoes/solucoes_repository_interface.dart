@@ -8,7 +8,7 @@ import '../../../../core/errors/failure.dart';
 abstract class ISolucaoRepository {
   Future<Either<Failure, List<SolucaoNutritiva>>> buscarSolucoes(int contaId);
   Future<Either<Failure, SolucaoNutritiva>> registrarSolucaoNutritiva(
-      SolucaoNutritiva solucao, int contaId);
+      SolucaoNutritiva solucao, int contaId, bool hasConcentrada);
   Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes();
   Future<Either<Failure, SolucaoNutritiva>> detalhesSolucao(int solucaoId);
   Future<Either<Failure, SolucaoConcentrada>> cadastrarSolucaoConcentrada(

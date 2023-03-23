@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 
 class CadastrarSolucaoConcentradaPage extends StatefulWidget {
@@ -301,9 +302,9 @@ class _CadastrarSolucaoConcentradaPageState
               ),
             );
           }),
-          onPressed: () {
-            store.criarSolucaoConcentrada();
-            // store.cadastrarSolucaoNutritiva();
+          onPressed: () async {
+            await store.criarSolucaoConcentrada();
+            store.cadastrarSolucaoNutritiva();
           },
         ),
       ),
@@ -493,9 +494,12 @@ class _CadastrarSolucaoConcentradaPageState
                     itemCount: store.solucaoConcentradaList[index]
                         .solucoes_fertilizantes_concentradas?.length,
                     itemBuilder: (_, indexFert) {
+                      SolucaoFertilizanteConcentrada? fertilizanteConcentrada =
+                          store.solucaoConcentradaList[index]
+                              .solucoes_fertilizantes_concentradas?[indexFert];
                       return Row(
-                        children: const [
-                          Text(
+                        children: [
+                          const Text(
                             "• ",
                             style: TextStyle(
                               fontSize: 30,
@@ -503,8 +507,9 @@ class _CadastrarSolucaoConcentradaPageState
                             ),
                           ),
                           Text(
-                            'Fertilizante #1',
-                            style: TextStyle(
+                            fertilizanteConcentrada?.fertilizante?.nome ??
+                                'Não informado',
+                            style: const TextStyle(
                               fontSize: 20,
                               fontStyle: FontStyle.italic,
                               color: Constants.kGreyMedium,
@@ -523,7 +528,9 @@ class _CadastrarSolucaoConcentradaPageState
                   highlightColor: Colors.transparent,
                   onTap: () {
                     _solucaoConcentradaFertList(
-                        store.solucaoConcentradaList[index].nome);
+                      store.solucaoConcentradaList[index].nome,
+                      index,
+                    );
                   },
                   child: const Text(
                     '+ Adicionar fertilizante',
@@ -543,7 +550,7 @@ class _CadastrarSolucaoConcentradaPageState
     );
   }
 
-  _solucaoConcentradaFertList(String? nome) {
+  _solucaoConcentradaFertList(String? nome, int index) {
     return showModalBottomSheet<void>(
       constraints:
           BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.6),
@@ -648,28 +655,30 @@ class _CadastrarSolucaoConcentradaPageState
                   }),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0, vertical: 32),
+                      horizontal: 20.0,
+                      vertical: 32,
+                    ),
                     child: SizedBox(
                       height: 40,
                       width: double.infinity,
-                      child: Observer(builder: (_) {
-                        return ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Constants.kPrimaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Constants.kPrimaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          child: const Text(
-                            "Confirmar",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
+                        ),
+                        child: const Text(
+                          "Confirmar",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
                           ),
-                          onPressed: () {},
-                        );
-                      }),
+                        ),
+                        onPressed: () {
+                          store.addFertilizanteParaSolucao(index);
+                        },
+                      ),
                     ),
                   )
                 ],

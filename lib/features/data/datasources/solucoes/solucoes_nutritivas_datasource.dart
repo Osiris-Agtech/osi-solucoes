@@ -12,8 +12,11 @@ import '../../../../core/errors/errors.dart';
 abstract class ISolucaoDatasource {
   Future<Either<Failure, List<SolucaoNutritiva>>> buscarSolucoes(
       {required int contaId});
-  Future<Either<Failure, SolucaoNutritiva>> registrarSolucaoNutritiva(
-      {required SolucaoNutritiva solucao, required int contaId});
+  Future<Either<Failure, SolucaoNutritiva>> registrarSolucaoNutritiva({
+    required SolucaoNutritiva solucao,
+    required int contaId,
+    required bool hasConcentrada,
+  });
   Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes();
   Future<Either<Failure, SolucaoNutritiva>> detalhesSolucao(
       {required int solucaoId});
@@ -81,8 +84,11 @@ class SolucaoDatasource implements ISolucaoDatasource {
   }
 
   @override
-  Future<Either<Failure, SolucaoNutritiva>> registrarSolucaoNutritiva(
-      {required SolucaoNutritiva solucao, required int contaId}) async {
+  Future<Either<Failure, SolucaoNutritiva>> registrarSolucaoNutritiva({
+    required SolucaoNutritiva solucao,
+    required int contaId,
+    required bool hasConcentrada,
+  }) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     /// MODIFICAR ESSA LÓGICA PARA EXECUTAR APENAS QUANDO NÃO TEM CONCENTRADA
@@ -90,20 +96,41 @@ class SolucaoDatasource implements ISolucaoDatasource {
 
     //Criando a query para varios lotes
     String query = '';
-    for (SolucaoFertilizanteConcentrada element
-        in solucao.solucoes_fertilizantes_concentradas ?? []) {
-      if (element ==
-          solucao.solucoes_fertilizantes_concentradas![
-              solucao.solucoes_fertilizantes_concentradas!.length - 1]) {
-        query += """{
+    if (hasConcentrada) {
+      for (SolucaoFertilizanteConcentrada element
+          in solucao.solucoes_fertilizantes_concentradas ?? []) {
+        if (element ==
+            solucao.solucoes_fertilizantes_concentradas![
+                solucao.solucoes_fertilizantes_concentradas!.length - 1]) {
+          query += """{
+          fk_fertilizantes_id: ${element.fertilizante!.id},
+          fk_concentradas_id: ${element.concentrada!.id},
+          quantidade: ${element.quantidade}
+        }""";
+        } else {
+          query += """{
+          fk_fertilizantes_id: ${element.fertilizante!.id},
+          fk_concentradas_id: ${element.concentrada!.id},
+          quantidade: ${element.quantidade}
+        },""";
+        }
+      }
+    } else {
+      for (SolucaoFertilizanteConcentrada element
+          in solucao.solucoes_fertilizantes_concentradas ?? []) {
+        if (element ==
+            solucao.solucoes_fertilizantes_concentradas![
+                solucao.solucoes_fertilizantes_concentradas!.length - 1]) {
+          query += """{
           fk_fertilizantes_id: ${element.fertilizante!.id},
           quantidade: ${element.quantidade}
         }""";
-      } else {
-        query += """{
+        } else {
+          query += """{
           fk_fertilizantes_id: ${element.fertilizante!.id},
           quantidade: ${element.quantidade}
         },""";
+        }
       }
     }
 

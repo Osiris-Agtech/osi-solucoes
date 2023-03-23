@@ -294,14 +294,18 @@ abstract class _SolucaoStoreBase with Store {
     );
 
     var fertilizantes = await solucaoRepository.registrarSolucaoNutritiva(
-        novaSolucao, authController.usuario.selected_conta!.conta!.id!);
+      novaSolucao,
+      authController.usuario.selected_conta!.conta!.id!,
+      solucaoConcentradaList.isNotEmpty,
+    );
 
     fertilizantes.fold(
       (err) {
         toastError(message: err.message);
       },
       (data) async {
-        Get.back();
+        Get.close(2);
+        clearAll();
         buscarSolucoes();
       },
     );
@@ -326,15 +330,39 @@ abstract class _SolucaoStoreBase with Store {
 
     /// VERIFICAR SE A LISTA DE CONCENTRADA NÃO ESTÁ VAZIA, PARA PODER ADD O ID
     /// DA CONCENTRADA NA LISTA ABAIXO
+    if (solucaoConcentradaList.isEmpty) {
+      for (var item in expandedFertilizantes) {
+        list.add(
+          SolucaoFertilizanteConcentrada(
+            fertilizante: item.fertilizante,
+            quantidade:
+                item.quantidade.replaceAll('.', '').replaceAll(',', '.'),
+          ),
+        );
+      }
+    } else {
+      for (var item in expandedFertilizantes) {
+        int concentradaIndex = solucaoConcentradaList.indexWhere((element) {
+          SolucaoFertilizanteConcentrada? fertilizante =
+              element.solucoes_fertilizantes_concentradas!.singleWhereOrNull(
+            (element) => element.fertilizante?.id == item.fertilizante.id,
+          );
 
-    for (var item in expandedFertilizantes) {
-      list.add(
-        SolucaoFertilizanteConcentrada(
-          fertilizante: item.fertilizante,
-          quantidade: item.quantidade.replaceAll('.', '').replaceAll(',', '.'),
-        ),
-      );
+          if (fertilizante != null) return true;
+          return false;
+        });
+
+        list.add(
+          SolucaoFertilizanteConcentrada(
+            fertilizante: item.fertilizante,
+            concentrada: solucaoConcentradaList[concentradaIndex],
+            quantidade:
+                item.quantidade.replaceAll('.', '').replaceAll(',', '.'),
+          ),
+        );
+      }
     }
+
     return list;
   }
 
@@ -374,6 +402,8 @@ abstract class _SolucaoStoreBase with Store {
     novaSolucaoName.clear();
     expandedFertilizantes.clear();
     quantidadeFertilizantes.clear();
+    solucaoConcentradaList.clear();
+    fatorConcentracao.clear();
   }
 
   @computed
@@ -505,14 +535,12 @@ abstract class _SolucaoStoreBase with Store {
         }
         solucaoConcentradaList[indexSolucaoConcentrada]
             .solucoes_fertilizantes_concentradas!
-            .add(SolucaoFertilizanteConcentrada());
-
-        /// ARRUMAR PRIMEIRO A LÓGICA DA SOLUÇÃO CONCENTRADA NO APP.
-        /// AO INVÉS DE FAZER O ADD DE NOVA LINHA NO BANCO COM A SC
-        /// É PRECISO EDITAR A LINHA QUE JÁ VAI SER ADICIONADA DO FERTILIZANTES
-        /// COM O ID DESSA SOLUÇÃO CONCENTRADA
+            .add(SolucaoFertilizanteConcentrada(
+                fertilizante: item.fertilizante));
       }
     }
+    solucaoConcentradaList = List.from(solucaoConcentradaList);
+    Get.back();
   }
 
   @action
@@ -569,10 +597,17 @@ abstract class _SolucaoStoreBase with Store {
   List<SelecaoFertilizante> get showFertilizantesNaoUtilizados {
     List<SelecaoFertilizante> list = fertilizantesEscolhidos;
 
+    // Para cada solução concentrada na lista
     for (var solucaoConcentrada in solucaoConcentradaList) {
+      // Para cada fertilizante na solução concentrada
       for (SolucaoFertilizanteConcentrada item
           in solucaoConcentrada.solucoes_fertilizantes_concentradas ?? []) {
-        list.removeWhere((element) => element.fertilizante.id == item.id);
+        print('Encontrou');
+        int index = list.indexWhere(
+            (element) => element.fertilizante.id == item.fertilizante?.id);
+        if (index != -1) {
+          list.removeAt(index);
+        }
       }
     }
 
