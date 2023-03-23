@@ -9,6 +9,14 @@ part of 'reservatorios_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
+  Computed<List<Reservatorio>>? _$searchReservatorioComputed;
+
+  @override
+  List<Reservatorio> get searchReservatorio => (_$searchReservatorioComputed ??=
+          Computed<List<Reservatorio>>(() => super.searchReservatorio,
+              name: '_ReservatoriosStoreBase.searchReservatorio'))
+      .value;
+
   final _$reservatorioDetalhesAtom =
       Atom(name: '_ReservatoriosStoreBase.reservatorioDetalhes');
 
@@ -369,6 +377,23 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
     });
   }
 
+  final _$searchReservatorioTextAtom =
+      Atom(name: '_ReservatoriosStoreBase.searchReservatorioText');
+
+  @override
+  String get searchReservatorioText {
+    _$searchReservatorioTextAtom.reportRead();
+    return super.searchReservatorioText;
+  }
+
+  @override
+  set searchReservatorioText(String value) {
+    _$searchReservatorioTextAtom
+        .reportWrite(value, super.searchReservatorioText, () {
+      super.searchReservatorioText = value;
+    });
+  }
+
   final _$buscarReservatorioDetalhesAsyncAction =
       AsyncAction('_ReservatoriosStoreBase.buscarReservatorioDetalhes');
 
@@ -442,6 +467,17 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
         name: '_ReservatoriosStoreBase.setReservatorioDetalhes');
     try {
       return super.setReservatorioDetalhes(reservatorio);
+    } finally {
+      _$_ReservatoriosStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setSearchReservatorioText(String value) {
+    final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
+        name: '_ReservatoriosStoreBase.setSearchReservatorioText');
+    try {
+      return super.setSearchReservatorioText(value);
     } finally {
       _$_ReservatoriosStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -559,7 +595,9 @@ isSolucaoNutritivaValid: ${isSolucaoNutritivaValid},
 novoReservatorioName: ${novoReservatorioName},
 novoReservatorioVolume: ${novoReservatorioVolume},
 pesquisarReceita: ${pesquisarReceita},
-dotIndicator: ${dotIndicator}
+dotIndicator: ${dotIndicator},
+searchReservatorioText: ${searchReservatorioText},
+searchReservatorio: ${searchReservatorio}
     ''';
   }
 }

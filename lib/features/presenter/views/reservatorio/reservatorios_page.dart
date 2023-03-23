@@ -23,6 +23,12 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
   final ScrollController _scrollController = ScrollController();
 
   @override
+  void initState() {
+    store.setSearchReservatorioText('');
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -81,7 +87,7 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
         (BuildContext context, int index) {
           return reservatorioItem(index, store);
         },
-        childCount: store.reservatorioList.length,
+        childCount: store.searchReservatorio.length,
       ),
     );
   }
@@ -163,6 +169,9 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
         vertical: 5, //MediaQuery.of(context).size.height * 0.007,
       ),
       child: TextFormField(
+        onChanged: ((value) => {
+              store.setSearchReservatorioText(value),
+            }),
         textAlignVertical: TextAlignVertical.top,
         textAlign: TextAlign.start,
         decoration: InputDecoration(
