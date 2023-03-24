@@ -166,7 +166,9 @@ class SolucaoDatasource implements ISolucaoDatasource {
               id
               quantidade
               fertilizante {
+                id
                 nome
+                compatibilidade
               }
             }
           }
@@ -201,6 +203,7 @@ class SolucaoDatasource implements ISolucaoDatasource {
             id
             nome
             c_eletrica
+            compatibilidade
             fertilizantes_nutrientes {
               id
               teor_nutriente
@@ -259,7 +262,9 @@ class SolucaoDatasource implements ISolucaoDatasource {
             solucoes_fertilizantes_concentradas {
               quantidade
               fertilizante {
+                id
                 nome
+                compatibilidade
                 fertilizantes_nutrientes {
                   teor_nutriente
                   nutriente {

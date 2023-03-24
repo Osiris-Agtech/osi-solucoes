@@ -105,7 +105,7 @@ class _CadastrarSolucaoConcentradaPageState
   Widget titulo() {
     return const Padding(
       padding: EdgeInsets.only(
-        left: 40,
+        left: 30,
         right: 30,
       ),
       child: Text(
@@ -552,7 +552,7 @@ class _CadastrarSolucaoConcentradaPageState
     );
   }
 
-  _solucaoConcentradaFertList(String? nome, int index) {
+  _solucaoConcentradaFertList(String? nome, int indexConcentrada) {
     return showModalBottomSheet<void>(
       constraints:
           BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.6),
@@ -569,6 +569,7 @@ class _CadastrarSolucaoConcentradaPageState
         return Container(
           padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
@@ -614,6 +615,7 @@ class _CadastrarSolucaoConcentradaPageState
                     }
                     return ListView.builder(
                       shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: store.showFertilizantesNaoUtilizados.length,
                       itemBuilder: (context, index) {
                         return Padding(
@@ -621,36 +623,48 @@ class _CadastrarSolucaoConcentradaPageState
                             right: 10,
                             top: index == 0 ? 10 : 0,
                           ),
-                          child: ListTile(
-                            leading: Observer(builder: (_) {
-                              if (!store.showFertilizantesNaoUtilizados[index]
-                                  .selected) {
+                          child: Observer(builder: (_) {
+                            bool check = store.checkCompatibilidade(
+                              number: store
+                                      .showFertilizantesNaoUtilizados[index]
+                                      .fertilizante
+                                      .compatibilidade ??
+                                  0,
+                              indexConcentrada: indexConcentrada,
+                            );
+
+                            return ListTile(
+                              enabled: check,
+                              leading: Observer(builder: (_) {
+                                if (!store.showFertilizantesNaoUtilizados[index]
+                                    .selected) {
+                                  return const Icon(
+                                      Icons.check_box_outline_blank_rounded);
+                                }
                                 return const Icon(
-                                    Icons.check_box_outline_blank_rounded);
-                              }
-                              return const Icon(
-                                Icons.check_box,
-                                color: Constants.kPrimaryColor,
-                              );
-                            }),
-                            dense: true,
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 10),
-                            title: Text(
-                              store.showFertilizantesNaoUtilizados[index]
-                                      .fertilizante.nome ??
-                                  "---",
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w500),
-                            ),
-                            onTap: () {
-                              store.changeSelecaoFertilizantesEscolhidos(
-                                index,
-                                !store.showFertilizantesNaoUtilizados[index]
-                                    .selected,
-                              );
-                            },
-                          ),
+                                  Icons.check_box,
+                                  color: Constants.kPrimaryColor,
+                                );
+                              }),
+                              dense: true,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              title: Text(
+                                store.showFertilizantesNaoUtilizados[index]
+                                        .fertilizante.nome ??
+                                    "---",
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w500),
+                              ),
+                              onTap: () {
+                                store.changeSelecaoFertilizantesEscolhidos(
+                                  index,
+                                  !store.showFertilizantesNaoUtilizados[index]
+                                      .selected,
+                                );
+                              },
+                            );
+                          }),
                         );
                       },
                     );
@@ -678,7 +692,7 @@ class _CadastrarSolucaoConcentradaPageState
                           ),
                         ),
                         onPressed: () {
-                          store.addFertilizanteParaSolucao(index);
+                          store.addFertilizanteParaSolucao(indexConcentrada);
                         },
                       ),
                     ),

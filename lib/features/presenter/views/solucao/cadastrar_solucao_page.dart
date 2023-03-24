@@ -231,8 +231,12 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
                   itemCount: store.expandedFertilizantes.length,
                   itemBuilder: (context, indexExpended) {
                     return Padding(
-                      padding:
-                          EdgeInsets.only(top: indexExpended == 0 ? 16.0 : 4.0),
+                      padding: EdgeInsets.only(
+                          top: indexExpended == 0 ? 16.0 : 4.0,
+                          bottom: indexExpended ==
+                                  store.expandedFertilizantes.length - 1
+                              ? 16.0
+                              : 0.0),
                       child: Card(
                         elevation: 2,
                         shape: RoundedRectangleBorder(
@@ -376,6 +380,9 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
         children: [
           CustomTextFormField(
             value: itemFertilizante.quantidade,
+            onEditingComplete: () {
+              store.setExpandedCard(index);
+            },
             onChanged: (String value) {
               store.setFertilizanteQuantidade(
                 itemFertilizante.fertilizante.id ?? 0,
@@ -451,7 +458,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
   Widget titulo() {
     return const Padding(
       padding: EdgeInsets.only(
-        left: 40,
+        left: 30,
         right: 30,
       ),
       child: Text(

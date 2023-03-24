@@ -391,7 +391,7 @@ abstract class _SolucaoStoreBase with Store {
 
   @action
   bool validarCadastroConcentrada() {
-    if (fatorConcentracao.text.isEmpty) {
+    if (fatorConcentracao.text.isEmpty && solucaoConcentradaList.isNotEmpty) {
       toastError(message: 'Preencha o fator de concentração');
       return false;
     }
@@ -520,6 +520,9 @@ abstract class _SolucaoStoreBase with Store {
   @observable
   List<SolucaoConcentrada> solucaoConcentradaList = [];
 
+  // @observable
+  // List<int> compatibilidadeConcentrada = [];
+
   @action
   setFertilizantesEscolhidos() {
     fertilizantesEscolhidos = [];
@@ -602,6 +605,7 @@ abstract class _SolucaoStoreBase with Store {
   addToSolucaoConcentradaList() {
     solucaoConcentradaList.add(SolucaoConcentrada());
     solucaoConcentradaList = List.from(solucaoConcentradaList);
+    setFertilizantesEscolhidos();
   }
 
   @action
@@ -628,5 +632,70 @@ abstract class _SolucaoStoreBase with Store {
     }
 
     return list;
+  }
+
+  @computed
+  List<SelecaoFertilizante> get showSelectedFertilizantes {
+    List<SelecaoFertilizante> list = [];
+    for (var item in showFertilizantesNaoUtilizados) {
+      if (item.selected) {
+        list.add(item);
+      }
+    }
+
+    return list;
+  }
+
+  @action
+  bool checkCompatibilidade(
+      {required int number, required int indexConcentrada}) {
+    bool isCompatible = false;
+    List<SelecaoFertilizante> list = List.from(showSelectedFertilizantes);
+
+    /// ESTÁ ACONTECENDO ALGUM ERRO QUE A LISTA NÃO ESTÁ RESETANDO PARA FAZER A
+    /// VERIFICAÇÃO DA COMPATIBILIDADE. ISSO TÁ DEIXANDO ELA COM VÁRIOS ITENS REPETIDOS
+
+    print('Lista 01: ${list.length}');
+    for (SolucaoFertilizanteConcentrada item
+        in solucaoConcentradaList[indexConcentrada]
+                .solucoes_fertilizantes_concentradas ??
+            []) {
+      list.add(
+        SelecaoFertilizante(
+          selected: true,
+          fertilizante: item.fertilizante!,
+        ),
+      );
+    }
+    print('Lista 02: ${list.length}');
+
+    switch (number) {
+      case 0:
+        isCompatible = true;
+        break;
+      case 1:
+        int index = list
+            .indexWhere((element) => element.fertilizante.compatibilidade == 2);
+        if (index != -1) {
+          isCompatible = false;
+        } else {
+          isCompatible = true;
+        }
+        break;
+      case 2:
+        int index = list
+            .indexWhere((element) => element.fertilizante.compatibilidade == 1);
+        if (index != -1) {
+          isCompatible = false;
+        } else {
+          isCompatible = true;
+        }
+        break;
+      default:
+        isCompatible = true;
+        break;
+    }
+
+    return isCompatible;
   }
 }

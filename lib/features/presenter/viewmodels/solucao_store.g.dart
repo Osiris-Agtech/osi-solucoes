@@ -41,6 +41,15 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
                   () => super.showFertilizantesNaoUtilizados,
                   name: '_SolucaoStoreBase.showFertilizantesNaoUtilizados'))
           .value;
+  Computed<List<SelecaoFertilizante>>? _$showSelectedFertilizantesComputed;
+
+  @override
+  List<SelecaoFertilizante> get showSelectedFertilizantes =>
+      (_$showSelectedFertilizantesComputed ??=
+              Computed<List<SelecaoFertilizante>>(
+                  () => super.showSelectedFertilizantes,
+                  name: '_SolucaoStoreBase.showSelectedFertilizantes'))
+          .value;
 
   final _$valueAtom = Atom(name: '_SolucaoStoreBase.value');
 
@@ -656,6 +665,19 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   }
 
   @override
+  bool checkCompatibilidade(
+      {required int number, required int indexConcentrada}) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.checkCompatibilidade');
+    try {
+      return super.checkCompatibilidade(
+          number: number, indexConcentrada: indexConcentrada);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
@@ -681,7 +703,8 @@ solucaoConcentradaList: ${solucaoConcentradaList},
 selectedFertilizantes: ${selectedFertilizantes},
 nutrientesCalculados: ${nutrientesCalculados},
 searchSolucao: ${searchSolucao},
-showFertilizantesNaoUtilizados: ${showFertilizantesNaoUtilizados}
+showFertilizantesNaoUtilizados: ${showFertilizantesNaoUtilizados},
+showSelectedFertilizantes: ${showSelectedFertilizantes}
     ''';
   }
 }

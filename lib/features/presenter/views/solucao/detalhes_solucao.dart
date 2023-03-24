@@ -29,13 +29,16 @@ class _DetalhesSolucaoState extends State<DetalhesSolucao> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(
-                  Icons.close,
-                  size: 32,
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+                child: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(
+                    Icons.close,
+                    size: 32,
+                  ),
+                  color: Constants.kPrimaryColor,
                 ),
-                color: Constants.kPrimaryColor,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),

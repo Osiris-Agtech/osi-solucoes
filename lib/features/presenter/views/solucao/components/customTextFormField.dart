@@ -9,10 +9,15 @@ import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final Function(String)? onChanged;
+  final Function()? onEditingComplete;
   final String? value;
 
-  const CustomTextFormField({Key? key, this.onChanged, this.value})
-      : super(key: key);
+  const CustomTextFormField({
+    Key? key,
+    this.onChanged,
+    this.value,
+    this.onEditingComplete,
+  }) : super(key: key);
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -57,6 +62,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           ),
         ),
       ),
+      onEditingComplete: widget.onEditingComplete,
       onChanged: (String value) {
         widget.onChanged?.call(value);
         controller.selection =
