@@ -8,6 +8,7 @@ import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
@@ -210,6 +211,8 @@ abstract class _SetorStoreBase with Store {
   @action
   registrarSetor() async {
     SetorRepository setorRepository = GetIt.I<SetorRepository>();
+    AreaCultivoStore areaCultivoStore = GetIt.I<AreaCultivoStore>();
+
     isNovoSetorLoading = true;
 
     novoSetor = Setor(
@@ -228,6 +231,7 @@ abstract class _SetorStoreBase with Store {
       (data) async {
         toastSuccess(message: "Cadastrado com sucesso");
         buscarSetores();
+        areaCultivoStore.buscarArea();
         limparTudo();
         Get.close(1);
       },
