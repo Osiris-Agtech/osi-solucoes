@@ -60,6 +60,8 @@ class _CadastrarSolucaoConcentradaPageState
                   subtitulo(),
                   const SizedBox(height: 10),
                   _fator(context),
+                  const SizedBox(height: 10),
+                  _volume(context),
                   const Divider(),
                   Expanded(
                     child: Padding(
@@ -137,7 +139,11 @@ class _CadastrarSolucaoConcentradaPageState
         highlightColor: Colors.transparent,
         child: Observer(builder: (_) {
           return ListTile(
-            leading: const Icon(Icons.invert_colors),
+            horizontalTitleGap: 8,
+            leading: const Icon(
+              Icons.keyboard_double_arrow_up_rounded,
+              size: 32,
+            ),
             title: const Text(
               'Fator de concentração',
               style: TextStyle(
@@ -257,7 +263,164 @@ class _CadastrarSolucaoConcentradaPageState
                         fontStyle: FontStyle.italic,
                       ),
                       decoration: const InputDecoration(
-                        hintText: 'EX. 300',
+                        hintText: '100x',
+                        hintStyle: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.normal,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+// -----------------------------------------------------------------------------
+
+  _volume(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 20,
+        top: 15,
+      ),
+      child: InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: Observer(builder: (_) {
+          return ListTile(
+            horizontalTitleGap: 8,
+            leading: const Padding(
+              padding: EdgeInsets.only(left: 4.0),
+              child: Icon(
+                Icons.invert_colors,
+              ),
+            ),
+            title: const Text(
+              'Volume',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            trailing: store.volumeConcentracao.text.isNotEmpty
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        store.volumeConcentracao.text + ' Litros',
+                        textAlign: TextAlign.end,
+                        style: const TextStyle(
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  )
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Text(
+                        "Preencher",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Constants.kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        size: 18,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  ),
+            onTap: () {
+              _volumeTextField(context);
+            },
+          );
+        }),
+      ),
+    );
+  }
+
+  _volumeTextField(BuildContext context) {
+    return showModalBottomSheet<void>(
+      backgroundColor: Constants.kBackgroundColor,
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+      ),
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.9,
+          padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(
+                  Icons.close,
+                  size: 32,
+                ),
+                color: Constants.kPrimaryColor,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
+                child: RichText(
+                  textAlign: TextAlign.start,
+                  text: const TextSpan(
+                    text: 'Qual ',
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'volume',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Constants.kPrimaryColor),
+                      ),
+                      TextSpan(text: ' você deseja em cada solução ?'),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+                child: Observer(
+                  builder: (_) {
+                    return TextFormField(
+                      controller: store.volumeConcentracao,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.normal,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      decoration: const InputDecoration(
+                        hintText: '20 Litros',
                         hintStyle: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.normal,

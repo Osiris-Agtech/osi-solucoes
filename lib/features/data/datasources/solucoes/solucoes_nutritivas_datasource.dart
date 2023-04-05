@@ -309,7 +309,8 @@ class SolucaoDatasource implements ISolucaoDatasource {
         mutation CreateOneConcentrada {
           createOneConcentrada(data: {
             nome: "${novaSolucaoConcentrada.nome}",
-            fator_concentracao: ${novaSolucaoConcentrada.fator_concentracao}
+            fator_concentracao: ${novaSolucaoConcentrada.fator_concentracao},
+            volume: ${novaSolucaoConcentrada.volume ?? 1},
           }) {
             id
             nome

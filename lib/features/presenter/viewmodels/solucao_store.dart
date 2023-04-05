@@ -206,6 +206,15 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
+  double calcularQuantidadeFertilizanteConcentrada({
+    required double quantidadeOriginal,
+    required double volumeConcentrada,
+    required double fator,
+  }) {
+    return volumeConcentrada * quantidadeOriginal * fator / 1000;
+  }
+
+  @action
   buscarDetalhesSolucao() async {
     SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
     isSolucaoDetalhesLoading = true;
@@ -320,8 +329,6 @@ abstract class _SolucaoStoreBase with Store {
   generateSolucaoFertilizanteConcentrada() {
     List<SolucaoFertilizanteConcentrada> list = [];
 
-    /// VERIFICAR SE A LISTA DE CONCENTRADA NÃO ESTÁ VAZIA, PARA PODER ADD O ID
-    /// DA CONCENTRADA NA LISTA ABAIXO
     if (solucaoConcentradaList.isEmpty) {
       for (var item in expandedFertilizantes) {
         list.add(
@@ -421,6 +428,7 @@ abstract class _SolucaoStoreBase with Store {
     quantidadeFertilizantes.clear();
     solucaoConcentradaList.clear();
     fatorConcentracao.clear();
+    volumeConcentracao.clear();
   }
 
   @computed
@@ -488,12 +496,6 @@ abstract class _SolucaoStoreBase with Store {
         double.parse(a.teor_nutriente ?? '0.0'),
       ),
     );
-    // list.sort((a, b) {
-    //   double valueA = double.parse(a.teor_nutriente ?? '0');
-    //   double valueB = double.parse(b.teor_nutriente ?? '0');
-    //   if (valueA >
-    //       double.parse(b.teor_nutriente ?? '0')) return -1;
-    // });
     return list;
   }
 
@@ -516,6 +518,9 @@ abstract class _SolucaoStoreBase with Store {
 
   @observable
   TextEditingController fatorConcentracao = TextEditingController();
+
+  @observable
+  TextEditingController volumeConcentracao = TextEditingController();
 
   @observable
   List<SolucaoConcentrada> solucaoConcentradaList = [];
@@ -571,6 +576,7 @@ abstract class _SolucaoStoreBase with Store {
       SolucaoConcentrada novaConcentrada = SolucaoConcentrada(
         nome: solucaoConcentradaList[i].nome,
         fator_concentracao: double.tryParse(fatorConcentracao.text),
+        volume: double.tryParse(volumeConcentracao.text) ?? 1,
       );
 
       var solucaoConcentrada = await solucaoRepository
@@ -592,6 +598,7 @@ abstract class _SolucaoStoreBase with Store {
   clearSolucaoConcentrada() {
     solucaoConcentradaList = [];
     fatorConcentracao = TextEditingController();
+    volumeConcentracao = TextEditingController();
   }
 
   @action
@@ -652,10 +659,6 @@ abstract class _SolucaoStoreBase with Store {
     bool isCompatible = false;
     List<SelecaoFertilizante> list = List.from(showSelectedFertilizantes);
 
-    /// ESTÁ ACONTECENDO ALGUM ERRO QUE A LISTA NÃO ESTÁ RESETANDO PARA FAZER A
-    /// VERIFICAÇÃO DA COMPATIBILIDADE. ISSO TÁ DEIXANDO ELA COM VÁRIOS ITENS REPETIDOS
-
-    print('Lista 01: ${list.length}');
     for (SolucaoFertilizanteConcentrada item
         in solucaoConcentradaList[indexConcentrada]
                 .solucoes_fertilizantes_concentradas ??
@@ -667,7 +670,6 @@ abstract class _SolucaoStoreBase with Store {
         ),
       );
     }
-    print('Lista 02: ${list.length}');
 
     switch (number) {
       case 0:

@@ -10,12 +10,12 @@ SolucaoConcentrada _$SolucaoConcentradaFromJson(Map<String, dynamic> json) =>
     SolucaoConcentrada(
       id: json['id'] as int?,
       nome: json['nome'] as String?,
-      volume: (json['volume'] as num?)?.toDouble(),
+      volume: SolucaoConcentrada._stringFromJson(json['volume']),
       created_at: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
-      fator_concentracao: SolucaoConcentrada._fatorFromJson(
-          json['fator_concentracao'] as Object),
+      fator_concentracao:
+          SolucaoConcentrada._stringFromJson(json['fator_concentracao']),
       solucoes_fertilizantes_concentradas:
           (json['solucoes_fertilizantes_concentradas'] as List<dynamic>?)
               ?.map((e) => SolucaoFertilizanteConcentrada.fromJson(

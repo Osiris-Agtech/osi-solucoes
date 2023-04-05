@@ -361,63 +361,7 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                                             itemCount: store
                                                 .solucaoConcentradaList.length,
                                             itemBuilder: (context, index) {
-                                              return ListTile(
-                                                dense: true,
-                                                visualDensity:
-                                                    const VisualDensity(
-                                                        horizontal: 0,
-                                                        vertical: -4),
-                                                title: Text(
-                                                  store
-                                                          .solucaoConcentradaList[
-                                                              index]
-                                                          .concentrada
-                                                          ?.nome ??
-                                                      "...",
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                                subtitle: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    left: 16.0,
-                                                    bottom: 8.0,
-                                                  ),
-                                                  child: ListView.builder(
-                                                    shrinkWrap: true,
-                                                    itemCount: store
-                                                            .solucaoConcentradaList[
-                                                                index]
-                                                            .concentrada
-                                                            ?.solucoes_fertilizantes_concentradas
-                                                            ?.length ??
-                                                        0,
-                                                    itemBuilder:
-                                                        (_, indexFert) {
-                                                      SolucaoFertilizanteConcentrada?
-                                                          fertilizanteConcentrada =
-                                                          store
-                                                                  .solucaoConcentradaList[
-                                                                      index]
-                                                                  .concentrada
-                                                                  ?.solucoes_fertilizantes_concentradas?[
-                                                              indexFert];
-                                                      return Text(
-                                                        fertilizanteConcentrada
-                                                                ?.fertilizante
-                                                                ?.nome ??
-                                                            'Não informado',
-                                                        style: const TextStyle(
-                                                          fontSize: 14,
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                                // trailing: Text(
-                                                //     "${store.solucaoConcentradaList[index].quantidade} mg/L"),
-                                              );
+                                              return _concentradaItem(index);
                                             },
                                           );
                                         }),
@@ -533,6 +477,85 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
           ),
         ),
       ),
+    );
+  }
+
+  _concentradaItem(int index) {
+    return ListTile(
+      dense: true,
+      visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+      title: Row(
+        children: [
+          Expanded(
+            child: Text(
+              store.solucaoConcentradaList[index].concentrada?.nome ?? "...",
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            "${store.solucaoConcentradaList[index].concentrada?.volume ?? 1} Litro(s)",
+            style: const TextStyle(
+              fontSize: 14,
+              color: Constants.kGreyMedium,
+            ),
+          ),
+        ],
+      ),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(
+          left: 16.0,
+          top: 4.0,
+          bottom: 8.0,
+        ),
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: store.solucaoConcentradaList[index].concentrada
+                  ?.solucoes_fertilizantes_concentradas?.length ??
+              0,
+          itemBuilder: (_, indexFert) {
+            SolucaoFertilizanteConcentrada? fertilizanteConcentrada = store
+                .solucaoConcentradaList[index]
+                .concentrada
+                ?.solucoes_fertilizantes_concentradas?[indexFert];
+            return Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    fertilizanteConcentrada?.fertilizante?.nome ??
+                        'Não informado',
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  "${store.calcularQuantidadeFertilizanteConcentrada(
+                    quantidadeOriginal: double.tryParse(
+                            fertilizanteConcentrada?.quantidade ?? '0.0') ??
+                        0.0,
+                    volumeConcentrada: store.solucaoConcentradaList[index]
+                            .concentrada?.volume ??
+                        1,
+                    fator: store.solucaoConcentradaList[index].concentrada
+                            ?.fator_concentracao ??
+                        1,
+                  )} g",
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Constants.kGreyMedium,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+      // trailing: Text(
+      //     "${store.solucaoConcentradaList[index].quantidade} mg/L"),
     );
   }
 }

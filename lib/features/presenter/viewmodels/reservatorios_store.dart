@@ -43,6 +43,15 @@ abstract class _ReservatoriosStoreBase with Store {
   }
 
   @action
+  double calcularQuantidadeFertilizanteConcentrada({
+    required double quantidadeOriginal,
+    required double volumeConcentrada,
+    required double fator,
+  }) {
+    return volumeConcentrada * quantidadeOriginal * fator / 1000;
+  }
+
+  @action
   buscarReservatorioDetalhes() async {
     var reservatorios = await reservatorioRepository
         .buscarReservatorioDetalhes(reservatorioDetalhes.id!);

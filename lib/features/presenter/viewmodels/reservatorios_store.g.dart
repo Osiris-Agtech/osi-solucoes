@@ -473,6 +473,24 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
   }
 
   @override
+  double calcularQuantidadeFertilizanteConcentrada(
+      {required double quantidadeOriginal,
+      required double volumeConcentrada,
+      required double fator}) {
+    final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
+        name:
+            '_ReservatoriosStoreBase.calcularQuantidadeFertilizanteConcentrada');
+    try {
+      return super.calcularQuantidadeFertilizanteConcentrada(
+          quantidadeOriginal: quantidadeOriginal,
+          volumeConcentrada: volumeConcentrada,
+          fator: fator);
+    } finally {
+      _$_ReservatoriosStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setSearchReservatorioText(String value) {
     final _$actionInfo = _$_ReservatoriosStoreBaseActionController.startAction(
         name: '_ReservatoriosStoreBase.setSearchReservatorioText');

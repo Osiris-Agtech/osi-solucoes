@@ -358,6 +358,22 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
+  final _$volumeConcentracaoAtom =
+      Atom(name: '_SolucaoStoreBase.volumeConcentracao');
+
+  @override
+  TextEditingController get volumeConcentracao {
+    _$volumeConcentracaoAtom.reportRead();
+    return super.volumeConcentracao;
+  }
+
+  @override
+  set volumeConcentracao(TextEditingController value) {
+    _$volumeConcentracaoAtom.reportWrite(value, super.volumeConcentracao, () {
+      super.volumeConcentracao = value;
+    });
+  }
+
   final _$solucaoConcentradaListAtom =
       Atom(name: '_SolucaoStoreBase.solucaoConcentradaList');
 
@@ -516,6 +532,23 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
         name: '_SolucaoStoreBase.setFertilizanteQuantidade');
     try {
       return super.setFertilizanteQuantidade(id, value);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  double calcularQuantidadeFertilizanteConcentrada(
+      {required double quantidadeOriginal,
+      required double volumeConcentrada,
+      required double fator}) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.calcularQuantidadeFertilizanteConcentrada');
+    try {
+      return super.calcularQuantidadeFertilizanteConcentrada(
+          quantidadeOriginal: quantidadeOriginal,
+          volumeConcentrada: volumeConcentrada,
+          fator: fator);
     } finally {
       _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -699,6 +732,7 @@ condutividadeEletrica: ${condutividadeEletrica},
 searchSolucaoText: ${searchSolucaoText},
 fertilizantesEscolhidos: ${fertilizantesEscolhidos},
 fatorConcentracao: ${fatorConcentracao},
+volumeConcentracao: ${volumeConcentracao},
 solucaoConcentradaList: ${solucaoConcentradaList},
 selectedFertilizantes: ${selectedFertilizantes},
 nutrientesCalculados: ${nutrientesCalculados},
