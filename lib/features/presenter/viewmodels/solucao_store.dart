@@ -58,6 +58,9 @@ abstract class _SolucaoStoreBase with Store {
   List<FertilizanteNutrienteMap> nutrientesList = [];
 
   @observable
+  List<SolucaoFertilizanteConcentrada> solucaoConcentradaListDetalhes = [];
+
+  @observable
   TextEditingController novaSolucaoName = TextEditingController();
 
   @observable
@@ -229,9 +232,18 @@ abstract class _SolucaoStoreBase with Store {
       },
       (data) async {
         solucaoSelecionada = data;
+        solucaoConcentradaListDetalhes = [];
         nutrientesList.clear();
         for (SolucaoFertilizanteConcentrada fertilizante
             in solucaoSelecionada.solucoes_fertilizantes_concentradas ?? []) {
+          if (fertilizante.concentrada != null) {
+            if (solucaoConcentradaListDetalhes.indexWhere((solucao) =>
+                    solucao.concentrada?.id == fertilizante.concentrada?.id) ==
+                -1) {
+              solucaoConcentradaListDetalhes.add(fertilizante);
+            }
+          }
+
           var map = groupBy(
               fertilizante.fertilizante!.fertilizantes_nutrientes!,
               (FertilizanteNutriente obj) =>
@@ -255,6 +267,8 @@ abstract class _SolucaoStoreBase with Store {
           );
         }
         nutrientesList = List.from(nutrientesList);
+        solucaoConcentradaListDetalhes =
+            List.from(solucaoConcentradaListDetalhes);
       },
     );
 

@@ -261,6 +261,24 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
+  final _$solucaoConcentradaListDetalhesAtom =
+      Atom(name: '_SolucaoStoreBase.solucaoConcentradaListDetalhes');
+
+  @override
+  List<SolucaoFertilizanteConcentrada> get solucaoConcentradaListDetalhes {
+    _$solucaoConcentradaListDetalhesAtom.reportRead();
+    return super.solucaoConcentradaListDetalhes;
+  }
+
+  @override
+  set solucaoConcentradaListDetalhes(
+      List<SolucaoFertilizanteConcentrada> value) {
+    _$solucaoConcentradaListDetalhesAtom
+        .reportWrite(value, super.solucaoConcentradaListDetalhes, () {
+      super.solucaoConcentradaListDetalhes = value;
+    });
+  }
+
   final _$novaSolucaoNameAtom = Atom(name: '_SolucaoStoreBase.novaSolucaoName');
 
   @override
@@ -726,6 +744,7 @@ fertilizanteList: ${fertilizanteList},
 expandedFertilizantes: ${expandedFertilizantes},
 quantidadeFertilizantes: ${quantidadeFertilizantes},
 nutrientesList: ${nutrientesList},
+solucaoConcentradaListDetalhes: ${solucaoConcentradaListDetalhes},
 novaSolucaoName: ${novaSolucaoName},
 solucaoSelecionada: ${solucaoSelecionada},
 condutividadeEletrica: ${condutividadeEletrica},

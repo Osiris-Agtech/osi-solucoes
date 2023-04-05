@@ -554,8 +554,6 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
           },
         ),
       ),
-      // trailing: Text(
-      //     "${store.solucaoConcentradaList[index].quantidade} mg/L"),
     );
   }
 }
