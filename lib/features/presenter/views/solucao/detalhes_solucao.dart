@@ -52,7 +52,7 @@ class _DetalhesSolucaoState extends State<DetalhesSolucao> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
                 child: Text(
-                  "C.elétrica: ${getCurrency(double.parse(store.solucaoSelecionada.c_eletrica ?? '0'))} S.m/mm2",
+                  "C.elétrica: ${getCurrency(double.parse(store.solucaoSelecionada.c_eletrica ?? '0'))} MicroS/cm",
                   style:
                       const TextStyle(fontSize: 16, color: Constants.kGreyText),
                 ),
@@ -70,7 +70,7 @@ class _DetalhesSolucaoState extends State<DetalhesSolucao> {
                   ),
                   Spacer(),
                   Text(
-                    'quantidade / Litro',
+                    'mg / Litro',
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -118,14 +118,27 @@ class _DetalhesSolucaoState extends State<DetalhesSolucao> {
                   },
                 );
               }),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                child: Text(
-                  'Lista de Nutrientes',
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      fontStyle: FontStyle.italic),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                child: Row(
+                  children: const [
+                    Text(
+                      'Lista de Nutrientes',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.italic),
+                    ),
+                    Spacer(),
+                    Text(
+                      'mg / Litros',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.italic),
+                    ),
+                  ],
                 ),
               ),
               Observer(builder: (_) {
