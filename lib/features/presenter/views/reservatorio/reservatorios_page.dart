@@ -195,7 +195,7 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
               primary: Constants.kPrimaryColor,
             ),
             child: const Text(
-              "data",
+              "nome",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,

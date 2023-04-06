@@ -297,7 +297,7 @@ class TabSolucaoConcentrada extends StatelessWidget {
           ),
           Padding(
               padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.009),
+                  top: MediaQuery.of(context).size.height * 0.02),
               child: SizedBox(
                 height: 45,
                 width: double.infinity,
@@ -306,9 +306,9 @@ class TabSolucaoConcentrada extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      Text(
-                        "Volume total do reservatório",
+                    children: [
+                      const Text(
+                        "Volume total do reservatório: ",
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontStyle: FontStyle.italic,
@@ -317,8 +317,8 @@ class TabSolucaoConcentrada extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "  5000 L",
-                        style: TextStyle(
+                        '${store.selectedReservatorio.volume} Litros',
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic,
                           fontSize: 14,
