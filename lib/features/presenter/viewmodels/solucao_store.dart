@@ -266,6 +266,38 @@ abstract class _SolucaoStoreBase with Store {
             },
           );
         }
+
+        //----------------------------------------------------------------------------
+
+        double teorNitrogenio = double.tryParse(nutrientesList
+                    .firstWhereOrNull((element) => element.key == 'N')
+                    ?.values[0]
+                    .teor_nutriente ??
+                '1.0') ??
+            1.0;
+
+        for (var i = 0; i < nutrientesList.length; i++) {
+          if (nutrientesList[i].key == 'N-NO3-') {
+            nutrientesList[i].values[0].teor_nutriente = ((double.tryParse(
+                            nutrientesList[i].values[0].teor_nutriente ??
+                                '0.0') ??
+                        0.0) *
+                    teorNitrogenio)
+                .toString();
+          }
+
+          if (nutrientesList[i].key == 'N-NH4+') {
+            nutrientesList[i].values[0].teor_nutriente = ((double.tryParse(
+                            nutrientesList[i].values[0].teor_nutriente ??
+                                '0.0') ??
+                        0.0) *
+                    teorNitrogenio)
+                .toString();
+          }
+        }
+
+        //----------------------------------------------------------------------------
+
         nutrientesList = List.from(nutrientesList);
         solucaoConcentradaListDetalhes =
             List.from(solucaoConcentradaListDetalhes);
@@ -273,6 +305,34 @@ abstract class _SolucaoStoreBase with Store {
     );
 
     isSolucaoDetalhesLoading = false;
+  }
+
+  @action
+  multiplicarTeorNitratoEAmonia() {
+    double teorNitrogenio = double.tryParse(nutrientesList
+                .firstWhereOrNull((element) => element.key == 'N')
+                ?.values[0]
+                .teor_nutriente ??
+            '1.0') ??
+        1.0;
+
+    for (var i = 0; i < nutrientesList.length; i++) {
+      if (nutrientesList[i].key == 'N-NO3-') {
+        nutrientesList[i].values[0].teor_nutriente = ((double.tryParse(
+                        nutrientesList[i].values[0].teor_nutriente ?? '0.0') ??
+                    0.0) *
+                teorNitrogenio)
+            .toString();
+      }
+
+      if (nutrientesList[i].key == 'N-NH4+') {
+        nutrientesList[i].values[0].teor_nutriente = ((double.tryParse(
+                        nutrientesList[i].values[0].teor_nutriente ?? '0.0') ??
+                    0.0) *
+                teorNitrogenio)
+            .toString();
+      }
+    }
   }
 
   @action
@@ -510,6 +570,32 @@ abstract class _SolucaoStoreBase with Store {
         double.parse(a.teor_nutriente ?? '0.0'),
       ),
     );
+
+    //--------------------------------------------------------------------------
+
+    double teorNitrogenio = double.tryParse(list
+                .firstWhereOrNull((element) => element.nutriente?.sigla == 'N')
+                ?.teor_nutriente ??
+            '1.0') ??
+        1.0;
+
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].nutriente?.sigla == 'N-NO3-') {
+        list[i].teor_nutriente =
+            ((double.tryParse(list[i].teor_nutriente ?? '0.0') ?? 0.0) *
+                    teorNitrogenio)
+                .toString();
+      }
+
+      if (list[i].nutriente?.sigla == 'N-NH4+') {
+        list[i].teor_nutriente =
+            ((double.tryParse(list[i].teor_nutriente ?? '0.0') ?? 0.0) *
+                    teorNitrogenio)
+                .toString();
+      }
+    }
+
+    //--------------------------------------------------------------------------
     return list;
   }
 

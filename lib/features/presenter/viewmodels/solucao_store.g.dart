@@ -573,6 +573,17 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   }
 
   @override
+  dynamic multiplicarTeorNitratoEAmonia() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.multiplicarTeorNitratoEAmonia');
+    try {
+      return super.multiplicarTeorNitratoEAmonia();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic validarFertilizantes() {
     final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
         name: '_SolucaoStoreBase.validarFertilizantes');

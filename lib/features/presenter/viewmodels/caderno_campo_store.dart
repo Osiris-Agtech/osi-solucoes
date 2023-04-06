@@ -214,6 +214,9 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
+  limparLoteSelecionado() => loteSelecionado = Lote();
+
+  @action
   limparLotes() {
     loteList.clear();
     areaList.clear();
@@ -484,9 +487,13 @@ abstract class _CadernoCampoStoreBase with Store {
             LoteByFilter(
               key: key,
               selected: false,
-              lotesSelection: value
-                  .map((e) => LoteSelection(selected: false, lote: e))
-                  .toList(),
+              lotesSelection: value.map((e) {
+                if (loteSelecionado.id != null && loteSelecionado.id == e.id) {
+                  return LoteSelection(selected: true, lote: e);
+                }
+
+                return LoteSelection(selected: false, lote: e);
+              }).toList(),
             ),
           );
         });
@@ -506,9 +513,13 @@ abstract class _CadernoCampoStoreBase with Store {
             LoteByFilter(
               key: key,
               selected: false,
-              lotesSelection: value
-                  .map((e) => LoteSelection(selected: false, lote: e))
-                  .toList(),
+              lotesSelection: value.map((e) {
+                if (loteSelecionado.id != null && loteSelecionado.id == e.id) {
+                  return LoteSelection(selected: true, lote: e);
+                }
+
+                return LoteSelection(selected: false, lote: e);
+              }).toList(),
             ),
           );
         });

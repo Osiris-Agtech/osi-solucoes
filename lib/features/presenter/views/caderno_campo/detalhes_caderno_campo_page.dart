@@ -39,6 +39,12 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
   }
 
   @override
+  void dispose() {
+    store.limparLoteSelecionado();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -51,7 +57,6 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 18.0),
             child: FloatingActionButton(
-              heroTag: 'NovaNota',
               onPressed: () {
                 Get.toNamed(Routes.cadastroCadernoCampoPage);
               },

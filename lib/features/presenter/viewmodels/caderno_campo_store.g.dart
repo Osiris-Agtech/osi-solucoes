@@ -603,6 +603,17 @@ mixin _$CadernoCampoStore on _CadernoCampoStoreBase, Store {
   }
 
   @override
+  dynamic limparLoteSelecionado() {
+    final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
+        name: '_CadernoCampoStoreBase.limparLoteSelecionado');
+    try {
+      return super.limparLoteSelecionado();
+    } finally {
+      _$_CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic limparLotes() {
     final _$actionInfo = _$_CadernoCampoStoreBaseActionController.startAction(
         name: '_CadernoCampoStoreBase.limparLotes');
