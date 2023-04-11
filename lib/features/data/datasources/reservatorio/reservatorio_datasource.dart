@@ -232,7 +232,15 @@ class ReservatorioDatasource implements IReservatorioDatasource {
                 concentrada {
                   id
                   nome
+                  volume
                   fator_concentracao
+                  solucoes_fertilizantes_concentradas {
+                    fertilizante {
+                      id
+                      nome
+                    }
+                    quantidade
+                  }
                 }
               }
             }

@@ -18,7 +18,7 @@ Padding reservatorioItem(int index, ReservatoriosStore store) {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        store.setReservatorioDetalhes(store.reservatorioList[index]);
+        store.setReservatorioDetalhes(store.searchReservatorio[index]);
         // Get.toNamed(Routes.detalhesReservatorio);
         Get.to(() => const DetalhesReservatorio());
       },
@@ -52,7 +52,7 @@ Padding reservatorioItem(int index, ReservatoriosStore store) {
                         bottom: 5.0,
                       ),
                       child: Text(
-                        store.reservatorioList[index].nome ?? "---",
+                        store.searchReservatorio[index].nome ?? "---",
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -74,7 +74,7 @@ Padding reservatorioItem(int index, ReservatoriosStore store) {
                           Padding(
                             padding: const EdgeInsets.only(left: 5),
                             child: Text(
-                              "${store.reservatorioList[index].lotes?.length ?? 0} Ativos",
+                              "${store.searchReservatorio[index].lotes?.length ?? 0} Ativos",
                               style: const TextStyle(
                                 color: Constants.kPrimaryColor,
                                 fontSize: 14,

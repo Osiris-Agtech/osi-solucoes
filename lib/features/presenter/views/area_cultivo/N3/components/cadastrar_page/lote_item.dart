@@ -18,43 +18,59 @@ lote(
           Icons.label,
           color: Constants.kPrimaryColor,
         ),
-        title: const Text(
-          'Lote',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-        ),
-        trailing: store.novoLoteName.text.isNotEmpty
-            ? SizedBox(
-                width: 150,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      width: 126,
-                      child: Text(
-                        store.novoLoteName.text,
-                        textAlign: TextAlign.end,
-                        style: const TextStyle(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(right: 8),
+              child: Text(
+                'Lote',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+              ),
+            ),
+            store.novoLoteName.text.isNotEmpty
+                ? Expanded(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            store.novoLoteName.text,
+                            textAlign: TextAlign.end,
+                            style: const TextStyle(
+                              color: Constants.kPrimaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const Icon(
+                          Icons.chevron_right,
+                          color: Constants.kPrimaryColor,
+                        ),
+                      ],
+                    ),
+                  )
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Text(
+                        "Preencher",
+                        style: TextStyle(
                           color: Constants.kPrimaryColor,
                           fontWeight: FontWeight.w600,
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    const Icon(
-                      Icons.chevron_right,
-                      color: Constants.kPrimaryColor,
-                    ),
-                  ],
-                ),
-              )
-            : const Text(
-                "Preencher",
-                style: TextStyle(
-                  color: Constants.kPrimaryColor,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+                      Icon(
+                        Icons.chevron_right,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  ),
+          ],
+        ),
         onTap: () {
           store.setDotIndicator(1);
           bottomSheetN3(context, carouselController, store, key);

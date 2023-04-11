@@ -109,9 +109,13 @@ abstract class _AjustesStoreBase with Store {
   @observable
   List<Reservatorio> reservatorioList = [];
 
+  @observable
+  List<SolucaoFertilizanteConcentrada> solucaoConcentradaList = [];
+
   @action
   selectReservatorio(Reservatorio reservatorio) {
     selectedReservatorio = reservatorio;
+    getConcentradaList();
   }
 
   @action
@@ -132,6 +136,27 @@ abstract class _AjustesStoreBase with Store {
       },
     );
   }
+
+  @action
+  getConcentradaList() {
+    solucaoConcentradaList.clear();
+    for (SolucaoFertilizanteConcentrada fertilizante
+        in selectedReservatorio.solucao?.solucoes_fertilizantes_concentradas ??
+            []) {
+      if (fertilizante.concentrada != null) {
+        if (solucaoConcentradaList.indexWhere((solucao) =>
+                solucao.concentrada?.id == fertilizante.concentrada?.id) ==
+            -1) {
+          solucaoConcentradaList.add(fertilizante);
+        }
+      }
+    }
+
+    if (solucaoConcentradaList.isNotEmpty) {
+      fatorConcentracaoRecebido =
+          solucaoConcentradaList[0].concentrada?.fator_concentracao ?? 100.0;
+    }
+  }
   // #################### FIM DROPDOWN RESERVATORIO #######################
 
   // #################### INICIO CALCULO ##################################
@@ -140,6 +165,9 @@ abstract class _AjustesStoreBase with Store {
 
   @observable
   String volumeConcentrado = '';
+
+  @observable
+  double fatorConcentracaoRecebido = 100;
 
   @observable
   List<ReposicaoFert> reposicaoFert = [];
@@ -215,7 +243,7 @@ abstract class _AjustesStoreBase with Store {
             .solucao?.solucoes_fertilizantes_concentradas?[0].quantidade! ??
         '0.0');
 
-    double fatorConcentracao = 300;
+    double fatorConcentracao = fatorConcentracaoRecebido;
     // obs: Essa condutividade ja deve vir considerando CE da agua
     double ceTeorico =
         double.parse(selectedReservatorio.solucao?.c_eletrica ?? '0.0');

@@ -111,25 +111,16 @@ Widget fertilizantePage(
                       padding: EdgeInsets.only(
                           left: 10, right: 10, top: index == 0 ? 10 : 0),
                       child: ListTile(
-                        leading: IconButton(
-                          padding: EdgeInsets.zero,
-                          icon: Observer(builder: (_) {
-                            if (!store.fertilizanteList[index].selected) {
-                              return const Icon(
-                                  Icons.check_box_outline_blank_rounded);
-                            }
+                        leading: Observer(builder: (_) {
+                          if (!store.fertilizanteList[index].selected) {
                             return const Icon(
-                              Icons.check_box,
-                              color: Constants.kPrimaryColor,
-                            );
-                          }),
-                          onPressed: () {
-                            store.changeSelecaoFertilizante(
-                              index,
-                              !store.fertilizanteList[index].selected,
-                            );
-                          },
-                        ),
+                                Icons.check_box_outline_blank_rounded);
+                          }
+                          return const Icon(
+                            Icons.check_box,
+                            color: Constants.kPrimaryColor,
+                          );
+                        }),
                         dense: true,
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 20),
@@ -140,8 +131,10 @@ Widget fertilizantePage(
                               fontSize: 20, fontWeight: FontWeight.w500),
                         ),
                         onTap: () {
-                          // store.setSolucaoDetalhes(store.solucaoList[index]);
-                          controlerPages.nextPage();
+                          store.changeSelecaoFertilizante(
+                            index,
+                            !store.fertilizanteList[index].selected,
+                          );
                         },
                       ),
                     );

@@ -9,6 +9,7 @@ import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/caderno_campo_store.dart';
@@ -86,7 +87,7 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
                                   ? store.dropButtonArea
                                   : null,
                               hint: const Text(
-                                'Selecionar',
+                                'Por Área',
                                 style: TextStyle(fontStyle: FontStyle.italic),
                               ),
                               isExpanded: true,
@@ -120,7 +121,7 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
                                   ? store.dropButtonSetor
                                   : null,
                               hint: const Text(
-                                'Selecionar',
+                                'No Setor',
                                 style: TextStyle(fontStyle: FontStyle.italic),
                               ),
                               isExpanded: true,
@@ -415,6 +416,62 @@ class _CardLoteState extends State<CardLote> {
                     ),
                   ],
                 ),
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const Icon(
+                    Icons.calendar_month_rounded,
+                    color: Constants.kText2,
+                    size: 16,
+                  ),
+                  const Text(
+                    'Registro',
+                    style: TextStyle(
+                      color: Constants.kGreyText,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
+                  ),
+                  Text(
+                    widget.lote.registro_data != null
+                        ? DateFormat("dd/MM/y", 'pt_br')
+                                .format(
+                                  widget.lote.registro_data!,
+                                )
+                                .capitalize ??
+                            '--/--/--'
+                        : '--/--/--',
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  const Text(
+                    'Colheita',
+                    style: TextStyle(
+                      color: Constants.kGreyText,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
+                  ),
+                  Text(
+                    widget.lote.colheita_data != null
+                        ? DateFormat("dd/MM/y", 'pt_br')
+                                .format(
+                                  widget.lote.colheita_data!,
+                                )
+                                .capitalize ??
+                            '--/--/--'
+                        : '--/--/--',
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
               const Padding(
                 padding: EdgeInsets.only(right: 8.0),

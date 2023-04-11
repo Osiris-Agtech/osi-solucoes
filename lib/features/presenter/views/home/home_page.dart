@@ -277,6 +277,7 @@ class _HomePageState extends State<HomePage> {
                         },
                       );
                       await Future.delayed(const Duration(seconds: 1));
+                      store.setIsCollaped();
                       Get.to(
                         () => MultiAccountsPage(
                           isLoggedIn: true,
@@ -356,6 +357,7 @@ class _HomePageState extends State<HomePage> {
                     );
                     await LocalStorage().deleteUser();
                     await Future.delayed(const Duration(seconds: 2));
+                    store.setIsCollaped();
                     Get.offAll(() => const SplashPage());
                   },
                   child: Row(
@@ -507,8 +509,11 @@ class _HomePageState extends State<HomePage> {
                   //   false,
                   //   id: 5,
                   // ),
-                  const SizedBox(),
+                  // const SizedBox(),
                 ],
+              ),
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 24),
               ),
             ],
           ),

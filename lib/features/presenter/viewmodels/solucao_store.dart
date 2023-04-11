@@ -7,6 +7,7 @@ import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_reposi
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutrienteMap_model.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
+import 'package:osi_solucoes/features/presenter/models/solucaoConcentrada/solucaoConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
@@ -57,6 +58,9 @@ abstract class _SolucaoStoreBase with Store {
   List<FertilizanteNutrienteMap> nutrientesList = [];
 
   @observable
+  List<SolucaoFertilizanteConcentrada> solucaoConcentradaListDetalhes = [];
+
+  @observable
   TextEditingController novaSolucaoName = TextEditingController();
 
   @observable
@@ -79,6 +83,9 @@ abstract class _SolucaoStoreBase with Store {
       dotIndicator = value;
     }
   }
+
+  @action
+  setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
 
   @action
   setExpandedCard(int index) {
@@ -202,6 +209,15 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
+  double calcularQuantidadeFertilizanteConcentrada({
+    required double quantidadeOriginal,
+    required double volumeConcentrada,
+    required double fator,
+  }) {
+    return volumeConcentrada * quantidadeOriginal * fator / 1000;
+  }
+
+  @action
   buscarDetalhesSolucao() async {
     SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
     isSolucaoDetalhesLoading = true;
@@ -216,9 +232,18 @@ abstract class _SolucaoStoreBase with Store {
       },
       (data) async {
         solucaoSelecionada = data;
+        solucaoConcentradaListDetalhes = [];
         nutrientesList.clear();
         for (SolucaoFertilizanteConcentrada fertilizante
             in solucaoSelecionada.solucoes_fertilizantes_concentradas ?? []) {
+          if (fertilizante.concentrada != null) {
+            if (solucaoConcentradaListDetalhes.indexWhere((solucao) =>
+                    solucao.concentrada?.id == fertilizante.concentrada?.id) ==
+                -1) {
+              solucaoConcentradaListDetalhes.add(fertilizante);
+            }
+          }
+
           var map = groupBy(
               fertilizante.fertilizante!.fertilizantes_nutrientes!,
               (FertilizanteNutriente obj) =>
@@ -241,11 +266,73 @@ abstract class _SolucaoStoreBase with Store {
             },
           );
         }
+
+        //----------------------------------------------------------------------------
+
+        double teorNitrogenio = double.tryParse(nutrientesList
+                    .firstWhereOrNull((element) => element.key == 'N')
+                    ?.values[0]
+                    .teor_nutriente ??
+                '1.0') ??
+            1.0;
+
+        for (var i = 0; i < nutrientesList.length; i++) {
+          if (nutrientesList[i].key == 'N-NO3-') {
+            nutrientesList[i].values[0].teor_nutriente = ((double.tryParse(
+                            nutrientesList[i].values[0].teor_nutriente ??
+                                '0.0') ??
+                        0.0) *
+                    teorNitrogenio)
+                .toString();
+          }
+
+          if (nutrientesList[i].key == 'N-NH4+') {
+            nutrientesList[i].values[0].teor_nutriente = ((double.tryParse(
+                            nutrientesList[i].values[0].teor_nutriente ??
+                                '0.0') ??
+                        0.0) *
+                    teorNitrogenio)
+                .toString();
+          }
+        }
+
+        //----------------------------------------------------------------------------
+
         nutrientesList = List.from(nutrientesList);
+        solucaoConcentradaListDetalhes =
+            List.from(solucaoConcentradaListDetalhes);
       },
     );
 
     isSolucaoDetalhesLoading = false;
+  }
+
+  @action
+  multiplicarTeorNitratoEAmonia() {
+    double teorNitrogenio = double.tryParse(nutrientesList
+                .firstWhereOrNull((element) => element.key == 'N')
+                ?.values[0]
+                .teor_nutriente ??
+            '1.0') ??
+        1.0;
+
+    for (var i = 0; i < nutrientesList.length; i++) {
+      if (nutrientesList[i].key == 'N-NO3-') {
+        nutrientesList[i].values[0].teor_nutriente = ((double.tryParse(
+                        nutrientesList[i].values[0].teor_nutriente ?? '0.0') ??
+                    0.0) *
+                teorNitrogenio)
+            .toString();
+      }
+
+      if (nutrientesList[i].key == 'N-NH4+') {
+        nutrientesList[i].values[0].teor_nutriente = ((double.tryParse(
+                        nutrientesList[i].values[0].teor_nutriente ?? '0.0') ??
+                    0.0) *
+                teorNitrogenio)
+            .toString();
+      }
+    }
   }
 
   @action
@@ -269,14 +356,6 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  validarCadastro() {
-    bool validate = novaSolucaoName.text.isNotEmpty && validarFertilizantes();
-
-    mostrarErroFormulario = !validate;
-    return validate;
-  }
-
-  @action
   cadastrarSolucaoNutritiva() async {
     isNovaSolucaoLoading = true;
     SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
@@ -290,14 +369,18 @@ abstract class _SolucaoStoreBase with Store {
     );
 
     var fertilizantes = await solucaoRepository.registrarSolucaoNutritiva(
-        novaSolucao, authController.usuario.selected_conta!.conta!.id!);
+      novaSolucao,
+      authController.usuario.selected_conta!.conta!.id!,
+      solucaoConcentradaList.isNotEmpty,
+    );
 
     fertilizantes.fold(
       (err) {
         toastError(message: err.message);
       },
       (data) async {
-        Get.back();
+        Get.close(2);
+        clearAll();
         buscarSolucoes();
       },
     );
@@ -319,15 +402,97 @@ abstract class _SolucaoStoreBase with Store {
   @action
   generateSolucaoFertilizanteConcentrada() {
     List<SolucaoFertilizanteConcentrada> list = [];
-    for (var item in expandedFertilizantes) {
-      list.add(
-        SolucaoFertilizanteConcentrada(
-          fertilizante: item.fertilizante,
-          quantidade: item.quantidade.replaceAll('.', '').replaceAll(',', '.'),
-        ),
-      );
+
+    if (solucaoConcentradaList.isEmpty) {
+      for (var item in expandedFertilizantes) {
+        list.add(
+          SolucaoFertilizanteConcentrada(
+            fertilizante: item.fertilizante,
+            quantidade:
+                item.quantidade.replaceAll('.', '').replaceAll(',', '.'),
+          ),
+        );
+      }
+    } else {
+      for (var item in expandedFertilizantes) {
+        int concentradaIndex = solucaoConcentradaList.indexWhere((element) {
+          SolucaoFertilizanteConcentrada? fertilizante =
+              element.solucoes_fertilizantes_concentradas!.singleWhereOrNull(
+            (element) => element.fertilizante?.id == item.fertilizante.id,
+          );
+
+          if (fertilizante != null) return true;
+          return false;
+        });
+
+        list.add(
+          SolucaoFertilizanteConcentrada(
+            fertilizante: item.fertilizante,
+            concentrada: solucaoConcentradaList[concentradaIndex],
+            quantidade:
+                item.quantidade.replaceAll('.', '').replaceAll(',', '.'),
+          ),
+        );
+      }
     }
+
     return list;
+  }
+
+  @action
+  validateNewSN() {
+    bool validate =
+        novaSolucaoName.text.isNotEmpty && expandedFertilizantes.isNotEmpty;
+
+    for (var item in expandedFertilizantes) {
+      try {
+        if (item.quantidade.isEmpty ||
+            double.parse(
+                    item.quantidade.replaceAll('.', '').replaceAll(',', '.')) ==
+                0) {
+          validate = false;
+          toastError(
+              message:
+                  'A quantidade do fertilizante não pode ser 0, verifique sua lista e preencha corretamente.');
+          return validate;
+        }
+      } catch (e) {
+        e.printError();
+        validate = false;
+        toastError(
+            message:
+                'Quantidade do fertilizante com valor inválido, verifique sua lista e preencha corretamente.');
+        return validate;
+      }
+    }
+
+    mostrarErroFormulario = !validate;
+    return validate;
+  }
+
+  @action
+  bool validarCadastroConcentrada() {
+    if (fatorConcentracao.text.isEmpty && solucaoConcentradaList.isNotEmpty) {
+      toastError(message: 'Preencha o fator de concentração');
+      return false;
+    }
+
+    for (var item in solucaoConcentradaList) {
+      if ((item.nome ?? '').isEmpty) {
+        toastError(
+            message: 'Preencha o nome em todas as soluções concentradas');
+        return false;
+      }
+
+      if ((item.solucoes_fertilizantes_concentradas ?? []).isEmpty) {
+        toastError(
+            message:
+                'Solução concentrada precisa ter pelo menos um fertilizante');
+        return false;
+      }
+    }
+
+    return true;
   }
 
   @action
@@ -335,6 +500,9 @@ abstract class _SolucaoStoreBase with Store {
     novaSolucaoName.clear();
     expandedFertilizantes.clear();
     quantidadeFertilizantes.clear();
+    solucaoConcentradaList.clear();
+    fatorConcentracao.clear();
+    volumeConcentracao.clear();
   }
 
   @computed
@@ -402,12 +570,32 @@ abstract class _SolucaoStoreBase with Store {
         double.parse(a.teor_nutriente ?? '0.0'),
       ),
     );
-    // list.sort((a, b) {
-    //   double valueA = double.parse(a.teor_nutriente ?? '0');
-    //   double valueB = double.parse(b.teor_nutriente ?? '0');
-    //   if (valueA >
-    //       double.parse(b.teor_nutriente ?? '0')) return -1;
-    // });
+
+    //--------------------------------------------------------------------------
+
+    double teorNitrogenio = double.tryParse(list
+                .firstWhereOrNull((element) => element.nutriente?.sigla == 'N')
+                ?.teor_nutriente ??
+            '1.0') ??
+        1.0;
+
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].nutriente?.sigla == 'N-NO3-') {
+        list[i].teor_nutriente =
+            ((double.tryParse(list[i].teor_nutriente ?? '0.0') ?? 0.0) *
+                    teorNitrogenio)
+                .toString();
+      }
+
+      if (list[i].nutriente?.sigla == 'N-NH4+') {
+        list[i].teor_nutriente =
+            ((double.tryParse(list[i].teor_nutriente ?? '0.0') ?? 0.0) *
+                    teorNitrogenio)
+                .toString();
+      }
+    }
+
+    //--------------------------------------------------------------------------
     return list;
   }
 
@@ -422,5 +610,194 @@ abstract class _SolucaoStoreBase with Store {
         .toList();
 
     return result;
+  }
+
+  // #################### INICIO CADASTRO SOLUÇÃO CONCENTRADA #######################
+  @observable
+  List<SelecaoFertilizante> fertilizantesEscolhidos = [];
+
+  @observable
+  TextEditingController fatorConcentracao = TextEditingController();
+
+  @observable
+  TextEditingController volumeConcentracao = TextEditingController();
+
+  @observable
+  List<SolucaoConcentrada> solucaoConcentradaList = [];
+
+  // @observable
+  // List<int> compatibilidadeConcentrada = [];
+
+  @action
+  setFertilizantesEscolhidos() {
+    fertilizantesEscolhidos = [];
+    for (var item in expandedFertilizantes) {
+      fertilizantesEscolhidos.add(
+        SelecaoFertilizante(
+          selected: false,
+          fertilizante: item.fertilizante,
+        ),
+      );
+    }
+    fertilizantesEscolhidos = List.from(fertilizantesEscolhidos);
+  }
+
+  @action
+  changeSelecaoFertilizantesEscolhidos(int index, bool value) {
+    fertilizantesEscolhidos[index].selected = value;
+    fertilizantesEscolhidos = List.from(fertilizantesEscolhidos);
+  }
+
+  @action
+  addFertilizanteParaSolucao(int indexSolucaoConcentrada) {
+    for (var item in showFertilizantesNaoUtilizados) {
+      if (item.selected) {
+        if (solucaoConcentradaList[indexSolucaoConcentrada]
+                .solucoes_fertilizantes_concentradas ==
+            null) {
+          solucaoConcentradaList[indexSolucaoConcentrada]
+              .solucoes_fertilizantes_concentradas = [];
+        }
+        solucaoConcentradaList[indexSolucaoConcentrada]
+            .solucoes_fertilizantes_concentradas!
+            .add(SolucaoFertilizanteConcentrada(
+                fertilizante: item.fertilizante));
+      }
+    }
+    solucaoConcentradaList = List.from(solucaoConcentradaList);
+    Get.back();
+  }
+
+  @action
+  criarSolucaoConcentrada() async {
+    SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
+
+    for (var i = 0; i < solucaoConcentradaList.length; i++) {
+      SolucaoConcentrada novaConcentrada = SolucaoConcentrada(
+        nome: solucaoConcentradaList[i].nome,
+        fator_concentracao: double.tryParse(fatorConcentracao.text),
+        volume: double.tryParse(volumeConcentracao.text) ?? 1,
+      );
+
+      var solucaoConcentrada = await solucaoRepository
+          .cadastrarSolucaoConcentrada(novaSolucaoConcentrada: novaConcentrada);
+
+      solucaoConcentrada.fold(
+        (err) {
+          toastError(message: err.message);
+        },
+        (data) async {
+          solucaoConcentradaList[i].id = data.id;
+        },
+      );
+    }
+    return;
+  }
+
+  @action
+  clearSolucaoConcentrada() {
+    solucaoConcentradaList = [];
+    fatorConcentracao = TextEditingController();
+    volumeConcentracao = TextEditingController();
+  }
+
+  @action
+  setNomeSolucaoConcentrada(String nomeSolucaoConcentrada, int index) {
+    if (nomeSolucaoConcentrada.isEmpty) return;
+    solucaoConcentradaList[index].nome = nomeSolucaoConcentrada.trim();
+    solucaoConcentradaList = List.from(solucaoConcentradaList);
+  }
+
+  @action
+  addToSolucaoConcentradaList() {
+    solucaoConcentradaList.add(SolucaoConcentrada());
+    solucaoConcentradaList = List.from(solucaoConcentradaList);
+    setFertilizantesEscolhidos();
+  }
+
+  @action
+  deleteSolucaoConcentradaToTheList(int index) {
+    solucaoConcentradaList.removeAt(index);
+    solucaoConcentradaList = List.from(solucaoConcentradaList);
+    setFertilizantesEscolhidos();
+  }
+
+  @computed
+  List<SelecaoFertilizante> get showFertilizantesNaoUtilizados {
+    List<SelecaoFertilizante> list = fertilizantesEscolhidos;
+    // Para cada solução concentrada na lista
+    for (var solucaoConcentrada in solucaoConcentradaList) {
+      // Para cada fertilizante na solução concentrada
+      for (SolucaoFertilizanteConcentrada item
+          in solucaoConcentrada.solucoes_fertilizantes_concentradas ?? []) {
+        int index = list.indexWhere(
+            (element) => element.fertilizante.id == item.fertilizante?.id);
+        if (index != -1) {
+          list.removeAt(index);
+        }
+      }
+    }
+
+    return list;
+  }
+
+  @computed
+  List<SelecaoFertilizante> get showSelectedFertilizantes {
+    List<SelecaoFertilizante> list = [];
+    for (var item in showFertilizantesNaoUtilizados) {
+      if (item.selected) {
+        list.add(item);
+      }
+    }
+
+    return list;
+  }
+
+  @action
+  bool checkCompatibilidade(
+      {required int number, required int indexConcentrada}) {
+    bool isCompatible = false;
+    List<SelecaoFertilizante> list = List.from(showSelectedFertilizantes);
+
+    for (SolucaoFertilizanteConcentrada item
+        in solucaoConcentradaList[indexConcentrada]
+                .solucoes_fertilizantes_concentradas ??
+            []) {
+      list.add(
+        SelecaoFertilizante(
+          selected: true,
+          fertilizante: item.fertilizante!,
+        ),
+      );
+    }
+
+    switch (number) {
+      case 0:
+        isCompatible = true;
+        break;
+      case 1:
+        int index = list
+            .indexWhere((element) => element.fertilizante.compatibilidade == 2);
+        if (index != -1) {
+          isCompatible = false;
+        } else {
+          isCompatible = true;
+        }
+        break;
+      case 2:
+        int index = list
+            .indexWhere((element) => element.fertilizante.compatibilidade == 1);
+        if (index != -1) {
+          isCompatible = false;
+        } else {
+          isCompatible = true;
+        }
+        break;
+      default:
+        isCompatible = true;
+        break;
+    }
+
+    return isCompatible;
   }
 }

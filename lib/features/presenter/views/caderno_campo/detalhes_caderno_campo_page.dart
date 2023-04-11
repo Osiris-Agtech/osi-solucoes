@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get/get_utils/src/extensions/string_extensions.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
@@ -13,6 +13,7 @@ import 'dart:convert' show jsonDecode, utf8;
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 
 import '../../../../core/constants/constants.dart';
+import '../../routes/routes.dart';
 import '../../viewmodels/caderno_campo_store.dart';
 
 class DetalhesCadernoCampoPage extends StatefulWidget {
@@ -38,6 +39,12 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
   }
 
   @override
+  void dispose() {
+    store.limparLoteSelecionado();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -47,6 +54,16 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Constants.kSecondBackgroundColor,
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: 18.0),
+            child: FloatingActionButton(
+              onPressed: () {
+                Get.toNamed(Routes.cadastroCadernoCampoPage);
+              },
+              backgroundColor: Constants.kPrimaryColor,
+              child: const Icon(Icons.add),
+            ),
+          ),
           body: CustomScrollView(
             controller: scrollController,
             primary: false,

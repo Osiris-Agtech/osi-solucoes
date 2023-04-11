@@ -3,6 +3,7 @@ import 'package:graphql/client.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/api_source.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
+import 'package:osi_solucoes/features/presenter/models/solucaoConcentrada/solucaoConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 
@@ -11,11 +12,16 @@ import '../../../../core/errors/errors.dart';
 abstract class ISolucaoDatasource {
   Future<Either<Failure, List<SolucaoNutritiva>>> buscarSolucoes(
       {required int contaId});
-  Future<Either<Failure, SolucaoNutritiva>> registrarSolucaoNutritiva(
-      {required SolucaoNutritiva solucao, required int contaId});
+  Future<Either<Failure, SolucaoNutritiva>> registrarSolucaoNutritiva({
+    required SolucaoNutritiva solucao,
+    required int contaId,
+    required bool hasConcentrada,
+  });
   Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes();
   Future<Either<Failure, SolucaoNutritiva>> detalhesSolucao(
       {required int solucaoId});
+  Future<Either<Failure, SolucaoConcentrada>> cadastrarSolucaoConcentrada(
+      {required SolucaoConcentrada novaSolucaoConcentrada});
 }
 
 class SolucaoDatasource implements ISolucaoDatasource {
@@ -78,26 +84,53 @@ class SolucaoDatasource implements ISolucaoDatasource {
   }
 
   @override
-  Future<Either<Failure, SolucaoNutritiva>> registrarSolucaoNutritiva(
-      {required SolucaoNutritiva solucao, required int contaId}) async {
+  Future<Either<Failure, SolucaoNutritiva>> registrarSolucaoNutritiva({
+    required SolucaoNutritiva solucao,
+    required int contaId,
+    required bool hasConcentrada,
+  }) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    /// MODIFICAR ESSA LÓGICA PARA EXECUTAR APENAS QUANDO NÃO TEM CONCENTRADA
+    /// CASO TENHA, ADICIONAR O ID DELA NA LISTA
 
     //Criando a query para varios lotes
     String query = '';
-    for (SolucaoFertilizanteConcentrada element
-        in solucao.solucoes_fertilizantes_concentradas ?? []) {
-      if (element ==
-          solucao.solucoes_fertilizantes_concentradas![
-              solucao.solucoes_fertilizantes_concentradas!.length - 1]) {
-        query += """{
+    if (hasConcentrada) {
+      for (SolucaoFertilizanteConcentrada element
+          in solucao.solucoes_fertilizantes_concentradas ?? []) {
+        if (element ==
+            solucao.solucoes_fertilizantes_concentradas![
+                solucao.solucoes_fertilizantes_concentradas!.length - 1]) {
+          query += """{
+          fk_fertilizantes_id: ${element.fertilizante!.id},
+          fk_concentradas_id: ${element.concentrada!.id},
+          quantidade: ${element.quantidade}
+        }""";
+        } else {
+          query += """{
+          fk_fertilizantes_id: ${element.fertilizante!.id},
+          fk_concentradas_id: ${element.concentrada!.id},
+          quantidade: ${element.quantidade}
+        },""";
+        }
+      }
+    } else {
+      for (SolucaoFertilizanteConcentrada element
+          in solucao.solucoes_fertilizantes_concentradas ?? []) {
+        if (element ==
+            solucao.solucoes_fertilizantes_concentradas![
+                solucao.solucoes_fertilizantes_concentradas!.length - 1]) {
+          query += """{
           fk_fertilizantes_id: ${element.fertilizante!.id},
           quantidade: ${element.quantidade}
         }""";
-      } else {
-        query += """{
+        } else {
+          query += """{
           fk_fertilizantes_id: ${element.fertilizante!.id},
           quantidade: ${element.quantidade}
         },""";
+        }
       }
     }
 
@@ -133,7 +166,9 @@ class SolucaoDatasource implements ISolucaoDatasource {
               id
               quantidade
               fertilizante {
+                id
                 nome
+                compatibilidade
               }
             }
           }
@@ -168,6 +203,7 @@ class SolucaoDatasource implements ISolucaoDatasource {
             id
             nome
             c_eletrica
+            compatibilidade
             fertilizantes_nutrientes {
               id
               teor_nutriente
@@ -226,7 +262,9 @@ class SolucaoDatasource implements ISolucaoDatasource {
             solucoes_fertilizantes_concentradas {
               quantidade
               fertilizante {
+                id
                 nome
+                compatibilidade
                 fertilizantes_nutrientes {
                   teor_nutriente
                   nutriente {
@@ -234,6 +272,19 @@ class SolucaoDatasource implements ISolucaoDatasource {
                     nome
                     sigla
                   }
+                }
+              }
+              concentrada {
+                id
+                nome
+                volume
+                fator_concentracao
+                solucoes_fertilizantes_concentradas {
+                  fertilizante {
+                    id
+                    nome
+                  }
+                  quantidade
                 }
               }
             }
@@ -255,6 +306,45 @@ class SolucaoDatasource implements ISolucaoDatasource {
     if (!result.hasException) {
       SolucaoNutritiva? solucao =
           SolucaoNutritiva.fromJson(result.data?['sNutritiva']);
+
+      return Right(solucao);
+    } else {
+      return Left(ErrorReservatorio(message: FailureMessage.errorInfoMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SolucaoConcentrada>> cadastrarSolucaoConcentrada(
+      {required SolucaoConcentrada novaSolucaoConcentrada}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    String readRepositories = """
+        mutation CreateOneConcentrada {
+          createOneConcentrada(data: {
+            nome: "${novaSolucaoConcentrada.nome}",
+            fator_concentracao: ${novaSolucaoConcentrada.fator_concentracao},
+            volume: ${novaSolucaoConcentrada.volume ?? 1},
+          }) {
+            id
+            nome
+            volume
+            fator_concentracao
+            created_at
+          }
+        }
+     """;
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      SolucaoConcentrada? solucao =
+          SolucaoConcentrada.fromJson(result.data?['createOneConcentrada']);
 
       return Right(solucao);
     } else {

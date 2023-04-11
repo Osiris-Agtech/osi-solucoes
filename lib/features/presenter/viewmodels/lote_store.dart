@@ -533,8 +533,9 @@ abstract class _LoteStoreBase with Store {
 
   @action
   registrarLote() async {
-    isNovoLoteLoading = true;
+    SetorStore setorStore = GetIt.I<SetorStore>();
 
+    isNovoLoteLoading = true;
     novoLote = Lote(
       nome: novoLoteName.text,
       setor: novoLoteSetor,
@@ -556,6 +557,7 @@ abstract class _LoteStoreBase with Store {
       (data) async {
         limparTudo();
         Get.close(1);
+        setorStore.buscarSetores();
         if (setorSelecionado.id != null) {
           buscarLotes();
         }

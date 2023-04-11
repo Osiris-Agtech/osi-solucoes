@@ -12,7 +12,7 @@ import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/components/topAppBarArea.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
 class LotePage extends StatefulWidget {
@@ -181,8 +181,9 @@ class _AppBarState extends State<AppBar> {
           flexibleSpace: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TopAppBar(
-                namePage: widget.setorN2.nome ?? '',
+              TopAppBarArea(
+                namePage1: "Setor: ",
+                namePage2: widget.setorN2.nome ?? '',
                 subtitle: "Lista de lotes cadastrados",
               ),
               const SizedBox(

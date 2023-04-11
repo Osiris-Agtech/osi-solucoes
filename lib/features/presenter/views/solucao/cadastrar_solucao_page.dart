@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/utils/decimal_format.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
@@ -10,6 +11,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/customTextFormField.dart';
 import '../../../../../core/constants/constants.dart';
+import '../../routes/routes.dart';
 
 class CadastrarSolucaoPage extends StatefulWidget {
   const CadastrarSolucaoPage({Key? key}) : super(key: key);
@@ -94,6 +96,27 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
                     }),
                     const Divider(),
                     _fertilizantes(context),
+                    Observer(builder: (_) {
+                      return Visibility(
+                        visible: store.mostrarErroFormulario &&
+                            store.expandedFertilizantes.isEmpty,
+                        child: const Padding(
+                          padding: EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 8.0,
+                          ),
+                          child: Text(
+                            'Adicione fertilizante à lista',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Constants.kErrorColor,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                     Expanded(
                       child: Observer(builder: (_) {
                         if (store.expandedFertilizantes.isEmpty) {
@@ -118,7 +141,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
                   ],
                 ),
               ),
-              bottomNavigationBar: isKeyboardOpen ? null : _saveButton(size),
+              bottomNavigationBar: isKeyboardOpen ? null : _nextButton(size),
             ),
           ),
         ),
@@ -208,8 +231,12 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
                   itemCount: store.expandedFertilizantes.length,
                   itemBuilder: (context, indexExpended) {
                     return Padding(
-                      padding:
-                          EdgeInsets.only(top: indexExpended == 0 ? 16.0 : 4.0),
+                      padding: EdgeInsets.only(
+                          top: indexExpended == 0 ? 16.0 : 4.0,
+                          bottom: indexExpended ==
+                                  store.expandedFertilizantes.length - 1
+                              ? 16.0
+                              : 0.0),
                       child: Card(
                         elevation: 2,
                         shape: RoundedRectangleBorder(
@@ -353,6 +380,9 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
         children: [
           CustomTextFormField(
             value: itemFertilizante.quantidade,
+            onEditingComplete: () {
+              store.setExpandedCard(index);
+            },
             onChanged: (String value) {
               store.setFertilizanteQuantidade(
                 itemFertilizante.fertilizante.id ?? 0,
@@ -428,7 +458,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
   Widget titulo() {
     return const Padding(
       padding: EdgeInsets.only(
-        left: 40,
+        left: 30,
         right: 30,
       ),
       child: Text(
@@ -595,7 +625,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     );
   }
 
-  _saveButton(Size size) {
+  _nextButton(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       child: SizedBox(
@@ -616,7 +646,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
             }
 
             return const Text(
-              "Salvar",
+              "Avançar",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -624,8 +654,10 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
             );
           }),
           onPressed: () {
-            if (store.validarCadastro()) {
-              store.cadastrarSolucaoNutritiva();
+            // Validate Page
+            if (store.validateNewSN()) {
+              store.setFertilizantesEscolhidos();
+              Get.toNamed(Routes.cadastrarSolucaoConcentradaPage);
             }
           },
         ),

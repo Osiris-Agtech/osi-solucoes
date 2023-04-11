@@ -230,43 +230,59 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
       child: Observer(builder: (_) {
         return ListTile(
           leading: const Icon(Icons.label),
-          title: const Text(
-            'Nome',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
-          trailing: store.novaAreaName.text.isNotEmpty
-              ? SizedBox(
-                  width: 100,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        width: 76,
-                        child: Text(
-                          store.novaAreaName.text,
-                          textAlign: TextAlign.end,
-                          style: const TextStyle(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(right: 8),
+                child: Text(
+                  'Nome',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                ),
+              ),
+              store.novaAreaName.text.isNotEmpty
+                  ? Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              store.novaAreaName.text,
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                color: Constants.kPrimaryColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const Icon(
+                            Icons.chevron_right,
+                            color: Constants.kPrimaryColor,
+                          ),
+                        ],
+                      ),
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Text(
+                          "Preencher",
+                          style: TextStyle(
                             color: Constants.kPrimaryColor,
                             fontWeight: FontWeight.w600,
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      const Icon(
-                        Icons.chevron_right,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ],
-                  ),
-                )
-              : const Text(
-                  "Preencher",
-                  style: TextStyle(
-                    color: Constants.kPrimaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Constants.kPrimaryColor,
+                        ),
+                      ],
+                    ),
+            ],
+          ),
           onTap: () {
             store.setDotIndicator(0);
             bottomSheet(context, controlerPages, carouselController, store);
@@ -281,40 +297,46 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
       child: Observer(builder: (_) {
         return ListTile(
           leading: const Icon(Icons.location_on),
-          trailing: store.localizacaoSelecionada.endereco != null &&
-                  store.localizacaoSelecionada.endereco!.isNotEmpty
-              ? SizedBox(
-                  width: 100,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        width: 76,
-                        child: Text(
-                          store.localizacaoSelecionada.endereco!,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.end,
-                          style: const TextStyle(
-                            color: Constants.kPrimaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      const Icon(
-                        Icons.chevron_right,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ],
-                  ),
-                )
-              : const Icon(
-                  Icons.chevron_right,
-                  color: Constants.kPrimaryColor,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(right: 8),
+                child: Text(
+                  'Localização',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                 ),
-          title: const Text(
-            'Localização',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+              ),
+              store.localizacaoSelecionada.endereco != null &&
+                      store.localizacaoSelecionada.endereco!.isNotEmpty
+                  ? Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              store.localizacaoSelecionada.endereco!,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                color: Constants.kPrimaryColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          const Icon(
+                            Icons.chevron_right,
+                            color: Constants.kPrimaryColor,
+                          ),
+                        ],
+                      ),
+                    )
+                  : const Icon(
+                      Icons.chevron_right,
+                      color: Constants.kPrimaryColor,
+                    ),
+            ],
           ),
           onTap: () {
             store.setDotIndicator(1);

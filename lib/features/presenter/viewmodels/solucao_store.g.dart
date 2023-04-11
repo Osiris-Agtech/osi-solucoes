@@ -32,6 +32,24 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
           Computed<List<SolucaoNutritiva>>(() => super.searchSolucao,
               name: '_SolucaoStoreBase.searchSolucao'))
       .value;
+  Computed<List<SelecaoFertilizante>>? _$showFertilizantesNaoUtilizadosComputed;
+
+  @override
+  List<SelecaoFertilizante> get showFertilizantesNaoUtilizados =>
+      (_$showFertilizantesNaoUtilizadosComputed ??=
+              Computed<List<SelecaoFertilizante>>(
+                  () => super.showFertilizantesNaoUtilizados,
+                  name: '_SolucaoStoreBase.showFertilizantesNaoUtilizados'))
+          .value;
+  Computed<List<SelecaoFertilizante>>? _$showSelectedFertilizantesComputed;
+
+  @override
+  List<SelecaoFertilizante> get showSelectedFertilizantes =>
+      (_$showSelectedFertilizantesComputed ??=
+              Computed<List<SelecaoFertilizante>>(
+                  () => super.showSelectedFertilizantes,
+                  name: '_SolucaoStoreBase.showSelectedFertilizantes'))
+          .value;
 
   final _$valueAtom = Atom(name: '_SolucaoStoreBase.value');
 
@@ -243,6 +261,24 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
+  final _$solucaoConcentradaListDetalhesAtom =
+      Atom(name: '_SolucaoStoreBase.solucaoConcentradaListDetalhes');
+
+  @override
+  List<SolucaoFertilizanteConcentrada> get solucaoConcentradaListDetalhes {
+    _$solucaoConcentradaListDetalhesAtom.reportRead();
+    return super.solucaoConcentradaListDetalhes;
+  }
+
+  @override
+  set solucaoConcentradaListDetalhes(
+      List<SolucaoFertilizanteConcentrada> value) {
+    _$solucaoConcentradaListDetalhesAtom
+        .reportWrite(value, super.solucaoConcentradaListDetalhes, () {
+      super.solucaoConcentradaListDetalhes = value;
+    });
+  }
+
   final _$novaSolucaoNameAtom = Atom(name: '_SolucaoStoreBase.novaSolucaoName');
 
   @override
@@ -307,6 +343,72 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
+  final _$fertilizantesEscolhidosAtom =
+      Atom(name: '_SolucaoStoreBase.fertilizantesEscolhidos');
+
+  @override
+  List<SelecaoFertilizante> get fertilizantesEscolhidos {
+    _$fertilizantesEscolhidosAtom.reportRead();
+    return super.fertilizantesEscolhidos;
+  }
+
+  @override
+  set fertilizantesEscolhidos(List<SelecaoFertilizante> value) {
+    _$fertilizantesEscolhidosAtom
+        .reportWrite(value, super.fertilizantesEscolhidos, () {
+      super.fertilizantesEscolhidos = value;
+    });
+  }
+
+  final _$fatorConcentracaoAtom =
+      Atom(name: '_SolucaoStoreBase.fatorConcentracao');
+
+  @override
+  TextEditingController get fatorConcentracao {
+    _$fatorConcentracaoAtom.reportRead();
+    return super.fatorConcentracao;
+  }
+
+  @override
+  set fatorConcentracao(TextEditingController value) {
+    _$fatorConcentracaoAtom.reportWrite(value, super.fatorConcentracao, () {
+      super.fatorConcentracao = value;
+    });
+  }
+
+  final _$volumeConcentracaoAtom =
+      Atom(name: '_SolucaoStoreBase.volumeConcentracao');
+
+  @override
+  TextEditingController get volumeConcentracao {
+    _$volumeConcentracaoAtom.reportRead();
+    return super.volumeConcentracao;
+  }
+
+  @override
+  set volumeConcentracao(TextEditingController value) {
+    _$volumeConcentracaoAtom.reportWrite(value, super.volumeConcentracao, () {
+      super.volumeConcentracao = value;
+    });
+  }
+
+  final _$solucaoConcentradaListAtom =
+      Atom(name: '_SolucaoStoreBase.solucaoConcentradaList');
+
+  @override
+  List<SolucaoConcentrada> get solucaoConcentradaList {
+    _$solucaoConcentradaListAtom.reportRead();
+    return super.solucaoConcentradaList;
+  }
+
+  @override
+  set solucaoConcentradaList(List<SolucaoConcentrada> value) {
+    _$solucaoConcentradaListAtom
+        .reportWrite(value, super.solucaoConcentradaList, () {
+      super.solucaoConcentradaList = value;
+    });
+  }
+
   final _$buscarSolucoesAsyncAction =
       AsyncAction('_SolucaoStoreBase.buscarSolucoes');
 
@@ -342,6 +444,15 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
         .run(() => super.cadastrarSolucaoNutritiva());
   }
 
+  final _$criarSolucaoConcentradaAsyncAction =
+      AsyncAction('_SolucaoStoreBase.criarSolucaoConcentrada');
+
+  @override
+  Future criarSolucaoConcentrada() {
+    return _$criarSolucaoConcentradaAsyncAction
+        .run(() => super.criarSolucaoConcentrada());
+  }
+
   final _$_SolucaoStoreBaseActionController =
       ActionController(name: '_SolucaoStoreBase');
 
@@ -362,6 +473,17 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
         name: '_SolucaoStoreBase.setDotIndicator');
     try {
       return super.setDotIndicator(value);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setMostrarErroFormulario(bool value) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.setMostrarErroFormulario');
+    try {
+      return super.setMostrarErroFormulario(value);
     } finally {
       _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -434,22 +556,39 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   }
 
   @override
-  dynamic validarFertilizantes() {
+  double calcularQuantidadeFertilizanteConcentrada(
+      {required double quantidadeOriginal,
+      required double volumeConcentrada,
+      required double fator}) {
     final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.validarFertilizantes');
+        name: '_SolucaoStoreBase.calcularQuantidadeFertilizanteConcentrada');
     try {
-      return super.validarFertilizantes();
+      return super.calcularQuantidadeFertilizanteConcentrada(
+          quantidadeOriginal: quantidadeOriginal,
+          volumeConcentrada: volumeConcentrada,
+          fator: fator);
     } finally {
       _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic validarCadastro() {
+  dynamic multiplicarTeorNitratoEAmonia() {
     final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.validarCadastro');
+        name: '_SolucaoStoreBase.multiplicarTeorNitratoEAmonia');
     try {
-      return super.validarCadastro();
+      return super.multiplicarTeorNitratoEAmonia();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic validarFertilizantes() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.validarFertilizantes');
+    try {
+      return super.validarFertilizantes();
     } finally {
       _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -478,11 +617,123 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   }
 
   @override
+  dynamic validateNewSN() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.validateNewSN');
+    try {
+      return super.validateNewSN();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool validarCadastroConcentrada() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.validarCadastroConcentrada');
+    try {
+      return super.validarCadastroConcentrada();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic clearAll() {
     final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
         name: '_SolucaoStoreBase.clearAll');
     try {
       return super.clearAll();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setFertilizantesEscolhidos() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.setFertilizantesEscolhidos');
+    try {
+      return super.setFertilizantesEscolhidos();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic changeSelecaoFertilizantesEscolhidos(int index, bool value) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.changeSelecaoFertilizantesEscolhidos');
+    try {
+      return super.changeSelecaoFertilizantesEscolhidos(index, value);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic addFertilizanteParaSolucao(int indexSolucaoConcentrada) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.addFertilizanteParaSolucao');
+    try {
+      return super.addFertilizanteParaSolucao(indexSolucaoConcentrada);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic clearSolucaoConcentrada() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.clearSolucaoConcentrada');
+    try {
+      return super.clearSolucaoConcentrada();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setNomeSolucaoConcentrada(String nomeSolucaoConcentrada, int index) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.setNomeSolucaoConcentrada');
+    try {
+      return super.setNomeSolucaoConcentrada(nomeSolucaoConcentrada, index);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic addToSolucaoConcentradaList() {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.addToSolucaoConcentradaList');
+    try {
+      return super.addToSolucaoConcentradaList();
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic deleteSolucaoConcentradaToTheList(int index) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.deleteSolucaoConcentradaToTheList');
+    try {
+      return super.deleteSolucaoConcentradaToTheList(index);
+    } finally {
+      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool checkCompatibilidade(
+      {required int number, required int indexConcentrada}) {
+    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
+        name: '_SolucaoStoreBase.checkCompatibilidade');
+    try {
+      return super.checkCompatibilidade(
+          number: number, indexConcentrada: indexConcentrada);
     } finally {
       _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -504,13 +755,20 @@ fertilizanteList: ${fertilizanteList},
 expandedFertilizantes: ${expandedFertilizantes},
 quantidadeFertilizantes: ${quantidadeFertilizantes},
 nutrientesList: ${nutrientesList},
+solucaoConcentradaListDetalhes: ${solucaoConcentradaListDetalhes},
 novaSolucaoName: ${novaSolucaoName},
 solucaoSelecionada: ${solucaoSelecionada},
 condutividadeEletrica: ${condutividadeEletrica},
 searchSolucaoText: ${searchSolucaoText},
+fertilizantesEscolhidos: ${fertilizantesEscolhidos},
+fatorConcentracao: ${fatorConcentracao},
+volumeConcentracao: ${volumeConcentracao},
+solucaoConcentradaList: ${solucaoConcentradaList},
 selectedFertilizantes: ${selectedFertilizantes},
 nutrientesCalculados: ${nutrientesCalculados},
-searchSolucao: ${searchSolucao}
+searchSolucao: ${searchSolucao},
+showFertilizantesNaoUtilizados: ${showFertilizantesNaoUtilizados},
+showSelectedFertilizantes: ${showSelectedFertilizantes}
     ''';
   }
 }

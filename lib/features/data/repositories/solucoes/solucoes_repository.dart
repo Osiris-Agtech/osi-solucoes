@@ -3,6 +3,7 @@ import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/datasources/solucoes/solucoes_nutritivas_datasource.dart';
 import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_repository_interface.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
+import 'package:osi_solucoes/features/presenter/models/solucaoConcentrada/solucaoConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 
 class SolucaoRepository implements ISolucaoRepository {
@@ -21,10 +22,11 @@ class SolucaoRepository implements ISolucaoRepository {
 
   @override
   Future<Either<Failure, SolucaoNutritiva>> registrarSolucaoNutritiva(
-      SolucaoNutritiva solucao, int contaId) async {
+      SolucaoNutritiva solucao, int contaId, bool hasConcentrada) async {
     var result = await datasource.registrarSolucaoNutritiva(
       solucao: solucao,
       contaId: contaId,
+      hasConcentrada: hasConcentrada,
     );
 
     return result;
@@ -41,6 +43,15 @@ class SolucaoRepository implements ISolucaoRepository {
   Future<Either<Failure, SolucaoNutritiva>> detalhesSolucao(
       int solucaoId) async {
     var result = await datasource.detalhesSolucao(solucaoId: solucaoId);
+
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, SolucaoConcentrada>> cadastrarSolucaoConcentrada(
+      {required SolucaoConcentrada novaSolucaoConcentrada}) async {
+    var result = await datasource.cadastrarSolucaoConcentrada(
+        novaSolucaoConcentrada: novaSolucaoConcentrada);
 
     return result;
   }

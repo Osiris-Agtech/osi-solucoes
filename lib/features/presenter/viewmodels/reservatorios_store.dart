@@ -43,6 +43,15 @@ abstract class _ReservatoriosStoreBase with Store {
   }
 
   @action
+  double calcularQuantidadeFertilizanteConcentrada({
+    required double quantidadeOriginal,
+    required double volumeConcentrada,
+    required double fator,
+  }) {
+    return volumeConcentrada * quantidadeOriginal * fator / 1000;
+  }
+
+  @action
   buscarReservatorioDetalhes() async {
     var reservatorios = await reservatorioRepository
         .buscarReservatorioDetalhes(reservatorioDetalhes.id!);
@@ -58,10 +67,13 @@ abstract class _ReservatoriosStoreBase with Store {
         reservatorioDetalhes.solucao?.solucoes_fertilizantes_concentradas
             ?.forEach(
           (element) {
-            if (element.concentrada == null) {
-              solucaoNutritivaList.add(element);
-            } else {
-              solucaoConcentradaList.add(element);
+            solucaoNutritivaList.add(element);
+            if (element.concentrada != null) {
+              if (solucaoConcentradaList.indexWhere((solucao) =>
+                      solucao.concentrada?.id == element.concentrada?.id) ==
+                  -1) {
+                solucaoConcentradaList.add(element);
+              }
             }
           },
         );
@@ -129,13 +141,24 @@ abstract class _ReservatoriosStoreBase with Store {
   @observable
   int dotIndicator = 1;
 
-  // @computed
-  // List<SolucaoNutritiva> get getSolucaoNutritivaList =>
-  //     solucaoList.where((element) {
-  //       if (pesquisarReceita.text.isEmpty) return true;
-  //       print(pesquisarReceita.text);
-  //       return element.nome!.contains(pesquisarReceita.text);
-  //     }).toList();
+  @observable
+  String searchReservatorioText = '';
+
+  @action
+  setSearchReservatorioText(String value) => searchReservatorioText = value;
+
+  @computed
+  List<Reservatorio> get searchReservatorio {
+    List<Reservatorio> result = reservatorioList
+        .where((element) =>
+            element.nome
+                ?.toLowerCase()
+                .contains(searchReservatorioText.toLowerCase()) ??
+            false)
+        .toList();
+
+    return result;
+  }
 
   @action
   setDotIndicator(int value) {
