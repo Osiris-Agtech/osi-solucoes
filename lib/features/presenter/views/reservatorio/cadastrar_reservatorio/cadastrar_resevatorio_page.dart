@@ -195,40 +195,59 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
       child: Observer(builder: (_) {
         return ListTile(
           leading: const Icon(Icons.label),
-          title: const Text(
-            'Nome',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
-          trailing: store.novoReservatorioName.text.isNotEmpty
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      width: 126,
-                      child: Text(
-                        store.novoReservatorioName.text,
-                        textAlign: TextAlign.end,
-                        style: const TextStyle(
-                          color: Constants.kPrimaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const Icon(
-                      Icons.chevron_right,
-                      color: Constants.kPrimaryColor,
-                    ),
-                  ],
-                )
-              : const Text(
-                  "Preencher",
-                  style: TextStyle(
-                    color: Constants.kPrimaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(right: 8),
+                child: Text(
+                  'Nome',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                 ),
+              ),
+              store.novoReservatorioName.text.isNotEmpty
+                  ? Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              store.novoReservatorioName.text,
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                color: Constants.kPrimaryColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const Icon(
+                            Icons.chevron_right,
+                            color: Constants.kPrimaryColor,
+                          ),
+                        ],
+                      ),
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Text(
+                          "Preencher",
+                          style: TextStyle(
+                            color: Constants.kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Constants.kPrimaryColor,
+                        ),
+                      ],
+                    ),
+            ],
+          ),
           onTap: () {
             store.setDotIndicator(0);
             bottomSheet(context, controlerPages, carouselController, store);
@@ -244,33 +263,57 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
       child: Observer(builder: (_) {
         return ListTile(
           leading: const Icon(Icons.waves),
-          title: const Text(
-            'Volume',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
-          trailing: store.novoReservatorioVolume.text.isNotEmpty
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      store.novoReservatorioVolume.text + " Litros",
-                      style: const TextStyle(
-                          color: Constants.kPrimaryColor,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    const Icon(
-                      Icons.chevron_right,
-                      color: Constants.kPrimaryColor,
-                    )
-                  ],
-                )
-              : const Text(
-                  "Preencher",
-                  style: TextStyle(
-                    color: Constants.kPrimaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(right: 8),
+                child: Text(
+                  'Volume',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                 ),
+              ),
+              store.novoReservatorioVolume.text.isNotEmpty
+                  ? Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              store.novoReservatorioVolume.text + " Litros",
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                  color: Constants.kPrimaryColor,
+                                  fontWeight: FontWeight.w600),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const Icon(
+                            Icons.chevron_right,
+                            color: Constants.kPrimaryColor,
+                          )
+                        ],
+                      ),
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Text(
+                          "Preencher",
+                          style: TextStyle(
+                            color: Constants.kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Constants.kPrimaryColor,
+                        ),
+                      ],
+                    ),
+            ],
+          ),
           onTap: () {
             store.setDotIndicator(1);
             bottomSheet(context, controlerPages, carouselController, store);
@@ -285,19 +328,59 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
       child: Observer(builder: (_) {
         return ListTile(
           leading: const Icon(Icons.invert_colors),
-          title: const Text(
-            'Solução Nutritiva',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(right: 8),
+                child: Text(
+                  'Solução\nNutritiva',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                ),
+              ),
+              store.isSolucaoNutritivaValid
+                  ? Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              store.solucaoNutritiva.nome ?? "",
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                color: Constants.kPrimaryColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const Icon(
+                            Icons.chevron_right,
+                            color: Constants.kPrimaryColor,
+                          ),
+                        ],
+                      ),
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Text(
+                          "Selecionar",
+                          style: TextStyle(
+                            color: Constants.kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Constants.kPrimaryColor,
+                        ),
+                      ],
+                    ),
+            ],
           ),
-          trailing: store.isSolucaoNutritivaValid
-              ? Text(
-                  store.solucaoNutritiva.nome ?? "",
-                  style: const TextStyle(
-                    color: Constants.kPrimaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                )
-              : null,
           onTap: () {
             store.buscarSolucoes();
             store.setDotIndicator(2);

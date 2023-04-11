@@ -180,7 +180,7 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
         const Padding(
           padding: EdgeInsets.only(top: 10, left: 20),
           child: Text(
-            'Local: ',
+            'Área: ',
             style: TextStyle(
               fontSize: 18,
               color: Constants.kText2,
@@ -295,43 +295,61 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
       child: Observer(builder: (_) {
         return ListTile(
             leading: const Icon(Icons.label),
-            title: const Text(
-              'Nome',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-            ),
-            trailing: store.novoSetorName.text.isNotEmpty
-                ? SizedBox(
-                    width: 100,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          width: 76,
-                          child: Text(
-                            store.novoSetorName.text,
-                            textAlign: TextAlign.end,
-                            style: const TextStyle(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(right: 8),
+                  child: Text(
+                    'Nome',
+                    maxLines: 1,
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                  ),
+                ),
+                store.novoSetorName.text.isNotEmpty
+                    ? Expanded(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                store.novoSetorName.text,
+                                textAlign: TextAlign.end,
+                                style: const TextStyle(
+                                  color: Constants.kPrimaryColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const Icon(
+                              Icons.chevron_right,
+                              color: Constants.kPrimaryColor,
+                            ),
+                          ],
+                        ),
+                      )
+                    : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Text(
+                            "Preencher",
+                            style: TextStyle(
                               color: Constants.kPrimaryColor,
                               fontWeight: FontWeight.w600,
                             ),
-                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                        const Icon(
-                          Icons.chevron_right,
-                          color: Constants.kPrimaryColor,
-                        ),
-                      ],
-                    ),
-                  )
-                : const Text(
-                    "Preencher",
-                    style: TextStyle(
-                      color: Constants.kPrimaryColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: Constants.kPrimaryColor,
+                          ),
+                        ],
+                      ),
+              ],
+            ),
             onTap: () {
               store.setDotIndicator(0);
               bottomSheet(context, carouselController, controlerPages, store);
@@ -349,41 +367,60 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
             height: 25,
             width: 25,
           ),
-          title: const Text(
-            'Reservatório',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          ),
-          trailing: store.novoSetorReservatorio.nome != null &&
-                  store.novoSetorReservatorio.nome!.isNotEmpty
-              ? SizedBox(
-                  width: 100,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        width: 76,
-                        child: Text(
-                          store.novoSetorReservatorio.nome!,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.end,
-                          style: const TextStyle(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(right: 8),
+                child: Text(
+                  'Reservatório',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                ),
+              ),
+              store.novoSetorReservatorio.nome != null &&
+                      store.novoSetorReservatorio.nome!.isNotEmpty
+                  ? Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              store.novoSetorReservatorio.nome!,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                color: Constants.kPrimaryColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          const Icon(
+                            Icons.chevron_right,
+                            color: Constants.kPrimaryColor,
+                          ),
+                        ],
+                      ),
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Text(
+                          "Selecionar",
+                          style: TextStyle(
                             color: Constants.kPrimaryColor,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                      ),
-                      const Icon(
-                        Icons.chevron_right,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ],
-                  ),
-                )
-              : const Icon(
-                  Icons.chevron_right,
-                  color: Constants.kPrimaryColor,
-                ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Constants.kPrimaryColor,
+                        ),
+                      ],
+                    ),
+            ],
+          ),
           onTap: () {
             store.setDotIndicator(1);
             bottomSheet(context, controlerPages, carouselController, store);
