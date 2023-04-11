@@ -44,7 +44,7 @@ class AppWidget extends StatelessWidget {
       ],
       locale: const Locale("pt", "BR"),
       debugShowCheckedModeBanner: false,
-      title: 'Osíris Soluções',
+      title: 'Gerenciador de Cultivos',
       theme: ThemeData(
         primarySwatch: Colors.green,
         fontFamily: "Montserrat",
