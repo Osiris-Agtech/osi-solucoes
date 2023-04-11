@@ -54,6 +54,12 @@ class AjusteDatasource implements IAjusteDatasource {
                   nome
                   c_eletrica
                 }
+                concentrada {
+                  id
+                  nome
+                  volume
+                  fator_concentracao
+                }
               }
             }
           }

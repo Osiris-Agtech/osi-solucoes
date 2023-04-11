@@ -463,8 +463,9 @@ abstract class _CadernoCampoStoreBase with Store {
         toastError(message: err.message);
       },
       (data) async {
-        await buscarLotesByConta();
         Get.close(2);
+        await buscarLotesByConta();
+        if (loteSelecionado.id != null) buscarAtividades();
       },
     );
     isNovoRegistroLoading = false;

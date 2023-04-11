@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/core/utils/decimal_format.dart';
+import 'package:osi_solucoes/features/presenter/models/solucaoConcentrada/solucaoConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/ajustes_store.dart';
 import 'package:rive/rive.dart';
 
@@ -244,10 +246,13 @@ class TabSolucaoConcentrada extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(
                 top: MediaQuery.of(context).size.height * 0.007),
-            child: const Text(
-              "300x",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-            ),
+            child: Observer(builder: (_) {
+              return Text(
+                "${store.fatorConcentracaoRecebido.toStringAsFixed(0)}x",
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              );
+            }),
           ),
           Padding(
             padding: EdgeInsets.only(
@@ -337,53 +342,76 @@ class TabSolucaoConcentrada extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height * 0.018,
-              left: MediaQuery.of(context).size.width * 0.032,
-              right: MediaQuery.of(context).size.width * 0.032,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Solução A ",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          Observer(builder: (_) {
+            if (store.solucaoConcentradaList.isEmpty) {
+              return Padding(
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.01,
+                  left: MediaQuery.of(context).size.width * 0.032,
+                  right: MediaQuery.of(context).size.width * 0.032,
                 ),
-                Text(
-                  '${store.volumeConcentrado} ml',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Soluções (cada) ",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      '${store.volumeConcentrado} ml',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          const Divider(
-            height: 15,
-            thickness: 0.5,
-            color: Color(0xFFC4C4C4),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height * 0.01,
-              left: MediaQuery.of(context).size.width * 0.032,
-              right: MediaQuery.of(context).size.width * 0.032,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Solução B ",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                Text(
-                  '${store.volumeConcentrado} ml',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-              ],
-            ),
-          ),
+              );
+            }
+
+            return ListView.builder(
+                shrinkWrap: true,
+                itemCount: store.solucaoConcentradaList.length,
+                itemBuilder: (context, index) {
+                  SolucaoConcentrada? concentrada =
+                      store.solucaoConcentradaList[index].concentrada;
+                  return Column(
+                    children: [
+                      Visibility(
+                        visible: index != 0,
+                        child: const Divider(
+                          height: 15,
+                          thickness: 0.5,
+                          color: Color(0xFFC4C4C4),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.018,
+                          left: MediaQuery.of(context).size.width * 0.032,
+                          right: MediaQuery.of(context).size.width * 0.032,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "${concentrada?.nome ?? 'Nome não informado'} ",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              '${store.volumeConcentrado} ml',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                });
+          }),
         ],
       ),
     );

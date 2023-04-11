@@ -163,6 +163,23 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
+  final _$solucaoConcentradaListAtom =
+      Atom(name: '_AjustesStoreBase.solucaoConcentradaList');
+
+  @override
+  List<SolucaoFertilizanteConcentrada> get solucaoConcentradaList {
+    _$solucaoConcentradaListAtom.reportRead();
+    return super.solucaoConcentradaList;
+  }
+
+  @override
+  set solucaoConcentradaList(List<SolucaoFertilizanteConcentrada> value) {
+    _$solucaoConcentradaListAtom
+        .reportWrite(value, super.solucaoConcentradaList, () {
+      super.solucaoConcentradaList = value;
+    });
+  }
+
   final _$ceAguaAtom = Atom(name: '_AjustesStoreBase.ceAgua');
 
   @override
@@ -191,6 +208,23 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
   set volumeConcentrado(String value) {
     _$volumeConcentradoAtom.reportWrite(value, super.volumeConcentrado, () {
       super.volumeConcentrado = value;
+    });
+  }
+
+  final _$fatorConcentracaoRecebidoAtom =
+      Atom(name: '_AjustesStoreBase.fatorConcentracaoRecebido');
+
+  @override
+  double get fatorConcentracaoRecebido {
+    _$fatorConcentracaoRecebidoAtom.reportRead();
+    return super.fatorConcentracaoRecebido;
+  }
+
+  @override
+  set fatorConcentracaoRecebido(double value) {
+    _$fatorConcentracaoRecebidoAtom
+        .reportWrite(value, super.fatorConcentracaoRecebido, () {
+      super.fatorConcentracaoRecebido = value;
     });
   }
 
@@ -286,6 +320,17 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
   }
 
   @override
+  dynamic getConcentradaList() {
+    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
+        name: '_AjustesStoreBase.getConcentradaList');
+    try {
+      return super.getConcentradaList();
+    } finally {
+      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic calculoLado(SolucaoFertilizanteConcentrada fertilizante, String ce) {
     final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
         name: '_AjustesStoreBase.calculoLado');
@@ -342,8 +387,10 @@ pH: ${pH},
 reservatorio: ${reservatorio},
 selectedReservatorio: ${selectedReservatorio},
 reservatorioList: ${reservatorioList},
+solucaoConcentradaList: ${solucaoConcentradaList},
 ceAgua: ${ceAgua},
 volumeConcentrado: ${volumeConcentrado},
+fatorConcentracaoRecebido: ${fatorConcentracaoRecebido},
 reposicaoFert: ${reposicaoFert}
     ''';
   }
