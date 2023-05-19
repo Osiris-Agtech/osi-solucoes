@@ -306,7 +306,7 @@ abstract class _AjustesStoreBase with Store {
                 volumeAtual.text.replaceAll('.', '').replaceAll(',', '.')))
         .toString();
     var fertDescrition = '';
-    String ph = "PH: Não Informado";
+    String ph = "pH: Não Informado";
 
     //Construindo String reposicaoFert
     for (var listFert in reposicaoFert) {
@@ -317,7 +317,7 @@ abstract class _AjustesStoreBase with Store {
     // Construindo String concentrada
     // Construindo String pH
     if (pH.text != '') {
-      ph = "PH: ${pH.text}";
+      ph = "pH: ${pH.text}";
     }
 
     //Criando encoded da descrição

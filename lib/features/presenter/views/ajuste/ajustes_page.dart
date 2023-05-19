@@ -568,7 +568,7 @@ class AjustesPageState extends State<AjustesPage> {
                                                 fontSize: 14,
                                                 fontStyle: FontStyle.italic,
                                               )),
-                                          Text("PH",
+                                          Text("pH",
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   fontStyle: FontStyle.italic,
