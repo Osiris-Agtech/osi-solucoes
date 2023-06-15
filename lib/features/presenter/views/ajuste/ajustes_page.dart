@@ -302,7 +302,7 @@ class AjustesPageState extends State<AjustesPage> {
                                                       EdgeInsets.only(
                                                     bottom: 10,
                                                   ),
-                                                  hintText: "S.m/mm2",
+                                                  hintText: "µS/cm",
                                                   hintStyle: TextStyle(
                                                     fontWeight: FontWeight.w100,
                                                     color: Colors.black38,
@@ -366,7 +366,7 @@ class AjustesPageState extends State<AjustesPage> {
                                                       EdgeInsets.only(
                                                     bottom: 10,
                                                   ),
-                                                  hintText: "S.m/mm2",
+                                                  hintText: "µS/cm",
                                                   hintStyle: TextStyle(
                                                     fontWeight: FontWeight.w100,
                                                     color: Colors.black38,
@@ -442,7 +442,7 @@ class AjustesPageState extends State<AjustesPage> {
                                                           contentPadding:
                                                               EdgeInsets.only(
                                                                   bottom: 10),
-                                                          hintText: "S.m/mm2",
+                                                          hintText: "Litros",
                                                           hintStyle: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w100,
@@ -505,7 +505,7 @@ class AjustesPageState extends State<AjustesPage> {
                                                           contentPadding:
                                                               EdgeInsets.only(
                                                                   bottom: 10),
-                                                          hintText: "S.m/mm2",
+                                                          hintText: "Litros",
                                                           hintStyle: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w100,
