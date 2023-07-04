@@ -9,7 +9,7 @@ import '../../../../core/errors/errors.dart';
 
 abstract class IAreaDatasource {
   Future<Either<Failure, Localizacao>> cadastrarLocalizacao(
-      {required Localizacao localizacao});
+      {required Localizacao localizacao, required int contaId});
   Future<Either<Failure, List<Localizacao>>> buscarLocalizacoes(
       {required int contaId});
   Future<Either<Failure, List<Area>>> buscarArea(
@@ -25,11 +25,11 @@ abstract class IAreaDatasource {
 class AreaDatasource implements IAreaDatasource {
   @override
   Future<Either<Failure, Localizacao>> cadastrarLocalizacao(
-      {required Localizacao localizacao}) async {
+      {required Localizacao localizacao, required int contaId}) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     const String readRepositories = r'''
-        mutation CreateOneLocalizacao ($cep: String!, $endereco: String!, $bairro: String!, $cidade: String!, $pais: String!, $estado: String!, $complemento: String) {
+        mutation CreateOneLocalizacao ($cep: String!, $endereco: String!, $bairro: String!, $cidade: String!, $pais: String!, $estado: String!, $complemento: String, $contaId: Int) {
           createOneLocalizacao(data: {
             cep: $cep,
             endereco: $endereco,
@@ -38,6 +38,11 @@ class AreaDatasource implements IAreaDatasource {
             pais: $pais,
             estado: $estado,
             complemento: $complemento,
+            conta: {
+              connect: {
+                id: $contaId
+              }
+            },
           }) {
             id
             cep
@@ -62,6 +67,7 @@ class AreaDatasource implements IAreaDatasource {
     options = MutationOptions(
       document: gql(readRepositories),
       variables: <String, dynamic>{
+        "contaId": contaId,
         'cep': localizacao.cep,
         'endereco': localizacao.endereco,
         'bairro': localizacao.bairro,

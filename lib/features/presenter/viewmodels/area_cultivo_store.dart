@@ -179,6 +179,7 @@ abstract class _AreaCultivoStoreBase with Store {
   @action
   cadastrarNovaLocalizacao(BuildContext context) async {
     AreaRepository areaRepository = GetIt.I<AreaRepository>();
+    AuthController authController = GetIt.I<AuthController>();
 
     Localizacao localizacao = Localizacao(
         cep: cep.text,
@@ -189,8 +190,8 @@ abstract class _AreaCultivoStoreBase with Store {
         estado: estado.text,
         complemento: complemento.text);
 
-    var localizaoResult =
-        await areaRepository.cadastrarLocalizacao(localizacao);
+    var localizaoResult = await areaRepository.cadastrarLocalizacao(
+        localizacao, authController.usuario.selected_conta?.conta?.id ?? 0);
 
     localizaoResult.fold(
       (err) {
