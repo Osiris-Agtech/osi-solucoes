@@ -433,9 +433,9 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
       AsyncAction('_ReservatoriosStoreBase.registrarReservatorio');
 
   @override
-  Future registrarReservatorio() {
+  Future registrarReservatorio({bool isShortcut = false}) {
     return _$registrarReservatorioAsyncAction
-        .run(() => super.registrarReservatorio());
+        .run(() => super.registrarReservatorio(isShortcut: isShortcut));
   }
 
   final _$updateReservatorioAsyncAction =

@@ -148,7 +148,7 @@ Widget reservatorioPage(BuildContext context, SetorStore store) {
                   color: Constants.kPrimaryColor),
             ),
             onTap: () {
-              Get.to(() => const CadastrarReservatorioPage());
+              Get.to(() => const CadastrarReservatorioPage(isShortcut: true));
             },
           ),
         )

@@ -10,6 +10,7 @@ import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 
 part 'reservatorios_store.g.dart';
 
@@ -360,7 +361,7 @@ abstract class _ReservatoriosStoreBase with Store {
   }
 
   @action
-  registrarReservatorio() async {
+  registrarReservatorio({bool isShortcut = false}) async {
     isNovoReservatorioLoading = true;
 
     novoReservatorio = Reservatorio(
@@ -378,10 +379,17 @@ abstract class _ReservatoriosStoreBase with Store {
         toastError(message: err.message);
       },
       (data) async {
-        toastSuccess(message: "Cadastrado com sucesso");
-        buscarReservatorios();
-        limparNovoReservatorio();
+        await buscarReservatorios();
+        await limparNovoReservatorio();
+
+        if (isShortcut) {
+          SetorStore setorStore = GetIt.I<SetorStore>();
+          await setorStore.buscarReservatorios();
+          await setorStore.setReservatorioSelecionada(data);
+        }
+
         Get.close(1);
+        toastSuccess(message: "Cadastrado com sucesso");
       },
     );
 

@@ -10,9 +10,12 @@ import '../../../../../core/constants/constants.dart';
 
 class CadastrarReservatorioPage extends StatefulWidget {
   final String title;
-  const CadastrarReservatorioPage(
-      {Key? key, this.title = 'CadastrarReservatorioPage'})
-      : super(key: key);
+  final bool isShortcut;
+  const CadastrarReservatorioPage({
+    Key? key,
+    this.title = 'CadastrarReservatorioPage',
+    this.isShortcut = false,
+  }) : super(key: key);
   @override
   CadastrarReservatorioPageState createState() =>
       CadastrarReservatorioPageState();
@@ -176,10 +179,10 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
                     ),
               onPressed: () {
                 if (store.validarReservatorio()) {
-                  if (store.isEditing) {
-                    store.updateReservatorio();
+                  if (!store.isEditing || widget.isShortcut) {
+                    store.registrarReservatorio(isShortcut: widget.isShortcut);
                   } else {
-                    store.registrarReservatorio();
+                    store.updateReservatorio();
                   }
                 }
               },
