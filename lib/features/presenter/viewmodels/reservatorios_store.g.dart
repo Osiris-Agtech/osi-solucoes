@@ -235,13 +235,13 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
   final _$solucaoListAtom = Atom(name: '_ReservatoriosStoreBase.solucaoList');
 
   @override
-  ObservableList<SolucaoNutritiva> get solucaoList {
+  List<SolucaoNutritiva> get solucaoList {
     _$solucaoListAtom.reportRead();
     return super.solucaoList;
   }
 
   @override
-  set solucaoList(ObservableList<SolucaoNutritiva> value) {
+  set solucaoList(List<SolucaoNutritiva> value) {
     _$solucaoListAtom.reportWrite(value, super.solucaoList, () {
       super.solucaoList = value;
     });

@@ -156,10 +156,11 @@ Widget receitaPage(BuildContext context, CarouselController controlerPages) {
             child: Text(
               'Deseja adicionar uma\nnova Receita?',
               style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  decoration: TextDecoration.underline,
-                  color: Constants.kPrimaryColor),
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                decoration: TextDecoration.underline,
+                color: Constants.kPrimaryColor,
+              ),
             ),
           ),
         ),

@@ -115,8 +115,7 @@ abstract class _ReservatoriosStoreBase with Store {
   List<RelacaoNutriente> relacaoNutrientes = [];
 
   @observable
-  ObservableList<SolucaoNutritiva> solucaoList =
-      ObservableList<SolucaoNutritiva>.of([]);
+  List<SolucaoNutritiva> solucaoList = [];
 
   @observable
   List<Reservatorio> reservatorioList = [];
@@ -297,6 +296,7 @@ abstract class _ReservatoriosStoreBase with Store {
     );
 
     isDetalhesSolucaoLoading = false;
+    return;
   }
 
   @action
@@ -340,15 +340,16 @@ abstract class _ReservatoriosStoreBase with Store {
 
     solucoes.fold(
       (err) {
-        solucaoList = ObservableList.of([]);
+        solucaoList = List.from([]);
         // toastError(message: err.message);
       },
       (data) async {
-        solucaoList = ObservableList.of(data);
+        solucaoList = List.from(data);
       },
     );
 
     isSolucaoListLoading = false;
+    return;
   }
 
   @action

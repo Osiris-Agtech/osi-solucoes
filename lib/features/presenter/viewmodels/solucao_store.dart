@@ -383,12 +383,13 @@ abstract class _SolucaoStoreBase with Store {
         if (isShortcut) {
           ReservatoriosStore reservatoriosStore = GetIt.I<ReservatoriosStore>();
           await reservatoriosStore.buscarSolucoes();
-          await reservatoriosStore.setSolucaoDetalhes(data);
+          await reservatoriosStore.setSolucaoNutritiva(data);
+          Get.close(1);
         }
 
         Get.close(2);
         clearAll();
-        buscarSolucoes();
+        if (!isShortcut) buscarSolucoes();
       },
     );
 

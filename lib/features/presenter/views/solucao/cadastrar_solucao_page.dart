@@ -8,10 +8,10 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/utils/decimal_format.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
+import 'package:osi_solucoes/features/presenter/views/solucao/cadastrar_solucao_concentrada_page.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/customTextFormField.dart';
 import '../../../../../core/constants/constants.dart';
-import '../../routes/routes.dart';
 
 class CadastrarSolucaoPage extends StatefulWidget {
   final bool isShortcut;
@@ -661,7 +661,11 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
             // Validate Page
             if (store.validateNewSN()) {
               store.setFertilizantesEscolhidos();
-              Get.toNamed(Routes.cadastrarSolucaoConcentradaPage);
+              Get.to(
+                () => CadastrarSolucaoConcentradaPage(
+                  isShortcut: widget.isShortcut,
+                ),
+              );
             }
           },
         ),
