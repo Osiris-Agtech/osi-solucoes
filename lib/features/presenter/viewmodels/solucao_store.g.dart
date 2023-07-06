@@ -439,9 +439,9 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
       AsyncAction('_SolucaoStoreBase.cadastrarSolucaoNutritiva');
 
   @override
-  Future cadastrarSolucaoNutritiva() {
+  Future cadastrarSolucaoNutritiva({bool isShortcut = false}) {
     return _$cadastrarSolucaoNutritivaAsyncAction
-        .run(() => super.cadastrarSolucaoNutritiva());
+        .run(() => super.cadastrarSolucaoNutritiva(isShortcut: isShortcut));
   }
 
   final _$criarSolucaoConcentradaAsyncAction =

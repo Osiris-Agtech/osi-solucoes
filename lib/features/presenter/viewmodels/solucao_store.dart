@@ -12,6 +12,7 @@ import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcen
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import "package:collection/collection.dart";
+import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 
 part 'solucao_store.g.dart';
 
@@ -356,7 +357,7 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  cadastrarSolucaoNutritiva() async {
+  cadastrarSolucaoNutritiva({bool isShortcut = false}) async {
     isNovaSolucaoLoading = true;
     SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
     AuthController authController = GetIt.I<AuthController>();
@@ -379,6 +380,12 @@ abstract class _SolucaoStoreBase with Store {
         toastError(message: err.message);
       },
       (data) async {
+        if (isShortcut) {
+          ReservatoriosStore reservatoriosStore = GetIt.I<ReservatoriosStore>();
+          await reservatoriosStore.buscarSolucoes();
+          await reservatoriosStore.setSolucaoDetalhes(data);
+        }
+
         Get.close(2);
         clearAll();
         buscarSolucoes();

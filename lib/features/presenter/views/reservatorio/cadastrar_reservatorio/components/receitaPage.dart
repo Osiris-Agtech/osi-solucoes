@@ -3,8 +3,10 @@
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:osi_solucoes/features/presenter/views/solucao/cadastrar_solucao_page.dart';
 
 import '../../../../../../core/constants/constants.dart';
 
@@ -143,19 +145,24 @@ Widget receitaPage(BuildContext context, CarouselController controlerPages) {
             ),
           ),
         ),
-        // TextButton(
-        //   onPressed: () {},
-        //   child: const Padding(
-        //     padding: EdgeInsets.only(top: 20, left: 20),
-        //     child: Text(
-        //       'Deseja adicionar uma\nnova Receita?',
-        //       style: TextStyle(
-        //           fontSize: 16,
-        //           fontWeight: FontWeight.w600,
-        //           decoration: TextDecoration.underline),
-        //     ),
-        //   ),
-        // ),
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: () {
+            Get.to(() => const CadastrarSolucaoPage(isShortcut: true));
+          },
+          child: const Padding(
+            padding: EdgeInsets.only(top: 8, left: 20),
+            child: Text(
+              'Deseja adicionar uma\nnova Receita?',
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  decoration: TextDecoration.underline,
+                  color: Constants.kPrimaryColor),
+            ),
+          ),
+        ),
       ],
     ),
   );

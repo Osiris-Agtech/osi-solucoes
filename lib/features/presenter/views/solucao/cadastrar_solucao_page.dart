@@ -14,7 +14,11 @@ import '../../../../../core/constants/constants.dart';
 import '../../routes/routes.dart';
 
 class CadastrarSolucaoPage extends StatefulWidget {
-  const CadastrarSolucaoPage({Key? key}) : super(key: key);
+  final bool isShortcut;
+  const CadastrarSolucaoPage({
+    Key? key,
+    this.isShortcut = false,
+  }) : super(key: key);
 
   @override
   State<CadastrarSolucaoPage> createState() => _CadastrarSolucaoPageState();
