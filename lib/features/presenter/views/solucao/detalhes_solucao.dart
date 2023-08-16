@@ -107,7 +107,7 @@ class _DetalhesSolucaoState extends State<DetalhesSolucao> {
                                     const TextStyle(color: Constants.kGreyText),
                               ),
                               Text(
-                                "${getCurrency(double.parse(store.solucaoSelecionada.solucoes_fertilizantes_concentradas?[index].quantidade ?? '0'))} mg",
+                                "${getCurrency(double.parse(store.solucaoSelecionada.solucoes_fertilizantes_concentradas?[index].quantidade ?? '0'))} ",
                                 style:
                                     const TextStyle(color: Constants.kGreyText),
                               ),

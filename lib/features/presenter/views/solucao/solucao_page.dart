@@ -29,6 +29,7 @@ class _SolucaoPage extends State<SolucaoPage> {
 
   @override
   void initState() {
+    solucaoStore.setsearchSolucaoText('');
     solucaoStore.buscarSolucoes();
     super.initState();
   }
@@ -75,7 +76,7 @@ class _SolucaoPage extends State<SolucaoPage> {
                       ),
                     );
                   }
-                  if (solucaoStore.solucaoList.isEmpty) {
+                  if (solucaoStore.searchSolucao.isEmpty) {
                     return const SliverToBoxAdapter(
                       child: Padding(
                         padding:
@@ -102,7 +103,7 @@ class _SolucaoPage extends State<SolucaoPage> {
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 2,
                       children: List.generate(
-                        solucaoStore.solucaoList.length,
+                        solucaoStore.searchSolucao.length,
                         (index) => CardReceita(
                           solucaoNutritiva: solucaoStore.searchSolucao[index],
                         ),
@@ -134,6 +135,8 @@ class AppBar extends StatefulWidget {
 
 class _AppBarState extends State<AppBar> {
   SetorStore setorStore = GetIt.I<SetorStore>();
+  SolucaoStore solucaoStore = GetIt.I<SolucaoStore>();
+
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
@@ -171,6 +174,9 @@ class _AppBarState extends State<AppBar> {
                       ),
                       border: InputBorder.none,
                     ),
+                    onChanged: (newValue) {
+                      solucaoStore.setsearchSolucaoText(newValue);
+                    },
                   )),
             ),
           ],
