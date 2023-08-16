@@ -7,7 +7,11 @@ import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcen
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 
 class CadastrarSolucaoConcentradaPage extends StatefulWidget {
-  const CadastrarSolucaoConcentradaPage({Key? key}) : super(key: key);
+  final bool isShortcut;
+  const CadastrarSolucaoConcentradaPage({
+    Key? key,
+    this.isShortcut = false,
+  }) : super(key: key);
 
   @override
   State<CadastrarSolucaoConcentradaPage> createState() =>
@@ -468,7 +472,7 @@ class _CadastrarSolucaoConcentradaPageState
           onPressed: () async {
             if (store.validarCadastroConcentrada()) {
               await store.criarSolucaoConcentrada();
-              store.cadastrarSolucaoNutritiva();
+              store.cadastrarSolucaoNutritiva(isShortcut: widget.isShortcut);
             }
           },
         ),

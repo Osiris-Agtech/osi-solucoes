@@ -14,9 +14,9 @@ class AreaRepository implements IAreaRepository {
 
   @override
   Future<Either<Failure, Localizacao>> cadastrarLocalizacao(
-      Localizacao localizacao) async {
-    var result =
-        await datasource.cadastrarLocalizacao(localizacao: localizacao);
+      Localizacao localizacao, int contaId) async {
+    var result = await datasource.cadastrarLocalizacao(
+        localizacao: localizacao, contaId: contaId);
 
     return result;
   }

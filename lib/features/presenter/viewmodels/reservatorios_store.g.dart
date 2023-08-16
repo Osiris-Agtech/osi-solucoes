@@ -235,13 +235,13 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
   final _$solucaoListAtom = Atom(name: '_ReservatoriosStoreBase.solucaoList');
 
   @override
-  ObservableList<SolucaoNutritiva> get solucaoList {
+  List<SolucaoNutritiva> get solucaoList {
     _$solucaoListAtom.reportRead();
     return super.solucaoList;
   }
 
   @override
-  set solucaoList(ObservableList<SolucaoNutritiva> value) {
+  set solucaoList(List<SolucaoNutritiva> value) {
     _$solucaoListAtom.reportWrite(value, super.solucaoList, () {
       super.solucaoList = value;
     });
@@ -433,9 +433,9 @@ mixin _$ReservatoriosStore on _ReservatoriosStoreBase, Store {
       AsyncAction('_ReservatoriosStoreBase.registrarReservatorio');
 
   @override
-  Future registrarReservatorio() {
+  Future registrarReservatorio({bool isShortcut = false}) {
     return _$registrarReservatorioAsyncAction
-        .run(() => super.registrarReservatorio());
+        .run(() => super.registrarReservatorio(isShortcut: isShortcut));
   }
 
   final _$updateReservatorioAsyncAction =

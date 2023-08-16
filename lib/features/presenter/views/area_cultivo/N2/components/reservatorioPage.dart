@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/cadastrar_resevatorio_page.dart';
 
 Widget reservatorioPage(BuildContext context, SetorStore store) {
   return Container(
@@ -134,6 +136,21 @@ Widget reservatorioPage(BuildContext context, SetorStore store) {
               },
             );
           }),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.only(top: 40, left: 8),
+          child: InkWell(
+            child: const Text(
+              "Deseja criar um novo reservatório?",
+              style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  color: Constants.kPrimaryColor),
+            ),
+            onTap: () {
+              Get.to(() => const CadastrarReservatorioPage(isShortcut: true));
+            },
+          ),
         )
       ],
     ),
