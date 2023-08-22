@@ -17,6 +17,7 @@ import 'package:osi_solucoes/features/presenter/views/caderno_campo/detalhes_cad
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/cadastrar_usuario_page.dart';
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/detalhes_usuario_page.dart';
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/protocolo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/recuperar_senha/codigo_seguranca_page.dart';
 import 'package:osi_solucoes/features/presenter/views/recuperar_senha/nova_senha_page.dart';
 import 'package:osi_solucoes/features/presenter/views/recuperar_senha/recuperacao_page.dart';
@@ -197,6 +198,11 @@ class AppPages {
     GetPage(
       name: Routes.gerenciarEquipePage,
       page: () => const GerenciarEquipePage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.protocoloPage,
+      page: () => const ProtocoloPage(),
       transition: Transition.rightToLeft,
       middlewares: [
         EquipeViewPagePermission(),
