@@ -4,10 +4,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/reservatorioItem.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/components/protocoloItem.dart';
 
 import '../../../../core/constants/constants.dart';
-import '../../viewmodels/reservatorios_store.dart';
+import '../../viewmodels/protocolo_store.dart';
 import '../home/components/top_app_bar.dart';
 
 class ProtocoloPage extends StatefulWidget {
@@ -19,12 +19,12 @@ class ProtocoloPage extends StatefulWidget {
 }
 
 class ProtocoloPageState extends State<ProtocoloPage> {
-  ReservatoriosStore store = GetIt.I<ReservatoriosStore>();
+  ProtocoloStore store = GetIt.I<ProtocoloStore>();
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
-    store.setSearchReservatorioText('');
+    // store.setSearchReservatorioText('');
     super.initState();
   }
 
@@ -47,12 +47,12 @@ class ProtocoloPageState extends State<ProtocoloPage> {
                 slivers: [
                   sliverAppBar(context),
                   Observer(builder: (_) {
-                    if (store.isReservatorioListLoading) {
-                      return loadingList();
-                    }
-                    if (store.reservatorioList.isEmpty) {
-                      return emptyList();
-                    }
+                    // if (store.isReservatorioListLoading) {
+                    //   return loadingList();
+                    // }
+                    // if (store.reservatorioList.isEmpty) {
+                    //   return emptyList();
+                    // }
                     return showList();
                   }),
                 ],
@@ -67,10 +67,10 @@ class ProtocoloPageState extends State<ProtocoloPage> {
 
   FloatingActionButton floatingButton() {
     return FloatingActionButton(
-      heroTag: "NovoReservatório",
+      heroTag: "NovoProtocolo",
       onPressed: () {
-        store.setIsEditing(false);
-        Get.toNamed(Routes.cadastrarReservatoriosPage);
+        // store.setIsEditing(false);
+        // Get.toNamed(Routes.cadastrarReservatoriosPage);
       },
       child: const Icon(
         Icons.add,
@@ -85,9 +85,10 @@ class ProtocoloPageState extends State<ProtocoloPage> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          return reservatorioItem(index, store);
+          return protocoloItem(index, store);
         },
-        childCount: store.searchReservatorio.length,
+        childCount: 2,
+        //childCount: store.searchReservatorio.length,
       ),
     );
   }
@@ -170,7 +171,7 @@ class ProtocoloPageState extends State<ProtocoloPage> {
       ),
       child: TextFormField(
         onChanged: ((value) => {
-              store.setSearchReservatorioText(value),
+              //store.setSearchReservatorioText(value),
             }),
         textAlignVertical: TextAlignVertical.top,
         textAlign: TextAlign.start,

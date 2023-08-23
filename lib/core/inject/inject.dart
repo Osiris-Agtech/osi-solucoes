@@ -5,14 +5,15 @@ import 'package:osi_solucoes/features/data/datasources/cadernoCampo/caderno_camp
 import 'package:osi_solucoes/features/data/datasources/gerenciarEquipe/gerenciar_equipe_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/login/login_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/lote/lote_datasource.dart';
+import 'package:osi_solucoes/features/data/datasources/protocolo/protocolo_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/recuperarSenha/recuperar_senha_datasource.dart';
-import 'package:osi_solucoes/features/data/datasources/reservatorio/reservatorio_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/setor/setor_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/solucoes/solucoes_nutritivas_datasource.dart';
 import 'package:osi_solucoes/features/data/repositories/ajuste/ajuste_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/cadernoCampo/cadeno_campo_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/lote/lote_repository.dart';
+import 'package:osi_solucoes/features/data/repositories/protocolo/protocolo_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/recuperarSenha/recuperar_senha_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/reservatorio/reservatorio_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/setor/setor_repository.dart';
@@ -20,11 +21,13 @@ import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_reposi
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/gerenciar_equipe_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/recuperar_senha_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 
 import '../../features/data/datasources/area/area_datasource.dart';
 import '../../features/data/datasources/cadastro/cadastro_datasource.dart';
+import '../../features/data/datasources/reservatorio/reservatorio_datasource.dart';
 import '../../features/data/repositories/area/area_repository.dart';
 import '../../features/data/repositories/cadastro/cadastro_repository.dart';
 import '../../features/data/repositories/login/login_repository.dart';
@@ -53,12 +56,13 @@ Future<void> initInject() async {
   //datasource
   sl.registerLazySingleton<ICadastroConta>(() => CadastroConta());
   sl.registerLazySingleton<ILoginDatasource>(() => LoginDatasource());
-  sl.registerLazySingleton<IReservatorioDatasource>(
-      () => ReservatorioDatasource());
+  sl.registerLazySingleton<IProtocoloDatasource>(() => ProtocoloDatasource());
   sl.registerLazySingleton<ISetorDatasource>(() => SetorDatasource());
   sl.registerLazySingleton<IAreaDatasource>(() => AreaDatasource());
   sl.registerLazySingleton<ILoteDatasource>(() => LoteDatasource());
   sl.registerLazySingleton<IAjusteDatasource>(() => AjusteDatasource());
+  sl.registerLazySingleton<IReservatorioDatasource>(
+      () => ReservatorioDatasource());
   sl.registerLazySingleton<ICadernoCampoDatasource>(
       () => CadernoCampoDatasource());
   sl.registerLazySingleton<ISolucaoDatasource>(() => SolucaoDatasource());
@@ -90,6 +94,8 @@ Future<void> initInject() async {
       () => GerenciarEquipeRepository(datasource: sl()));
   sl.registerLazySingleton<RecuperarSenhaRepository>(
       () => RecuperarSenhaRepository(datasource: sl()));
+  sl.registerLazySingleton<ProtocoloRepository>(
+      () => ProtocoloRepository(datasource: sl()));
 
   //viewmodels
   sl.registerLazySingleton<AjustesStore>(() => AjustesStore());
@@ -107,6 +113,8 @@ Future<void> initInject() async {
   sl.registerLazySingleton<ResultadoajusteStore>(() => ResultadoajusteStore());
   sl.registerLazySingleton<SolucaoStore>(() => SolucaoStore());
   sl.registerLazySingleton<GerenciarEquipeStore>(() => GerenciarEquipeStore());
+  sl.registerLazySingleton<ProtocoloStore>(() => ProtocoloStore());
+
   sl.registerFactoryParam<MultiAccountsPage, Usuario, bool>(
     (param1, param2) => MultiAccountsPage(
       user: param1,
