@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/components/detelhes_protocolo.dart';
 
 Padding protocoloItem(int index, ProtocoloStore store) {
   return Padding(
@@ -14,7 +16,7 @@ Padding protocoloItem(int index, ProtocoloStore store) {
       highlightColor: Colors.transparent,
       onTap: () {
         // store.setReservatorioDetalhes(store.searchReservatorio[index]);
-        //Get.to(() => const DetalhesReservatorio());
+        Get.to(() => const DetalhesProtocolo());
       },
       child: Card(
         shape: RoundedRectangleBorder(
