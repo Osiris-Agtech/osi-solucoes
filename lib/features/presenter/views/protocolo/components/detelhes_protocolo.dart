@@ -88,7 +88,9 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: const [
-                                Text('Cultura'),
+                                Expanded(
+                                  child: Text('Cultura'),
+                                ),
                                 Text(
                                   'Alface',
                                   style: TextStyle(
@@ -104,7 +106,9 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: const [
-                                Text('Tipo'),
+                                Expanded(
+                                  child: Text('Tipo'),
+                                ),
                                 Text(
                                   'Lista',
                                   style: TextStyle(
@@ -120,7 +124,9 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: const [
-                                Text('Sistema de Cultivo'),
+                                Expanded(
+                                  child: Text('Sistema de Cultivo'),
+                                ),
                                 Text(
                                   'Hidroponia',
                                   style: TextStyle(
