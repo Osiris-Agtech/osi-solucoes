@@ -199,14 +199,15 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                         child: Text(
                           'Cultivos Vinculados',
                           style: TextStyle(
-                            fontSize: 18,
-                            color: Constants.kContentColorLightTheme,
+                            fontSize: 12,
+                            color: Constants.kButtonGrey,
                             fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
                           ),
                         ),
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 5,
                       ),
                       Observer(builder: (_) {
                         // if (store.reservatorioDetalhes.lotes == null ||
@@ -224,16 +225,16 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                         return ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: 1,
+                          itemCount: 2,
                           itemBuilder: (context, index) {
                             return ListTile(
                               dense: true,
                               contentPadding:
                                   const EdgeInsets.symmetric(horizontal: 20),
                               title: Text(
-                                "Cultivo 1",
+                                "Cultivo Teste",
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 20,
                                   color: Constants.kContentColorLightTheme
                                       .withOpacity(.8),
                                   fontWeight: FontWeight.bold,
@@ -242,9 +243,9 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                               subtitle: Text(
                                 'Cultura: Alface',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 12,
                                   color: Constants.kContentColorLightTheme
-                                      .withOpacity(.7),
+                                      .withOpacity(.8),
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),
