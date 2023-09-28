@@ -85,7 +85,7 @@ class ProtocoloPageState extends State<ProtocoloPage> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          return protocoloItem(index, store);
+          return protocoloItem(index: index);
         },
         childCount: 2,
         //childCount: store.searchReservatorio.length,

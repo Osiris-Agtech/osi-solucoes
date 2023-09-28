@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 
-Padding protocoloItem(int index, ProtocoloStore store) {
+Padding protocoloItem({
+  required int index,
+  VoidCallback? onTap,
+}) {
   return Padding(
     padding: EdgeInsets.only(
       top: index == 0 ? 10 : 5,
@@ -12,10 +14,7 @@ Padding protocoloItem(int index, ProtocoloStore store) {
     child: InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: () {
-        // store.setReservatorioDetalhes(store.searchReservatorio[index]);
-        //Get.to(() => const DetalhesReservatorio());
-      },
+      onTap: onTap ?? () {},
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
