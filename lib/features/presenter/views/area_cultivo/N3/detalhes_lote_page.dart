@@ -9,7 +9,6 @@ import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 
 import 'components/detalhes_page/dados_cultivo.dart';
-import 'components/detalhes_page/datas_itens.dart';
 import 'components/detalhes_page/horizontal_lista.dart';
 
 class DetalhesLotePage extends StatefulWidget {
@@ -58,16 +57,80 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                   indent: 20,
                   endIndent: 20,
                 ),
-                const SizedBox(height: 16),
-                dateTitle(),
-                const SizedBox(
-                  height: 10,
+                InkWell(
+                  child: Observer(builder: (_) {
+                    return ListTile(
+                      leading: const Icon(
+                        Icons.build,
+                        color: Constants.kPrimaryColor,
+                      ),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.only(right: 8),
+                            child: Text(
+                              'Protocolo Selecionado',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.normal),
+                            ),
+                          ),
+                        ],
+                      ),
+                      subtitle: const Text("Alfaces Hidrogood"),
+                      trailing: const Icon(
+                        Icons.chevron_right_rounded,
+                        color: Constants.kPrimaryColor,
+                      ),
+                      onTap: () {},
+                    );
+                  }),
                 ),
-                registro(context, store),
-                semeadura(context, store),
-                transplantio(context, store),
-                colheita(context, store),
-                const SizedBox(height: 16),
+                Divider(
+                  color: const Color(0xFF9F9F9F).withOpacity(.6),
+                  indent: 20,
+                  endIndent: 20,
+                ),
+                InkWell(
+                  child: Observer(builder: (_) {
+                    return ListTile(
+                      leading: const Icon(
+                        Icons.checklist,
+                        color: Constants.kPrimaryColor,
+                      ),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.only(right: 8),
+                            child: Text(
+                              'Atividades',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.normal),
+                            ),
+                          ),
+                        ],
+                      ),
+                      subtitle:
+                          const Text("Atividades planejadas para o cultivo"),
+                      trailing: const Icon(
+                        Icons.chevron_right_rounded,
+                        color: Constants.kPrimaryColor,
+                      ),
+                      onTap: () {},
+                    );
+                  }),
+                ),
+                // const SizedBox(height: 16),
+                // dateTitle(),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                // registro(context, store),
+                // semeadura(context, store),
+                // transplantio(context, store),
+                // colheita(context, store),
+                // const SizedBox(height: 16),
                 Divider(
                   color: const Color(0xFF9F9F9F).withOpacity(.6),
                   indent: 20,

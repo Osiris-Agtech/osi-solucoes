@@ -7,9 +7,9 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_item.dart';
 
 import 'components/cadastrar_page/cultura_item.dart';
-import 'components/cadastrar_page/data_item.dart';
 import 'components/cadastrar_page/lote_item.dart';
 import 'components/cadastrar_page/reservatorio_detalhes_page.dart';
 import 'components/cadastrar_page/reservatorio_item.dart';
@@ -149,8 +149,11 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                 ),
                 reservatorio(context, carouselController, store, key),
                 // fase(context),
-                const Divider(),
-                datas(context, store),
+                const Divider(
+                  thickness: 0.5,
+                  color: Color(0xFFC4C4C4),
+                ),
+                protocolo(context, carouselController, store, key),
                 const SizedBox(height: 20),
                 saveButton(size),
               ],
@@ -294,11 +297,15 @@ bottomSheetN3(
                     children: [
                       Observer(
                         builder: (_) {
-                          return store.dotIndicator == 3 &&
-                                  store.showReservatorioDetalhes
+                          return (store.dotIndicator == 3 &&
+                                      store.showReservatorioDetalhes) ||
+                                  (store.dotIndicator == 4 &&
+                                      store.showProtocoloDetalhes)
                               ? IconButton(
-                                  onPressed: () =>
-                                      store.setShowReservatorioDetalhes(false),
+                                  onPressed: () {
+                                    store.setShowReservatorioDetalhes(false);
+                                    store.setShowProtocoloDetalhes(false);
+                                  },
                                   icon: const Icon(
                                     Icons.arrow_back_ios_new_rounded,
                                     size: 26,
@@ -317,7 +324,7 @@ bottomSheetN3(
                       ),
                       Observer(builder: (_) {
                         return DotsIndicator(
-                          dotsCount: 4,
+                          dotsCount: 5,
                           position: store.dotIndicator * 1.0,
                           decorator: DotsDecorator(
                             size: const Size.square(9.0),
@@ -360,6 +367,14 @@ bottomSheetN3(
                             ? CrossFadeState.showFirst
                             : CrossFadeState.showSecond,
                       ),
+                      AnimatedCrossFade(
+                        duration: const Duration(milliseconds: 200),
+                        firstChild: protocoloPage(context, store),
+                        secondChild: protocoloDetalhes(store),
+                        crossFadeState: !store.showProtocoloDetalhes
+                            ? CrossFadeState.showFirst
+                            : CrossFadeState.showSecond,
+                      ),
                     ],
                   );
                 }),
@@ -388,6 +403,41 @@ bottomSheetN3(
   );
 }
 
+bottomSheetProtocol(
+  BuildContext context,
+  CarouselController carouselController,
+  LoteStore store,
+  GlobalKey<FormFieldState> key,
+) {
+  return showModalBottomSheet<void>(
+    context: context,
+    backgroundColor: Constants.kBackgroundColor,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(10),
+      ),
+    ),
+    isScrollControlled: true,
+    builder: (BuildContext context) {
+      return Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.9,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [],
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
 class BackStepButton extends StatefulWidget {
   final CarouselController carouselController;
   const BackStepButton({
@@ -406,7 +456,8 @@ class _BackStepButtonState extends State<BackStepButton> {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        return store.dotIndicator == 3 && store.showReservatorioDetalhes
+        return (store.dotIndicator == 3 && store.showReservatorioDetalhes) ||
+                (store.dotIndicator == 4 && store.showProtocoloDetalhes)
             ? Container()
             : TextButton(
                 onPressed: () {
@@ -468,7 +519,8 @@ class _NextStepButtonState extends State<NextStepButton> {
       ),
       child: Center(
         child: Observer(builder: (_) {
-          return store.dotIndicator == 3 && store.showReservatorioDetalhes
+          return (store.dotIndicator == 3 && store.showReservatorioDetalhes) ||
+                  (store.dotIndicator == 4 && store.showProtocoloDetalhes)
               ? const Text(
                   'Vincular',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
@@ -490,12 +542,14 @@ class _NextStepButtonState extends State<NextStepButton> {
         if (store.dotIndicator == 3) {
           if (store.showReservatorioDetalhes) {
             store.selecionarNovoLoteReservatorio();
-            Navigator.pop(context);
-          } else {
-            Navigator.pop(context);
           }
         }
-        if (store.dotIndicator < 3) {
+        if (store.dotIndicator == 4) {
+          if (store.showProtocoloDetalhes) {
+            store.selecionarNovoLoteProtocolo();
+          }
+        }
+        if (store.dotIndicator < 4) {
           store.setDotIndicator(store.dotIndicator + 1);
           widget.carouselController.nextPage();
         }
