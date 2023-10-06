@@ -4,11 +4,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/views/protocolo/components/protocoloItem.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/protocolo_store.dart';
 import '../home/components/top_app_bar.dart';
+import 'components/detalhes_page/protocoloItem.dart';
 
 class ProtocoloPage extends StatefulWidget {
   final String title;
@@ -69,8 +69,7 @@ class ProtocoloPageState extends State<ProtocoloPage> {
     return FloatingActionButton(
       heroTag: "NovoProtocolo",
       onPressed: () {
-        // store.setIsEditing(false);
-        // Get.toNamed(Routes.cadastrarReservatoriosPage);
+        Get.toNamed(Routes.cadastrarProtocoloPage);
       },
       child: const Icon(
         Icons.add,

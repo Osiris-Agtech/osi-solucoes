@@ -4,8 +4,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/modulos_store.dart';
-import '../../../viewmodels/protocolo_store.dart';
-import '../../home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
+import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 
 class DetalhesProtocolo extends StatefulWidget {
   const DetalhesProtocolo({Key? key}) : super(key: key);
