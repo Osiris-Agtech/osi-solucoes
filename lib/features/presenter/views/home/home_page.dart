@@ -447,8 +447,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                         firstItems(context, size, "card2Home".i18n(),
                             "assets/icons/relatorio_icon.svg"),
-                        firstItems(context, size, "card3Home".i18n(),
-                            "assets/icons/inventario_icon.svg"),
+                        firstItems(
+                          context,
+                          size,
+                          "card3Home".i18n(),
+                          "assets/icons/inventario_icon.svg",
+                          onTap: () => Get.toNamed(Routes.agendaPage),
+                        ),
                         firstItems(
                           context,
                           size,
