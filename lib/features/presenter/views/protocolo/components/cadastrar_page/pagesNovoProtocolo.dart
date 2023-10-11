@@ -11,6 +11,7 @@ import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadas
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/formaPage.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/sistemaPage.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/tipoPage.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/registrar_ativ.dart';
 
 SizedBox pagesNovoProtocolo(
     BuildContext context,
@@ -71,6 +72,7 @@ SizedBox pagesNovoProtocolo(
               tipoPage(context, store),
               sistemaPage(context, store),
               formaPage(context, store),
+              registrarAtivPage(context)
             ],
           );
         }),
