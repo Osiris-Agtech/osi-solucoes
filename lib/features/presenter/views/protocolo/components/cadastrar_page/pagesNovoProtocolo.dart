@@ -38,7 +38,7 @@ SizedBox pagesNovoProtocolo(
               ),
               Observer(builder: (_) {
                 return DotsIndicator(
-                  dotsCount: 2,
+                  dotsCount: 4,
                   position: store.dotIndicator * 1.0,
                   decorator: DotsDecorator(
                     size: const Size.square(9.0),
@@ -160,7 +160,7 @@ class _NextStepButtonState extends State<NextStepButton> {
         ),
       ),
       onPressed: () {
-        if (store.dotIndicator == 1) {
+        if (store.dotIndicator == 3) {
           Navigator.pop(context);
         } else {
           store.setDotIndicator(store.dotIndicator + 1);
