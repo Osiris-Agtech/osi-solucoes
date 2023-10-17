@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/atividadeItem.dart';
 
 registrarAtivPage(BuildContext context) {
   return SingleChildScrollView(
@@ -40,8 +41,7 @@ registrarAtivPage(BuildContext context) {
                 itemCount: 2,
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: const EdgeInsets.only(
-                        top: 20, bottom: 20, left: 20, right: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
@@ -49,38 +49,48 @@ registrarAtivPage(BuildContext context) {
                         color: Constants.kCardColor,
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text(
-                                  'Germinação',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Germinação',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                RichText(
-                                  text: TextSpan(
-                                    text: 'Período: ',
-                                    style: DefaultTextStyle.of(context).style,
-                                    children: const <TextSpan>[
-                                      TextSpan(
-                                        text: '2 dias',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
+                                  RichText(
+                                    text: TextSpan(
+                                      text: 'Período: ',
+                                      style: DefaultTextStyle.of(context).style,
+                                      children: const <TextSpan>[
+                                        TextSpan(
+                                          text: '2 dias',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                             const SizedBox(
                               height: 10,
                             ),
-                            ...['oi', 'oi', 'oi'].map((e) => Text(e)).toList()
+                            ...['oi', 'oi', 'oi']
+                                .asMap()
+                                .entries
+                                .map((entry) => atividadeItem(index: entry.key))
+                                .toList()
                           ],
                         ),
                       ),
