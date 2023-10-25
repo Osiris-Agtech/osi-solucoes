@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/ativBottomSheet.dart';
+
+import '../../../../widgets/get_bottom_sheet.dart';
 
 Padding atividadeItem({
   required int index,
@@ -15,8 +18,7 @@ Padding atividadeItem({
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        // store.setReservatorioDetalhes(store.searchReservatorio[index]);
-        //Get.to(() => const DetalhesProtocolo());
+        getBottomSheet(const AtivBottomSheet());
       },
       child: Card(
         shape: RoundedRectangleBorder(
@@ -33,8 +35,8 @@ Padding atividadeItem({
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Padding(
+                  children: const [
+                    Padding(
                       padding: EdgeInsets.only(
                         left: 5.0,
                         bottom: 8.0,
@@ -50,17 +52,13 @@ Padding atividadeItem({
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Column(
-                        children: const [
-                          Text(
-                            "Data 20/08/23",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        "Data 20/08/23",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     )
                   ],
@@ -72,7 +70,7 @@ Padding atividadeItem({
                 color: Constants.kPrimaryColor,
               ),
               const SizedBox(
-                width: 10,
+                width: 16,
               ),
               const Icon(
                 Icons.edit,
