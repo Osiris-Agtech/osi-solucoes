@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/views/protocolo/components/protocoloItem.dart';
+import 'package:osi_solucoes/features/presenter/views/agenda/components/agenda_item.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -49,6 +49,26 @@ class AgendaPageState extends State<AgendaPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  SliverAppBar sliverAppBar(BuildContext context) {
+    return SliverAppBar(
+      backgroundColor: Colors.white,
+      toolbarHeight: 120, //MediaQuery.of(context).size.height * 0.17,
+      // collapsedHeight: 200, //MediaQuery.of(context).size.height * 0.17,
+      floating: true,
+      automaticallyImplyLeading: false,
+      forceElevated: true,
+      elevation: 1,
+      flexibleSpace: TopAppBar(
+        path: "/Home/",
+        namePage: "Agenda",
+        subtitle: "Acompanhamento de ações da produção",
+        onPressed: () {
+          Get.offNamedUntil(Routes.homePage, (route) => false);
+        },
       ),
     );
   }
@@ -117,7 +137,7 @@ class AgendaPageState extends State<AgendaPage> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          return protocoloItem(index: index);
+          return agendaItem(index: index);
         },
         childCount: 2,
         //childCount: store.searchReservatorio.length,
@@ -162,26 +182,6 @@ class AgendaPageState extends State<AgendaPage> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  SliverAppBar sliverAppBar(BuildContext context) {
-    return SliverAppBar(
-      backgroundColor: Colors.white,
-      toolbarHeight: 120, //MediaQuery.of(context).size.height * 0.17,
-      // collapsedHeight: 200, //MediaQuery.of(context).size.height * 0.17,
-      floating: true,
-      automaticallyImplyLeading: false,
-      forceElevated: true,
-      elevation: 1,
-      flexibleSpace: TopAppBar(
-        path: "/Home/",
-        namePage: "Agenda",
-        subtitle: "Acompanhamento de ações da produção",
-        onPressed: () {
-          Get.offNamedUntil(Routes.homePage, (route) => false);
-        },
       ),
     );
   }
