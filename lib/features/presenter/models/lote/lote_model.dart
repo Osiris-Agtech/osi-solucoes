@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lotesAtividades/lotes_atividades_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
@@ -28,6 +29,8 @@ class Lote {
   @JsonKey(required: false, disallowNullValue: false)
   DateTime? colheita_data;
   @JsonKey(required: false, disallowNullValue: false)
+  DateTime? deleted_at;
+  @JsonKey(required: false, disallowNullValue: false)
   int? proxima_fase;
   @JsonKey(required: false, disallowNullValue: false)
   bool? ativo;
@@ -41,6 +44,8 @@ class Lote {
   int? embalagens_produzidas;
   @JsonKey(required: false, disallowNullValue: false)
   Cultura? cultura;
+  @JsonKey(required: false, disallowNullValue: false)
+  Agenda? agenda;
   // @JsonKey(required: false, disallowNullValue: false)
   // Fase? fase;
   @JsonKey(required: false, disallowNullValue: false)
@@ -69,6 +74,8 @@ class Lote {
     this.setor,
     this.cultura,
     this.lotes_atividades,
+    this.agenda,
+    this.deleted_at,
   });
 
   factory Lote.fromJson(Map<String, dynamic> json) => _$LoteFromJson(json);

@@ -44,6 +44,12 @@ Lote _$LoteFromJson(Map<String, dynamic> json) => Lote(
               ?.map((e) => LotesAtividades.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
+      agenda: json['agenda'] == null
+          ? null
+          : Agenda.fromJson(json['agenda'] as Map<String, dynamic>),
+      deleted_at: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
     );
 
 Map<String, dynamic> _$LoteToJson(Lote instance) => <String, dynamic>{
@@ -55,6 +61,7 @@ Map<String, dynamic> _$LoteToJson(Lote instance) => <String, dynamic>{
       'semeadura_data': instance.semeadura_data?.toIso8601String(),
       'transplantio_data': instance.transplantio_data?.toIso8601String(),
       'colheita_data': instance.colheita_data?.toIso8601String(),
+      'deleted_at': instance.deleted_at?.toIso8601String(),
       'proxima_fase': instance.proxima_fase,
       'ativo': instance.ativo,
       'bandeijas_semeadas': instance.bandeijas_semeadas,
@@ -62,6 +69,7 @@ Map<String, dynamic> _$LoteToJson(Lote instance) => <String, dynamic>{
       'plantas_colhidas': instance.plantas_colhidas,
       'embalagens_produzidas': instance.embalagens_produzidas,
       'cultura': instance.cultura?.toJson(),
+      'agenda': instance.agenda?.toJson(),
       'reservatorio': instance.reservatorio?.toJson(),
       'setor': instance.setor?.toJson(),
       'lotes_atividades':
