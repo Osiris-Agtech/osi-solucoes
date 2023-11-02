@@ -80,7 +80,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                             bottom: 8.0,
                           ),
                           child: Text(
-                            'Tipo obrigatório',
+                            'Cultura obrigatório',
                             style: TextStyle(
                               fontSize: 12,
                               color: Constants.kErrorColor,
@@ -173,6 +173,28 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                       thickness: 0.5,
                       color: Color(0xFFC4C4C4),
                     ),
+                    atividades(context),
+                    Observer(builder: (_) {
+                      return Visibility(
+                        visible: store.mostrarErroFormulario &&
+                            store.novoSetorName.text.isEmpty,
+                        child: const Padding(
+                          padding: EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 8.0,
+                          ),
+                          child: Text(
+                            'Forma de implantação obrigatório',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Constants.kErrorColor,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                     const SizedBox(height: 30),
                     saveButton(size),
                   ],
@@ -489,6 +511,74 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                   padding: EdgeInsets.only(right: 8),
                   child: Text(
                     'Forma de \nimplantação',
+                    maxLines: 2,
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                  ),
+                ),
+                store.novoSetorName.text.isNotEmpty
+                    ? Expanded(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                store.novoSetorName.text,
+                                textAlign: TextAlign.end,
+                                style: const TextStyle(
+                                  color: Constants.kPrimaryColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const Icon(
+                              Icons.chevron_right,
+                              color: Constants.kPrimaryColor,
+                            ),
+                          ],
+                        ),
+                      )
+                    : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Text(
+                            "Preencher",
+                            style: TextStyle(
+                              color: Constants.kPrimaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: Constants.kPrimaryColor,
+                          ),
+                        ],
+                      ),
+              ],
+            ),
+            onTap: () {
+              store.setDotIndicator(2);
+              bottomSheet(context, carouselController, controlerPages, store);
+            });
+      }),
+    );
+  }
+
+  InkWell atividades(BuildContext context) {
+    return InkWell(
+      child: Observer(builder: (_) {
+        return ListTile(
+            leading: const Icon(Icons.label),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(right: 8),
+                  child: Text(
+                    'Atividades',
                     maxLines: 2,
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
