@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/components/detalhes_page/detelhes_protocolo.dart';
 
 Padding protocoloItem({
   required int index,
@@ -14,7 +16,10 @@ Padding protocoloItem({
     child: InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: onTap ?? () {},
+      onTap: () {
+        // store.setReservatorioDetalhes(store.searchReservatorio[index]);
+        Get.to(() => const DetalhesProtocolo());
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),

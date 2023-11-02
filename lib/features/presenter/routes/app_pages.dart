@@ -37,6 +37,7 @@ import '../views/modulos/modulos_page.dart';
 import '../views/login/login_page.dart';
 import '../views/login/multi_account_page.dart';
 import '../views/onboarding/splash_page.dart';
+import '../views/protocolo/cadastrar_protocolo_page.dart';
 import '../views/reservatorio/reservatorios_page.dart';
 import '../views/solucao/solucao_page.dart';
 
@@ -204,6 +205,14 @@ class AppPages {
     GetPage(
       name: Routes.protocoloPage,
       page: () => const ProtocoloPage(),
+      transition: Transition.rightToLeft,
+      middlewares: [
+        EquipeViewPagePermission(),
+      ],
+    ),
+    GetPage(
+      name: Routes.cadastrarProtocoloPage,
+      page: () => const CadastrarProtocoloPage(),
       transition: Transition.rightToLeft,
       middlewares: [
         EquipeViewPagePermission(),

@@ -9,4 +9,13 @@ abstract class _ProtocoloStoreBase with Store {
   //     GetIt.I<ReservatorioRepository>();
   // AuthController authController = GetIt.I<AuthController>();
 
+  @observable
+  int dotIndicator = 1;
+
+  @action
+  setDotIndicator(int value) {
+    if (value >= 0 && value <= 1) {
+      dotIndicator = value;
+    }
+  }
 }
