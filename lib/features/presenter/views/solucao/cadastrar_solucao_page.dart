@@ -15,7 +15,7 @@ import '../../routes/routes.dart';
 
 class CadastrarSolucaoPage extends StatefulWidget {
   final bool isShortcut;
-  const CadastrarSolucaoPage({
+  const    CadastrarSolucaoPage({
     Key? key,
     this.isShortcut = false,
   }) : super(key: key);
