@@ -24,7 +24,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    return Container(
+    return Padding(
       padding: const EdgeInsets.all(12),
       child: SingleChildScrollView(
         child: Padding(
