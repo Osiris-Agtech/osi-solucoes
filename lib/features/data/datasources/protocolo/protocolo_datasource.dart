@@ -1,3 +1,38 @@
-abstract class IProtocoloDatasource {}
+import 'package:dartz/dartz.dart';
+import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
+import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
+import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
+import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 
-class ProtocoloDatasource implements IProtocoloDatasource {}
+import '../../../../core/errors/failure.dart';
+
+abstract class IProtocoloDatasource {
+  Future<Either<Failure, List<Protocolo>>> buscarProtocolos();
+}
+
+class ProtocoloDatasource implements IProtocoloDatasource {
+  @override
+  Future<Either<Failure, List<Protocolo>>> buscarProtocolos() async {
+    // Simule uma chamada de API assíncrona
+    await Future.delayed(const Duration(seconds: 2));
+
+    final protocolos = List.generate(
+        3,
+        (index) => Protocolo(
+              id: index + 1,
+              nome: 'Protocolo ${index + 1}',
+              descricao: 'Descrição do Protocolo ${index + 1}',
+              tipo_cultura: 'Tipo de Cultura ${index + 1}',
+              sistema_cultivo: 'Sistema de Cultivo ${index + 1}',
+              implantacao: 'Implantação ${index + 1}',
+              created_at: DateTime.now(),
+              updated_at: DateTime.now(),
+              deleted_at: null,
+              acao: [Acao(), Acao()],
+              cultura: Cultura(nome: 'alface ${index + 1}'),
+              conta: Conta(),
+            ));
+
+    return Future.value(Right(protocolos));
+  }
+}

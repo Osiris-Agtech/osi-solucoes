@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/detalhes_page/detelhes_protocolo.dart';
 
 Padding protocoloItem({
   required int index,
+  ProtocoloStore? store,
   VoidCallback? onTap,
 }) {
   return Padding(
@@ -36,16 +38,15 @@ Padding protocoloItem({
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(
+                    Padding(
+                      padding: const EdgeInsets.only(
                         left: 10.0,
                         bottom: 8.0,
                         top: 5.0,
                       ),
                       child: Text(
-                        //store.searchReservatorio[index].nome ?? "---",
-                        "Nome do Protocolo",
-                        style: TextStyle(
+                        store?.protocoloList[index].nome ?? "---",
+                        style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
                         ),
@@ -57,8 +58,8 @@ Padding protocoloItem({
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
-                            children: const [
-                              Text(
+                            children: [
+                              const Text(
                                 "Cultivos Alvo:",
                                 style: TextStyle(
                                   fontSize: 14,
@@ -66,11 +67,11 @@ Padding protocoloItem({
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(left: 5),
+                                padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  //"${store.searchReservatorio[index].lotes?.length ?? 0} Ativos",
-                                  "Alface",
-                                  style: TextStyle(
+                                  store?.protocoloList[index].cultura?.nome ??
+                                      "---",
+                                  style: const TextStyle(
                                     color: Constants.kPrimaryColor,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,

@@ -25,6 +25,7 @@ class ProtocoloPageState extends State<ProtocoloPage> {
   @override
   void initState() {
     // store.setSearchReservatorioText('');
+    store.buscarProtocolos();
     super.initState();
   }
 
@@ -84,10 +85,9 @@ class ProtocoloPageState extends State<ProtocoloPage> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          return protocoloItem(index: index);
+          return protocoloItem(index: index, store: store);
         },
-        childCount: 2,
-        //childCount: store.searchReservatorio.length,
+        childCount: store.protocoloList.length,
       ),
     );
   }
