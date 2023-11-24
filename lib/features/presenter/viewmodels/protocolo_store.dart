@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/features/data/repositories/protocolo/protocolo_repository.dart';
+import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
+import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 
 part 'protocolo_store.g.dart';
@@ -18,11 +21,41 @@ abstract class _ProtocoloStoreBase with Store {
   bool isProtocoloListLoading = false;
 
   @observable
+  bool isEditing = false;
+
+  @observable
+  bool canNotificate = false;
+
+  @observable
+  bool mostrarErroFormulario = false;
+
+  @observable
+  TextEditingController novoTipoProtocolo = TextEditingController();
+
+  @observable
+  TextEditingController novoSistemaProtocolo = TextEditingController();
+
+  @observable
+  TextEditingController novoFormaProtocolo = TextEditingController();
+
+  @observable
+  Cultura novaCulturaProtocolo = Cultura();
+
+  @observable
+  List<Atividade> novasAtividadesProtocolo = [];
+
+  @observable
   List<Protocolo> protocoloList = [];
 
   @action
+  setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
+
+  @action
+  setCanNotificate(bool value) => canNotificate = value;
+
+  @action
   setDotIndicator(int value) {
-    if (value >= 0 && value <= 1) {
+    if (value >= 0 && value <= 5) {
       dotIndicator = value;
     }
   }

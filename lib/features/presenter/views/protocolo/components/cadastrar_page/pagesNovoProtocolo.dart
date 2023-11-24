@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/cultura_item.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/formaPage.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/sistemaPage.dart';
@@ -17,7 +17,7 @@ SizedBox pagesNovoProtocolo(
     BuildContext context,
     CarouselController carouselController,
     CarouselController controlerPages,
-    SetorStore store) {
+    ProtocoloStore store) {
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
     child: Column(
@@ -39,7 +39,7 @@ SizedBox pagesNovoProtocolo(
               ),
               Observer(builder: (_) {
                 return DotsIndicator(
-                  dotsCount: 4,
+                  dotsCount: 5,
                   position: store.dotIndicator * 1.0,
                   decorator: DotsDecorator(
                     size: const Size.square(9.0),
@@ -72,7 +72,7 @@ SizedBox pagesNovoProtocolo(
               tipoPage(context, store),
               sistemaPage(context, store),
               formaPage(context, store),
-              registrarAtivPage(context)
+              registrarAtivPage(context, store)
             ],
           );
         }),
@@ -137,7 +137,7 @@ class NextStepButton extends StatefulWidget {
 }
 
 class _NextStepButtonState extends State<NextStepButton> {
-  SetorStore store = GetIt.I<SetorStore>();
+  ProtocoloStore store = GetIt.I<ProtocoloStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +162,7 @@ class _NextStepButtonState extends State<NextStepButton> {
         ),
       ),
       onPressed: () {
-        if (store.dotIndicator == 3) {
+        if (store.dotIndicator == 4) {
           Navigator.pop(context);
         } else {
           store.setDotIndicator(store.dotIndicator + 1);

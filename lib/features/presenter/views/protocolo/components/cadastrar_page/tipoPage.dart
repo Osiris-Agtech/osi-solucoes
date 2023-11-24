@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 
-Container tipoPage(BuildContext context, SetorStore store) {
+Container tipoPage(BuildContext context, ProtocoloStore store) {
   return Container(
     height: MediaQuery.of(context).size.height * 0.9,
     margin: EdgeInsets.only(
