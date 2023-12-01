@@ -2,12 +2,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 
 cultura(
   BuildContext context,
   CarouselController carouselController,
   GlobalKey<FormFieldState> key,
+  ProtocoloStore store,
 ) {
   return InkWell(
     child: Observer(builder: (_) {
@@ -81,7 +82,7 @@ cultura(
   );
 }
 
-culturaPage(BuildContext context) {
+culturaPage(BuildContext context, ProtocoloStore store) {
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
     child: Column(
@@ -125,86 +126,87 @@ culturaPage(BuildContext context) {
                 color: const Color(0xffF5F5F5),
               ),
               child: Observer(builder: (_) {
-                return ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return Observer(builder: (_) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          left: 30,
-                          right: 10,
-                          top: index == 0 ? 16.0 : 8.0,
-                          bottom: 5,
+                return store.isProtocoloListLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Constants.kPrimaryColor,
                         ),
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              value: false,
-                              onChanged: (value) {
-                                //if (value != null) store.setNovoLoteCultura(index);
-                              },
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Text(
-                              "Alface",
-                              style: TextStyle(
-                                fontSize: 24,
+                      )
+                    : ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: store.culturaList.length,
+                        itemBuilder: (context, index) {
+                          return Observer(builder: (_) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                left: 30,
+                                right: 10,
+                                top: index == 0 ? 16.0 : 8.0,
+                                bottom: 5,
                               ),
-                            ),
-                          ],
-                        ),
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                    value: false,
+                                    onChanged: (value) {
+                                      //if (value != null) store.setNovoLoteCultura(index);
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    store.culturaList[index].nome ?? "",
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          });
+                        },
                       );
-                    });
-                  },
-                );
               }),
             ),
           ),
         ),
-        InkWell(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          onTap: () {},
-          child: const Padding(
-            padding: EdgeInsets.only(top: 8, left: 20),
-            child: Text(
-              'Deseja criar uma\nnova cultura?',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                decoration: TextDecoration.underline,
-                color: Constants.kPrimaryColor,
-              ),
-            ),
-          ),
-        ),
-        // Padding(
-        //   padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-        //   child: Observer(builder: (_) {
-        //     return AnimatedCrossFade(
-        //       duration: const Duration(milliseconds: 200),
-        //       firstChild: addCulturaButton(store),
-        //       secondChild: addCulturaTextFormField(store),
-        //       crossFadeState: !store.isNovaCultura
-        //           ? CrossFadeState.showFirst
-        //           : CrossFadeState.showSecond,
-        //     );
-        //   }),
-        // ),
+        Observer(builder: (_) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+            child: Observer(builder: (_) {
+              return AnimatedCrossFade(
+                duration: const Duration(milliseconds: 200),
+                firstChild: addCulturaButton(store),
+                secondChild: addCulturaTextFormField(store),
+                crossFadeState: !store.isNovaCultura
+                    ? CrossFadeState.showFirst
+                    : CrossFadeState.showSecond,
+              );
+            }),
+          );
+        }),
         const SizedBox(height: 24),
       ],
     ),
   );
 }
 
-addCulturaTextFormField(LoteStore store) {
+addCulturaTextFormField(ProtocoloStore store) {
   return Column(
     children: [
       Row(
         children: [
+          InkWell(
+            child: const Icon(
+              Icons.close,
+              color: Constants.kButtonGrey,
+            ),
+            onTap: () => store.setIsNovaCultura(false),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
           Expanded(
             child: TextFormField(
               controller: store.novaCulturaController,
@@ -249,11 +251,10 @@ addCulturaTextFormField(LoteStore store) {
   );
 }
 
-addCulturaButton() {
-  return const TextButton(
-    //onPressed: () => store.setIsNovaCultura(true),
-    onPressed: null,
-    child: Text(
+addCulturaButton(ProtocoloStore store) {
+  return TextButton(
+    onPressed: () => store.setIsNovaCultura(true),
+    child: const Text(
       "Deseja cadastrar nova cultura ?",
       style: TextStyle(
         fontSize: 16,

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
+import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/protocolo/protocolo_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
@@ -30,6 +31,12 @@ abstract class _ProtocoloStoreBase with Store {
   bool mostrarErroFormulario = false;
 
   @observable
+  bool isNovaCultura = false;
+
+  @observable
+  List<Cultura> culturaList = [];
+
+  @observable
   TextEditingController novoTipoProtocolo = TextEditingController();
 
   @observable
@@ -39,6 +46,9 @@ abstract class _ProtocoloStoreBase with Store {
   TextEditingController novoFormaProtocolo = TextEditingController();
 
   @observable
+  TextEditingController novaCulturaController = TextEditingController();
+
+  @observable
   Cultura novaCulturaProtocolo = Cultura();
 
   @observable
@@ -46,6 +56,9 @@ abstract class _ProtocoloStoreBase with Store {
 
   @observable
   List<Protocolo> protocoloList = [];
+
+  @action
+  setIsNovaCultura(bool value) => isNovaCultura = value;
 
   @action
   setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
@@ -73,10 +86,53 @@ abstract class _ProtocoloStoreBase with Store {
       (data) async {
         protocoloList = List.from(data);
         protocoloList = List.from(protocoloList);
-        print(protocoloList);
       },
     );
 
     isProtocoloListLoading = false;
   }
+
+  @action
+  registrarCultura() async {
+    isProtocoloListLoading = true;
+
+    if (novaCulturaController.text.isNotEmpty) {
+      Cultura novaCultura = Cultura(
+        nome: novaCulturaController.text,
+        privado: true,
+      );
+
+      // var conta = await loteRepository.registrarCultura(
+      //     novaCultura, authController.usuario.selected_conta!.conta!.id!);
+
+      // conta.fold(
+      //   (err) {
+      //     toastError(message: err.message);
+      //   },
+      //   (data) async {
+      //     // culturaList = List.from([data, ...culturaList]);
+      //     setIsNovaCultura(false);
+      //   },
+      // );
+    }
+  }
+
+  @action
+  buscarCulturas() async {
+    isProtocoloListLoading = true;
+    var culturas = await protocoloRepository.buscarCulturas();
+
+    culturas.fold(
+      (err) {
+        toastError(message: err.message);
+        culturaList = [];
+      },
+      (data) async {
+        culturaList = List.from(data);
+      },
+    );
+    isProtocoloListLoading = false;
+  }
+
+  limparTudo() {}
 }

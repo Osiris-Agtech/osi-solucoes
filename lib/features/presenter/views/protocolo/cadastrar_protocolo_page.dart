@@ -22,15 +22,14 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
   @override
   void initState() {
     super.initState();
-    // store.buscarReservatorios(); - mudar para buscar culturas
-    // store.setShowTextFormField(false);
+    store.buscarCulturas();
     store.setMostrarErroFormulario(false);
   }
 
   @override
   void dispose() {
     super.dispose();
-    //store.limparTudo();
+    store.limparTudo();
   }
 
   @override
@@ -257,11 +256,13 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              child: store.isProtocoloListLoading
-                  ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                  : store.isEditing
+              child:
+                  // store.isProtocoloListLoading
+                  // ? const CircularProgressIndicator(
+                  //     color: Colors.white,
+                  //   )
+                  // :
+                  store.isEditing
                       ? const Text(
                           "Alterar",
                           style: TextStyle(

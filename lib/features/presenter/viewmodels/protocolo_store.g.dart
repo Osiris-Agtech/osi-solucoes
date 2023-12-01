@@ -88,6 +88,21 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
+  final _$isNovaCulturaAtom = Atom(name: '_ProtocoloStoreBase.isNovaCultura');
+
+  @override
+  bool get isNovaCultura {
+    _$isNovaCulturaAtom.reportRead();
+    return super.isNovaCultura;
+  }
+
+  @override
+  set isNovaCultura(bool value) {
+    _$isNovaCulturaAtom.reportWrite(value, super.isNovaCultura, () {
+      super.isNovaCultura = value;
+    });
+  }
+
   final _$novoTipoProtocoloAtom =
       Atom(name: '_ProtocoloStoreBase.novoTipoProtocolo');
 
@@ -134,6 +149,23 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   set novoFormaProtocolo(TextEditingController value) {
     _$novoFormaProtocoloAtom.reportWrite(value, super.novoFormaProtocolo, () {
       super.novoFormaProtocolo = value;
+    });
+  }
+
+  final _$novaCulturaControllerAtom =
+      Atom(name: '_ProtocoloStoreBase.novaCulturaController');
+
+  @override
+  TextEditingController get novaCulturaController {
+    _$novaCulturaControllerAtom.reportRead();
+    return super.novaCulturaController;
+  }
+
+  @override
+  set novaCulturaController(TextEditingController value) {
+    _$novaCulturaControllerAtom.reportWrite(value, super.novaCulturaController,
+        () {
+      super.novaCulturaController = value;
     });
   }
 
@@ -194,8 +226,27 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     return _$buscarProtocolosAsyncAction.run(() => super.buscarProtocolos());
   }
 
+  final _$registrarCulturaAsyncAction =
+      AsyncAction('_ProtocoloStoreBase.registrarCultura');
+
+  @override
+  Future registrarCultura() {
+    return _$registrarCulturaAsyncAction.run(() => super.registrarCultura());
+  }
+
   final _$_ProtocoloStoreBaseActionController =
       ActionController(name: '_ProtocoloStoreBase');
+
+  @override
+  dynamic setIsNovaCultura(bool value) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.setIsNovaCultura');
+    try {
+      return super.setIsNovaCultura(value);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic setMostrarErroFormulario(bool value) {
@@ -238,9 +289,11 @@ isProtocoloListLoading: ${isProtocoloListLoading},
 isEditing: ${isEditing},
 canNotificate: ${canNotificate},
 mostrarErroFormulario: ${mostrarErroFormulario},
+isNovaCultura: ${isNovaCultura},
 novoTipoProtocolo: ${novoTipoProtocolo},
 novoSistemaProtocolo: ${novoSistemaProtocolo},
 novoFormaProtocolo: ${novoFormaProtocolo},
+novaCulturaController: ${novaCulturaController},
 novaCulturaProtocolo: ${novaCulturaProtocolo},
 novasAtividadesProtocolo: ${novasAtividadesProtocolo},
 protocoloList: ${protocoloList}

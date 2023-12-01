@@ -48,12 +48,12 @@ class ProtocoloPageState extends State<ProtocoloPage> {
                 slivers: [
                   sliverAppBar(context),
                   Observer(builder: (_) {
-                    // if (store.isReservatorioListLoading) {
-                    //   return loadingList();
-                    // }
-                    // if (store.reservatorioList.isEmpty) {
-                    //   return emptyList();
-                    // }
+                    if (store.isProtocoloListLoading) {
+                      return loadingList();
+                    }
+                    if (store.protocoloList.isEmpty) {
+                      return emptyList();
+                    }
                     return showList();
                   }),
                 ],
@@ -142,13 +142,10 @@ class ProtocoloPageState extends State<ProtocoloPage> {
       automaticallyImplyLeading: false,
       forceElevated: true,
       elevation: 1,
-      flexibleSpace: TopAppBar(
+      flexibleSpace: const TopAppBar(
         path: "/Home/",
         namePage: "Meus Protocolos",
         subtitle: "Lista de protocolos cadastrados",
-        onPressed: () {
-          Get.offNamedUntil(Routes.homePage, (route) => false);
-        },
       ),
       bottom: PreferredSize(
         child: filterWidget(context),

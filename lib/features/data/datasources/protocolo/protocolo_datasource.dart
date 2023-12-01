@@ -8,6 +8,7 @@ import '../../../../core/errors/failure.dart';
 
 abstract class IProtocoloDatasource {
   Future<Either<Failure, List<Protocolo>>> buscarProtocolos();
+  Future<Either<Failure, List<Cultura>>> buscarCulturas();
 }
 
 class ProtocoloDatasource implements IProtocoloDatasource {
@@ -29,10 +30,27 @@ class ProtocoloDatasource implements IProtocoloDatasource {
               updated_at: DateTime.now(),
               deleted_at: null,
               acao: [Acao(), Acao()],
-              cultura: Cultura(nome: 'alface ${index + 1}'),
+              cultura: Cultura(nome: 'Alface ${index + 1}'),
               conta: Conta(),
             ));
 
     return Future.value(Right(protocolos));
+  }
+
+  @override
+  Future<Either<Failure, List<Cultura>>> buscarCulturas() async {
+    // Simule uma chamada de API assíncrona
+    await Future.delayed(const Duration(seconds: 2));
+
+    final culturas = List.generate(
+        3,
+        (index) => Cultura(
+              id: index + 1,
+              nome: 'Alface ${index + 1}',
+              created_at: DateTime.now(),
+              conta: Conta(),
+            ));
+
+    return Future.value(Right(culturas));
   }
 }

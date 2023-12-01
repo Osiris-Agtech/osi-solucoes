@@ -4,6 +4,8 @@ import 'package:osi_solucoes/features/data/datasources/protocolo/protocolo_datas
 import 'package:osi_solucoes/features/data/repositories/protocolo/protocolo_repository_interface.dart';
 import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 
+import '../../../presenter/models/cultura/cultura_model.dart';
+
 class ProtocoloRepository implements IProtocoloRepository {
   final IProtocoloDatasource datasource;
   ProtocoloRepository({
@@ -14,6 +16,12 @@ class ProtocoloRepository implements IProtocoloRepository {
   Future<Either<Failure, List<Protocolo>>> buscarProtocolos() async {
     var result = await datasource.buscarProtocolos();
 
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, List<Cultura>>> buscarCulturas() async {
+    var result = await datasource.buscarCulturas();
     return result;
   }
 }

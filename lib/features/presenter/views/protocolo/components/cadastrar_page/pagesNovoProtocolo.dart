@@ -68,7 +68,7 @@ SizedBox pagesNovoProtocolo(
               scrollPhysics: const NeverScrollableScrollPhysics(),
             ),
             items: [
-              culturaPage(context),
+              culturaPage(context, store),
               tipoPage(context, store),
               sistemaPage(context, store),
               formaPage(context, store),
