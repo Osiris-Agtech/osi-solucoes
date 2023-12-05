@@ -22,8 +22,10 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
   @override
   void initState() {
     super.initState();
-    store.buscarCulturas();
-    store.setMostrarErroFormulario(false);
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      store.buscarCulturas();
+      store.setMostrarErroFormulario(false);
+    });
   }
 
   @override
@@ -69,7 +71,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                     Observer(builder: (_) {
                       return Visibility(
                         visible: store.mostrarErroFormulario &&
-                            store.novaCulturaProtocolo.id == null,
+                            store.novaCulturaProtocolo[0].nome == null,
                         child: const Padding(
                           padding: EdgeInsets.only(
                             left: 16.0,
@@ -310,7 +312,8 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                         TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                 ),
-                store.novaCulturaProtocolo.id != null
+                store.novaCulturaProtocolo.isNotEmpty &&
+                        store.novaCulturaProtocolo[0].nome != null
                     ? Expanded(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -318,7 +321,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.novaCulturaProtocolo.nome.toString(),
+                                store.novaCulturaProtocolo[0].nome.toString(),
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,

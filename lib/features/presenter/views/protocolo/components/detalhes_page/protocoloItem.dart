@@ -69,7 +69,8 @@ Padding protocoloItem({
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  store?.protocoloList[index].cultura?.nome ??
+                                  store?.protocoloList[index].cultura?[0]
+                                          .nome ??
                                       "---",
                                   style: const TextStyle(
                                     color: Constants.kPrimaryColor,

@@ -103,6 +103,21 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
+  final _$culturaListAtom = Atom(name: '_ProtocoloStoreBase.culturaList');
+
+  @override
+  List<Cultura> get culturaList {
+    _$culturaListAtom.reportRead();
+    return super.culturaList;
+  }
+
+  @override
+  set culturaList(List<Cultura> value) {
+    _$culturaListAtom.reportWrite(value, super.culturaList, () {
+      super.culturaList = value;
+    });
+  }
+
   final _$novoTipoProtocoloAtom =
       Atom(name: '_ProtocoloStoreBase.novoTipoProtocolo');
 
@@ -173,13 +188,13 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
       Atom(name: '_ProtocoloStoreBase.novaCulturaProtocolo');
 
   @override
-  Cultura get novaCulturaProtocolo {
+  List<Cultura> get novaCulturaProtocolo {
     _$novaCulturaProtocoloAtom.reportRead();
     return super.novaCulturaProtocolo;
   }
 
   @override
-  set novaCulturaProtocolo(Cultura value) {
+  set novaCulturaProtocolo(List<Cultura> value) {
     _$novaCulturaProtocoloAtom.reportWrite(value, super.novaCulturaProtocolo,
         () {
       super.novaCulturaProtocolo = value;
@@ -234,6 +249,14 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     return _$registrarCulturaAsyncAction.run(() => super.registrarCultura());
   }
 
+  final _$buscarCulturasAsyncAction =
+      AsyncAction('_ProtocoloStoreBase.buscarCulturas');
+
+  @override
+  Future buscarCulturas() {
+    return _$buscarCulturasAsyncAction.run(() => super.buscarCulturas());
+  }
+
   final _$_ProtocoloStoreBaseActionController =
       ActionController(name: '_ProtocoloStoreBase');
 
@@ -282,6 +305,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic mudarSelecaoCultura(Cultura item) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.mudarSelecaoCultura');
+    try {
+      return super.mudarSelecaoCultura(item);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 dotIndicator: ${dotIndicator},
@@ -290,6 +324,7 @@ isEditing: ${isEditing},
 canNotificate: ${canNotificate},
 mostrarErroFormulario: ${mostrarErroFormulario},
 isNovaCultura: ${isNovaCultura},
+culturaList: ${culturaList},
 novoTipoProtocolo: ${novoTipoProtocolo},
 novoSistemaProtocolo: ${novoSistemaProtocolo},
 novoFormaProtocolo: ${novoFormaProtocolo},

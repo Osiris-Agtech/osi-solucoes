@@ -139,29 +139,34 @@ culturaPage(BuildContext context, ProtocoloStore store) {
                           return Observer(builder: (_) {
                             return Padding(
                               padding: EdgeInsets.only(
-                                left: 30,
-                                right: 10,
-                                top: index == 0 ? 16.0 : 8.0,
-                                bottom: 5,
-                              ),
-                              child: Row(
-                                children: [
-                                  Checkbox(
-                                    value: false,
-                                    onChanged: (value) {
-                                      //if (value != null) store.setNovoLoteCultura(index);
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    store.culturaList[index].nome ?? "",
-                                    style: const TextStyle(
-                                      fontSize: 24,
-                                    ),
-                                  ),
-                                ],
+                                  left: 10,
+                                  right: 10,
+                                  top: index == 0 ? 10 : 0),
+                              child: ListTile(
+                                leading: Observer(builder: (_) {
+                                  if (!store.novaCulturaProtocolo
+                                      .contains(store.culturaList[index])) {
+                                    return const Icon(
+                                        Icons.check_box_outline_blank_rounded);
+                                  }
+                                  return const Icon(
+                                    Icons.check_box,
+                                    color: Constants.kPrimaryColor,
+                                  );
+                                }),
+                                dense: true,
+                                contentPadding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                title: Text(
+                                  store.culturaList[index].nome ?? "---",
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                onTap: () {
+                                  store.mudarSelecaoCultura(
+                                      store.culturaList[index]);
+                                },
                               ),
                             );
                           });

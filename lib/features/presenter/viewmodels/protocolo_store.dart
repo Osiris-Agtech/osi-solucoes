@@ -49,7 +49,7 @@ abstract class _ProtocoloStoreBase with Store {
   TextEditingController novaCulturaController = TextEditingController();
 
   @observable
-  Cultura novaCulturaProtocolo = Cultura();
+  List<Cultura> novaCulturaProtocolo = [];
 
   @observable
   List<Atividade> novasAtividadesProtocolo = [];
@@ -132,6 +132,16 @@ abstract class _ProtocoloStoreBase with Store {
       },
     );
     isProtocoloListLoading = false;
+  }
+
+  @action
+  mudarSelecaoCultura(Cultura item) {
+    if (novaCulturaProtocolo.contains(item)) {
+      novaCulturaProtocolo.remove(item);
+    } else {
+      novaCulturaProtocolo.add(item);
+    }
+    novaCulturaProtocolo = List.from(novaCulturaProtocolo);
   }
 
   limparTudo() {}
