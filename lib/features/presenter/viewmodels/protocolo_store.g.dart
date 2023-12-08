@@ -184,6 +184,22 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
+  final _$novoNomeControllerAtom =
+      Atom(name: '_ProtocoloStoreBase.novoNomeController');
+
+  @override
+  TextEditingController get novoNomeController {
+    _$novoNomeControllerAtom.reportRead();
+    return super.novoNomeController;
+  }
+
+  @override
+  set novoNomeController(TextEditingController value) {
+    _$novoNomeControllerAtom.reportWrite(value, super.novoNomeController, () {
+      super.novoNomeController = value;
+    });
+  }
+
   final _$novaCulturaProtocoloAtom =
       Atom(name: '_ProtocoloStoreBase.novaCulturaProtocolo');
 
@@ -294,6 +310,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic alterarNome(String name) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarNome');
+    try {
+      return super.alterarNome(name);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setDotIndicator(int value) {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.setDotIndicator');
@@ -329,6 +356,7 @@ novoTipoProtocolo: ${novoTipoProtocolo},
 novoSistemaProtocolo: ${novoSistemaProtocolo},
 novoFormaProtocolo: ${novoFormaProtocolo},
 novaCulturaController: ${novaCulturaController},
+novoNomeController: ${novoNomeController},
 novaCulturaProtocolo: ${novaCulturaProtocolo},
 novasAtividadesProtocolo: ${novasAtividadesProtocolo},
 protocoloList: ${protocoloList}

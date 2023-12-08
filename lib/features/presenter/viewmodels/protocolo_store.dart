@@ -49,6 +49,9 @@ abstract class _ProtocoloStoreBase with Store {
   TextEditingController novaCulturaController = TextEditingController();
 
   @observable
+  TextEditingController novoNomeController = TextEditingController();
+
+  @observable
   List<Cultura> novaCulturaProtocolo = [];
 
   @observable
@@ -65,6 +68,11 @@ abstract class _ProtocoloStoreBase with Store {
 
   @action
   setCanNotificate(bool value) => canNotificate = value;
+
+  @action
+  alterarNome(String name) {
+    novoNomeController = TextEditingController(text: name);
+  }
 
   @action
   setDotIndicator(int value) {

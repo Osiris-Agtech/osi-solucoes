@@ -9,6 +9,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/cultura_item.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/formaPage.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/nomePage.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/sistemaPage.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/tipoPage.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/registrar_ativ.dart';
@@ -39,7 +40,7 @@ SizedBox pagesNovoProtocolo(
               ),
               Observer(builder: (_) {
                 return DotsIndicator(
-                  dotsCount: 5,
+                  dotsCount: 6,
                   position: store.dotIndicator * 1.0,
                   decorator: DotsDecorator(
                     size: const Size.square(9.0),
@@ -68,6 +69,7 @@ SizedBox pagesNovoProtocolo(
               scrollPhysics: const NeverScrollableScrollPhysics(),
             ),
             items: [
+              nomePage(context, store),
               culturaPage(context, store),
               tipoPage(context, store),
               sistemaPage(context, store),
@@ -162,7 +164,7 @@ class _NextStepButtonState extends State<NextStepButton> {
         ),
       ),
       onPressed: () {
-        if (store.dotIndicator == 4) {
+        if (store.dotIndicator == 6) {
           Navigator.pop(context);
         } else {
           store.setDotIndicator(store.dotIndicator + 1);
