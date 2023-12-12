@@ -415,7 +415,12 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.novaCulturaProtocolo[0].nome.toString(),
+                                store.novaCulturaProtocolo.length == 1
+                                    ? store.novaCulturaProtocolo[0].nome
+                                        .toString()
+                                    : store.novaCulturaProtocolo[0].nome
+                                            .toString() +
+                                        ', ...',
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,

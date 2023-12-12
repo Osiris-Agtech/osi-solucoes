@@ -59,7 +59,6 @@ Container nomePage(BuildContext context, ProtocoloStore store) {
                   fontStyle: FontStyle.italic,
                 ),
               ),
-              onChanged: (String value) => store.alterarNome(value),
             ),
           ),
         ],

@@ -70,8 +70,8 @@ abstract class _ProtocoloStoreBase with Store {
   setCanNotificate(bool value) => canNotificate = value;
 
   @action
-  alterarNome(String name) {
-    novoNomeController = TextEditingController(text: name);
+  alterarTipo(String name) {
+    novoTipoProtocolo = TextEditingController(text: name);
   }
 
   @action
@@ -152,5 +152,8 @@ abstract class _ProtocoloStoreBase with Store {
     novaCulturaProtocolo = List.from(novaCulturaProtocolo);
   }
 
-  limparTudo() {}
+  limparTudo() {
+    novoNomeController.clear();
+    novaCulturaProtocolo.clear();
+  }
 }

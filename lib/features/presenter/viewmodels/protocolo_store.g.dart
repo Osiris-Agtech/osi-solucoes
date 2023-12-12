@@ -310,17 +310,6 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
-  dynamic alterarNome(String name) {
-    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
-        name: '_ProtocoloStoreBase.alterarNome');
-    try {
-      return super.alterarNome(name);
-    } finally {
-      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic setDotIndicator(int value) {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.setDotIndicator');
