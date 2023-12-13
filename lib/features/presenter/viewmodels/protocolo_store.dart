@@ -37,19 +37,19 @@ abstract class _ProtocoloStoreBase with Store {
   List<Cultura> culturaList = [];
 
   @observable
-  TextEditingController novoTipoProtocolo = TextEditingController();
+  String? novoTipoProtocolo;
 
   @observable
-  TextEditingController novoSistemaProtocolo = TextEditingController();
+  String? novoSistemaProtocolo;
 
   @observable
-  TextEditingController novoFormaProtocolo = TextEditingController();
+  String? novoFormaProtocolo;
 
   @observable
   TextEditingController novaCulturaController = TextEditingController();
 
   @observable
-  TextEditingController novoNomeController = TextEditingController();
+  String? novoNomeProtocolo;
 
   @observable
   List<Cultura> novaCulturaProtocolo = [];
@@ -70,8 +70,23 @@ abstract class _ProtocoloStoreBase with Store {
   setCanNotificate(bool value) => canNotificate = value;
 
   @action
-  alterarTipo(String name) {
-    novoTipoProtocolo = TextEditingController(text: name);
+  alterarForma(String forma) {
+    novoFormaProtocolo = forma;
+  }
+
+  @action
+  alterarSistema(String sistema) {
+    novoSistemaProtocolo = sistema;
+  }
+
+  @action
+  alterarTipo(String tipo) {
+    novoTipoProtocolo = tipo;
+  }
+
+  @action
+  alterarNome(String name) {
+    novoNomeProtocolo = name;
   }
 
   @action
@@ -152,8 +167,12 @@ abstract class _ProtocoloStoreBase with Store {
     novaCulturaProtocolo = List.from(novaCulturaProtocolo);
   }
 
+  @action
   limparTudo() {
-    novoNomeController.clear();
+    novoNomeProtocolo = null;
+    novoFormaProtocolo = null;
+    novoTipoProtocolo = null;
+    novoSistemaProtocolo = null;
     novaCulturaProtocolo.clear();
   }
 }

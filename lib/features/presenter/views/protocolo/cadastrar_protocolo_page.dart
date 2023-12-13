@@ -123,7 +123,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                     Observer(builder: (_) {
                       return Visibility(
                         visible: store.mostrarErroFormulario &&
-                            store.novoTipoProtocolo.text.isEmpty,
+                            (store.novoTipoProtocolo ?? "").isEmpty,
                         child: const Padding(
                           padding: EdgeInsets.only(
                             left: 16.0,
@@ -149,7 +149,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                     Observer(builder: (_) {
                       return Visibility(
                         visible: store.mostrarErroFormulario &&
-                            store.novoSistemaProtocolo.text.isEmpty,
+                            (store.novoSistemaProtocolo ?? "").isEmpty,
                         child: const Padding(
                           padding: EdgeInsets.only(
                             left: 16.0,
@@ -175,7 +175,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                     Observer(builder: (_) {
                       return Visibility(
                         visible: store.mostrarErroFormulario &&
-                            store.novoFormaProtocolo.text.isEmpty,
+                            (store.novoFormaProtocolo ?? "").isEmpty,
                         child: const Padding(
                           padding: EdgeInsets.only(
                             left: 16.0,
@@ -338,22 +338,24 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                         TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                 ),
-                store.novoNomeController.text.isNotEmpty
+                (store.novoNomeProtocolo ?? "").isNotEmpty
                     ? Expanded(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Expanded(
-                              child: Text(
-                                store.novoNomeController.text.toString(),
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                              child: Observer(builder: (_) {
+                                return Text(
+                                  store.novoNomeProtocolo ?? "",
+                                  textAlign: TextAlign.end,
+                                  style: const TextStyle(
+                                    color: Constants.kPrimaryColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                );
+                              }),
                             ),
                             const Icon(
                               Icons.chevron_right,
@@ -480,7 +482,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                         TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                 ),
-                store.novoTipoProtocolo.text.isNotEmpty
+                (store.novoTipoProtocolo ?? "").isNotEmpty
                     ? Expanded(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -488,7 +490,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.novoTipoProtocolo.text,
+                                store.novoTipoProtocolo ?? "",
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,
@@ -548,7 +550,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                         TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                 ),
-                store.novoSistemaProtocolo.text.isNotEmpty
+                (store.novoSistemaProtocolo ?? "").isNotEmpty
                     ? Expanded(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -556,7 +558,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.novoSistemaProtocolo.text,
+                                store.novoSistemaProtocolo ?? "",
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,
@@ -616,7 +618,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                         TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                 ),
-                store.novoFormaProtocolo.text.isNotEmpty
+                (store.novoFormaProtocolo ?? "").isNotEmpty
                     ? Expanded(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -624,7 +626,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.novoFormaProtocolo.text,
+                                store.novoFormaProtocolo ?? "",
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,

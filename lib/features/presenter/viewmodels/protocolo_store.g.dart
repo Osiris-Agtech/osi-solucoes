@@ -122,13 +122,13 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
       Atom(name: '_ProtocoloStoreBase.novoTipoProtocolo');
 
   @override
-  TextEditingController get novoTipoProtocolo {
+  String? get novoTipoProtocolo {
     _$novoTipoProtocoloAtom.reportRead();
     return super.novoTipoProtocolo;
   }
 
   @override
-  set novoTipoProtocolo(TextEditingController value) {
+  set novoTipoProtocolo(String? value) {
     _$novoTipoProtocoloAtom.reportWrite(value, super.novoTipoProtocolo, () {
       super.novoTipoProtocolo = value;
     });
@@ -138,13 +138,13 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
       Atom(name: '_ProtocoloStoreBase.novoSistemaProtocolo');
 
   @override
-  TextEditingController get novoSistemaProtocolo {
+  String? get novoSistemaProtocolo {
     _$novoSistemaProtocoloAtom.reportRead();
     return super.novoSistemaProtocolo;
   }
 
   @override
-  set novoSistemaProtocolo(TextEditingController value) {
+  set novoSistemaProtocolo(String? value) {
     _$novoSistemaProtocoloAtom.reportWrite(value, super.novoSistemaProtocolo,
         () {
       super.novoSistemaProtocolo = value;
@@ -155,13 +155,13 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
       Atom(name: '_ProtocoloStoreBase.novoFormaProtocolo');
 
   @override
-  TextEditingController get novoFormaProtocolo {
+  String? get novoFormaProtocolo {
     _$novoFormaProtocoloAtom.reportRead();
     return super.novoFormaProtocolo;
   }
 
   @override
-  set novoFormaProtocolo(TextEditingController value) {
+  set novoFormaProtocolo(String? value) {
     _$novoFormaProtocoloAtom.reportWrite(value, super.novoFormaProtocolo, () {
       super.novoFormaProtocolo = value;
     });
@@ -184,19 +184,19 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
-  final _$novoNomeControllerAtom =
-      Atom(name: '_ProtocoloStoreBase.novoNomeController');
+  final _$novoNomeProtocoloAtom =
+      Atom(name: '_ProtocoloStoreBase.novoNomeProtocolo');
 
   @override
-  TextEditingController get novoNomeController {
-    _$novoNomeControllerAtom.reportRead();
-    return super.novoNomeController;
+  String? get novoNomeProtocolo {
+    _$novoNomeProtocoloAtom.reportRead();
+    return super.novoNomeProtocolo;
   }
 
   @override
-  set novoNomeController(TextEditingController value) {
-    _$novoNomeControllerAtom.reportWrite(value, super.novoNomeController, () {
-      super.novoNomeController = value;
+  set novoNomeProtocolo(String? value) {
+    _$novoNomeProtocoloAtom.reportWrite(value, super.novoNomeProtocolo, () {
+      super.novoNomeProtocolo = value;
     });
   }
 
@@ -310,6 +310,50 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic alterarForma(String forma) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarForma');
+    try {
+      return super.alterarForma(forma);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarSistema(String sistema) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarSistema');
+    try {
+      return super.alterarSistema(sistema);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarTipo(String tipo) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarTipo');
+    try {
+      return super.alterarTipo(tipo);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarNome(String name) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarNome');
+    try {
+      return super.alterarNome(name);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setDotIndicator(int value) {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.setDotIndicator');
@@ -332,6 +376,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic limparTudo() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.limparTudo');
+    try {
+      return super.limparTudo();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 dotIndicator: ${dotIndicator},
@@ -345,7 +400,7 @@ novoTipoProtocolo: ${novoTipoProtocolo},
 novoSistemaProtocolo: ${novoSistemaProtocolo},
 novoFormaProtocolo: ${novoFormaProtocolo},
 novaCulturaController: ${novaCulturaController},
-novoNomeController: ${novoNomeController},
+novoNomeProtocolo: ${novoNomeProtocolo},
 novaCulturaProtocolo: ${novaCulturaProtocolo},
 novasAtividadesProtocolo: ${novasAtividadesProtocolo},
 protocoloList: ${protocoloList}

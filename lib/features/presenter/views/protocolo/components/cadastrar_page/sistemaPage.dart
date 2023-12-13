@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/utils/enum/sistema_protocolo_enum.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 
 Container sistemaPage(BuildContext context, ProtocoloStore store) {
@@ -46,21 +47,16 @@ Container sistemaPage(BuildContext context, ProtocoloStore store) {
             child: DropdownButton<String>(
               isExpanded: true,
               alignment: Alignment.center,
-              value: 'Hidroponia',
+              hint: const Text("Selecione o Sistema de Cultivo..."),
+              value: store.novoSistemaProtocolo,
               focusColor: Colors.transparent,
               iconEnabledColor: Constants.kPrimaryColor,
               elevation: 16,
               borderRadius: const BorderRadius.all(Radius.circular(5)),
               onChanged: (String? newValue) async {
-                // if (newValue == store.dropDownValue) {
-                //   store.changeOrder();
-                // } else {
-                //   store.setSearchAreaText('');
-                // }
-                //store.setDropDown(newValue!);
-                //await store.buscarArea();
+                store.alterarSistema(newValue!);
               },
-              items: <String>['Hidroponia', 'teste 2']
+              items: sistemaProtocoloList
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,

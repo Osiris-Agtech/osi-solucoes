@@ -44,7 +44,7 @@ Container nomePage(BuildContext context, ProtocoloStore store) {
           Container(
             padding: const EdgeInsets.only(top: 30),
             child: TextFormField(
-              controller: store.novoNomeController,
+              initialValue: store.novoNomeProtocolo,
               textCapitalization: TextCapitalization.words,
               style: const TextStyle(
                 fontSize: 24,
@@ -59,6 +59,7 @@ Container nomePage(BuildContext context, ProtocoloStore store) {
                   fontStyle: FontStyle.italic,
                 ),
               ),
+              onChanged: store.alterarNome,
             ),
           ),
         ],

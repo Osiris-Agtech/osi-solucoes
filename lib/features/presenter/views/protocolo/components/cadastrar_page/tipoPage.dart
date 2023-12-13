@@ -48,7 +48,8 @@ Container tipoPage(BuildContext context, ProtocoloStore store) {
             child: DropdownButton<String>(
               isExpanded: true,
               alignment: Alignment.center,
-              value: store.novoTipoProtocolo.text,
+              hint: const Text("Selecione o Tipo de Cultura..."),
+              value: store.novoTipoProtocolo,
               focusColor: Colors.transparent,
               iconEnabledColor: Constants.kPrimaryColor,
               elevation: 16,
