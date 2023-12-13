@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/agenda_store.dart';
+import 'package:osi_solucoes/features/presenter/views/agenda/components/detalhes_bottomSheet.dart';
+import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
 
 Padding agendaItem({
   required int index,
   VoidCallback? onTap,
+  required AgendaStore store,
 }) {
   return Padding(
     padding: EdgeInsets.only(
@@ -14,7 +18,11 @@ Padding agendaItem({
     child: InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: onTap ?? () {},
+      onTap: onTap ??
+          () {
+            store.setShowEditPage(false);
+            getBottomSheet(const DetalhesBottomSheet());
+          },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),

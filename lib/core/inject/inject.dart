@@ -19,6 +19,7 @@ import 'package:osi_solucoes/features/data/repositories/reservatorio/reservatori
 import 'package:osi_solucoes/features/data/repositories/setor/setor_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/agenda_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/gerenciar_equipe_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
@@ -102,6 +103,7 @@ Future<void> initInject() async {
   sl.registerLazySingleton<AreaCultivoStore>(() => AreaCultivoStore());
   sl.registerLazySingleton<SetorStore>(() => SetorStore());
   sl.registerLazySingleton<LoteStore>(() => LoteStore());
+  sl.registerLazySingleton<AgendaStore>(() => AgendaStore());
   sl.registerLazySingleton<AuthController>(() => AuthController());
   sl.registerLazySingleton<CadastroStore>(() => CadastroStore());
   sl.registerLazySingleton<RecuperarSenhaStore>(() => RecuperarSenhaStore());

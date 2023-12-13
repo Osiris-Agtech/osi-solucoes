@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/agenda_store.dart';
 import 'package:osi_solucoes/features/presenter/views/agenda/components/agenda_item.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +20,7 @@ class AgendaPage extends StatefulWidget {
 
 class AgendaPageState extends State<AgendaPage> {
   final ScrollController _scrollController = ScrollController();
+  final AgendaStore store = GetIt.I<AgendaStore>();
 
   @override
   void initState() {
@@ -137,7 +140,7 @@ class AgendaPageState extends State<AgendaPage> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          return agendaItem(index: index);
+          return agendaItem(index: index, store: store);
         },
         childCount: 2,
         //childCount: store.searchReservatorio.length,
