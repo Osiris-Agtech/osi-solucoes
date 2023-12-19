@@ -24,6 +24,38 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
+  final _$radioIndicatorAtom = Atom(name: '_ProtocoloStoreBase.radioIndicator');
+
+  @override
+  int get radioIndicator {
+    _$radioIndicatorAtom.reportRead();
+    return super.radioIndicator;
+  }
+
+  @override
+  set radioIndicator(int value) {
+    _$radioIndicatorAtom.reportWrite(value, super.radioIndicator, () {
+      super.radioIndicator = value;
+    });
+  }
+
+  final _$isNovaFaseBottonSheetAtom =
+      Atom(name: '_ProtocoloStoreBase.isNovaFaseBottonSheet');
+
+  @override
+  bool get isNovaFaseBottonSheet {
+    _$isNovaFaseBottonSheetAtom.reportRead();
+    return super.isNovaFaseBottonSheet;
+  }
+
+  @override
+  set isNovaFaseBottonSheet(bool value) {
+    _$isNovaFaseBottonSheetAtom.reportWrite(value, super.isNovaFaseBottonSheet,
+        () {
+      super.isNovaFaseBottonSheet = value;
+    });
+  }
+
   final _$isProtocoloListLoadingAtom =
       Atom(name: '_ProtocoloStoreBase.isProtocoloListLoading');
 
@@ -354,6 +386,28 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic alterarRadioIndicator(int value) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarRadioIndicator');
+    try {
+      return super.alterarRadioIndicator(value);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarIsNovaFaseBottonSheet(bool value) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarIsNovaFaseBottonSheet');
+    try {
+      return super.alterarIsNovaFaseBottonSheet(value);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setDotIndicator(int value) {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.setDotIndicator');
@@ -390,6 +444,8 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   String toString() {
     return '''
 dotIndicator: ${dotIndicator},
+radioIndicator: ${radioIndicator},
+isNovaFaseBottonSheet: ${isNovaFaseBottonSheet},
 isProtocoloListLoading: ${isProtocoloListLoading},
 isEditing: ${isEditing},
 canNotificate: ${canNotificate},

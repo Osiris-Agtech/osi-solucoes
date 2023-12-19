@@ -19,6 +19,12 @@ abstract class _ProtocoloStoreBase with Store {
   int dotIndicator = 1;
 
   @observable
+  int radioIndicator = 1;
+
+  @observable
+  bool isNovaFaseBottonSheet = false;
+
+  @observable
   bool isProtocoloListLoading = false;
 
   @observable
@@ -87,6 +93,16 @@ abstract class _ProtocoloStoreBase with Store {
   @action
   alterarNome(String name) {
     novoNomeProtocolo = name;
+  }
+
+  @action
+  alterarRadioIndicator(int value) {
+    radioIndicator = value;
+  }
+
+  @action
+  alterarIsNovaFaseBottonSheet(bool value) {
+    isNovaFaseBottonSheet = value;
   }
 
   @action
