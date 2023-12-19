@@ -2,9 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/core/utils/enum/forma_protocolo_enum.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 
-Container formaPage(BuildContext context, SetorStore store) {
+Container formaPage(BuildContext context, ProtocoloStore store) {
   return Container(
     height: MediaQuery.of(context).size.height * 0.9,
     margin: EdgeInsets.only(
@@ -46,21 +47,16 @@ Container formaPage(BuildContext context, SetorStore store) {
             child: DropdownButton<String>(
               isExpanded: true,
               alignment: Alignment.center,
-              value: 'Semeadura',
+              hint: const Text("Selecione a Forma de Implantação..."),
+              value: store.novoFormaProtocolo,
               focusColor: Colors.transparent,
               iconEnabledColor: Constants.kPrimaryColor,
               elevation: 16,
               borderRadius: const BorderRadius.all(Radius.circular(5)),
               onChanged: (String? newValue) async {
-                // if (newValue == store.dropDownValue) {
-                //   store.changeOrder();
-                // } else {
-                //   store.setSearchAreaText('');
-                // }
-                //store.setDropDown(newValue!);
-                //await store.buscarArea();
+                store.alterarForma(newValue!);
               },
-              items: <String>['Semeadura', 'teste 2']
+              items: formaProtocoloList
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,

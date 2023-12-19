@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 
-Container tipoPage(BuildContext context, SetorStore store) {
+import '../../../../../../core/utils/enum/tipo_protocolo_enum.dart';
+
+Container tipoPage(BuildContext context, ProtocoloStore store) {
   return Container(
     height: MediaQuery.of(context).size.height * 0.9,
     margin: EdgeInsets.only(
@@ -46,21 +48,16 @@ Container tipoPage(BuildContext context, SetorStore store) {
             child: DropdownButton<String>(
               isExpanded: true,
               alignment: Alignment.center,
-              value: 'Lisa',
+              hint: const Text("Selecione o Tipo de Cultura..."),
+              value: store.novoTipoProtocolo,
               focusColor: Colors.transparent,
               iconEnabledColor: Constants.kPrimaryColor,
               elevation: 16,
               borderRadius: const BorderRadius.all(Radius.circular(5)),
               onChanged: (String? newValue) async {
-                // if (newValue == store.dropDownValue) {
-                //   store.changeOrder();
-                // } else {
-                //   store.setSearchAreaText('');
-                // }
-                //store.setDropDown(newValue!);
-                //await store.buscarArea();
+                store.alterarTipo(newValue!);
               },
-              items: <String>['Lisa', 'teste 2']
+              items: tipoProtocoloList
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,

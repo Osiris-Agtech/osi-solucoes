@@ -2,10 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/core/utils/enum/sistema_protocolo_enum.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 
-Container sistemaPage(BuildContext context, ProtocoloStore store) {
+Container nomePage(BuildContext context, ProtocoloStore store) {
   return Container(
     height: MediaQuery.of(context).size.height * 0.9,
     margin: EdgeInsets.only(
@@ -21,20 +20,20 @@ Container sistemaPage(BuildContext context, ProtocoloStore store) {
             child: RichText(
               textAlign: TextAlign.start,
               text: const TextSpan(
-                text: 'Qual o',
+                text: 'Qual será o',
                 style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
                 children: <TextSpan>[
                   TextSpan(
-                    text: ' sistema ',
+                    text: ' nome ',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Constants.kPrimaryColor),
                   ),
                   TextSpan(
-                    text: 'de cultivo ?',
+                    text: 'do seu protocolo ?',
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: Constants.kText2),
                   ),
@@ -44,27 +43,23 @@ Container sistemaPage(BuildContext context, ProtocoloStore store) {
           ),
           Container(
             padding: const EdgeInsets.only(top: 30),
-            child: DropdownButton<String>(
-              isExpanded: true,
-              alignment: Alignment.center,
-              hint: const Text("Selecione o Sistema de Cultivo..."),
-              value: store.novoSistemaProtocolo,
-              focusColor: Colors.transparent,
-              iconEnabledColor: Constants.kPrimaryColor,
-              elevation: 16,
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
-              onChanged: (String? newValue) async {
-                store.alterarSistema(newValue!);
-              },
-              items: sistemaProtocoloList
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                  ),
-                );
-              }).toList(),
+            child: TextFormField(
+              initialValue: store.novoNomeProtocolo,
+              textCapitalization: TextCapitalization.words,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.normal,
+                fontStyle: FontStyle.italic,
+              ),
+              decoration: const InputDecoration(
+                hintText: 'EX. Protocolo para Alface',
+                hintStyle: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.normal,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+              onChanged: store.alterarNome,
             ),
           ),
         ],

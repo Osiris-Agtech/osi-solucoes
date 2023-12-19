@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/bottomSheet.dart';
 
 class CadastrarProtocoloPage extends StatefulWidget {
@@ -21,14 +21,15 @@ class CadastrarProtocoloPage extends StatefulWidget {
 class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
   CarouselController carouselController = CarouselController();
   CarouselController controlerPages = CarouselController();
-  SetorStore store = GetIt.I<SetorStore>();
+  ProtocoloStore store = GetIt.I<ProtocoloStore>();
 
   @override
   void initState() {
     super.initState();
-    store.buscarReservatorios();
-    store.setShowTextFormField(false);
-    store.setMostrarErroFormulario(false);
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      store.buscarCulturas();
+      store.setMostrarErroFormulario(false);
+    });
   }
 
   @override
@@ -49,9 +50,6 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
       child: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
-          if (store.novoSetorDescription.text.isEmpty) {
-            store.setShowTextFormField(false);
-          }
         },
         child: SafeArea(
           child: Scaffold(
@@ -73,11 +71,37 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                     titulo(),
                     subtitulo(),
                     const SizedBox(height: 10),
+                    nome(context),
+                    Observer(builder: (_) {
+                      return Visibility(
+                        visible: store.mostrarErroFormulario &&
+                            store.novaCulturaProtocolo[0].nome == null,
+                        child: const Padding(
+                          padding: EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 8.0,
+                          ),
+                          child: Text(
+                            'Nome obrigatório',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Constants.kErrorColor,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                    const Divider(
+                      thickness: 0.5,
+                      color: Color(0xFFC4C4C4),
+                    ),
                     cultura(context),
                     Observer(builder: (_) {
                       return Visibility(
                         visible: store.mostrarErroFormulario &&
-                            store.novoSetorName.text.isEmpty,
+                            store.novaCulturaProtocolo[0].nome == null,
                         child: const Padding(
                           padding: EdgeInsets.only(
                             left: 16.0,
@@ -103,7 +127,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                     Observer(builder: (_) {
                       return Visibility(
                         visible: store.mostrarErroFormulario &&
-                            store.novoSetorName.text.isEmpty,
+                            (store.novoTipoProtocolo ?? "").isEmpty,
                         child: const Padding(
                           padding: EdgeInsets.only(
                             left: 16.0,
@@ -129,7 +153,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                     Observer(builder: (_) {
                       return Visibility(
                         visible: store.mostrarErroFormulario &&
-                            store.novoSetorName.text.isEmpty,
+                            (store.novoSistemaProtocolo ?? "").isEmpty,
                         child: const Padding(
                           padding: EdgeInsets.only(
                             left: 16.0,
@@ -155,7 +179,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                     Observer(builder: (_) {
                       return Visibility(
                         visible: store.mostrarErroFormulario &&
-                            store.novoSetorName.text.isEmpty,
+                            (store.novoFormaProtocolo ?? "").isEmpty,
                         child: const Padding(
                           padding: EdgeInsets.only(
                             left: 16.0,
@@ -181,7 +205,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                     Observer(builder: (_) {
                       return Visibility(
                         visible: store.mostrarErroFormulario &&
-                            store.novoSetorName.text.isEmpty,
+                            store.novasAtividadesProtocolo.isEmpty,
                         child: const Padding(
                           padding: EdgeInsets.only(
                             left: 16.0,
@@ -264,11 +288,13 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              child: store.isNovoSetorLoading
-                  ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                  : store.isEditing
+              child:
+                  // store.isProtocoloListLoading
+                  // ? const CircularProgressIndicator(
+                  //     color: Colors.white,
+                  //   )
+                  // :
+                  store.isEditing
                       ? const Text(
                           "Alterar",
                           style: TextStyle(
@@ -284,18 +310,88 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                           ),
                         ),
               onPressed: () {
-                if (store.validarCadastro()) {
-                  if (store.isEditing) {
-                    store.alterarSetor();
-                  } else {
-                    store.registrarSetor();
-                  }
-                }
+                // if (store.validarCadastro()) {
+                //   if (store.isEditing) {
+                //     store.alterarSetor();
+                //   } else {
+                //     store.registrarSetor();
+                //   }
+                // }
               }, //store.registrarReservatorio(),
             );
           }),
         ),
       ),
+    );
+  }
+
+  InkWell nome(BuildContext context) {
+    return InkWell(
+      child: Observer(builder: (_) {
+        return ListTile(
+            leading: const Icon(Icons.label),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(right: 8),
+                  child: Text(
+                    'Nome',
+                    maxLines: 1,
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                  ),
+                ),
+                (store.novoNomeProtocolo ?? "").isNotEmpty
+                    ? Expanded(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Observer(builder: (_) {
+                                return Text(
+                                  store.novoNomeProtocolo ?? "",
+                                  textAlign: TextAlign.end,
+                                  style: const TextStyle(
+                                    color: Constants.kPrimaryColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                );
+                              }),
+                            ),
+                            const Icon(
+                              Icons.chevron_right,
+                              color: Constants.kPrimaryColor,
+                            ),
+                          ],
+                        ),
+                      )
+                    : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Text(
+                            "Preencher",
+                            style: TextStyle(
+                              color: Constants.kPrimaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: Constants.kPrimaryColor,
+                          ),
+                        ],
+                      ),
+              ],
+            ),
+            onTap: () {
+              store.setDotIndicator(0);
+              bottomSheet(context, carouselController, controlerPages, store);
+            });
+      }),
     );
   }
 
@@ -316,7 +412,8 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                         TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                 ),
-                store.novoSetorName.text.isNotEmpty
+                store.novaCulturaProtocolo.isNotEmpty &&
+                        store.novaCulturaProtocolo[0].nome != null
                     ? Expanded(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -324,143 +421,12 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.novoSetorName.text,
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ],
-                        ),
-                      )
-                    : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Text(
-                            "Preencher",
-                            style: TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-              ],
-            ),
-            onTap: () {
-              store.setDotIndicator(0);
-              bottomSheet(context, carouselController, controlerPages, store);
-            });
-      }),
-    );
-  }
-
-  InkWell tipo(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-            leading: const Icon(Icons.label),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: Text(
-                    'Tipo',
-                    maxLines: 1,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                  ),
-                ),
-                store.novoSetorName.text.isNotEmpty
-                    ? Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.novoSetorName.text,
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ],
-                        ),
-                      )
-                    : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Text(
-                            "Preencher",
-                            style: TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-              ],
-            ),
-            onTap: () {
-              store.setDotIndicator(0);
-              bottomSheet(context, carouselController, controlerPages, store);
-            });
-      }),
-    );
-  }
-
-  InkWell sistema(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-            leading: const Icon(Icons.label),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: Text(
-                    'Sistema de \ncultivo',
-                    maxLines: 2,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                  ),
-                ),
-                store.novoSetorName.text.isNotEmpty
-                    ? Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.novoSetorName.text,
+                                store.novaCulturaProtocolo.length == 1
+                                    ? store.novaCulturaProtocolo[0].nome
+                                        .toString()
+                                    : store.novaCulturaProtocolo[0].nome
+                                            .toString() +
+                                        ', ...',
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,
@@ -503,7 +469,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
     );
   }
 
-  InkWell forma(BuildContext context) {
+  InkWell tipo(BuildContext context) {
     return InkWell(
       child: Observer(builder: (_) {
         return ListTile(
@@ -514,13 +480,13 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                 const Padding(
                   padding: EdgeInsets.only(right: 8),
                   child: Text(
-                    'Forma de \nimplantação',
-                    maxLines: 2,
+                    'Tipo',
+                    maxLines: 1,
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                 ),
-                store.novoSetorName.text.isNotEmpty
+                (store.novoTipoProtocolo ?? "").isNotEmpty
                     ? Expanded(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -528,7 +494,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.novoSetorName.text,
+                                store.novoTipoProtocolo ?? "",
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,
@@ -571,7 +537,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
     );
   }
 
-  InkWell atividades(BuildContext context) {
+  InkWell sistema(BuildContext context) {
     return InkWell(
       child: Observer(builder: (_) {
         return ListTile(
@@ -582,13 +548,13 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                 const Padding(
                   padding: EdgeInsets.only(right: 8),
                   child: Text(
-                    'Atividades',
+                    'Sistema de \ncultivo',
                     maxLines: 2,
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                 ),
-                store.novoSetorName.text.isNotEmpty
+                (store.novoSistemaProtocolo ?? "").isNotEmpty
                     ? Expanded(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -596,7 +562,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.novoSetorName.text,
+                                store.novoSistemaProtocolo ?? "",
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,
@@ -632,7 +598,144 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
               ],
             ),
             onTap: () {
-              store.setDotIndicator(2);
+              store.setDotIndicator(3);
+              bottomSheet(context, carouselController, controlerPages, store);
+            });
+      }),
+    );
+  }
+
+  InkWell forma(BuildContext context) {
+    return InkWell(
+      child: Observer(builder: (_) {
+        return ListTile(
+            leading: const Icon(Icons.label),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(right: 8),
+                  child: Text(
+                    'Forma de \nimplantação',
+                    maxLines: 2,
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                  ),
+                ),
+                (store.novoFormaProtocolo ?? "").isNotEmpty
+                    ? Expanded(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                store.novoFormaProtocolo ?? "",
+                                textAlign: TextAlign.end,
+                                style: const TextStyle(
+                                  color: Constants.kPrimaryColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const Icon(
+                              Icons.chevron_right,
+                              color: Constants.kPrimaryColor,
+                            ),
+                          ],
+                        ),
+                      )
+                    : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Text(
+                            "Preencher",
+                            style: TextStyle(
+                              color: Constants.kPrimaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: Constants.kPrimaryColor,
+                          ),
+                        ],
+                      ),
+              ],
+            ),
+            onTap: () {
+              store.setDotIndicator(4);
+              bottomSheet(context, carouselController, controlerPages, store);
+            });
+      }),
+    );
+  }
+
+  InkWell atividades(BuildContext context) {
+    return InkWell(
+      child: Observer(builder: (_) {
+        return ListTile(
+            leading: const Icon(Icons.label),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(right: 8),
+                  child: Text(
+                    'Atividades',
+                    maxLines: 2,
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                  ),
+                ),
+                store.novasAtividadesProtocolo.isNotEmpty
+                    ? Expanded(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                store.novasAtividadesProtocolo.length
+                                    .toString(),
+                                textAlign: TextAlign.end,
+                                style: const TextStyle(
+                                  color: Constants.kPrimaryColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const Icon(
+                              Icons.chevron_right,
+                              color: Constants.kPrimaryColor,
+                            ),
+                          ],
+                        ),
+                      )
+                    : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Text(
+                            "Preencher",
+                            style: TextStyle(
+                              color: Constants.kPrimaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: Constants.kPrimaryColor,
+                          ),
+                        ],
+                      ),
+              ],
+            ),
+            onTap: () {
+              store.setDotIndicator(5);
               bottomSheet(context, carouselController, controlerPages, store);
             });
       }),

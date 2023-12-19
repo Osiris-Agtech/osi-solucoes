@@ -25,6 +25,7 @@ class ProtocoloPageState extends State<ProtocoloPage> {
   @override
   void initState() {
     // store.setSearchReservatorioText('');
+    store.buscarProtocolos();
     super.initState();
   }
 
@@ -47,12 +48,12 @@ class ProtocoloPageState extends State<ProtocoloPage> {
                 slivers: [
                   sliverAppBar(context),
                   Observer(builder: (_) {
-                    // if (store.isReservatorioListLoading) {
-                    //   return loadingList();
-                    // }
-                    // if (store.reservatorioList.isEmpty) {
-                    //   return emptyList();
-                    // }
+                    if (store.isProtocoloListLoading) {
+                      return loadingList();
+                    }
+                    if (store.protocoloList.isEmpty) {
+                      return emptyList();
+                    }
                     return showList();
                   }),
                 ],
@@ -84,10 +85,9 @@ class ProtocoloPageState extends State<ProtocoloPage> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          return protocoloItem(index: index);
+          return protocoloItem(index: index, store: store);
         },
-        childCount: 2,
-        //childCount: store.searchReservatorio.length,
+        childCount: store.protocoloList.length,
       ),
     );
   }
@@ -142,13 +142,10 @@ class ProtocoloPageState extends State<ProtocoloPage> {
       automaticallyImplyLeading: false,
       forceElevated: true,
       elevation: 1,
-      flexibleSpace: TopAppBar(
+      flexibleSpace: const TopAppBar(
         path: "/Home/",
         namePage: "Meus Protocolos",
         subtitle: "Lista de protocolos cadastrados",
-        onPressed: () {
-          Get.offNamedUntil(Routes.homePage, (route) => false);
-        },
       ),
       bottom: PreferredSize(
         child: filterWidget(context),
