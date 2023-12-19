@@ -5,6 +5,7 @@ import 'package:osi_solucoes/core/middlewares/equipe_middleware.dart';
 import 'package:osi_solucoes/core/middlewares/reservatorio_middleware.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:osi_solucoes/features/presenter/views/agenda/agenda_page.dart';
 import 'package:osi_solucoes/features/presenter/views/alert/permission_denied_view.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/cadastrar_setor_page.dart';
@@ -212,6 +213,14 @@ class AppPages {
     GetPage(
       name: Routes.cadastrarProtocoloPage,
       page: () => const CadastrarProtocoloPage(),
+      transition: Transition.rightToLeft,
+      middlewares: [
+        EquipeViewPagePermission(),
+      ],
+    ),
+    GetPage(
+      name: Routes.agendaPage,
+      page: () => const AgendaPage(),
       transition: Transition.rightToLeft,
       middlewares: [
         EquipeViewPagePermission(),

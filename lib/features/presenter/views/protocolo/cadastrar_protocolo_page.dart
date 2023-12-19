@@ -8,7 +8,11 @@ import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart'
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/bottomSheet.dart';
 
 class CadastrarProtocoloPage extends StatefulWidget {
-  const CadastrarProtocoloPage({Key? key}) : super(key: key);
+  final bool isShortcut;
+  const CadastrarProtocoloPage({
+    Key? key,
+    this.isShortcut = false,
+  }) : super(key: key);
 
   @override
   State<CadastrarProtocoloPage> createState() => _CadastrarProtocoloPageState();

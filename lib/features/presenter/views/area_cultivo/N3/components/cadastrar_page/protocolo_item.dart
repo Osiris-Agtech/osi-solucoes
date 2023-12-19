@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/cadastrar_protocolo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/detalhes_page/protocoloItem.dart';
 
 protocolo(
@@ -138,7 +140,9 @@ protocoloPage(BuildContext context, LoteStore store) {
         InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
-          onTap: () {},
+          onTap: () {
+            Get.to(() => const CadastrarProtocoloPage(isShortcut: true));
+          },
           child: const Padding(
             padding: EdgeInsets.only(top: 8, left: 20),
             child: Text(
