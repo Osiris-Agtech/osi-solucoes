@@ -39,16 +39,16 @@ Padding agendaItem({
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(
+                    Padding(
+                      padding: const EdgeInsets.only(
                         left: 10.0,
                         bottom: 5.0,
                         top: 5.0,
                       ),
                       child: Text(
                         //store.searchReservatorio[index].nome ?? "---",
-                        "Ajuste de Solução",
-                        style: TextStyle(
+                        store.acoesList[index].titulo ?? "---",
+                        style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
                         ),

@@ -24,6 +24,44 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
+  final _$isAcoesListLoadingAtom =
+      Atom(name: '_AgendaStoreBase.isAcoesListLoading');
+
+  @override
+  bool get isAcoesListLoading {
+    _$isAcoesListLoadingAtom.reportRead();
+    return super.isAcoesListLoading;
+  }
+
+  @override
+  set isAcoesListLoading(bool value) {
+    _$isAcoesListLoadingAtom.reportWrite(value, super.isAcoesListLoading, () {
+      super.isAcoesListLoading = value;
+    });
+  }
+
+  final _$acoesListAtom = Atom(name: '_AgendaStoreBase.acoesList');
+
+  @override
+  List<Acao> get acoesList {
+    _$acoesListAtom.reportRead();
+    return super.acoesList;
+  }
+
+  @override
+  set acoesList(List<Acao> value) {
+    _$acoesListAtom.reportWrite(value, super.acoesList, () {
+      super.acoesList = value;
+    });
+  }
+
+  final _$buscarAcoesAsyncAction = AsyncAction('_AgendaStoreBase.buscarAcoes');
+
+  @override
+  Future buscarAcoes() {
+    return _$buscarAcoesAsyncAction.run(() => super.buscarAcoes());
+  }
+
   final _$_AgendaStoreBaseActionController =
       ActionController(name: '_AgendaStoreBase');
 
@@ -41,7 +79,9 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
   @override
   String toString() {
     return '''
-showEditPage: ${showEditPage}
+showEditPage: ${showEditPage},
+isAcoesListLoading: ${isAcoesListLoading},
+acoesList: ${acoesList}
     ''';
   }
 }

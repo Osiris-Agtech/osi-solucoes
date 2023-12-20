@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
@@ -25,6 +26,7 @@ class AgendaPageState extends State<AgendaPage> {
   @override
   void initState() {
     super.initState();
+    store.buscarAcoes();
   }
 
   @override
@@ -46,7 +48,15 @@ class AgendaPageState extends State<AgendaPage> {
                 slivers: [
                   sliverAppBar(context),
                   agenda(),
-                  showList(),
+                  Observer(builder: (_) {
+                    if (store.isAcoesListLoading) {
+                      return loadingList();
+                    }
+                    if (store.acoesList.isEmpty) {
+                      return emptyList();
+                    }
+                    return showList();
+                  }),
                 ],
               ),
             ),
@@ -142,8 +152,7 @@ class AgendaPageState extends State<AgendaPage> {
         (BuildContext context, int index) {
           return agendaItem(index: index, store: store);
         },
-        childCount: 2,
-        //childCount: store.searchReservatorio.length,
+        childCount: store.acoesList.length,
       ),
     );
   }
