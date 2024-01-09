@@ -55,7 +55,13 @@ abstract class _ProtocoloStoreBase with Store {
   TextEditingController novaCulturaController = TextEditingController();
 
   @observable
+  TextEditingController dropdownTitle = TextEditingController(text: 'teste1');
+
+  @observable
   String? novoNomeProtocolo;
+
+  @observable
+  List<String> mockList = ['teste1', 'teste2'];
 
   @observable
   List<Cultura> novaCulturaProtocolo = [];

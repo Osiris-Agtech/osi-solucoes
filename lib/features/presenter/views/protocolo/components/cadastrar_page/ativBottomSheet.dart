@@ -60,6 +60,8 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     children: [
                       Expanded(
                         child: RadioListTile<int>(
+                          tileColor: Colors.transparent,
+                          selectedTileColor: Colors.transparent,
                           title: const Text('Atividade'),
                           value: 1,
                           activeColor: Colors.green,
@@ -74,6 +76,8 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                       const SizedBox(width: 16),
                       Expanded(
                         child: RadioListTile<int>(
+                          tileColor: Colors.transparent,
+                          selectedTileColor: Colors.transparent,
                           title: const Text('Fase'),
                           value: 2,
                           activeColor: Colors.green,
@@ -102,15 +106,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                   iconEnabledColor: Constants.kPrimaryColor,
                   elevation: 16,
                   borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  onChanged: (String? newValue) async {
-                    // if (newValue == store.dropDownValue) {
-                    //   store.changeOrder();
-                    // } else {
-                    //   store.setSearchAreaText('');
-                    // }
-                    //store.setDropDown(newValue!);
-                    //await store.buscarArea();
-                  },
+                  onChanged: (String? newValue) {},
                   items: <String>['Germinação (5 dias)', 'Germinação (2 dias)']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
@@ -229,6 +225,8 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     children: [
                       Expanded(
                         child: RadioListTile<int>(
+                          tileColor: Colors.transparent,
+                          selectedTileColor: Colors.transparent,
                           title: const Text('Atividade'),
                           value: 1,
                           activeColor: Colors.green,
@@ -244,6 +242,8 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                       const SizedBox(width: 16),
                       Expanded(
                         child: RadioListTile<int>(
+                          tileColor: Colors.transparent,
+                          selectedTileColor: Colors.transparent,
                           title: const Text('Fase'),
                           value: 2,
                           activeColor: Colors.green,
@@ -261,35 +261,18 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
               ),
               const SizedBox(height: 16),
               const Text('Titulo'),
-              Container(
-                padding: const EdgeInsets.only(top: 5),
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  alignment: Alignment.center,
-                  value: 'Germinação (5 dias)',
-                  focusColor: Colors.transparent,
-                  iconEnabledColor: Constants.kPrimaryColor,
-                  elevation: 16,
-                  borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  onChanged: (String? newValue) async {
-                    // if (newValue == store.dropDownValue) {
-                    //   store.changeOrder();
-                    // } else {
-                    //   store.setSearchAreaText('');
-                    // }
-                    //store.setDropDown(newValue!);
-                    //await store.buscarArea();
-                  },
-                  items: <String>['Germinação (5 dias)', 'Germinação (2 dias)']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                      ),
-                    );
-                  }).toList(),
-                ),
+              Autocomplete<String>(
+                optionsBuilder: (TextEditingValue textEditingValue) {
+                  if (textEditingValue.text == '') {
+                    return const Iterable<String>.empty();
+                  }
+                  return store.mockList.where((String option) {
+                    return option.contains(textEditingValue.text.toLowerCase());
+                  });
+                },
+                onSelected: (String selection) {
+                  debugPrint('You just selected $selection');
+                },
               ),
               const SizedBox(height: 16),
               const Text('Dias'),

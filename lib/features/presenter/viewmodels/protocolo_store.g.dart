@@ -216,6 +216,21 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
+  final _$dropdownTitleAtom = Atom(name: '_ProtocoloStoreBase.dropdownTitle');
+
+  @override
+  TextEditingController get dropdownTitle {
+    _$dropdownTitleAtom.reportRead();
+    return super.dropdownTitle;
+  }
+
+  @override
+  set dropdownTitle(TextEditingController value) {
+    _$dropdownTitleAtom.reportWrite(value, super.dropdownTitle, () {
+      super.dropdownTitle = value;
+    });
+  }
+
   final _$novoNomeProtocoloAtom =
       Atom(name: '_ProtocoloStoreBase.novoNomeProtocolo');
 
@@ -229,6 +244,21 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   set novoNomeProtocolo(String? value) {
     _$novoNomeProtocoloAtom.reportWrite(value, super.novoNomeProtocolo, () {
       super.novoNomeProtocolo = value;
+    });
+  }
+
+  final _$mockListAtom = Atom(name: '_ProtocoloStoreBase.mockList');
+
+  @override
+  List<String> get mockList {
+    _$mockListAtom.reportRead();
+    return super.mockList;
+  }
+
+  @override
+  set mockList(List<String> value) {
+    _$mockListAtom.reportWrite(value, super.mockList, () {
+      super.mockList = value;
     });
   }
 
@@ -456,7 +486,9 @@ novoTipoProtocolo: ${novoTipoProtocolo},
 novoSistemaProtocolo: ${novoSistemaProtocolo},
 novoFormaProtocolo: ${novoFormaProtocolo},
 novaCulturaController: ${novaCulturaController},
+dropdownTitle: ${dropdownTitle},
 novoNomeProtocolo: ${novoNomeProtocolo},
+mockList: ${mockList},
 novaCulturaProtocolo: ${novaCulturaProtocolo},
 novasAtividadesProtocolo: ${novasAtividadesProtocolo},
 protocoloList: ${protocoloList}
