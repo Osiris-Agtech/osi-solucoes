@@ -31,7 +31,9 @@ registrarAtivPage(BuildContext context, ProtocoloStore store) {
         const SizedBox(width: 16),
         FloatingActionButton(
           onPressed: () {
-            getBottomSheet(const AtivBottomSheet());
+            getBottomSheet(const AtivBottomSheet(
+              isNewRecord: true,
+            ));
           },
           backgroundColor: Constants.kPrimaryColor,
           child: const Icon(
@@ -89,37 +91,64 @@ registrarAtivPage(BuildContext context, ProtocoloStore store) {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 8),
+                          vertical: 16,
+                          horizontal: 8,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    'Germinação',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                              child: Row(children: [
+                                const Text(
+                                  'Germinação',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'Período: ',
-                                      style: DefaultTextStyle.of(context).style,
-                                      children: const <TextSpan>[
-                                        TextSpan(
-                                          text: '2 dias',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
+                                ),
+                                const Spacer(),
+                                InkWell(
+                                  onTap: () {
+                                    getBottomSheet(const AtivBottomSheet(
+                                      isNewRecord: false,
+                                      isFase: true,
+                                    ));
+                                  },
+                                  child: const Icon(
+                                    Icons.edit,
+                                    size: 20,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                InkWell(
+                                  onTap: () => null,
+                                  child: const Icon(
+                                    Icons.delete,
+                                    size: 20,
+                                  ),
+                                ),
+                              ]),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 2,
+                                horizontal: 16,
+                              ),
+                              child: RichText(
+                                text: TextSpan(
+                                  text: 'Período: ',
+                                  style: DefaultTextStyle.of(context).style,
+                                  children: const <TextSpan>[
+                                    TextSpan(
+                                      text: '2 dias',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  )
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                             const SizedBox(

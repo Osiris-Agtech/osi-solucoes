@@ -4,9 +4,18 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/showFaseBottomSheet.dart';
+import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
 
 class AtivBottomSheet extends StatefulWidget {
-  const AtivBottomSheet({Key? key}) : super(key: key);
+  final bool isNewRecord;
+  final bool isFase;
+
+  const AtivBottomSheet({
+    Key? key,
+    this.isFase = false,
+    required this.isNewRecord,
+  }) : super(key: key);
 
   @override
   State<AtivBottomSheet> createState() => _AtivBottomSheetState();
@@ -18,10 +27,12 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
   @override
   void initState() {
     super.initState();
+    store.alterarIsNovaFaseBottonSheet(widget.isFase);
+    store.alterarRadioIndicator(widget.isFase ? 2 : 1);
   }
 
   Widget buildAtividadeFase() {
-    var size = MediaQuery.of(context).size;
+    var size = MediaQuery.of(Get.context!).size;
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -43,9 +54,9 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                 onPressed: () => Get.back(),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Nova Atividade',
-                style: TextStyle(
+              Text(
+                widget.isNewRecord ? 'Nova Atividade' : 'Editar Atividade',
+                style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: Constants.kText2,
@@ -95,7 +106,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                 }),
               ),
               const SizedBox(height: 16),
-              const Text('Titulo'),
+              const Text('Selecione a Fase: '),
               Container(
                 padding: const EdgeInsets.only(top: 5),
                 child: DropdownButton<String>(
@@ -119,34 +130,54 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                 ),
               ),
               const SizedBox(height: 16),
-              const Text('Dias após o último evento'),
+              const Text('Titulo:'),
               TextFormField(
                 textInputAction: TextInputAction.next,
                 style: const TextStyle(
-                  fontSize: 24,
                   fontWeight: FontWeight.normal,
                   fontStyle: FontStyle.italic,
                 ),
                 decoration: const InputDecoration(
                   hintStyle: TextStyle(
-                    fontSize: 24,
                     fontWeight: FontWeight.normal,
                     fontStyle: FontStyle.italic,
                   ),
                 ),
               ),
               const SizedBox(height: 16),
-              const Text('Descrição'),
+              const Text('Dia:'),
+              TextFormField(
+                onTap: () {
+                  getBottomSheet(
+                    const ShowFaseBottomSheet(),
+                  );
+                },
+                textInputAction: TextInputAction.next,
+                style: const TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontStyle: FontStyle.italic,
+                ),
+                decoration: const InputDecoration(
+                  suffixIcon: Icon(
+                    Icons.calendar_month,
+                    color: Constants.kPrimaryColor,
+                  ),
+                  hintStyle: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text('Descrição:'),
               TextFormField(
                 textInputAction: TextInputAction.next,
                 style: const TextStyle(
-                  fontSize: 24,
                   fontWeight: FontWeight.normal,
                   fontStyle: FontStyle.italic,
                 ),
                 decoration: const InputDecoration(
                   hintStyle: TextStyle(
-                    fontSize: 24,
                     fontWeight: FontWeight.normal,
                     fontStyle: FontStyle.italic,
                   ),
@@ -186,7 +217,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
   }
 
   Widget buildNovaFase() {
-    var size = MediaQuery.of(context).size;
+    var size = MediaQuery.of(Get.context!).size;
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -208,9 +239,9 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                 onPressed: () => Get.back(),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Nova Fase',
-                style: TextStyle(
+              Text(
+                widget.isNewRecord ? 'Nova Fase' : 'Editar Fase',
+                style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: Constants.kText2,
@@ -260,7 +291,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                 }),
               ),
               const SizedBox(height: 16),
-              const Text('Titulo'),
+              const Text('Titulo:'),
               Autocomplete<String>(
                 optionsBuilder: (TextEditingValue textEditingValue) {
                   if (textEditingValue.text == '') {
@@ -275,26 +306,26 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                 },
               ),
               const SizedBox(height: 16),
-              const Text('Dias'),
-              TextFormField(
-                textInputAction: TextInputAction.next,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.normal,
-                  fontStyle: FontStyle.italic,
-                ),
-                decoration: const InputDecoration(
-                  hintStyle: TextStyle(
-                    fontSize: 24,
+              const Text('Total de Dias:'),
+              InkWell(
+                child: TextFormField(
+                  textInputAction: TextInputAction.next,
+                  style: const TextStyle(
                     fontWeight: FontWeight.normal,
                     fontStyle: FontStyle.italic,
                   ),
+                  decoration: const InputDecoration(
+                    hintStyle: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 5.0),
-                child: Text('Data Prevista: 24/10/2023 - 26/10/2023'),
-              ),
+              // const Padding(
+              //   padding: EdgeInsets.only(top: 5.0),
+              //   child: Text('Data Prevista: 24/10/2023 - 26/10/2023'),
+              // ),
               const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.only(bottom: 30),
