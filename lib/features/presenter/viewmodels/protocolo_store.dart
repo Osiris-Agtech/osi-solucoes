@@ -34,6 +34,9 @@ abstract class _ProtocoloStoreBase with Store {
   bool canNotificate = false;
 
   @observable
+  bool diasDaAtiv = false;
+
+  @observable
   bool mostrarErroFormulario = false;
 
   @observable
@@ -80,6 +83,9 @@ abstract class _ProtocoloStoreBase with Store {
 
   @action
   setCanNotificate(bool value) => canNotificate = value;
+
+  @action
+  setDiasDaAtiv(bool value) => diasDaAtiv = value;
 
   @action
   alterarForma(String forma) {

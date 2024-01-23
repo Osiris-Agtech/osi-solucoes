@@ -145,7 +145,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                 ),
               ),
               const SizedBox(height: 16),
-              const Text('Dia:'),
+              const Text('Dia(s) da Atividade:'),
               TextFormField(
                 onTap: () {
                   getBottomSheet(

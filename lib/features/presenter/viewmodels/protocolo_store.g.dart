@@ -103,6 +103,21 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
+  final _$diasDaAtivAtom = Atom(name: '_ProtocoloStoreBase.diasDaAtiv');
+
+  @override
+  bool get diasDaAtiv {
+    _$diasDaAtivAtom.reportRead();
+    return super.diasDaAtiv;
+  }
+
+  @override
+  set diasDaAtiv(bool value) {
+    _$diasDaAtivAtom.reportWrite(value, super.diasDaAtiv, () {
+      super.diasDaAtiv = value;
+    });
+  }
+
   final _$mostrarErroFormularioAtom =
       Atom(name: '_ProtocoloStoreBase.mostrarErroFormulario');
 
@@ -372,6 +387,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic setDiasDaAtiv(bool value) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.setDiasDaAtiv');
+    try {
+      return super.setDiasDaAtiv(value);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic alterarForma(String forma) {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.alterarForma');
@@ -479,6 +505,7 @@ isNovaFaseBottonSheet: ${isNovaFaseBottonSheet},
 isProtocoloListLoading: ${isProtocoloListLoading},
 isEditing: ${isEditing},
 canNotificate: ${canNotificate},
+diasDaAtiv: ${diasDaAtiv},
 mostrarErroFormulario: ${mostrarErroFormulario},
 isNovaCultura: ${isNovaCultura},
 culturaList: ${culturaList},
