@@ -47,7 +47,7 @@ Padding agendaItem({
                       ),
                       child: Text(
                         //store.searchReservatorio[index].nome ?? "---",
-                        store.acoesList[index].titulo ?? "---",
+                        store.atividadeList[index].titulo ?? "---",
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,

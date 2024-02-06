@@ -3,7 +3,7 @@ import 'dart:core';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/features/data/repositories/agenda/agenda_repository.dart';
-import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
+import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 
 part 'agenda_store.g.dart';
 
@@ -19,27 +19,49 @@ abstract class _AgendaStoreBase with Store {
   bool isAcoesListLoading = false;
 
   @observable
-  List<Acao> acoesList = [];
+  DateTime selectedDay = DateTime.now();
+
+  @observable
+  DateTime focusedDay = DateTime.now();
+
+  @observable
+  List<Agenda> atividadeList = [];
 
   @action
   setShowEditPage(bool value) => showEditPage = value;
 
   @action
-  buscarAcoes() async {
+  buscarAtividades() async {
     isAcoesListLoading = true;
 
-    var acoes = await agendaRepository.buscarAcoes();
+    var atividades = await agendaRepository.buscarAtividades();
 
-    acoes.fold(
+    atividades.fold(
       (err) {
-        acoesList = List.from([]);
+        atividadeList = List.from([]);
       },
       (data) async {
-        acoesList = List.from(data);
-        acoesList = List.from(acoesList);
+        atividadeList = List.from(data);
+        atividadeList = List.from(atividadeList);
       },
     );
 
     isAcoesListLoading = false;
+  }
+
+  @computed
+  List<Agenda> get filteredAtividades {
+    return atividadeList
+        .where((atividade) =>
+            atividade.data?.year == selectedDay.year &&
+            atividade.data?.month == selectedDay.month &&
+            atividade.data?.day == selectedDay.day)
+        .toList();
+  }
+
+  @action
+  void onDaySelected(DateTime day, DateTime focusedDay) {
+    selectedDay = day;
+    this.focusedDay = focusedDay;
   }
 }

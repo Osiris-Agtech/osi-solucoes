@@ -9,6 +9,14 @@ part of 'agenda_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AgendaStore on _AgendaStoreBase, Store {
+  Computed<List<Agenda>>? _$filteredAtividadesComputed;
+
+  @override
+  List<Agenda> get filteredAtividades => (_$filteredAtividadesComputed ??=
+          Computed<List<Agenda>>(() => super.filteredAtividades,
+              name: '_AgendaStoreBase.filteredAtividades'))
+      .value;
+
   final _$showEditPageAtom = Atom(name: '_AgendaStoreBase.showEditPage');
 
   @override
@@ -40,26 +48,57 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$acoesListAtom = Atom(name: '_AgendaStoreBase.acoesList');
+  final _$selectedDayAtom = Atom(name: '_AgendaStoreBase.selectedDay');
 
   @override
-  List<Acao> get acoesList {
-    _$acoesListAtom.reportRead();
-    return super.acoesList;
+  DateTime get selectedDay {
+    _$selectedDayAtom.reportRead();
+    return super.selectedDay;
   }
 
   @override
-  set acoesList(List<Acao> value) {
-    _$acoesListAtom.reportWrite(value, super.acoesList, () {
-      super.acoesList = value;
+  set selectedDay(DateTime value) {
+    _$selectedDayAtom.reportWrite(value, super.selectedDay, () {
+      super.selectedDay = value;
     });
   }
 
-  final _$buscarAcoesAsyncAction = AsyncAction('_AgendaStoreBase.buscarAcoes');
+  final _$focusedDayAtom = Atom(name: '_AgendaStoreBase.focusedDay');
 
   @override
-  Future buscarAcoes() {
-    return _$buscarAcoesAsyncAction.run(() => super.buscarAcoes());
+  DateTime get focusedDay {
+    _$focusedDayAtom.reportRead();
+    return super.focusedDay;
+  }
+
+  @override
+  set focusedDay(DateTime value) {
+    _$focusedDayAtom.reportWrite(value, super.focusedDay, () {
+      super.focusedDay = value;
+    });
+  }
+
+  final _$atividadeListAtom = Atom(name: '_AgendaStoreBase.atividadeList');
+
+  @override
+  List<Agenda> get atividadeList {
+    _$atividadeListAtom.reportRead();
+    return super.atividadeList;
+  }
+
+  @override
+  set atividadeList(List<Agenda> value) {
+    _$atividadeListAtom.reportWrite(value, super.atividadeList, () {
+      super.atividadeList = value;
+    });
+  }
+
+  final _$buscarAtividadesAsyncAction =
+      AsyncAction('_AgendaStoreBase.buscarAtividades');
+
+  @override
+  Future buscarAtividades() {
+    return _$buscarAtividadesAsyncAction.run(() => super.buscarAtividades());
   }
 
   final _$_AgendaStoreBaseActionController =
@@ -77,11 +116,25 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
   }
 
   @override
+  void onDaySelected(DateTime day, DateTime focusedDay) {
+    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
+        name: '_AgendaStoreBase.onDaySelected');
+    try {
+      return super.onDaySelected(day, focusedDay);
+    } finally {
+      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 showEditPage: ${showEditPage},
 isAcoesListLoading: ${isAcoesListLoading},
-acoesList: ${acoesList}
+selectedDay: ${selectedDay},
+focusedDay: ${focusedDay},
+atividadeList: ${atividadeList},
+filteredAtividades: ${filteredAtividades}
     ''';
   }
 }

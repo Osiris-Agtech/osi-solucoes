@@ -26,7 +26,7 @@ class AgendaPageState extends State<AgendaPage> {
   @override
   void initState() {
     super.initState();
-    store.buscarAcoes();
+    store.buscarAtividades();
   }
 
   @override
@@ -52,7 +52,7 @@ class AgendaPageState extends State<AgendaPage> {
                     if (store.isAcoesListLoading) {
                       return loadingList();
                     }
-                    if (store.acoesList.isEmpty) {
+                    if (store.atividadeList.isEmpty) {
                       return emptyList();
                     }
                     return showList();
@@ -89,57 +89,62 @@ class AgendaPageState extends State<AgendaPage> {
   SliverToBoxAdapter agenda() {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        child: TableCalendar(
-          locale: 'pt_BR',
-          firstDay: DateTime.now().subtract(const Duration(days: 10 * 365)),
-          lastDay: DateTime.now().add(const Duration(days: 10 * 365)),
-          focusedDay: DateTime.utc(2023, 05, 20),
-          daysOfWeekHeight: 24,
-          availableCalendarFormats: const {CalendarFormat.month: 'Month'},
-          headerStyle: HeaderStyle(
-            titleCentered: true,
-            titleTextFormatter: (date, locale) {
-              String s = DateFormat.yMMMM(locale).format(date);
-              return s[0].toUpperCase() + s.substring(1);
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Observer(
+          // Use o Observer aqui
+          builder: (_) => TableCalendar(
+            selectedDayPredicate: (day) => isSameDay(store.selectedDay, day),
+            onDaySelected: (selectedDay, focusedDay) {
+              store.onDaySelected(selectedDay, focusedDay);
             },
-            leftChevronIcon: const Icon(
-              Icons.chevron_left,
-              color: Constants.kPrimaryColor,
+            locale: 'pt_BR',
+            firstDay: DateTime.now().subtract(const Duration(days: 10 * 365)),
+            lastDay: DateTime.now().add(const Duration(days: 10 * 365)),
+            focusedDay: store.focusedDay, // Use o focusedDay do store
+            daysOfWeekHeight: 24,
+            availableCalendarFormats: const {CalendarFormat.month: 'Month'},
+            headerStyle: HeaderStyle(
+              titleCentered: true,
+              titleTextFormatter: (date, locale) {
+                String s = DateFormat.yMMMM(locale).format(date);
+                return s[0].toUpperCase() + s.substring(1);
+              },
+              leftChevronIcon: const Icon(
+                Icons.chevron_left,
+                color: Constants.kPrimaryColor,
+              ),
+              rightChevronIcon: const Icon(
+                Icons.chevron_right,
+                color: Constants.kGreyText,
+              ),
             ),
-            rightChevronIcon: const Icon(
-              Icons.chevron_right,
-              color: Constants.kGreyText,
+            daysOfWeekStyle: DaysOfWeekStyle(
+              dowTextFormatter: (date, locale) =>
+                  DateFormat.E(locale).format(date)[0].toUpperCase(),
             ),
-          ),
-          daysOfWeekStyle: DaysOfWeekStyle(
-            dowTextFormatter: (date, locale) =>
-                DateFormat.E(locale).format(date)[0].toUpperCase(),
-          ),
-          calendarStyle: const CalendarStyle(
-            todayDecoration: BoxDecoration(
-              color: Constants.kGreyLight,
-              shape: BoxShape.circle,
+            calendarStyle: const CalendarStyle(
+              todayDecoration: BoxDecoration(
+                color: Constants.kGreyLight,
+                shape: BoxShape.circle,
+              ),
+              selectedDecoration: BoxDecoration(
+                color: Constants.kGreyText,
+                shape: BoxShape.circle,
+              ),
             ),
-            selectedDecoration: BoxDecoration(
-              color: Constants.kGreyText,
-              shape: BoxShape.circle,
+            calendarBuilders: CalendarBuilders(
+              singleMarkerBuilder: (context, date, event) {
+                return Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Constants.kGreyText,
+                  ),
+                  width: 7.0,
+                  height: 7.0,
+                  margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                );
+              },
             ),
-          ),
-          calendarBuilders: CalendarBuilders(
-            singleMarkerBuilder: (context, date, event) {
-              return Container(
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Constants.kGreyText,
-                ),
-                width: 7.0,
-                height: 7.0,
-                margin: const EdgeInsets.symmetric(horizontal: 1.5),
-              );
-            },
           ),
         ),
       ),
@@ -152,7 +157,7 @@ class AgendaPageState extends State<AgendaPage> {
         (BuildContext context, int index) {
           return agendaItem(index: index, store: store);
         },
-        childCount: store.acoesList.length,
+        childCount: store.atividadeList.length,
       ),
     );
   }
