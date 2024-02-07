@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
@@ -49,31 +50,33 @@ class _ShowFaseBottomSheet extends State<ShowFaseBottomSheet> {
               ),
             ),
             const SizedBox(height: 20),
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                children: List.generate(10, (index) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () => {store.setDiasDaAtiv(!store.diasDaAtiv)},
-                        child: Icon(
-                          store.diasDaAtiv
-                              ? Icons.check_box
-                              : Icons.check_box_outline_blank,
-                          size: 80,
+            Observer(builder: (_) {
+              return Expanded(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  children: List.generate(10, (index) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () => {store.setDiasDaAtiv(!store.diasDaAtiv)},
+                          child: Icon(
+                            store.diasDaAtiv
+                                ? Icons.check_box
+                                : Icons.check_box_outline_blank,
+                            size: 80,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Dia ${index + 1}',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                    ],
-                  );
-                }),
-              ),
-            )
+                        Text(
+                          'Dia ${index + 1}',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                      ],
+                    );
+                  }),
+                ),
+              );
+            })
           ],
         ),
       ),
