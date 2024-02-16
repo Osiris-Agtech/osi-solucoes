@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
 
 getBottomSheet(Widget child) {
   Get.bottomSheet(

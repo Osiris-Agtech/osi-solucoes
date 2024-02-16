@@ -4,7 +4,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/reservatorios_store.dart';
 
 import '../../../../../../core/constants/constants.dart';
 

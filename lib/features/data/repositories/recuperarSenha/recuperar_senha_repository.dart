@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:osi_solucoes/core/errors/failure.dart';
-import 'package:osi_solucoes/features/data/datasources/recuperarSenha/recuperar_senha_datasource.dart';
-import 'package:osi_solucoes/features/data/repositories/recuperarSenha/recuperar_senha_repository_interface.dart';
-import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
+import 'package:sigma_hort_gestao_equipe/core/errors/failure.dart';
+import 'package:sigma_hort_gestao_equipe/features/data/datasources/recuperarSenha/recuperar_senha_datasource.dart';
+import 'package:sigma_hort_gestao_equipe/features/data/repositories/recuperarSenha/recuperar_senha_repository_interface.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/usuario/usuario_model.dart';
 
 class RecuperarSenhaRepository implements IRecuperarSenhaRepository {
   final IRecuperarSenhaDatasource datasource;

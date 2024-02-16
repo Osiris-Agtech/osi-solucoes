@@ -4,12 +4,12 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/core/utils/toast.dart';
-import 'package:osi_solucoes/features/data/repositories/ajuste/ajuste_repository.dart';
-import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
-import 'package:osi_solucoes/features/presenter/models/reposicaoFert/reposicaoFert_model.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:sigma_hort_gestao_equipe/core/utils/toast.dart';
+import 'package:sigma_hort_gestao_equipe/features/data/repositories/ajuste/ajuste_repository.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/atividade/atividade_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/reposicaoFert/reposicaoFert_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/auth_controller.dart';
 
 import '../models/reservatorio/reservatorio_model.dart';
 

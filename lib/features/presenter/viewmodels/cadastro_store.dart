@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/auth_controller.dart';
 import 'package:search_cep/search_cep.dart';
 
 import '../../../core/services/local_storage.dart';

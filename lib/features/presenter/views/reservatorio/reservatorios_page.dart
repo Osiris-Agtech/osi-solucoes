@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/reservatorioItem.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/reservatorio/cadastrar_reservatorio/components/reservatorioItem.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/reservatorios_store.dart';

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/area_cultivo_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/lote_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/setor_store.dart';
 
 class NewFloatingActionButton extends StatefulWidget {
   final int nivel;

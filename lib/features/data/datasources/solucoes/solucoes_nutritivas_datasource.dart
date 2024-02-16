@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:graphql/client.dart';
-import 'package:osi_solucoes/core/errors/failure.dart';
-import 'package:osi_solucoes/features/data/api_source.dart';
-import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
+import 'package:sigma_hort_gestao_equipe/core/errors/failure.dart';
+import 'package:sigma_hort_gestao_equipe/features/data/api_source.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/fertilizante/fertilizante_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 
 import '../../../../core/errors/errors.dart';
 

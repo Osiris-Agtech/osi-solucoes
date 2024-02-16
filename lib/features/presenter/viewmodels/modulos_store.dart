@@ -1,10 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/ajustes_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/ajustes_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/area_cultivo_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/caderno_campo_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/solucao_store.dart';
 
 part 'modulos_store.g.dart';
 

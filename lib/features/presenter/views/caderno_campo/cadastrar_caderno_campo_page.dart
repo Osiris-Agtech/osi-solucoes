@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/utils/toast.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
-import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/bottomSheet.dart';
-import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/lotes_bottomsheet.dart';
-import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
+import 'package:sigma_hort_gestao_equipe/core/utils/toast.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/caderno_campo_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/caderno_campo/components/bottomSheet.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/caderno_campo/components/lotes_bottomsheet.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/widgets/get_bottom_sheet.dart';
 import '../../../../../core/constants/constants.dart';
 import 'package:intl/intl.dart';
 

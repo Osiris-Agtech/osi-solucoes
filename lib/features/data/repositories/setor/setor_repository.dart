@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:osi_solucoes/core/errors/failure.dart';
-import 'package:osi_solucoes/features/data/datasources/setor/setor_datasource.dart';
-import 'package:osi_solucoes/features/data/repositories/setor/setor_repository_interface.dart';
-import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
-import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
+import 'package:sigma_hort_gestao_equipe/core/errors/failure.dart';
+import 'package:sigma_hort_gestao_equipe/features/data/datasources/setor/setor_datasource.dart';
+import 'package:sigma_hort_gestao_equipe/features/data/repositories/setor/setor_repository_interface.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/reservatorio/reservatorio_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/setor/setor_model.dart';
 
 class SetorRepository implements ISetorRepository {
   final ISetorDatasource datasource;

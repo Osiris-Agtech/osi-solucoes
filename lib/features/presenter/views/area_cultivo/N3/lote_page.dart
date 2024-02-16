@@ -6,14 +6,14 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
-import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
-import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
+import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/lote/lote_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/setor/setor_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/lote_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/setor_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/widgets/floating_actino_button.dart';
 
 class LotePage extends StatefulWidget {
   const LotePage({Key? key}) : super(key: key);

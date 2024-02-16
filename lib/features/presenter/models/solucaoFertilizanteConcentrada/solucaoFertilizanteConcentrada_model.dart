@@ -1,9 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoConcentrada/solucaoConcentrada_model.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/fertilizante/fertilizante_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/solucaoConcentrada/solucaoConcentrada_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 
 part 'solucaoFertilizanteConcentrada_model.g.dart';
 

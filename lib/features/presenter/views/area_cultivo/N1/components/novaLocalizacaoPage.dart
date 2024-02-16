@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
-import 'package:osi_solucoes/features/presenter/views/login/components/loadingDialog.dart';
+import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/area_cultivo_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/login/components/loadingDialog.dart';
 
 Widget novaLocalizacaoPage(BuildContext context,
     CarouselController controlerPages, AreaCultivoStore store) {

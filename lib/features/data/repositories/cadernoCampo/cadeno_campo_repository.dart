@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:osi_solucoes/core/errors/failure.dart';
-import 'package:osi_solucoes/features/data/datasources/cadernoCampo/caderno_campo_datasource.dart';
-import 'package:osi_solucoes/features/data/repositories/cadernoCampo/caderno_campo_repository_interface.dart';
-import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
-import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
-import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
-import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
+import 'package:sigma_hort_gestao_equipe/core/errors/failure.dart';
+import 'package:sigma_hort_gestao_equipe/features/data/datasources/cadernoCampo/caderno_campo_datasource.dart';
+import 'package:sigma_hort_gestao_equipe/features/data/repositories/cadernoCampo/caderno_campo_repository_interface.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/area/area_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/atividade/atividade_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/lote/lote_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/usuario/usuario_model.dart';
 
 class CadernoCampoRepository implements ICadernoCampoRepository {
   final ICadernoCampoDatasource datasource;

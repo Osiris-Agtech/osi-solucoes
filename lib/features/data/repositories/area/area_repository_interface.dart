@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:osi_solucoes/features/presenter/models/localizacao/localizacao_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/localizacao/localizacao_model.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../presenter/models/area/area_model.dart';

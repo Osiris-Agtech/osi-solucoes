@@ -2,16 +2,15 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
-import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/pagesNovoCadernoCampo.dart';
+import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/caderno_campo_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/caderno_campo/components/pagesNovoCadernoCampo.dart';
 
 Future<void> bottomSheet(
-  BuildContext context,
-  CarouselController carouselController,
-  CarouselController controlerPages,
-  CadernoCampoStore store
-) {
+    BuildContext context,
+    CarouselController carouselController,
+    CarouselController controlerPages,
+    CadernoCampoStore store) {
   return showModalBottomSheet<void>(
     backgroundColor: Constants.kBackgroundColor,
     context: context,
@@ -34,7 +33,8 @@ Future<void> bottomSheet(
           scrollPhysics: const NeverScrollableScrollPhysics(),
         ),
         items: [
-          pagesNovoCadernoCampo(context, carouselController, controlerPages, store)
+          pagesNovoCadernoCampo(
+              context, carouselController, controlerPages, store)
         ],
       );
     },

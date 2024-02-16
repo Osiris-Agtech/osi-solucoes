@@ -1,6 +1,6 @@
 // ignore_for_file: file_names
 
-import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
 
 class FertilizanteNutrienteMap {
   String key;

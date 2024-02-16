@@ -4,11 +4,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/nomePage.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/receitaPage.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/volumePage.dart';
+import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/reservatorio/cadastrar_reservatorio/components/nomePage.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/reservatorio/cadastrar_reservatorio/components/receitaPage.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/reservatorio/cadastrar_reservatorio/components/volumePage.dart';
 
 SizedBox pagesNewReservatorio(BuildContext context, ReservatoriosStore store,
     CarouselController carouselController, CarouselController controlerPages) {

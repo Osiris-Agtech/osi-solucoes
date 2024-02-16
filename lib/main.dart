@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:localization/localization.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
 import 'package:get/get.dart';
-import 'package:osi_solucoes/core/services/auth_service.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_equipe/core/services/auth_service.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/routes/routes.dart';
 
 import 'core/inject/inject.dart';
 import 'features/presenter/routes/app_pages.dart';

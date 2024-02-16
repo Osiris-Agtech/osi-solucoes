@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/routes/routes.dart';
 
 class FirstMiddleware extends GetMiddleware {
   @override

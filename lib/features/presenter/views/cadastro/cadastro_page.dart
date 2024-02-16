@@ -4,12 +4,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
-// import 'package:osi_solucoes/app//modules/cadastro/cadastro_store.dart';
+// import 'package:sigma_hort_gestao_equipe/app//modules/cadastro/cadastro_store.dart';
 import 'package:flutter/material.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/core/errors/failure.dart';
-import 'package:osi_solucoes/features/presenter/views/ajuste/resultadoajuste_page.dart';
-import 'package:osi_solucoes/features/presenter/views/home/home_page.dart';
+import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_equipe/core/errors/failure.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/ajuste/resultadoajuste_page.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/home/home_page.dart';
 
 import '../../viewmodels/cadastro_store.dart';
 

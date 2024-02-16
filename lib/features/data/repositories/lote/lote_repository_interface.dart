@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
-import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
-import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
-import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/cultura/cultura_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/area/area_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/lote/lote_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/reservatorio/reservatorio_model.dart';
 
 import '../../../../core/errors/failure.dart';
 

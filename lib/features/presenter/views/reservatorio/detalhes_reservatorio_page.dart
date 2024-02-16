@@ -5,11 +5,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/modulos_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/modulos_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/home/components/top_app_bar.dart';
 
 class DetalhesReservatorio extends StatefulWidget {
   const DetalhesReservatorio({Key? key}) : super(key: key);

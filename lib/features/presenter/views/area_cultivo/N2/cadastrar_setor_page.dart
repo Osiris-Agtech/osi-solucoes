@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/bottomSheet.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/setor_store.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/area_cultivo/N2/components/bottomSheet.dart';
 import '../../../../../core/constants/constants.dart';
 
 class CadastrarSetorPage extends StatefulWidget {

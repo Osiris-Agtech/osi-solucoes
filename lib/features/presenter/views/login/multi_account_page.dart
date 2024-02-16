@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/views/home/home_page.dart';
-import 'package:osi_solucoes/features/presenter/views/login/login_page.dart';
+import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/home/home_page.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/login/login_page.dart';
 
 import '../../models/usuario/usuario_model.dart';
 import '../../viewmodels/auth_controller.dart';

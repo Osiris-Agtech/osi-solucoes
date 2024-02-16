@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:graphql/client.dart';
-import 'package:osi_solucoes/features/data/api_source.dart';
-import 'package:osi_solucoes/features/presenter/models/cargo/cargo_model.dart';
-import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/data/api_source.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/cargo/cargo_model.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/models/usuario/usuario_model.dart';
 
 import '../../../../core/errors/errors.dart';
 import '../../../../core/errors/failure.dart';

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(osi_solucoes LANGUAGES CXX)
+project(sigma_hort_gestao_equipe LANGUAGES CXX)
 
 set(BINARY_NAME "osi-solucoes")
 
