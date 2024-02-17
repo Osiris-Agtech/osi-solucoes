@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
 import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/login_store.dart';
-import 'package:sigma_hort_gestao_equipe/features/presenter/views/home/home_page.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
 import 'package:sigma_hort_gestao_equipe/features/presenter/views/login/login_page.dart';
 
 import '../../../../core/services/local_storage.dart';
@@ -32,7 +32,7 @@ class _SplashPageState extends State<SplashPage> {
         loginStore.setSenhaController(usuario.senha ?? '');
         String response = await loginStore.login();
         if (response == "sucesso") {
-          Get.to(() => const HomePage());
+          Get.to(() => const GerenciarEquipePage());
           // Modular.to.pushReplacementNamed("/Home/");
         } else if (response == "multiple") {
           Get.to(

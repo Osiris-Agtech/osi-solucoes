@@ -4,12 +4,13 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart'
+    as ge;
 import 'package:sigma_hort_gestao_equipe/features/presenter/views/onboarding/splash_page.dart';
 import 'package:rive/rive.dart';
 import 'package:flutter/material.dart';
 
 import '../../viewmodels/cadastro_store.dart';
-import '../home/home_page.dart';
 
 class ConfirmaSegurancaPage extends StatefulWidget {
   final String title;
@@ -238,7 +239,8 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
                                     showDoneAnimation(context),
                                     await Future.delayed(
                                         const Duration(milliseconds: 1400)),
-                                    Get.offAll(() => const HomePage()),
+                                    Get.offAll(
+                                        () => const ge.GerenciarEquipePage()),
                                   }
                                 : {
                                     showErrorDialog(context, res),

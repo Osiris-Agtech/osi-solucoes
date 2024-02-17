@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
-import 'package:sigma_hort_gestao_equipe/features/presenter/views/home/home_page.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart'
+    as ge;
 import 'package:sigma_hort_gestao_equipe/features/presenter/views/login/login_page.dart';
 
 import '../../models/usuario/usuario_model.dart';
@@ -144,7 +145,8 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
                                         await Future.delayed(
                                             const Duration(seconds: 2));
                                         Navigator.pop(context);
-                                        Get.offAll(() => const HomePage());
+                                        Get.offAll(() =>
+                                            const ge.GerenciarEquipePage());
                                       },
                                       child: SizedBox(
                                         width:

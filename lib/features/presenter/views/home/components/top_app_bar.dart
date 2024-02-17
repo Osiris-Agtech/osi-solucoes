@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
 
 class TopAppBar extends StatelessWidget {
   const TopAppBar({
@@ -28,27 +26,25 @@ class TopAppBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          IconButton(
-            hoverColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            padding: EdgeInsets.zero,
-            alignment: Alignment.centerLeft,
-            onPressed: () {
-              if (onPressed != null) {
-                onPressed!.call();
-              } else {
-                Get.close(1);
-              }
-            },
-            icon: const Icon(Icons.arrow_back),
-            color: Constants.kPrimaryColor,
-          ),
+          // IconButton(
+          //   hoverColor: Colors.transparent,
+          //   splashColor: Colors.transparent,
+          //   highlightColor: Colors.transparent,
+          //   padding: EdgeInsets.zero,
+          //   alignment: Alignment.centerLeft,
+          //   onPressed: () {
+          //     if (onPressed != null) {
+          //       onPressed!.call();
+          //     } else {
+          //       Get.close(1);
+          //     }
+          //   },
+          //   icon: const Icon(Icons.arrow_back),
+          //   color: Constants.kPrimaryColor,
+          // ),
           Padding(
             padding: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width * 0.013,
-              // top: MediaQuery.of(context).size.height * 0.002
-            ),
+                left: MediaQuery.of(context).size.width * 0.013, top: 32),
             child: Text(
               namePage,
               style: const TextStyle(

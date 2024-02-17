@@ -6,9 +6,9 @@ import 'package:localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
 import 'package:sigma_hort_gestao_equipe/features/presenter/viewmodels/auth_controller.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
 import 'package:sigma_hort_gestao_equipe/features/presenter/views/login/multi_account_page.dart';
 import '../../viewmodels/login_store.dart';
-import '../home/home_page.dart';
 import 'components/forgotPassword.dart';
 import 'components/loadingDialog.dart';
 import 'components/loginButton.dart';
@@ -190,7 +190,7 @@ class LoginPageState extends State<LoginPage> {
                       await Future.delayed(const Duration(seconds: 2));
                       if (response == "sucesso") {
                         store.clearFields();
-                        Get.offAll(() => const HomePage());
+                        Get.offAll(() => const GerenciarEquipePage());
                       } else if (response == "multiple") {
                         store.clearFields();
                         Get.to(

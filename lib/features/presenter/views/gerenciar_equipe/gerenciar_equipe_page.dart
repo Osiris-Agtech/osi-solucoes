@@ -39,6 +39,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
       ),
       child: SafeArea(
         child: Scaffold(
+          // appBar: AppBar(automaticallyImplyLeading: false),
           backgroundColor: Constants.kCardColor,
           floatingActionButton: FloatingActionButton(
             onPressed: () {
@@ -57,7 +58,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                AppBar(store: gerenciarEquipeStore),
+                AppBarCustom(store: gerenciarEquipeStore),
                 Observer(builder: (_) {
                   if (gerenciarEquipeStore.isUserListLoading) {
                     return const SliverToBoxAdapter(
@@ -190,8 +191,8 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
 }
 
 // ignore: camel_case_types
-class AppBar extends StatefulWidget {
-  const AppBar({
+class AppBarCustom extends StatefulWidget {
+  const AppBarCustom({
     Key? key,
     required this.store,
   }) : super(key: key);
@@ -199,10 +200,10 @@ class AppBar extends StatefulWidget {
   final GerenciarEquipeStore store;
 
   @override
-  State<AppBar> createState() => _AppBarState();
+  State<AppBarCustom> createState() => _AppBarCustomState();
 }
 
-class _AppBarState extends State<AppBar> {
+class _AppBarCustomState extends State<AppBarCustom> {
   GerenciarEquipeStore gerenciarEquipeStore = GetIt.I<GerenciarEquipeStore>();
   @override
   Widget build(BuildContext context) {

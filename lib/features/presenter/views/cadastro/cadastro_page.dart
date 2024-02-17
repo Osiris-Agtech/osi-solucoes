@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
 import 'package:sigma_hort_gestao_equipe/core/errors/failure.dart';
 import 'package:sigma_hort_gestao_equipe/features/presenter/views/ajuste/resultadoajuste_page.dart';
-import 'package:sigma_hort_gestao_equipe/features/presenter/views/home/home_page.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart'
+    as ge;
 
 import '../../viewmodels/cadastro_store.dart';
 
@@ -315,8 +316,8 @@ class CadastroPageState extends State<CadastroPage> {
                                               await Future.delayed(
                                                   const Duration(
                                                       milliseconds: 1400)),
-                                              Get.offAll(
-                                                  () => const HomePage()),
+                                              Get.offAll(() => const ge
+                                                  .GerenciarEquipePage()),
                                             }
                                           : {
                                               showErrorDialog(context, res),
