@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/core/services/local_storage.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/onboarding/splash_page.dart';
 
 class TopAppBar extends StatelessWidget {
   const TopAppBar({
@@ -31,6 +34,33 @@ class TopAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Visibility(
+            visible: !showBackButton,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: IconButton(
+                  onPressed: () async {
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const Center(child: CircularProgressIndicator());
+                      },
+                    );
+                    await LocalStorage().deleteUser();
+                    await Future.delayed(const Duration(seconds: 2));
+                    Get.offAll(() => const SplashPage());
+                  },
+                  icon: SvgPicture.asset(
+                    "assets/icons/external_link_icon.svg",
+                    color: Constants.kPrimaryColor,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Visibility(
             visible: showBackButton,
             child: IconButton(
               hoverColor: Colors.transparent,
@@ -52,7 +82,7 @@ class TopAppBar extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(
               left: MediaQuery.of(context).size.width * 0.013,
-              top: showBackButton ? 0 : 32,
+              // top: showBackButton ? 0 : 32,
               // top: MediaQuery.of(context).size.height * 0.002
             ),
             child: Text(
