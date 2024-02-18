@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:sigma_hort_gestao_equipe/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_equipe/core/services/local_storage.dart';
+import 'package:sigma_hort_gestao_equipe/features/presenter/views/onboarding/splash_page.dart';
 
 class TopAppBar extends StatelessWidget {
   const TopAppBar({
@@ -42,9 +47,33 @@ class TopAppBar extends StatelessWidget {
           //   icon: const Icon(Icons.arrow_back),
           //   color: Constants.kPrimaryColor,
           // ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: IconButton(
+                onPressed: () async {
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                  );
+                  await LocalStorage().deleteUser();
+                  await Future.delayed(const Duration(seconds: 2));
+                  Get.offAll(() => const SplashPage());
+                },
+                icon: SvgPicture.asset(
+                  "assets/icons/external_link_icon.svg",
+                  color: Constants.kPrimaryColor,
+                ),
+              ),
+            ),
+          ),
           Padding(
             padding: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width * 0.013, top: 32),
+                left: MediaQuery.of(context).size.width * 0.013),
             child: Text(
               namePage,
               style: const TextStyle(
