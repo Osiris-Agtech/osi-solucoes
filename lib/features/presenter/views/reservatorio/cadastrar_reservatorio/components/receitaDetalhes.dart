@@ -3,11 +3,11 @@
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
-import 'package:osi_solucoes/features/presenter/models/relacaoNutriente/relacaoNutriente_model.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/relacaoNutriente/relacaoNutriente_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/reservatorios_store.dart';
 
 Widget receitaDetalhe(BuildContext context, CarouselController controlerPages,
     ReservatoriosStore store) {

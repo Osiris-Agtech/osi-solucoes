@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/area/area_model.dart';
 
 part 'localizacao_model.g.dart';
 

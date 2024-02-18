@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/utils/decimal_format.dart';
-import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
-import 'package:osi_solucoes/features/presenter/views/solucao/components/bottomSheet.dart';
-import 'package:osi_solucoes/features/presenter/views/solucao/components/customTextFormField.dart';
+import 'package:sigma_hort_gestao_producao/core/utils/decimal_format.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/fertilizante/fertilizante_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/solucao_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/solucao/components/bottomSheet.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/solucao/components/customTextFormField.dart';
 import '../../../../../core/constants/constants.dart';
 
 class CadastrarSolucaoPage extends StatefulWidget {

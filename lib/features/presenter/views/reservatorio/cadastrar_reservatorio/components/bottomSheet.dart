@@ -2,10 +2,10 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/pagesNovoReservatorio.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/receitaDetalhes.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/reservatorio/cadastrar_reservatorio/components/pagesNovoReservatorio.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/reservatorio/cadastrar_reservatorio/components/receitaDetalhes.dart';
 
 Future<void> bottomSheet(
     BuildContext context,

@@ -5,14 +5,14 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
-import 'package:osi_solucoes/features/presenter/views/solucao/cadastrar_solucao_page.dart';
-import 'package:osi_solucoes/features/presenter/views/solucao/detalhes_solucao.dart';
-import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/setor_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/solucao_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/solucao/cadastrar_solucao_page.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/solucao/detalhes_solucao.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/widgets/get_bottom_sheet.dart';
 
 class SolucaoPage extends StatefulWidget {
   const SolucaoPage({Key? key}) : super(key: key);

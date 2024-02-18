@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
 
 class TopAppBar extends StatelessWidget {
   const TopAppBar({
@@ -10,12 +10,14 @@ class TopAppBar extends StatelessWidget {
     required this.namePage,
     this.subtitle,
     this.onPressed,
+    this.showBackButton = false,
   }) : super(key: key);
   final bool? navigate;
   final String? path;
   final String namePage;
   final String? subtitle;
   final Function? onPressed;
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
@@ -28,25 +30,29 @@ class TopAppBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          IconButton(
-            hoverColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            padding: EdgeInsets.zero,
-            alignment: Alignment.centerLeft,
-            onPressed: () {
-              if (onPressed != null) {
-                onPressed!.call();
-              } else {
-                Get.close(1);
-              }
-            },
-            icon: const Icon(Icons.arrow_back),
-            color: Constants.kPrimaryColor,
+          Visibility(
+            visible: showBackButton,
+            child: IconButton(
+              hoverColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              padding: EdgeInsets.zero,
+              alignment: Alignment.centerLeft,
+              onPressed: () {
+                if (onPressed != null) {
+                  onPressed!.call();
+                } else {
+                  Get.close(1);
+                }
+              },
+              icon: const Icon(Icons.arrow_back),
+              color: Constants.kPrimaryColor,
+            ),
           ),
           Padding(
             padding: EdgeInsets.only(
               left: MediaQuery.of(context).size.width * 0.013,
+              top: showBackButton ? 0 : 32,
               // top: MediaQuery.of(context).size.height * 0.002
             ),
             child: Text(

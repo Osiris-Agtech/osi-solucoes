@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/usuario/usuario_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/caderno_campo_store.dart';
 
 Container autorPage(BuildContext context, CadernoCampoStore store) {
   return Container(

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/login_store.dart';
-import 'package:osi_solucoes/features/presenter/views/home/home_page.dart';
-import 'package:osi_solucoes/features/presenter/views/login/login_page.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/login_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/home/home_page.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/login/login_page.dart';
 
 import '../../../../core/services/local_storage.dart';
 import '../../viewmodels/auth_controller.dart';

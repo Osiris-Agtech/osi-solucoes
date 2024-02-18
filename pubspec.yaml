@@ -1,4 +1,4 @@
-name: osi_solucoes
+name: sigma_hort_gestao_producao
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -85,7 +85,7 @@ flutter_icons:
   android: "launcher_icon"
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/icons/launcher_icon.png"
+  image_path: "assets/icons/launcher_icon_gestao_producao.png"
  
 
 

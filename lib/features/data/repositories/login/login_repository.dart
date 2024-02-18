@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:osi_solucoes/core/errors/failure.dart';
-import 'package:osi_solucoes/features/data/datasources/login/login_datasource.dart';
+import 'package:sigma_hort_gestao_producao/core/errors/failure.dart';
+import 'package:sigma_hort_gestao_producao/features/data/datasources/login/login_datasource.dart';
 
 import '../../../presenter/models/usuario/usuario_model.dart';
 import 'login_repository_interface.dart';

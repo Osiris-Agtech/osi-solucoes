@@ -5,10 +5,10 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/nomePage.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/reservatorioPage.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/setor_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/area_cultivo/N2/components/nomePage.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/area_cultivo/N2/components/reservatorioPage.dart';
 
 SizedBox pagesNovoSetor(
     BuildContext context,

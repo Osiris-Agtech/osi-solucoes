@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/detalhes_reservatorio_page.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/reservatorio/detalhes_reservatorio_page.dart';
 
 Padding reservatorioItem(int index, ReservatoriosStore store) {
   return Padding(

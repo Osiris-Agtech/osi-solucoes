@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/auth_controller.dart';
 
 part 'home_store.g.dart';
 

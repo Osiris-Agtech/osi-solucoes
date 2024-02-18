@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/core/utils/toast.dart';
-import 'package:osi_solucoes/features/data/repositories/recuperarSenha/recuperar_senha_repository.dart';
-import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_producao/core/utils/toast.dart';
+import 'package:sigma_hort_gestao_producao/features/data/repositories/recuperarSenha/recuperar_senha_repository.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/usuario/usuario_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/routes/routes.dart';
 
 part 'recuperar_senha_store.g.dart';
 

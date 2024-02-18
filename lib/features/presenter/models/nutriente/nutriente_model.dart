@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, file_names
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
 
 part 'nutriente_model.g.dart';
 

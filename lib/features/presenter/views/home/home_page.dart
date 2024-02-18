@@ -7,10 +7,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
-import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/login/multi_account_page.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/onboarding/splash_page.dart';
 
 import '../../../../core/services/local_storage.dart';
 import '../../viewmodels/auth_controller.dart';

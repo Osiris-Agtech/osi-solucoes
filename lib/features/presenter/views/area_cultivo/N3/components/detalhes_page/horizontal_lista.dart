@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/modulos_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/lote_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/modulos_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/reservatorios_store.dart';
 
 import 'custom_dialog.dart';
 
@@ -19,83 +17,83 @@ SingleChildScrollView horizontalList(BuildContext context,
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
-          width: 24,
-        ),
-        Visibility(
-          visible: store.loteSelecionado.reservatorio?.id != null,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              InkWell(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onTap: () async {
-                  reservatorioStore.setReservatorioDetalhes(
-                      store.loteSelecionado.reservatorio!);
-                  await modulosStore.setPageViewController(1);
-                  Get.toNamed(
-                    Routes.modulosPage,
-                    // () => const ModulosPage(),
-                    // transition: Transition.rightToLeft,
-                  );
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircleAvatar(
-                      radius: 25,
-                      child: SvgPicture.asset(
-                        "assets/icons/reservatorio_icon.svg",
-                      ),
-                      backgroundColor: Constants.kCardColor,
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    const Text(
-                      'Reservatório',
-                      style: TextStyle(
-                        color: Constants.kGreyText,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                width: 24,
-              ),
-            ],
-          ),
-        ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircleAvatar(
-              radius: 25,
-              child: SvgPicture.asset(
-                "assets/icons/caderno_campo_icon.svg",
-                height: 25,
-                width: 25,
-              ),
-              backgroundColor: Constants.kCardColor,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            const Text(
-              'Caderno de\nCampo',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Constants.kGreyText,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+        // const SizedBox(
+        //   width: 24,
+        // ),
+        // Visibility(
+        //   visible: store.loteSelecionado.reservatorio?.id != null,
+        //   child: Row(
+        //     mainAxisSize: MainAxisSize.min,
+        //     children: [
+        //       InkWell(
+        //         splashColor: Colors.transparent,
+        //         highlightColor: Colors.transparent,
+        //         onTap: () async {
+        //           reservatorioStore.setReservatorioDetalhes(
+        //               store.loteSelecionado.reservatorio!);
+        //           await modulosStore.setPageViewController(1);
+        //           Get.toNamed(
+        //             Routes.modulosPage,
+        //             // () => const ModulosPage(),
+        //             // transition: Transition.rightToLeft,
+        //           );
+        //         },
+        //         child: Column(
+        //           mainAxisSize: MainAxisSize.min,
+        //           children: [
+        //             CircleAvatar(
+        //               radius: 25,
+        //               child: SvgPicture.asset(
+        //                 "assets/icons/reservatorio_icon.svg",
+        //               ),
+        //               backgroundColor: Constants.kCardColor,
+        //             ),
+        //             const SizedBox(
+        //               height: 8,
+        //             ),
+        //             const Text(
+        //               'Reservatório',
+        //               style: TextStyle(
+        //                 color: Constants.kGreyText,
+        //                 fontSize: 16,
+        //                 fontWeight: FontWeight.bold,
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //       const SizedBox(
+        //         width: 24,
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // Column(
+        //   mainAxisSize: MainAxisSize.min,
+        //   children: [
+        //     CircleAvatar(
+        //       radius: 25,
+        //       child: SvgPicture.asset(
+        //         "assets/icons/caderno_campo_icon.svg",
+        //         height: 25,
+        //         width: 25,
+        //       ),
+        //       backgroundColor: Constants.kCardColor,
+        //     ),
+        //     const SizedBox(
+        //       height: 8,
+        //     ),
+        //     const Text(
+        //       'Caderno de\nCampo',
+        //       textAlign: TextAlign.center,
+        //       style: TextStyle(
+        //         color: Constants.kGreyText,
+        //         fontSize: 16,
+        //         fontWeight: FontWeight.bold,
+        //       ),
+        //     ),
+        //   ],
+        // ),
         const SizedBox(
           width: 24,
         ),

@@ -2,14 +2,14 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:osi_solucoes/core/utils/parse_permissao.dart';
-import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe_repository.dart';
-import 'package:osi_solucoes/features/presenter/models/cargo/cargo_model.dart';
-import 'package:osi_solucoes/features/presenter/models/pessoa/pessoa_model.dart';
-import 'package:osi_solucoes/features/presenter/models/usuario/user_map_model.dart';
-import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:sigma_hort_gestao_producao/core/utils/parse_permissao.dart';
+import 'package:sigma_hort_gestao_producao/features/data/repositories/gerenciarEquipe/gerenciar_equipe_repository.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/cargo/cargo_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/pessoa/pessoa_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/usuario/user_map_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/usuario/usuario_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/auth_controller.dart';
 import "package:collection/collection.dart";
 
 import '../../../core/utils/toast.dart';
@@ -349,5 +349,4 @@ abstract class _GerenciarEquipeBase with Store {
   }
 
   //####################### END CADASTRAR USUARIO  ##########################
-
 }

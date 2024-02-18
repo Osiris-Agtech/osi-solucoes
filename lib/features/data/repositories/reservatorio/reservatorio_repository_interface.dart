@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/reservatorio/reservatorio_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 
 import '../../../../core/errors/failure.dart';
 

@@ -3,12 +3,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:flutter/material.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/views/ajuste/ajustes_page.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/area_cultivo_page.dart';
-import 'package:osi_solucoes/features/presenter/views/caderno_campo/caderno_campo_page.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/reservatorios_page.dart';
-import 'package:osi_solucoes/features/presenter/views/solucao/solucao_page.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/ajuste/ajustes_page.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/area_cultivo/N1/area_cultivo_page.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/caderno_campo/caderno_campo_page.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/reservatorio/reservatorios_page.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/solucao/solucao_page.dart';
 
 import '../../viewmodels/modulos_store.dart';
 

@@ -3,13 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/area_cultivo/N1/area_cultivo_page.dart'
+    as ac;
+import 'package:sigma_hort_gestao_producao/features/presenter/views/onboarding/splash_page.dart';
 import 'package:rive/rive.dart';
 import 'package:flutter/material.dart';
 
 import '../../viewmodels/cadastro_store.dart';
-import '../home/home_page.dart';
 
 class ConfirmaSegurancaPage extends StatefulWidget {
   final String title;
@@ -238,7 +239,8 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
                                     showDoneAnimation(context),
                                     await Future.delayed(
                                         const Duration(milliseconds: 1400)),
-                                    Get.offAll(() => const HomePage()),
+                                    Get.offAll(
+                                        () => const ac.AreaCultivoPage()),
                                   }
                                 : {
                                     showErrorDialog(context, res),

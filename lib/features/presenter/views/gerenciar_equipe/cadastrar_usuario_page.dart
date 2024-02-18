@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/features/presenter/models/cargo/cargo_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/cargo/cargo_model.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/gerenciar_equipe_store.dart';

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "osi_solucoes" "\0"
+            VALUE "FileDescription", "sigma_hort_gestao_producao" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "osi_solucoes" "\0"
+            VALUE "InternalName", "sigma_hort_gestao_producao" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "osi_solucoes.exe" "\0"
-            VALUE "ProductName", "osi_solucoes" "\0"
+            VALUE "OriginalFilename", "sigma_hort_gestao_producao.exe" "\0"
+            VALUE "ProductName", "sigma_hort_gestao_producao" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

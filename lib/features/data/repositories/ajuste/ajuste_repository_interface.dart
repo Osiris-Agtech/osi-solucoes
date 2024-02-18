@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:osi_solucoes/core/errors/failure.dart';
-import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
+import 'package:sigma_hort_gestao_producao/core/errors/failure.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/reservatorio/reservatorio_model.dart';
 import '../../../presenter/models/atividade/atividade_model.dart';
 
 abstract class IAjusteRepository {

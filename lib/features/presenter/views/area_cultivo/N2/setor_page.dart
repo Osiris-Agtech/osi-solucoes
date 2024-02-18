@@ -6,14 +6,14 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
-import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/area/area_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/setor/setor_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/area_cultivo_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/lote_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/setor_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/widgets/floating_actino_button.dart';
 import '../../home/components/top_app_bar.dart';
 
 class SetorPage extends StatefulWidget {
@@ -187,6 +187,7 @@ class _AppBarState extends State<AppBar> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TopAppBar(
+                showBackButton: true,
                 namePage: widget.areaN1.nome ?? '',
                 subtitle: "Lista de setores cadastrados",
               ),

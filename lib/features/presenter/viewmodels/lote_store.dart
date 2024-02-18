@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/core/utils/toast.dart';
-import 'package:osi_solucoes/features/data/repositories/lote/lote_repository.dart';
-import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
-import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
-import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
-import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:sigma_hort_gestao_producao/core/utils/toast.dart';
+import 'package:sigma_hort_gestao_producao/features/data/repositories/lote/lote_repository.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/cultura/cultura_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/lote/lote_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/reservatorio/reservatorio_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/setor/setor_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/auth_controller.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/setor_store.dart';
 
 import '../models/area/area_model.dart';
 

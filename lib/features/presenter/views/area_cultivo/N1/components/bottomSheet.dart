@@ -2,10 +2,10 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components/novaLocalizacaoPage.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components/pagesNovaAreaCultivo.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/area_cultivo_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/area_cultivo/N1/components/novaLocalizacaoPage.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/area_cultivo/N1/components/pagesNovaAreaCultivo.dart';
 
 Future<void> bottomSheet(
     BuildContext context,

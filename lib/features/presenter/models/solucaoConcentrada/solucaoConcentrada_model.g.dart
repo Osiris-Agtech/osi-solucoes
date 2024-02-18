@@ -14,7 +14,7 @@ SolucaoConcentrada _$SolucaoConcentradaFromJson(Map<String, dynamic> json) =>
       created_at: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
-      fator_concentracao: (json['fator_concentracao'] as num?)?.toDouble(),
+      fator_concentracao: double.tryParse(json['fator_concentracao']),
       solucoes_fertilizantes_concentradas:
           (json['solucoes_fertilizantes_concentradas'] as List<dynamic>?)
               ?.map((e) => SolucaoFertilizanteConcentrada.fromJson(

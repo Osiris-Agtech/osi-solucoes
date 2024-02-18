@@ -3,14 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
-import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/atividade/atividade_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/usuario/usuario_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/auth_controller.dart';
 import 'package:timelines/timelines.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert' show jsonDecode, utf8;
 
-import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/home/components/top_app_bar.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/caderno_campo_store.dart';

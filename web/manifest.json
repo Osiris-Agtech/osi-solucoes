@@ -1,6 +1,6 @@
 {
-    "name": "osi_solucoes",
-    "short_name": "osi_solucoes",
+    "name": "sigma_hort_gestao_producao",
+    "short_name": "sigma_hort_gestao_producao",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/features/data/repositories/area/area_repository.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:sigma_hort_gestao_producao/features/data/repositories/area/area_repository.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/auth_controller.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/setor_store.dart';
 import 'package:search_cep/search_cep.dart';
 
 import '../../../core/utils/toast.dart';

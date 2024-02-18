@@ -1,8 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
-import 'package:osi_solucoes/features/presenter/models/lotesAtividades/lotes_atividades_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/conta/conta_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/lotesAtividades/lotes_atividades_model.dart';
 
 part 'atividade_model.g.dart';
 

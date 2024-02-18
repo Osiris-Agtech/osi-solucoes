@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.osi_solucoes">
+    package="com.example.sigma_hort_gestao_producao">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="Calculadora Hidropônica"
+        android:label="Gestão da Produção - SIGMA HORT"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

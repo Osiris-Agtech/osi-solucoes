@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:localization/localization.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/routes/routes.dart';
 
 forgotPassword() {
   return TextButton(

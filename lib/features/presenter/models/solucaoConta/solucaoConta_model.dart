@@ -1,8 +1,8 @@
 // ignore_for_file: non_constant_identifier_names, file_names
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/conta/conta_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 
 part 'solucaoConta_model.g.dart';
 

@@ -4,12 +4,13 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
-// import 'package:osi_solucoes/app//modules/cadastro/cadastro_store.dart';
+// import 'package:sigma_hort_gestao_producao/app//modules/cadastro/cadastro_store.dart';
 import 'package:flutter/material.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/core/errors/failure.dart';
-import 'package:osi_solucoes/features/presenter/views/ajuste/resultadoajuste_page.dart';
-import 'package:osi_solucoes/features/presenter/views/home/home_page.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/core/errors/failure.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/ajuste/resultadoajuste_page.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/area_cultivo/N1/area_cultivo_page.dart'
+    as ac;
 
 import '../../viewmodels/cadastro_store.dart';
 
@@ -315,8 +316,8 @@ class CadastroPageState extends State<CadastroPage> {
                                               await Future.delayed(
                                                   const Duration(
                                                       milliseconds: 1400)),
-                                              Get.offAll(
-                                                  () => const HomePage()),
+                                              Get.offAll(() =>
+                                                  const ac.AreaCultivoPage()),
                                             }
                                           : {
                                               showErrorDialog(context, res),

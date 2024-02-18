@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:osi_solucoes/core/errors/failure.dart';
-import 'package:osi_solucoes/features/data/datasources/solucoes/solucoes_nutritivas_datasource.dart';
-import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_repository_interface.dart';
-import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
+import 'package:sigma_hort_gestao_producao/core/errors/failure.dart';
+import 'package:sigma_hort_gestao_producao/features/data/datasources/solucoes/solucoes_nutritivas_datasource.dart';
+import 'package:sigma_hort_gestao_producao/features/data/repositories/solucoes/solucoes_repository_interface.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/fertilizante/fertilizante_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 
 class SolucaoRepository implements ISolucaoRepository {
   final ISolucaoDatasource datasource;

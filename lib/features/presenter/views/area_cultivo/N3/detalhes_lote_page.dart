@@ -3,10 +3,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/lote_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/reservatorios_store.dart';
 
 import 'components/detalhes_page/dados_cultivo.dart';
 import 'components/detalhes_page/datas_itens.dart';
@@ -295,6 +295,35 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                 ),
               ),
             ],
+          ),
+        ),
+        Visibility(
+          visible: (store.loteSelecionado.reservatorio?.nome ?? '').isNotEmpty,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 4.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Reservatório: ',
+                  style: TextStyle(
+                    color: Constants.kText2.withOpacity(.8),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Flexible(
+                  child: Text(
+                    store.loteSelecionado.reservatorio?.nome ?? '-',
+                    style: const TextStyle(
+                      color: Constants.kPrimaryColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         const SizedBox(

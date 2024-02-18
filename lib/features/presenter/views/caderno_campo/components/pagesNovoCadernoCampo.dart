@@ -5,11 +5,11 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
-import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/atividadePage.dart';
-import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/autorPage.dart';
-import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/lotePage.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/caderno_campo_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/caderno_campo/components/atividadePage.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/caderno_campo/components/autorPage.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/caderno_campo/components/lotePage.dart';
 
 SizedBox pagesNovoCadernoCampo(
     BuildContext context,

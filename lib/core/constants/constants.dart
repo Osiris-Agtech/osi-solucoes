@@ -6,7 +6,8 @@ class Constants {
   // static const String productionUrl = 'http://200.129.247.241:4000/';
 
   // Colors
-  static const kPrimaryColor = Color.fromARGB(255, 38, 193, 100);
+  static const kPrimaryColor =
+      Color(0xFF4398D1); //Color.fromARGB(255, 38, 193, 100);
   static const kSecondaryColor = Color(0xFF82A1B1);
   static const kButtonGrey = Color(0xFF767676);
   static const kGreyMedium = Color(0xFF707070);

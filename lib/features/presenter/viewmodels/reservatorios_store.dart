@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/core/utils/toast.dart';
-import 'package:osi_solucoes/features/data/repositories/reservatorio/reservatorio_repository.dart';
-import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
-import 'package:osi_solucoes/features/presenter/models/relacaoNutriente/relacaoNutriente_model.dart';
-import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:sigma_hort_gestao_producao/core/utils/toast.dart';
+import 'package:sigma_hort_gestao_producao/features/data/repositories/reservatorio/reservatorio_repository.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/relacaoNutriente/relacaoNutriente_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/reservatorio/reservatorio_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/auth_controller.dart';
 
 part 'reservatorios_store.g.dart';
 

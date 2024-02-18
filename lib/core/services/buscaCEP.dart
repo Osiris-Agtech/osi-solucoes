@@ -2,8 +2,8 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
-import 'package:osi_solucoes/core/errors/errors.dart';
-import 'package:osi_solucoes/core/errors/failure.dart';
+import 'package:sigma_hort_gestao_producao/core/errors/errors.dart';
+import 'package:sigma_hort_gestao_producao/core/errors/failure.dart';
 import '../../features/presenter/models/resultadoCEP/resultadoCEP_model.dart';
 
 Future<Either<Failure, ResultCep>> buscarPorCEP(String cep) async {

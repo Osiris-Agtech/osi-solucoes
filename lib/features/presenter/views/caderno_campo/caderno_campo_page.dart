@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
-import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
-import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/area/area_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/lote/lote_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/setor/setor_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/home/components/top_app_bar.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/caderno_campo_store.dart';

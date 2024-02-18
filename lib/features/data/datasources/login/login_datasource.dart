@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:graphql/client.dart';
-import 'package:osi_solucoes/core/errors/failure.dart';
-import 'package:osi_solucoes/features/data/api_source.dart';
+import 'package:sigma_hort_gestao_producao/core/errors/failure.dart';
+import 'package:sigma_hort_gestao_producao/features/data/api_source.dart';
 
 import '../../../../core/errors/errors.dart';
 import '../../../presenter/models/usuario/usuario_model.dart';

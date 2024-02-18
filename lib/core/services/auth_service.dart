@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/usuario/usuario_model.dart';
 
 class AuthService extends GetxService {
   Future<AuthService> init() async => this;

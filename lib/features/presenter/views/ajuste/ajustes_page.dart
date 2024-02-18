@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/core/utils/toast.dart';
-import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/core/utils/toast.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/reservatorio/reservatorio_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/routes/routes.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 
 import '../../viewmodels/ajustes_store.dart';

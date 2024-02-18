@@ -2,16 +2,15 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/pagesNovoSetor.dart';
+import 'package:sigma_hort_gestao_producao/core/constants/constants.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/setor_store.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/views/area_cultivo/N2/components/pagesNovoSetor.dart';
 
 Future<void> bottomSheet(
-  BuildContext context,
-  CarouselController carouselController,
-  CarouselController controlerPages,
-  SetorStore store
-) {
+    BuildContext context,
+    CarouselController carouselController,
+    CarouselController controlerPages,
+    SetorStore store) {
   return showModalBottomSheet<void>(
     backgroundColor: Constants.kBackgroundColor,
     context: context,

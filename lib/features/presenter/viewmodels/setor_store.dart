@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:osi_solucoes/core/utils/toast.dart';
-import 'package:osi_solucoes/features/data/repositories/setor/setor_repository.dart';
-import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
-import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
-import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:sigma_hort_gestao_producao/core/utils/toast.dart';
+import 'package:sigma_hort_gestao_producao/features/data/repositories/setor/setor_repository.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/area/area_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/reservatorio/reservatorio_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/setor/setor_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/routes/routes.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/auth_controller.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/lote_store.dart';
 
 part 'setor_store.g.dart';
 
@@ -266,5 +266,4 @@ abstract class _SetorStoreBase with Store {
     isNovoSetorLoading = false;
   }
   // #################### END CADASTRO SETOR #######################
-
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
+import 'package:sigma_hort_gestao_producao/features/presenter/models/usuario/usuario_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage {
