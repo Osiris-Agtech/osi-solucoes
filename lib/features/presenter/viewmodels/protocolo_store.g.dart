@@ -214,6 +214,37 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
+  final _$novoTituloFaseAtom = Atom(name: '_ProtocoloStoreBase.novoTituloFase');
+
+  @override
+  String? get novoTituloFase {
+    _$novoTituloFaseAtom.reportRead();
+    return super.novoTituloFase;
+  }
+
+  @override
+  set novoTituloFase(String? value) {
+    _$novoTituloFaseAtom.reportWrite(value, super.novoTituloFase, () {
+      super.novoTituloFase = value;
+    });
+  }
+
+  final _$novoDuracaoDiasFaseAtom =
+      Atom(name: '_ProtocoloStoreBase.novoDuracaoDiasFase');
+
+  @override
+  int? get novoDuracaoDiasFase {
+    _$novoDuracaoDiasFaseAtom.reportRead();
+    return super.novoDuracaoDiasFase;
+  }
+
+  @override
+  set novoDuracaoDiasFase(int? value) {
+    _$novoDuracaoDiasFaseAtom.reportWrite(value, super.novoDuracaoDiasFase, () {
+      super.novoDuracaoDiasFase = value;
+    });
+  }
+
   final _$novaCulturaControllerAtom =
       Atom(name: '_ProtocoloStoreBase.novaCulturaController');
 
@@ -326,6 +357,37 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
+  final _$faseListAtom = Atom(name: '_ProtocoloStoreBase.faseList');
+
+  @override
+  List<Fase> get faseList {
+    _$faseListAtom.reportRead();
+    return super.faseList;
+  }
+
+  @override
+  set faseList(List<Fase> value) {
+    _$faseListAtom.reportWrite(value, super.faseList, () {
+      super.faseList = value;
+    });
+  }
+
+  final _$createAtivAcaoListAtom =
+      Atom(name: '_ProtocoloStoreBase.createAtivAcaoList');
+
+  @override
+  List<Acao> get createAtivAcaoList {
+    _$createAtivAcaoListAtom.reportRead();
+    return super.createAtivAcaoList;
+  }
+
+  @override
+  set createAtivAcaoList(List<Acao> value) {
+    _$createAtivAcaoListAtom.reportWrite(value, super.createAtivAcaoList, () {
+      super.createAtivAcaoList = value;
+    });
+  }
+
   final _$buscarProtocolosAsyncAction =
       AsyncAction('_ProtocoloStoreBase.buscarProtocolos');
 
@@ -334,12 +396,12 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     return _$buscarProtocolosAsyncAction.run(() => super.buscarProtocolos());
   }
 
-  final _$registrarCulturaAsyncAction =
-      AsyncAction('_ProtocoloStoreBase.registrarCultura');
+  final _$registrarFaseAsyncAction =
+      AsyncAction('_ProtocoloStoreBase.registrarFase');
 
   @override
-  Future registrarCultura() {
-    return _$registrarCulturaAsyncAction.run(() => super.registrarCultura());
+  Future registrarFase() {
+    return _$registrarFaseAsyncAction.run(() => super.registrarFase());
   }
 
   final _$buscarCulturasAsyncAction =
@@ -442,11 +504,33 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic alterarTituloFase(String name) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarTituloFase');
+    try {
+      return super.alterarTituloFase(name);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic alterarRadioIndicator(int value) {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.alterarRadioIndicator');
     try {
       return super.alterarRadioIndicator(value);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarDuracaoDiasFase(int value) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarDuracaoDiasFase');
+    try {
+      return super.alterarDuracaoDiasFase(value);
     } finally {
       _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -512,13 +596,17 @@ culturaList: ${culturaList},
 novoTipoProtocolo: ${novoTipoProtocolo},
 novoSistemaProtocolo: ${novoSistemaProtocolo},
 novoFormaProtocolo: ${novoFormaProtocolo},
+novoTituloFase: ${novoTituloFase},
+novoDuracaoDiasFase: ${novoDuracaoDiasFase},
 novaCulturaController: ${novaCulturaController},
 dropdownTitle: ${dropdownTitle},
 novoNomeProtocolo: ${novoNomeProtocolo},
 mockList: ${mockList},
 novaCulturaProtocolo: ${novaCulturaProtocolo},
 novasAtividadesProtocolo: ${novasAtividadesProtocolo},
-protocoloList: ${protocoloList}
+protocoloList: ${protocoloList},
+faseList: ${faseList},
+createAtivAcaoList: ${createAtivAcaoList}
     ''';
   }
 }

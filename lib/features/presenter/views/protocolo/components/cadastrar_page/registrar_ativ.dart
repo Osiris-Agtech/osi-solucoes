@@ -77,7 +77,7 @@ registrarAtivPage(BuildContext context, ProtocoloStore store) {
           ),
           const SizedBox(height: 16),
           Observer(builder: (_) {
-            if (true) {
+            if (store.createAtivAcaoList.isEmpty) {
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 100, left: 60, right: 60),
@@ -125,7 +125,7 @@ class ListFases extends StatelessWidget {
           controller: _scrollController,
           physics: const BouncingScrollPhysics(),
           shrinkWrap: true,
-          itemCount: 3,
+          itemCount: store.createAtivAcaoList.length,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),

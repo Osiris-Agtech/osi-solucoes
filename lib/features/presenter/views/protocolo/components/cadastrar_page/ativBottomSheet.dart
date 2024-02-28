@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -292,36 +293,54 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
               ),
               const SizedBox(height: 16),
               const Text('Titulo:'),
-              Autocomplete<String>(
-                optionsBuilder: (TextEditingValue textEditingValue) {
-                  if (textEditingValue.text == '') {
-                    return const Iterable<String>.empty();
-                  }
-                  return store.mockList.where((String option) {
-                    return option.contains(textEditingValue.text.toLowerCase());
-                  });
-                },
-                onSelected: (String selection) {
-                  debugPrint('You just selected $selection');
-                },
-              ),
+              Observer(builder: (_) {
+                return TextFormField(
+                  initialValue: store.novoTituloFase,
+                  textCapitalization: TextCapitalization.words,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  decoration: const InputDecoration(
+                    hintText: 'EX. Fase de Germinação',
+                    hintStyle: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  onChanged: store.alterarTituloFase,
+                );
+              }),
               const SizedBox(height: 16),
               const Text('Total de Dias:'),
-              InkWell(
-                child: TextFormField(
+              Observer(builder: (_) {
+                return TextFormField(
+                  initialValue: store.novoDuracaoDiasFase.toString(),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
                   textInputAction: TextInputAction.next,
+                  textCapitalization: TextCapitalization.words,
                   style: const TextStyle(
+                    fontSize: 16,
                     fontWeight: FontWeight.normal,
                     fontStyle: FontStyle.italic,
                   ),
                   decoration: const InputDecoration(
                     hintStyle: TextStyle(
+                      fontSize: 16,
                       fontWeight: FontWeight.normal,
                       fontStyle: FontStyle.italic,
                     ),
                   ),
-                ),
-              ),
+                  onChanged: (value) {
+                    store.alterarDuracaoDiasFase(int.parse(value));
+                  },
+                );
+              }),
               // const Padding(
               //   padding: EdgeInsets.only(top: 5.0),
               //   child: Text('Data Prevista: 24/10/2023 - 26/10/2023'),
@@ -341,13 +360,15 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                         ),
                       ),
                       child: const Text(
-                        "Adicionar",
+                        "Salvar",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        store.registrarFase();
+                      },
                     ),
                   ),
                 ),

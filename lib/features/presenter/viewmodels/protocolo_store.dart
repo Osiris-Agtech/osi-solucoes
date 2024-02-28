@@ -3,8 +3,10 @@ import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/protocolo/protocolo_repository.dart';
+import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
 import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
+import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 
 part 'protocolo_store.g.dart';
@@ -55,6 +57,12 @@ abstract class _ProtocoloStoreBase with Store {
   String? novoFormaProtocolo;
 
   @observable
+  String? novoTituloFase;
+
+  @observable
+  int? novoDuracaoDiasFase;
+
+  @observable
   TextEditingController novaCulturaController = TextEditingController();
 
   @observable
@@ -74,6 +82,12 @@ abstract class _ProtocoloStoreBase with Store {
 
   @observable
   List<Protocolo> protocoloList = [];
+
+  @observable
+  List<Fase> faseList = [];
+
+  @observable
+  List<Acao> createAtivAcaoList = [];
 
   @action
   setIsNovaCultura(bool value) => isNovaCultura = value;
@@ -108,8 +122,18 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
+  alterarTituloFase(String name) {
+    novoTituloFase = name;
+  }
+
+  @action
   alterarRadioIndicator(int value) {
     radioIndicator = value;
+  }
+
+  @action
+  alterarDuracaoDiasFase(int value) {
+    novoDuracaoDiasFase = value;
   }
 
   @action
@@ -144,28 +168,28 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  registrarCultura() async {
+  registrarFase() async {
     isProtocoloListLoading = true;
 
-    if (novaCulturaController.text.isNotEmpty) {
-      Cultura novaCultura = Cultura(
-        nome: novaCulturaController.text,
-        privado: true,
+    if (novoTituloFase != null && novoTituloFase != "") {
+      Fase novaFase = Fase(
+        nome: novoTituloFase,
+        duracao_dias: novoDuracaoDiasFase,
       );
 
-      // var conta = await loteRepository.registrarCultura(
-      //     novaCultura, authController.usuario.selected_conta!.conta!.id!);
+      var fase = await protocoloRepository.registrarFase(novaFase);
 
-      // conta.fold(
-      //   (err) {
-      //     toastError(message: err.message);
-      //   },
-      //   (data) async {
-      //     // culturaList = List.from([data, ...culturaList]);
-      //     setIsNovaCultura(false);
-      //   },
-      // );
+      fase.fold(
+        (err) {
+          toastError(message: err.message);
+        },
+        (data) async {
+          faseList = List.from([data, ...faseList]);
+          print(faseList);
+        },
+      );
     }
+    isProtocoloListLoading = false;
   }
 
   @action
@@ -201,6 +225,7 @@ abstract class _ProtocoloStoreBase with Store {
     novoFormaProtocolo = null;
     novoTipoProtocolo = null;
     novoSistemaProtocolo = null;
+    faseList.clear();
     novaCulturaProtocolo.clear();
   }
 }
