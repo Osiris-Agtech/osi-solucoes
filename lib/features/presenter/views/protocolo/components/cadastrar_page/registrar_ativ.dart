@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/ativBottomSheet.dart';
@@ -31,7 +33,9 @@ registrarAtivPage(BuildContext context, ProtocoloStore store) {
         const SizedBox(width: 16),
         FloatingActionButton(
           onPressed: () {
-            getBottomSheet(const AtivBottomSheet());
+            getBottomSheet(const AtivBottomSheet(
+              isNewRecord: true,
+            ));
           },
           backgroundColor: Constants.kPrimaryColor,
           child: const Icon(
@@ -72,75 +76,140 @@ registrarAtivPage(BuildContext context, ProtocoloStore store) {
             ),
           ),
           const SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-                controller: _scrollController,
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Constants.kCardColor,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    'Germinação',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'Período: ',
-                                      style: DefaultTextStyle.of(context).style,
-                                      children: const <TextSpan>[
-                                        TextSpan(
-                                          text: '2 dias',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            ...['oi', 'oi', 'oi']
-                                .asMap()
-                                .entries
-                                .map((entry) => atividadeItem(
-                                    index: entry.key, store: store))
-                                .toList()
-                          ],
+          Observer(builder: (_) {
+            if (true) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 100, left: 60, right: 60),
+                  child: Column(
+                    children: const [
+                      Text(
+                        'Nenhuma Fase ou Atividade ainda foi cadastrada para esse Protocolo, comece a partir do botão "+"',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xff6F6464),
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w800,
                         ),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  );
-                }),
-          ),
+                    ],
+                  ),
+                ),
+              );
+            }
+            return ListFases(scrollController: _scrollController);
+          }),
           const SizedBox(height: 24),
         ],
       ),
     ),
   );
+}
+
+class ListFases extends StatelessWidget {
+  const ListFases({
+    Key? key,
+    required ScrollController scrollController,
+  })  : _scrollController = scrollController,
+        super(key: key);
+
+  final ScrollController _scrollController;
+
+  @override
+  Widget build(BuildContext context) {
+    ProtocoloStore store = GetIt.I<ProtocoloStore>();
+
+    return Expanded(
+      child: ListView.builder(
+          controller: _scrollController,
+          physics: const BouncingScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Constants.kCardColor,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 8,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(children: [
+                          const Text(
+                            'Germinação',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const Spacer(),
+                          InkWell(
+                            onTap: () {
+                              getBottomSheet(const AtivBottomSheet(
+                                isNewRecord: false,
+                                isFase: true,
+                              ));
+                            },
+                            child: const Icon(
+                              Icons.edit,
+                              size: 20,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          InkWell(
+                            onTap: () => null,
+                            child: const Icon(
+                              Icons.delete,
+                              size: 20,
+                            ),
+                          ),
+                        ]),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 2,
+                          horizontal: 16,
+                        ),
+                        child: RichText(
+                          text: TextSpan(
+                            text: 'Período: ',
+                            style: DefaultTextStyle.of(context).style,
+                            children: const <TextSpan>[
+                              TextSpan(
+                                text: '2 dias',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      ...['oi', 'oi', 'oi']
+                          .asMap()
+                          .entries
+                          .map((entry) =>
+                              atividadeItem(index: entry.key, store: store))
+                          .toList()
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
+    );
+  }
 }

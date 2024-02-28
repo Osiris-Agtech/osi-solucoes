@@ -3,8 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/ativBottomSheet.dart';
-
-import '../../../../widgets/get_bottom_sheet.dart';
+import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
 
 Padding atividadeItem({
   required int index,
@@ -82,15 +81,29 @@ Padding atividadeItem({
                 const SizedBox(
                   width: 16,
                 ),
-                InkWell(
-                  onTap: () {
-                    getBottomSheet(const AtivBottomSheet());
-                  },
-                  child: const Icon(
-                    Icons.edit,
-                    size: 20,
+                PopupMenuButton(
+                  icon: const Icon(
+                    Icons.more_vert,
                     color: Constants.kPrimaryColor,
                   ),
+                  onSelected: (newValue) {
+                    if (newValue == 1) {
+                      getBottomSheet(const AtivBottomSheet(
+                        isNewRecord: false,
+                        isFase: false,
+                      ));
+                    }
+                  },
+                  itemBuilder: (_) => <PopupMenuEntry>[
+                    const PopupMenuItem(
+                      child: Text('Editar'),
+                      value: 1,
+                    ),
+                    const PopupMenuItem(
+                      child: Text('Apagar'),
+                      value: 2,
+                    ),
+                  ],
                 ),
               ],
             ),

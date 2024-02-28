@@ -19,6 +19,12 @@ abstract class _ProtocoloStoreBase with Store {
   int dotIndicator = 1;
 
   @observable
+  int radioIndicator = 1;
+
+  @observable
+  bool isNovaFaseBottonSheet = false;
+
+  @observable
   bool isProtocoloListLoading = false;
 
   @observable
@@ -26,6 +32,9 @@ abstract class _ProtocoloStoreBase with Store {
 
   @observable
   bool canNotificate = false;
+
+  @observable
+  bool diasDaAtiv = false;
 
   @observable
   bool mostrarErroFormulario = false;
@@ -49,7 +58,13 @@ abstract class _ProtocoloStoreBase with Store {
   TextEditingController novaCulturaController = TextEditingController();
 
   @observable
+  TextEditingController dropdownTitle = TextEditingController(text: 'teste1');
+
+  @observable
   String? novoNomeProtocolo;
+
+  @observable
+  List<String> mockList = ['teste1', 'teste2'];
 
   @observable
   List<Cultura> novaCulturaProtocolo = [];
@@ -70,6 +85,9 @@ abstract class _ProtocoloStoreBase with Store {
   setCanNotificate(bool value) => canNotificate = value;
 
   @action
+  setDiasDaAtiv(bool value) => diasDaAtiv = value;
+
+  @action
   alterarForma(String forma) {
     novoFormaProtocolo = forma;
   }
@@ -87,6 +105,16 @@ abstract class _ProtocoloStoreBase with Store {
   @action
   alterarNome(String name) {
     novoNomeProtocolo = name;
+  }
+
+  @action
+  alterarRadioIndicator(int value) {
+    radioIndicator = value;
+  }
+
+  @action
+  alterarIsNovaFaseBottonSheet(bool value) {
+    isNovaFaseBottonSheet = value;
   }
 
   @action

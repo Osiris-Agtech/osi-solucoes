@@ -24,6 +24,38 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
+  final _$radioIndicatorAtom = Atom(name: '_ProtocoloStoreBase.radioIndicator');
+
+  @override
+  int get radioIndicator {
+    _$radioIndicatorAtom.reportRead();
+    return super.radioIndicator;
+  }
+
+  @override
+  set radioIndicator(int value) {
+    _$radioIndicatorAtom.reportWrite(value, super.radioIndicator, () {
+      super.radioIndicator = value;
+    });
+  }
+
+  final _$isNovaFaseBottonSheetAtom =
+      Atom(name: '_ProtocoloStoreBase.isNovaFaseBottonSheet');
+
+  @override
+  bool get isNovaFaseBottonSheet {
+    _$isNovaFaseBottonSheetAtom.reportRead();
+    return super.isNovaFaseBottonSheet;
+  }
+
+  @override
+  set isNovaFaseBottonSheet(bool value) {
+    _$isNovaFaseBottonSheetAtom.reportWrite(value, super.isNovaFaseBottonSheet,
+        () {
+      super.isNovaFaseBottonSheet = value;
+    });
+  }
+
   final _$isProtocoloListLoadingAtom =
       Atom(name: '_ProtocoloStoreBase.isProtocoloListLoading');
 
@@ -68,6 +100,21 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   set canNotificate(bool value) {
     _$canNotificateAtom.reportWrite(value, super.canNotificate, () {
       super.canNotificate = value;
+    });
+  }
+
+  final _$diasDaAtivAtom = Atom(name: '_ProtocoloStoreBase.diasDaAtiv');
+
+  @override
+  bool get diasDaAtiv {
+    _$diasDaAtivAtom.reportRead();
+    return super.diasDaAtiv;
+  }
+
+  @override
+  set diasDaAtiv(bool value) {
+    _$diasDaAtivAtom.reportWrite(value, super.diasDaAtiv, () {
+      super.diasDaAtiv = value;
     });
   }
 
@@ -184,6 +231,21 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
+  final _$dropdownTitleAtom = Atom(name: '_ProtocoloStoreBase.dropdownTitle');
+
+  @override
+  TextEditingController get dropdownTitle {
+    _$dropdownTitleAtom.reportRead();
+    return super.dropdownTitle;
+  }
+
+  @override
+  set dropdownTitle(TextEditingController value) {
+    _$dropdownTitleAtom.reportWrite(value, super.dropdownTitle, () {
+      super.dropdownTitle = value;
+    });
+  }
+
   final _$novoNomeProtocoloAtom =
       Atom(name: '_ProtocoloStoreBase.novoNomeProtocolo');
 
@@ -197,6 +259,21 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   set novoNomeProtocolo(String? value) {
     _$novoNomeProtocoloAtom.reportWrite(value, super.novoNomeProtocolo, () {
       super.novoNomeProtocolo = value;
+    });
+  }
+
+  final _$mockListAtom = Atom(name: '_ProtocoloStoreBase.mockList');
+
+  @override
+  List<String> get mockList {
+    _$mockListAtom.reportRead();
+    return super.mockList;
+  }
+
+  @override
+  set mockList(List<String> value) {
+    _$mockListAtom.reportWrite(value, super.mockList, () {
+      super.mockList = value;
     });
   }
 
@@ -310,6 +387,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic setDiasDaAtiv(bool value) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.setDiasDaAtiv');
+    try {
+      return super.setDiasDaAtiv(value);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic alterarForma(String forma) {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.alterarForma');
@@ -354,6 +442,28 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic alterarRadioIndicator(int value) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarRadioIndicator');
+    try {
+      return super.alterarRadioIndicator(value);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarIsNovaFaseBottonSheet(bool value) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarIsNovaFaseBottonSheet');
+    try {
+      return super.alterarIsNovaFaseBottonSheet(value);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setDotIndicator(int value) {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.setDotIndicator');
@@ -390,9 +500,12 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   String toString() {
     return '''
 dotIndicator: ${dotIndicator},
+radioIndicator: ${radioIndicator},
+isNovaFaseBottonSheet: ${isNovaFaseBottonSheet},
 isProtocoloListLoading: ${isProtocoloListLoading},
 isEditing: ${isEditing},
 canNotificate: ${canNotificate},
+diasDaAtiv: ${diasDaAtiv},
 mostrarErroFormulario: ${mostrarErroFormulario},
 isNovaCultura: ${isNovaCultura},
 culturaList: ${culturaList},
@@ -400,7 +513,9 @@ novoTipoProtocolo: ${novoTipoProtocolo},
 novoSistemaProtocolo: ${novoSistemaProtocolo},
 novoFormaProtocolo: ${novoFormaProtocolo},
 novaCulturaController: ${novaCulturaController},
+dropdownTitle: ${dropdownTitle},
 novoNomeProtocolo: ${novoNomeProtocolo},
+mockList: ${mockList},
 novaCulturaProtocolo: ${novaCulturaProtocolo},
 novasAtividadesProtocolo: ${novasAtividadesProtocolo},
 protocoloList: ${protocoloList}
