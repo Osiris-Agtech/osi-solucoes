@@ -6,6 +6,8 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/agenda_store.dart';
 
+import '../../../widgets/date_picker.dart';
+
 class DetalhesBottomSheet extends StatefulWidget {
   const DetalhesBottomSheet({Key? key}) : super(key: key);
 
@@ -360,8 +362,16 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
                 const Text('Data'),
                 const SizedBox(height: 8),
                 GestureDetector(
-                  onTap: () {
-                    _selectDate(context);
+                  onTap: () async {
+                    // _selectDate(context);
+                    DateTime? dateTime = await datePicker(
+                      context: context,
+                      title: 'Data de Nascimento',
+                      initialDate: DateTime.now(),
+                    );
+                    if (dateTime != null) {
+                      // Executar ação
+                    }
                   },
                   child: Container(
                     height: 40,
