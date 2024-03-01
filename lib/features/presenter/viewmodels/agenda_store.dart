@@ -42,11 +42,20 @@ abstract class _AgendaStoreBase with Store {
       },
       (data) async {
         atividadeList = List.from(data);
-        atividadeList = List.from(atividadeList);
       },
     );
 
     isAcoesListLoading = false;
+  }
+
+  @action
+  List<Agenda> getEventsForDay(DateTime day) {
+    return atividadeList
+        .where((element) =>
+            element.data?.year == day.year &&
+            element.data?.month == day.month &&
+            element.data?.day == day.day)
+        .toList();
   }
 
   @computed

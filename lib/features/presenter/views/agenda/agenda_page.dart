@@ -48,6 +48,9 @@ class AgendaPageState extends State<AgendaPage> {
                 slivers: [
                   sliverAppBar(context),
                   agenda(),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: 16),
+                  ),
                   Observer(builder: (_) {
                     if (store.isAcoesListLoading) {
                       return loadingList();
@@ -113,10 +116,8 @@ class AgendaPageState extends State<AgendaPage> {
                 Icons.chevron_left,
                 color: Constants.kPrimaryColor,
               ),
-              rightChevronIcon: const Icon(
-                Icons.chevron_right,
-                color: Constants.kGreyText,
-              ),
+              rightChevronIcon: const Icon(Icons.chevron_right,
+                  color: Constants.kPrimaryColor),
             ),
             daysOfWeekStyle: DaysOfWeekStyle(
               dowTextFormatter: (date, locale) =>
@@ -128,16 +129,17 @@ class AgendaPageState extends State<AgendaPage> {
                 shape: BoxShape.circle,
               ),
               selectedDecoration: BoxDecoration(
-                color: Constants.kGreyText,
+                color: Constants.kPrimaryColor,
                 shape: BoxShape.circle,
               ),
             ),
+            eventLoader: store.getEventsForDay,
             calendarBuilders: CalendarBuilders(
               singleMarkerBuilder: (context, date, event) {
                 return Container(
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Constants.kGreyText,
+                    color: Constants.kPrimaryColor,
                   ),
                   width: 7.0,
                   height: 7.0,

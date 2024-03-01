@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/agenda_store.dart';
 import 'package:osi_solucoes/features/presenter/views/agenda/components/detalhes_bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
+
+import 'package:intl/intl.dart';
 
 Padding agendaItem({
   required int index,
@@ -29,61 +32,61 @@ Padding agendaItem({
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 15.0,
-            vertical: 15.0,
+            horizontal: 24.0,
+            vertical: 16.0,
           ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10.0,
-                        bottom: 5.0,
-                        top: 5.0,
-                      ),
-                      child: Text(
-                        //store.searchReservatorio[index].nome ?? "---",
-                        store.atividadeList[index].titulo ?? "---",
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                        ),
+                    Text(
+                      //store.searchReservatorio[index].nome ?? "---",
+                      store.atividadeList[index].titulo ?? "---",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Column(
-                        children: [
-                          const ListTile(
-                            title: Text("Miguel Ribeiro"),
-                            subtitle: Text("Admistrador"),
-                            leading: Icon(Icons.person_add),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 20,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ),
-                          Row(
-                            children: const [
-                              Text("28/07/2023"),
-                              Icon(
-                                Icons.circle,
-                                size: 10,
-                                color: Constants.kPrimaryColor,
-                              ),
-                              Text("14:30 PM")
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
+                    const ListTile(
+                      horizontalTitleGap: 0,
+                      title: Text("Miguel Ribeiro"),
+                      subtitle: Text("Admistrador"),
+                      leading: Icon(Icons.person_add),
+                    ),
+                    Row(
+                      children: [
+                        Text(DateFormat("dd/MM/y", 'pt_br')
+                                .format(
+                                  store.atividadeList[index].data!,
+                                )
+                                .capitalize ??
+                            ''),
+                        const SizedBox(width: 8),
+                        const Icon(
+                          Icons.circle,
+                          size: 8,
+                          color: Constants.kPrimaryColor,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(DateFormat("HH:mm", 'pt_br')
+                                .format(
+                                  store.atividadeList[index].data!,
+                                )
+                                .capitalize ??
+                            '')
+                      ],
+                    ),
                   ],
                 ),
+              ),
+              const Icon(
+                Icons.arrow_forward_ios,
+                size: 20,
+                color: Constants.kPrimaryColor,
               ),
             ],
           ),

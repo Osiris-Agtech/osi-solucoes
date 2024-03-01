@@ -116,6 +116,17 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
   }
 
   @override
+  List<Agenda> getEventsForDay(DateTime day) {
+    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
+        name: '_AgendaStoreBase.getEventsForDay');
+    try {
+      return super.getEventsForDay(day);
+    } finally {
+      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void onDaySelected(DateTime day, DateTime focusedDay) {
     final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
         name: '_AgendaStoreBase.onDaySelected');

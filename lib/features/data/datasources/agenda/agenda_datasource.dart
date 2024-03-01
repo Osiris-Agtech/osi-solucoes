@@ -22,6 +22,7 @@ class AgendaDatasource implements IAgendaDatasource {
               created_at: DateTime.now(),
               updated_at: DateTime.now(),
               deleted_at: DateTime.now(),
+              data: DateTime.now().subtract(Duration(days: index)),
               titulo: 'Titulo ${index + 1}',
               alerta: false,
               ativo: true,
