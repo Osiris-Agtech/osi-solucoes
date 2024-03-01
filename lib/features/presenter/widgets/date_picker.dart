@@ -14,8 +14,12 @@ Future<DateTime?> datePicker({
   return showRoundedDatePicker(
     context: context,
     title: title,
-    // titleTextStyle: getPurpleStyleHeading(),
-    // headerLine: getGreyLineColor(),
+    titleTextStyle: const TextStyle(
+      color: Constants.kPrimaryColor,
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+    ),
+    headerLine: Constants.kGreyLight,
     height: 300,
     initialDate: initialDate,
     firstDate: DateTime(DateTime.now().year - 100),
@@ -29,16 +33,32 @@ Future<DateTime?> datePicker({
       primarySwatch: createMaterialColor(Constants.kBackgroundColor),
     ),
     styleDatePicker: MaterialRoundedDatePickerStyle(
-      // textStyleDayButton: getRegularStyle(),
-      // textStyleYearButton: getRegularStyle(),
+      textStyleDayButton: const TextStyle(
+        color: Constants.kPrimaryColor,
+        fontWeight: FontWeight.w500,
+      ),
+      textStyleYearButton: const TextStyle(
+        color: Constants.kPrimaryColor,
+        fontWeight: FontWeight.w500,
+      ),
       textStyleDayHeader: const TextStyle(
-        color: Constants.kGreyLight,
+        color: Constants.kGreyMedium,
         fontWeight: FontWeight.bold,
       ),
-      // textStyleCurrentDayOnCalendar: getBoldStyle(),
+      textStyleCurrentDayOnCalendar: const TextStyle(
+        color: Constants.kGreyText,
+        fontWeight: FontWeight.bold,
+      ),
       textStyleDayOnCalendar: const TextStyle(color: Constants.kGreyMedium),
-      // textStyleDayOnCalendarSelected: getWhiteStyle(),
-      // textStyleMonthYearHeader: getPurpleStyle(),
+      textStyleDayOnCalendarSelected: const TextStyle(
+        color: Constants.kBackgroundColor,
+        fontWeight: FontWeight.bold,
+      ),
+      textStyleMonthYearHeader: const TextStyle(
+        color: Constants.kPrimaryColor,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
       paddingDatePicker: const EdgeInsets.all(0),
       // paddingMonthHeader: const EdgeInsets.fromLTRB(32, 22, 32, 22),
       paddingActionBar: const EdgeInsets.all(0),
@@ -58,6 +78,26 @@ Future<DateTime?> datePicker({
       textStyleButtonNegative: const TextStyle(color: Constants.kGreyMedium),
       decorationDateSelected: const BoxDecoration(
           color: Constants.kPrimaryColor, shape: BoxShape.circle),
+      phaseColors: {
+        Colors.blueAccent: [
+          DateTime(2024, 2, 1),
+          DateTime(2024, 2, 2),
+          DateTime(2024, 2, 3),
+          DateTime(2024, 2, 4),
+        ],
+        Colors.orangeAccent: [
+          DateTime(2024, 2, 5),
+          DateTime(2024, 2, 6),
+          DateTime(2024, 2, 7),
+          DateTime(2024, 2, 8),
+          DateTime(2024, 2, 9),
+        ],
+        Colors.amberAccent: [
+          DateTime(2024, 2, 12),
+          DateTime(2024, 2, 13),
+          DateTime(2024, 2, 14)
+        ],
+      },
       backgroundPicker: Constants.kBackgroundColor, //getBackgroundColor(),
       backgroundActionBar: Constants.kBackgroundColor, //getBackgroundColor(),
       backgroundHeaderMonth: Constants.kBackgroundColor, //getBackgroundColor(),

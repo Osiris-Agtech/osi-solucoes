@@ -21,6 +21,7 @@ class MaterialRoundedDatePickerStyle {
   double? marginTopArrowNext;
   double? marginRightArrowNext;
   BoxDecoration? decorationDateSelected;
+  Map<Color, List<DateTime>>? phaseColors;
   Color? colorArrowPrevious;
   Color? colorArrowNext;
   Color? backgroundPicker;
@@ -53,6 +54,7 @@ class MaterialRoundedDatePickerStyle {
     // this.textStyleButtonPositive,
     // this.textStyleButtonAction,
     this.decorationDateSelected,
+    this.phaseColors,
     this.colorArrowNext,
     this.colorArrowPrevious,
     this.backgroundActionBar,
