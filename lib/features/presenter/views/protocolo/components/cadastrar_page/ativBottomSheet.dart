@@ -4,6 +4,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/utils/toast.dart';
+import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/showFaseBottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
@@ -108,55 +110,76 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
               ),
               const SizedBox(height: 16),
               const Text('Selecione a Fase: '),
-              Container(
-                padding: const EdgeInsets.only(top: 5),
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  alignment: Alignment.center,
-                  value: 'Germinação (5 dias)',
-                  focusColor: Colors.transparent,
-                  iconEnabledColor: Constants.kPrimaryColor,
-                  elevation: 16,
-                  borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  onChanged: (String? newValue) {},
-                  items: <String>['Germinação (5 dias)', 'Germinação (2 dias)']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
+              Observer(builder: (_) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: DropdownButton<Fase>(
+                    isExpanded: true,
+                    value: store.selectedFase,
+                    alignment: Alignment.center,
+                    hint: store.faseDropDownList.isEmpty
+                        ? const Text("Crie uma fase ...")
+                        : const Text("Selecione uma fase ..."),
+                    focusColor: Colors.transparent,
+                    iconEnabledColor: Constants.kPrimaryColor,
+                    elevation: 16,
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    onChanged: (Fase? newValue) {
+                      if (newValue != null) {
+                        store.alterarDropdownFase(newValue);
+                      }
+                    },
+                    items: store.faseDropDownList
+                        .map<DropdownMenuItem<Fase>>((Fase value) {
+                      return DropdownMenuItem<Fase>(
+                        value: value,
+                        child: Text(
+                          value.nome ?? "",
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                );
+              }),
               const SizedBox(height: 16),
               const Text('Titulo:'),
-              TextFormField(
-                textInputAction: TextInputAction.next,
-                style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontStyle: FontStyle.italic,
-                ),
-                decoration: const InputDecoration(
-                  hintStyle: TextStyle(
+              Observer(builder: (_) {
+                return TextFormField(
+                  initialValue: store.novoTituloAtividade,
+                  onChanged: store.alterarTituloAtividade,
+                  textInputAction: TextInputAction.next,
+                  style: const TextStyle(
                     fontWeight: FontWeight.normal,
                     fontStyle: FontStyle.italic,
                   ),
-                ),
-              ),
+                  decoration: const InputDecoration(
+                    hintStyle: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                );
+              }),
               const SizedBox(height: 16),
-              const Text('Dia(s) da Atividade:'),
+              const Text('Dia da Atividade:'),
               TextFormField(
+                readOnly: true,
+                controller: store.diaDaAtivController,
                 onTap: () {
-                  getBottomSheet(
-                    const ShowFaseBottomSheet(),
-                  );
+                  if (store.selectedFase?.nome != null &&
+                      store.selectedFase?.duracao_dias != null) {
+                    getBottomSheet(
+                      const ShowFaseBottomSheet(),
+                    );
+                  } else {
+                    toastError(
+                      message: 'Selecione uma fase para atividade',
+                    );
+                  }
                 },
                 textInputAction: TextInputAction.next,
                 style: const TextStyle(
                   fontWeight: FontWeight.normal,
-                  fontStyle: FontStyle.italic,
                 ),
                 decoration: const InputDecoration(
                   suffixIcon: Icon(
@@ -171,19 +194,23 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
               ),
               const SizedBox(height: 16),
               const Text('Descrição:'),
-              TextFormField(
-                textInputAction: TextInputAction.next,
-                style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontStyle: FontStyle.italic,
-                ),
-                decoration: const InputDecoration(
-                  hintStyle: TextStyle(
+              Observer(builder: (_) {
+                return TextFormField(
+                  initialValue: store.novoDescricaoAtividade,
+                  onChanged: store.alterarDescricaoAtividade,
+                  textInputAction: TextInputAction.next,
+                  style: const TextStyle(
                     fontWeight: FontWeight.normal,
                     fontStyle: FontStyle.italic,
                   ),
-                ),
-              ),
+                  decoration: const InputDecoration(
+                    hintStyle: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                );
+              }),
               const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.only(bottom: 30),
@@ -205,7 +232,10 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        store.addToFaseList();
+                        Get.back();
+                      },
                     ),
                   ),
                 ),
@@ -303,7 +333,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     fontStyle: FontStyle.italic,
                   ),
                   decoration: const InputDecoration(
-                    hintText: 'EX. Fase de Germinação',
+                    hintText: 'EX: Fase de Germinação ...',
                     hintStyle: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
@@ -317,7 +347,6 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
               const Text('Total de Dias:'),
               Observer(builder: (_) {
                 return TextFormField(
-                  initialValue: store.novoDuracaoDiasFase.toString(),
                   keyboardType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -330,6 +359,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     fontStyle: FontStyle.italic,
                   ),
                   decoration: const InputDecoration(
+                    hintText: 'Numero de dias da Fase ...',
                     hintStyle: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
@@ -337,7 +367,9 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     ),
                   ),
                   onChanged: (value) {
-                    store.alterarDuracaoDiasFase(int.parse(value));
+                    if (value != "") {
+                      store.alterarDuracaoDiasFase(int.parse(value));
+                    }
                   },
                 );
               }),
@@ -352,24 +384,28 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                   child: SizedBox(
                     width: size.width * .8,
                     height: 40,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Constants.kPrimaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
+                    child: Observer(builder: (_) {
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Constants.kPrimaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
                         ),
-                      ),
-                      child: const Text(
-                        "Salvar",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                        child: const Text(
+                          "Salvar",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      onPressed: () {
-                        store.registrarFase();
-                      },
-                    ),
+                        onPressed: () {
+                          store.registrarFase();
+                          store.limparFaseBottomSheet();
+                          Get.back();
+                        },
+                      );
+                    }),
                   ),
                 ),
               )

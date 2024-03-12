@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/ativBottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
 
 Padding atividadeItem({
-  required int index,
-  required ProtocoloStore store,
+  required int indexFase,
+  required int indexAcao,
+  required Acao acao,
   VoidCallback? onTap,
 }) {
   return Padding(
     padding: EdgeInsets.only(
-      top: index == 0 ? 10 : 5,
+      top: indexAcao == 0 ? 10 : 5,
       left: 10,
       right: 10,
     ),
     child: Observer(builder: (_) {
+      ProtocoloStore store = GetIt.I<ProtocoloStore>();
       return InkWell(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
@@ -35,27 +39,26 @@ Padding atividadeItem({
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           left: 5.0,
                           bottom: 8.0,
                           top: 5.0,
                         ),
                         child: Text(
-                          //store.searchReservatorio[index].nome ?? "---",
-                          "Preparar Início da Germinação",
-                          style: TextStyle(
+                          acao.titulo ?? "---",
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 10),
+                        padding: const EdgeInsets.only(left: 10),
                         child: Text(
-                          "Data 20/08/23",
-                          style: TextStyle(
+                          'Dia ${acao.duracao_dias}',
+                          style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),
@@ -64,20 +67,22 @@ Padding atividadeItem({
                     ],
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    store.setCanNotificate(!store.canNotificate);
-                  },
-                  child: Icon(
-                    store.canNotificate
-                        ? Icons.notifications
-                        : Icons.notifications_off,
-                    size: 20,
-                    color: store.canNotificate
-                        ? Constants.kPrimaryColor
-                        : Constants.kButtonGrey,
-                  ),
-                ),
+                Observer(builder: (_) {
+                  return InkWell(
+                    onTap: () {
+                      store.alterarAlertaAcao(indexFase, indexAcao);
+                    },
+                    child: Icon(
+                      acao.alerta ?? false
+                          ? Icons.notifications
+                          : Icons.notifications_off,
+                      size: 20,
+                      color: acao.alerta ?? false
+                          ? Constants.kPrimaryColor
+                          : Constants.kButtonGrey,
+                    ),
+                  );
+                }),
                 const SizedBox(
                   width: 16,
                 ),
@@ -92,7 +97,9 @@ Padding atividadeItem({
                         isNewRecord: false,
                         isFase: false,
                       ));
+                      return;
                     }
+                    store.removeAcao(indexAcao, indexFase);
                   },
                   itemBuilder: (_) => <PopupMenuEntry>[
                     const PopupMenuItem(

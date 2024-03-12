@@ -1,13 +1,15 @@
+import 'package:faker/faker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/protocolo/protocolo_repository.dart';
-import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
 import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
+
+import '../models/acao/acao_model.dart';
 
 part 'protocolo_store.g.dart';
 
@@ -33,19 +35,13 @@ abstract class _ProtocoloStoreBase with Store {
   bool isEditing = false;
 
   @observable
-  bool canNotificate = false;
-
-  @observable
-  bool diasDaAtiv = false;
+  int? diaDaAtiv;
 
   @observable
   bool mostrarErroFormulario = false;
 
   @observable
   bool isNovaCultura = false;
-
-  @observable
-  List<Cultura> culturaList = [];
 
   @observable
   String? novoTipoProtocolo;
@@ -60,10 +56,22 @@ abstract class _ProtocoloStoreBase with Store {
   String? novoTituloFase;
 
   @observable
+  String? novoTituloAtividade;
+
+  @observable
+  String? novoDescricaoAtividade;
+
+  @observable
   int? novoDuracaoDiasFase;
 
   @observable
+  Fase? selectedFase;
+
+  @observable
   TextEditingController novaCulturaController = TextEditingController();
+
+  @observable
+  TextEditingController diaDaAtivController = TextEditingController();
 
   @observable
   TextEditingController dropdownTitle = TextEditingController(text: 'teste1');
@@ -72,7 +80,7 @@ abstract class _ProtocoloStoreBase with Store {
   String? novoNomeProtocolo;
 
   @observable
-  List<String> mockList = ['teste1', 'teste2'];
+  List<Cultura> culturaList = [];
 
   @observable
   List<Cultura> novaCulturaProtocolo = [];
@@ -84,10 +92,10 @@ abstract class _ProtocoloStoreBase with Store {
   List<Protocolo> protocoloList = [];
 
   @observable
-  List<Fase> faseList = [];
+  List<Fase> faseDropDownList = [];
 
   @observable
-  List<Acao> createAtivAcaoList = [];
+  List<Fase> faseList = [];
 
   @action
   setIsNovaCultura(bool value) => isNovaCultura = value;
@@ -96,10 +104,7 @@ abstract class _ProtocoloStoreBase with Store {
   setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
 
   @action
-  setCanNotificate(bool value) => canNotificate = value;
-
-  @action
-  setDiasDaAtiv(bool value) => diasDaAtiv = value;
+  setDiaDaAtiv(int value) => diaDaAtiv = value;
 
   @action
   alterarForma(String forma) {
@@ -127,6 +132,21 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
+  alterarTituloAtividade(String name) {
+    novoTituloAtividade = name;
+  }
+
+  @action
+  alterarDescricaoAtividade(String name) {
+    novoDescricaoAtividade = name;
+  }
+
+  @action
+  alterarDropdownFase(Fase newFase) {
+    selectedFase = newFase;
+  }
+
+  @action
   alterarRadioIndicator(int value) {
     radioIndicator = value;
   }
@@ -134,6 +154,12 @@ abstract class _ProtocoloStoreBase with Store {
   @action
   alterarDuracaoDiasFase(int value) {
     novoDuracaoDiasFase = value;
+  }
+
+  @action
+  setarDuracaoDiasFase(String value) {
+    diaDaAtivController.clear();
+    diaDaAtivController = TextEditingController(text: value);
   }
 
   @action
@@ -163,7 +189,6 @@ abstract class _ProtocoloStoreBase with Store {
         protocoloList = List.from(protocoloList);
       },
     );
-
     isProtocoloListLoading = false;
   }
 
@@ -173,6 +198,7 @@ abstract class _ProtocoloStoreBase with Store {
 
     if (novoTituloFase != null && novoTituloFase != "") {
       Fase novaFase = Fase(
+        id: faker.guid.random.integer(50),
         nome: novoTituloFase,
         duracao_dias: novoDuracaoDiasFase,
       );
@@ -184,8 +210,8 @@ abstract class _ProtocoloStoreBase with Store {
           toastError(message: err.message);
         },
         (data) async {
-          faseList = List.from([data, ...faseList]);
-          print(faseList);
+          faseDropDownList = List.from([data, ...faseDropDownList]);
+          //toastSuccess(message: "Fase cadastrada com sucesso !");
         },
       );
     }
@@ -220,12 +246,75 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
+  addToFaseList() {
+    Acao acao = Acao(
+      titulo: novoTituloAtividade,
+      duracao_dias: int.parse(diaDaAtivController.text),
+      descricao: novoDescricaoAtividade,
+      alerta: true,
+    );
+
+    final index = faseList.indexWhere((item) => item.id == selectedFase!.id);
+    if (index == -1) {
+      // Add Fase e acao
+      selectedFase?.acao = (selectedFase?.acao ?? [])..add(acao);
+      if (selectedFase!.acao!.length > 1) {
+        // Ordena a lista caso maior que 1
+        selectedFase!.acao!
+            .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
+      }
+      faseList.add(selectedFase!);
+      faseList = List.from(faseList);
+      return;
+    }
+    // Add apenas acao quando a fase ja existe na lista
+    faseList[index].acao = (faseList[index].acao ?? [])..add(acao);
+    if (faseList[index].acao!.length > 1) {
+      // Ordena a lista caso maior que 1
+      faseList[index]
+          .acao!
+          .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
+    }
+    faseList = List.from(faseList);
+  }
+
+  @action
+  alterarAlertaAcao(int indexFase, int indexAcao) {
+    faseList[indexFase].acao?[indexAcao].alerta =
+        !(faseList[indexFase].acao?[indexAcao].alerta ?? false);
+    faseList = List.from(faseList);
+  }
+
+  @action
+  removeAcao(int indexAcao, int indexFase) {
+    faseList[indexFase].acao?.removeAt(indexAcao);
+    faseList = List.from(faseList);
+  }
+
+  @action
+  removeFase(int indexFase) {
+    faseList.removeAt(indexFase);
+    faseList = List.from(faseList);
+  }
+
+  @action
   limparTudo() {
     novoNomeProtocolo = null;
     novoFormaProtocolo = null;
     novoTipoProtocolo = null;
     novoSistemaProtocolo = null;
+    novoTituloAtividade = null;
+    novoDescricaoAtividade = null;
+    selectedFase = null;
     faseList.clear();
+    faseDropDownList.clear();
+    diaDaAtivController.clear();
     novaCulturaProtocolo.clear();
+  }
+
+  @action
+  limparFaseBottomSheet() {
+    novoTituloFase = null;
+    diaDaAtiv = null;
   }
 }

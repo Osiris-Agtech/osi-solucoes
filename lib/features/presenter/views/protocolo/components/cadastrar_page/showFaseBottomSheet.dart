@@ -22,63 +22,94 @@ class _ShowFaseBottomSheet extends State<ShowFaseBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(Get.context!).size;
+
     return Padding(
-      padding: const EdgeInsets.all(12),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 8),
-            IconButton(
-              padding: EdgeInsets.zero,
-              alignment: Alignment.centerLeft,
-              icon: const Icon(
-                Icons.close,
-                size: 28,
-                color: Constants.kPrimaryColor,
-              ),
-              onPressed: () => Get.back(),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 8),
+          IconButton(
+            padding: EdgeInsets.zero,
+            alignment: Alignment.centerLeft,
+            icon: const Icon(
+              Icons.close,
+              size: 28,
+              color: Constants.kPrimaryColor,
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'Nome Fase ( 10 dias )',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Constants.kText2,
-              ),
+            onPressed: () => Get.back(),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            "${store.selectedFase?.nome}: Selecione o dia para realização da atividade ",
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Constants.kPrimaryColor,
             ),
-            const SizedBox(height: 20),
-            Observer(builder: (_) {
-              return Expanded(
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  children: List.generate(10, (index) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          onTap: () => {store.setDiasDaAtiv(!store.diasDaAtiv)},
-                          child: Icon(
-                            store.diasDaAtiv
-                                ? Icons.check_box
-                                : Icons.check_box_outline_blank,
-                            size: 80,
-                          ),
+          ),
+          const SizedBox(height: 20),
+          Observer(builder: (_) {
+            return Expanded(
+              child: GridView.count(
+                crossAxisCount: 2,
+                children:
+                    List.generate(store.selectedFase!.duracao_dias!, (index) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () => {store.setDiaDaAtiv(index + 1)},
+                        child: Icon(
+                          store.diaDaAtiv != null &&
+                                  (store.diaDaAtiv! - 1) == index
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
+                          size: 80,
+                          color: Constants.kPrimaryColor,
                         ),
-                        Text(
-                          'Dia ${index + 1}',
-                          style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      Text(
+                        'Dia ${index + 1}',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                    ],
+                  );
+                }),
+              ),
+            );
+          }),
+          Observer(builder: (_) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: Center(
+                child: SizedBox(
+                  width: size.width * .8,
+                  height: 40,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Constants.kPrimaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                      ],
-                    );
-                  }),
+                      ),
+                      child: const Text(
+                        "Selecionar",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      onPressed: () {
+                        store.setarDuracaoDiasFase(store.diaDaAtiv.toString());
+                        Get.back();
+                      }),
                 ),
-              );
-            })
-          ],
-        ),
+              ),
+            );
+          })
+        ],
       ),
     );
   }
