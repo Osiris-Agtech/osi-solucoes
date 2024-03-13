@@ -33,6 +33,23 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$isProtocoloListLoadingAtom =
+      Atom(name: '_LoteStoreBase.isProtocoloListLoading');
+
+  @override
+  bool get isProtocoloListLoading {
+    _$isProtocoloListLoadingAtom.reportRead();
+    return super.isProtocoloListLoading;
+  }
+
+  @override
+  set isProtocoloListLoading(bool value) {
+    _$isProtocoloListLoadingAtom
+        .reportWrite(value, super.isProtocoloListLoading, () {
+      super.isProtocoloListLoading = value;
+    });
+  }
+
   final _$dropDownValueAtom = Atom(name: '_LoteStoreBase.dropDownValue');
 
   @override
@@ -105,6 +122,21 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   set loteList(List<Lote> value) {
     _$loteListAtom.reportWrite(value, super.loteList, () {
       super.loteList = value;
+    });
+  }
+
+  final _$protocoloListAtom = Atom(name: '_LoteStoreBase.protocoloList');
+
+  @override
+  List<Protocolo> get protocoloList {
+    _$protocoloListAtom.reportRead();
+    return super.protocoloList;
+  }
+
+  @override
+  set protocoloList(List<Protocolo> value) {
+    _$protocoloListAtom.reportWrite(value, super.protocoloList, () {
+      super.protocoloList = value;
     });
   }
 
@@ -811,6 +843,14 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     return _$buscarLotesAsyncAction.run(() => super.buscarLotes());
   }
 
+  final _$buscarProtocolosAsyncAction =
+      AsyncAction('_LoteStoreBase.buscarProtocolos');
+
+  @override
+  Future buscarProtocolos() {
+    return _$buscarProtocolosAsyncAction.run(() => super.buscarProtocolos());
+  }
+
   final _$migrarLoteAsyncAction = AsyncAction('_LoteStoreBase.migrarLote');
 
   @override
@@ -1283,11 +1323,13 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   String toString() {
     return '''
 isLoteListLoading: ${isLoteListLoading},
+isProtocoloListLoading: ${isProtocoloListLoading},
 dropDownValue: ${dropDownValue},
 searchLoteText: ${searchLoteText},
 order: ${order},
 setorSelecionado: ${setorSelecionado},
 loteList: ${loteList},
+protocoloList: ${protocoloList},
 data1: ${data1},
 data2: ${data2},
 areaList: ${areaList},

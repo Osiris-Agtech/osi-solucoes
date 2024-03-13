@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_item.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_page.dart';
 
 import 'components/cadastrar_page/cultura_item.dart';
 import 'components/cadastrar_page/lote_item.dart';
@@ -35,6 +35,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
         );
     store.buscarCulturas();
     store.buscarReservatorios();
+    store.buscarProtocolos();
     store.setIsNovaCultura(false);
     store.setMostrarErroFormulario(false);
   }

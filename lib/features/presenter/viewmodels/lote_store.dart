@@ -6,6 +6,7 @@ import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/lote/lote_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
+import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
@@ -26,6 +27,9 @@ abstract class _LoteStoreBase with Store {
   bool isLoteListLoading = false;
 
   @observable
+  bool isProtocoloListLoading = false;
+
+  @observable
   String dropDownValue = "Nome";
 
   @observable
@@ -39,6 +43,9 @@ abstract class _LoteStoreBase with Store {
 
   @observable
   List<Lote> loteList = [];
+
+  @observable
+  List<Protocolo> protocoloList = [];
 
   @observable
   DateTime data1 = DateTime(
@@ -90,6 +97,25 @@ abstract class _LoteStoreBase with Store {
     );
 
     isLoteListLoading = false;
+  }
+
+  @action
+  buscarProtocolos() async {
+    isProtocoloListLoading = true;
+
+    var protocolos = await loteRepository.buscarProtocolos();
+
+    protocolos.fold(
+      (err) {
+        protocoloList = List.from([]);
+      },
+      (data) async {
+        protocoloList = List.from(data);
+        protocoloList = List.from(protocoloList);
+      },
+    );
+
+    isProtocoloListLoading = false;
   }
 
   @computed

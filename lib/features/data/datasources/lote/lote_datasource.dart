@@ -4,8 +4,11 @@ import 'package:dartz/dartz.dart';
 import 'package:graphql/client.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/api_source.dart';
+import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
+import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
+import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 
 import '../../../../core/errors/errors.dart';
@@ -26,6 +29,7 @@ abstract class ILoteDatasource {
       {required int contaId});
   Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
       {required int reservatorioId});
+  Future<Either<Failure, List<Protocolo>>> buscarProtocolos();
   Future<Either<Failure, Lote>> registrarLote({required Lote lote});
   Future<Either<Failure, Lote>> migrarLote(
       {required int loteId, required int setorId, required int reservatorioId});
@@ -420,6 +424,31 @@ class LoteDatasource implements ILoteDatasource {
     } else {
       return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
     }
+  }
+
+  @override
+  Future<Either<Failure, List<Protocolo>>> buscarProtocolos() async {
+    // Simule uma chamada de API assíncrona
+    await Future.delayed(const Duration(seconds: 2));
+
+    final protocolos = List.generate(
+        3,
+        (index) => Protocolo(
+              id: index + 1,
+              nome: 'Protocolo ${index + 1}',
+              descricao: 'Descrição do Protocolo ${index + 1}',
+              tipo_cultura: 'Tipo de Cultura ${index + 1}',
+              sistema_cultivo: 'Sistema de Cultivo ${index + 1}',
+              implantacao: 'Implantação ${index + 1}',
+              created_at: DateTime.now(),
+              updated_at: DateTime.now(),
+              deleted_at: null,
+              acao: [Acao(), Acao()],
+              cultura: [Cultura(id: index, nome: 'Alface ${index + 1}')],
+              conta: Conta(),
+            ));
+
+    return Future.value(Right(protocolos));
   }
 
   @override

@@ -4,6 +4,7 @@ import 'package:osi_solucoes/features/data/datasources/lote/lote_datasource.dart
 import 'package:osi_solucoes/features/data/repositories/lote/lote_repository_interface.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
+import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 
 import '../../../presenter/models/area/area_model.dart';
@@ -62,6 +63,13 @@ class LoteRepository implements ILoteRepository {
       int reservatorioId) async {
     var result = await datasource.buscarReservatorioDetalhes(
         reservatorioId: reservatorioId);
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, List<Protocolo>>> buscarProtocolos() async {
+    var result = await datasource.buscarProtocolos();
+
     return result;
   }
 
