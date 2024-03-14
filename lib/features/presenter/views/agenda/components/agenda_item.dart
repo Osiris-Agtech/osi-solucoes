@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/agenda_store.dart';
 import 'package:osi_solucoes/features/presenter/views/agenda/components/detalhes_bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
@@ -8,13 +9,16 @@ import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
 import 'package:intl/intl.dart';
 
 Padding agendaItem({
-  required int index,
-  VoidCallback? onTap,
+  required Agenda agenda,
   required AgendaStore store,
+  required bool isFirst,
+  required bool isLast,
+  VoidCallback? onTap,
 }) {
   return Padding(
     padding: EdgeInsets.only(
-      top: index == 0 ? 10 : 5,
+      top: isFirst ? 16 : 4,
+      bottom: isLast ? 16 : 4,
       left: 10,
       right: 10,
     ),
@@ -24,7 +28,7 @@ Padding agendaItem({
       onTap: onTap ??
           () {
             store.setShowEditPage(false);
-            getBottomSheet(const DetalhesBottomSheet());
+            getBottomSheet(DetalhesBottomSheet(agenda: agenda));
           },
       child: Card(
         shape: RoundedRectangleBorder(
@@ -44,27 +48,78 @@ Padding agendaItem({
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      //store.searchReservatorio[index].nome ?? "---",
-                      store.atividadeList[index].titulo ?? "---",
+                      agenda.titulo ?? "---",
                       style: const TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const ListTile(
-                      horizontalTitleGap: 0,
-                      title: Text("Miguel Ribeiro"),
-                      subtitle: Text("Admistrador"),
-                      leading: Icon(Icons.person_add),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      horizontalTitleGap: 16,
+                      title: Text(
+                        agenda.usuario?.nome ?? "Sem responsável",
+                        style: const TextStyle(
+                          color: Constants.kText2,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Text(
+                        agenda.usuario?.selected_conta?.cargo?.cargo ?? "---",
+                        style: const TextStyle(
+                          color: Constants.kText2,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      leading: agenda.usuario?.pessoa?.imagem != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: Image.network(
+                                agenda.usuario?.pessoa?.imagem ?? '',
+                                width: 40,
+                                height: 40,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Constants.kGreyLight,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        Constants.kGreyMedium.withOpacity(.5),
+                                    blurRadius: 3,
+                                    offset: const Offset(1, 2),
+                                  ),
+                                ],
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.person,
+                                  color: Colors.black,
+                                  size: 25,
+                                ),
+                              ),
+                            ),
                     ),
                     Row(
                       children: [
-                        Text(DateFormat("dd/MM/y", 'pt_br')
-                                .format(
-                                  store.atividadeList[index].data!,
-                                )
-                                .capitalize ??
-                            ''),
+                        Text(
+                          DateFormat("dd/MM/y", 'pt_br')
+                                  .format(
+                                    agenda.data!,
+                                  )
+                                  .capitalize ??
+                              '',
+                          style: const TextStyle(
+                            color: Constants.kGreyText,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                         const SizedBox(width: 8),
                         const Icon(
                           Icons.circle,
@@ -72,12 +127,18 @@ Padding agendaItem({
                           color: Constants.kPrimaryColor,
                         ),
                         const SizedBox(width: 8),
-                        Text(DateFormat("HH:mm", 'pt_br')
-                                .format(
-                                  store.atividadeList[index].data!,
-                                )
-                                .capitalize ??
-                            '')
+                        Text(
+                          DateFormat("HH:mm", 'pt_br')
+                                  .format(
+                                    agenda.data!,
+                                  )
+                                  .capitalize ??
+                              '',
+                          style: const TextStyle(
+                            color: Constants.kGreyText,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
                       ],
                     ),
                   ],

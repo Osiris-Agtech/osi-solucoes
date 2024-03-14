@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/agenda_store.dart';
 import 'package:osi_solucoes/features/presenter/views/agenda/components/agenda_item.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/constants.dart';
+import '../../states/agenda_page_states_enum.dart';
 import '../home/components/top_app_bar.dart';
 
 class AgendaPage extends StatefulWidget {
@@ -26,7 +25,9 @@ class AgendaPageState extends State<AgendaPage> {
   @override
   void initState() {
     super.initState();
+    store.onDaySelected(null);
     store.buscarAtividades();
+    store.buscarUsuariosConta();
   }
 
   @override
@@ -38,7 +39,7 @@ class AgendaPageState extends State<AgendaPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Constants.kSecondBackgroundColor,
+          backgroundColor: Constants.kBackgroundColor,
           body: PrimaryScrollController(
             controller: _scrollController,
             child: Scrollbar(
@@ -49,16 +50,31 @@ class AgendaPageState extends State<AgendaPage> {
                   sliverAppBar(context),
                   agenda(),
                   const SliverToBoxAdapter(
-                    child: SizedBox(height: 16),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: 8.0,
+                        bottom: 16.0,
+                        left: 24.0,
+                        right: 24.0,
+                      ),
+                      child: Text(
+                        'Atividades',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
                   Observer(builder: (_) {
-                    if (store.isAcoesListLoading) {
-                      return loadingList();
+                    if (store.state == AgendaState.loading) {
+                      return _loadingList();
                     }
                     if (store.atividadeList.isEmpty) {
-                      return emptyList();
+                      return _emptyList();
                     }
-                    return showList();
+                    return _showList();
                   }),
                 ],
               ),
@@ -70,21 +86,21 @@ class AgendaPageState extends State<AgendaPage> {
   }
 
   SliverAppBar sliverAppBar(BuildContext context) {
-    return SliverAppBar(
+    return const SliverAppBar(
       backgroundColor: Colors.white,
-      toolbarHeight: 120, //MediaQuery.of(context).size.height * 0.17,
+      toolbarHeight: 100, //MediaQuery.of(context).size.height * 0.17,
       // collapsedHeight: 200, //MediaQuery.of(context).size.height * 0.17,
       floating: true,
       automaticallyImplyLeading: false,
       forceElevated: true,
-      elevation: 1,
+      elevation: 0,
       flexibleSpace: TopAppBar(
         path: "/Home/",
         namePage: "Agenda",
         subtitle: "Acompanhamento de ações da produção",
-        onPressed: () {
-          Get.offNamedUntil(Routes.homePage, (route) => false);
-        },
+        // onPressed: () {
+        //   Get.offNamed(Routes.homePage, (route) => false);
+        // },
       ),
     );
   }
@@ -93,17 +109,17 @@ class AgendaPageState extends State<AgendaPage> {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Observer(
-          // Use o Observer aqui
-          builder: (_) => TableCalendar(
+        child: Observer(builder: (context) {
+          return TableCalendar(
             selectedDayPredicate: (day) => isSameDay(store.selectedDay, day),
             onDaySelected: (selectedDay, focusedDay) {
-              store.onDaySelected(selectedDay, focusedDay);
+              store.onDaySelected(selectedDay);
             },
             locale: 'pt_BR',
             firstDay: DateTime.now().subtract(const Duration(days: 10 * 365)),
             lastDay: DateTime.now().add(const Duration(days: 10 * 365)),
-            focusedDay: store.focusedDay, // Use o focusedDay do store
+            focusedDay: store.selectedDay ??
+                DateTime.now(), // Use o focusedDay do store
             daysOfWeekHeight: 24,
             availableCalendarFormats: const {CalendarFormat.month: 'Month'},
             headerStyle: HeaderStyle(
@@ -112,6 +128,11 @@ class AgendaPageState extends State<AgendaPage> {
                 String s = DateFormat.yMMMM(locale).format(date);
                 return s[0].toUpperCase() + s.substring(1);
               },
+              titleTextStyle: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Constants.kPrimaryColor,
+              ),
               leftChevronIcon: const Icon(
                 Icons.chevron_left,
                 color: Constants.kPrimaryColor,
@@ -147,24 +168,65 @@ class AgendaPageState extends State<AgendaPage> {
                 );
               },
             ),
+          );
+        }),
+      ),
+    );
+  }
+
+  _showList() {
+    return SliverToBoxAdapter(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Constants.kCardColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
           ),
         ),
+        child: store.selectedDay != null && store.filteredAtividades.isEmpty
+            ? const Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 100.0),
+                  child: Text(
+                    'Não há atividades\ncadastradas para esta data',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Constants.kText2,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w800,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: store.selectedDay != null
+                    ? store.filteredAtividades.length
+                    : store.atividadeList.length,
+                itemBuilder: (context, index) {
+                  return agendaItem(
+                    isFirst: index == 0,
+                    isLast: index ==
+                        (store.selectedDay != null
+                                    ? store.filteredAtividades
+                                    : store.atividadeList)
+                                .length -
+                            1,
+                    agenda: store.selectedDay != null
+                        ? store.filteredAtividades[index]
+                        : store.atividadeList[index],
+                    store: store,
+                  );
+                },
+              ),
       ),
     );
   }
 
-  SliverList showList() {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return agendaItem(index: index, store: store);
-        },
-        childCount: store.atividadeList.length,
-      ),
-    );
-  }
-
-  SliverList emptyList() {
+  _emptyList() {
     return SliverList(
       delegate: SliverChildListDelegate(
         [
@@ -188,7 +250,7 @@ class AgendaPageState extends State<AgendaPage> {
     );
   }
 
-  SliverList loadingList() {
+  _loadingList() {
     return SliverList(
       delegate: SliverChildListDelegate(
         [

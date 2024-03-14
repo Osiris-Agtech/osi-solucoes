@@ -109,6 +109,11 @@ Future<DateTime?> datePicker({
       heightYearRow: 70,
       backgroundPicker: Constants.kBackgroundColor, //getBackgroundColor(),
     ),
+    subtitle: {
+      "fase 1": Colors.blueAccent,
+      "fase 2": Colors.orangeAccent,
+      "fase 3": Colors.amberAccent,
+    },
   );
 }
 

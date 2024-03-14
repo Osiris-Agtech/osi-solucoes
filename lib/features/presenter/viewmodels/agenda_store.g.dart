@@ -17,6 +17,21 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
               name: '_AgendaStoreBase.filteredAtividades'))
       .value;
 
+  final _$stateAtom = Atom(name: '_AgendaStoreBase.state');
+
+  @override
+  AgendaState get state {
+    _$stateAtom.reportRead();
+    return super.state;
+  }
+
+  @override
+  set state(AgendaState value) {
+    _$stateAtom.reportWrite(value, super.state, () {
+      super.state = value;
+    });
+  }
+
   final _$showEditPageAtom = Atom(name: '_AgendaStoreBase.showEditPage');
 
   @override
@@ -32,49 +47,18 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$isAcoesListLoadingAtom =
-      Atom(name: '_AgendaStoreBase.isAcoesListLoading');
-
-  @override
-  bool get isAcoesListLoading {
-    _$isAcoesListLoadingAtom.reportRead();
-    return super.isAcoesListLoading;
-  }
-
-  @override
-  set isAcoesListLoading(bool value) {
-    _$isAcoesListLoadingAtom.reportWrite(value, super.isAcoesListLoading, () {
-      super.isAcoesListLoading = value;
-    });
-  }
-
   final _$selectedDayAtom = Atom(name: '_AgendaStoreBase.selectedDay');
 
   @override
-  DateTime get selectedDay {
+  DateTime? get selectedDay {
     _$selectedDayAtom.reportRead();
     return super.selectedDay;
   }
 
   @override
-  set selectedDay(DateTime value) {
+  set selectedDay(DateTime? value) {
     _$selectedDayAtom.reportWrite(value, super.selectedDay, () {
       super.selectedDay = value;
-    });
-  }
-
-  final _$focusedDayAtom = Atom(name: '_AgendaStoreBase.focusedDay');
-
-  @override
-  DateTime get focusedDay {
-    _$focusedDayAtom.reportRead();
-    return super.focusedDay;
-  }
-
-  @override
-  set focusedDay(DateTime value) {
-    _$focusedDayAtom.reportWrite(value, super.focusedDay, () {
-      super.focusedDay = value;
     });
   }
 
@@ -93,12 +77,114 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
+  final _$usuariosContaAtom = Atom(name: '_AgendaStoreBase.usuariosConta');
+
+  @override
+  List<Usuario> get usuariosConta {
+    _$usuariosContaAtom.reportRead();
+    return super.usuariosConta;
+  }
+
+  @override
+  set usuariosConta(List<Usuario> value) {
+    _$usuariosContaAtom.reportWrite(value, super.usuariosConta, () {
+      super.usuariosConta = value;
+    });
+  }
+
+  final _$tituloControllerAtom =
+      Atom(name: '_AgendaStoreBase.tituloController');
+
+  @override
+  TextEditingController get tituloController {
+    _$tituloControllerAtom.reportRead();
+    return super.tituloController;
+  }
+
+  @override
+  set tituloController(TextEditingController value) {
+    _$tituloControllerAtom.reportWrite(value, super.tituloController, () {
+      super.tituloController = value;
+    });
+  }
+
+  final _$descricaoControllerAtom =
+      Atom(name: '_AgendaStoreBase.descricaoController');
+
+  @override
+  TextEditingController get descricaoController {
+    _$descricaoControllerAtom.reportRead();
+    return super.descricaoController;
+  }
+
+  @override
+  set descricaoController(TextEditingController value) {
+    _$descricaoControllerAtom.reportWrite(value, super.descricaoController, () {
+      super.descricaoController = value;
+    });
+  }
+
+  final _$dataAtividadeAtom = Atom(name: '_AgendaStoreBase.dataAtividade');
+
+  @override
+  DateTime? get dataAtividade {
+    _$dataAtividadeAtom.reportRead();
+    return super.dataAtividade;
+  }
+
+  @override
+  set dataAtividade(DateTime? value) {
+    _$dataAtividadeAtom.reportWrite(value, super.dataAtividade, () {
+      super.dataAtividade = value;
+    });
+  }
+
+  final _$usuarioAtividadeAtom =
+      Atom(name: '_AgendaStoreBase.usuarioAtividade');
+
+  @override
+  Usuario? get usuarioAtividade {
+    _$usuarioAtividadeAtom.reportRead();
+    return super.usuarioAtividade;
+  }
+
+  @override
+  set usuarioAtividade(Usuario? value) {
+    _$usuarioAtividadeAtom.reportWrite(value, super.usuarioAtividade, () {
+      super.usuarioAtividade = value;
+    });
+  }
+
   final _$buscarAtividadesAsyncAction =
       AsyncAction('_AgendaStoreBase.buscarAtividades');
 
   @override
   Future buscarAtividades() {
     return _$buscarAtividadesAsyncAction.run(() => super.buscarAtividades());
+  }
+
+  final _$buscarUsuariosContaAsyncAction =
+      AsyncAction('_AgendaStoreBase.buscarUsuariosConta');
+
+  @override
+  Future buscarUsuariosConta() {
+    return _$buscarUsuariosContaAsyncAction
+        .run(() => super.buscarUsuariosConta());
+  }
+
+  final _$deletarAtividadeAsyncAction =
+      AsyncAction('_AgendaStoreBase.deletarAtividade');
+
+  @override
+  Future deletarAtividade(int id) {
+    return _$deletarAtividadeAsyncAction.run(() => super.deletarAtividade(id));
+  }
+
+  final _$editAgendaAsyncAction = AsyncAction('_AgendaStoreBase.editAgenda');
+
+  @override
+  Future editAgenda(Agenda agenda) {
+    return _$editAgendaAsyncAction.run(() => super.editAgenda(agenda));
   }
 
   final _$_AgendaStoreBaseActionController =
@@ -127,11 +213,55 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
   }
 
   @override
-  void onDaySelected(DateTime day, DateTime focusedDay) {
+  void onDaySelected(DateTime? day) {
     final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
         name: '_AgendaStoreBase.onDaySelected');
     try {
-      return super.onDaySelected(day, focusedDay);
+      return super.onDaySelected(day);
+    } finally {
+      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setDataAtividade(DateTime? value) {
+    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
+        name: '_AgendaStoreBase.setDataAtividade');
+    try {
+      return super.setDataAtividade(value);
+    } finally {
+      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setUsuarioAtividade(Usuario? value) {
+    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
+        name: '_AgendaStoreBase.setUsuarioAtividade');
+    try {
+      return super.setUsuarioAtividade(value);
+    } finally {
+      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic carregarDadosDaAtividade(Agenda agenda) {
+    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
+        name: '_AgendaStoreBase.carregarDadosDaAtividade');
+    try {
+      return super.carregarDadosDaAtividade(agenda);
+    } finally {
+      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic limparDadosDaAtividade() {
+    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
+        name: '_AgendaStoreBase.limparDadosDaAtividade');
+    try {
+      return super.limparDadosDaAtividade();
     } finally {
       _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -140,11 +270,15 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
   @override
   String toString() {
     return '''
+state: ${state},
 showEditPage: ${showEditPage},
-isAcoesListLoading: ${isAcoesListLoading},
 selectedDay: ${selectedDay},
-focusedDay: ${focusedDay},
 atividadeList: ${atividadeList},
+usuariosConta: ${usuariosConta},
+tituloController: ${tituloController},
+descricaoController: ${descricaoController},
+dataAtividade: ${dataAtividade},
+usuarioAtividade: ${usuarioAtividade},
 filteredAtividades: ${filteredAtividades}
     ''';
   }

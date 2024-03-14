@@ -44,19 +44,23 @@ class TopAppBar extends StatelessWidget {
             icon: const Icon(Icons.arrow_back),
             color: Constants.kPrimaryColor,
           ),
-          Text(
-            namePage,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 22,
-              fontWeight: FontWeight.w600,
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Text(
+              namePage,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           if (subtitle != null)
             Padding(
               padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.003,
-                  left: MediaQuery.of(context).size.width * 0.013),
+                top: MediaQuery.of(context).size.height * 0.003,
+                left: 8.0,
+              ), //MediaQuery.of(context).size.width * 0.013),
               child: Text(
                 subtitle!,
                 style: const TextStyle(
