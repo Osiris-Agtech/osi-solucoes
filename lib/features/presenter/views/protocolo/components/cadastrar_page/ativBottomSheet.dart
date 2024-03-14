@@ -13,11 +13,15 @@ import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
 class AtivBottomSheet extends StatefulWidget {
   final bool isNewRecord;
   final bool isFase;
+  final int? indexFase;
+  final int? indexAcao;
 
   const AtivBottomSheet({
     Key? key,
     this.isFase = false,
     required this.isNewRecord,
+    this.indexFase,
+    this.indexAcao,
   }) : super(key: key);
 
   @override
@@ -96,12 +100,14 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                           value: 2,
                           activeColor: Colors.green,
                           groupValue: store.radioIndicator,
-                          onChanged: (value) {
-                            if (value != null) {
-                              store.alterarRadioIndicator(value);
-                              store.alterarIsNovaFaseBottonSheet(true);
-                            }
-                          },
+                          onChanged: !widget.isNewRecord
+                              ? null
+                              : (value) {
+                                  if (value != null) {
+                                    store.alterarRadioIndicator(value);
+                                    store.alterarIsNovaFaseBottonSheet(true);
+                                  }
+                                },
                         ),
                       ),
                     ],
@@ -134,7 +140,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                       return DropdownMenuItem<Fase>(
                         value: value,
                         child: Text(
-                          value.nome ?? "",
+                          "${value.nome} - ${value.duracao_dias} Dia(s) ",
                         ),
                       );
                     }).toList(),
@@ -142,7 +148,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                 );
               }),
               const SizedBox(height: 16),
-              const Text('Titulo:'),
+              const Text('Título:'),
               Observer(builder: (_) {
                 return TextFormField(
                   initialValue: store.novoTituloAtividade,
@@ -153,6 +159,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     fontStyle: FontStyle.italic,
                   ),
                   decoration: const InputDecoration(
+                    hintText: "Título da Atividade ...",
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.normal,
                       fontStyle: FontStyle.italic,
@@ -186,6 +193,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     Icons.calendar_month,
                     color: Constants.kPrimaryColor,
                   ),
+                  hintText: "Dia da Atividade ...",
                   hintStyle: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontStyle: FontStyle.italic,
@@ -204,6 +212,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     fontStyle: FontStyle.italic,
                   ),
                   decoration: const InputDecoration(
+                    hintText: "Descrição da Atividade ...",
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.normal,
                       fontStyle: FontStyle.italic,
@@ -233,7 +242,26 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                         ),
                       ),
                       onPressed: () {
+                        store.validarAtividade();
+                        if (!store.isValid) {
+                          toastError(
+                              message:
+                                  "Preencha todos campos do formulario corretamente!");
+                          return;
+                        }
+                        if (widget.indexFase != null &&
+                            widget.indexAcao != null &&
+                            widget.isNewRecord == false) {
+                          store.editarAcao(
+                            widget.indexFase!,
+                            widget.indexAcao!,
+                          );
+                          store.limparAtividadeBottomSheet();
+                          Get.back();
+                          return;
+                        }
                         store.addToFaseList();
+                        store.limparAtividadeBottomSheet();
                         Get.back();
                       },
                     ),
@@ -310,11 +338,13 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                           value: 2,
                           activeColor: Colors.green,
                           groupValue: store.radioIndicator,
-                          onChanged: (value) {
-                            if (value != null) {
-                              store.alterarRadioIndicator(value);
-                            }
-                          },
+                          onChanged: !widget.isNewRecord
+                              ? null
+                              : (value) {
+                                  if (value != null) {
+                                    store.alterarRadioIndicator(value);
+                                  }
+                                },
                         ),
                       ),
                     ],
@@ -322,7 +352,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                 }),
               ),
               const SizedBox(height: 16),
-              const Text('Titulo:'),
+              const Text('Título:'),
               Observer(builder: (_) {
                 return TextFormField(
                   initialValue: store.novoTituloFase,
@@ -333,7 +363,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     fontStyle: FontStyle.italic,
                   ),
                   decoration: const InputDecoration(
-                    hintText: 'EX: Fase de Germinação ...',
+                    hintText: 'Título da Fase ...',
                     hintStyle: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
@@ -347,6 +377,9 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
               const Text('Total de Dias:'),
               Observer(builder: (_) {
                 return TextFormField(
+                  initialValue: store.novoDuracaoDiasFase == null
+                      ? ""
+                      : store.novoDuracaoDiasFase.toString(),
                   keyboardType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -359,7 +392,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     fontStyle: FontStyle.italic,
                   ),
                   decoration: const InputDecoration(
-                    hintText: 'Numero de dias da Fase ...',
+                    hintText: 'Número de dias da Fase ...',
                     hintStyle: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
@@ -400,6 +433,13 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                           ),
                         ),
                         onPressed: () {
+                          store.validarNovaFase();
+                          if (!store.isValid) {
+                            toastError(
+                                message:
+                                    "Preencha todos campos do formulario corretamente!");
+                            return;
+                          }
                           store.registrarFase();
                           store.limparFaseBottomSheet();
                           Get.back();

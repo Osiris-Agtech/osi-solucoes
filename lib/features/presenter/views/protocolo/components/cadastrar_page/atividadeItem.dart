@@ -93,9 +93,12 @@ Padding atividadeItem({
                   ),
                   onSelected: (newValue) {
                     if (newValue == 1) {
-                      getBottomSheet(const AtivBottomSheet(
+                      store.prepararEditAtiv(indexFase, indexAcao);
+                      getBottomSheet(AtivBottomSheet(
                         isNewRecord: false,
                         isFase: false,
+                        indexAcao: indexAcao,
+                        indexFase: indexFase,
                       ));
                       return;
                     }

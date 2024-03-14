@@ -33,6 +33,8 @@ registrarAtivPage(BuildContext context, ProtocoloStore store) {
         const SizedBox(width: 16),
         FloatingActionButton(
           onPressed: () {
+            store.limparAtividadeBottomSheet();
+            store.limparFaseBottomSheet();
             getBottomSheet(const AtivBottomSheet(
               isNewRecord: true,
             ));
@@ -151,29 +153,31 @@ class ListFases extends StatelessWidget {
                               store.faseList[index].nome ?? "",
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
+                                fontSize: 20,
                               ),
                             ),
                             const Spacer(),
-                            InkWell(
-                              onTap: () {
-                                getBottomSheet(const AtivBottomSheet(
-                                  isNewRecord: false,
-                                  isFase: true,
-                                ));
-                              },
-                              child: const Icon(
-                                Icons.edit,
-                                size: 20,
-                              ),
-                            ),
+                            // InkWell(
+                            //   onTap: () {
+                            //     getBottomSheet(const AtivBottomSheet(
+                            //       isNewRecord: false,
+                            //       isFase: true,
+                            //     ));
+                            //   },
+                            //   child: const Icon(
+                            //     Icons.edit,
+                            //     size: 20,
+                            //   ),
+                            // ),
                             const SizedBox(
                               width: 10,
                             ),
                             InkWell(
                               onTap: () => store.removeFase(index),
                               child: const Icon(
-                                Icons.delete,
+                                Icons.delete_outlined,
                                 size: 20,
+                                color: Colors.red,
                               ),
                             ),
                           ]),

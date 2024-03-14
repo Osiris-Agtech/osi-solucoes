@@ -39,6 +39,21 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
+  final _$isValidAtom = Atom(name: '_ProtocoloStoreBase.isValid');
+
+  @override
+  bool get isValid {
+    _$isValidAtom.reportRead();
+    return super.isValid;
+  }
+
+  @override
+  set isValid(bool value) {
+    _$isValidAtom.reportWrite(value, super.isValid, () {
+      super.isValid = value;
+    });
+  }
+
   final _$isNovaFaseBottonSheetAtom =
       Atom(name: '_ProtocoloStoreBase.isNovaFaseBottonSheet');
 
@@ -659,6 +674,28 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic prepararEditAtiv(int indexFase, int indexAcao) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.prepararEditAtiv');
+    try {
+      return super.prepararEditAtiv(indexFase, indexAcao);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic editarAcao(int indexFase, int indexAcao) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.editarAcao');
+    try {
+      return super.editarAcao(indexFase, indexAcao);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic removeAcao(int indexAcao, int indexFase) {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.removeAcao');
@@ -675,6 +712,28 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
         name: '_ProtocoloStoreBase.removeFase');
     try {
       return super.removeFase(indexFase);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic validarNovaFase() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.validarNovaFase');
+    try {
+      return super.validarNovaFase();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic validarAtividade() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.validarAtividade');
+    try {
+      return super.validarAtividade();
     } finally {
       _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -703,10 +762,22 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic limparAtividadeBottomSheet() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.limparAtividadeBottomSheet');
+    try {
+      return super.limparAtividadeBottomSheet();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 dotIndicator: ${dotIndicator},
 radioIndicator: ${radioIndicator},
+isValid: ${isValid},
 isNovaFaseBottonSheet: ${isNovaFaseBottonSheet},
 isProtocoloListLoading: ${isProtocoloListLoading},
 isEditing: ${isEditing},

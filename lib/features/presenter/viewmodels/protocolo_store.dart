@@ -26,6 +26,9 @@ abstract class _ProtocoloStoreBase with Store {
   int radioIndicator = 1;
 
   @observable
+  bool isValid = false;
+
+  @observable
   bool isNovaFaseBottonSheet = false;
 
   @observable
@@ -198,7 +201,7 @@ abstract class _ProtocoloStoreBase with Store {
 
     if (novoTituloFase != null && novoTituloFase != "") {
       Fase novaFase = Fase(
-        id: faker.guid.random.integer(50),
+        id: faker.guid.random.integer(50), // retirar junto com mock
         nome: novoTituloFase,
         duracao_dias: novoDuracaoDiasFase,
       );
@@ -255,11 +258,11 @@ abstract class _ProtocoloStoreBase with Store {
     );
 
     final index = faseList.indexWhere((item) => item.id == selectedFase!.id);
+    // Add Fase e acao
     if (index == -1) {
-      // Add Fase e acao
       selectedFase?.acao = (selectedFase?.acao ?? [])..add(acao);
+      // Ordena a lista caso maior que 1
       if (selectedFase!.acao!.length > 1) {
-        // Ordena a lista caso maior que 1
         selectedFase!.acao!
             .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
       }
@@ -285,6 +288,43 @@ abstract class _ProtocoloStoreBase with Store {
     faseList = List.from(faseList);
   }
 
+  // @action
+  // prepararEditFase(int indexFase) {
+  //   novoTituloFase = faseList[indexFase].nome;
+  //   novoDuracaoDiasFase = faseList[indexFase].duracao_dias;
+  // }
+
+  @action
+  prepararEditAtiv(int indexFase, int indexAcao) {
+    selectedFase = faseList[indexFase];
+    novoTituloAtividade = faseList[indexFase].acao?[indexAcao].titulo ?? "";
+    novoDescricaoAtividade =
+        faseList[indexFase].acao?[indexAcao].descricao ?? "";
+    diaDaAtivController = TextEditingController(
+        text: faseList[indexFase].acao![indexAcao].duracao_dias.toString());
+  }
+
+  @action
+  editarAcao(int indexFase, int indexAcao) {
+    if (selectedFase!.id != faseList[indexFase].id) {
+      addToFaseList();
+      faseList[indexFase].acao?.removeAt(indexAcao);
+      if (faseList[indexFase].acao!.isEmpty) {
+        faseList.removeAt(indexFase);
+      }
+      faseList = List.from(faseList);
+      return;
+    }
+    faseList[indexFase].acao?[indexAcao].titulo = novoTituloAtividade;
+    faseList[indexFase].acao?[indexAcao].descricao = novoDescricaoAtividade;
+    faseList[indexFase].acao![indexAcao].duracao_dias =
+        int.parse(diaDaAtivController.text);
+    faseList[indexFase]
+        .acao!
+        .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
+    faseList = List.from(faseList);
+  }
+
   @action
   removeAcao(int indexAcao, int indexFase) {
     faseList[indexFase].acao?.removeAt(indexAcao);
@@ -298,6 +338,29 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
+  validarNovaFase() {
+    if (novoTituloFase == null ||
+        novoTituloFase == "" ||
+        novoDuracaoDiasFase == null) {
+      isValid = false;
+      return;
+    }
+    isValid = true;
+  }
+
+  @action
+  validarAtividade() {
+    if (novoTituloAtividade == null ||
+        novoTituloAtividade == "" ||
+        selectedFase == null ||
+        diaDaAtivController.text == "") {
+      isValid = false;
+      return;
+    }
+    isValid = true;
+  }
+
+  @action
   limparTudo() {
     novoNomeProtocolo = null;
     novoFormaProtocolo = null;
@@ -306,6 +369,7 @@ abstract class _ProtocoloStoreBase with Store {
     novoTituloAtividade = null;
     novoDescricaoAtividade = null;
     selectedFase = null;
+    novoDuracaoDiasFase = null;
     faseList.clear();
     faseDropDownList.clear();
     diaDaAtivController.clear();
@@ -315,6 +379,14 @@ abstract class _ProtocoloStoreBase with Store {
   @action
   limparFaseBottomSheet() {
     novoTituloFase = null;
-    diaDaAtiv = null;
+    novoDuracaoDiasFase = null;
+  }
+
+  @action
+  limparAtividadeBottomSheet() {
+    novoTituloAtividade = null;
+    selectedFase = null;
+    novoDescricaoAtividade = null;
+    diaDaAtivController.clear();
   }
 }
