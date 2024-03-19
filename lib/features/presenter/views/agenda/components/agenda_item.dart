@@ -77,22 +77,22 @@ Padding agendaItem({
                               borderRadius: BorderRadius.circular(100),
                               child: Image.network(
                                 agenda.usuario?.pessoa?.imagem ?? '',
-                                width: 40,
-                                height: 40,
+                                width: 35,
+                                height: 35,
                                 fit: BoxFit.cover,
                               ),
                             )
                           : Container(
-                              height: 40,
-                              width: 40,
+                              height: 35,
+                              width: 35,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Constants.kGreyLight,
                                 boxShadow: [
                                   BoxShadow(
                                     color:
-                                        Constants.kGreyMedium.withOpacity(.5),
-                                    blurRadius: 3,
+                                        Constants.kGreyMedium.withOpacity(.3),
+                                    blurRadius: 2,
                                     offset: const Offset(1, 2),
                                   ),
                                 ],
@@ -116,7 +116,7 @@ Padding agendaItem({
                                   .capitalize ??
                               '',
                           style: const TextStyle(
-                            color: Constants.kGreyText,
+                            color: Constants.kGreyMedium,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -135,13 +135,24 @@ Padding agendaItem({
                                   .capitalize ??
                               '',
                           style: const TextStyle(
-                            color: Constants.kGreyText,
+                            color: Constants.kGreyMedium,
                             fontWeight: FontWeight.w600,
                           ),
                         )
                       ],
                     ),
                   ],
+                ),
+              ),
+              Visibility(
+                visible: agenda.finalizado ?? false,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Icon(
+                    Icons.check_circle_outline_rounded,
+                    color: Constants.kPrimaryColor,
+                    size: 30,
+                  ),
                 ),
               ),
               const Icon(

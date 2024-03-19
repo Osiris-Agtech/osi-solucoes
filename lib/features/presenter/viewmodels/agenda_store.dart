@@ -117,6 +117,28 @@ abstract class _AgendaStoreBase with Store {
   }
 
   @action
+  marcarAtividadeComoFeita(int id) async {
+    Get.back();
+    showEditPage = false;
+    state = AgendaState.loading;
+
+    var atividade = await agendaRepository.marcarComoFeito(id);
+
+    atividade.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        toastSuccess(message: 'Atividade marcada como feita!');
+        await buscarAtividades();
+      },
+    );
+
+    state = AgendaState.loaded;
+    return;
+  }
+
+  @action
   deletarAtividade(int id) async {
     Get.back();
     showEditPage = false;
@@ -130,6 +152,7 @@ abstract class _AgendaStoreBase with Store {
       },
       (data) async {
         await buscarAtividades();
+        toastSuccess(message: 'Atividade deletada com sucesso!');
       },
     );
 
@@ -161,12 +184,22 @@ abstract class _AgendaStoreBase with Store {
     tituloController.text = agenda.titulo ?? '';
     descricaoController.text = agenda.descricao ?? '';
     dataAtividade = agenda.data;
+    usuarioAtividade = null;
 
     int index =
         usuariosConta.indexWhere((element) => agenda.usuario?.id == element.id);
     if (index != -1) {
       usuarioAtividade = usuariosConta[index];
     }
+  }
+
+  @action
+  Agenda atualizarDadosDaAtividade(Agenda agenda) {
+    agenda.titulo = tituloController.text;
+    agenda.descricao = descricaoController.text;
+    agenda.data = dataAtividade;
+    agenda.usuario = usuarioAtividade;
+    return agenda;
   }
 
   @action
@@ -183,14 +216,16 @@ abstract class _AgendaStoreBase with Store {
     showEditPage = false;
     state = AgendaState.loading;
 
-    var atividades = await agendaRepository.buscarAtividades();
+    var atividades = await agendaRepository
+        .editarAtividade(atualizarDadosDaAtividade(agenda));
 
     atividades.fold(
       (err) {
         toastError(message: err.message);
       },
       (data) async {
-        atividadeList = List.from(data);
+        toastSuccess(message: 'Atividade atualizada com sucesso!');
+        await buscarAtividades();
       },
     );
 

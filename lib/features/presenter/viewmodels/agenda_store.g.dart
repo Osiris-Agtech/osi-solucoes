@@ -172,6 +172,15 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
         .run(() => super.buscarUsuariosConta());
   }
 
+  final _$marcarAtividadeComoFeitaAsyncAction =
+      AsyncAction('_AgendaStoreBase.marcarAtividadeComoFeita');
+
+  @override
+  Future marcarAtividadeComoFeita(int id) {
+    return _$marcarAtividadeComoFeitaAsyncAction
+        .run(() => super.marcarAtividadeComoFeita(id));
+  }
+
   final _$deletarAtividadeAsyncAction =
       AsyncAction('_AgendaStoreBase.deletarAtividade');
 
@@ -251,6 +260,17 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
         name: '_AgendaStoreBase.carregarDadosDaAtividade');
     try {
       return super.carregarDadosDaAtividade(agenda);
+    } finally {
+      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Agenda atualizarDadosDaAtividade(Agenda agenda) {
+    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
+        name: '_AgendaStoreBase.atualizarDadosDaAtividade');
+    try {
+      return super.atualizarDadosDaAtividade(agenda);
     } finally {
       _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
     }

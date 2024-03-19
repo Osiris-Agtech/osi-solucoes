@@ -363,29 +363,38 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Constants.kBackgroundColor,
-                    side: const BorderSide(
-                      color: Constants.kPrimaryColor,
+                    side: BorderSide(
+                      color: (widget.agenda.finalizado ?? false)
+                          ? Constants.kGreyMedium
+                          : Constants.kPrimaryColor,
                     ), // Borda verde
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  onPressed: () {}, //store.registrarReservatorio(),
+                  onPressed: (widget.agenda.finalizado ?? false)
+                      ? null
+                      : () => store.marcarAtividadeComoFeita(widget.agenda.id!),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(
                         Icons.check,
                         size: 28,
-                        color: Constants.kPrimaryColor,
+                        color: (widget.agenda.finalizado ?? false)
+                            ? Constants.kGreyMedium
+                            : Constants.kPrimaryColor,
                       ), // Ícone de check
-                      SizedBox(width: 8), // Espaçamento entre o ícone e o texto
+                      const SizedBox(
+                          width: 8), // Espaçamento entre o ícone e o texto
                       Text(
                         "Marcar como feito",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w800,
-                          color: Constants.kPrimaryColor,
+                          color: (widget.agenda.finalizado ?? false)
+                              ? Constants.kGreyMedium
+                              : Constants.kPrimaryColor,
                         ),
                       ),
                     ],
@@ -674,7 +683,9 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
                         fontWeight: FontWeight.w600,
                         color: Colors.white),
                   ),
-                  onPressed: () {}, //store.registrarReservatorio(),
+                  onPressed: () {
+                    store.editAgenda(widget.agenda);
+                  },
                 ),
               ),
             ),

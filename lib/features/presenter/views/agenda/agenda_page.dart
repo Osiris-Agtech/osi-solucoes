@@ -49,21 +49,37 @@ class AgendaPageState extends State<AgendaPage> {
                 slivers: [
                   sliverAppBar(context),
                   agenda(),
-                  const SliverToBoxAdapter(
+                  SliverToBoxAdapter(
                     child: Padding(
-                      padding: EdgeInsets.only(
-                        top: 8.0,
+                      padding: const EdgeInsets.only(
+                        top: 16.0,
                         bottom: 16.0,
                         left: 24.0,
                         right: 24.0,
                       ),
-                      child: Text(
-                        'Atividades',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text(
+                            'Atividades',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Tooltip(
+                            message:
+                                "Atividades já realizadas\npossuem o ícone de check",
+                            padding: EdgeInsets.all(8),
+                            triggerMode: TooltipTriggerMode.tap,
+                            child: Icon(
+                              Icons.info_outline,
+                              color: Constants.kPrimaryColor,
+                              size: 24,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

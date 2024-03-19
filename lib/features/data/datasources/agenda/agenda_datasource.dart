@@ -101,7 +101,7 @@ List<Agenda> atividadeList = [
     titulo: 'Atividade 2',
     alerta: false,
     ativo: true,
-    finalizado: false,
+    finalizado: true,
     conta: Conta(),
     lote: Lote(),
     usuario: Usuario(),
