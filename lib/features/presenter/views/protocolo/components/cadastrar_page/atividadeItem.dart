@@ -103,6 +103,7 @@ Padding atividadeItem({
                       return;
                     }
                     store.removeAcao(indexAcao, indexFase);
+                    store.atualizarNovasAtividades();
                   },
                   itemBuilder: (_) => <PopupMenuEntry>[
                     const PopupMenuItem(

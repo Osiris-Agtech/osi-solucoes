@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/protocolo/protocolo_repository.dart';
-import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
@@ -89,7 +88,7 @@ abstract class _ProtocoloStoreBase with Store {
   List<Cultura> novaCulturaProtocolo = [];
 
   @observable
-  List<Atividade> novasAtividadesProtocolo = [];
+  List<Acao> novasAtividadesProtocolo = [];
 
   @observable
   List<Protocolo> protocoloList = [];
@@ -222,6 +221,33 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
+  registrarProtocolo() async {
+    isProtocoloListLoading = true;
+
+    Protocolo novaProtocolo = Protocolo(
+      nome: novoNomeProtocolo,
+      implantacao: novoFormaProtocolo,
+      tipo_cultura: novoTipoProtocolo,
+      sistema_cultivo: novoSistemaProtocolo,
+      cultura: culturaList,
+      acao: novasAtividadesProtocolo,
+    );
+
+    var protocolo = await protocoloRepository.registrarProtocolo(novaProtocolo);
+
+    protocolo.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        protocoloList = List.from([data, ...protocoloList]);
+        toastSuccess(message: "Protocolo cadastrada com sucesso !");
+      },
+    );
+    isProtocoloListLoading = false;
+  }
+
+  @action
   buscarCulturas() async {
     isProtocoloListLoading = true;
     var culturas = await protocoloRepository.buscarCulturas();
@@ -246,6 +272,24 @@ abstract class _ProtocoloStoreBase with Store {
       novaCulturaProtocolo.add(item);
     }
     novaCulturaProtocolo = List.from(novaCulturaProtocolo);
+  }
+
+  @action
+  atualizarNovasAtividades() {
+    novasAtividadesProtocolo
+        .clear(); // Limpa a lista antes de adicionar novas ações
+    for (var fase in faseList) {
+      if (fase.acao != null && fase.acao!.isNotEmpty) {
+        // Se ação não é nula E ação não está vazia
+        for (var acao in fase.acao!) {
+          novasAtividadesProtocolo.add(acao);
+        }
+      }
+    }
+    novasAtividadesProtocolo = List.from(
+        novasAtividadesProtocolo); // Atualiza a lista após todas as adições
+    print(novasAtividadesProtocolo
+        .map((e) => e.titulo)); // Imprime os títulos após a atualização
   }
 
   @action
@@ -328,13 +372,35 @@ abstract class _ProtocoloStoreBase with Store {
   @action
   removeAcao(int indexAcao, int indexFase) {
     faseList[indexFase].acao?.removeAt(indexAcao);
+    if (faseList[indexFase].acao!.isEmpty) {
+      faseList.removeAt(indexFase);
+    }
     faseList = List.from(faseList);
   }
 
   @action
   removeFase(int indexFase) {
+    faseList[indexFase].acao?.clear();
     faseList.removeAt(indexFase);
     faseList = List.from(faseList);
+  }
+
+  @action
+  validarNovoProtocolo() {
+    if (novoNomeProtocolo == null ||
+        novoNomeProtocolo == "" ||
+        culturaList == [] ||
+        novasAtividadesProtocolo == [] ||
+        novoTipoProtocolo == null ||
+        novoTipoProtocolo == "" ||
+        novoSistemaProtocolo == null ||
+        novoSistemaProtocolo == "" ||
+        novoFormaProtocolo == "" ||
+        novoFormaProtocolo == null) {
+      isValid = false;
+      return;
+    }
+    isValid = true;
   }
 
   @action
@@ -370,6 +436,7 @@ abstract class _ProtocoloStoreBase with Store {
     novoDescricaoAtividade = null;
     selectedFase = null;
     novoDuracaoDiasFase = null;
+    novasAtividadesProtocolo.clear();
     faseList.clear();
     faseDropDownList.clear();
     diaDaAtivController.clear();

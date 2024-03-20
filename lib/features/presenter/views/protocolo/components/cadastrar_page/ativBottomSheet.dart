@@ -261,6 +261,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                           return;
                         }
                         store.addToFaseList();
+                        store.atualizarNovasAtividades();
                         store.limparAtividadeBottomSheet();
                         Get.back();
                       },

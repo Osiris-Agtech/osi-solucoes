@@ -164,7 +164,7 @@ class _NextStepButtonState extends State<NextStepButton> {
         ),
       ),
       onPressed: () {
-        if (store.dotIndicator == 6) {
+        if (store.dotIndicator == 5) {
           Navigator.pop(context);
         } else {
           store.setDotIndicator(store.dotIndicator + 1);

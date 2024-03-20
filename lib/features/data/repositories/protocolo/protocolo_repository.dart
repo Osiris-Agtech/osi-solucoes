@@ -31,4 +31,11 @@ class ProtocoloRepository implements IProtocoloRepository {
     var result = await datasource.registrarFase(fase: fase);
     return result;
   }
+
+  @override
+  Future<Either<Failure, Protocolo>> registrarProtocolo(
+      Protocolo protocolo) async {
+    var result = await datasource.registrarProtocolo(protocolo: protocolo);
+    return result;
+  }
 }

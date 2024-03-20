@@ -378,13 +378,13 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
       Atom(name: '_ProtocoloStoreBase.novasAtividadesProtocolo');
 
   @override
-  List<Atividade> get novasAtividadesProtocolo {
+  List<Acao> get novasAtividadesProtocolo {
     _$novasAtividadesProtocoloAtom.reportRead();
     return super.novasAtividadesProtocolo;
   }
 
   @override
-  set novasAtividadesProtocolo(List<Atividade> value) {
+  set novasAtividadesProtocolo(List<Acao> value) {
     _$novasAtividadesProtocoloAtom
         .reportWrite(value, super.novasAtividadesProtocolo, () {
       super.novasAtividadesProtocolo = value;
@@ -451,6 +451,15 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   @override
   Future registrarFase() {
     return _$registrarFaseAsyncAction.run(() => super.registrarFase());
+  }
+
+  final _$registrarProtocoloAsyncAction =
+      AsyncAction('_ProtocoloStoreBase.registrarProtocolo');
+
+  @override
+  Future registrarProtocolo() {
+    return _$registrarProtocoloAsyncAction
+        .run(() => super.registrarProtocolo());
   }
 
   final _$buscarCulturasAsyncAction =
@@ -652,6 +661,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic atualizarNovasAtividades() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.atualizarNovasAtividades');
+    try {
+      return super.atualizarNovasAtividades();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic addToFaseList() {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.addToFaseList');
@@ -712,6 +732,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
         name: '_ProtocoloStoreBase.removeFase');
     try {
       return super.removeFase(indexFase);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic validarNovoProtocolo() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.validarNovoProtocolo');
+    try {
+      return super.validarNovoProtocolo();
     } finally {
       _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
     }

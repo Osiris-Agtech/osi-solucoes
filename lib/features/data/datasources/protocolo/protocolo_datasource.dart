@@ -11,6 +11,8 @@ abstract class IProtocoloDatasource {
   Future<Either<Failure, List<Protocolo>>> buscarProtocolos();
   Future<Either<Failure, List<Cultura>>> buscarCulturas();
   Future<Either<Failure, Fase>> registrarFase({required Fase fase});
+  Future<Either<Failure, Protocolo>> registrarProtocolo(
+      {required Protocolo protocolo});
 }
 
 class ProtocoloDatasource implements IProtocoloDatasource {
@@ -60,5 +62,12 @@ class ProtocoloDatasource implements IProtocoloDatasource {
   Future<Either<Failure, Fase>> registrarFase({required Fase fase}) async {
     await Future.delayed(const Duration(seconds: 2));
     return Future.value(Right(fase));
+  }
+
+  @override
+  Future<Either<Failure, Protocolo>> registrarProtocolo(
+      {required Protocolo protocolo}) async {
+    await Future.delayed(const Duration(seconds: 2));
+    return Future.value(Right(protocolo));
   }
 }

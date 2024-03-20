@@ -173,7 +173,10 @@ class ListFases extends StatelessWidget {
                               width: 10,
                             ),
                             InkWell(
-                              onTap: () => store.removeFase(index),
+                              onTap: () {
+                                store.removeFase(index);
+                                store.atualizarNovasAtividades();
+                              },
                               child: const Icon(
                                 Icons.delete_outlined,
                                 size: 20,
