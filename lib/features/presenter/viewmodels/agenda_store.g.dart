@@ -9,6 +9,27 @@ part of 'agenda_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AgendaStore on _AgendaStoreBase, Store {
+  Computed<List<Agenda>>? _$listaParaSerUsadaComputed;
+
+  @override
+  List<Agenda> get listaParaSerUsada => (_$listaParaSerUsadaComputed ??=
+          Computed<List<Agenda>>(() => super.listaParaSerUsada,
+              name: '_AgendaStoreBase.listaParaSerUsada'))
+      .value;
+  Computed<List<Agenda>>? _$filtrarPorLoteComputed;
+
+  @override
+  List<Agenda> get filtrarPorLote => (_$filtrarPorLoteComputed ??=
+          Computed<List<Agenda>>(() => super.filtrarPorLote,
+              name: '_AgendaStoreBase.filtrarPorLote'))
+      .value;
+  Computed<List<Agenda>>? _$filtrarPorResponsavelComputed;
+
+  @override
+  List<Agenda> get filtrarPorResponsavel => (_$filtrarPorResponsavelComputed ??=
+          Computed<List<Agenda>>(() => super.filtrarPorResponsavel,
+              name: '_AgendaStoreBase.filtrarPorResponsavel'))
+      .value;
   Computed<List<Agenda>>? _$filteredAtividadesComputed;
 
   @override
@@ -29,6 +50,52 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
   set state(AgendaState value) {
     _$stateAtom.reportWrite(value, super.state, () {
       super.state = value;
+    });
+  }
+
+  final _$filterAtom = Atom(name: '_AgendaStoreBase.filter');
+
+  @override
+  AgendaFilter get filter {
+    _$filterAtom.reportRead();
+    return super.filter;
+  }
+
+  @override
+  set filter(AgendaFilter value) {
+    _$filterAtom.reportWrite(value, super.filter, () {
+      super.filter = value;
+    });
+  }
+
+  final _$filtroLoteAtom = Atom(name: '_AgendaStoreBase.filtroLote');
+
+  @override
+  Lote? get filtroLote {
+    _$filtroLoteAtom.reportRead();
+    return super.filtroLote;
+  }
+
+  @override
+  set filtroLote(Lote? value) {
+    _$filtroLoteAtom.reportWrite(value, super.filtroLote, () {
+      super.filtroLote = value;
+    });
+  }
+
+  final _$filtroResponsavelAtom =
+      Atom(name: '_AgendaStoreBase.filtroResponsavel');
+
+  @override
+  Usuario? get filtroResponsavel {
+    _$filtroResponsavelAtom.reportRead();
+    return super.filtroResponsavel;
+  }
+
+  @override
+  set filtroResponsavel(Usuario? value) {
+    _$filtroResponsavelAtom.reportWrite(value, super.filtroResponsavel, () {
+      super.filtroResponsavel = value;
     });
   }
 
@@ -89,6 +156,21 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
   set usuariosConta(List<Usuario> value) {
     _$usuariosContaAtom.reportWrite(value, super.usuariosConta, () {
       super.usuariosConta = value;
+    });
+  }
+
+  final _$lotesContaAtom = Atom(name: '_AgendaStoreBase.lotesConta');
+
+  @override
+  List<Lote> get lotesConta {
+    _$lotesContaAtom.reportRead();
+    return super.lotesConta;
+  }
+
+  @override
+  set lotesConta(List<Lote> value) {
+    _$lotesContaAtom.reportWrite(value, super.lotesConta, () {
+      super.lotesConta = value;
     });
   }
 
@@ -172,6 +254,14 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
         .run(() => super.buscarUsuariosConta());
   }
 
+  final _$buscarLotesContaAsyncAction =
+      AsyncAction('_AgendaStoreBase.buscarLotesConta');
+
+  @override
+  Future buscarLotesConta() {
+    return _$buscarLotesContaAsyncAction.run(() => super.buscarLotesConta());
+  }
+
   final _$marcarAtividadeComoFeitaAsyncAction =
       AsyncAction('_AgendaStoreBase.marcarAtividadeComoFeita');
 
@@ -196,6 +286,15 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     return _$editAgendaAsyncAction.run(() => super.editAgenda(agenda));
   }
 
+  final _$cadastrarAtividadeAsyncAction =
+      AsyncAction('_AgendaStoreBase.cadastrarAtividade');
+
+  @override
+  Future cadastrarAtividade() {
+    return _$cadastrarAtividadeAsyncAction
+        .run(() => super.cadastrarAtividade());
+  }
+
   final _$_AgendaStoreBaseActionController =
       ActionController(name: '_AgendaStoreBase');
 
@@ -205,6 +304,50 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
         name: '_AgendaStoreBase.setShowEditPage');
     try {
       return super.setShowEditPage(value);
+    } finally {
+      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setInitialStateForFilter() {
+    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
+        name: '_AgendaStoreBase.setInitialStateForFilter');
+    try {
+      return super.setInitialStateForFilter();
+    } finally {
+      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setFiltro(AgendaFilter? value) {
+    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
+        name: '_AgendaStoreBase.setFiltro');
+    try {
+      return super.setFiltro(value);
+    } finally {
+      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setFiltroLote(Lote? value) {
+    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
+        name: '_AgendaStoreBase.setFiltroLote');
+    try {
+      return super.setFiltroLote(value);
+    } finally {
+      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setFiltroResponsavel(Usuario? value) {
+    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
+        name: '_AgendaStoreBase.setFiltroResponsavel');
+    try {
+      return super.setFiltroResponsavel(value);
     } finally {
       _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -291,14 +434,21 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
   String toString() {
     return '''
 state: ${state},
+filter: ${filter},
+filtroLote: ${filtroLote},
+filtroResponsavel: ${filtroResponsavel},
 showEditPage: ${showEditPage},
 selectedDay: ${selectedDay},
 atividadeList: ${atividadeList},
 usuariosConta: ${usuariosConta},
+lotesConta: ${lotesConta},
 tituloController: ${tituloController},
 descricaoController: ${descricaoController},
 dataAtividade: ${dataAtividade},
 usuarioAtividade: ${usuarioAtividade},
+listaParaSerUsada: ${listaParaSerUsada},
+filtrarPorLote: ${filtrarPorLote},
+filtrarPorResponsavel: ${filtrarPorResponsavel},
 filteredAtividades: ${filteredAtividades}
     ''';
   }

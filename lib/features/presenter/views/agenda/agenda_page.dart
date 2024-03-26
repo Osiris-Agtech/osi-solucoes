@@ -8,12 +8,16 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/constants.dart';
-import '../../states/agenda_page_states_enum.dart';
+import '../../models/lote/lote_model.dart';
+import '../../models/usuario/usuario_model.dart';
+import '../../states/agenda_page_enum.dart';
 import '../home/components/top_app_bar.dart';
 
 class AgendaPage extends StatefulWidget {
   final String title;
-  const AgendaPage({Key? key, this.title = 'AgendaPage'}) : super(key: key);
+  final int? loteId;
+  const AgendaPage({Key? key, this.loteId, this.title = 'AgendaPage'})
+      : super(key: key);
   @override
   AgendaPageState createState() => AgendaPageState();
 }
@@ -25,9 +29,11 @@ class AgendaPageState extends State<AgendaPage> {
   @override
   void initState() {
     super.initState();
+    store.setInitialStateForFilter();
     store.onDaySelected(null);
     store.buscarAtividades();
     store.buscarUsuariosConta();
+    store.buscarLotesConta();
   }
 
   @override
@@ -57,28 +63,100 @@ class AgendaPageState extends State<AgendaPage> {
                         left: 24.0,
                         right: 24.0,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text(
-                            'Atividades',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            children: [
+                              const Expanded(
+                                child: Text(
+                                  'Atividades',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 150,
+                                child: Observer(builder: (_) {
+                                  return DropdownButtonFormField<AgendaFilter>(
+                                    value: store.filter,
+                                    hint: const Text(
+                                      'Filtro',
+                                      style: TextStyle(
+                                          fontStyle: FontStyle.italic),
+                                    ),
+                                    icon: const Icon(Icons.filter_list_rounded),
+                                    iconEnabledColor: Constants.kPrimaryColor,
+                                    items: AgendaFilter.values
+                                        .map((AgendaFilter filtro) {
+                                      return DropdownMenuItem<AgendaFilter>(
+                                        value: filtro,
+                                        child: Text(
+                                            (filtro == AgendaFilter.todos
+                                                    ? 'Exibir '
+                                                    : '') +
+                                                filtro.name),
+                                      );
+                                    }).toList(),
+                                    onChanged: store.setFiltro,
+                                  );
+                                }),
+                              ),
+                            ],
                           ),
-                          Tooltip(
-                            message:
-                                "Atividades já realizadas\npossuem o ícone de check",
-                            padding: EdgeInsets.all(8),
-                            triggerMode: TooltipTriggerMode.tap,
-                            child: Icon(
-                              Icons.info_outline,
-                              color: Constants.kPrimaryColor,
-                              size: 24,
-                            ),
-                          ),
+                          Observer(builder: (_) {
+                            if (store.filter == AgendaFilter.todos) {
+                              return const SizedBox.shrink();
+                            }
+
+                            if (store.filter == AgendaFilter.lote) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: DropdownButtonFormField<Lote>(
+                                  value: store.filtroLote,
+                                  hint: const Text(
+                                    'Selecionar Lote',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                  isExpanded: true,
+                                  iconEnabledColor: Constants.kPrimaryColor,
+                                  items: store.lotesConta.map((Lote lote) {
+                                    return DropdownMenuItem<Lote>(
+                                      value: lote,
+                                      child: Text(
+                                          '${lote.nome} - ${lote.setor?.nome ?? ''}'),
+                                    );
+                                  }).toList(),
+                                  onChanged: store.setFiltroLote,
+                                ),
+                              );
+                            }
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: DropdownButtonFormField<Usuario>(
+                                value: store.filtroResponsavel,
+                                hint: const Text(
+                                  'Selecionar Responsável',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                                isExpanded: true,
+                                iconEnabledColor: Constants.kPrimaryColor,
+                                items:
+                                    store.usuariosConta.map((Usuario usuario) {
+                                  return DropdownMenuItem<Usuario>(
+                                    value: usuario,
+                                    child: Text(
+                                        '${usuario.nome} (${usuario.selected_conta?.cargo?.cargo})'),
+                                  );
+                                }).toList(),
+                                onChanged: store.setFiltroResponsavel,
+                              ),
+                            );
+                          }),
                         ],
                       ),
                     ),
@@ -87,6 +165,14 @@ class AgendaPageState extends State<AgendaPage> {
                     if (store.state == AgendaState.loading) {
                       return _loadingList();
                     }
+
+                    if (store.filter == AgendaFilter.lote) {
+                      if (store.filtrarPorLote.isEmpty) {
+                        return _emptyList();
+                      }
+                      return _showList();
+                    }
+
                     if (store.atividadeList.isEmpty) {
                       return _emptyList();
                     }
@@ -102,7 +188,7 @@ class AgendaPageState extends State<AgendaPage> {
   }
 
   SliverAppBar sliverAppBar(BuildContext context) {
-    return const SliverAppBar(
+    return SliverAppBar(
       backgroundColor: Colors.white,
       toolbarHeight: 100, //MediaQuery.of(context).size.height * 0.17,
       // collapsedHeight: 200, //MediaQuery.of(context).size.height * 0.17,
@@ -110,7 +196,7 @@ class AgendaPageState extends State<AgendaPage> {
       automaticallyImplyLeading: false,
       forceElevated: true,
       elevation: 0,
-      flexibleSpace: TopAppBar(
+      flexibleSpace: const TopAppBar(
         path: "/Home/",
         namePage: "Agenda",
         subtitle: "Acompanhamento de ações da produção",
@@ -118,6 +204,23 @@ class AgendaPageState extends State<AgendaPage> {
         //   Get.offNamed(Routes.homePage, (route) => false);
         // },
       ),
+      actions: store.atividadeList.isNotEmpty
+          ? [
+              const Padding(
+                padding: EdgeInsets.only(top: 16.0, right: 24.0),
+                child: Tooltip(
+                  message: "Atividades já realizadas\npossuem o ícone de check",
+                  padding: EdgeInsets.all(8),
+                  triggerMode: TooltipTriggerMode.tap,
+                  child: Icon(
+                    Icons.info_outline,
+                    color: Constants.kPrimaryColor,
+                    size: 24,
+                  ),
+                ),
+              ),
+            ]
+          : null,
     );
   }
 
@@ -130,6 +233,7 @@ class AgendaPageState extends State<AgendaPage> {
             selectedDayPredicate: (day) => isSameDay(store.selectedDay, day),
             onDaySelected: (selectedDay, focusedDay) {
               store.onDaySelected(selectedDay);
+              store.setInitialStateForFilter();
             },
             locale: 'pt_BR',
             firstDay: DateTime.now().subtract(const Duration(days: 10 * 365)),
@@ -193,6 +297,9 @@ class AgendaPageState extends State<AgendaPage> {
   _showList() {
     return SliverToBoxAdapter(
       child: Container(
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height * 0.3,
+        ),
         decoration: const BoxDecoration(
           color: Constants.kCardColor,
           borderRadius: BorderRadius.only(
@@ -200,13 +307,13 @@ class AgendaPageState extends State<AgendaPage> {
             topRight: Radius.circular(10),
           ),
         ),
-        child: store.selectedDay != null && store.filteredAtividades.isEmpty
-            ? const Center(
+        child: store.listaParaSerUsada.isEmpty
+            ? Center(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 100.0),
+                  padding: const EdgeInsets.symmetric(vertical: 100.0),
                   child: Text(
-                    'Não há atividades\ncadastradas para esta data',
-                    style: TextStyle(
+                    'Não há atividades\ncadastradas${store.selectedDay != null ? ' para esta data' : ''}',
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Constants.kText2,
                       fontStyle: FontStyle.italic,
@@ -219,21 +326,12 @@ class AgendaPageState extends State<AgendaPage> {
             : ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: store.selectedDay != null
-                    ? store.filteredAtividades.length
-                    : store.atividadeList.length,
+                itemCount: store.listaParaSerUsada.length,
                 itemBuilder: (context, index) {
                   return agendaItem(
                     isFirst: index == 0,
-                    isLast: index ==
-                        (store.selectedDay != null
-                                    ? store.filteredAtividades
-                                    : store.atividadeList)
-                                .length -
-                            1,
-                    agenda: store.selectedDay != null
-                        ? store.filteredAtividades[index]
-                        : store.atividadeList[index],
+                    isLast: index == store.listaParaSerUsada.length - 1,
+                    agenda: store.listaParaSerUsada[index],
                     store: store,
                   );
                 },
@@ -246,18 +344,27 @@ class AgendaPageState extends State<AgendaPage> {
     return SliverList(
       delegate: SliverChildListDelegate(
         [
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.only(top: 120.0),
-              child: Text(
-                'Não há protocolos\ncadastrados em sua conta',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xff6F6464),
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w800,
+          Container(
+            decoration: const BoxDecoration(
+              color: Constants.kCardColor,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+            ),
+            child: const Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 120.0, bottom: 120.0),
+                child: Text(
+                  'Não há protocolos\ncadastrados em sua conta',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xff6F6464),
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w800,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
           ),

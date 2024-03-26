@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
@@ -511,8 +513,10 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
                   onTap: () async {
                     DateTime? dateTime = await datePicker(
                       context: context,
-                      title: 'Data de Nascimento',
+                      title: 'Data da Atividade',
                       initialDate: DateTime.now(),
+                      // phaseColors: store.calcularFases(widget.agenda),
+                      // subtitle: store.calularSubtitulo(widget.agenda),
                     );
                     if (dateTime != null) {
                       store.setDataAtividade(dateTime);

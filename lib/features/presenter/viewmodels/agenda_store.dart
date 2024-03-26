@@ -10,7 +10,8 @@ import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart'
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 
 import '../../data/repositories/cadernoCampo/cadeno_campo_repository.dart';
-import '../states/agenda_page_states_enum.dart';
+import '../models/lote/lote_model.dart';
+import '../states/agenda_page_enum.dart';
 import 'auth_controller.dart';
 
 part 'agenda_store.g.dart';
@@ -24,6 +25,15 @@ abstract class _AgendaStoreBase with Store {
   AgendaState state = AgendaState.loading;
 
   @observable
+  AgendaFilter filter = AgendaFilter.todos;
+
+  @observable
+  Lote? filtroLote;
+
+  @observable
+  Usuario? filtroResponsavel;
+
+  @observable
   bool showEditPage = false;
 
   @observable
@@ -34,6 +44,9 @@ abstract class _AgendaStoreBase with Store {
 
   @observable
   List<Usuario> usuariosConta = [];
+
+  @observable
+  List<Lote> lotesConta = [];
 
   @action
   setShowEditPage(bool value) => showEditPage = value;
@@ -87,12 +100,86 @@ abstract class _AgendaStoreBase with Store {
   }
 
   @action
+  buscarLotesConta() async {
+    AuthController authController = GetIt.I<AuthController>();
+
+    var usuariosContaResult = await agendaRepository
+        .buscarLotesConta(authController.usuario.selected_conta!.conta!.id!);
+
+    usuariosContaResult.fold(
+      (err) {
+        lotesConta = List.from([]);
+      },
+      (data) async {
+        lotesConta = List.from(data);
+      },
+    );
+  }
+
+  @action
+  setInitialStateForFilter() {
+    filter = AgendaFilter.todos;
+    filtroLote = null;
+    filtroResponsavel = null;
+  }
+
+  @action
+  setFiltro(AgendaFilter? value) {
+    filter = value ?? AgendaFilter.todos;
+    filtroLote = null;
+    filtroResponsavel = null;
+  }
+
+  @action
+  setFiltroLote(Lote? value) {
+    filtroLote = value;
+  }
+
+  @action
+  setFiltroResponsavel(Usuario? value) {
+    filtroResponsavel = value;
+  }
+
+  @action
   List<Agenda> getEventsForDay(DateTime day) {
     return atividadeList
         .where((element) =>
             element.data?.year == day.year &&
             element.data?.month == day.month &&
             element.data?.day == day.day)
+        .toList();
+  }
+
+  @computed
+  List<Agenda> get listaParaSerUsada {
+    switch (filter) {
+      case AgendaFilter.todos:
+        if (selectedDay != null) return filteredAtividades;
+        return atividadeList;
+      case AgendaFilter.lote:
+        return filtrarPorLote;
+      case AgendaFilter.responsavel:
+        return filtrarPorResponsavel;
+    }
+  }
+
+  @computed
+  List<Agenda> get filtrarPorLote {
+    if (filtroLote == null) {
+      return atividadeList;
+    }
+    return atividadeList
+        .where((element) => element.lote?.id == filtroLote?.id)
+        .toList();
+  }
+
+  @computed
+  List<Agenda> get filtrarPorResponsavel {
+    if (filtroResponsavel == null) {
+      return atividadeList;
+    }
+    return atividadeList
+        .where((element) => element.usuario?.id == filtroResponsavel?.id)
         .toList();
   }
 
@@ -225,6 +312,35 @@ abstract class _AgendaStoreBase with Store {
       },
       (data) async {
         toastSuccess(message: 'Atividade atualizada com sucesso!');
+        await buscarAtividades();
+      },
+    );
+
+    state = AgendaState.loaded;
+    return;
+  }
+
+  @action
+  cadastrarAtividade() async {
+    Get.back();
+    showEditPage = false;
+    state = AgendaState.loading;
+
+    Agenda agenda = Agenda(
+      titulo: tituloController.text,
+      descricao: descricaoController.text,
+      data: dataAtividade,
+      usuario: usuarioAtividade,
+    );
+
+    var atividade = await agendaRepository.cadastrarAtividade(agenda);
+
+    atividade.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        toastSuccess(message: 'Atividade cadastrada com sucesso!');
         await buscarAtividades();
       },
     );

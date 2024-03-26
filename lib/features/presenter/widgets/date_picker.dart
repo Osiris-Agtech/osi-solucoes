@@ -10,6 +10,8 @@ Future<DateTime?> datePicker({
   required BuildContext context,
   required DateTime initialDate,
   required String title,
+  Map<Color, List<DateTime>>? phaseColors,
+  Map<String, Color>? subtitle,
 }) {
   return showRoundedDatePicker(
     context: context,
@@ -78,26 +80,27 @@ Future<DateTime?> datePicker({
       textStyleButtonNegative: const TextStyle(color: Constants.kGreyMedium),
       decorationDateSelected: const BoxDecoration(
           color: Constants.kPrimaryColor, shape: BoxShape.circle),
-      phaseColors: {
-        Colors.blueAccent: [
-          DateTime(2024, 2, 1),
-          DateTime(2024, 2, 2),
-          DateTime(2024, 2, 3),
-          DateTime(2024, 2, 4),
-        ],
-        Colors.orangeAccent: [
-          DateTime(2024, 2, 5),
-          DateTime(2024, 2, 6),
-          DateTime(2024, 2, 7),
-          DateTime(2024, 2, 8),
-          DateTime(2024, 2, 9),
-        ],
-        Colors.amberAccent: [
-          DateTime(2024, 2, 12),
-          DateTime(2024, 2, 13),
-          DateTime(2024, 2, 14)
-        ],
-      },
+      phaseColors: phaseColors,
+      // phaseColors: {
+      //   Colors.blueAccent: [
+      //     DateTime(2024, 2, 1),
+      //     DateTime(2024, 2, 2),
+      //     DateTime(2024, 2, 3),
+      //     DateTime(2024, 2, 4),
+      //   ],
+      //   Colors.orangeAccent: [
+      //     DateTime(2024, 2, 5),
+      //     DateTime(2024, 2, 6),
+      //     DateTime(2024, 2, 7),
+      //     DateTime(2024, 2, 8),
+      //     DateTime(2024, 2, 9),
+      //   ],
+      //   Colors.amberAccent: [
+      //     DateTime(2024, 2, 12),
+      //     DateTime(2024, 2, 13),
+      //     DateTime(2024, 2, 14)
+      //   ],
+      // },
       backgroundPicker: Constants.kBackgroundColor, //getBackgroundColor(),
       backgroundActionBar: Constants.kBackgroundColor, //getBackgroundColor(),
       backgroundHeaderMonth: Constants.kBackgroundColor, //getBackgroundColor(),
@@ -109,11 +112,12 @@ Future<DateTime?> datePicker({
       heightYearRow: 70,
       backgroundPicker: Constants.kBackgroundColor, //getBackgroundColor(),
     ),
-    subtitle: {
-      "fase 1": Colors.blueAccent,
-      "fase 2": Colors.orangeAccent,
-      "fase 3": Colors.amberAccent,
-    },
+    subtitle: subtitle,
+    // subtitle: {
+    //   "fase 1": Colors.blueAccent,
+    //   "fase 2": Colors.orangeAccent,
+    //   "fase 3": Colors.amberAccent,
+    // },
   );
 }
 

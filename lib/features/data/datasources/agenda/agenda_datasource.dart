@@ -3,6 +3,7 @@ import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
+import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 
 abstract class IAgendaDatasource {
@@ -11,6 +12,7 @@ abstract class IAgendaDatasource {
   Future<Either<Failure, Agenda>> deletarAtividade(int id);
   Future<Either<Failure, Agenda>> cadastrarAtividade(Agenda agenda);
   Future<Either<Failure, Agenda>> marcarComoFeito(int id);
+  Future<Either<Failure, List<Lote>>> buscarLotesConta(int contaId);
 }
 
 class AgendaDatasource implements IAgendaDatasource {
@@ -73,6 +75,15 @@ class AgendaDatasource implements IAgendaDatasource {
 
     return Future.value(Right(agenda ?? Agenda()));
   }
+
+  @override
+  Future<Either<Failure, List<Lote>>> buscarLotesConta(int contaId) async {
+    await Future.delayed(const Duration(seconds: 1));
+
+    loteList
+        .sort((a, b) => (a.setor?.nome ?? '').compareTo(b.setor?.nome ?? ''));
+    return Future.value(Right(loteList));
+  }
 }
 
 List<Agenda> atividadeList = [
@@ -118,7 +129,37 @@ List<Agenda> atividadeList = [
     ativo: true,
     finalizado: false,
     conta: Conta(),
-    lote: Lote(),
+    lote: loteList[1],
     usuario: Usuario(),
+  ),
+];
+
+List<Lote> loteList = [
+  Lote(
+    id: 1,
+    nome: 'Lote 1',
+    semeadura_data: DateTime.now(),
+    setor: Setor(
+      id: 1,
+      nome: 'Setor 1',
+    ),
+  ),
+  Lote(
+    id: 3,
+    nome: 'Lote 3',
+    semeadura_data: DateTime.now(),
+    setor: Setor(
+      id: 3,
+      nome: 'Setor 3',
+    ),
+  ),
+  Lote(
+    id: 2,
+    nome: 'Lote 2',
+    semeadura_data: DateTime.now(),
+    setor: Setor(
+      id: 2,
+      nome: 'Setor 2',
+    ),
   ),
 ];

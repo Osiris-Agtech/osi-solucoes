@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:osi_solucoes/features/data/datasources/agenda/agenda_datasource.dart';
 import 'package:osi_solucoes/features/data/repositories/agenda/agenda_repository_interface.dart';
 import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
+import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 
 class AgendaRepository implements IAgendaRepository {
   final IAgendaDatasource datasource;
@@ -13,6 +14,13 @@ class AgendaRepository implements IAgendaRepository {
   @override
   Future<Either<Failure, List<Agenda>>> buscarAtividades() async {
     var result = await datasource.buscarAtividades();
+
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, List<Lote>>> buscarLotesConta(int contaId) async {
+    var result = await datasource.buscarLotesConta(contaId);
 
     return result;
   }
