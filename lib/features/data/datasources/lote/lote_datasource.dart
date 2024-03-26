@@ -29,6 +29,8 @@ abstract class ILoteDatasource {
       {required int contaId});
   Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
       {required int reservatorioId});
+  Future<Either<Failure, Protocolo>> buscarProtocoloDetalhes(
+      {required int protocoloId});
   Future<Either<Failure, List<Protocolo>>> buscarProtocolos();
   Future<Either<Failure, Lote>> registrarLote({required Lote lote});
   Future<Either<Failure, Lote>> migrarLote(
@@ -423,6 +425,45 @@ class LoteDatasource implements ILoteDatasource {
       return Right(reservatorio);
     } else {
       return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Protocolo>> buscarProtocoloDetalhes(
+      {required int protocoloId}) async {
+    try {
+      // Simula uma chamada de API assíncrona com delay
+      await Future.delayed(const Duration(seconds: 2));
+
+      // Gera uma lista com 3 Protocolos mockados
+      final List<Protocolo> protocolosMock = List.generate(
+          3,
+          (index) => Protocolo(
+                id: index + 1,
+                nome: "Protocolo ${index + 1}",
+                descricao: "Descrição do Protocolo ${index + 1}",
+                tipo_cultura: "Tipo de Cultura ${index + 1}",
+                sistema_cultivo: "Sistema de Cultivo ${index + 1}",
+                implantacao: "Implantação ${index + 1}",
+                created_at: DateTime.now(),
+                updated_at: DateTime.now(),
+                deleted_at: null,
+                acao: List.generate(2, (indexAcao) => Acao()),
+                cultura: [
+                  Cultura(id: index, nome: 'Cultura Exemplo ${index + 1}')
+                ],
+                conta: Conta(),
+              ));
+
+      Protocolo? protocoloDetalhe = protocolosMock.firstWhere(
+        (protocolo) => protocolo.id == protocoloId,
+        orElse: () => throw Exception("Protocolo não encontrado"),
+      );
+
+      return Right(protocoloDetalhe);
+    } catch (e) {
+      return Left(ErrorProtocolo(
+          message: "Não foi possível buscar os detalhes do protocolo"));
     }
   }
 

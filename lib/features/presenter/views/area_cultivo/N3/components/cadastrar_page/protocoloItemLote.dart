@@ -4,7 +4,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
 Padding protocoloItemLote({
   required int index,
-  LoteStore? store,
+  required LoteStore store,
   VoidCallback? onTap,
 }) {
   return Padding(
@@ -16,7 +16,10 @@ Padding protocoloItemLote({
     child: InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: () {},
+      onTap: () {
+        store.setProtocoloDetalhes(store.protocoloList[index]);
+        store.buscarProtocoloDetalhes();
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -40,7 +43,7 @@ Padding protocoloItemLote({
                         top: 5.0,
                       ),
                       child: Text(
-                        store?.protocoloList[index].nome ?? "---",
+                        store.protocoloList[index].nome ?? "---",
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
@@ -64,8 +67,7 @@ Padding protocoloItemLote({
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  store?.protocoloList[index].cultura?[0]
-                                          .nome ??
+                                  store.protocoloList[index].cultura?[0].nome ??
                                       "---",
                                   style: const TextStyle(
                                     color: Constants.kPrimaryColor,

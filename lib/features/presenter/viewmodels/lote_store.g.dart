@@ -787,6 +787,22 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$protocoloDetalhesAtom =
+      Atom(name: '_LoteStoreBase.protocoloDetalhes');
+
+  @override
+  Protocolo get protocoloDetalhes {
+    _$protocoloDetalhesAtom.reportRead();
+    return super.protocoloDetalhes;
+  }
+
+  @override
+  set protocoloDetalhes(Protocolo value) {
+    _$protocoloDetalhesAtom.reportWrite(value, super.protocoloDetalhes, () {
+      super.protocoloDetalhes = value;
+    });
+  }
+
   final _$solucaoNutritivaListAtom =
       Atom(name: '_LoteStoreBase.solucaoNutritivaList');
 
@@ -900,6 +916,15 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   Future buscarReservatorioDetalhes() {
     return _$buscarReservatorioDetalhesAsyncAction
         .run(() => super.buscarReservatorioDetalhes());
+  }
+
+  final _$buscarProtocoloDetalhesAsyncAction =
+      AsyncAction('_LoteStoreBase.buscarProtocoloDetalhes');
+
+  @override
+  Future buscarProtocoloDetalhes() {
+    return _$buscarProtocoloDetalhesAsyncAction
+        .run(() => super.buscarProtocoloDetalhes());
   }
 
   final _$registrarLoteAsyncAction =
@@ -1298,11 +1323,11 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
-  dynamic setProtocoloDetalhes() {
+  dynamic setProtocoloDetalhes(Protocolo protocolo) {
     final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
         name: '_LoteStoreBase.setProtocoloDetalhes');
     try {
-      return super.setProtocoloDetalhes();
+      return super.setProtocoloDetalhes(protocolo);
     } finally {
       _$_LoteStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -1371,6 +1396,7 @@ colheitaData: ${colheitaData},
 novoLoteDescricao: ${novoLoteDescricao},
 reservatorioList: ${reservatorioList},
 reservatorioDetalhes: ${reservatorioDetalhes},
+protocoloDetalhes: ${protocoloDetalhes},
 solucaoNutritivaList: ${solucaoNutritivaList},
 solucaoConcentradaList: ${solucaoConcentradaList},
 novoLote: ${novoLote},

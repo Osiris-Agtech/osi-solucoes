@@ -21,6 +21,7 @@ abstract class ILoteRepository {
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(int contaId);
   Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
       int reservatorioId);
+  Future<Either<Failure, Protocolo>> buscarProtocoloDetalhes(int protocoloId);
   Future<Either<Failure, List<Protocolo>>> buscarProtocolos();
   Future<Either<Failure, Lote>> registrarLote(Lote lote);
   Future<Either<Failure, Cultura>> registrarCultura(

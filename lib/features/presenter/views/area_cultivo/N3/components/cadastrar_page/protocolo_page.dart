@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
@@ -85,83 +84,75 @@ protocolo(
 
 protocoloPage(BuildContext context, LoteStore store) {
   final ScrollController _scrollController = ScrollController();
-  return AnnotatedRegion<SystemUiOverlayStyle>(
-    value: const SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-    ),
-    child: SafeArea(
-      child: Scaffold(
-        backgroundColor: Constants.kSecondBackgroundColor,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 10, left: 30),
-              child: RichText(
-                textAlign: TextAlign.start,
-                text: const TextSpan(
+  return SizedBox(
+    height: MediaQuery.of(context).size.height * 0.9,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 10, left: 30),
+          child: RichText(
+            textAlign: TextAlign.start,
+            text: const TextSpan(
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: 'Qual ',
+                ),
+                TextSpan(
+                  text: 'protocolo',
                   style: TextStyle(
-                    fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'Qual ',
-                    ),
-                    TextSpan(
-                      text: 'reservatorio',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' deseja usar ?',
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            filterWidget(context),
-            const Padding(
-              padding: EdgeInsets.only(left: 24, top: 8),
-              child: Text(
-                "Todos os Protocolos",
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ),
-            Expanded(
-              child: PrimaryScrollController(
-                controller: _scrollController,
-                child: Scrollbar(
-                  radius: const Radius.circular(12),
-                  child: CustomScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    slivers: [
-                      Observer(builder: (_) {
-                        if (store.isProtocoloListLoading) {
-                          return loadingList();
-                        }
-                        if (store.protocoloList.isEmpty) {
-                          return emptyList();
-                        }
-                        return showList(store);
-                      }),
-                    ],
+                    color: Constants.kPrimaryColor,
                   ),
                 ),
-              ),
+                TextSpan(
+                  text: ' deseja usar ?',
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+        const SizedBox(
+          height: 8,
+        ),
+        filterWidget(context),
+        const Padding(
+          padding: EdgeInsets.only(left: 24, top: 8),
+          child: Text(
+            "Todos os Protocolos",
+            style: TextStyle(
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ),
+        Expanded(
+          child: PrimaryScrollController(
+            controller: _scrollController,
+            child: Scrollbar(
+              radius: const Radius.circular(12),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  Observer(builder: (_) {
+                    if (store.isProtocoloListLoading) {
+                      return loadingList();
+                    }
+                    if (store.protocoloList.isEmpty) {
+                      return emptyList();
+                    }
+                    return showList(store);
+                  }),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     ),
   );
 }
@@ -247,13 +238,5 @@ SliverList emptyList() {
         ),
       ],
     ),
-  );
-}
-
-protocoloDetalhes(LoteStore store) {
-  return ListView(
-    shrinkWrap: true,
-    physics: const BouncingScrollPhysics(),
-    children: const [],
   );
 }

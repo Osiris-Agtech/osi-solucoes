@@ -351,6 +351,9 @@ abstract class _LoteStoreBase with Store {
   Reservatorio reservatorioDetalhes = Reservatorio();
 
   @observable
+  Protocolo protocoloDetalhes = Protocolo();
+
+  @observable
   List<SolucaoFertilizanteConcentrada> solucaoNutritivaList = [];
 
   @observable
@@ -539,8 +542,8 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  setProtocoloDetalhes() {
-    // protocoloDetalhes = protocolo;
+  setProtocoloDetalhes(Protocolo protocolo) {
+    protocoloDetalhes = protocolo;
     showProtocoloDetalhes = true;
   }
 
@@ -572,6 +575,21 @@ abstract class _LoteStoreBase with Store {
 
     solucaoNutritivaList = List.from(solucaoNutritivaList);
     solucaoConcentradaList = List.from(solucaoConcentradaList);
+  }
+
+  @action
+  buscarProtocoloDetalhes() async {
+    var protocolos =
+        await loteRepository.buscarProtocoloDetalhes(protocoloDetalhes.id!);
+
+    protocolos.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        protocoloDetalhes = data;
+      },
+    );
   }
 
   @action

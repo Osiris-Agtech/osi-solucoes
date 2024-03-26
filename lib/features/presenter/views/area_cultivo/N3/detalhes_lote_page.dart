@@ -58,15 +58,47 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                   indent: 20,
                   endIndent: 20,
                 ),
-                Observer(builder: (_) {
-                  return ListTile(
-                    leading: Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: SvgPicture.asset(
-                        "assets/icons/relatorio_icon.svg",
+                ListTile(
+                  leading: Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: SvgPicture.asset(
+                      "assets/icons/relatorio_icon.svg",
+                      color: Constants.kPrimaryColor,
+                      width: 24,
+                      height: 24,
+                    ),
+                  ),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.only(right: 8),
+                        child: Text(
+                          'Protocolo Base',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.normal),
+                        ),
+                      ),
+                    ],
+                  ),
+                  subtitle: const Text(
+                    "Alfaces Hidrogood",
+                    style: TextStyle(color: Constants.kPrimaryColor),
+                  ),
+                  onTap: () {},
+                ),
+                Divider(
+                  color: const Color(0xFF9F9F9F).withOpacity(.6),
+                  indent: 20,
+                  endIndent: 20,
+                ),
+                InkWell(
+                  child: ListTile(
+                    leading: const Padding(
+                      padding: EdgeInsets.only(left: 8),
+                      child: Icon(
+                        Icons.event,
                         color: Constants.kPrimaryColor,
-                        width: 24,
-                        height: 24,
                       ),
                     ),
                     title: Row(
@@ -75,58 +107,22 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                         Padding(
                           padding: EdgeInsets.only(right: 8),
                           child: Text(
-                            'Protocolo Base',
+                            'Agenda de Atividades',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.normal),
                           ),
                         ),
                       ],
                     ),
-                    subtitle: const Text(
-                      "Alfaces Hidrogood",
-                      style: TextStyle(color: Constants.kPrimaryColor),
+                    subtitle: const Text("Atividades planejadas para o lote"),
+                    trailing: const Icon(
+                      Icons.chevron_right_rounded,
+                      color: Constants.kPrimaryColor,
                     ),
-                    onTap: () {},
-                  );
-                }),
-                Divider(
-                  color: const Color(0xFF9F9F9F).withOpacity(.6),
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                InkWell(
-                  child: Observer(builder: (_) {
-                    return ListTile(
-                      leading: const Padding(
-                        padding: EdgeInsets.only(left: 8),
-                        child: Icon(
-                          Icons.event,
-                          color: Constants.kPrimaryColor,
-                        ),
-                      ),
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.only(right: 8),
-                            child: Text(
-                              'Agenda de Atividades',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.normal),
-                            ),
-                          ),
-                        ],
-                      ),
-                      subtitle: const Text("Atividades planejadas para o lote"),
-                      trailing: const Icon(
-                        Icons.chevron_right_rounded,
-                        color: Constants.kPrimaryColor,
-                      ),
-                      onTap: () {
-                        Get.to(() => const AgendaPage());
-                      },
-                    );
-                  }),
+                    onTap: () {
+                      Get.to(() => const AgendaPage());
+                    },
+                  ),
                 ),
                 // const SizedBox(height: 16),
                 // dateTitle(),

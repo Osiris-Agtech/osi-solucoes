@@ -67,6 +67,14 @@ class LoteRepository implements ILoteRepository {
   }
 
   @override
+  Future<Either<Failure, Protocolo>> buscarProtocoloDetalhes(
+      int protocoloId) async {
+    var result =
+        await datasource.buscarProtocoloDetalhes(protocoloId: protocoloId);
+    return result;
+  }
+
+  @override
   Future<Either<Failure, List<Protocolo>>> buscarProtocolos() async {
     var result = await datasource.buscarProtocolos();
 
