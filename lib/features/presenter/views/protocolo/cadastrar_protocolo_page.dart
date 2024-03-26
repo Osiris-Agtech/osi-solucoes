@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
@@ -321,7 +320,6 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                   return;
                 }
                 store.registrarProtocolo();
-                Get.back();
               }, //store.registrarReservatorio(),
             );
           }),

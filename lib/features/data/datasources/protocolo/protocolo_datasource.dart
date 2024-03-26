@@ -33,7 +33,7 @@ class ProtocoloDatasource implements IProtocoloDatasource {
               created_at: DateTime.now(),
               updated_at: DateTime.now(),
               deleted_at: null,
-              acao: [Acao(), Acao()],
+              acao: [Acao(fase: Fase()), Acao(fase: Fase())],
               cultura: [Cultura(id: index, nome: 'Alface ${index + 1}')],
               conta: Conta(),
             ));

@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
@@ -70,6 +71,9 @@ abstract class _ProtocoloStoreBase with Store {
   Fase? selectedFase;
 
   @observable
+  Protocolo? protocoloSelecionado;
+
+  @observable
   TextEditingController novaCulturaController = TextEditingController();
 
   @observable
@@ -98,6 +102,9 @@ abstract class _ProtocoloStoreBase with Store {
 
   @observable
   List<Fase> faseList = [];
+
+  @observable
+  List<Fase> listaFaseDetalhes = [];
 
   @action
   setIsNovaCultura(bool value) => isNovaCultura = value;
@@ -146,6 +153,11 @@ abstract class _ProtocoloStoreBase with Store {
   @action
   alterarDropdownFase(Fase newFase) {
     selectedFase = newFase;
+  }
+
+  @action
+  alterarProtocoloSelecionado(Protocolo novoProtocolo) {
+    protocoloSelecionado = novoProtocolo;
   }
 
   @action
@@ -224,16 +236,16 @@ abstract class _ProtocoloStoreBase with Store {
   registrarProtocolo() async {
     isProtocoloListLoading = true;
 
-    Protocolo novaProtocolo = Protocolo(
+    Protocolo novoProtocolo = Protocolo(
       nome: novoNomeProtocolo,
       implantacao: novoFormaProtocolo,
       tipo_cultura: novoTipoProtocolo,
       sistema_cultivo: novoSistemaProtocolo,
-      cultura: culturaList,
-      acao: novasAtividadesProtocolo,
+      cultura: List.from(novaCulturaProtocolo),
+      acao: List.from(novasAtividadesProtocolo),
     );
 
-    var protocolo = await protocoloRepository.registrarProtocolo(novaProtocolo);
+    var protocolo = await protocoloRepository.registrarProtocolo(novoProtocolo);
 
     protocolo.fold(
       (err) {
@@ -241,6 +253,7 @@ abstract class _ProtocoloStoreBase with Store {
       },
       (data) async {
         protocoloList = List.from([data, ...protocoloList]);
+        Get.back();
         toastSuccess(message: "Protocolo cadastrada com sucesso !");
       },
     );
@@ -298,6 +311,7 @@ abstract class _ProtocoloStoreBase with Store {
       titulo: novoTituloAtividade,
       duracao_dias: int.parse(diaDaAtivController.text),
       descricao: novoDescricaoAtividade,
+      fase: selectedFase,
       alerta: true,
     );
 
@@ -337,6 +351,40 @@ abstract class _ProtocoloStoreBase with Store {
   //   novoTituloFase = faseList[indexFase].nome;
   //   novoDuracaoDiasFase = faseList[indexFase].duracao_dias;
   // }
+
+  @action
+  prepararListaDetalhesFase() {
+    listaFaseDetalhes.clear(); // Limpa a lista antes de adicionar novas fases
+    print('inicio: ${protocoloSelecionado?.acao?.length}');
+    if (protocoloSelecionado?.acao != null) {
+      for (var acao in protocoloSelecionado!.acao!) {
+        if (acao.fase != null) {
+          // Procura a fase na listaFaseDetalhes
+          var fase = listaFaseDetalhes.firstWhere(
+            (f) => f.id == acao.fase!.id,
+            orElse: () => Fase(),
+          );
+
+          print(fase.nome);
+
+          if (fase.id == null) {
+            // Verifica se a fase retornada é a fase vazia
+            // Se a fase não está na lista, adiciona ela e inicializa a lista de ações
+            acao.fase!.acao = [acao];
+            listaFaseDetalhes.add(acao.fase!);
+          } else {
+            // Se a fase já está na lista, apenas adiciona a ação à sua lista de ações
+            fase.acao?.add(acao);
+          }
+        }
+        print(acao.fase?.nome);
+      }
+    }
+    listaFaseDetalhes = List.from(listaFaseDetalhes);
+
+    print('inicio: ${protocoloSelecionado?.acao?.length}');
+    print(listaFaseDetalhes.map((e) => e.nome));
+  }
 
   @action
   prepararEditAtiv(int indexFase, int indexAcao) {
@@ -389,7 +437,7 @@ abstract class _ProtocoloStoreBase with Store {
   validarNovoProtocolo() {
     if (novoNomeProtocolo == null ||
         novoNomeProtocolo == "" ||
-        culturaList == [] ||
+        novaCulturaProtocolo == [] ||
         novasAtividadesProtocolo == [] ||
         novoTipoProtocolo == null ||
         novoTipoProtocolo == "" ||

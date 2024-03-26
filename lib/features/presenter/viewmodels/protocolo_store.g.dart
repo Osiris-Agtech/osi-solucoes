@@ -278,6 +278,23 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
+  final _$protocoloSelecionadoAtom =
+      Atom(name: '_ProtocoloStoreBase.protocoloSelecionado');
+
+  @override
+  Protocolo? get protocoloSelecionado {
+    _$protocoloSelecionadoAtom.reportRead();
+    return super.protocoloSelecionado;
+  }
+
+  @override
+  set protocoloSelecionado(Protocolo? value) {
+    _$protocoloSelecionadoAtom.reportWrite(value, super.protocoloSelecionado,
+        () {
+      super.protocoloSelecionado = value;
+    });
+  }
+
   final _$novaCulturaControllerAtom =
       Atom(name: '_ProtocoloStoreBase.novaCulturaController');
 
@@ -434,6 +451,22 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   set faseList(List<Fase> value) {
     _$faseListAtom.reportWrite(value, super.faseList, () {
       super.faseList = value;
+    });
+  }
+
+  final _$listaFaseDetalhesAtom =
+      Atom(name: '_ProtocoloStoreBase.listaFaseDetalhes');
+
+  @override
+  List<Fase> get listaFaseDetalhes {
+    _$listaFaseDetalhesAtom.reportRead();
+    return super.listaFaseDetalhes;
+  }
+
+  @override
+  set listaFaseDetalhes(List<Fase> value) {
+    _$listaFaseDetalhesAtom.reportWrite(value, super.listaFaseDetalhes, () {
+      super.listaFaseDetalhes = value;
     });
   }
 
@@ -595,6 +628,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic alterarProtocoloSelecionado(Protocolo novoProtocolo) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarProtocoloSelecionado');
+    try {
+      return super.alterarProtocoloSelecionado(novoProtocolo);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic alterarRadioIndicator(int value) {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.alterarRadioIndicator');
@@ -688,6 +732,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
         name: '_ProtocoloStoreBase.alterarAlertaAcao');
     try {
       return super.alterarAlertaAcao(indexFase, indexAcao);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic prepararListaDetalhesFase() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.prepararListaDetalhesFase');
+    try {
+      return super.prepararListaDetalhesFase();
     } finally {
       _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -823,6 +878,7 @@ novoTituloAtividade: ${novoTituloAtividade},
 novoDescricaoAtividade: ${novoDescricaoAtividade},
 novoDuracaoDiasFase: ${novoDuracaoDiasFase},
 selectedFase: ${selectedFase},
+protocoloSelecionado: ${protocoloSelecionado},
 novaCulturaController: ${novaCulturaController},
 diaDaAtivController: ${diaDaAtivController},
 dropdownTitle: ${dropdownTitle},
@@ -832,7 +888,8 @@ novaCulturaProtocolo: ${novaCulturaProtocolo},
 novasAtividadesProtocolo: ${novasAtividadesProtocolo},
 protocoloList: ${protocoloList},
 faseDropDownList: ${faseDropDownList},
-faseList: ${faseList}
+faseList: ${faseList},
+listaFaseDetalhes: ${listaFaseDetalhes}
     ''';
   }
 }
