@@ -1,11 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/modulos_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/components/detalhes_page/detalhes_ativ.dart';
 
 class DetalhesProtocolo extends StatefulWidget {
   const DetalhesProtocolo({Key? key}) : super(key: key);
@@ -23,27 +25,12 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
   @override
   void initState() {
     super.initState();
-    // store.buscarReservatorioDetalhes();
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 18.0),
-          child: FloatingActionButton.extended(
-            onPressed: () {},
-            backgroundColor: Constants.kPrimaryColor,
-            label: const Text(
-              'Vincular',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
         backgroundColor: Colors.white,
         body: PrimaryScrollController(
           controller: _scrollController,
@@ -53,16 +40,21 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
               physics: const BouncingScrollPhysics(),
               slivers: [
                 Observer(builder: (_) {
-                  return const SliverAppBar(
+                  return SliverAppBar(
                     toolbarHeight: 80,
                     backgroundColor: Colors.white,
                     floating: false,
                     automaticallyImplyLeading: false,
                     forceElevated: true,
                     elevation: 0,
+                    titleTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                    ),
                     flexibleSpace: TopAppBar(
                       path: "",
-                      namePage: "Detalhes do Protocolo",
+                      namePage: store.protocoloSelecionado!.nome ?? "---",
                     ),
                   );
                 }),
@@ -87,13 +79,18 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Expanded(
+                              children: [
+                                const Expanded(
                                   child: Text('Cultura'),
                                 ),
                                 Text(
-                                  'Alface',
-                                  style: TextStyle(
+                                  store.protocoloSelecionado!.cultura!.length >
+                                          1
+                                      ? '${store.protocoloSelecionado!.cultura?[0].nome} , ...' ??
+                                          "---"
+                                      : '${store.protocoloSelecionado!.cultura?[0].nome}' ??
+                                          "---",
+                                  style: const TextStyle(
                                     color: Constants.kText2,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -101,17 +98,18 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                               ],
                             ),
                             const SizedBox(
-                              height: 10,
+                              height: 16,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Expanded(
+                              children: [
+                                const Expanded(
                                   child: Text('Tipo'),
                                 ),
                                 Text(
-                                  'Lista',
-                                  style: TextStyle(
+                                  store.protocoloSelecionado!.tipo_cultura ??
+                                      "---",
+                                  style: const TextStyle(
                                     color: Constants.kText2,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -119,17 +117,18 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                               ],
                             ),
                             const SizedBox(
-                              height: 10,
+                              height: 16,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Expanded(
+                              children: [
+                                const Expanded(
                                   child: Text('Sistema de Cultivo'),
                                 ),
                                 Text(
-                                  'Hidroponia',
-                                  style: TextStyle(
+                                  store.protocoloSelecionado!.sistema_cultivo ??
+                                      "---",
+                                  style: const TextStyle(
                                     color: Constants.kText2,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -137,17 +136,18 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                               ],
                             ),
                             const SizedBox(
-                              height: 10,
+                              height: 16,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Expanded(
+                              children: [
+                                const Expanded(
                                   child: Text('Forma de Implantação (Inicio)'),
                                 ),
                                 Text(
-                                  'Semeadura',
-                                  style: TextStyle(
+                                  store.protocoloSelecionado!.implantacao ??
+                                      "---",
+                                  style: const TextStyle(
                                     color: Constants.kText2,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -157,9 +157,9 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 16),
                       const Divider(),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 16),
                       InkWell(
                         child: Observer(builder: (_) {
                           return ListTile(
@@ -175,8 +175,9 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                                   child: Text(
                                     'Atividades',
                                     style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.normal),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.normal,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -187,13 +188,15 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                               Icons.chevron_right_rounded,
                               color: Constants.kPrimaryColor,
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              Get.to(() => const DetalhesAtivPage());
+                            },
                           );
                         }),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 16),
                       const Divider(),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 16),
                       const Padding(
                         padding: EdgeInsets.only(left: 20.0),
                         child: Text(
@@ -227,28 +230,32 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: 2,
                           itemBuilder: (context, index) {
-                            return ListTile(
-                              dense: true,
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              title: Text(
-                                "Cultivo Teste",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Constants.kContentColorLightTheme
-                                      .withOpacity(.8),
-                                  fontWeight: FontWeight.bold,
+                            return Column(
+                              children: [
+                                ListTile(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  title: Text(
+                                    "Cultivo Teste",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Constants.kContentColorLightTheme
+                                          .withOpacity(.8),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    'Cultura: Alface',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Constants.kContentColorLightTheme
+                                          .withOpacity(.8),
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              subtitle: Text(
-                                'Cultura: Alface',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Constants.kContentColorLightTheme
-                                      .withOpacity(.8),
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
+                                const Divider(),
+                              ],
                             );
                           },
                         );

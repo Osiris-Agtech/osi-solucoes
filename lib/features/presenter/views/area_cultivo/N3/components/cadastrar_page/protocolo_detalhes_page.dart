@@ -17,7 +17,7 @@ protocoloDetalhes(LoteStore store) {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 10.0),
+              padding: const EdgeInsets.only(top: 10.0, left: 16, bottom: 8),
               child: Text(
                 store.protocoloDetalhes.nome ?? "...",
                 style: const TextStyle(
@@ -45,15 +45,23 @@ protocoloDetalhes(LoteStore store) {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Expanded(
+                    children: [
+                      const Expanded(
                         child: Text('Cultura'),
                       ),
-                      Text(
-                        'Alface',
-                        style: TextStyle(
-                          color: Constants.kText2,
-                          fontWeight: FontWeight.w600,
+                      Flexible(
+                        child: Text(
+                          store.protocoloDetalhes.cultura
+                                  ?.map((e) => e.nome)
+                                  .toList()
+                                  .join(", ") ??
+                              '',
+                          textAlign: TextAlign.end,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Constants.kText2,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ],
@@ -63,13 +71,13 @@ protocoloDetalhes(LoteStore store) {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Expanded(
+                    children: [
+                      const Expanded(
                         child: Text('Tipo'),
                       ),
                       Text(
-                        'Lista',
-                        style: TextStyle(
+                        store.protocoloDetalhes.tipo_cultura ?? "...",
+                        style: const TextStyle(
                           color: Constants.kText2,
                           fontWeight: FontWeight.w600,
                         ),
@@ -81,13 +89,13 @@ protocoloDetalhes(LoteStore store) {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Expanded(
+                    children: [
+                      const Expanded(
                         child: Text('Sistema de Cultivo'),
                       ),
                       Text(
-                        'Hidroponia',
-                        style: TextStyle(
+                        store.protocoloDetalhes.sistema_cultivo ?? "...",
+                        style: const TextStyle(
                           color: Constants.kText2,
                           fontWeight: FontWeight.w600,
                         ),
@@ -99,13 +107,13 @@ protocoloDetalhes(LoteStore store) {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Expanded(
+                    children: [
+                      const Expanded(
                         child: Text('Forma de Implantação (Inicio)'),
                       ),
                       Text(
-                        'Semeadura',
-                        style: TextStyle(
+                        store.protocoloDetalhes.implantacao ?? "...",
+                        style: const TextStyle(
                           color: Constants.kText2,
                           fontWeight: FontWeight.w600,
                         ),
@@ -115,9 +123,9 @@ protocoloDetalhes(LoteStore store) {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             const Divider(),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             InkWell(
               child: Observer(builder: (_) {
                 return ListTile(
@@ -147,9 +155,67 @@ protocoloDetalhes(LoteStore store) {
                 );
               }),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             const Divider(),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
+            const Padding(
+              padding: EdgeInsets.only(left: 20.0),
+              child: Text(
+                'Cultivos Vinculados',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Constants.kButtonGrey,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Observer(builder: (_) {
+              // if (store.reservatorioDetalhes.lotes == null ||
+              //     store.reservatorioDetalhes.lotes!.isEmpty) {
+              //   return const Padding(
+              //     padding: EdgeInsets.all(16.0),
+              //     child: Center(
+              //       child: Text(
+              //         "Não contém lotes vinculados a este reservatório",
+              //         textAlign: TextAlign.center,
+              //       ),
+              //     ),
+              //   );
+              // }
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 2,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    dense: true,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+                    title: Text(
+                      "Cultivo Teste",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color:
+                            Constants.kContentColorLightTheme.withOpacity(.8),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Cultura: Alface',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color:
+                            Constants.kContentColorLightTheme.withOpacity(.8),
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  );
+                },
+              );
+            }),
           ],
         ),
       )

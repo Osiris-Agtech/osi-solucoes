@@ -7,6 +7,8 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/bottomSheet.dart';
 
+import '../../../../core/utils/toast.dart';
+
 class CadastrarProtocoloPage extends StatefulWidget {
   final bool isShortcut;
   const CadastrarProtocoloPage({
@@ -212,7 +214,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                             bottom: 8.0,
                           ),
                           child: Text(
-                            'Forma de implantação obrigatório',
+                            'Atividades são obrigatórias',
                             style: TextStyle(
                               fontSize: 12,
                               color: Constants.kErrorColor,
@@ -310,13 +312,14 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                           ),
                         ),
               onPressed: () {
-                // if (store.validarCadastro()) {
-                //   if (store.isEditing) {
-                //     store.alterarSetor();
-                //   } else {
-                //     store.registrarSetor();
-                //   }
-                // }
+                store.validarNovoProtocolo();
+                if (!store.isValid) {
+                  toastError(
+                      message:
+                          "Preencha todos campos do formulario corretamente!");
+                  return;
+                }
+                store.registrarProtocolo();
               }, //store.registrarReservatorio(),
             );
           }),

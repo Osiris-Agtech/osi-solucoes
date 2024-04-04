@@ -33,6 +33,8 @@ registrarAtivPage(BuildContext context, ProtocoloStore store) {
         const SizedBox(width: 16),
         FloatingActionButton(
           onPressed: () {
+            store.limparAtividadeBottomSheet();
+            store.limparFaseBottomSheet();
             getBottomSheet(const AtivBottomSheet(
               isNewRecord: true,
             ));
@@ -77,7 +79,11 @@ registrarAtivPage(BuildContext context, ProtocoloStore store) {
           ),
           const SizedBox(height: 16),
           Observer(builder: (_) {
+<<<<<<< HEAD
             if (false) {
+=======
+            if (store.faseList.isEmpty) {
+>>>>>>> a177ff15ea4ea482b134589c0cb8f3b28a2d145f
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 100, left: 60, right: 60),
@@ -121,95 +127,120 @@ class ListFases extends StatelessWidget {
     ProtocoloStore store = GetIt.I<ProtocoloStore>();
 
     return Expanded(
-      child: ListView.builder(
-          controller: _scrollController,
-          physics: const BouncingScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: 3,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Constants.kCardColor,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 8,
+      child: Observer(builder: (_) {
+        return ListView.builder(
+            controller: _scrollController,
+            physics: const BouncingScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: store.faseList.length,
+            itemBuilder: (_, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Constants.kCardColor,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(children: [
-                          const Text(
-                            'Germinação',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Spacer(),
-                          InkWell(
-                            onTap: () {
-                              getBottomSheet(const AtivBottomSheet(
-                                isNewRecord: false,
-                                isFase: true,
-                              ));
-                            },
-                            child: const Icon(
-                              Icons.edit,
-                              size: 20,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          InkWell(
-                            onTap: () => null,
-                            child: const Icon(
-                              Icons.delete,
-                              size: 20,
-                            ),
-                          ),
-                        ]),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 2,
-                          horizontal: 16,
-                        ),
-                        child: RichText(
-                          text: TextSpan(
-                            text: 'Período: ',
-                            style: DefaultTextStyle.of(context).style,
-                            children: const <TextSpan>[
-                              TextSpan(
-                                text: '2 dias',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: 8,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(children: [
+                            Text(
+                              store.faseList[index].nome ?? "",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
                               ),
-                            ],
+                            ),
+                            const Spacer(),
+                            // InkWell(
+                            //   onTap: () {
+                            //     getBottomSheet(const AtivBottomSheet(
+                            //       isNewRecord: false,
+                            //       isFase: true,
+                            //     ));
+                            //   },
+                            //   child: const Icon(
+                            //     Icons.edit,
+                            //     size: 20,
+                            //   ),
+                            // ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                store.removeFase(index);
+                                store.atualizarNovasAtividades();
+                              },
+                              child: const Icon(
+                                Icons.delete_outlined,
+                                size: 20,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ]),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 2,
+                            horizontal: 16,
+                          ),
+                          child: RichText(
+                            text: TextSpan(
+                              text: 'Período: ',
+                              style: DefaultTextStyle.of(context).style,
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text:
+                                      '${(store.faseList[index].duracao_dias).toString()} dias',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      ...['oi', 'oi', 'oi']
-                          .asMap()
-                          .entries
-                          .map((entry) =>
-                              atividadeItem(index: entry.key, store: store))
-                          .toList()
-                    ],
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Observer(builder: (context) {
+                          if (store.faseList[index].acao != null) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ...store.faseList[index].acao!
+                                    .asMap()
+                                    .entries
+                                    .map((entry) => atividadeItem(
+                                          indexFase: index,
+                                          indexAcao: entry.key,
+                                          acao: entry.value,
+                                        ))
+                                    .toList()
+                              ],
+                            );
+                          } else {
+                            return const Center(
+                              child: Text("Nenhuma atividade cadastrada"),
+                            );
+                          }
+                        }),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          }),
+              );
+            });
+      }),
     );
   }
 }

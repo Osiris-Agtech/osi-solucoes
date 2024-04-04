@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
 import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
+import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 
 import '../../../../core/errors/failure.dart';
@@ -9,6 +10,9 @@ import '../../../../core/errors/failure.dart';
 abstract class IProtocoloDatasource {
   Future<Either<Failure, List<Protocolo>>> buscarProtocolos();
   Future<Either<Failure, List<Cultura>>> buscarCulturas();
+  Future<Either<Failure, Fase>> registrarFase({required Fase fase});
+  Future<Either<Failure, Protocolo>> registrarProtocolo(
+      {required Protocolo protocolo});
 }
 
 class ProtocoloDatasource implements IProtocoloDatasource {
@@ -29,7 +33,7 @@ class ProtocoloDatasource implements IProtocoloDatasource {
               created_at: DateTime.now(),
               updated_at: DateTime.now(),
               deleted_at: null,
-              acao: [Acao(), Acao()],
+              acao: [Acao(fase: Fase()), Acao(fase: Fase())],
               cultura: [Cultura(id: index, nome: 'Alface ${index + 1}')],
               conta: Conta(),
             ));
@@ -52,5 +56,18 @@ class ProtocoloDatasource implements IProtocoloDatasource {
             ));
 
     return Future.value(Right(culturas));
+  }
+
+  @override
+  Future<Either<Failure, Fase>> registrarFase({required Fase fase}) async {
+    await Future.delayed(const Duration(seconds: 2));
+    return Future.value(Right(fase));
+  }
+
+  @override
+  Future<Either<Failure, Protocolo>> registrarProtocolo(
+      {required Protocolo protocolo}) async {
+    await Future.delayed(const Duration(seconds: 2));
+    return Future.value(Right(protocolo));
   }
 }

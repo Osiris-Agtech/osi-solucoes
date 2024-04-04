@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/detalhes_page/detelhes_protocolo.dart';
 
 Padding protocoloItem({
   required int index,
-  ProtocoloStore? store,
   VoidCallback? onTap,
 }) {
+  ProtocoloStore store = GetIt.I<ProtocoloStore>();
   return Padding(
     padding: EdgeInsets.only(
       top: index == 0 ? 10 : 5,
@@ -19,7 +20,7 @@ Padding protocoloItem({
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        // store.setReservatorioDetalhes(store.searchReservatorio[index]);
+        store.alterarProtocoloSelecionado(store.protocoloList[index]);
         Get.to(() => const DetalhesProtocolo());
       },
       child: Card(
@@ -45,7 +46,7 @@ Padding protocoloItem({
                         top: 5.0,
                       ),
                       child: Text(
-                        store?.protocoloList[index].nome ?? "---",
+                        store.protocoloList[index].nome ?? "---",
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
@@ -69,8 +70,7 @@ Padding protocoloItem({
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  store?.protocoloList[index].cultura?[0]
-                                          .nome ??
+                                  store.protocoloList[index].cultura?[0].nome ??
                                       "---",
                                   style: const TextStyle(
                                     color: Constants.kPrimaryColor,

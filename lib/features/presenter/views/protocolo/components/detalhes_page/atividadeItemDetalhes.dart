@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
-import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/ativBottomSheet.dart';
-import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
 
-Padding atividadeItem({
+Padding atividadeItemDetalhes({
   required int indexFase,
   required int indexAcao,
   required Acao acao,
@@ -20,7 +16,6 @@ Padding atividadeItem({
       right: 10,
     ),
     child: Observer(builder: (_) {
-      ProtocoloStore store = GetIt.I<ProtocoloStore>();
       return InkWell(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
@@ -68,54 +63,16 @@ Padding atividadeItem({
                   ),
                 ),
                 Observer(builder: (_) {
-                  return InkWell(
-                    onTap: () {
-                      store.alterarAlertaAcao(indexFase, indexAcao);
-                    },
-                    child: Icon(
-                      acao.alerta ?? false
-                          ? Icons.notifications
-                          : Icons.notifications_off,
-                      size: 20,
-                      color: acao.alerta ?? false
-                          ? Constants.kPrimaryColor
-                          : Constants.kButtonGrey,
-                    ),
+                  return Icon(
+                    acao.alerta ?? false
+                        ? Icons.notifications
+                        : Icons.notifications_off,
+                    size: 20,
+                    color: acao.alerta ?? false
+                        ? Constants.kPrimaryColor
+                        : Constants.kButtonGrey,
                   );
                 }),
-                const SizedBox(
-                  width: 16,
-                ),
-                PopupMenuButton(
-                  icon: const Icon(
-                    Icons.more_vert,
-                    color: Constants.kPrimaryColor,
-                  ),
-                  onSelected: (newValue) {
-                    if (newValue == 1) {
-                      store.prepararEditAtiv(indexFase, indexAcao);
-                      getBottomSheet(AtivBottomSheet(
-                        isNewRecord: false,
-                        isFase: false,
-                        indexAcao: indexAcao,
-                        indexFase: indexFase,
-                      ));
-                      return;
-                    }
-                    store.removeAcao(indexAcao, indexFase);
-                    store.atualizarNovasAtividades();
-                  },
-                  itemBuilder: (_) => <PopupMenuEntry>[
-                    const PopupMenuItem(
-                      child: Text('Editar'),
-                      value: 1,
-                    ),
-                    const PopupMenuItem(
-                      child: Text('Apagar'),
-                      value: 2,
-                    ),
-                  ],
-                ),
               ],
             ),
           ),

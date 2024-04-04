@@ -248,7 +248,7 @@ addCulturaTextFormField(ProtocoloStore store) {
                 fontStyle: FontStyle.italic,
               ),
             ),
-            onPressed: store.registrarCultura,
+            onPressed: () {},
           ),
         ],
       ),

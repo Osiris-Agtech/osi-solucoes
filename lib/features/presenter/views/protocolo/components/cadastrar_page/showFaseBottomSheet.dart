@@ -22,10 +22,12 @@ class _ShowFaseBottomSheet extends State<ShowFaseBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12),
+    var size = MediaQuery.of(Get.context!).size;
+
+    return SizedBox(
+      height: size.height * 0.9,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -40,40 +42,93 @@ class _ShowFaseBottomSheet extends State<ShowFaseBottomSheet> {
               ),
               onPressed: () => Get.back(),
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'Nome Fase ( 10 dias )',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Constants.kText2,
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: Text(
+                "${store.selectedFase?.nome} ",
+                style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Constants.kText2,
+                ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 8),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              child: Text(
+                "Selecione o dia que essa atividade será realizada dentro da fase escolhida.",
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Constants.kText2,
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
             Observer(builder: (_) {
               return Expanded(
                 child: GridView.count(
-                  crossAxisCount: 2,
-                  children: List.generate(10, (index) {
+                  crossAxisCount: 3,
+                  children:
+                      List.generate(store.selectedFase!.duracao_dias!, (index) {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () => {store.setDiasDaAtiv(!store.diasDaAtiv)},
+                          onTap: () => {store.setDiaDaAtiv(index + 1)},
                           child: Icon(
-                            store.diasDaAtiv
+                            store.diaDaAtiv != null &&
+                                    (store.diaDaAtiv! - 1) == index
                                 ? Icons.check_box
                                 : Icons.check_box_outline_blank,
-                            size: 80,
+                            size: 50,
+                            color: store.diaDaAtiv != null &&
+                                    (store.diaDaAtiv! - 1) == index
+                                ? Constants.kPrimaryColor
+                                : Constants.kGreyMedium,
                           ),
                         ),
+                        const SizedBox(height: 8),
                         Text(
                           'Dia ${index + 1}',
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          style: Theme.of(context).textTheme.headline6,
                         ),
                       ],
                     );
                   }),
+                ),
+              );
+            }),
+            Observer(builder: (_) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 20, top: 20),
+                child: Center(
+                  child: SizedBox(
+                    width: size.width * .8,
+                    height: 40,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Constants.kPrimaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                        child: const Text(
+                          "Selecionar",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        onPressed: () {
+                          store
+                              .setarDuracaoDiasFase(store.diaDaAtiv.toString());
+                          Get.back();
+                        }),
+                  ),
                 ),
               );
             })
