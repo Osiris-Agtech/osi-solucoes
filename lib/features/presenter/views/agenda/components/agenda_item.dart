@@ -49,6 +49,8 @@ Padding agendaItem({
                   children: [
                     Text(
                       agenda.titulo ?? "---",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 20,
                         color: Colors.black,

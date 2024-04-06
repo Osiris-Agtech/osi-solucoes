@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:graphql/client.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
@@ -6,8 +7,11 @@ import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 
+import '../../../../core/errors/errors.dart';
+import '../../api_source.dart';
+
 abstract class IAgendaDatasource {
-  Future<Either<Failure, List<Agenda>>> buscarAtividades();
+  Future<Either<Failure, List<Agenda>>> buscarAtividades(int contaId);
   Future<Either<Failure, Agenda>> editarAtividade(Agenda agenda);
   Future<Either<Failure, Agenda>> deletarAtividade(int id);
   Future<Either<Failure, Agenda>> cadastrarAtividade(Agenda agenda);
@@ -17,10 +21,71 @@ abstract class IAgendaDatasource {
 
 class AgendaDatasource implements IAgendaDatasource {
   @override
-  Future<Either<Failure, List<Agenda>>> buscarAtividades() async {
-    await Future.delayed(const Duration(seconds: 2));
+  Future<Either<Failure, List<Agenda>>> buscarAtividades(int contaId) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-    return Future.value(Right(atividadeList));
+    const String readRepositories = r'''
+      query Agendas($contaId: Int) {
+        agendas(contaId: $contaId) {
+          id
+          titulo
+          descricao
+          data
+          alerta
+          finalizado
+          lote {
+            id
+            nome
+            setor {
+              id
+              nome
+              area {
+                id
+                nome
+              }
+            }
+          }
+          usuario {
+            id
+            nome
+            contas {
+              conta {
+                id
+                nome
+              }
+              cargo {
+                cargo
+              }
+            }
+          }
+        }
+      }
+    ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "contaId": contaId,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      if (result.data?['agendas'] == []) return const Right([]);
+
+      List<Agenda>? agendas = (result.data?['agendas'] as List?)
+          ?.map((item) => Agenda.fromJson(item as Map<String, dynamic>))
+          .toList();
+      if (agendas == null) {
+        return Left(ErrorAgenda(message: FailureMessage.errorBuscarAgendas));
+      }
+      return Right(agendas);
+    } else {
+      return Left(ErrorAgenda(message: FailureMessage.errorBuscarAgendas));
+    }
   }
 
   @override
@@ -35,15 +100,49 @@ class AgendaDatasource implements IAgendaDatasource {
 
   @override
   Future<Either<Failure, Agenda>> editarAtividade(Agenda agenda) async {
-    await Future.delayed(const Duration(seconds: 2));
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-    int index = atividadeList.indexWhere((element) => element.id == agenda.id);
-    if (index != -1) {
-      atividadeList[index] = agenda;
-      atividadeList = List.from(atividadeList);
+    const String readRepositories = r'''
+      mutation UpdateAgenda($agendaId: Int!, $titulo: String, $descricao: String, $data: DateTime, $usuarioId: Int) {
+        updateAgenda(agendaId: $agendaId, titulo: $titulo, descricao: $descricao, data: $data, usuarioId: $usuarioId) {
+          id
+          titulo
+          finalizado
+          data
+          descricao
+          usuario {
+            id
+            nome
+          }
+        }
+      }
+    ''';
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "agendaId": agenda.id,
+        "titulo": agenda.titulo,
+        "descricao": agenda.descricao,
+        "data": agenda.data?.toIso8601String(),
+        "usuarioId": agenda.usuario?.id,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        Agenda? agenda = Agenda.fromJson(result.data?['updateAgenda']);
+        return Right(agenda);
+      } catch (e) {
+        return Left(ErrorAgenda(message: FailureMessage.errorEditAgenda));
+      }
+    } else {
+      return Left(ErrorAgenda(message: FailureMessage.errorEditAgenda));
     }
-
-    return Future.value(Right(agenda));
   }
 
   @override
@@ -63,17 +162,41 @@ class AgendaDatasource implements IAgendaDatasource {
 
   @override
   Future<Either<Failure, Agenda>> marcarComoFeito(int id) async {
-    await Future.delayed(const Duration(seconds: 2));
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-    Agenda? agenda;
-    int index = atividadeList.indexWhere((element) => element.id == id);
-    if (index != -1) {
-      atividadeList[index].finalizado = true;
-      atividadeList = List.from(atividadeList);
-      agenda = atividadeList[index];
+    const String readRepositories = r'''
+      mutation MarkAsDone($agendaId: Int!) {
+        markAsDone(agendaId: $agendaId) {
+          id
+          titulo
+          finalizado
+        }
+      }
+    ''';
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "agendaId": id,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        Agenda? agenda = Agenda.fromJson(result.data?['markAsDone']);
+        return Right(agenda);
+      } catch (e) {
+        return Left(
+            ErrorAgenda(message: FailureMessage.errorAgendaMarcarComoFeito));
+      }
+    } else {
+      return Left(
+          ErrorAgenda(message: FailureMessage.errorAgendaMarcarComoFeito));
     }
-
-    return Future.value(Right(agenda ?? Agenda()));
   }
 
   @override

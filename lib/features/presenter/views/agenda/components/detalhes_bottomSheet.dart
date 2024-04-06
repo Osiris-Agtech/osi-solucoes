@@ -310,7 +310,7 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
                         ),
                         Text(
                           widget.agenda.usuario?.selected_conta?.cargo?.cargo ??
-                              "---",
+                              " ---",
                           style: const TextStyle(
                             color: Constants.kText2,
                             fontWeight: FontWeight.normal,
@@ -341,7 +341,10 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
               color: Constants.kCardColor,
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 100),
+              padding: EdgeInsets.symmetric(
+                vertical: (widget.agenda.descricao ?? '').isEmpty ? 100 : 16,
+                horizontal: 24,
+              ),
               child: Text(
                 widget.agenda.descricao ?? "Sem descrição",
                 textAlign: TextAlign.center,
@@ -514,7 +517,7 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
                     DateTime? dateTime = await datePicker(
                       context: context,
                       title: 'Data da Atividade',
-                      initialDate: DateTime.now(),
+                      initialDate: widget.agenda.data ?? DateTime.now(),
                       // phaseColors: store.calcularFases(widget.agenda),
                       // subtitle: store.calularSubtitulo(widget.agenda),
                     );
@@ -651,6 +654,7 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
                     child: Observer(builder: (_) {
                       return TextFormField(
                         controller: store.descricaoController,
+                        maxLines: 3,
                         style: const TextStyle(color: Colors.black),
                         decoration: const InputDecoration(
                           border: InputBorder.none,

@@ -109,3 +109,9 @@ class ErrorLote implements Failure {
   final String message;
   ErrorLote({required this.message});
 }
+
+class ErrorAgenda implements Failure {
+  @override
+  final String message;
+  ErrorAgenda({required this.message});
+}

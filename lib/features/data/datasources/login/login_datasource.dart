@@ -89,6 +89,8 @@ class LoginDatasource implements ILoginDatasource {
       final QueryResult result = await client.query(options);
 
       if (!result.hasException) {
+        if (result.data?['usuarios'] == []) return const Right([]);
+
         List? usuario = result.data?['usuarios']
             ?.map((item) => Usuario.fromJson(item))
             .toList();

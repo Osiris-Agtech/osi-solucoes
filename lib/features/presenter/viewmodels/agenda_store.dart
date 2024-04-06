@@ -55,7 +55,9 @@ abstract class _AgendaStoreBase with Store {
   buscarAtividades() async {
     state = AgendaState.loading;
 
-    var atividades = await agendaRepository.buscarAtividades();
+    AuthController authController = GetIt.I<AuthController>();
+    var atividades = await agendaRepository
+        .buscarAtividades(authController.usuario.selected_conta!.conta!.id!);
 
     atividades.fold(
       (err) {
@@ -63,6 +65,14 @@ abstract class _AgendaStoreBase with Store {
         atividadeList = List.from([]);
       },
       (data) async {
+        // testar essa lógica
+        for (var atividade in data) {
+          int index = usuariosConta
+              .indexWhere((element) => atividade.usuario?.id == element.id);
+          if (index != -1) {
+            atividade.usuario = usuariosConta[index];
+          }
+        }
         atividadeList = List.from(data);
       },
     );
@@ -97,6 +107,7 @@ abstract class _AgendaStoreBase with Store {
         usuariosConta = List.from(usuariosConta);
       },
     );
+    return;
   }
 
   @action
@@ -142,12 +153,13 @@ abstract class _AgendaStoreBase with Store {
 
   @action
   List<Agenda> getEventsForDay(DateTime day) {
-    return atividadeList
+    List<Agenda> list = atividadeList
         .where((element) =>
             element.data?.year == day.year &&
             element.data?.month == day.month &&
             element.data?.day == day.day)
         .toList();
+    return list;
   }
 
   @computed

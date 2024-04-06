@@ -32,8 +32,7 @@ class AgendaPageState extends State<AgendaPage> {
     store.setInitialStateForFilter();
     store.onDaySelected(null);
     store.buscarAtividades();
-    store.buscarUsuariosConta();
-    store.buscarLotesConta();
+    store.buscarUsuariosConta().then((value) => store.buscarLotesConta());
   }
 
   @override
@@ -298,7 +297,7 @@ class AgendaPageState extends State<AgendaPage> {
     return SliverToBoxAdapter(
       child: Container(
         constraints: BoxConstraints(
-          minHeight: MediaQuery.of(context).size.height * 0.3,
+          minHeight: MediaQuery.of(context).size.height * 0.4,
         ),
         decoration: const BoxDecoration(
           color: Constants.kCardColor,
@@ -356,7 +355,7 @@ class AgendaPageState extends State<AgendaPage> {
               child: Padding(
                 padding: EdgeInsets.only(top: 120.0, bottom: 120.0),
                 child: Text(
-                  'Não há protocolos\ncadastrados em sua conta',
+                  'Não há atividades\ncadastradas em sua conta',
                   style: TextStyle(
                     fontSize: 14,
                     color: Color(0xff6F6464),

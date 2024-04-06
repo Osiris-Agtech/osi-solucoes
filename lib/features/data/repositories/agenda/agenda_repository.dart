@@ -12,8 +12,8 @@ class AgendaRepository implements IAgendaRepository {
   });
 
   @override
-  Future<Either<Failure, List<Agenda>>> buscarAtividades() async {
-    var result = await datasource.buscarAtividades();
+  Future<Either<Failure, List<Agenda>>> buscarAtividades(int contaId) async {
+    var result = await datasource.buscarAtividades(contaId);
 
     return result;
   }
