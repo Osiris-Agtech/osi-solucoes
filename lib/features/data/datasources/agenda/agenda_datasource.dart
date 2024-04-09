@@ -90,12 +90,85 @@ class AgendaDatasource implements IAgendaDatasource {
 
   @override
   Future<Either<Failure, Agenda>> cadastrarAtividade(Agenda agenda) async {
-    await Future.delayed(const Duration(seconds: 2));
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+    String queryLote = '';
+    if (agenda.lote != null) {
+      queryLote = """
+        lote: {
+          connect: {
+            id: ${agenda.lote?.id}
+          }
+        },
+      """;
+    }
 
-    atividadeList.add(agenda);
-    atividadeList = List.from(atividadeList);
+    String queryUsuario = '';
+    if (agenda.usuario != null) {
+      queryUsuario = """
+        usuario: {
+          connect: {
+            id: ${agenda.usuario?.id}
+          }
+        },
+      """;
+    }
 
-    return Future.value(Right(agenda));
+    String readRepositories = """
+      mutation CreateOneAgenda {
+        createOneAgenda(data: {
+          data: "${agenda.data?.toIso8601String()}",
+          descricao: "${agenda.descricao}",
+          titulo: "${agenda.titulo}",
+          $queryLote
+          $queryUsuario
+          conta: {
+            connect: {
+              id: ${agenda.conta?.id}
+            }
+          }
+        }) {
+          id
+          titulo
+          descricao
+          data
+          conta {
+            id
+            nome
+          }
+          lote {
+            id
+            nome
+          }
+          usuario {
+            id
+            nome
+          }
+        }
+      }
+    """;
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+    );
+
+    try {
+      final QueryResult result = await client.mutate(options);
+
+      if (!result.hasException) {
+        try {
+          Agenda? agenda = Agenda.fromJson(result.data?['createOneAgenda']);
+          return Right(agenda);
+        } catch (e) {
+          return Left(ErrorAgenda(message: FailureMessage.errorCreateAgenda));
+        }
+      } else {
+        return Left(ErrorAgenda(message: FailureMessage.errorCreateAgenda));
+      }
+    } catch (e) {
+      return Left(ErrorAgenda(message: FailureMessage.errorCreateAgenda));
+    }
   }
 
   @override
@@ -147,17 +220,38 @@ class AgendaDatasource implements IAgendaDatasource {
 
   @override
   Future<Either<Failure, Agenda>> deletarAtividade(int id) async {
-    await Future.delayed(const Duration(seconds: 2));
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-    Agenda? agenda;
-    int index = atividadeList.indexWhere((element) => element.id == id);
-    if (index != -1) {
-      agenda = atividadeList[index];
-      atividadeList.removeAt(index);
-      atividadeList = List.from(atividadeList);
+    const String readRepositories = r'''
+      mutation SoftDeleteAgenda($agendaId: Int!) {
+        softDeleteAgenda(agendaId: $agendaId) {
+          id
+          titulo
+        }
+      }
+    ''';
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "agendaId": id,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        Agenda? agenda = Agenda.fromJson(result.data?['softDeleteAgenda']);
+        return Right(agenda);
+      } catch (e) {
+        return Left(ErrorAgenda(message: FailureMessage.errorDeleteAgenda));
+      }
+    } else {
+      return Left(ErrorAgenda(message: FailureMessage.errorDeleteAgenda));
     }
-
-    return Future.value(Right(agenda ?? Agenda()));
   }
 
   @override
@@ -201,11 +295,80 @@ class AgendaDatasource implements IAgendaDatasource {
 
   @override
   Future<Either<Failure, List<Lote>>> buscarLotesConta(int contaId) async {
-    await Future.delayed(const Duration(seconds: 1));
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-    loteList
-        .sort((a, b) => (a.setor?.nome ?? '').compareTo(b.setor?.nome ?? ''));
-    return Future.value(Right(loteList));
+    const String readRepositories = r'''
+        query Lotes($contaId: Int!) {
+          lotes(where: {
+            setor: {
+              area: {
+                conta: {
+                  id: {
+                    equals: $contaId
+                  }
+                }
+              }
+            }
+          }, 
+          orderBy: [
+            {
+              setor: {
+                nome: asc
+              }
+            }
+          ]) {
+            id
+            nome
+            registro_data
+            colheita_data
+            setor {
+              id
+              nome
+              area {
+                id
+                nome
+                conta {
+                  id
+                  nome
+                }
+              }
+            }
+            cultura {
+              id
+              nome
+            }
+            reservatorio {
+              id
+              nome
+            }
+          }
+        }
+      ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'contaId': contaId,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      if (result.data?['lotes'] == []) return const Right([]);
+
+      List<Lote>? lotes = (result.data?['lotes'] as List?)
+          ?.map((item) => Lote.fromJson(item as Map<String, dynamic>))
+          .toList();
+      if (lotes == null) {
+        return Left(InternalError(message: FailureMessage.emptyListMessage));
+      }
+      return Right(lotes);
+    } else {
+      return Left(InternalError(message: FailureMessage.emptyListMessage));
+    }
   }
 }
 

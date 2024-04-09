@@ -11,7 +11,9 @@ import '../../../../core/constants/constants.dart';
 import '../../models/lote/lote_model.dart';
 import '../../models/usuario/usuario_model.dart';
 import '../../states/agenda_page_enum.dart';
+import '../../widgets/get_bottom_sheet.dart';
 import '../home/components/top_app_bar.dart';
+import 'components/detalhes_bottomSheet.dart';
 
 class AgendaPage extends StatefulWidget {
   final String title;
@@ -31,8 +33,15 @@ class AgendaPageState extends State<AgendaPage> {
     super.initState();
     store.setInitialStateForFilter();
     store.onDaySelected(null);
-    store.buscarAtividades();
-    store.buscarUsuariosConta().then((value) => store.buscarLotesConta());
+    store.setPageState(AgendaState.loading);
+    store.buscarUsuariosConta().then((value) => store.buscarLotesConta().then(
+        (value) => store
+            .buscarAtividades()
+            .then((value) => store.setPageState(AgendaState.loaded))));
+
+    if (widget.loteId != null) {
+      store.setFiltroLote(null, loteId: widget.loteId);
+    }
   }
 
   @override
@@ -45,6 +54,14 @@ class AgendaPageState extends State<AgendaPage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Constants.kBackgroundColor,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              store.limparDadosDaAtividade();
+              store.setShowEditPage(true);
+              getBottomSheet(const DetalhesBottomSheet());
+            },
+            child: const Icon(Icons.add),
+          ),
           body: PrimaryScrollController(
             controller: _scrollController,
             child: Scrollbar(

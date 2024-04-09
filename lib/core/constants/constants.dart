@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Constants {
   // API Conection
   static const String stagingUrl =
-      'https://a999-2804-1408-9059-a700-ed17-5d4d-dd54-b3cc.ngrok-free.app'; //'http://200.129.247.244:4000/';
+      'https://1b69-2804-1408-9059-a700-8915-36f9-1520-1a00.ngrok-free.app'; //'http://200.129.247.244:4000/';
   // static const String productionUrl = 'http://200.129.247.241:4000/';
 
   // Colors

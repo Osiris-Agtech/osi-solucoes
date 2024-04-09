@@ -47,4 +47,6 @@ class FailureMessage {
   static const errorAgendaMarcarComoFeito =
       'Ocorreu um erro ao marcar a atividade como feita';
   static const errorEditAgenda = 'Ocorreu um erro ao editar a atividade';
+  static const errorCreateAgenda = 'Ocorreu um erro ao criar a atividade';
+  static const errorDeleteAgenda = 'Ocorreu um erro ao deletar a atividade';
 }

@@ -310,6 +310,17 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
   }
 
   @override
+  dynamic setPageState(AgendaState value) {
+    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
+        name: '_AgendaStoreBase.setPageState');
+    try {
+      return super.setPageState(value);
+    } finally {
+      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setInitialStateForFilter() {
     final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
         name: '_AgendaStoreBase.setInitialStateForFilter');
@@ -332,11 +343,11 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
   }
 
   @override
-  dynamic setFiltroLote(Lote? value) {
+  dynamic setFiltroLote(Lote? value, {int? loteId}) {
     final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
         name: '_AgendaStoreBase.setFiltroLote');
     try {
-      return super.setFiltroLote(value);
+      return super.setFiltroLote(value, loteId: loteId);
     } finally {
       _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
     }

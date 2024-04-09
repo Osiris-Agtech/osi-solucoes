@@ -52,6 +52,9 @@ abstract class _AgendaStoreBase with Store {
   setShowEditPage(bool value) => showEditPage = value;
 
   @action
+  setPageState(AgendaState value) => state = value;
+
+  @action
   buscarAtividades() async {
     state = AgendaState.loading;
 
@@ -65,7 +68,6 @@ abstract class _AgendaStoreBase with Store {
         atividadeList = List.from([]);
       },
       (data) async {
-        // testar essa lógica
         for (var atividade in data) {
           int index = usuariosConta
               .indexWhere((element) => atividade.usuario?.id == element.id);
@@ -142,8 +144,15 @@ abstract class _AgendaStoreBase with Store {
   }
 
   @action
-  setFiltroLote(Lote? value) {
+  setFiltroLote(Lote? value, {int? loteId}) {
     filtroLote = value;
+
+    if (loteId != null) {
+      filtroLote = lotesConta.firstWhere((element) => element.id == loteId);
+      if (filtroLote != null) {
+        setFiltro(AgendaFilter.lote);
+      }
+    }
   }
 
   @action
@@ -305,7 +314,7 @@ abstract class _AgendaStoreBase with Store {
   limparDadosDaAtividade() {
     tituloController.text = '';
     descricaoController.text = '';
-    dataAtividade = null;
+    dataAtividade = DateTime.now();
     usuarioAtividade = null;
   }
 
@@ -338,11 +347,13 @@ abstract class _AgendaStoreBase with Store {
     showEditPage = false;
     state = AgendaState.loading;
 
+    AuthController authController = GetIt.I<AuthController>();
     Agenda agenda = Agenda(
       titulo: tituloController.text,
       descricao: descricaoController.text,
       data: dataAtividade,
       usuario: usuarioAtividade,
+      conta: authController.usuario.selected_conta!.conta!,
     );
 
     var atividade = await agendaRepository.cadastrarAtividade(agenda);

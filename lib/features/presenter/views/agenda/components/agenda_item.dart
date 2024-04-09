@@ -49,7 +49,7 @@ Padding agendaItem({
                   children: [
                     Text(
                       agenda.titulo ?? "---",
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 20,
