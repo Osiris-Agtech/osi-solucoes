@@ -258,6 +258,9 @@ abstract class _LoteStoreBase with Store {
   bool showReservatorioDetalhes = false;
 
   @observable
+  bool showProtocoloDetalhes = false;
+
+  @observable
   bool isNovaCultura = false;
 
   @observable
@@ -364,6 +367,11 @@ abstract class _LoteStoreBase with Store {
   @action
   selecionarNovoLoteReservatorio() {
     novoLoteReservatorio = reservatorioDetalhes;
+    setShowReservatorioDetalhes(false);
+  }
+
+  @action
+  selecionarNovoLoteProtocolo() {
     setShowReservatorioDetalhes(false);
   }
 
@@ -493,12 +501,21 @@ abstract class _LoteStoreBase with Store {
   setShowReservatorioDetalhes(bool value) => showReservatorioDetalhes = value;
 
   @action
+  setShowProtocoloDetalhes(bool value) => showProtocoloDetalhes = value;
+
+  @action
   setIsNovaCultura(bool value) => isNovaCultura = value;
 
   @action
   setReservatorioDetalhes(Reservatorio reservatorio) {
     reservatorioDetalhes = reservatorio;
     showReservatorioDetalhes = true;
+  }
+
+  @action
+  setProtocoloDetalhes() {
+    // protocoloDetalhes = protocolo;
+    showProtocoloDetalhes = true;
   }
 
   @action

@@ -5,6 +5,7 @@ import 'package:osi_solucoes/core/middlewares/equipe_middleware.dart';
 import 'package:osi_solucoes/core/middlewares/reservatorio_middleware.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:osi_solucoes/features/presenter/views/agenda/agenda_page.dart';
 import 'package:osi_solucoes/features/presenter/views/alert/permission_denied_view.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/cadastrar_area_cultivo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/cadastrar_setor_page.dart';
@@ -17,6 +18,7 @@ import 'package:osi_solucoes/features/presenter/views/caderno_campo/detalhes_cad
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/cadastrar_usuario_page.dart';
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/detalhes_usuario_page.dart';
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/protocolo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/recuperar_senha/codigo_seguranca_page.dart';
 import 'package:osi_solucoes/features/presenter/views/recuperar_senha/nova_senha_page.dart';
 import 'package:osi_solucoes/features/presenter/views/recuperar_senha/recuperacao_page.dart';
@@ -35,6 +37,7 @@ import '../views/modulos/modulos_page.dart';
 import '../views/login/login_page.dart';
 import '../views/login/multi_account_page.dart';
 import '../views/onboarding/splash_page.dart';
+import '../views/protocolo/cadastrar_protocolo_page.dart';
 import '../views/reservatorio/reservatorios_page.dart';
 import '../views/solucao/solucao_page.dart';
 
@@ -197,6 +200,27 @@ class AppPages {
     GetPage(
       name: Routes.gerenciarEquipePage,
       page: () => const GerenciarEquipePage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.protocoloPage,
+      page: () => const ProtocoloPage(),
+      transition: Transition.rightToLeft,
+      middlewares: [
+        EquipeViewPagePermission(),
+      ],
+    ),
+    GetPage(
+      name: Routes.cadastrarProtocoloPage,
+      page: () => const CadastrarProtocoloPage(),
+      transition: Transition.rightToLeft,
+      middlewares: [
+        EquipeViewPagePermission(),
+      ],
+    ),
+    GetPage(
+      name: Routes.agendaPage,
+      page: () => const AgendaPage(),
       transition: Transition.rightToLeft,
       middlewares: [
         EquipeViewPagePermission(),

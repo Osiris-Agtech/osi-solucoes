@@ -72,7 +72,7 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
                         padding: EdgeInsets.only(top: 200, left: 60, right: 60),
                         child: Center(
                           child: Text(
-                            'Nenhuma área de cultivo cadastrada',
+                            'Nenhuma fase cadastrada',
                             style: TextStyle(
                               fontSize: 14,
                               color: Color(0xff6F6464),

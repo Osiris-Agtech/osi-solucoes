@@ -43,4 +43,10 @@ class FailureMessage {
       'Falha ao cadastrar ajuste, verifique se os campos estão preenchido corretamente';
   static const errorUpdateUsuarioMessage =
       'Falha ao atualizar usuario, verifique se os campos estão preenchido corretamente';
+  static const errorBuscarAgendas = 'Ocorreu um erro ao buscar as atividades';
+  static const errorAgendaMarcarComoFeito =
+      'Ocorreu um erro ao marcar a atividade como feita';
+  static const errorEditAgenda = 'Ocorreu um erro ao editar a atividade';
+  static const errorCreateAgenda = 'Ocorreu um erro ao criar a atividade';
+  static const errorDeleteAgenda = 'Ocorreu um erro ao deletar a atividade';
 }

@@ -423,6 +423,23 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$showProtocoloDetalhesAtom =
+      Atom(name: '_LoteStoreBase.showProtocoloDetalhes');
+
+  @override
+  bool get showProtocoloDetalhes {
+    _$showProtocoloDetalhesAtom.reportRead();
+    return super.showProtocoloDetalhes;
+  }
+
+  @override
+  set showProtocoloDetalhes(bool value) {
+    _$showProtocoloDetalhesAtom.reportWrite(value, super.showProtocoloDetalhes,
+        () {
+      super.showProtocoloDetalhes = value;
+    });
+  }
+
   final _$isNovaCulturaAtom = Atom(name: '_LoteStoreBase.isNovaCultura');
 
   @override
@@ -1054,6 +1071,17 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic selecionarNovoLoteProtocolo() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.selecionarNovoLoteProtocolo');
+    try {
+      return super.selecionarNovoLoteProtocolo();
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setRegistroData(DateTime dateTime) {
     final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
         name: '_LoteStoreBase.setRegistroData');
@@ -1197,6 +1225,17 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic setShowProtocoloDetalhes(bool value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setShowProtocoloDetalhes');
+    try {
+      return super.setShowProtocoloDetalhes(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setIsNovaCultura(bool value) {
     final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
         name: '_LoteStoreBase.setIsNovaCultura');
@@ -1213,6 +1252,17 @@ mixin _$LoteStore on _LoteStoreBase, Store {
         name: '_LoteStoreBase.setReservatorioDetalhes');
     try {
       return super.setReservatorioDetalhes(reservatorio);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setProtocoloDetalhes() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setProtocoloDetalhes');
+    try {
+      return super.setProtocoloDetalhes();
     } finally {
       _$_LoteStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -1258,6 +1308,7 @@ isVisible: ${isVisible},
 isNovaAreaLoading: ${isNovaAreaLoading},
 isNovoLoteLoading: ${isNovoLoteLoading},
 showReservatorioDetalhes: ${showReservatorioDetalhes},
+showProtocoloDetalhes: ${showProtocoloDetalhes},
 isNovaCultura: ${isNovaCultura},
 dotIndicator: ${dotIndicator},
 culturaList: ${culturaList},

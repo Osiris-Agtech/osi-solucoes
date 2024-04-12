@@ -167,13 +167,15 @@ class CadastroConta implements ICadastroConta {
     final QueryResult result = await client.query(options);
 
     if (!result.hasException) {
-      List? usuarios = result.data?['usuarios']
-          ?.map((item) => Usuario.fromJson(item))
+      if (result.data?['usuarios'] == []) return const Right([]);
+
+      List<Usuario>? usuarios = (result.data?['usuarios'] as List?)
+          ?.map((item) => Usuario.fromJson(item as Map<String, dynamic>))
           .toList();
       if (usuarios == null || usuarios.isEmpty) {
         return Left(ErrorRegister(message: FailureMessage.userNotFoundMessage));
       }
-      return Right(usuarios as List<Usuario>);
+      return Right(usuarios);
     } else {
       return Left(ErrorRegister(message: FailureMessage.userNotFoundMessage));
     }

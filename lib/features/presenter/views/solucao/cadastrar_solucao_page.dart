@@ -8,14 +8,14 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/utils/decimal_format.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
-import 'package:osi_solucoes/features/presenter/views/solucao/cadastrar_solucao_concentrada_page.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/customTextFormField.dart';
 import '../../../../../core/constants/constants.dart';
+import '../../routes/routes.dart';
 
 class CadastrarSolucaoPage extends StatefulWidget {
   final bool isShortcut;
-  const CadastrarSolucaoPage({
+  const    CadastrarSolucaoPage({
     Key? key,
     this.isShortcut = false,
   }) : super(key: key);
@@ -68,82 +68,92 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    titulo(),
-                    const SizedBox(height: 20),
-                    subtitulo(),
-                    const SizedBox(height: 10),
-                    _nome(context),
-                    Observer(builder: (_) {
-                      return Visibility(
-                        visible: store.mostrarErroFormulario &&
-                            store.novaSolucaoName.text.isEmpty,
-                        child: const Padding(
-                          padding: EdgeInsets.only(
-                            left: 16.0,
-                            bottom: 8.0,
-                          ),
-                          child: Text(
-                            'Nome obrigatório',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Constants.kErrorColor,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                    const Divider(),
-                    _fertilizantes(context),
-                    Observer(builder: (_) {
-                      return Visibility(
-                        visible: store.mostrarErroFormulario &&
-                            store.expandedFertilizantes.isEmpty,
-                        child: const Padding(
-                          padding: EdgeInsets.only(
-                            left: 16.0,
-                            bottom: 8.0,
-                          ),
-                          child: Text(
-                            'Adicione fertilizante à lista',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Constants.kErrorColor,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                    Expanded(
-                      child: Observer(builder: (_) {
-                        if (store.expandedFertilizantes.isEmpty) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 20, bottom: 20),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: const Color(0xffF5F5F5),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        titulo(),
+                        const SizedBox(height: 20),
+                        subtitulo(),
+                        const SizedBox(height: 10),
+                        _nome(context),
+                        Observer(builder: (_) {
+                          return Visibility(
+                            visible: store.mostrarErroFormulario &&
+                                store.novaSolucaoName.text.isEmpty,
+                            child: const Padding(
+                              padding: EdgeInsets.only(
+                                left: 16.0,
+                                bottom: 8.0,
                               ),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: avisoFertilizante(),
+                              child: Text(
+                                'Nome obrigatório',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Constants.kErrorColor,
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           );
-                        }
+                        }),
+                        const Divider(),
+                        _fertilizantes(context),
+                        Observer(builder: (_) {
+                          return Visibility(
+                            visible: store.mostrarErroFormulario &&
+                                store.expandedFertilizantes.isEmpty,
+                            child: const Padding(
+                              padding: EdgeInsets.only(
+                                left: 16.0,
+                                bottom: 8.0,
+                              ),
+                              child: Text(
+                                'Adicione fertilizante à lista',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Constants.kErrorColor,
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                        SizedBox(
+                          height: (constraints.maxHeight +
+                                  (isKeyboardOpen
+                                      ? MediaQuery.of(context).viewInsets.bottom
+                                      : 0)) -
+                              220,
+                          child: Observer(builder: (_) {
+                            if (store.expandedFertilizantes.isEmpty) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 20, bottom: 20),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: const Color(0xffF5F5F5),
+                                  ),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: avisoFertilizante(),
+                                  ),
+                                ),
+                              );
+                            }
 
-                        return _cardListWithData();
-                      }),
+                            return _cardListWithData();
+                          }),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  );
+                }),
               ),
               bottomNavigationBar: isKeyboardOpen ? null : _nextButton(size),
             ),
@@ -484,57 +494,64 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
 
   _nome(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 20,
-        right: 20,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: InkWell(
         child: Observer(builder: (_) {
           return ListTile(
             leading: const Icon(Icons.label),
-            title: const Text(
-              'Nome',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+            dense: true,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Nome',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                ),
+                store.novaSolucaoName.text.isNotEmpty
+                    ? Expanded(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                store.novaSolucaoName.text,
+                                textAlign: TextAlign.end,
+                                style: const TextStyle(
+                                  color: Constants.kPrimaryColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const Icon(
+                              Icons.chevron_right,
+                              color: Constants.kPrimaryColor,
+                            ),
+                          ],
+                        ),
+                      )
+                    : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Text(
+                            "Preencher",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Constants.kPrimaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            size: 18,
+                            color: Constants.kPrimaryColor,
+                          ),
+                        ],
+                      ),
+              ],
             ),
-            trailing: store.novaSolucaoName.text.isNotEmpty
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        store.novaSolucaoName.text,
-                        textAlign: TextAlign.end,
-                        style: const TextStyle(
-                          color: Constants.kPrimaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const Icon(
-                        Icons.chevron_right,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ],
-                  )
-                : Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Text(
-                        "Preencher",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Constants.kPrimaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Icon(
-                        Icons.chevron_right,
-                        size: 18,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ],
-                  ),
             onTap: () {
               store.setDotIndicator(0);
               bottomSheet(context, carouselController, controlerPages, store);
@@ -547,13 +564,11 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
 
   _fertilizantes(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 20,
-        right: 20,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: InkWell(
         child: Observer(builder: (_) {
           return ListTile(
+            dense: true,
             leading: const Icon(Icons.invert_colors),
             title: const Text(
               'Fertilizantes',
@@ -661,11 +676,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
             // Validate Page
             if (store.validateNewSN()) {
               store.setFertilizantesEscolhidos();
-              Get.to(
-                () => CadastrarSolucaoConcentradaPage(
-                  isShortcut: widget.isShortcut,
-                ),
-              );
+              Get.toNamed(Routes.cadastrarSolucaoConcentradaPage);
             }
           },
         ),

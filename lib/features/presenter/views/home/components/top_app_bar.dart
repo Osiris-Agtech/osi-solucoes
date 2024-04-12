@@ -45,10 +45,7 @@ class TopAppBar extends StatelessWidget {
             color: Constants.kPrimaryColor,
           ),
           Padding(
-            padding: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width * 0.013,
-              // top: MediaQuery.of(context).size.height * 0.002
-            ),
+            padding: const EdgeInsets.only(left: 8.0),
             child: Text(
               namePage,
               style: const TextStyle(
@@ -61,8 +58,9 @@ class TopAppBar extends StatelessWidget {
           if (subtitle != null)
             Padding(
               padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.003,
-                  left: MediaQuery.of(context).size.width * 0.013),
+                top: MediaQuery.of(context).size.height * 0.003,
+                left: 8.0,
+              ), //MediaQuery.of(context).size.width * 0.013),
               child: Text(
                 subtitle!,
                 style: const TextStyle(
