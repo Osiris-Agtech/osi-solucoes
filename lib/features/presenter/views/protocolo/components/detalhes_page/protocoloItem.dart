@@ -72,7 +72,7 @@ Padding protocoloItem({
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  store.protocoloList[index].cultura?[0].nome ??
+                                  store.protocoloList[index].cultura?.nome ??
                                       "---",
                                   style: const TextStyle(
                                     color: Constants.kPrimaryColor,
@@ -97,7 +97,7 @@ Padding protocoloItem({
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(left: 5, bottom: 5),
+                                padding: EdgeInsets.only(left: 5),
                                 child: Text(
                                   //"${store.searchReservatorio[index].lotes?.length ?? 0} Ativos",
                                   "0 Lotes",

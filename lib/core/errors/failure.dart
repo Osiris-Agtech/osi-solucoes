@@ -49,4 +49,6 @@ class FailureMessage {
   static const errorEditAgenda = 'Ocorreu um erro ao editar a atividade';
   static const errorCreateAgenda = 'Ocorreu um erro ao criar a atividade';
   static const errorDeleteAgenda = 'Ocorreu um erro ao deletar a atividade';
+  static const errorBuscarProtocolos =
+      'Ocorreu um erro ao buscar os protocolos';
 }

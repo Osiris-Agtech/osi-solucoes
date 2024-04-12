@@ -8,6 +8,7 @@ import 'package:osi_solucoes/features/data/repositories/protocolo/protocolo_repo
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
 import '../models/acao/acao_model.dart';
 
@@ -192,7 +193,9 @@ abstract class _ProtocoloStoreBase with Store {
   buscarProtocolos() async {
     isProtocoloListLoading = true;
 
-    var protocolos = await protocoloRepository.buscarProtocolos();
+    AuthController authController = GetIt.I<AuthController>();
+    var protocolos = await protocoloRepository
+        .buscarProtocolos(authController.usuario.selected_conta!.conta!.id!);
 
     protocolos.fold(
       (err) {
@@ -241,7 +244,9 @@ abstract class _ProtocoloStoreBase with Store {
       implantacao: novoFormaProtocolo,
       tipo_cultura: novoTipoProtocolo,
       sistema_cultivo: novoSistemaProtocolo,
-      cultura: List.from(novaCulturaProtocolo),
+      cultura: novaCulturaProtocolo.isNotEmpty
+          ? novaCulturaProtocolo.first
+          : null, //List.from(novaCulturaProtocolo),
       acao: List.from(novasAtividadesProtocolo),
     );
 

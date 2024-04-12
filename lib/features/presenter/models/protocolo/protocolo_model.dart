@@ -30,7 +30,7 @@ class Protocolo {
   @JsonKey(required: false, disallowNullValue: false)
   List<Acao>? acao;
   @JsonKey(required: false, disallowNullValue: false)
-  List<Cultura>? cultura;
+  Cultura? cultura;
   @JsonKey(required: false, disallowNullValue: false)
   Conta? conta;
 
