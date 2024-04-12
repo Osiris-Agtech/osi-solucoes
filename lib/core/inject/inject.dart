@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/features/data/datasources/agenda/agenda_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/ajuste/ajuste_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/cadernoCampo/caderno_campo_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/gerenciarEquipe/gerenciar_equipe_datasource.dart';
@@ -9,6 +10,7 @@ import 'package:osi_solucoes/features/data/datasources/protocolo/protocolo_datas
 import 'package:osi_solucoes/features/data/datasources/recuperarSenha/recuperar_senha_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/setor/setor_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/solucoes/solucoes_nutritivas_datasource.dart';
+import 'package:osi_solucoes/features/data/repositories/agenda/agenda_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/ajuste/ajuste_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/cadernoCampo/cadeno_campo_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerenciar_equipe_repository.dart';
@@ -60,6 +62,7 @@ Future<void> initInject() async {
   sl.registerLazySingleton<IProtocoloDatasource>(() => ProtocoloDatasource());
   sl.registerLazySingleton<ISetorDatasource>(() => SetorDatasource());
   sl.registerLazySingleton<IAreaDatasource>(() => AreaDatasource());
+  sl.registerLazySingleton<IAgendaDatasource>(() => AgendaDatasource());
   sl.registerLazySingleton<ILoteDatasource>(() => LoteDatasource());
   sl.registerLazySingleton<IAjusteDatasource>(() => AjusteDatasource());
   sl.registerLazySingleton<IReservatorioDatasource>(
@@ -97,6 +100,8 @@ Future<void> initInject() async {
       () => RecuperarSenhaRepository(datasource: sl()));
   sl.registerLazySingleton<ProtocoloRepository>(
       () => ProtocoloRepository(datasource: sl()));
+  sl.registerLazySingleton<AgendaRepository>(
+      () => AgendaRepository(datasource: sl()));
 
   //viewmodels
   sl.registerLazySingleton<AjustesStore>(() => AjustesStore());

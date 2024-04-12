@@ -297,6 +297,8 @@ class CadernoCampoDatasource implements ICadernoCampoDatasource {
     final QueryResult result = await client.query(options);
 
     if (!result.hasException) {
+      if (result.data?['usuarios'] == []) return const Right([]);
+
       List? usuarios = result.data?['usuarios']
           ?.map((item) => Usuario.fromJson(item))
           .toList();
