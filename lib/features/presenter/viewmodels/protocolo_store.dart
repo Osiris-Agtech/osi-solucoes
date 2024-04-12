@@ -299,10 +299,7 @@ abstract class _ProtocoloStoreBase with Store {
         }
       }
     }
-    novasAtividadesProtocolo = List.from(
-        novasAtividadesProtocolo); // Atualiza a lista após todas as adições
-    print(novasAtividadesProtocolo
-        .map((e) => e.titulo)); // Imprime os títulos após a atualização
+    novasAtividadesProtocolo = List.from(novasAtividadesProtocolo);
   }
 
   @action
@@ -355,7 +352,6 @@ abstract class _ProtocoloStoreBase with Store {
   @action
   prepararListaDetalhesFase() {
     listaFaseDetalhes.clear(); // Limpa a lista antes de adicionar novas fases
-    print('inicio: ${protocoloSelecionado?.acao?.length}');
     if (protocoloSelecionado?.acao != null) {
       for (var acao in protocoloSelecionado!.acao!) {
         if (acao.fase != null) {
@@ -364,8 +360,6 @@ abstract class _ProtocoloStoreBase with Store {
             (f) => f.id == acao.fase!.id,
             orElse: () => Fase(),
           );
-
-          print(fase.nome);
 
           if (fase.id == null) {
             // Verifica se a fase retornada é a fase vazia
@@ -377,13 +371,9 @@ abstract class _ProtocoloStoreBase with Store {
             fase.acao?.add(acao);
           }
         }
-        print(acao.fase?.nome);
       }
     }
     listaFaseDetalhes = List.from(listaFaseDetalhes);
-
-    print('inicio: ${protocoloSelecionado?.acao?.length}');
-    print(listaFaseDetalhes.map((e) => e.nome));
   }
 
   @action
