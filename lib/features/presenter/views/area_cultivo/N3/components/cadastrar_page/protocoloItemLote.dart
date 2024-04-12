@@ -19,6 +19,9 @@ Padding protocoloItemLote({
       onTap: () {
         store.setProtocoloDetalhes(store.protocoloList[index]);
         store.buscarProtocoloDetalhes();
+        if (store.abrirProtocoloDetalhesAtv) {
+          store.toggleAbrirProtocoloDetalhesAtv();
+        }
       },
       child: Card(
         shape: RoundedRectangleBorder(

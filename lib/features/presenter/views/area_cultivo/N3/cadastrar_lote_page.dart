@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_detalhes_atv.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_detalhes_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_page.dart';
 
@@ -305,8 +306,12 @@ bottomSheetN3(
                                       store.showProtocoloDetalhes)
                               ? IconButton(
                                   onPressed: () {
-                                    store.setShowReservatorioDetalhes(false);
-                                    store.setShowProtocoloDetalhes(false);
+                                    if (store.abrirProtocoloDetalhesAtv) {
+                                      store.toggleAbrirProtocoloDetalhesAtv();
+                                    } else {
+                                      store.setShowReservatorioDetalhes(false);
+                                      store.setShowProtocoloDetalhes(false);
+                                    }
                                   },
                                   icon: const Icon(
                                     Icons.arrow_back_ios_new_rounded,
@@ -372,7 +377,9 @@ bottomSheetN3(
                       AnimatedCrossFade(
                         duration: const Duration(milliseconds: 200),
                         firstChild: protocoloPage(context, store),
-                        secondChild: protocoloDetalhes(store),
+                        secondChild: store.abrirProtocoloDetalhesAtv
+                            ? protocoloAtividadeDetalhes(store)
+                            : protocoloDetalhes(store),
                         crossFadeState: !store.showProtocoloDetalhes
                             ? CrossFadeState.showFirst
                             : CrossFadeState.showSecond,
@@ -460,7 +467,7 @@ class _BackStepButtonState extends State<BackStepButton> {
       builder: (_) {
         return (store.dotIndicator == 3 && store.showReservatorioDetalhes) ||
                 (store.dotIndicator == 4 && store.showProtocoloDetalhes)
-            ? Container()
+            ? const SizedBox.shrink()
             : TextButton(
                 onPressed: () {
                   store.setDotIndicator(store.dotIndicator - 1);
@@ -514,48 +521,53 @@ class _NextStepButtonState extends State<NextStepButton> {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        primary: Constants.kPrimaryColor,
-      ),
-      child: Center(
-        child: Observer(builder: (_) {
-          return (store.dotIndicator == 3 && store.showReservatorioDetalhes) ||
-                  (store.dotIndicator == 4 && store.showProtocoloDetalhes)
-              ? const Text(
-                  'Vincular',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                )
-              : Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text(
-                      'Avançar',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                    ),
-                    Icon(Icons.chevron_right),
-                  ],
-                );
-        }),
-      ),
-      onPressed: () {
-        if (store.dotIndicator == 3) {
-          if (store.showReservatorioDetalhes) {
-            store.selecionarNovoLoteReservatorio();
-          }
-        }
-        if (store.dotIndicator == 4) {
-          if (store.showProtocoloDetalhes) {
-            store.selecionarNovoLoteProtocolo();
-          }
-        }
-        if (store.dotIndicator < 4) {
-          store.setDotIndicator(store.dotIndicator + 1);
-          widget.carouselController.nextPage();
-        }
-      },
-    );
+    return Observer(builder: (_) {
+      return store.abrirProtocoloDetalhesAtv
+          ? const SizedBox.shrink()
+          : ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24)),
+                primary: Constants.kPrimaryColor,
+              ),
+              child: Center(
+                child: (store.dotIndicator == 3 &&
+                            store.showReservatorioDetalhes) ||
+                        (store.dotIndicator == 4 && store.showProtocoloDetalhes)
+                    ? const Text(
+                        'Vincular',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w600),
+                      )
+                    : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Text(
+                            'Avançar',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w600),
+                          ),
+                          Icon(Icons.chevron_right),
+                        ],
+                      ),
+              ),
+              onPressed: () {
+                if (store.dotIndicator == 3) {
+                  if (store.showReservatorioDetalhes) {
+                    store.selecionarNovoLoteReservatorio();
+                  }
+                }
+                if (store.dotIndicator == 4) {
+                  if (store.showProtocoloDetalhes) {
+                    store.selecionarNovoLoteProtocolo();
+                  }
+                }
+                if (store.dotIndicator < 4) {
+                  store.setDotIndicator(store.dotIndicator + 1);
+                  widget.carouselController.nextPage();
+                }
+              },
+            );
+    });
   }
 }

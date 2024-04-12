@@ -5,6 +5,7 @@ import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/lote/lote_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
+import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
@@ -46,6 +47,9 @@ abstract class _LoteStoreBase with Store {
 
   @observable
   List<Protocolo> protocoloList = [];
+
+  @observable
+  List<Fase> listaFaseDetalhes = [];
 
   @observable
   DateTime data1 = DateTime(
@@ -362,6 +366,14 @@ abstract class _LoteStoreBase with Store {
   @observable
   Lote novoLote = Lote();
 
+  @observable
+  bool abrirProtocoloDetalhesAtv = false;
+
+  @action
+  void toggleAbrirProtocoloDetalhesAtv() {
+    abrirProtocoloDetalhesAtv = !abrirProtocoloDetalhesAtv;
+  }
+
   @action
   selecionarNovoLoteArea(Area area) => novoLoteArea = area;
 
@@ -590,6 +602,29 @@ abstract class _LoteStoreBase with Store {
         protocoloDetalhes = data;
       },
     );
+  }
+
+  @action
+  prepararListaDetalhesFase() {
+    listaFaseDetalhes.clear(); // Limpa a lista antes de adicionar novas fases
+    if (protocoloDetalhes.acao != null) {
+      for (var acao in protocoloDetalhes.acao!) {
+        if (acao.fase != null) {
+          var fase = listaFaseDetalhes.firstWhere(
+            (f) => f.id == acao.fase!.id,
+            orElse: () => Fase(),
+          );
+
+          if (fase.id == null) {
+            acao.fase!.acao = [acao];
+            listaFaseDetalhes.add(acao.fase!);
+          } else {
+            fase.acao?.add(acao);
+          }
+        }
+      }
+    }
+    listaFaseDetalhes = List.from(listaFaseDetalhes);
   }
 
   @action

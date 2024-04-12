@@ -7,6 +7,7 @@ import 'package:osi_solucoes/features/data/api_source.dart';
 import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
 import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
+import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
@@ -486,7 +487,7 @@ class LoteDatasource implements ILoteDatasource {
               created_at: DateTime.now(),
               updated_at: DateTime.now(),
               deleted_at: null,
-              acao: [Acao(), Acao()],
+              acao: [Acao(fase: Fase()), Acao(fase: Fase())],
               cultura: [Cultura(id: index, nome: 'Alface ${index + 1}')],
               conta: Conta(),
             ));

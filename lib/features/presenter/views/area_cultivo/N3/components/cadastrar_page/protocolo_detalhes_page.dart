@@ -151,7 +151,10 @@ protocoloDetalhes(LoteStore store) {
                     Icons.chevron_right_rounded,
                     color: Constants.kPrimaryColor,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    store.prepararListaDetalhesFase();
+                    store.toggleAbrirProtocoloDetalhesAtv();
+                  },
                 );
               }),
             ),

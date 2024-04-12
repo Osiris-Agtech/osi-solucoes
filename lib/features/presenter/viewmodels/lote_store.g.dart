@@ -140,6 +140,22 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$listaFaseDetalhesAtom =
+      Atom(name: '_LoteStoreBase.listaFaseDetalhes');
+
+  @override
+  List<Fase> get listaFaseDetalhes {
+    _$listaFaseDetalhesAtom.reportRead();
+    return super.listaFaseDetalhes;
+  }
+
+  @override
+  set listaFaseDetalhes(List<Fase> value) {
+    _$listaFaseDetalhesAtom.reportWrite(value, super.listaFaseDetalhes, () {
+      super.listaFaseDetalhes = value;
+    });
+  }
+
   final _$data1Atom = Atom(name: '_LoteStoreBase.data1');
 
   @override
@@ -852,6 +868,23 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$abrirProtocoloDetalhesAtvAtom =
+      Atom(name: '_LoteStoreBase.abrirProtocoloDetalhesAtv');
+
+  @override
+  bool get abrirProtocoloDetalhesAtv {
+    _$abrirProtocoloDetalhesAtvAtom.reportRead();
+    return super.abrirProtocoloDetalhesAtv;
+  }
+
+  @override
+  set abrirProtocoloDetalhesAtv(bool value) {
+    _$abrirProtocoloDetalhesAtvAtom
+        .reportWrite(value, super.abrirProtocoloDetalhesAtv, () {
+      super.abrirProtocoloDetalhesAtv = value;
+    });
+  }
+
   final _$buscarLotesAsyncAction = AsyncAction('_LoteStoreBase.buscarLotes');
 
   @override
@@ -1064,6 +1097,17 @@ mixin _$LoteStore on _LoteStoreBase, Store {
         name: '_LoteStoreBase.selecionarArea');
     try {
       return super.selecionarArea(area);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void toggleAbrirProtocoloDetalhesAtv() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.toggleAbrirProtocoloDetalhesAtv');
+    try {
+      return super.toggleAbrirProtocoloDetalhesAtv();
     } finally {
       _$_LoteStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -1334,6 +1378,17 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic prepararListaDetalhesFase() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.prepararListaDetalhesFase');
+    try {
+      return super.prepararListaDetalhesFase();
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic validarRegistro() {
     final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
         name: '_LoteStoreBase.validarRegistro');
@@ -1355,6 +1410,7 @@ order: ${order},
 setorSelecionado: ${setorSelecionado},
 loteList: ${loteList},
 protocoloList: ${protocoloList},
+listaFaseDetalhes: ${listaFaseDetalhes},
 data1: ${data1},
 data2: ${data2},
 areaList: ${areaList},
@@ -1400,6 +1456,7 @@ protocoloDetalhes: ${protocoloDetalhes},
 solucaoNutritivaList: ${solucaoNutritivaList},
 solucaoConcentradaList: ${solucaoConcentradaList},
 novoLote: ${novoLote},
+abrirProtocoloDetalhesAtv: ${abrirProtocoloDetalhesAtv},
 searchLote: ${searchLote}
     ''';
   }

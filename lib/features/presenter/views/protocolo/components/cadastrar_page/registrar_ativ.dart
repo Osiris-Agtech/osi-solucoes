@@ -79,11 +79,7 @@ registrarAtivPage(BuildContext context, ProtocoloStore store) {
           ),
           const SizedBox(height: 16),
           Observer(builder: (_) {
-<<<<<<< HEAD
-            if (false) {
-=======
             if (store.faseList.isEmpty) {
->>>>>>> a177ff15ea4ea482b134589c0cb8f3b28a2d145f
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 100, left: 60, right: 60),
