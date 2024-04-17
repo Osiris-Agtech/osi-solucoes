@@ -80,6 +80,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     children: [
                       Expanded(
                         child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
                           tileColor: Colors.transparent,
                           selectedTileColor: Colors.transparent,
                           title: const Text('Atividade'),
@@ -96,6 +97,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                       const SizedBox(width: 16),
                       Expanded(
                         child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
                           tileColor: Colors.transparent,
                           selectedTileColor: Colors.transparent,
                           title: const Text('Fase'),
@@ -318,6 +320,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     children: [
                       Expanded(
                         child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
                           tileColor: Colors.transparent,
                           selectedTileColor: Colors.transparent,
                           title: const Text('Atividade'),
@@ -335,6 +338,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                       const SizedBox(width: 16),
                       Expanded(
                         child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
                           tileColor: Colors.transparent,
                           selectedTileColor: Colors.transparent,
                           title: const Text('Fase'),

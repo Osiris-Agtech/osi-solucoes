@@ -88,8 +88,8 @@ Padding protocoloItem({
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
-                            children: const [
-                              Text(
+                            children: [
+                              const Text(
                                 "Lotes Vinculados:",
                                 style: TextStyle(
                                   fontSize: 14,
@@ -97,11 +97,11 @@ Padding protocoloItem({
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(left: 5),
+                                padding: const EdgeInsets.only(left: 5),
                                 child: Text(
                                   //"${store.searchReservatorio[index].lotes?.length ?? 0} Ativos",
-                                  "0 Lotes",
-                                  style: TextStyle(
+                                  "${store.protocoloList[index].lotes.length} Lotes",
+                                  style: const TextStyle(
                                     color: Constants.kPrimaryColor,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,

@@ -47,64 +47,59 @@ registrarAtivPage(BuildContext context, ProtocoloStore store) {
         ),
       ],
     ),
-    body: SizedBox(
-      height: MediaQuery.of(context).size.height * 0.9,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 20, left: 30),
-            child: RichText(
-              textAlign: TextAlign.start,
-              text: const TextSpan(
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: 'Registrar ',
-                  ),
-                  TextSpan(
-                    text: 'Atividades',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Constants.kPrimaryColor,
-                    ),
-                  ),
-                ],
+    body: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 20, left: 30),
+          child: RichText(
+            textAlign: TextAlign.start,
+            text: const TextSpan(
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: 'Registrar ',
+                ),
+                TextSpan(
+                  text: 'Atividades',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Constants.kPrimaryColor,
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 16),
-          Observer(builder: (_) {
-            if (store.faseList.isEmpty) {
-              return Center(
+        ),
+        const SizedBox(height: 16),
+        Observer(builder: (_) {
+          if (store.faseList.isEmpty) {
+            return const Expanded(
+              child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 100, left: 60, right: 60),
-                  child: Column(
-                    children: const [
-                      Text(
-                        'Nenhuma Fase ou Atividade ainda foi cadastrada para esse Protocolo, comece a partir do botão "+"',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xff6F6464),
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w800,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+                  padding: EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Text(
+                    'Nenhuma Fase ou Atividade ainda foi cadastrada para esse Protocolo, comece a partir do botão "+"',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xff6F6464),
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w800,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-              );
-            }
-            return ListFases(scrollController: _scrollController);
-          }),
-          const SizedBox(height: 24),
-        ],
-      ),
+              ),
+            );
+          }
+          return ListFases(scrollController: _scrollController);
+        }),
+        const SizedBox(height: 24),
+      ],
     ),
   );
 }
@@ -157,18 +152,6 @@ class ListFases extends StatelessWidget {
                               ),
                             ),
                             const Spacer(),
-                            // InkWell(
-                            //   onTap: () {
-                            //     getBottomSheet(const AtivBottomSheet(
-                            //       isNewRecord: false,
-                            //       isFase: true,
-                            //     ));
-                            //   },
-                            //   child: const Icon(
-                            //     Icons.edit,
-                            //     size: 20,
-                            //   ),
-                            // ),
                             const SizedBox(
                               width: 10,
                             ),

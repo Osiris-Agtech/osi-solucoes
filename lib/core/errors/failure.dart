@@ -51,4 +51,5 @@ class FailureMessage {
   static const errorDeleteAgenda = 'Ocorreu um erro ao deletar a atividade';
   static const errorBuscarProtocolos =
       'Ocorreu um erro ao buscar os protocolos';
+  static const errorBuscarCulturas = 'Ocorreu um erro ao buscar suas culturas';
 }

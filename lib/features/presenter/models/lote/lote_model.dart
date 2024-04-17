@@ -7,6 +7,7 @@ import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 
 import '../cultura/cultura_model.dart';
+import '../protocolo/protocolo_model.dart';
 
 part 'lote_model.g.dart';
 
@@ -52,6 +53,8 @@ class Lote {
   Reservatorio? reservatorio;
   @JsonKey(required: false, disallowNullValue: false)
   Setor? setor;
+  @JsonKey(required: false, disallowNullValue: false)
+  Protocolo? protocolo;
   @JsonKey(required: false, disallowNullValue: false, defaultValue: [])
   List<LotesAtividades>? lotes_atividades;
 
@@ -73,6 +76,7 @@ class Lote {
     this.reservatorio,
     this.setor,
     this.cultura,
+    this.protocolo,
     this.lotes_atividades,
     this.agenda,
     this.deleted_at,

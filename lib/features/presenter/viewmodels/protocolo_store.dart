@@ -268,7 +268,10 @@ abstract class _ProtocoloStoreBase with Store {
   @action
   buscarCulturas() async {
     isProtocoloListLoading = true;
-    var culturas = await protocoloRepository.buscarCulturas();
+
+    AuthController authController = GetIt.I<AuthController>();
+    var culturas = await protocoloRepository
+        .buscarCulturas(authController.usuario.selected_conta!.conta!.id!);
 
     culturas.fold(
       (err) {
