@@ -44,7 +44,7 @@ protocoloAtividadeDetalhes(LoteStore store) {
             ),
             const SizedBox(height: 16),
             Observer(builder: (_) {
-              if ((store.protocoloDetalhes.acao ?? []).isEmpty) {
+              if ((store.protocoloDetalhes?.acao ?? []).isEmpty) {
                 return Center(
                   child: Padding(
                     padding:

@@ -528,43 +528,56 @@ class _NextStepButtonState extends State<NextStepButton> {
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24)),
-                primary: Constants.kPrimaryColor,
+                primary: store.isAlreadySelected && store.showProtocoloDetalhes
+                    ? Constants.kErrorColor
+                    : Constants.kPrimaryColor,
               ),
               child: Center(
-                child: (store.dotIndicator == 3 &&
-                            store.showReservatorioDetalhes) ||
-                        (store.dotIndicator == 4 && store.showProtocoloDetalhes)
-                    ? const Text(
-                        'Vincular',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600),
-                      )
-                    : Row(
+                child: store.isAlreadySelected && store.showProtocoloDetalhes
+                    ? Row(
                         mainAxisSize: MainAxisSize.min,
                         children: const [
                           Text(
-                            'Avançar',
+                            'Desvincular',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w600),
                           ),
-                          Icon(Icons.chevron_right),
+                          Icon(Icons.close),
                         ],
-                      ),
+                      )
+                    : (store.showProtocoloDetalhes)
+                        ? const Text(
+                            'Vincular',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w600),
+                          )
+                        : Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Text(
+                                'Avançar',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w600),
+                              ),
+                              Icon(Icons.chevron_right),
+                            ],
+                          ),
               ),
               onPressed: () {
-                if (store.dotIndicator == 3) {
-                  if (store.showReservatorioDetalhes) {
-                    store.selecionarNovoLoteReservatorio();
-                  }
+                if (store.isAlreadySelected) {
+                  store.desvincularProtocolo();
+                } else if (store.showProtocoloDetalhes &&
+                    store.protocoloDetalhes != null) {
+                  store.setProtocolo(store.protocoloDetalhes!);
                 }
-                if (store.dotIndicator == 4) {
-                  if (store.showProtocoloDetalhes) {
-                    store.selecionarNovoLoteProtocolo();
-                  }
-                }
+
                 if (store.dotIndicator < 4) {
                   store.setDotIndicator(store.dotIndicator + 1);
                   widget.carouselController.nextPage();
+                } else {
+                  Navigator.pop(context);
+                  store.setShowProtocoloDetalhes(false);
+                  store.removeProtocoloDetalhes();
                 }
               },
             );

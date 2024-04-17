@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
@@ -19,7 +18,7 @@ protocoloDetalhes(LoteStore store) {
             Padding(
               padding: const EdgeInsets.only(top: 10.0, left: 16, bottom: 8),
               child: Text(
-                store.protocoloDetalhes.nome ?? "...",
+                store.protocoloDetalhes?.nome ?? "...",
                 style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -51,7 +50,7 @@ protocoloDetalhes(LoteStore store) {
                       ),
                       Flexible(
                         child: Text(
-                          store.protocoloDetalhes.cultura
+                          store.protocoloDetalhes?.cultura
                                   ?.map((e) => e.nome)
                                   .toList()
                                   .join(", ") ??
@@ -76,7 +75,7 @@ protocoloDetalhes(LoteStore store) {
                         child: Text('Tipo'),
                       ),
                       Text(
-                        store.protocoloDetalhes.tipo_cultura ?? "...",
+                        store.protocoloDetalhes?.tipo_cultura ?? "...",
                         style: const TextStyle(
                           color: Constants.kText2,
                           fontWeight: FontWeight.w600,
@@ -94,7 +93,7 @@ protocoloDetalhes(LoteStore store) {
                         child: Text('Sistema de Cultivo'),
                       ),
                       Text(
-                        store.protocoloDetalhes.sistema_cultivo ?? "...",
+                        store.protocoloDetalhes?.sistema_cultivo ?? "...",
                         style: const TextStyle(
                           color: Constants.kText2,
                           fontWeight: FontWeight.w600,
@@ -112,7 +111,7 @@ protocoloDetalhes(LoteStore store) {
                         child: Text('Forma de Implantação (Inicio)'),
                       ),
                       Text(
-                        store.protocoloDetalhes.implantacao ?? "...",
+                        store.protocoloDetalhes?.implantacao ?? "...",
                         style: const TextStyle(
                           color: Constants.kText2,
                           fontWeight: FontWeight.w600,
@@ -127,37 +126,34 @@ protocoloDetalhes(LoteStore store) {
             const Divider(),
             const SizedBox(height: 8),
             InkWell(
-              child: Observer(builder: (_) {
-                return ListTile(
-                  leading: const Icon(
-                    Icons.checklist,
-                    color: Constants.kPrimaryColor,
+                child: ListTile(
+              leading: const Icon(
+                Icons.checklist,
+                color: Constants.kPrimaryColor,
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.only(right: 8),
+                    child: Text(
+                      'Atividades',
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.normal),
+                    ),
                   ),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.only(right: 8),
-                        child: Text(
-                          'Atividades',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.normal),
-                        ),
-                      ),
-                    ],
-                  ),
-                  subtitle: const Text("Atividades planejadas para o cultivo"),
-                  trailing: const Icon(
-                    Icons.chevron_right_rounded,
-                    color: Constants.kPrimaryColor,
-                  ),
-                  onTap: () {
-                    store.prepararListaDetalhesFase();
-                    store.toggleAbrirProtocoloDetalhesAtv();
-                  },
-                );
-              }),
-            ),
+                ],
+              ),
+              subtitle: const Text("Atividades planejadas para o cultivo"),
+              trailing: const Icon(
+                Icons.chevron_right_rounded,
+                color: Constants.kPrimaryColor,
+              ),
+              onTap: () {
+                store.prepararListaDetalhesFase();
+                store.toggleAbrirProtocoloDetalhesAtv();
+              },
+            )),
             const SizedBox(height: 8),
             const Divider(),
             const SizedBox(height: 8),
@@ -176,49 +172,33 @@ protocoloDetalhes(LoteStore store) {
             const SizedBox(
               height: 5,
             ),
-            Observer(builder: (_) {
-              // if (store.reservatorioDetalhes.lotes == null ||
-              //     store.reservatorioDetalhes.lotes!.isEmpty) {
-              //   return const Padding(
-              //     padding: EdgeInsets.all(16.0),
-              //     child: Center(
-              //       child: Text(
-              //         "Não contém lotes vinculados a este reservatório",
-              //         textAlign: TextAlign.center,
-              //       ),
-              //     ),
-              //   );
-              // }
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    dense: true,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                    title: Text(
-                      "Cultivo Teste",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color:
-                            Constants.kContentColorLightTheme.withOpacity(.8),
-                        fontWeight: FontWeight.bold,
-                      ),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  dense: true,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+                  title: Text(
+                    "Cultivo Teste",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Constants.kContentColorLightTheme.withOpacity(.8),
+                      fontWeight: FontWeight.bold,
                     ),
-                    subtitle: Text(
-                      'Cultura: Alface',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color:
-                            Constants.kContentColorLightTheme.withOpacity(.8),
-                        fontWeight: FontWeight.normal,
-                      ),
+                  ),
+                  subtitle: Text(
+                    'Cultura: Alface',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Constants.kContentColorLightTheme.withOpacity(.8),
+                      fontWeight: FontWeight.normal,
                     ),
-                  );
-                },
-              );
-            }),
+                  ),
+                );
+              },
+            )
           ],
         ),
       )

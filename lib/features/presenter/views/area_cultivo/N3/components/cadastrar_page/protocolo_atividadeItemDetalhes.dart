@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
 
@@ -10,13 +9,12 @@ Padding protocoloatividadeItemDetalhes({
   VoidCallback? onTap,
 }) {
   return Padding(
-    padding: EdgeInsets.only(
-      top: indexAcao == 0 ? 10 : 5,
-      left: 10,
-      right: 10,
-    ),
-    child: Observer(builder: (_) {
-      return InkWell(
+      padding: EdgeInsets.only(
+        top: indexAcao == 0 ? 10 : 5,
+        left: 10,
+        right: 10,
+      ),
+      child: InkWell(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         child: Card(
@@ -62,22 +60,18 @@ Padding protocoloatividadeItemDetalhes({
                     ],
                   ),
                 ),
-                Observer(builder: (_) {
-                  return Icon(
-                    acao.alerta ?? false
-                        ? Icons.notifications
-                        : Icons.notifications_off,
-                    size: 20,
-                    color: acao.alerta ?? false
-                        ? Constants.kPrimaryColor
-                        : Constants.kButtonGrey,
-                  );
-                }),
+                Icon(
+                  acao.alerta ?? false
+                      ? Icons.notifications
+                      : Icons.notifications_off,
+                  size: 20,
+                  color: acao.alerta ?? false
+                      ? Constants.kPrimaryColor
+                      : Constants.kButtonGrey,
+                )
               ],
             ),
           ),
         ),
-      );
-    }),
-  );
+      ));
 }

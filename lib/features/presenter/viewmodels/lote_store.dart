@@ -355,7 +355,10 @@ abstract class _LoteStoreBase with Store {
   Reservatorio reservatorioDetalhes = Reservatorio();
 
   @observable
-  Protocolo protocoloDetalhes = Protocolo();
+  Protocolo? protocoloDetalhes;
+
+  @observable
+  Protocolo? protocoloVinculado;
 
   @observable
   List<SolucaoFertilizanteConcentrada> solucaoNutritivaList = [];
@@ -368,6 +371,9 @@ abstract class _LoteStoreBase with Store {
 
   @observable
   bool abrirProtocoloDetalhesAtv = false;
+
+  @observable
+  bool isProtocoloValid = false;
 
   @action
   void toggleAbrirProtocoloDetalhesAtv() {
@@ -560,6 +566,23 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
+  removeProtocoloDetalhes() {
+    protocoloDetalhes = null;
+  }
+
+  @action
+  setProtocolo(Protocolo protocolo) {
+    protocoloVinculado = protocolo;
+    isProtocoloValid = true;
+  }
+
+  @action
+  desvincularProtocolo() {
+    protocoloVinculado = null;
+    isProtocoloValid = false;
+  }
+
+  @action
   buscarReservatorioDetalhes() async {
     var reservatorios = await loteRepository
         .buscarReservatorioDetalhes(reservatorioDetalhes.id!);
@@ -591,8 +614,11 @@ abstract class _LoteStoreBase with Store {
 
   @action
   buscarProtocoloDetalhes() async {
+    if (protocoloDetalhes == null) {
+      return;
+    }
     var protocolos =
-        await loteRepository.buscarProtocoloDetalhes(protocoloDetalhes.id!);
+        await loteRepository.buscarProtocoloDetalhes(protocoloDetalhes!.id!);
 
     protocolos.fold(
       (err) {
@@ -606,9 +632,12 @@ abstract class _LoteStoreBase with Store {
 
   @action
   prepararListaDetalhesFase() {
-    listaFaseDetalhes.clear(); // Limpa a lista antes de adicionar novas fases
-    if (protocoloDetalhes.acao != null) {
-      for (var acao in protocoloDetalhes.acao!) {
+    listaFaseDetalhes.clear();
+    if (protocoloDetalhes == null) {
+      return;
+    } // Limpa a lista antes de adicionar novas fases
+    if (protocoloDetalhes!.acao != null) {
+      for (var acao in protocoloDetalhes!.acao!) {
         if (acao.fase != null) {
           var fase = listaFaseDetalhes.firstWhere(
             (f) => f.id == acao.fase!.id,
@@ -787,6 +816,12 @@ abstract class _LoteStoreBase with Store {
     );
 
     isNovoLoteLoading = false;
+  }
+
+  @computed
+  bool get isAlreadySelected {
+    return protocoloVinculado?.id != null &&
+        protocoloVinculado?.id == protocoloDetalhes?.id;
   }
 
   limparTudo() {

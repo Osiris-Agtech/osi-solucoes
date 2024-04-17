@@ -16,6 +16,13 @@ mixin _$LoteStore on _LoteStoreBase, Store {
       (_$searchLoteComputed ??= Computed<List<Lote>>(() => super.searchLote,
               name: '_LoteStoreBase.searchLote'))
           .value;
+  Computed<bool>? _$isAlreadySelectedComputed;
+
+  @override
+  bool get isAlreadySelected => (_$isAlreadySelectedComputed ??= Computed<bool>(
+          () => super.isAlreadySelected,
+          name: '_LoteStoreBase.isAlreadySelected'))
+      .value;
 
   final _$isLoteListLoadingAtom =
       Atom(name: '_LoteStoreBase.isLoteListLoading');
@@ -807,15 +814,31 @@ mixin _$LoteStore on _LoteStoreBase, Store {
       Atom(name: '_LoteStoreBase.protocoloDetalhes');
 
   @override
-  Protocolo get protocoloDetalhes {
+  Protocolo? get protocoloDetalhes {
     _$protocoloDetalhesAtom.reportRead();
     return super.protocoloDetalhes;
   }
 
   @override
-  set protocoloDetalhes(Protocolo value) {
+  set protocoloDetalhes(Protocolo? value) {
     _$protocoloDetalhesAtom.reportWrite(value, super.protocoloDetalhes, () {
       super.protocoloDetalhes = value;
+    });
+  }
+
+  final _$protocoloVinculadoAtom =
+      Atom(name: '_LoteStoreBase.protocoloVinculado');
+
+  @override
+  Protocolo? get protocoloVinculado {
+    _$protocoloVinculadoAtom.reportRead();
+    return super.protocoloVinculado;
+  }
+
+  @override
+  set protocoloVinculado(Protocolo? value) {
+    _$protocoloVinculadoAtom.reportWrite(value, super.protocoloVinculado, () {
+      super.protocoloVinculado = value;
     });
   }
 
@@ -882,6 +905,21 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     _$abrirProtocoloDetalhesAtvAtom
         .reportWrite(value, super.abrirProtocoloDetalhesAtv, () {
       super.abrirProtocoloDetalhesAtv = value;
+    });
+  }
+
+  final _$isProtocoloValidAtom = Atom(name: '_LoteStoreBase.isProtocoloValid');
+
+  @override
+  bool get isProtocoloValid {
+    _$isProtocoloValidAtom.reportRead();
+    return super.isProtocoloValid;
+  }
+
+  @override
+  set isProtocoloValid(bool value) {
+    _$isProtocoloValidAtom.reportWrite(value, super.isProtocoloValid, () {
+      super.isProtocoloValid = value;
     });
   }
 
@@ -1378,6 +1416,39 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic removeProtocoloDetalhes() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.removeProtocoloDetalhes');
+    try {
+      return super.removeProtocoloDetalhes();
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setProtocolo(Protocolo protocolo) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setProtocolo');
+    try {
+      return super.setProtocolo(protocolo);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic desvincularProtocolo() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.desvincularProtocolo');
+    try {
+      return super.desvincularProtocolo();
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic prepararListaDetalhesFase() {
     final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
         name: '_LoteStoreBase.prepararListaDetalhesFase');
@@ -1453,11 +1524,14 @@ novoLoteDescricao: ${novoLoteDescricao},
 reservatorioList: ${reservatorioList},
 reservatorioDetalhes: ${reservatorioDetalhes},
 protocoloDetalhes: ${protocoloDetalhes},
+protocoloVinculado: ${protocoloVinculado},
 solucaoNutritivaList: ${solucaoNutritivaList},
 solucaoConcentradaList: ${solucaoConcentradaList},
 novoLote: ${novoLote},
 abrirProtocoloDetalhesAtv: ${abrirProtocoloDetalhesAtv},
-searchLote: ${searchLote}
+isProtocoloValid: ${isProtocoloValid},
+searchLote: ${searchLote},
+isAlreadySelected: ${isAlreadySelected}
     ''';
   }
 }
