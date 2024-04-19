@@ -56,3 +56,13 @@ class Agenda {
 
   Map<String, dynamic> toJson() => _$AgendaToJson(this);
 }
+
+class AgendaSelection {
+  bool selected;
+  Agenda agenda;
+
+  AgendaSelection({
+    required this.selected,
+    required this.agenda,
+  });
+}

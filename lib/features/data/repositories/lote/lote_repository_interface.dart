@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
@@ -20,10 +21,14 @@ abstract class ILoteRepository {
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(int contaId);
   Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
       int reservatorioId);
+  Future<Either<Failure, List<Agenda>>> verificarAtividades(List<int> lotesIds);
   Future<Either<Failure, Lote>> registrarLote(Lote lote);
   Future<Either<Failure, Cultura>> registrarCultura(
       Cultura cultura, int contaId);
   Future<Either<Failure, Lote>> migrarLote(
       int loteId, int setorId, int reservatorioId);
   Future<Either<Failure, Lote>> alterarLote(Lote alterarLote);
+  Future<Either<Failure, bool>> deletarAtividades(List<int> agendaIds);
+  Future<Either<Failure, bool>> finalizarAtividades(List<int> agendaIds);
+  Future<Either<Failure, bool>> finalizarLotes(List<int> lotesIds);
 }

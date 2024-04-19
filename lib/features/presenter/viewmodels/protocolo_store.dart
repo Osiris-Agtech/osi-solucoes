@@ -225,7 +225,6 @@ abstract class _ProtocoloStoreBase with Store {
         },
         (data) async {
           faseDropDownList = List.from([data, ...faseDropDownList]);
-          //toastSuccess(message: "Fase cadastrada com sucesso !");
         },
       );
     }
@@ -345,12 +344,6 @@ abstract class _ProtocoloStoreBase with Store {
         !(faseList[indexFase].acao?[indexAcao].alerta ?? false);
     faseList = List.from(faseList);
   }
-
-  // @action
-  // prepararEditFase(int indexFase) {
-  //   novoTituloFase = faseList[indexFase].nome;
-  //   novoDuracaoDiasFase = faseList[indexFase].duracao_dias;
-  // }
 
   @action
   prepararListaDetalhesFase() {

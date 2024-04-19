@@ -86,10 +86,8 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                                 Text(
                                   store.protocoloSelecionado!.cultura!.length >
                                           1
-                                      ? '${store.protocoloSelecionado!.cultura?[0].nome} , ...' ??
-                                          "---"
-                                      : '${store.protocoloSelecionado!.cultura?[0].nome}' ??
-                                          "---",
+                                      ? '${store.protocoloSelecionado!.cultura?[0].nome} , ...'
+                                      : '${store.protocoloSelecionado!.cultura?[0].nome}',
                                   style: const TextStyle(
                                     color: Constants.kText2,
                                     fontWeight: FontWeight.w600,

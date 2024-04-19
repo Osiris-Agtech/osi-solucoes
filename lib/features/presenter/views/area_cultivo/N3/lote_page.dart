@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,7 @@ import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/finalizar_page/bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/components/topAppBarArea.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
@@ -33,6 +35,12 @@ class _LotePageState extends State<LotePage> {
     loteStore.setSearchLoteText('');
     loteStore.buscarLotes();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    loteStore.limparFinalizacao();
+    super.dispose();
   }
 
   @override
@@ -131,6 +139,10 @@ class AppBar extends StatefulWidget {
 
 class _AppBarState extends State<AppBar> {
   SetorStore setorStore = GetIt.I<SetorStore>();
+  LoteStore loteStore = GetIt.I<LoteStore>();
+
+  CarouselController carouselController = CarouselController();
+  CarouselController controlerPages = CarouselController();
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (_) {
@@ -154,23 +166,39 @@ class _AppBarState extends State<AppBar> {
                     highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
                   ),
-                  child: PopupMenuButton(
-                    icon: SvgPicture.asset(
-                      "assets/icons/settings_icon.svg",
-                      color: Constants.kButtonGrey,
-                      height: 20,
-                    ),
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        child: Row(
-                          children: const [
-                            Text('Editar'),
-                          ],
-                        ),
-                        onTap: () async {
-                          await setorStore.setSetorEditing(widget.setorN2);
-                          Get.toNamed(Routes.cadastrarSetorPage);
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          loteStore.setDotIndicator(0);
+                          loteStore.listaLotesParaFinalizar();
+                          bottomSheet(
+                              context, carouselController, controlerPages);
                         },
+                        icon: const Icon(
+                          Icons.done_all_outlined,
+                          color: Constants.kPrimaryColor,
+                        ),
+                      ),
+                      PopupMenuButton(
+                        icon: SvgPicture.asset(
+                          "assets/icons/settings_icon.svg",
+                          color: Constants.kButtonGrey,
+                          height: 20,
+                        ),
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            child: Row(
+                              children: const [
+                                Text('Editar'),
+                              ],
+                            ),
+                            onTap: () async {
+                              await setorStore.setSetorEditing(widget.setorN2);
+                              Get.toNamed(Routes.cadastrarSetorPage);
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
