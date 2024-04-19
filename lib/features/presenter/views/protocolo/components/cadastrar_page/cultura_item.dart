@@ -83,101 +83,101 @@ cultura(
 }
 
 culturaPage(BuildContext context, ProtocoloStore store) {
-  return SizedBox(
-    height: MediaQuery.of(context).size.height * 0.9,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 10, left: 30),
-          child: RichText(
-            textAlign: TextAlign.start,
-            text: const TextSpan(
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-              children: <TextSpan>[
-                TextSpan(
-                  text: 'Qual ',
+  return SingleChildScrollView(
+    child: SizedBox(
+      height: MediaQuery.of(context).size.height * 0.9 - 130,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 10, left: 30),
+            child: RichText(
+              textAlign: TextAlign.start,
+              text: const TextSpan(
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
-                TextSpan(
-                  text: 'cultura',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Constants.kPrimaryColor,
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'Qual ',
                   ),
-                ),
-                TextSpan(
-                  text: ' deseja usar ?',
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 20),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: const Color(0xffF5F5F5),
+                  TextSpan(
+                    text: 'cultura',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Constants.kPrimaryColor,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' deseja usar ?',
+                  ),
+                ],
               ),
-              child: Observer(builder: (_) {
-                return store.isProtocoloListLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: Constants.kPrimaryColor,
-                        ),
-                      )
-                    : ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: store.culturaList.length,
-                        itemBuilder: (context, index) {
-                          return Observer(builder: (_) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  left: 10,
-                                  right: 10,
-                                  top: index == 0 ? 10 : 0),
-                              child: ListTile(
-                                leading: Observer(builder: (_) {
-                                  if (!store.novaCulturaProtocolo
-                                      .contains(store.culturaList[index])) {
-                                    return const Icon(
-                                        Icons.check_box_outline_blank_rounded);
-                                  }
-                                  return const Icon(
-                                    Icons.check_box,
-                                    color: Constants.kPrimaryColor,
-                                  );
-                                }),
-                                dense: true,
-                                contentPadding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                title: Text(
-                                  store.culturaList[index].nome ?? "---",
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                onTap: () {
-                                  store.mudarSelecaoCultura(
-                                      store.culturaList[index]);
-                                },
-                              ),
-                            );
-                          });
-                        },
-                      );
-              }),
             ),
           ),
-        ),
-        Observer(builder: (_) {
-          return Padding(
+          const SizedBox(height: 16),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: const Color(0xffF5F5F5),
+                ),
+                child: Observer(builder: (_) {
+                  return store.isProtocoloListLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Constants.kPrimaryColor,
+                          ),
+                        )
+                      : ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: store.culturaList.length,
+                          itemBuilder: (context, index) {
+                            return Observer(builder: (_) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                    left: 10,
+                                    right: 10,
+                                    top: index == 0 ? 10 : 0),
+                                child: ListTile(
+                                  leading: Observer(builder: (_) {
+                                    if (!store.novaCulturaProtocolo
+                                        .contains(store.culturaList[index])) {
+                                      return const Icon(Icons
+                                          .check_box_outline_blank_rounded);
+                                    }
+                                    return const Icon(
+                                      Icons.check_box,
+                                      color: Constants.kPrimaryColor,
+                                    );
+                                  }),
+                                  dense: true,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  title: Text(
+                                    store.culturaList[index].nome ?? "---",
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  onTap: () {
+                                    store.mudarSelecaoCultura(
+                                        store.culturaList[index]);
+                                  },
+                                ),
+                              );
+                            });
+                          },
+                        );
+                }),
+              ),
+            ),
+          ),
+          Padding(
             padding: const EdgeInsets.only(left: 20.0, right: 20.0),
             child: Observer(builder: (_) {
               return AnimatedCrossFade(
@@ -189,10 +189,10 @@ culturaPage(BuildContext context, ProtocoloStore store) {
                     : CrossFadeState.showSecond,
               );
             }),
-          );
-        }),
-        const SizedBox(height: 24),
-      ],
+          ),
+          const SizedBox(height: 24),
+        ],
+      ),
     ),
   );
 }
@@ -248,7 +248,7 @@ addCulturaTextFormField(ProtocoloStore store) {
                 fontStyle: FontStyle.italic,
               ),
             ),
-            onPressed: () {},
+            onPressed: store.registrarCultura,
           ),
         ],
       ),

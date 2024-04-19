@@ -10,6 +10,7 @@ import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
+import '../../data/repositories/lote/lote_repository.dart';
 import '../models/acao/acao_model.dart';
 
 part 'protocolo_store.g.dart';
@@ -210,6 +211,22 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
+  buscarFases() async {
+    AuthController authController = GetIt.I<AuthController>();
+    var fases = await protocoloRepository
+        .buscarFases(authController.usuario.selected_conta!.conta!.id!);
+
+    fases.fold(
+      (err) {
+        faseDropDownList = List.from([]);
+      },
+      (data) async {
+        faseDropDownList = List.from(data);
+      },
+    );
+  }
+
+  @action
   registrarFase() async {
     isProtocoloListLoading = true;
 
@@ -218,6 +235,7 @@ abstract class _ProtocoloStoreBase with Store {
         id: faker.guid.random.integer(50), // retirar junto com mock
         nome: novoTituloFase,
         duracao_dias: novoDuracaoDiasFase,
+        conta: GetIt.I<AuthController>().usuario.selected_conta!.conta!,
       );
 
       var fase = await protocoloRepository.registrarFase(novaFase);
@@ -236,6 +254,31 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
+  registrarCultura() async {
+    if (novaCulturaController.text.isNotEmpty) {
+      Cultura novaCultura = Cultura(
+        nome: novaCulturaController.text,
+        privado: true,
+      );
+
+      LoteRepository loteRepository = GetIt.I<LoteRepository>();
+      AuthController authController = GetIt.I<AuthController>();
+      var conta = await loteRepository.registrarCultura(
+          novaCultura, authController.usuario.selected_conta!.conta!.id!);
+
+      conta.fold(
+        (err) {
+          toastError(message: err.message);
+        },
+        (data) async {
+          culturaList = List.from([data, ...culturaList]);
+          setIsNovaCultura(false);
+        },
+      );
+    }
+  }
+
+  @action
   registrarProtocolo() async {
     isProtocoloListLoading = true;
 
@@ -248,6 +291,7 @@ abstract class _ProtocoloStoreBase with Store {
           ? novaCulturaProtocolo.first
           : null, //List.from(novaCulturaProtocolo),
       acao: List.from(novasAtividadesProtocolo),
+      conta: GetIt.I<AuthController>().usuario.selected_conta!.conta!,
     );
 
     var protocolo = await protocoloRepository.registrarProtocolo(novoProtocolo);
@@ -259,7 +303,7 @@ abstract class _ProtocoloStoreBase with Store {
       (data) async {
         protocoloList = List.from([data, ...protocoloList]);
         Get.back();
-        toastSuccess(message: "Protocolo cadastrada com sucesso !");
+        toastSuccess(message: "Protocolo cadastrado com sucesso!");
       },
     );
     isProtocoloListLoading = false;

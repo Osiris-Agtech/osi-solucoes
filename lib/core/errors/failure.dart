@@ -52,4 +52,9 @@ class FailureMessage {
   static const errorBuscarProtocolos =
       'Ocorreu um erro ao buscar os protocolos';
   static const errorBuscarCulturas = 'Ocorreu um erro ao buscar suas culturas';
+  static const errorCadastrarFase = 'Ocorreu um erro ao cadastrar a fase';
+  static const errorBuscarFases =
+      'Ocorreu um erro ao buscar suas fases cadastradas';
+  static const errorCadastrarProtocolo =
+      'Ocorreu um erro ao cadastrar o protocolo';
 }

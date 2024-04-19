@@ -164,38 +164,36 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                       InkWell(
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
-                        child: Observer(builder: (_) {
-                          return ListTile(
-                            dense: true,
-                            horizontalTitleGap: 12,
-                            leading: const Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Icon(
-                                Icons.checklist,
-                                color: Constants.kPrimaryColor,
-                              ),
-                            ),
-                            title: const Padding(
-                              padding: EdgeInsets.only(right: 8),
-                              child: Text(
-                                'Atividades',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                            ),
-                            subtitle: const Text(
-                                "Atividades planejadas para o cultivo"),
-                            trailing: const Icon(
-                              Icons.chevron_right_rounded,
+                        child: ListTile(
+                          dense: true,
+                          horizontalTitleGap: 12,
+                          leading: const Padding(
+                            padding: EdgeInsets.only(left: 8.0),
+                            child: Icon(
+                              Icons.checklist,
                               color: Constants.kPrimaryColor,
                             ),
-                            onTap: () {
-                              Get.to(() => const DetalhesAtivPage());
-                            },
-                          );
-                        }),
+                          ),
+                          title: const Padding(
+                            padding: EdgeInsets.only(right: 8),
+                            child: Text(
+                              'Atividades',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                          subtitle: const Text(
+                              "Atividades planejadas para o cultivo"),
+                          trailing: const Icon(
+                            Icons.chevron_right_rounded,
+                            color: Constants.kPrimaryColor,
+                          ),
+                          onTap: () {
+                            Get.to(() => const DetalhesAtivPage());
+                          },
+                        ),
                       ),
                       const Divider(),
                       const SizedBox(height: 16),
@@ -247,9 +245,14 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                               itemCount:
                                   (store.protocoloSelecionado?.lotes ?? [])
                                       .length,
-                              separatorBuilder: (context, index) =>
-                                  const Divider(
-                                      color: Constants.kBackgroundColor),
+                              separatorBuilder: (context, index) => Container(
+                                height: 1,
+                                width: double.infinity,
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                color: Constants.kBackgroundColor,
+                              ),
                               itemBuilder: (context, index) {
                                 return Column(
                                   children: [

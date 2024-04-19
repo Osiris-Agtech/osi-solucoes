@@ -30,6 +30,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       store.buscarCulturas();
+      store.buscarFases();
       store.setMostrarErroFormulario(false);
     });
   }
