@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/datasources/lote/lote_datasource.dart';
 import 'package:osi_solucoes/features/data/repositories/lote/lote_repository_interface.dart';
+import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
@@ -90,6 +91,31 @@ class LoteRepository implements ILoteRepository {
       Cultura cultura, int contaId) async {
     var result =
         await datasource.registrarCultura(cultura: cultura, contaId: contaId);
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, List<Agenda>>> verificarAtividades(
+      List<int> lotesIds) async {
+    var result = await datasource.verificarAtividades(lotesIds: lotesIds);
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, bool>> deletarAtividades(List<int> agendaIds) async {
+    var result = await datasource.deletarAtividades(agendaIds: agendaIds);
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, bool>> finalizarAtividades(List<int> agendaIds) async {
+    var result = await datasource.finalizarAtividades(agendaIds: agendaIds);
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, bool>> finalizarLotes(List<int> lotesIds) async {
+    var result = await datasource.finalizarLotes(lotesIds: lotesIds);
     return result;
   }
 }

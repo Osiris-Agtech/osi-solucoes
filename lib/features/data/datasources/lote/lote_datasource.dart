@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:graphql/client.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/api_source.dart';
+import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
@@ -32,6 +33,13 @@ abstract class ILoteDatasource {
   Future<Either<Failure, Lote>> alterarLote({required Lote alterarLote});
   Future<Either<Failure, Cultura>> registrarCultura(
       {required Cultura cultura, required int contaId});
+  Future<Either<Failure, List<Agenda>>> verificarAtividades(
+      {required List<int> lotesIds});
+  Future<Either<Failure, bool>> deletarAtividades(
+      {required List<int> agendaIds});
+  Future<Either<Failure, bool>> finalizarAtividades(
+      {required List<int> agendaIds});
+  Future<Either<Failure, bool>> finalizarLotes({required List<int> lotesIds});
 }
 
 class LoteDatasource implements ILoteDatasource {
@@ -80,6 +88,7 @@ class LoteDatasource implements ILoteDatasource {
             }
             registro_data
             colheita_data
+            bandeijas_semeadas
           }
         }
       ''';
@@ -697,5 +706,64 @@ class LoteDatasource implements ILoteDatasource {
       return Left(
           ErrorLote(message: FailureMessage.errorCadastrarCulturaMessage));
     }
+  }
+
+  @override
+  Future<Either<Failure, List<Agenda>>> verificarAtividades(
+      {required List<int> lotesIds}) async {
+    // Simule uma chamada de API assíncrona
+    await Future.delayed(const Duration(seconds: 2));
+
+    final atividades = List.generate(
+        3,
+        (index) => Agenda(
+              id: index + 1,
+              titulo: 'Atividade ${index + 1}',
+              data: DateTime.now(),
+              descricao: 'Descrição do Atividade ${index + 1}',
+              created_at: DateTime.now(),
+              updated_at: DateTime.now(),
+              deleted_at: null,
+              lote: Lote(
+                id: index + 1,
+                nome: 'Lote ${index + 1}',
+                cultura: Cultura(id: index, nome: 'Alface ${index + 1}'),
+                registro_data: DateTime.now(),
+                colheita_data: DateTime.now(),
+                bandeijas_semeadas: 10,
+              ),
+            ));
+
+    return Future.value(Right(atividades));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deletarAtividades(
+      {required List<int> agendaIds}) async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    const result = true;
+
+    return Future.value(const Right(result));
+  }
+
+  @override
+  Future<Either<Failure, bool>> finalizarAtividades(
+      {required List<int> agendaIds}) async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    const result = true;
+
+    return Future.value(const Right(result));
+  }
+
+  @override
+  Future<Either<Failure, bool>> finalizarLotes(
+      {required List<int> lotesIds}) async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    const result = true;
+
+    return Future.value(const Right(result));
   }
 }

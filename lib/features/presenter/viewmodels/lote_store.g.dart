@@ -16,6 +16,28 @@ mixin _$LoteStore on _LoteStoreBase, Store {
       (_$searchLoteComputed ??= Computed<List<Lote>>(() => super.searchLote,
               name: '_LoteStoreBase.searchLote'))
           .value;
+  Computed<List<LoteSelection>>? _$getLotesGroupComputed;
+
+  @override
+  List<LoteSelection> get getLotesGroup => (_$getLotesGroupComputed ??=
+          Computed<List<LoteSelection>>(() => super.getLotesGroup,
+              name: '_LoteStoreBase.getLotesGroup'))
+      .value;
+  Computed<List<LoteSelection>>? _$lotesParaFinalizarComputed;
+
+  @override
+  List<LoteSelection> get lotesParaFinalizar =>
+      (_$lotesParaFinalizarComputed ??= Computed<List<LoteSelection>>(
+              () => super.lotesParaFinalizar,
+              name: '_LoteStoreBase.lotesParaFinalizar'))
+          .value;
+  Computed<bool>? _$marcarTodasAtividadesComputed;
+
+  @override
+  bool get marcarTodasAtividades => (_$marcarTodasAtividadesComputed ??=
+          Computed<bool>(() => super.marcarTodasAtividades,
+              name: '_LoteStoreBase.marcarTodasAtividades'))
+      .value;
 
   final _$isLoteListLoadingAtom =
       Atom(name: '_LoteStoreBase.isLoteListLoading');
@@ -804,6 +826,117 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$searchLotePageAtom = Atom(name: '_LoteStoreBase.searchLotePage');
+
+  @override
+  TextEditingController get searchLotePage {
+    _$searchLotePageAtom.reportRead();
+    return super.searchLotePage;
+  }
+
+  @override
+  set searchLotePage(TextEditingController value) {
+    _$searchLotePageAtom.reportWrite(value, super.searchLotePage, () {
+      super.searchLotePage = value;
+    });
+  }
+
+  final _$plantasColhidasAtom = Atom(name: '_LoteStoreBase.plantasColhidas');
+
+  @override
+  int? get plantasColhidas {
+    _$plantasColhidasAtom.reportRead();
+    return super.plantasColhidas;
+  }
+
+  @override
+  set plantasColhidas(int? value) {
+    _$plantasColhidasAtom.reportWrite(value, super.plantasColhidas, () {
+      super.plantasColhidas = value;
+    });
+  }
+
+  final _$embalagensProduzidasAtom =
+      Atom(name: '_LoteStoreBase.embalagensProduzidas');
+
+  @override
+  int? get embalagensProduzidas {
+    _$embalagensProduzidasAtom.reportRead();
+    return super.embalagensProduzidas;
+  }
+
+  @override
+  set embalagensProduzidas(int? value) {
+    _$embalagensProduzidasAtom.reportWrite(value, super.embalagensProduzidas,
+        () {
+      super.embalagensProduzidas = value;
+    });
+  }
+
+  final _$finalizarLotesAtom = Atom(name: '_LoteStoreBase.finalizarLotes');
+
+  @override
+  List<LoteSelection> get finalizarLotes {
+    _$finalizarLotesAtom.reportRead();
+    return super.finalizarLotes;
+  }
+
+  @override
+  set finalizarLotes(List<LoteSelection> value) {
+    _$finalizarLotesAtom.reportWrite(value, super.finalizarLotes, () {
+      super.finalizarLotes = value;
+    });
+  }
+
+  final _$atividadesPendentesAtom =
+      Atom(name: '_LoteStoreBase.atividadesPendentes');
+
+  @override
+  List<AgendaSelection> get atividadesPendentes {
+    _$atividadesPendentesAtom.reportRead();
+    return super.atividadesPendentes;
+  }
+
+  @override
+  set atividadesPendentes(List<AgendaSelection> value) {
+    _$atividadesPendentesAtom.reportWrite(value, super.atividadesPendentes, () {
+      super.atividadesPendentes = value;
+    });
+  }
+
+  final _$atividadesDeletadasAtom =
+      Atom(name: '_LoteStoreBase.atividadesDeletadas');
+
+  @override
+  List<Agenda> get atividadesDeletadas {
+    _$atividadesDeletadasAtom.reportRead();
+    return super.atividadesDeletadas;
+  }
+
+  @override
+  set atividadesDeletadas(List<Agenda> value) {
+    _$atividadesDeletadasAtom.reportWrite(value, super.atividadesDeletadas, () {
+      super.atividadesDeletadas = value;
+    });
+  }
+
+  final _$carregandoFinalizarLotesAtom =
+      Atom(name: '_LoteStoreBase.carregandoFinalizarLotes');
+
+  @override
+  bool get carregandoFinalizarLotes {
+    _$carregandoFinalizarLotesAtom.reportRead();
+    return super.carregandoFinalizarLotes;
+  }
+
+  @override
+  set carregandoFinalizarLotes(bool value) {
+    _$carregandoFinalizarLotesAtom
+        .reportWrite(value, super.carregandoFinalizarLotes, () {
+      super.carregandoFinalizarLotes = value;
+    });
+  }
+
   final _$buscarLotesAsyncAction = AsyncAction('_LoteStoreBase.buscarLotes');
 
   @override
@@ -900,6 +1033,42 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   @override
   Future alterarDatasLote() {
     return _$alterarDatasLoteAsyncAction.run(() => super.alterarDatasLote());
+  }
+
+  final _$finalizarTodosLotesAsyncAction =
+      AsyncAction('_LoteStoreBase.finalizarTodosLotes');
+
+  @override
+  Future finalizarTodosLotes() {
+    return _$finalizarTodosLotesAsyncAction
+        .run(() => super.finalizarTodosLotes());
+  }
+
+  final _$deletarAtividadesSelecionadasAsyncAction =
+      AsyncAction('_LoteStoreBase.deletarAtividadesSelecionadas');
+
+  @override
+  Future deletarAtividadesSelecionadas() {
+    return _$deletarAtividadesSelecionadasAsyncAction
+        .run(() => super.deletarAtividadesSelecionadas());
+  }
+
+  final _$finalizarAtividadesSelecionadasAsyncAction =
+      AsyncAction('_LoteStoreBase.finalizarAtividadesSelecionadas');
+
+  @override
+  Future finalizarAtividadesSelecionadas() {
+    return _$finalizarAtividadesSelecionadasAsyncAction
+        .run(() => super.finalizarAtividadesSelecionadas());
+  }
+
+  final _$verificarAtividadesAsyncAction =
+      AsyncAction('_LoteStoreBase.verificarAtividades');
+
+  @override
+  Future verificarAtividades() {
+    return _$verificarAtividadesAsyncAction
+        .run(() => super.verificarAtividades());
   }
 
   final _$_LoteStoreBaseActionController =
@@ -1280,6 +1449,127 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic listaLotesParaFinalizar() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.listaLotesParaFinalizar');
+    try {
+      return super.listaLotesParaFinalizar();
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setSeachLotePage(String value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setSeachLotePage');
+    try {
+      return super.setSeachLotePage(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selecionarLoteParaFinalizar(int index) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.selecionarLoteParaFinalizar');
+    try {
+      return super.selecionarLoteParaFinalizar(index);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic selecionarAtividadesParaFinalizar(int index) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.selecionarAtividadesParaFinalizar');
+    try {
+      return super.selecionarAtividadesParaFinalizar(index);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic preencherPlantasColhidas(String value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.preencherPlantasColhidas');
+    try {
+      return super.preencherPlantasColhidas(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic preencherEmbalagensProduzidas(String value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.preencherEmbalagensProduzidas');
+    try {
+      return super.preencherEmbalagensProduzidas(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic deletarAtividades(int index) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.deletarAtividades');
+    try {
+      return super.deletarAtividades(index);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic verificarMarcarTodos() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.verificarMarcarTodos');
+    try {
+      return super.verificarMarcarTodos();
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool podemosFinalizarLotes() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.podemosFinalizarLotes');
+    try {
+      return super.podemosFinalizarLotes();
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool lotesSelecionadosEstaVazio() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.lotesSelecionadosEstaVazio');
+    try {
+      return super.lotesSelecionadosEstaVazio();
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic limparFinalizacao() {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.limparFinalizacao');
+    try {
+      return super.limparFinalizacao();
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isLoteListLoading: ${isLoteListLoading},
@@ -1332,7 +1622,17 @@ reservatorioDetalhes: ${reservatorioDetalhes},
 solucaoNutritivaList: ${solucaoNutritivaList},
 solucaoConcentradaList: ${solucaoConcentradaList},
 novoLote: ${novoLote},
-searchLote: ${searchLote}
+searchLotePage: ${searchLotePage},
+plantasColhidas: ${plantasColhidas},
+embalagensProduzidas: ${embalagensProduzidas},
+finalizarLotes: ${finalizarLotes},
+atividadesPendentes: ${atividadesPendentes},
+atividadesDeletadas: ${atividadesDeletadas},
+carregandoFinalizarLotes: ${carregandoFinalizarLotes},
+searchLote: ${searchLote},
+getLotesGroup: ${getLotesGroup},
+lotesParaFinalizar: ${lotesParaFinalizar},
+marcarTodasAtividades: ${marcarTodasAtividades}
     ''';
   }
 }
