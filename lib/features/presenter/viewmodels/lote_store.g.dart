@@ -16,6 +16,13 @@ mixin _$LoteStore on _LoteStoreBase, Store {
       (_$searchLoteComputed ??= Computed<List<Lote>>(() => super.searchLote,
               name: '_LoteStoreBase.searchLote'))
           .value;
+  Computed<List<Protocolo>>? _$searchProtocoloComputed;
+
+  @override
+  List<Protocolo> get searchProtocolo => (_$searchProtocoloComputed ??=
+          Computed<List<Protocolo>>(() => super.searchProtocolo,
+              name: '_LoteStoreBase.searchProtocolo'))
+      .value;
   Computed<bool>? _$isAlreadySelectedComputed;
 
   @override
@@ -842,6 +849,22 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$searchProtocoloTextAtom =
+      Atom(name: '_LoteStoreBase.searchProtocoloText');
+
+  @override
+  String get searchProtocoloText {
+    _$searchProtocoloTextAtom.reportRead();
+    return super.searchProtocoloText;
+  }
+
+  @override
+  set searchProtocoloText(String value) {
+    _$searchProtocoloTextAtom.reportWrite(value, super.searchProtocoloText, () {
+      super.searchProtocoloText = value;
+    });
+  }
+
   final _$solucaoNutritivaListAtom =
       Atom(name: '_LoteStoreBase.solucaoNutritivaList');
 
@@ -1427,6 +1450,17 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
+  dynamic setSearchProtocoloText(String value) {
+    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
+        name: '_LoteStoreBase.setSearchProtocoloText');
+    try {
+      return super.setSearchProtocoloText(value);
+    } finally {
+      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setProtocolo(Protocolo protocolo) {
     final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
         name: '_LoteStoreBase.setProtocolo');
@@ -1525,12 +1559,14 @@ reservatorioList: ${reservatorioList},
 reservatorioDetalhes: ${reservatorioDetalhes},
 protocoloDetalhes: ${protocoloDetalhes},
 protocoloVinculado: ${protocoloVinculado},
+searchProtocoloText: ${searchProtocoloText},
 solucaoNutritivaList: ${solucaoNutritivaList},
 solucaoConcentradaList: ${solucaoConcentradaList},
 novoLote: ${novoLote},
 abrirProtocoloDetalhesAtv: ${abrirProtocoloDetalhesAtv},
 isProtocoloValid: ${isProtocoloValid},
 searchLote: ${searchLote},
+searchProtocolo: ${searchProtocolo},
 isAlreadySelected: ${isAlreadySelected}
     ''';
   }

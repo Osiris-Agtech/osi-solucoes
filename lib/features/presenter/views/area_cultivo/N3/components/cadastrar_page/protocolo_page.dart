@@ -29,8 +29,7 @@ protocolo(
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
               ),
             ),
-            store.novoLoteReservatorio.nome != null &&
-                    store.novoLoteReservatorio.nome!.isNotEmpty
+            store.protocoloVinculado != null
                 ? Expanded(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -38,7 +37,7 @@ protocolo(
                       children: [
                         Expanded(
                           child: Text(
-                            store.novoLoteReservatorio.nome ?? '---',
+                            store.protocoloVinculado?.nome ?? '---',
                             textAlign: TextAlign.end,
                             style: const TextStyle(
                               color: Constants.kPrimaryColor,
@@ -120,7 +119,7 @@ protocoloPage(BuildContext context, LoteStore store) {
         const SizedBox(
           height: 8,
         ),
-        filterWidget(context),
+        filterWidget(context, store),
         const Padding(
           padding: EdgeInsets.only(left: 24, top: 8),
           child: Text(
@@ -157,17 +156,17 @@ protocoloPage(BuildContext context, LoteStore store) {
   );
 }
 
-Container filterWidget(BuildContext context) {
+Container filterWidget(BuildContext context, LoteStore store) {
   return Container(
     height: 50,
     color: const Color(0xFFF8F8F6),
     padding: EdgeInsets.symmetric(
       horizontal: MediaQuery.of(context).size.width * 0.04,
-      vertical: 5, //MediaQuery.of(context).size.height * 0.007,
+      vertical: 5,
     ),
     child: TextFormField(
       onChanged: ((value) => {
-            //store.setSearchReservatorioText(value),
+            store.setSearchProtocoloText(value),
           }),
       textAlignVertical: TextAlignVertical.top,
       textAlign: TextAlign.start,
@@ -195,7 +194,7 @@ SliverList showList(LoteStore store) {
       (BuildContext context, int index) {
         return protocoloItemLote(index: index, store: store);
       },
-      childCount: store.protocoloList.length,
+      childCount: store.searchProtocolo.length,
     ),
   );
 }

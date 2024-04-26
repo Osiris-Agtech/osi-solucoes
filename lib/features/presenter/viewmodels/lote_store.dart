@@ -361,6 +361,9 @@ abstract class _LoteStoreBase with Store {
   Protocolo? protocoloVinculado;
 
   @observable
+  String searchProtocoloText = '';
+
+  @observable
   List<SolucaoFertilizanteConcentrada> solucaoNutritivaList = [];
 
   @observable
@@ -568,6 +571,22 @@ abstract class _LoteStoreBase with Store {
   @action
   removeProtocoloDetalhes() {
     protocoloDetalhes = null;
+  }
+
+  @action
+  setSearchProtocoloText(String value) => searchProtocoloText = value;
+
+  @computed
+  List<Protocolo> get searchProtocolo {
+    List<Protocolo> result = protocoloList
+        .where((element) =>
+            element.nome
+                ?.toLowerCase()
+                .contains(searchProtocoloText.toLowerCase()) ??
+            false)
+        .toList();
+
+    return result;
   }
 
   @action

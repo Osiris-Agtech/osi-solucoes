@@ -17,7 +17,7 @@ Padding protocoloItemLote({
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        store.setProtocoloDetalhes(store.protocoloList[index]);
+        store.setProtocoloDetalhes(store.searchProtocolo[index]);
         store.buscarProtocoloDetalhes();
         if (store.abrirProtocoloDetalhesAtv) {
           store.toggleAbrirProtocoloDetalhesAtv();
@@ -46,7 +46,7 @@ Padding protocoloItemLote({
                         top: 5.0,
                       ),
                       child: Text(
-                        store.protocoloList[index].nome ?? "---",
+                        store.searchProtocolo[index].nome ?? "---",
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
@@ -70,7 +70,8 @@ Padding protocoloItemLote({
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  store.protocoloList[index].cultura?[0].nome ??
+                                  store.searchProtocolo[index].cultura?[0]
+                                          .nome ??
                                       "---",
                                   style: const TextStyle(
                                     color: Constants.kPrimaryColor,
