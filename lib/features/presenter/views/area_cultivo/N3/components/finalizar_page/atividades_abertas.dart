@@ -96,12 +96,15 @@ Container atividadesAbertas(BuildContext context) {
                   itemCount: store.atividadesPendentes.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                      padding: EdgeInsets.only(
+                        top: index == 0 ? 16.0 : 0.0,
+                        bottom: 8.0,
+                      ),
                       child: Row(
                         children: [
                           Expanded(child: cardList(store, index)),
                           Padding(
-                            padding: const EdgeInsets.only(right: 20),
+                            padding: const EdgeInsets.only(right: 8),
                             child: IconButton(
                               icon: const Icon(Icons.delete_outlined),
                               color: Colors.red,

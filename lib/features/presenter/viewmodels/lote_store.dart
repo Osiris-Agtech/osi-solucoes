@@ -855,7 +855,7 @@ abstract class _LoteStoreBase with Store {
 
     var ids = seletedLotes.map((e) => e.id).toList();
 
-    var result = await loteRepository.finalizarLotes(ids.cast<int>());
+    await loteRepository.finalizarLotes(ids.cast<int>());
 
     // result.fold(
     //   (err) {
@@ -877,7 +877,6 @@ abstract class _LoteStoreBase with Store {
   @action
   deletarAtividadesSelecionadas() async {
     var ids = atividadesDeletadas.map((e) => e.id).toList();
-    print('atividades deletadas: $ids');
 
     var result = await loteRepository.deletarAtividades(ids.cast<int>());
 
@@ -892,7 +891,6 @@ abstract class _LoteStoreBase with Store {
   @action
   finalizarAtividadesSelecionadas() async {
     var ids = atividadesPendentes.map((e) => e.agenda.id).toList();
-    print('atividades pendentes: $ids');
 
     var result = await loteRepository.finalizarAtividades(ids.cast<int>());
 

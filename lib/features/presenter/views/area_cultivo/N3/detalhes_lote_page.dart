@@ -57,69 +57,65 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                   indent: 20,
                   endIndent: 20,
                 ),
-                InkWell(
-                  child: Observer(builder: (_) {
-                    return ListTile(
-                      leading: const Icon(
-                        Icons.build,
-                        color: Constants.kPrimaryColor,
-                      ),
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.only(right: 8),
-                            child: Text(
-                              'Protocolo Selecionado',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.normal),
-                            ),
+                Observer(builder: (_) {
+                  return ListTile(
+                    dense: true,
+                    leading: const Icon(
+                      Icons.build,
+                      color: Constants.kPrimaryColor,
+                    ),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.only(right: 8),
+                          child: Text(
+                            'Protocolo Selecionado',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.normal),
                           ),
-                        ],
-                      ),
-                      subtitle: const Text("Alfaces Hidrogood"),
-                      trailing: const Icon(
-                        Icons.chevron_right_rounded,
-                        color: Constants.kPrimaryColor,
-                      ),
-                      onTap: () {},
-                    );
-                  }),
-                ),
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(store.loteSelecionado.protocolo?.nome ??
+                        'Nenhum protocolo selecionado'),
+                    trailing: const Icon(
+                      Icons.chevron_right_rounded,
+                      color: Constants.kPrimaryColor,
+                    ),
+                    onTap: () {},
+                  );
+                }),
                 Divider(
                   color: const Color(0xFF9F9F9F).withOpacity(.6),
                   indent: 20,
                   endIndent: 20,
                 ),
-                InkWell(
-                  child: Observer(builder: (_) {
-                    return ListTile(
-                      leading: const Icon(
-                        Icons.checklist,
-                        color: Constants.kPrimaryColor,
+                ListTile(
+                  dense: true,
+                  leading: const Icon(
+                    Icons.checklist,
+                    color: Constants.kPrimaryColor,
+                  ),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.only(right: 8),
+                        child: Text(
+                          'Atividades',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.normal),
+                        ),
                       ),
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.only(right: 8),
-                            child: Text(
-                              'Atividades',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.normal),
-                            ),
-                          ),
-                        ],
-                      ),
-                      subtitle:
-                          const Text("Atividades planejadas para o cultivo"),
-                      trailing: const Icon(
-                        Icons.chevron_right_rounded,
-                        color: Constants.kPrimaryColor,
-                      ),
-                      onTap: () {},
-                    );
-                  }),
+                    ],
+                  ),
+                  subtitle: const Text("Atividades planejadas para o cultivo"),
+                  trailing: const Icon(
+                    Icons.chevron_right_rounded,
+                    color: Constants.kPrimaryColor,
+                  ),
+                  onTap: () {},
                 ),
                 // const SizedBox(height: 16),
                 // dateTitle(),

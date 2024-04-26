@@ -711,50 +711,124 @@ class LoteDatasource implements ILoteDatasource {
   @override
   Future<Either<Failure, List<Agenda>>> verificarAtividades(
       {required List<int> lotesIds}) async {
-    // Simule uma chamada de API assíncrona
-    await Future.delayed(const Duration(seconds: 2));
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-    final atividades = List.generate(
-        3,
-        (index) => Agenda(
-              id: index + 1,
-              titulo: 'Atividade ${index + 1}',
-              data: DateTime.now(),
-              descricao: 'Descrição do Atividade ${index + 1}',
-              created_at: DateTime.now(),
-              updated_at: DateTime.now(),
-              deleted_at: null,
-              lote: Lote(
-                id: index + 1,
-                nome: 'Lote ${index + 1}',
-                cultura: Cultura(id: index, nome: 'Alface ${index + 1}'),
-                registro_data: DateTime.now(),
-                colheita_data: DateTime.now(),
-                bandeijas_semeadas: 10,
-              ),
-            ));
+    const String readRepositories = r'''
+        query AgendasByLoteId($lotesId: [Int!]) {
+          agendasAbertasPorLoteId(lotesId: $lotesId) {
+            id
+            titulo
+            descricao
+            ativo
+            alerta
+            finalizado
+            data
+            usuario {
+              id
+              nome
+            }
+            lote {
+              id
+              nome
+            }
+          }
+        }
+      ''';
 
-    return Future.value(Right(atividades));
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'lotesId': lotesIds,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      if (result.data?['agendasAbertasPorLoteId'] == []) return const Right([]);
+
+      List<Agenda>? agendas = (result.data?['agendasAbertasPorLoteId'] as List?)
+          ?.map((item) => Agenda.fromJson(item as Map<String, dynamic>))
+          .toList();
+      if (agendas == null) {
+        return Left(
+            ErrorAgenda(message: FailureMessage.errorBuscarAgendasEmAberto));
+      }
+      return Right(agendas);
+    } else {
+      return Left(
+          ErrorAgenda(message: FailureMessage.errorBuscarAgendasEmAberto));
+    }
   }
 
   @override
   Future<Either<Failure, bool>> deletarAtividades(
       {required List<int> agendaIds}) async {
-    await Future.delayed(const Duration(seconds: 2));
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-    const result = true;
+    const String readRepositories = r'''
+      mutation SoftDeleteAgendaList($agendasId: [Int!]) {
+        softDeleteAgendaList(agendasId: $agendasId)
+      }
+    ''';
 
-    return Future.value(const Right(result));
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "agendasId": agendaIds,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        int? agendaCount = result.data?['softDeleteAgendaList'];
+        return Right(agendaCount == agendaIds.length);
+      } catch (e) {
+        return Left(ErrorAgenda(message: FailureMessage.errorFinalizacaoLote));
+      }
+    } else {
+      return Left(ErrorAgenda(message: FailureMessage.errorFinalizacaoLote));
+    }
   }
 
   @override
   Future<Either<Failure, bool>> finalizarAtividades(
       {required List<int> agendaIds}) async {
-    await Future.delayed(const Duration(seconds: 2));
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-    const result = true;
+    const String readRepositories = r'''
+      mutation FinalizarAgendas($agendasId: [Int!]) {
+        finalizarAgendas(agendasId: $agendasId)
+      }
+    ''';
 
-    return Future.value(const Right(result));
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "agendasId": agendaIds,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        int? agendaCount = result.data?['finalizarAgendas'];
+        return Right(agendaCount == agendaIds.length);
+      } catch (e) {
+        return Left(ErrorAgenda(message: FailureMessage.errorFinalizacaoLote));
+      }
+    } else {
+      return Left(ErrorAgenda(message: FailureMessage.errorFinalizacaoLote));
+    }
   }
 
   @override
