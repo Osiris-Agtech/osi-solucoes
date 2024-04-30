@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// ignore_for_file: deprecated_member_use
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -89,38 +91,40 @@ typedef SelectableDayPredicate = bool Function(DateTime day);
 ///    a year.
 ///
 
-Future<DateTime?> showRoundedDatePicker(
-    {required BuildContext context,
-    String? title,
-    TextStyle? titleTextStyle,
-    Color? headerLine,
-    double? height,
-    DateTime? initialDate,
-    DateTime? firstDate,
-    DateTime? lastDate,
-    SelectableDayPredicate? selectableDayPredicate,
-    DatePickerMode initialDatePickerMode = DatePickerMode.day,
-    Locale? locale,
-    TextDirection? textDirection,
-    ThemeData? theme,
-    double borderRadius = 16,
-    EraMode era = EraMode.CHRIST_YEAR,
-    ImageProvider? imageHeader,
-    String description = "",
-    String? fontFamily,
-    bool barrierDismissible = false,
-    Color background = Colors.transparent,
-    String? textNegativeButton,
-    String? textPositiveButton,
-    String? textActionButton,
-    VoidCallback? onTapActionButton,
-    MaterialRoundedDatePickerStyle? styleDatePicker,
-    MaterialRoundedYearPickerStyle? styleYearPicker,
-    List<String>? customWeekDays,
-    BuilderDayOfDatePicker? builderDay,
-    List<DateTime>? listDateDisabled,
-    OnTapDay? onTapDay,
-    Function? onMonthChange}) async {
+Future<DateTime?> showRoundedDatePicker({
+  required BuildContext context,
+  String? title,
+  TextStyle? titleTextStyle,
+  Color? headerLine,
+  double? height,
+  DateTime? initialDate,
+  DateTime? firstDate,
+  DateTime? lastDate,
+  SelectableDayPredicate? selectableDayPredicate,
+  DatePickerMode initialDatePickerMode = DatePickerMode.day,
+  Locale? locale,
+  TextDirection? textDirection,
+  ThemeData? theme,
+  double borderRadius = 16,
+  EraMode era = EraMode.CHRIST_YEAR,
+  ImageProvider? imageHeader,
+  String description = "",
+  String? fontFamily,
+  bool barrierDismissible = false,
+  Color background = Colors.transparent,
+  String? textNegativeButton,
+  String? textPositiveButton,
+  String? textActionButton,
+  VoidCallback? onTapActionButton,
+  MaterialRoundedDatePickerStyle? styleDatePicker,
+  MaterialRoundedYearPickerStyle? styleYearPicker,
+  List<String>? customWeekDays,
+  BuilderDayOfDatePicker? builderDay,
+  List<DateTime>? listDateDisabled,
+  OnTapDay? onTapDay,
+  Function? onMonthChange,
+  Map<String, Color>? subtitle,
+}) async {
   initialDate ??= DateTime.now();
   firstDate ??= DateTime(initialDate.year - 1);
   lastDate ??= DateTime(initialDate.year + 1);
@@ -188,6 +192,7 @@ Future<DateTime?> showRoundedDatePicker(
           listDateDisabled: listDateDisabled,
           onTapDay: onTapDay,
           onMonthChange: onMonthChange,
+          subtitle: subtitle,
         ),
       ),
     ),

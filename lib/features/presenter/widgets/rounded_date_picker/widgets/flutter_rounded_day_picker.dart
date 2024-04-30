@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -324,16 +326,56 @@ class FlutterRoundedDayPicker extends StatelessWidget {
         final bool isCurrentDay = currentDate.year == year &&
             currentDate.month == month &&
             currentDate.day == day;
+
+        bool isInPhase = false;
+        Map<Color, List<DateTime>> mapDateSelected = style?.phaseColors ?? {};
+        mapDateSelected.forEach((color, listDate) {
+          if (listDate.contains(DateTime(year, month, day))) {
+            isInPhase = true;
+            itemStyle = style?.textStyleCurrentDayOnCalendar ??
+                themeData.textTheme.bodyMedium!.copyWith(
+                  color: themeData.colorScheme.primary,
+                  fontFamily: fontFamily,
+                );
+            if (DateTime(year, month, day) == listDate.first) {
+              decoration = BoxDecoration(
+                color: color.withOpacity(.5),
+                shape: BoxShape.rectangle,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  bottomLeft: Radius.circular(16),
+                ),
+              );
+            } else if (DateTime(year, month, day) == listDate.last) {
+              decoration = BoxDecoration(
+                color: color.withOpacity(.5),
+                shape: BoxShape.rectangle,
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
+                ),
+              );
+            } else {
+              decoration = BoxDecoration(
+                color: color.withOpacity(.5),
+                shape: BoxShape.rectangle,
+              );
+            }
+          }
+        });
+
         if (isSelectedDay) {
           // The selected day gets a circle background highlight, and a contrasting text color.
           itemStyle = style?.textStyleDayOnCalendarSelected ??
               themeData.textTheme.bodyLarge!.copyWith(
                 fontFamily: fontFamily,
               );
-          decoration = style?.decorationDateSelected ??
+
+          decoration = style?.decorationDateSelected?.copyWith(
+                  shape: isInPhase ? BoxShape.rectangle : BoxShape.circle) ??
               BoxDecoration(
                 color: themeData.colorScheme.primary,
-                shape: BoxShape.circle,
+                shape: isInPhase ? BoxShape.rectangle : BoxShape.circle,
               );
         } else if (disabled) {
           itemStyle = style?.textStyleDayOnCalendarDisabled ??
@@ -348,103 +390,6 @@ class FlutterRoundedDayPicker extends StatelessWidget {
                 color: themeData.colorScheme.primary,
                 fontFamily: fontFamily,
               );
-        }
-
-        List<DateTime> listDateSelected1 = [
-          DateTime(2024, 2, 1),
-          DateTime(2024, 2, 2),
-          DateTime(2024, 2, 3)
-        ];
-        List<DateTime> listDateSelected2 = [
-          DateTime(2024, 2, 5),
-          DateTime(2024, 2, 6),
-          DateTime(2024, 2, 7)
-        ];
-        List<DateTime> listDateSelected3 = [
-          DateTime(2024, 2, 9),
-          DateTime(2024, 2, 10),
-          DateTime(2024, 2, 11)
-        ];
-
-        if (listDateSelected1.contains(DateTime(year, month, day))) {
-          if (DateTime(year, month, day) == listDateSelected1.first) {
-            decoration = const BoxDecoration(
-              color: Colors.amberAccent,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16),
-                bottomLeft: Radius.circular(16),
-              ),
-            );
-          } else if (DateTime(year, month, day) == listDateSelected1.last) {
-            decoration = const BoxDecoration(
-              color: Colors.amberAccent,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(16),
-                bottomRight: Radius.circular(16),
-              ),
-            );
-          } else {
-            decoration = const BoxDecoration(
-              color: Colors.amberAccent,
-              shape: BoxShape.rectangle,
-            );
-          }
-        }
-
-        if (listDateSelected2.contains(DateTime(year, month, day))) {
-          if (DateTime(year, month, day) == listDateSelected2.first) {
-            decoration = const BoxDecoration(
-              color: Colors.blueAccent,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16),
-                bottomLeft: Radius.circular(16),
-              ),
-            );
-          } else if (DateTime(year, month, day) == listDateSelected2.last) {
-            decoration = const BoxDecoration(
-              color: Colors.blueAccent,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(16),
-                bottomRight: Radius.circular(16),
-              ),
-            );
-          } else {
-            decoration = const BoxDecoration(
-              color: Colors.blueAccent,
-              shape: BoxShape.rectangle,
-            );
-          }
-        }
-
-        if (listDateSelected3.contains(DateTime(year, month, day))) {
-          if (DateTime(year, month, day) == listDateSelected3.first) {
-            decoration = const BoxDecoration(
-              color: Colors.greenAccent,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16),
-                bottomLeft: Radius.circular(16),
-              ),
-            );
-          } else if (DateTime(year, month, day) == listDateSelected3.last) {
-            decoration = const BoxDecoration(
-              color: Colors.greenAccent,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(16),
-                bottomRight: Radius.circular(16),
-              ),
-            );
-          } else {
-            decoration = const BoxDecoration(
-              color: Colors.greenAccent,
-              shape: BoxShape.rectangle,
-            );
-          }
         }
 
         Widget? dayWidget;

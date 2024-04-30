@@ -96,10 +96,11 @@ class ProtocoloPageState extends State<ProtocoloPage> {
     return SliverList(
       delegate: SliverChildListDelegate(
         [
-          const Center(
+          Center(
             child: Padding(
-              padding: EdgeInsets.only(top: 120.0),
-              child: Text(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.3),
+              child: const Text(
                 'Não há protocolos\ncadastrados em sua conta',
                 style: TextStyle(
                   fontSize: 14,
@@ -120,10 +121,11 @@ class ProtocoloPageState extends State<ProtocoloPage> {
     return SliverList(
       delegate: SliverChildListDelegate(
         [
-          const Center(
+          Center(
             child: Padding(
-              padding: EdgeInsets.only(top: 120.0),
-              child: CircularProgressIndicator(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.3),
+              child: const CircularProgressIndicator(
                 strokeWidth: 1,
               ),
             ),

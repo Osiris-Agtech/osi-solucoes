@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -78,6 +80,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     children: [
                       Expanded(
                         child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
                           tileColor: Colors.transparent,
                           selectedTileColor: Colors.transparent,
                           title: const Text('Atividade'),
@@ -94,6 +97,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                       const SizedBox(width: 16),
                       Expanded(
                         child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
                           tileColor: Colors.transparent,
                           selectedTileColor: Colors.transparent,
                           title: const Text('Fase'),
@@ -202,24 +206,34 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
               ),
               const SizedBox(height: 16),
               const Text('Descrição:'),
-              Observer(builder: (_) {
-                return TextFormField(
-                  initialValue: store.novoDescricaoAtividade,
-                  onChanged: store.alterarDescricaoAtividade,
-                  textInputAction: TextInputAction.next,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.italic,
-                  ),
-                  decoration: const InputDecoration(
-                    hintText: "Descrição da Atividade ...",
-                    hintStyle: TextStyle(
+              const SizedBox(height: 8),
+              Container(
+                decoration: BoxDecoration(
+                  color: Constants.kCardColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Observer(builder: (_) {
+                  return TextFormField(
+                    initialValue: store.novoDescricaoAtividade,
+                    onChanged: store.alterarDescricaoAtividade,
+                    textInputAction: TextInputAction.next,
+                    maxLines: 4,
+                    style: const TextStyle(
                       fontWeight: FontWeight.normal,
                       fontStyle: FontStyle.italic,
                     ),
-                  ),
-                );
-              }),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Descrição da Atividade ...",
+                      hintStyle: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  );
+                }),
+              ),
               const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.only(bottom: 30),
@@ -316,6 +330,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     children: [
                       Expanded(
                         child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
                           tileColor: Colors.transparent,
                           selectedTileColor: Colors.transparent,
                           title: const Text('Atividade'),
@@ -333,6 +348,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                       const SizedBox(width: 16),
                       Expanded(
                         child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
                           tileColor: Colors.transparent,
                           selectedTileColor: Colors.transparent,
                           title: const Text('Fase'),
@@ -418,35 +434,33 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                   child: SizedBox(
                     width: size.width * .8,
                     height: 40,
-                    child: Observer(builder: (_) {
-                      return ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Constants.kPrimaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Constants.kPrimaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                        child: const Text(
-                          "Salvar",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
+                      ),
+                      child: const Text(
+                        "Salvar",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
                         ),
-                        onPressed: () {
-                          store.validarNovaFase();
-                          if (!store.isValid) {
-                            toastError(
-                                message:
-                                    "Preencha todos campos do formulario corretamente!");
-                            return;
-                          }
-                          store.registrarFase();
-                          store.limparFaseBottomSheet();
-                          Get.back();
-                        },
-                      );
-                    }),
+                      ),
+                      onPressed: () {
+                        store.validarNovaFase();
+                        if (!store.isValid) {
+                          toastError(
+                              message:
+                                  "Preencha todos campos do formulario corretamente!");
+                          return;
+                        }
+                        store.registrarFase();
+                        store.limparFaseBottomSheet();
+                        Get.back();
+                      },
+                    ),
                   ),
                 ),
               )

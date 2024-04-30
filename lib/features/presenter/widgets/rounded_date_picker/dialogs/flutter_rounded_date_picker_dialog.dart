@@ -13,35 +13,36 @@ import '../widgets/flutter_rounded_month_picker.dart';
 import '../widgets/flutter_rounded_year_picker.dart';
 
 class FlutterRoundedDatePickerDialog extends StatefulWidget {
-  const FlutterRoundedDatePickerDialog(
-      {Key? key,
-      this.title = '',
-      this.titleTextStyle,
-      this.headerLine = const Color(0xffF3F3F3),
-      this.height,
-      required this.initialDate,
-      required this.firstDate,
-      required this.lastDate,
-      this.selectableDayPredicate,
-      required this.initialDatePickerMode,
-      required this.era,
-      this.locale,
-      required this.borderRadius,
-      this.imageHeader,
-      this.description = "",
-      this.fontFamily,
-      this.textNegativeButton,
-      this.textPositiveButton,
-      this.textActionButton,
-      this.onTapActionButton,
-      this.styleDatePicker,
-      this.styleYearPicker,
-      this.customWeekDays,
-      this.builderDay,
-      this.listDateDisabled,
-      this.onTapDay,
-      this.onMonthChange})
-      : super(key: key);
+  const FlutterRoundedDatePickerDialog({
+    Key? key,
+    this.title = '',
+    this.titleTextStyle,
+    this.headerLine = const Color(0xffF3F3F3),
+    this.height,
+    required this.initialDate,
+    required this.firstDate,
+    required this.lastDate,
+    this.selectableDayPredicate,
+    required this.initialDatePickerMode,
+    required this.era,
+    this.locale,
+    required this.borderRadius,
+    this.imageHeader,
+    this.description = "",
+    this.fontFamily,
+    this.textNegativeButton,
+    this.textPositiveButton,
+    this.textActionButton,
+    this.onTapActionButton,
+    this.styleDatePicker,
+    this.styleYearPicker,
+    this.customWeekDays,
+    this.builderDay,
+    this.listDateDisabled,
+    this.onTapDay,
+    this.onMonthChange,
+    this.subtitle,
+  }) : super(key: key);
 
   final DateTime initialDate;
   final DateTime firstDate;
@@ -93,6 +94,8 @@ class FlutterRoundedDatePickerDialog extends StatefulWidget {
   final OnTapDay? onTapDay;
 
   final Function? onMonthChange;
+
+  final Map<String, Color>? subtitle;
 
   @override
   _FlutterRoundedDatePickerDialogState createState() =>
@@ -384,6 +387,94 @@ class _FlutterRoundedDatePickerDialogState
                             : (widget.height ?? 0.0) + 60.0,
                         child: picker,
                       ),
+
+                    Visibility(
+                      visible: _mode == DatePickerMode.day &&
+                          (widget.subtitle ?? {}).isNotEmpty,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          alignment: WrapAlignment.center,
+                          children: widget.subtitle?.entries.toList().map((e) {
+                                bool isLast =
+                                    e.key == widget.subtitle?.keys.last &&
+                                        e.value == widget.subtitle?.values.last;
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                      right: isLast ? 0.0 : 16.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        width: 10,
+                                        height: 10,
+                                        decoration: BoxDecoration(
+                                          color: e.value,
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(e.key),
+                                    ],
+                                  ),
+                                );
+                              }).toList() ??
+                              [],
+
+                          // Row(
+                          //     mainAxisSize: MainAxisSize.min,
+                          //     children: [
+                          //       Container(
+                          //         width: 10,
+                          //         height: 10,
+                          //         decoration: BoxDecoration(
+                          //           color: value,
+                          //           shape: BoxShape.circle,
+                          //         ),
+                          //       ),
+                          //       const SizedBox(width: 8),
+                          //       Text(key),
+                          //     ],
+                          //   ),
+                          // ).toList()
+
+                          // [
+                          //   Row(
+                          //     mainAxisSize: MainAxisSize.min,
+                          //     children: [
+                          //       Container(
+                          //         width: 10,
+                          //         height: 10,
+                          //         decoration: const BoxDecoration(
+                          //           color: Colors.blueAccent,
+                          //           shape: BoxShape.circle,
+                          //         ),
+                          //       ),
+                          //       const SizedBox(width: 8),
+                          //       const Text('Fase 1'),
+                          //     ],
+                          //   ),
+                          //   const SizedBox(width: 16),
+                          //   Row(
+                          //     mainAxisSize: MainAxisSize.min,
+                          //     children: [
+                          //       Container(
+                          //         width: 10,
+                          //         height: 10,
+                          //         decoration: const BoxDecoration(
+                          //           color: Colors.blueAccent,
+                          //           shape: BoxShape.circle,
+                          //         ),
+                          //       ),
+                          //       const SizedBox(width: 8),
+                          //       const Text('Fase 1'),
+                          //     ],
+                          //   ),
+                          // ],
+                        ),
+                      ),
+                    ),
                     Visibility(
                       visible: _mode == DatePickerMode.day,
                       child: actions,

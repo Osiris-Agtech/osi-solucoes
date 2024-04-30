@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -70,7 +72,7 @@ Padding protocoloItem({
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  store.protocoloList[index].cultura?[0].nome ??
+                                  store.protocoloList[index].cultura?.nome ??
                                       "---",
                                   style: const TextStyle(
                                     color: Constants.kPrimaryColor,
@@ -86,8 +88,8 @@ Padding protocoloItem({
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
-                            children: const [
-                              Text(
+                            children: [
+                              const Text(
                                 "Lotes Vinculados:",
                                 style: TextStyle(
                                   fontSize: 14,
@@ -95,11 +97,11 @@ Padding protocoloItem({
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(left: 5, bottom: 5),
+                                padding: const EdgeInsets.only(left: 5),
                                 child: Text(
                                   //"${store.searchReservatorio[index].lotes?.length ?? 0} Ativos",
-                                  "0 Lotes",
-                                  style: TextStyle(
+                                  "${store.protocoloList[index].lotes.length} Lotes",
+                                  style: const TextStyle(
                                     color: Constants.kPrimaryColor,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,

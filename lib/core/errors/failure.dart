@@ -43,4 +43,22 @@ class FailureMessage {
       'Falha ao cadastrar ajuste, verifique se os campos estão preenchido corretamente';
   static const errorUpdateUsuarioMessage =
       'Falha ao atualizar usuario, verifique se os campos estão preenchido corretamente';
+  static const errorBuscarAgendas = 'Ocorreu um erro ao buscar as atividades';
+  static const errorAgendaMarcarComoFeito =
+      'Ocorreu um erro ao marcar a atividade como feita';
+  static const errorEditAgenda = 'Ocorreu um erro ao editar a atividade';
+  static const errorCreateAgenda = 'Ocorreu um erro ao criar a atividade';
+  static const errorDeleteAgenda = 'Ocorreu um erro ao deletar a atividade';
+  static const errorBuscarProtocolos =
+      'Ocorreu um erro ao buscar os protocolos';
+  static const errorBuscarCulturas = 'Ocorreu um erro ao buscar suas culturas';
+  static const errorCadastrarFase = 'Ocorreu um erro ao cadastrar a fase';
+  static const errorBuscarFases =
+      'Ocorreu um erro ao buscar suas fases cadastradas';
+  static const errorCadastrarProtocolo =
+      'Ocorreu um erro ao cadastrar o protocolo';
+  static const errorBuscarAgendasEmAberto =
+      'Ocorreu um erro ao buscar as atividades em aberto';
+  static const errorFinalizacaoLote =
+      'Ocorreu um erro ao finalizar as atividades em aberto';
 }

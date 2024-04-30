@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
 import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
+import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 
 part 'protocolo_model.g.dart';
 
@@ -30,9 +31,11 @@ class Protocolo {
   @JsonKey(required: false, disallowNullValue: false)
   List<Acao>? acao;
   @JsonKey(required: false, disallowNullValue: false)
-  List<Cultura>? cultura;
+  Cultura? cultura;
   @JsonKey(required: false, disallowNullValue: false)
   Conta? conta;
+  @JsonKey(required: false, disallowNullValue: false, defaultValue: [])
+  List<Lote> lotes;
 
   Protocolo({
     this.id,
@@ -47,6 +50,7 @@ class Protocolo {
     this.conta,
     this.acao,
     this.cultura,
+    this.lotes = const [],
   });
 
   factory Protocolo.fromJson(Map<String, dynamic> json) =>

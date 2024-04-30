@@ -27,47 +27,47 @@ class GerenciarEquipeDatasource implements IGerenciarEquipeDatasource {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     const String readUsuarios = r'''
-              query Usuarios($contaId: Int) {
-                usuarios(where: {
-                  contas: {
-                    some: {
-                      fk_contas_id: {
-                        equals: $contaId
-                      }
-                    }
-                  }
-                }) {
+      query Usuarios($contaId: Int) {
+        usuarios(where: {
+          contas: {
+            some: {
+              fk_contas_id: {
+                equals: $contaId
+              }
+            }
+          }
+        }) {
+          id
+          nome
+          email
+          ativo
+          contas {
+            id
+            conta {
+              id
+              nome
+            }
+            cargo {
+              id
+              cargo
+              permissoes {
+                permissao {
                   id
                   nome
-                  email
-                  ativo
-                  contas {
-                    id
-                    conta {
-                      id
-                      nome
-                    }
-                    cargo {
-                      id
-                      cargo
-                      permissoes {
-                        permissao {
-                          id
-                          nome
-                        }
-                        status
-                        id
-                      }
-                    }
-                  }
-                  logs {
-                    id
-                    descricao
-                    data
-                  }
                 }
+                status
+                id
               }
-      ''';
+            }
+          }
+          logs {
+            id
+            descricao
+            data
+          }
+        }
+      }
+    ''';
 
     final QueryOptions? options;
 
@@ -81,6 +81,8 @@ class GerenciarEquipeDatasource implements IGerenciarEquipeDatasource {
     final QueryResult result = await client.query(options);
 
     if (!result.hasException) {
+      if (result.data?['usuarios'] == []) return const Right([]);
+
       List? usuarios = result.data?['usuarios']
           ?.map((item) => Usuario.fromJson(item))
           .toList();

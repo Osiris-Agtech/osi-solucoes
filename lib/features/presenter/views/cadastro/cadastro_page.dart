@@ -7,11 +7,11 @@ import 'package:localization/localization.dart';
 // import 'package:osi_solucoes/app//modules/cadastro/cadastro_store.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/core/errors/failure.dart';
-import 'package:osi_solucoes/features/presenter/views/ajuste/resultadoajuste_page.dart';
-import 'package:osi_solucoes/features/presenter/views/home/home_page.dart';
 
+import '../../../../core/errors/failure.dart';
 import '../../viewmodels/cadastro_store.dart';
+import '../ajuste/resultadoajuste_page.dart';
+import '../home/home_page.dart';
 
 class CadastroPage extends StatefulWidget {
   final String title;

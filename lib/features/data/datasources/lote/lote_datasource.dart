@@ -6,6 +6,7 @@ import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/api_source.dart';
 import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
 import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
+import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
@@ -39,6 +40,13 @@ abstract class ILoteDatasource {
   Future<Either<Failure, Lote>> alterarLote({required Lote alterarLote});
   Future<Either<Failure, Cultura>> registrarCultura(
       {required Cultura cultura, required int contaId});
+  Future<Either<Failure, List<Agenda>>> verificarAtividades(
+      {required List<int> lotesIds});
+  Future<Either<Failure, bool>> deletarAtividades(
+      {required List<int> agendaIds});
+  Future<Either<Failure, bool>> finalizarAtividades(
+      {required List<int> agendaIds});
+  Future<Either<Failure, bool>> finalizarLotes({required List<int> lotesIds});
 }
 
 class LoteDatasource implements ILoteDatasource {
@@ -87,6 +95,7 @@ class LoteDatasource implements ILoteDatasource {
             }
             registro_data
             colheita_data
+            bandeijas_semeadas
           }
         }
       ''';
@@ -450,11 +459,8 @@ class LoteDatasource implements ILoteDatasource {
                 updated_at: DateTime.now(),
                 deleted_at: null,
                 acao: List.generate(2, (indexAcao) => Acao()),
-                cultura: [
-                  Cultura(id: index, nome: 'Cultura Exemplo ${index + 1}'),
-                  Cultura(id: index, nome: 'Cultura Exemplo ${index + 2}'),
-                  Cultura(id: index, nome: 'Cultura Exemplo ${index + 3}'),
-                ],
+                cultura:
+                    Cultura(id: index, nome: 'Cultura Exemplo ${index + 1}'),
                 conta: Conta(),
               ));
 
@@ -488,7 +494,7 @@ class LoteDatasource implements ILoteDatasource {
               updated_at: DateTime.now(),
               deleted_at: null,
               acao: [Acao(fase: Fase()), Acao(fase: Fase())],
-              cultura: [Cultura(id: index, nome: 'Alface ${index + 1}')],
+              cultura: Cultura(id: index, nome: 'Alface ${index + 1}'),
               conta: Conta(),
             ));
 
@@ -770,5 +776,138 @@ class LoteDatasource implements ILoteDatasource {
       return Left(
           ErrorLote(message: FailureMessage.errorCadastrarCulturaMessage));
     }
+  }
+
+  @override
+  Future<Either<Failure, List<Agenda>>> verificarAtividades(
+      {required List<int> lotesIds}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+        query AgendasByLoteId($lotesId: [Int!]) {
+          agendasAbertasPorLoteId(lotesId: $lotesId) {
+            id
+            titulo
+            descricao
+            ativo
+            alerta
+            finalizado
+            data
+            usuario {
+              id
+              nome
+            }
+            lote {
+              id
+              nome
+            }
+          }
+        }
+      ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'lotesId': lotesIds,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      if (result.data?['agendasAbertasPorLoteId'] == []) return const Right([]);
+
+      List<Agenda>? agendas = (result.data?['agendasAbertasPorLoteId'] as List?)
+          ?.map((item) => Agenda.fromJson(item as Map<String, dynamic>))
+          .toList();
+      if (agendas == null) {
+        return Left(
+            ErrorAgenda(message: FailureMessage.errorBuscarAgendasEmAberto));
+      }
+      return Right(agendas);
+    } else {
+      return Left(
+          ErrorAgenda(message: FailureMessage.errorBuscarAgendasEmAberto));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deletarAtividades(
+      {required List<int> agendaIds}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      mutation SoftDeleteAgendaList($agendasId: [Int!]) {
+        softDeleteAgendaList(agendasId: $agendasId)
+      }
+    ''';
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "agendasId": agendaIds,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        int? agendaCount = result.data?['softDeleteAgendaList'];
+        return Right(agendaCount == agendaIds.length);
+      } catch (e) {
+        return Left(ErrorAgenda(message: FailureMessage.errorFinalizacaoLote));
+      }
+    } else {
+      return Left(ErrorAgenda(message: FailureMessage.errorFinalizacaoLote));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> finalizarAtividades(
+      {required List<int> agendaIds}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      mutation FinalizarAgendas($agendasId: [Int!]) {
+        finalizarAgendas(agendasId: $agendasId)
+      }
+    ''';
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "agendasId": agendaIds,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        int? agendaCount = result.data?['finalizarAgendas'];
+        return Right(agendaCount == agendaIds.length);
+      } catch (e) {
+        return Left(ErrorAgenda(message: FailureMessage.errorFinalizacaoLote));
+      }
+    } else {
+      return Left(ErrorAgenda(message: FailureMessage.errorFinalizacaoLote));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> finalizarLotes(
+      {required List<int> lotesIds}) async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    const result = true;
+
+    return Future.value(const Right(result));
   }
 }

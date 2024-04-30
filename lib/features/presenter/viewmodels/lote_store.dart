@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/lote/lote_repository.dart';
+import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
@@ -867,4 +868,227 @@ abstract class _LoteStoreBase with Store {
   }
 
   // ##################### END CADASTRAR LOTE ######################
+
+  // ##################### START FINALIZAR LOTE ######################
+
+  @observable
+  TextEditingController searchLotePage = TextEditingController(text: '');
+
+  @observable
+  int? plantasColhidas;
+
+  @observable
+  int? embalagensProduzidas;
+
+  @observable
+  List<LoteSelection> finalizarLotes = [];
+
+  @observable
+  List<AgendaSelection> atividadesPendentes = [];
+
+  @observable
+  List<Agenda> atividadesDeletadas = [];
+
+  @observable
+  bool carregandoFinalizarLotes = false;
+
+  @action
+  listaLotesParaFinalizar() {
+    finalizarLotes.clear();
+    for (var lote in loteList) {
+      finalizarLotes.add(LoteSelection(lote: lote, selected: false));
+    }
+    finalizarLotes = List.from(finalizarLotes);
+  }
+
+  @action
+  setSeachLotePage(String value) {
+    searchLotePage = TextEditingController(text: value);
+  }
+
+  @action
+  selecionarLoteParaFinalizar(int index) {
+    finalizarLotes[index].selected = !finalizarLotes[index].selected;
+    finalizarLotes = List.from(finalizarLotes);
+  }
+
+  @action
+  selecionarAtividadesParaFinalizar(int index) {
+    atividadesPendentes[index].selected = !atividadesPendentes[index].selected;
+    atividadesPendentes = List.from(atividadesPendentes);
+  }
+
+  @action
+  preencherPlantasColhidas(String value) {
+    plantasColhidas = value.isNotEmpty ? int.parse(value) : 0;
+  }
+
+  @action
+  preencherEmbalagensProduzidas(String value) {
+    embalagensProduzidas = value.isNotEmpty ? int.parse(value) : 0;
+  }
+
+  salvarDetalhesLote(int loteId) {
+    var loteSelecionado =
+        finalizarLotes.firstWhere((element) => element.lote.id == loteId);
+
+    loteSelecionado.lote.embalagens_produzidas = embalagensProduzidas;
+    loteSelecionado.lote.plantas_colhidas = plantasColhidas;
+
+    finalizarLotes = List.from(finalizarLotes);
+  }
+
+  @action
+  deletarAtividades(int index) {
+    atividadesDeletadas.add(atividadesPendentes[index].agenda);
+    atividadesPendentes.removeAt(index);
+
+    atividadesPendentes = List.from(atividadesPendentes);
+    atividadesDeletadas = List.from(atividadesDeletadas);
+  }
+
+  @action
+  verificarMarcarTodos() {
+    for (var atividade in atividadesPendentes) {
+      atividade.selected = true;
+    }
+    atividadesPendentes = List.from(atividadesPendentes);
+  }
+
+  @action
+  bool podemosFinalizarLotes() {
+    for (var element in lotesParaFinalizar) {
+      if (element.lote.plantas_colhidas == null ||
+          element.lote.embalagens_produzidas == null) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @action
+  finalizarTodosLotes() async {
+    // isNovoLoteLoading = true;
+
+    // Requisição para deleção de "agendas" selecionadas
+    deletarAtividadesSelecionadas();
+
+    // Requisição para finalização "agendas" selecionadas
+    finalizarAtividadesSelecionadas();
+
+    var seletedLotes = [];
+    for (var element in finalizarLotes) {
+      if (element.selected) {
+        seletedLotes.add(element.lote);
+      }
+    }
+
+    if (seletedLotes.isEmpty) {
+      toastError(message: 'Selecione ao menos um lote para finalizar');
+      return;
+    }
+
+    var ids = seletedLotes.map((e) => e.id).toList();
+
+    await loteRepository.finalizarLotes(ids.cast<int>());
+
+    // result.fold(
+    //   (err) {
+    //     toastError(message: err.message);
+    //   },
+    //   (data) async {
+    //     limparTudo();
+    //     Get.close(1);
+    //     setorStore.buscarSetores();
+    //     if (setorSelecionado.id != null) {
+    //       buscarLotes();
+    //     }
+    //   },
+    // );
+
+    // isNovoLoteLoading = false;
+  }
+
+  @action
+  deletarAtividadesSelecionadas() async {
+    var ids = atividadesDeletadas.map((e) => e.id).toList();
+
+    var result = await loteRepository.deletarAtividades(ids.cast<int>());
+
+    result.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {},
+    );
+  }
+
+  @action
+  finalizarAtividadesSelecionadas() async {
+    var ids = atividadesPendentes.map((e) => e.agenda.id).toList();
+
+    var result = await loteRepository.finalizarAtividades(ids.cast<int>());
+
+    result.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {},
+    );
+  }
+
+  @action
+  bool lotesSelecionadosEstaVazio() {
+    return finalizarLotes.where((element) => element.selected).isEmpty;
+  }
+
+  @action
+  verificarAtividades() async {
+    carregandoFinalizarLotes = true;
+
+    var lotesIds = finalizarLotes
+        .where((element) => element.selected)
+        .map((e) => e.lote.id)
+        .toList();
+
+    var buscarAtividadesPendentes =
+        await loteRepository.verificarAtividades(lotesIds.cast<int>());
+
+    buscarAtividadesPendentes.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        atividadesPendentes = data
+            .map((agenda) => AgendaSelection(agenda: agenda, selected: false))
+            .toList();
+      },
+    );
+
+    carregandoFinalizarLotes = false;
+  }
+
+  @action
+  limparFinalizacao() {
+    finalizarLotes.clear();
+    atividadesPendentes.clear();
+    searchLotePage = TextEditingController(text: '');
+  }
+
+  @computed
+  List<LoteSelection> get getLotesGroup => finalizarLotes.where((element) {
+        if (searchLotePage.text.isEmpty) return true;
+        return element.lote.nome!
+            .toLowerCase()
+            .contains(searchLotePage.text.toLowerCase());
+      }).toList();
+
+  @computed
+  List<LoteSelection> get lotesParaFinalizar => getLotesGroup.where((element) {
+        return element.selected == true;
+      }).toList();
+
+  @computed
+  bool get marcarTodasAtividades =>
+      !atividadesPendentes.any((element) => !element.selected);
 }

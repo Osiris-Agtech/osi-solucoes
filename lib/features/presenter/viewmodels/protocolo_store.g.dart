@@ -478,12 +478,28 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     return _$buscarProtocolosAsyncAction.run(() => super.buscarProtocolos());
   }
 
+  final _$buscarFasesAsyncAction =
+      AsyncAction('_ProtocoloStoreBase.buscarFases');
+
+  @override
+  Future buscarFases() {
+    return _$buscarFasesAsyncAction.run(() => super.buscarFases());
+  }
+
   final _$registrarFaseAsyncAction =
       AsyncAction('_ProtocoloStoreBase.registrarFase');
 
   @override
   Future registrarFase() {
     return _$registrarFaseAsyncAction.run(() => super.registrarFase());
+  }
+
+  final _$registrarCulturaAsyncAction =
+      AsyncAction('_ProtocoloStoreBase.registrarCultura');
+
+  @override
+  Future registrarCultura() {
+    return _$registrarCulturaAsyncAction.run(() => super.registrarCultura());
   }
 
   final _$registrarProtocoloAsyncAction =

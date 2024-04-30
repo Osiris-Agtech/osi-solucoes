@@ -41,7 +41,7 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
               slivers: [
                 Observer(builder: (_) {
                   return SliverAppBar(
-                    toolbarHeight: 80,
+                    toolbarHeight: 88,
                     backgroundColor: Colors.white,
                     floating: false,
                     automaticallyImplyLeading: false,
@@ -62,7 +62,10 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                   delegate: SliverChildListDelegate(
                     [
                       const Padding(
-                        padding: EdgeInsets.only(left: 20.0, bottom: 15),
+                        padding: EdgeInsets.only(
+                          left: 24.0,
+                          bottom: 16,
+                        ),
                         child: Text(
                           'Informações',
                           style: TextStyle(
@@ -74,7 +77,10 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 20.0, right: 30),
+                        padding: const EdgeInsets.only(
+                          left: 24.0,
+                          right: 30,
+                        ),
                         child: Column(
                           children: [
                             Row(
@@ -84,12 +90,8 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                                   child: Text('Cultura'),
                                 ),
                                 Text(
-                                  store.protocoloSelecionado!.cultura!.length >
-                                          1
-                                      ? '${store.protocoloSelecionado!.cultura?[0].nome} , ...' ??
-                                          "---"
-                                      : '${store.protocoloSelecionado!.cultura?[0].nome}' ??
-                                          "---",
+                                  store.protocoloSelecionado!.cultura?.nome ??
+                                      '---',
                                   style: const TextStyle(
                                     color: Constants.kText2,
                                     fontWeight: FontWeight.w600,
@@ -159,46 +161,44 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                       ),
                       const SizedBox(height: 16),
                       const Divider(),
-                      const SizedBox(height: 16),
                       InkWell(
-                        child: Observer(builder: (_) {
-                          return ListTile(
-                            leading: const Icon(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        child: ListTile(
+                          dense: true,
+                          horizontalTitleGap: 12,
+                          leading: const Padding(
+                            padding: EdgeInsets.only(left: 8.0),
+                            child: Icon(
                               Icons.checklist,
                               color: Constants.kPrimaryColor,
                             ),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Padding(
-                                  padding: EdgeInsets.only(right: 8),
-                                  child: Text(
-                                    'Atividades',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                          ),
+                          title: const Padding(
+                            padding: EdgeInsets.only(right: 8),
+                            child: Text(
+                              'Atividades',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
+                              ),
                             ),
-                            subtitle: const Text(
-                                "Atividades planejadas para o cultivo"),
-                            trailing: const Icon(
-                              Icons.chevron_right_rounded,
-                              color: Constants.kPrimaryColor,
-                            ),
-                            onTap: () {
-                              Get.to(() => const DetalhesAtivPage());
-                            },
-                          );
-                        }),
+                          ),
+                          subtitle: const Text(
+                              "Atividades planejadas para o cultivo"),
+                          trailing: const Icon(
+                            Icons.chevron_right_rounded,
+                            color: Constants.kPrimaryColor,
+                          ),
+                          onTap: () {
+                            Get.to(() => const DetalhesAtivPage());
+                          },
+                        ),
                       ),
-                      const SizedBox(height: 16),
                       const Divider(),
                       const SizedBox(height: 16),
                       const Padding(
-                        padding: EdgeInsets.only(left: 20.0),
+                        padding: EdgeInsets.only(left: 24.0),
                         child: Text(
                           'Cultivos Vinculados',
                           style: TextStyle(
@@ -212,54 +212,96 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                       const SizedBox(
                         height: 5,
                       ),
-                      Observer(builder: (_) {
-                        // if (store.reservatorioDetalhes.lotes == null ||
-                        //     store.reservatorioDetalhes.lotes!.isEmpty) {
-                        //   return const Padding(
-                        //     padding: EdgeInsets.all(16.0),
-                        //     child: Center(
-                        //       child: Text(
-                        //         "Não contém lotes vinculados a este reservatório",
-                        //         textAlign: TextAlign.center,
-                        //       ),
-                        //     ),
-                        //   );
-                        // }
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: 2,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                ListTile(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  title: Text(
-                                    "Cultivo Teste",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Constants.kContentColorLightTheme
-                                          .withOpacity(.8),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  subtitle: Text(
-                                    'Cultura: Alface',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Constants.kContentColorLightTheme
-                                          .withOpacity(.8),
-                                      fontWeight: FontWeight.normal,
-                                    ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 8.0,
+                        ),
+                        child: Container(
+                          constraints: const BoxConstraints(
+                            minHeight: 200,
+                            minWidth: double.infinity,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Constants.kCardColor,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Observer(builder: (_) {
+                            if ((store.protocoloSelecionado?.lotes ?? [])
+                                .isEmpty) {
+                              return const Padding(
+                                padding: EdgeInsets.all(24.0),
+                                child: Center(
+                                  child: Text(
+                                    "Não contém lotes vinculados a este reservatório",
+                                    textAlign: TextAlign.center,
                                   ),
                                 ),
-                                const Divider(),
-                              ],
+                              );
+                            }
+                            return ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount:
+                                  (store.protocoloSelecionado?.lotes ?? [])
+                                      .length,
+                              separatorBuilder: (context, index) => Container(
+                                height: 1,
+                                width: double.infinity,
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                color: Constants.kBackgroundColor,
+                              ),
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        top: index == 0 ? 8.0 : 0.0,
+                                        bottom: index ==
+                                                (store.protocoloSelecionado
+                                                            ?.lotes.length ??
+                                                        0) -
+                                                    1
+                                            ? 8.0
+                                            : 0.0,
+                                      ),
+                                      child: ListTile(
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 24),
+                                        title: Text(
+                                          store.protocoloSelecionado
+                                                  ?.lotes[index].nome ??
+                                              '---',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: Constants
+                                                .kContentColorLightTheme
+                                                .withOpacity(.8),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        subtitle: Text(
+                                          'Cultura: ${store.protocoloSelecionado?.lotes[index].nome ?? 'Sem Cultura'}',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Constants
+                                                .kContentColorLightTheme
+                                                .withOpacity(.8),
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
                             );
-                          },
-                        );
-                      }),
+                          }),
+                        ),
+                      ),
                     ],
                   ),
                 ),

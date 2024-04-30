@@ -8,6 +8,7 @@ import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 
 import '../cultura/cultura_model.dart';
+import '../protocolo/protocolo_model.dart';
 
 part 'lote_model.g.dart';
 
