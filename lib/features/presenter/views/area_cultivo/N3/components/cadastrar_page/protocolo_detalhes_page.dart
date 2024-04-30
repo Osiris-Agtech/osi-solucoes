@@ -50,11 +50,7 @@ protocoloDetalhes(LoteStore store) {
                       ),
                       Flexible(
                         child: Text(
-                          store.protocoloDetalhes?.cultura
-                                  ?.map((e) => e.nome)
-                                  .toList()
-                                  .join(", ") ??
-                              '',
+                          store.protocoloDetalhes?.cultura?.nome ?? '',
                           textAlign: TextAlign.end,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(

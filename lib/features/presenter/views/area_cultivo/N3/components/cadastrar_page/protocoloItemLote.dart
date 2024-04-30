@@ -70,8 +70,7 @@ Padding protocoloItemLote({
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  store.searchProtocolo[index].cultura?[0]
-                                          .nome ??
+                                  store.searchProtocolo[index].cultura?.nome ??
                                       "---",
                                   style: const TextStyle(
                                     color: Constants.kPrimaryColor,

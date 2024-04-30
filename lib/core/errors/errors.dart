@@ -121,9 +121,3 @@ class ErrorAgenda implements Failure {
   final String message;
   ErrorAgenda({required this.message});
 }
-
-class ErrorProtocolo implements Failure {
-  @override
-  final String message;
-  ErrorProtocolo({required this.message});
-}
