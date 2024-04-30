@@ -3,6 +3,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lotesAtividades/lotes_atividades_model.dart';
+import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 
@@ -52,6 +53,8 @@ class Lote {
   Reservatorio? reservatorio;
   @JsonKey(required: false, disallowNullValue: false)
   Setor? setor;
+  @JsonKey(required: false, disallowNullValue: false)
+  Protocolo? protocolo;
   @JsonKey(required: false, disallowNullValue: false, defaultValue: [])
   List<LotesAtividades>? lotes_atividades;
 
@@ -73,6 +76,7 @@ class Lote {
     this.reservatorio,
     this.setor,
     this.cultura,
+    this.protocolo,
     this.lotes_atividades,
     this.agenda,
     this.deleted_at,

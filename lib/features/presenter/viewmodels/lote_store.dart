@@ -690,6 +690,7 @@ abstract class _LoteStoreBase with Store {
       semeadura_data: semeaduraData,
       transplantio_data: transplantioData,
       colheita_data: colheitaData,
+      protocolo: protocoloVinculado,
     );
 
     var lote = await loteRepository.registrarLote(novoLote);
@@ -764,6 +765,7 @@ abstract class _LoteStoreBase with Store {
     novoLote.semeadura_data = semeaduraData;
     novoLote.transplantio_data = transplantioData;
     novoLote.colheita_data = colheitaData;
+    novoLote.protocolo = protocoloVinculado;
 
     var alterarLote = await loteRepository.alterarLote(novoLote);
 

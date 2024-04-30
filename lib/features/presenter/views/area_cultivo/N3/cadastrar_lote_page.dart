@@ -545,7 +545,8 @@ class _NextStepButtonState extends State<NextStepButton> {
                           Icon(Icons.close),
                         ],
                       )
-                    : (store.showProtocoloDetalhes)
+                    : (store.showProtocoloDetalhes ||
+                            store.showReservatorioDetalhes)
                         ? const Text(
                             'Vincular',
                             style: TextStyle(
@@ -569,6 +570,12 @@ class _NextStepButtonState extends State<NextStepButton> {
                 } else if (store.showProtocoloDetalhes &&
                     store.protocoloDetalhes != null) {
                   store.setProtocolo(store.protocoloDetalhes!);
+                }
+
+                if (store.dotIndicator == 3) {
+                  if (store.showReservatorioDetalhes) {
+                    store.selecionarNovoLoteReservatorio();
+                  }
                 }
 
                 if (store.dotIndicator < 4) {

@@ -81,9 +81,10 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       ),
                     ],
                   ),
-                  subtitle: const Text(
-                    "Alfaces Hidrogood",
-                    style: TextStyle(color: Constants.kPrimaryColor),
+                  subtitle: Text(
+                    store.loteSelecionado.protocolo?.nome ??
+                        'Nenhum Protocolo Selecionado',
+                    style: const TextStyle(color: Constants.kPrimaryColor),
                   ),
                   onTap: () {},
                 ),
