@@ -114,8 +114,29 @@ class LoteRepository implements ILoteRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> finalizarLotes(List<int> lotesIds) async {
-    var result = await datasource.finalizarLotes(lotesIds: lotesIds);
+  Future<Either<Failure, bool>> finalizarLotes(List<Lote> lotes) async {
+    var result = await datasource.finalizarLotes(lotes: lotes);
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, List<Lote>>> buscarLotesFinalizados(
+      {required List<int> setoresId}) async {
+    var result = await datasource.buscarLotesFinalizados(setoresId: setoresId);
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, List<int>>> buscarTodasAreasId(
+      {required int contaId}) async {
+    var result = await datasource.buscarTodasAreasId(contaId: contaId);
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, List<int>>> buscarTodosSetoresId(
+      {required List<int> areasId}) async {
+    var result = await datasource.buscarTodosSetoresId(areasId: areasId);
     return result;
   }
 }

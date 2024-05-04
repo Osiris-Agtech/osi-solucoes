@@ -35,4 +35,5 @@ abstract class Routes {
   static const recuperarSenha = '/recuperarSenha';
   static const codigoSeguranca = '/codigoSeguranca';
   static const novaSenha = '/novaSenha';
+  static const historicoPage = '/historicoPage';
 }

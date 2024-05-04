@@ -937,6 +937,21 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
+  final _$lotesFinalizadosAtom = Atom(name: '_LoteStoreBase.lotesFinalizados');
+
+  @override
+  List<Lote> get lotesFinalizados {
+    _$lotesFinalizadosAtom.reportRead();
+    return super.lotesFinalizados;
+  }
+
+  @override
+  set lotesFinalizados(List<Lote> value) {
+    _$lotesFinalizadosAtom.reportWrite(value, super.lotesFinalizados, () {
+      super.lotesFinalizados = value;
+    });
+  }
+
   final _$buscarLotesAsyncAction = AsyncAction('_LoteStoreBase.buscarLotes');
 
   @override
@@ -1069,6 +1084,15 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   Future verificarAtividades() {
     return _$verificarAtividadesAsyncAction
         .run(() => super.verificarAtividades());
+  }
+
+  final _$buscarLotesFinalizadosAsyncAction =
+      AsyncAction('_LoteStoreBase.buscarLotesFinalizados');
+
+  @override
+  Future buscarLotesFinalizados() {
+    return _$buscarLotesFinalizadosAsyncAction
+        .run(() => super.buscarLotesFinalizados());
   }
 
   final _$_LoteStoreBaseActionController =
@@ -1629,6 +1653,7 @@ finalizarLotes: ${finalizarLotes},
 atividadesPendentes: ${atividadesPendentes},
 atividadesDeletadas: ${atividadesDeletadas},
 carregandoFinalizarLotes: ${carregandoFinalizarLotes},
+lotesFinalizados: ${lotesFinalizados},
 searchLote: ${searchLote},
 getLotesGroup: ${getLotesGroup},
 lotesParaFinalizar: ${lotesParaFinalizar},

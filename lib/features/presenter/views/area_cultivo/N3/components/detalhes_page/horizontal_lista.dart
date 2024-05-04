@@ -10,8 +10,12 @@ import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.d
 
 import 'custom_dialog.dart';
 
-SingleChildScrollView horizontalList(BuildContext context,
-    ReservatoriosStore reservatorioStore, LoteStore store) {
+SingleChildScrollView horizontalList(
+  BuildContext context,
+  ReservatoriosStore reservatorioStore,
+  LoteStore store,
+  bool enableEditing,
+) {
   ModulosStore modulosStore = GetIt.I<ModulosStore>();
   return SingleChildScrollView(
     scrollDirection: Axis.horizontal,
@@ -23,7 +27,8 @@ SingleChildScrollView horizontalList(BuildContext context,
           width: 24,
         ),
         Visibility(
-          visible: store.loteSelecionado.reservatorio?.id != null,
+          visible:
+              store.loteSelecionado.reservatorio?.id != null && enableEditing,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -99,40 +104,43 @@ SingleChildScrollView horizontalList(BuildContext context,
         const SizedBox(
           width: 24,
         ),
-        InkWell(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircleAvatar(
-                radius: 25,
-                child: SvgPicture.asset(
-                  "assets/icons/migrar_lote.svg",
+        Visibility(
+          visible: enableEditing,
+          child: InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircleAvatar(
+                  radius: 25,
+                  child: SvgPicture.asset(
+                    "assets/icons/migrar_lote.svg",
+                  ),
+                  backgroundColor: Constants.kCardColor,
                 ),
-                backgroundColor: Constants.kCardColor,
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              const Text(
-                'Migrar Lote',
-                style: TextStyle(
-                  color: Constants.kGreyText,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                const SizedBox(
+                  height: 8,
                 ),
-              ),
-            ],
+                const Text(
+                  'Migrar Lote',
+                  style: TextStyle(
+                    color: Constants.kGreyText,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const CustomDialog();
+                },
+              );
+            },
           ),
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return const CustomDialog();
-              },
-            );
-          },
         ),
         const SizedBox(
           width: 20,

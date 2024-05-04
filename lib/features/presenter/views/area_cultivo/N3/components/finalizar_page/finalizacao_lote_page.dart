@@ -180,7 +180,6 @@ class _NextStepButtonState extends State<NextStepButton> {
             return;
           }
           await store.finalizarTodosLotes();
-          Navigator.pop(context);
           return;
         }
         if (store.dotIndicator == 0) {

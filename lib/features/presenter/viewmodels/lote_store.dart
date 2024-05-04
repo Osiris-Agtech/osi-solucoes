@@ -833,7 +833,8 @@ abstract class _LoteStoreBase with Store {
 
   @action
   finalizarTodosLotes() async {
-    // isNovoLoteLoading = true;
+    isNovoLoteLoading = true;
+    SetorStore setorStore = GetIt.I<SetorStore>();
 
     // Requisição para deleção de "agendas" selecionadas
     deletarAtividadesSelecionadas();
@@ -853,25 +854,25 @@ abstract class _LoteStoreBase with Store {
       return;
     }
 
-    var ids = seletedLotes.map((e) => e.id).toList();
+    var result =
+        await loteRepository.finalizarLotes(seletedLotes as List<Lote>);
+    Get.close(1);
 
-    await loteRepository.finalizarLotes(ids.cast<int>());
+    result.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        limparTudo();
+        Get.close(1);
+        setorStore.buscarSetores();
+        if (setorSelecionado.id != null) {
+          buscarLotes();
+        }
+      },
+    );
 
-    // result.fold(
-    //   (err) {
-    //     toastError(message: err.message);
-    //   },
-    //   (data) async {
-    //     limparTudo();
-    //     Get.close(1);
-    //     setorStore.buscarSetores();
-    //     if (setorSelecionado.id != null) {
-    //       buscarLotes();
-    //     }
-    //   },
-    // );
-
-    // isNovoLoteLoading = false;
+    isNovoLoteLoading = false;
   }
 
   @action
@@ -956,4 +957,62 @@ abstract class _LoteStoreBase with Store {
   @computed
   bool get marcarTodasAtividades =>
       !atividadesPendentes.any((element) => !element.selected);
+
+  ///
+  /// ------------------------ PÁGINA DE LOTES FINALIZADOS ------------------------
+  ///
+  @observable
+  List<Lote> lotesFinalizados = [];
+
+  @action
+  buscarLotesFinalizados() async {
+    isLoteListLoading = true;
+
+    LoteRepository loteRepository = GetIt.I<LoteRepository>();
+
+    // ---------------------- Buscar Areas ----------------------
+    var areas = await loteRepository.buscarTodasAreasId(
+      contaId: authController.usuario.selected_conta!.conta!.id!,
+    );
+
+    if (areas.isLeft()) {
+      lotesFinalizados = List.from([]);
+      showLotesFinalizadosErrorToast();
+      return;
+    }
+
+    List<int> areasIds = areas.fold((err) => [], (data) => data);
+    // ----------------------------------------------------------
+
+    // ---------------------- Buscar Setores ----------------------
+    var setores = await loteRepository.buscarTodosSetoresId(areasId: areasIds);
+
+    if (setores.isLeft()) {
+      lotesFinalizados = List.from([]);
+      showLotesFinalizadosErrorToast();
+      return;
+    }
+
+    List<int> setoresIds = setores.fold((err) => [], (data) => data);
+    // ----------------------------------------------------------
+
+    // ---------------------- Buscar Lotes Finalizados ----------------------
+    var lotes =
+        await loteRepository.buscarLotesFinalizados(setoresId: setoresIds);
+
+    if (lotes.isLeft()) {
+      lotesFinalizados = List.from([]);
+      showLotesFinalizadosErrorToast();
+      return;
+    }
+
+    lotesFinalizados = List.from(lotes.fold((err) => [], (data) => data));
+    // ----------------------------------------------------------
+
+    isLoteListLoading = false;
+  }
+
+  showLotesFinalizadosErrorToast() {
+    toastError(message: 'Ocorreu um erro ao buscar os lotes finalizados');
+  }
 }

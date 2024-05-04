@@ -30,5 +30,10 @@ abstract class ILoteRepository {
   Future<Either<Failure, Lote>> alterarLote(Lote alterarLote);
   Future<Either<Failure, bool>> deletarAtividades(List<int> agendaIds);
   Future<Either<Failure, bool>> finalizarAtividades(List<int> agendaIds);
-  Future<Either<Failure, bool>> finalizarLotes(List<int> lotesIds);
+  Future<Either<Failure, bool>> finalizarLotes(List<Lote> lotes);
+  Future<Either<Failure, List<Lote>>> buscarLotesFinalizados(
+      {required List<int> setoresId});
+  Future<Either<Failure, List<int>>> buscarTodosSetoresId(
+      {required List<int> areasId});
+  Future<Either<Failure, List<int>>> buscarTodasAreasId({required int contaId});
 }

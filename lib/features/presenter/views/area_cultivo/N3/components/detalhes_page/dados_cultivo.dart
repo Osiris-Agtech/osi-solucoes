@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
-embalagensProduzidas(LoteStore store) {
+embalagensProduzidas(LoteStore store, {bool enableEditing = true}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20.0),
     child: ListTile(
@@ -44,30 +44,32 @@ embalagensProduzidas(LoteStore store) {
           const SizedBox(
             width: 10,
           ),
-          InkWell(
-            child: Observer(builder: (_) {
-              if (store.isEmbalagensEditing) {
-                return const Icon(
-                  Icons.check,
-                  color: Constants.kPrimaryColor,
-                );
-              }
-              return const Icon(
-                Icons.edit,
-                color: Constants.kPrimaryColor,
-              );
-            }),
-            onTap: () {
-              store.setIsEmbalagensEditing(!store.isEmbalagensEditing);
-            },
-          ),
+          enableEditing
+              ? InkWell(
+                  child: Observer(builder: (_) {
+                    if (store.isEmbalagensEditing) {
+                      return const Icon(
+                        Icons.check,
+                        color: Constants.kPrimaryColor,
+                      );
+                    }
+                    return const Icon(
+                      Icons.edit,
+                      color: Constants.kPrimaryColor,
+                    );
+                  }),
+                  onTap: () {
+                    store.setIsEmbalagensEditing(!store.isEmbalagensEditing);
+                  },
+                )
+              : const SizedBox.shrink(),
         ],
       ),
     ),
   );
 }
 
-plantasColhidas(LoteStore store) {
+plantasColhidas(LoteStore store, {bool enableEditing = true}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20.0),
     child: ListTile(
@@ -108,30 +110,32 @@ plantasColhidas(LoteStore store) {
           const SizedBox(
             width: 10,
           ),
-          InkWell(
-            child: Observer(builder: (_) {
-              if (store.isPlantasEditing) {
-                return const Icon(
-                  Icons.check,
-                  color: Constants.kPrimaryColor,
-                );
-              }
-              return const Icon(
-                Icons.edit,
-                color: Constants.kPrimaryColor,
-              );
-            }),
-            onTap: () {
-              store.setIsPlantasEditing(!store.isPlantasEditing);
-            },
-          ),
+          enableEditing
+              ? InkWell(
+                  child: Observer(builder: (_) {
+                    if (store.isPlantasEditing) {
+                      return const Icon(
+                        Icons.check,
+                        color: Constants.kPrimaryColor,
+                      );
+                    }
+                    return const Icon(
+                      Icons.edit,
+                      color: Constants.kPrimaryColor,
+                    );
+                  }),
+                  onTap: () {
+                    store.setIsPlantasEditing(!store.isPlantasEditing);
+                  },
+                )
+              : const SizedBox.shrink(),
         ],
       ),
     ),
   );
 }
 
-mudasTransplantadas(LoteStore store) {
+mudasTransplantadas(LoteStore store, {bool enableEditing = true}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20.0),
     child: ListTile(
@@ -172,30 +176,32 @@ mudasTransplantadas(LoteStore store) {
           const SizedBox(
             width: 10,
           ),
-          InkWell(
-            child: Observer(builder: (_) {
-              if (store.isMudasEditing) {
-                return const Icon(
-                  Icons.check,
-                  color: Constants.kPrimaryColor,
-                );
-              }
-              return const Icon(
-                Icons.edit,
-                color: Constants.kPrimaryColor,
-              );
-            }),
-            onTap: () {
-              store.setIsMudasEditing(!store.isMudasEditing);
-            },
-          ),
+          enableEditing
+              ? InkWell(
+                  child: Observer(builder: (_) {
+                    if (store.isMudasEditing) {
+                      return const Icon(
+                        Icons.check,
+                        color: Constants.kPrimaryColor,
+                      );
+                    }
+                    return const Icon(
+                      Icons.edit,
+                      color: Constants.kPrimaryColor,
+                    );
+                  }),
+                  onTap: () {
+                    store.setIsMudasEditing(!store.isMudasEditing);
+                  },
+                )
+              : const SizedBox.shrink(),
         ],
       ),
     ),
   );
 }
 
-bandeijasSemeadas(LoteStore store) {
+bandeijasSemeadas(LoteStore store, {bool enableEditing = true}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20.0),
     child: ListTile(
@@ -236,23 +242,25 @@ bandeijasSemeadas(LoteStore store) {
           const SizedBox(
             width: 10,
           ),
-          InkWell(
-            child: Observer(builder: (_) {
-              if (store.isBandeijasEditing) {
-                return const Icon(
-                  Icons.check,
-                  color: Constants.kPrimaryColor,
-                );
-              }
-              return const Icon(
-                Icons.edit,
-                color: Constants.kPrimaryColor,
-              );
-            }),
-            onTap: () {
-              store.setIsBandeijaEditing(!store.isBandeijasEditing);
-            },
-          ),
+          enableEditing
+              ? InkWell(
+                  child: Observer(builder: (_) {
+                    if (store.isBandeijasEditing) {
+                      return const Icon(
+                        Icons.check,
+                        color: Constants.kPrimaryColor,
+                      );
+                    }
+                    return const Icon(
+                      Icons.edit,
+                      color: Constants.kPrimaryColor,
+                    );
+                  }),
+                  onTap: () {
+                    store.setIsBandeijaEditing(!store.isBandeijasEditing);
+                  },
+                )
+              : const SizedBox.shrink(),
         ],
       ),
     ),

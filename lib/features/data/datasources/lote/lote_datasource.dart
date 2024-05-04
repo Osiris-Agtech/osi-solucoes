@@ -39,7 +39,12 @@ abstract class ILoteDatasource {
       {required List<int> agendaIds});
   Future<Either<Failure, bool>> finalizarAtividades(
       {required List<int> agendaIds});
-  Future<Either<Failure, bool>> finalizarLotes({required List<int> lotesIds});
+  Future<Either<Failure, bool>> finalizarLotes({required List<Lote> lotes});
+  Future<Either<Failure, List<Lote>>> buscarLotesFinalizados(
+      {required List<int> setoresId});
+  Future<Either<Failure, List<int>>> buscarTodosSetoresId(
+      {required List<int> areasId});
+  Future<Either<Failure, List<int>>> buscarTodasAreasId({required int contaId});
 }
 
 class LoteDatasource implements ILoteDatasource {
@@ -66,15 +71,26 @@ class LoteDatasource implements ILoteDatasource {
       readRepositories = r'''
         query Lotes($setorId: Int!, $order: SortOrder!, $startDate: DateTime, $endDate: DateTime) {
           lotes(where: {
-            setor: {
-              id: {
-                equals: $setorId
-              }
-            }, 
-            registro_data: {
-              gt: $startDate,
-              lte: $endDate
-            }
+            AND: [
+              {
+                setor: {
+                  id: {
+                    equals: $setorId
+                  }
+                }
+              },
+              {
+                ativo: {
+                  equals: true
+                }
+              },
+              {
+                registro_data: {
+                  gte: $startDate
+                  lte: $endDate
+                }
+              },
+            ],
           }, orderBy: [
             {
               registro_data: $order,
@@ -96,11 +112,20 @@ class LoteDatasource implements ILoteDatasource {
       readRepositories = r'''
         query Lotes($setorId: Int!, $order: SortOrder!) {
           lotes(where: {
-            setor: {
-              id: {
-                equals: $setorId
-              }
-            }
+            AND: [
+              {
+                setor: {
+                  id: {
+                    equals: $setorId
+                  }
+                }
+              },
+              {
+                ativo: {
+                  equals: true
+                }
+              },
+            ],
           }, orderBy: [
             {
               nome: $order,
@@ -824,6 +849,44 @@ class LoteDatasource implements ILoteDatasource {
         int? agendaCount = result.data?['finalizarAgendas'];
         return Right(agendaCount == agendaIds.length);
       } catch (e) {
+        return Left(
+            ErrorAgenda(message: FailureMessage.errorFinalizacaoAgenda));
+      }
+    } else {
+      return Left(ErrorAgenda(message: FailureMessage.errorFinalizacaoAgenda));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> finalizarLotes(
+      {required List<Lote> lotes}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      mutation FinalizarLotes($lotesId: [Int!], $plantasColhidas: [Int!], $embalagensProduzidas: [Int!]) {
+        finalizarLotes(lotesId: $lotesId, plantasColhidas: $plantasColhidas, embalagensProduzidas: $embalagensProduzidas)
+      }
+    ''';
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "lotesId": lotes.map((e) => e.id).toList(),
+        "plantasColhidas": lotes.map((e) => e.plantas_colhidas).toList(),
+        "embalagensProduzidas":
+            lotes.map((e) => e.embalagens_produzidas).toList(),
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        int? agendaCount = result.data?['finalizarLotes'];
+        return Right(agendaCount == lotes.length);
+      } catch (e) {
         return Left(ErrorAgenda(message: FailureMessage.errorFinalizacaoLote));
       }
     } else {
@@ -832,12 +895,159 @@ class LoteDatasource implements ILoteDatasource {
   }
 
   @override
-  Future<Either<Failure, bool>> finalizarLotes(
-      {required List<int> lotesIds}) async {
-    await Future.delayed(const Duration(seconds: 2));
+  Future<Either<Failure, List<Lote>>> buscarLotesFinalizados(
+      {required List<int> setoresId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-    const result = true;
+    String readRepositories = r'''
+        query Lotes($setorId: [Int!]) {
+          lotes(where: {
+            AND: [
+              {
+                setor: {
+                  id: {
+                    in: $setorId
+                  }
+                }
+              },
+              {
+                ativo: {
+                  equals: false
+                }
+              },
+            ],
+          }, orderBy: [
+            {
+              colheita_data: asc,
+            }
+          ]) {
+            id
+            nome
+            cultura {
+              id
+              nome
+            }
+            registro_data
+            colheita_data
+            bandeijas_semeadas
+          }
+        }
+      ''';
 
-    return Future.value(const Right(result));
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'setorId': setoresId,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      List? lotes =
+          result.data?['lotes']?.map((item) => Lote.fromJson(item)).toList();
+      if (lotes == null || lotes.isEmpty) {
+        return const Right([]);
+      }
+
+      List<Lote> loteList = lotes.cast<Lote>();
+      return Right(loteList);
+    } else {
+      return Left(InternalError(message: FailureMessage.internalErrorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<int>>> buscarTodosSetoresId(
+      {required List<int> areasId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      query Setors($areasId: [Int!]) {
+        setors(where: {
+          area: {
+            id: {
+              in: $areasId
+            }
+          }
+        }) {
+          id
+        }
+      }
+    ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "areasId": areasId,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      try {
+        List<Map>? setorList = (result.data?['setors'] as List?)
+            ?.whereType<Map>()
+            .map((item) => item)
+            .toList();
+        List<int>? setoresId = setorList?.map((e) => e['id'] as int).toList();
+        return Right(setoresId ?? []);
+      } catch (e) {
+        return Left(ErrorAgenda(message: FailureMessage.internalErrorMessage));
+      }
+    } else {
+      return Left(ErrorAgenda(message: FailureMessage.internalErrorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<int>>> buscarTodasAreasId(
+      {required int contaId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      query Areas($contaId: Int!) {
+        areas(where: {
+          conta: {
+            id: {
+              equals: $contaId
+            }
+          }
+        }) {
+          id
+        }
+      }
+    ''';
+
+    final QueryOptions? options;
+
+    options = QueryOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        "contaId": contaId,
+      },
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      try {
+        List<Map>? areaList = (result.data?['areas'] as List?)
+            ?.whereType<Map>()
+            .map((item) => item)
+            .toList();
+        List<int>? areasId = areaList?.map((e) => e['id'] as int).toList();
+        return Right(areasId ?? []);
+      } catch (e) {
+        return Left(ErrorAgenda(message: FailureMessage.internalErrorMessage));
+      }
+    } else {
+      return Left(ErrorAgenda(message: FailureMessage.internalErrorMessage));
+    }
   }
 }

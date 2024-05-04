@@ -12,7 +12,9 @@ import 'components/detalhes_page/dados_cultivo.dart';
 import 'components/detalhes_page/horizontal_lista.dart';
 
 class DetalhesLotePage extends StatefulWidget {
-  const DetalhesLotePage({Key? key}) : super(key: key);
+  final bool enableEditing;
+  const DetalhesLotePage({Key? key, this.enableEditing = true})
+      : super(key: key);
 
   @override
   State<DetalhesLotePage> createState() => _DetalhesLotePageState();
@@ -48,7 +50,12 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 infoLote(),
-                horizontalList(context, reservatorioStore, store),
+                horizontalList(
+                  context,
+                  reservatorioStore,
+                  store,
+                  widget.enableEditing,
+                ),
                 const SizedBox(
                   height: 16,
                 ),
@@ -135,10 +142,11 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                 const SizedBox(height: 16),
                 producaoTitle(),
                 const SizedBox(height: 20),
-                bandeijasSemeadas(store),
-                mudasTransplantadas(store),
-                plantasColhidas(store),
-                embalagensProduzidas(store),
+                bandeijasSemeadas(store, enableEditing: widget.enableEditing),
+                mudasTransplantadas(store, enableEditing: widget.enableEditing),
+                plantasColhidas(store, enableEditing: widget.enableEditing),
+                embalagensProduzidas(store,
+                    enableEditing: widget.enableEditing),
                 const SizedBox(
                   height: 16,
                 ),
@@ -164,40 +172,42 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
       iconTheme: const IconThemeData(
         color: Constants.kPrimaryColor, //change your color here
       ),
-      actions: [
-        Align(
-          alignment: const Alignment(0.6, -0.9),
-          child: Padding(
-            padding: const EdgeInsets.only(right: 16.0, top: 8.0),
-            child: Theme(
-              data: Theme.of(context).copyWith(
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
-              ),
-              child: PopupMenuButton(
-                icon: SvgPicture.asset(
-                  "assets/icons/settings_icon.svg",
-                  color: Constants.kButtonGrey,
-                  height: 20,
-                ),
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    child: Row(
-                      children: const [
-                        Text('Editar'),
+      actions: widget.enableEditing
+          ? [
+              Align(
+                alignment: const Alignment(0.6, -0.9),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16.0, top: 8.0),
+                  child: Theme(
+                    data: Theme.of(context).copyWith(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                    ),
+                    child: PopupMenuButton(
+                      icon: SvgPicture.asset(
+                        "assets/icons/settings_icon.svg",
+                        color: Constants.kButtonGrey,
+                        height: 20,
+                      ),
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: Row(
+                            children: const [
+                              Text('Editar'),
+                            ],
+                          ),
+                          onTap: () async {
+                            await store.setLoteEditing(store.loteSelecionado);
+                            Get.toNamed(Routes.cadastrarLotePage);
+                          },
+                        ),
                       ],
                     ),
-                    onTap: () async {
-                      await store.setLoteEditing(store.loteSelecionado);
-                      Get.toNamed(Routes.cadastrarLotePage);
-                    },
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
-      ],
+            ]
+          : null,
     );
   }
 

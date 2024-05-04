@@ -54,10 +54,10 @@ class _ResultadoLoteState extends State<ResultadoLote> {
                 initialValue: widget.lote!.plantas_colhidas != null
                     ? widget.lote!.plantas_colhidas.toString()
                     : "",
+                keyboardType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                 ],
-                textCapitalization: TextCapitalization.words,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.normal,
@@ -86,8 +86,8 @@ class _ResultadoLoteState extends State<ResultadoLote> {
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                 ],
+                keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
-                textCapitalization: TextCapitalization.words,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.normal,

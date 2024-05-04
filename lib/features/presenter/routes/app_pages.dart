@@ -18,6 +18,7 @@ import 'package:osi_solucoes/features/presenter/views/caderno_campo/detalhes_cad
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/cadastrar_usuario_page.dart';
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/detalhes_usuario_page.dart';
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
+import 'package:osi_solucoes/features/presenter/views/historico/historico_page.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/protocolo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/recuperar_senha/codigo_seguranca_page.dart';
 import 'package:osi_solucoes/features/presenter/views/recuperar_senha/nova_senha_page.dart';
@@ -265,6 +266,11 @@ class AppPages {
     GetPage(
       name: Routes.novaSenha,
       page: () => const NovaSenhaPage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.historicoPage,
+      page: () => const HistoricoPage(),
       transition: Transition.rightToLeft,
     ),
   ];

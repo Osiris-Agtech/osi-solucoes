@@ -445,8 +445,13 @@ class _HomePageState extends State<HomePage> {
                           "assets/icons/gerenciar_icon.svg",
                           onTap: () => Get.toNamed(Routes.gerenciarEquipePage),
                         ),
-                        firstItems(context, size, "card2Home".i18n(),
-                            "assets/icons/relatorio_icon.svg"),
+                        firstItems(
+                          context,
+                          size,
+                          "card2Home".i18n(),
+                          "assets/icons/relatorio_icon.svg",
+                          onTap: () => Get.toNamed(Routes.historicoPage),
+                        ),
                         firstItems(
                           context,
                           size,
