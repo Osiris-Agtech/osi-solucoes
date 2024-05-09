@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
 
 Padding atividadeItemDetalhes({
@@ -64,17 +63,6 @@ Padding atividadeItemDetalhes({
                     ],
                   ),
                 ),
-                Observer(builder: (_) {
-                  return Icon(
-                    acao.alerta ?? false
-                        ? Icons.notifications
-                        : Icons.notifications_off,
-                    size: 20,
-                    color: acao.alerta ?? false
-                        ? Constants.kPrimaryColor
-                        : Constants.kButtonGrey,
-                  );
-                }),
               ],
             ),
           ),

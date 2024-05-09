@@ -25,7 +25,7 @@ Protocolo _$ProtocoloFromJson(Map<String, dynamic> json) => Protocolo(
       conta: json['conta'] == null
           ? null
           : Conta.fromJson(json['conta'] as Map<String, dynamic>),
-      acao: (json['acao'] as List<dynamic>?)
+      acao: (json['acoes'] as List<dynamic>?)
           ?.map((e) => Acao.fromJson(e as Map<String, dynamic>))
           .toList(),
       cultura: json['cultura'] == null
@@ -47,7 +47,7 @@ Map<String, dynamic> _$ProtocoloToJson(Protocolo instance) => <String, dynamic>{
       'created_at': instance.created_at?.toIso8601String(),
       'updated_at': instance.updated_at?.toIso8601String(),
       'deleted_at': instance.deleted_at?.toIso8601String(),
-      'acao': instance.acao?.map((e) => e.toJson()).toList(),
+      'acoes': instance.acao?.map((e) => e.toJson()).toList(),
       'cultura': instance.cultura?.toJson(),
       'conta': instance.conta?.toJson(),
       'lotes': instance.lotes.map((e) => e.toJson()).toList(),

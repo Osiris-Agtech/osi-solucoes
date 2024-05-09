@@ -8,6 +8,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/modulos_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/detalhes_page/detalhes_ativ.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/editar_protocolo_page.dart';
 
 class DetalhesProtocolo extends StatefulWidget {
   const DetalhesProtocolo({Key? key}) : super(key: key);
@@ -21,11 +22,6 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
   final ScrollController _scrollController = ScrollController();
   CarouselController carouselController = CarouselController();
   ModulosStore modulosStore = GetIt.I<ModulosStore>();
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +52,32 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                       path: "",
                       namePage: store.protocoloSelecionado!.nome ?? "---",
                     ),
+                    actions: [
+                      Align(
+                        alignment: const Alignment(0.6, -0.9),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 16.0, top: 8.0),
+                          child: Theme(
+                            data: Theme.of(context).copyWith(
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                            ),
+                            child: IconButton(
+                              hoverColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onPressed: () {
+                                Get.to(() => const EditarProtocoloPage());
+                              },
+                              icon: const Icon(
+                                Icons.edit,
+                                color: Constants.kPrimaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 }),
                 SliverList(

@@ -18,7 +18,7 @@ class _DetalhesAtivPageState extends State<DetalhesAtivPage> {
 
   @override
   void initState() {
-    store.prepararListaDetalhesFase();
+    store.alterarLoteFoiAlterado(false);
     super.initState();
   }
 
@@ -26,6 +26,28 @@ class _DetalhesAtivPageState extends State<DetalhesAtivPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FloatingActionButton(
+            heroTag:
+                store.protocoloSelecionado!.id.toString() + 'floatingButton1',
+            mini: true,
+            onPressed: () {
+              _scrollController.animateTo(
+                _scrollController.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            },
+            backgroundColor: Constants.kPrimaryColor,
+            child: const Icon(
+              Icons.arrow_downward,
+              size: 20,
+            ),
+          ),
+        ],
+      ),
       appBar: AppBar(
         backgroundColor: Constants.kBackgroundColor,
         foregroundColor: Constants.kPrimaryColor,
@@ -67,7 +89,7 @@ class _DetalhesAtivPageState extends State<DetalhesAtivPage> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24.0),
                     child: Text(
-                      'Nenhuma Fase ou Atividade ainda foi cadastrada para esse Protocolo, comece a partir do botão "+"',
+                      'Nenhuma Fase ou Atividade ainda foi cadastrada para esse Protocolo, edite o protocolo e adicione as fases e atividades desejadas.',
                       style: TextStyle(
                         fontSize: 16,
                         color: Color(0xff6F6464),
@@ -128,19 +150,13 @@ class ListFases extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(children: [
-                            Text(
-                              store.listaFaseDetalhes[index].nome ?? "",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
+                          child: Text(
+                            store.listaFaseDetalhes[index].nome ?? "",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
                             ),
-                            const Spacer(),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                          ]),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(

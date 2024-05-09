@@ -1,4 +1,3 @@
-import 'package:faker/faker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -23,6 +22,9 @@ abstract class _ProtocoloStoreBase with Store {
 
   @observable
   int dotIndicator = 1;
+
+  @observable
+  int dotIndicatorEdit = 1;
 
   @observable
   int radioIndicator = 1;
@@ -191,6 +193,13 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
+  setDotIndicatorEdit(int value) {
+    if (value >= 0 && value <= 5) {
+      dotIndicatorEdit = value;
+    }
+  }
+
+  @action
   buscarProtocolos() async {
     isProtocoloListLoading = true;
 
@@ -232,7 +241,6 @@ abstract class _ProtocoloStoreBase with Store {
 
     if (novoTituloFase != null && novoTituloFase != "") {
       Fase novaFase = Fase(
-        id: faker.guid.random.integer(50), // retirar junto com mock
         nome: novoTituloFase,
         duracao_dias: novoDuracaoDiasFase,
         conta: GetIt.I<AuthController>().usuario.selected_conta!.conta!,
@@ -396,24 +404,26 @@ abstract class _ProtocoloStoreBase with Store {
 
   @action
   prepararListaDetalhesFase() {
-    listaFaseDetalhes.clear(); // Limpa a lista antes de adicionar novas fases
+    listaFaseDetalhes = List.from([]);
+
     if (protocoloSelecionado?.acao != null) {
       for (var acao in protocoloSelecionado!.acao!) {
-        if (acao.fase != null) {
+        Acao novaAcao = Acao.fromJson(acao.toJson());
+        if (novaAcao.fase != null) {
           // Procura a fase na listaFaseDetalhes
           var fase = listaFaseDetalhes.firstWhere(
-            (f) => f.id == acao.fase!.id,
+            (f) => f.id == novaAcao.fase!.id,
             orElse: () => Fase(),
           );
 
           if (fase.id == null) {
             // Verifica se a fase retornada é a fase vazia
             // Se a fase não está na lista, adiciona ela e inicializa a lista de ações
-            acao.fase!.acao = [acao];
-            listaFaseDetalhes.add(acao.fase!);
+            novaAcao.fase!.acao = [novaAcao];
+            listaFaseDetalhes.add(novaAcao.fase!);
           } else {
             // Se a fase já está na lista, apenas adiciona a ação à sua lista de ações
-            fase.acao?.add(acao);
+            fase.acao?.add(novaAcao);
           }
         }
       }
@@ -538,5 +548,336 @@ abstract class _ProtocoloStoreBase with Store {
     selectedFase = null;
     novoDescricaoAtividade = null;
     diaDaAtivController.clear();
+  }
+
+  // ##################### START DETALHES ######################
+
+  @observable
+  List<Acao> novasAtividadesDetalhesProtocolo = [];
+
+  @observable
+  TextEditingController novoTituloDetalhesAtividade = TextEditingController();
+
+  @observable
+  TextEditingController novoDescricaoDetalhesAtividade =
+      TextEditingController();
+
+  @observable
+  Fase? selectedDetalhesFase;
+
+  @observable
+  bool loteFoiAlterado = false;
+
+  @observable
+  TextEditingController diaDetalhesAtivController = TextEditingController();
+
+  @observable
+  String? novoTituloFaseDetalhes;
+
+  @observable
+  int? novoDuracaoDiasFaseDetalhes;
+
+  @observable
+  int? diaDaAtivDetalhes;
+
+  @observable
+  List<Fase> faseDropDownListDetelhes = [];
+
+  @observable
+  String? novoNomeProtocoloDetalhes;
+
+  @observable
+  String? novoFormaProtocoloDetalhes;
+
+  @observable
+  String? novoTipoProtocoloDetalhes;
+
+  @observable
+  String? novoSistemaProtocoloDetalhes;
+
+  @observable
+  Cultura novaCulturaProtocoloDetalhes = Cultura();
+
+  @action
+  alterarLoteFoiAlterado(bool value) {
+    loteFoiAlterado = value;
+  }
+
+  @action
+  editarNome(String name) {
+    novoNomeProtocoloDetalhes = name;
+    alterarLoteFoiAlterado(true);
+  }
+
+  editarCultura(Cultura item) {
+    novaCulturaProtocoloDetalhes = item;
+    alterarLoteFoiAlterado(true);
+  }
+
+  @action
+  editarTipo(String tipo) {
+    novoTipoProtocoloDetalhes = tipo;
+    alterarLoteFoiAlterado(true);
+  }
+
+  @action
+  editarSistema(String sistema) {
+    novoSistemaProtocoloDetalhes = sistema;
+    alterarLoteFoiAlterado(true);
+  }
+
+  @action
+  editarForma(String forma) {
+    novoFormaProtocoloDetalhes = forma;
+    alterarLoteFoiAlterado(true);
+  }
+
+  @action
+  alterarDiaDaAtiv(int value) => diaDaAtivDetalhes = value;
+
+  @action
+  setarDuracaoDiasFaseDetalhes(String value) {
+    diaDetalhesAtivController.clear();
+    diaDetalhesAtivController = TextEditingController(text: value);
+  }
+
+  @action
+  alterarAlertaAcaoDetalhes(int indexFase, int indexAcao) {
+    listaFaseDetalhes[indexFase].acao?[indexAcao].alerta =
+        !(listaFaseDetalhes[indexFase].acao?[indexAcao].alerta ?? false);
+
+    listaFaseDetalhes = List.from(listaFaseDetalhes);
+    alterarLoteFoiAlterado(true);
+  }
+
+  @action
+  removeAcaoDetalhes(int indexAcao, int indexFase) {
+    listaFaseDetalhes[indexFase].acao?.removeAt(indexAcao);
+    if (listaFaseDetalhes[indexFase].acao!.isEmpty) {
+      listaFaseDetalhes.removeAt(indexFase);
+    }
+    listaFaseDetalhes = List.from(listaFaseDetalhes);
+    alterarLoteFoiAlterado(true);
+  }
+
+  @action
+  removeFaseDetalhes(int indexFase) {
+    listaFaseDetalhes[indexFase].acao?.clear();
+    listaFaseDetalhes.removeAt(indexFase);
+    listaFaseDetalhes = List.from(listaFaseDetalhes);
+    alterarLoteFoiAlterado(true);
+  }
+
+  @action
+  atualizarNovasAtividadesDetalhes() {
+    novasAtividadesDetalhesProtocolo
+        .clear(); // Limpa a lista antes de adicionar novas ações
+    for (var fase in listaFaseDetalhes) {
+      if (fase.acao != null && fase.acao!.isNotEmpty) {
+        // Se ação não é nula E ação não está vazia
+        for (var acao in fase.acao!) {
+          novasAtividadesDetalhesProtocolo.add(acao);
+        }
+      }
+    }
+    novasAtividadesDetalhesProtocolo = List.from(
+        novasAtividadesDetalhesProtocolo); // Atualiza a lista após todas as adições
+  }
+
+  @action
+  registrarFaseDetalhes() async {
+    isProtocoloListLoading = true;
+
+    if (novoTituloFaseDetalhes != null && novoTituloFaseDetalhes != "") {
+      Fase novaFase = Fase(
+        nome: novoTituloFaseDetalhes,
+        duracao_dias: novoDuracaoDiasFaseDetalhes,
+        conta: GetIt.I<AuthController>().usuario.selected_conta!.conta!,
+      );
+
+      var fase = await protocoloRepository.registrarFase(novaFase);
+
+      fase.fold(
+        (err) {
+          toastError(message: err.message);
+        },
+        (data) async {
+          faseDropDownListDetelhes =
+              List.from([data, ...faseDropDownListDetelhes]);
+        },
+      );
+    }
+    isProtocoloListLoading = false;
+  }
+
+  @action
+  alterarDuracaoDiasFaseDetalhes(int value) {
+    novoDuracaoDiasFaseDetalhes = value;
+  }
+
+  @action
+  alterarTituloFaseDetalhes(String name) {
+    novoTituloFaseDetalhes = name;
+  }
+
+  @action
+  alterarDropdownFaseDetalhes(Fase newFase) {
+    selectedDetalhesFase = newFase;
+  }
+
+  @action
+  prepararEditDetalhesAtiv(int indexFase, int indexAcao) {
+    selectedDetalhesFase = faseDropDownListDetelhes.firstWhereOrNull(
+        (element) => element.id == listaFaseDetalhes[indexFase].id);
+    novoTituloDetalhesAtividade = TextEditingController(
+        text: listaFaseDetalhes[indexFase].acao?[indexAcao].titulo ?? "");
+    novoDescricaoDetalhesAtividade = TextEditingController(
+        text: listaFaseDetalhes[indexFase].acao?[indexAcao].descricao ?? "");
+    diaDetalhesAtivController = TextEditingController(
+        text: listaFaseDetalhes[indexFase]
+            .acao![indexAcao]
+            .duracao_dias
+            .toString());
+  }
+
+  @action
+  addToFaseListDetalhes() {
+    Acao acao = Acao(
+      titulo: novoTituloDetalhesAtividade.text,
+      duracao_dias: int.parse(diaDetalhesAtivController.text),
+      descricao: novoDescricaoDetalhesAtividade.text,
+      fase: selectedDetalhesFase,
+      alerta: true,
+    );
+
+    final index = listaFaseDetalhes
+        .indexWhere((item) => item.id == selectedDetalhesFase!.id);
+    // Add Fase e acao
+    if (index == -1) {
+      selectedDetalhesFase?.acao = (selectedDetalhesFase?.acao ?? [])
+        ..add(acao);
+      // Ordena a lista caso maior que 1
+      if (selectedDetalhesFase!.acao!.length > 1) {
+        selectedDetalhesFase!.acao!
+            .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
+      }
+      listaFaseDetalhes.add(selectedDetalhesFase!);
+      listaFaseDetalhes = List.from(listaFaseDetalhes);
+      alterarLoteFoiAlterado(true);
+      return;
+    }
+    // Add apenas acao quando a fase ja existe na lista
+    listaFaseDetalhes[index].acao = (listaFaseDetalhes[index].acao ?? [])
+      ..add(acao);
+    if (listaFaseDetalhes[index].acao!.length > 1) {
+      // Ordena a lista caso maior que 1
+      listaFaseDetalhes[index]
+          .acao!
+          .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
+    }
+    listaFaseDetalhes = List.from(listaFaseDetalhes);
+    alterarLoteFoiAlterado(true);
+  }
+
+  @action
+  editarAcaoDetalhes(int indexFase, int indexAcao) {
+    if (selectedDetalhesFase!.id != listaFaseDetalhes[indexFase].id) {
+      addToFaseListDetalhes();
+      listaFaseDetalhes[indexFase].acao?.removeAt(indexAcao);
+      if (listaFaseDetalhes[indexFase].acao!.isEmpty) {
+        listaFaseDetalhes.removeAt(indexFase);
+      }
+      listaFaseDetalhes = List.from(listaFaseDetalhes);
+      return;
+    }
+    listaFaseDetalhes[indexFase].acao?[indexAcao].titulo =
+        novoTituloDetalhesAtividade.text;
+    listaFaseDetalhes[indexFase].acao?[indexAcao].descricao =
+        novoDescricaoDetalhesAtividade.text;
+    listaFaseDetalhes[indexFase].acao![indexAcao].duracao_dias =
+        int.parse(diaDetalhesAtivController.text);
+    listaFaseDetalhes[indexFase]
+        .acao!
+        .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
+    listaFaseDetalhes = List.from(listaFaseDetalhes);
+    alterarLoteFoiAlterado(true);
+  }
+
+  @action
+  buscarFasesDetalhes() async {
+    AuthController authController = GetIt.I<AuthController>();
+    var fases = await protocoloRepository
+        .buscarFases(authController.usuario.selected_conta!.conta!.id!);
+
+    fases.fold(
+      (err) {
+        faseDropDownListDetelhes = List.from([]);
+      },
+      (data) async {
+        faseDropDownListDetelhes = List.from(data);
+      },
+    );
+    return;
+  }
+
+  @action
+  atualizarProtocolo() async {
+    isProtocoloListLoading = true;
+    protocoloSelecionado!.nome = novoNomeProtocoloDetalhes;
+    protocoloSelecionado!.cultura = novaCulturaProtocoloDetalhes;
+    protocoloSelecionado!.implantacao = novoFormaProtocoloDetalhes;
+    protocoloSelecionado!.sistema_cultivo = novoSistemaProtocoloDetalhes;
+    protocoloSelecionado!.tipo_cultura = novoTipoProtocoloDetalhes;
+    protocoloSelecionado!.acao = List.from(novasAtividadesDetalhesProtocolo);
+
+    var protocolo =
+        await protocoloRepository.atualizarProtocolo(protocoloSelecionado!);
+
+    protocolo.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (data) async {
+        toastSuccess(message: "Alterado com sucesso");
+        buscarProtocolos();
+      },
+    );
+    isProtocoloListLoading = false;
+  }
+
+  @action
+  validarAtividadeDetalhes() {
+    if (novoTituloDetalhesAtividade.text == "" ||
+        selectedDetalhesFase == null ||
+        diaDetalhesAtivController.text == "") {
+      isValid = false;
+      return;
+    }
+    isValid = true;
+  }
+
+  @action
+  limparFaseDetalhesBottomSheet() {
+    novoTituloFaseDetalhes = null;
+    novoDuracaoDiasFaseDetalhes = null;
+  }
+
+  @action
+  limparAtividadeBottomSheetDetalhes() {
+    novoTituloDetalhesAtividade.clear();
+    selectedDetalhesFase = null;
+    novoDescricaoDetalhesAtividade.clear();
+    diaDetalhesAtivController.clear();
+  }
+
+  @action
+  validarNovaFaseDetalhes() {
+    if (novoTituloFaseDetalhes == null ||
+        novoTituloFaseDetalhes == "" ||
+        novoDuracaoDiasFaseDetalhes == null) {
+      isValid = false;
+      return;
+    }
+    isValid = true;
   }
 }

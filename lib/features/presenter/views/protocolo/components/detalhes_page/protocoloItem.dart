@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
-import 'package:osi_solucoes/features/presenter/views/protocolo/components/detalhes_page/detelhes_protocolo.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/detelhes_protocolo.dart';
 
 Padding protocoloItem({
   required int index,

@@ -14,6 +14,8 @@ abstract class IProtocoloDatasource {
   Future<Either<Failure, List<Cultura>>> buscarCulturas(int contaId);
   Future<Either<Failure, List<Fase>>> buscarFases(int contaId);
   Future<Either<Failure, Fase>> registrarFase({required Fase fase});
+  Future<Either<Failure, Protocolo>> atualizarProtocolo(
+      {required Protocolo alterarProtocolo});
   Future<Either<Failure, Protocolo>> registrarProtocolo(
       {required Protocolo protocolo});
 }
@@ -394,5 +396,12 @@ class ProtocoloDatasource implements IProtocoloDatasource {
       return Left(
           InternalError(message: FailureMessage.errorCadastrarProtocolo));
     }
+  }
+
+  @override
+  Future<Either<Failure, Protocolo>> atualizarProtocolo(
+      {required Protocolo alterarProtocolo}) {
+    // TODO: implement atualizarProtocolo
+    throw UnimplementedError();
   }
 }

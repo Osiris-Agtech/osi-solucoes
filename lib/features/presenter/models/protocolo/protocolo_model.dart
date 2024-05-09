@@ -28,7 +28,7 @@ class Protocolo {
   DateTime? updated_at;
   @JsonKey(required: false, disallowNullValue: false)
   DateTime? deleted_at;
-  @JsonKey(required: false, disallowNullValue: false)
+  @JsonKey(required: false, disallowNullValue: false, name: 'acoes')
   List<Acao>? acao;
   @JsonKey(required: false, disallowNullValue: false)
   Cultura? cultura;
