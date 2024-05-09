@@ -863,6 +863,15 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
+  limparProtocoloDetalhes() {
+    novoNomeProtocoloDetalhes = null;
+    novaCulturaProtocoloDetalhes = Cultura();
+    novoFormaProtocoloDetalhes = null;
+    novoSistemaProtocoloDetalhes = null;
+    novoTipoProtocoloDetalhes = null;
+  }
+
+  @action
   limparAtividadeBottomSheetDetalhes() {
     novoTituloDetalhesAtividade.clear();
     selectedDetalhesFase = null;

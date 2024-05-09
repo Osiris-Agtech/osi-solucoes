@@ -36,7 +36,7 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
   @override
   void dispose() {
     super.dispose();
-    store.limparTudo();
+    store.limparProtocoloDetalhes();
   }
 
   @override
@@ -339,7 +339,8 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                             Expanded(
                               child: Observer(builder: (_) {
                                 return Text(
-                                  store.novoNomeProtocoloDetalhes ?? "",
+                                  store.novoNomeProtocoloDetalhes ??
+                                      "Preencher",
                                   textAlign: TextAlign.end,
                                   style: const TextStyle(
                                     color: Constants.kPrimaryColor,
@@ -364,7 +365,8 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                             Expanded(
                               child: Observer(builder: (_) {
                                 return Text(
-                                  store.protocoloSelecionado!.nome ?? "",
+                                  store.protocoloSelecionado!.nome ??
+                                      "Preencher",
                                   textAlign: TextAlign.end,
                                   style: const TextStyle(
                                     color: Constants.kPrimaryColor,
@@ -441,8 +443,14 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.protocoloSelecionado!.cultura!.nome
-                                    .toString(),
+                                (store.protocoloSelecionado!.cultura!.nome ==
+                                            null ||
+                                        store.protocoloSelecionado!.cultura!
+                                                .nome! ==
+                                            "")
+                                    ? "Preencher"
+                                    : store.protocoloSelecionado!.cultura!.nome
+                                        .toString(),
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,
@@ -517,7 +525,8 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.protocoloSelecionado!.tipo_cultura ?? "",
+                                store.protocoloSelecionado!.tipo_cultura ??
+                                    "Preencher",
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,
@@ -569,7 +578,8 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.novoSistemaProtocoloDetalhes ?? "",
+                                store.novoSistemaProtocoloDetalhes ??
+                                    "Preencher",
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,
@@ -593,7 +603,7 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                             Expanded(
                               child: Text(
                                 store.protocoloSelecionado!.sistema_cultivo ??
-                                    "",
+                                    "Preencher",
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,
@@ -645,7 +655,7 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.novoFormaProtocoloDetalhes ?? "",
+                                store.novoFormaProtocoloDetalhes ?? "Preencher",
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,
@@ -668,7 +678,8 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.protocoloSelecionado!.implantacao ?? "",
+                                store.protocoloSelecionado!.implantacao ??
+                                    "Preencher",
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,

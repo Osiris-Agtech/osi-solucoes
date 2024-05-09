@@ -1391,6 +1391,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic limparProtocoloDetalhes() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.limparProtocoloDetalhes');
+    try {
+      return super.limparProtocoloDetalhes();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic limparAtividadeBottomSheetDetalhes() {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.limparAtividadeBottomSheetDetalhes');
