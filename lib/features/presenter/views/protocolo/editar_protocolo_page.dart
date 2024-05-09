@@ -29,6 +29,7 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       store.buscarCulturas();
       store.buscarFasesDetalhes();
+      store.prepararListaDetalhesFase();
       store.setMostrarErroFormulario(false);
     });
   }
@@ -411,7 +412,7 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                         TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                 ),
-                store.novaCulturaProtocoloDetalhes.nome != null
+                store.novaCulturaProtocoloDetalhes != null
                     ? Expanded(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -419,8 +420,8 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.novaCulturaProtocoloDetalhes.nome
-                                    .toString(),
+                                store.novaCulturaProtocoloDetalhes?.nome ??
+                                    'Preencher',
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,
@@ -443,14 +444,8 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                (store.protocoloSelecionado!.cultura!.nome ==
-                                            null ||
-                                        store.protocoloSelecionado!.cultura!
-                                                .nome! ==
-                                            "")
-                                    ? "Preencher"
-                                    : store.protocoloSelecionado!.cultura!.nome
-                                        .toString(),
+                                store.protocoloSelecionado?.cultura?.nome ??
+                                    "Preencher",
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,
@@ -723,58 +718,33 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                         TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                 ),
-                store.listaFaseDetalhes.isNotEmpty
-                    ? Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.listaFaseDetalhes.length.toString(),
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ],
+                Expanded(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          store.novasAtividadesDetalhesProtocolo.length
+                              .toString(),
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(
+                            color: Constants.kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      )
-                    : Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.protocoloSelecionado!.acao!.length
-                                    .toString(),
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ],
-                        ),
-                      )
+                      ),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
             onTap: () {
-              store.prepararListaDetalhesFase();
               store.setDotIndicatorEdit(5);
               editarBottomSheet(
                   context, carouselController, controlerPages, store);

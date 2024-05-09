@@ -36,4 +36,15 @@ class Conta {
   factory Conta.fromJson(Map<String, dynamic> json) => _$ContaFromJson(json);
 
   Map<String, dynamic> toJson() => _$ContaToJson(this);
+
+  toMap() {
+    return {
+      'id': id,
+      'nivel': nivel,
+      'nome': nome,
+      'imagem': imagem,
+      'cnpj': cnpj,
+      'created_at': created_at?.toIso8601String(),
+    };
+  }
 }

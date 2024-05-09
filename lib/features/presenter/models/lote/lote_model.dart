@@ -85,6 +85,17 @@ class Lote {
   factory Lote.fromJson(Map<String, dynamic> json) => _$LoteFromJson(json);
 
   Map<String, dynamic> toJson() => _$LoteToJson(this);
+
+  toMap() {
+    return {
+      'id': id,
+      'nome': nome,
+      'fase_dias': fase_dias,
+      'fase_data': fase_data?.toIso8601String(),
+      'registro_data': registro_data?.toIso8601String(),
+      'semeadura_data': semeadura_data?.toIso8601String(),
+    };
+  }
 }
 
 class LoteByFilter {

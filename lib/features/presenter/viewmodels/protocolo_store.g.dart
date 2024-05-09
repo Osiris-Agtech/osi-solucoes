@@ -726,13 +726,13 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
       Atom(name: '_ProtocoloStoreBase.novaCulturaProtocoloDetalhes');
 
   @override
-  Cultura get novaCulturaProtocoloDetalhes {
+  Cultura? get novaCulturaProtocoloDetalhes {
     _$novaCulturaProtocoloDetalhesAtom.reportRead();
     return super.novaCulturaProtocoloDetalhes;
   }
 
   @override
-  set novaCulturaProtocoloDetalhes(Cultura value) {
+  set novaCulturaProtocoloDetalhes(Cultura? value) {
     _$novaCulturaProtocoloDetalhesAtom
         .reportWrite(value, super.novaCulturaProtocoloDetalhes, () {
       super.novaCulturaProtocoloDetalhes = value;

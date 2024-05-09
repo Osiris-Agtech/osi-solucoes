@@ -45,4 +45,18 @@ class Acao {
   factory Acao.fromJson(Map<String, dynamic> json) => _$AcaoFromJson(json);
 
   Map<String, dynamic> toJson() => _$AcaoToJson(this);
+
+  toMap() {
+    return {
+      'id': id,
+      'titulo': titulo,
+      'descricao': descricao,
+      'duracao_dias': duracao_dias,
+      'alerta': alerta,
+      'created_at': created_at?.toIso8601String(),
+      'updated_at': updated_at?.toIso8601String(),
+      'deleted_at': deleted_at?.toIso8601String(),
+      'fase': fase?.toMap(),
+    };
+  }
 }

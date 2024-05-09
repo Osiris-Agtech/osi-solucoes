@@ -408,7 +408,7 @@ abstract class _ProtocoloStoreBase with Store {
 
     if (protocoloSelecionado?.acao != null) {
       for (var acao in protocoloSelecionado!.acao!) {
-        Acao novaAcao = Acao.fromJson(acao.toJson());
+        Acao novaAcao = Acao.fromJson(acao.toMap());
         if (novaAcao.fase != null) {
           // Procura a fase na listaFaseDetalhes
           var fase = listaFaseDetalhes.firstWhere(
@@ -429,6 +429,7 @@ abstract class _ProtocoloStoreBase with Store {
       }
     }
     listaFaseDetalhes = List.from(listaFaseDetalhes);
+    atualizarNovasAtividadesDetalhes();
   }
 
   @action
@@ -596,7 +597,7 @@ abstract class _ProtocoloStoreBase with Store {
   String? novoSistemaProtocoloDetalhes;
 
   @observable
-  Cultura novaCulturaProtocoloDetalhes = Cultura();
+  Cultura? novaCulturaProtocoloDetalhes;
 
   @action
   alterarLoteFoiAlterado(bool value) {
@@ -823,11 +824,17 @@ abstract class _ProtocoloStoreBase with Store {
   @action
   atualizarProtocolo() async {
     isProtocoloListLoading = true;
-    protocoloSelecionado!.nome = novoNomeProtocoloDetalhes;
-    protocoloSelecionado!.cultura = novaCulturaProtocoloDetalhes;
-    protocoloSelecionado!.implantacao = novoFormaProtocoloDetalhes;
-    protocoloSelecionado!.sistema_cultivo = novoSistemaProtocoloDetalhes;
-    protocoloSelecionado!.tipo_cultura = novoTipoProtocoloDetalhes;
+    protocoloSelecionado!.nome =
+        novoNomeProtocoloDetalhes ?? protocoloSelecionado!.nome;
+    protocoloSelecionado!.cultura =
+        novaCulturaProtocoloDetalhes ?? protocoloSelecionado!.cultura;
+
+    protocoloSelecionado!.implantacao =
+        novoFormaProtocoloDetalhes ?? protocoloSelecionado!.implantacao;
+    protocoloSelecionado!.sistema_cultivo =
+        novoSistemaProtocoloDetalhes ?? protocoloSelecionado!.sistema_cultivo;
+    protocoloSelecionado!.tipo_cultura =
+        novoTipoProtocoloDetalhes ?? protocoloSelecionado!.tipo_cultura;
     protocoloSelecionado!.acao = List.from(novasAtividadesDetalhesProtocolo);
 
     var protocolo =
@@ -838,6 +845,7 @@ abstract class _ProtocoloStoreBase with Store {
         toastError(message: err.message);
       },
       (data) async {
+        Get.back();
         toastSuccess(message: "Alterado com sucesso");
         buscarProtocolos();
       },
@@ -865,7 +873,7 @@ abstract class _ProtocoloStoreBase with Store {
   @action
   limparProtocoloDetalhes() {
     novoNomeProtocoloDetalhes = null;
-    novaCulturaProtocoloDetalhes = Cultura();
+    novaCulturaProtocoloDetalhes = null;
     novoFormaProtocoloDetalhes = null;
     novoSistemaProtocoloDetalhes = null;
     novoTipoProtocoloDetalhes = null;

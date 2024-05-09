@@ -18,7 +18,7 @@ class _DetalhesAtivPageState extends State<DetalhesAtivPage> {
 
   @override
   void initState() {
-    store.alterarLoteFoiAlterado(false);
+    store.prepararListaDetalhesFase();
     super.initState();
   }
 

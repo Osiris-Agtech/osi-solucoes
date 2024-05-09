@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:graphql/client.dart';
 import 'package:osi_solucoes/core/errors/errors.dart';
@@ -400,8 +402,41 @@ class ProtocoloDatasource implements IProtocoloDatasource {
 
   @override
   Future<Either<Failure, Protocolo>> atualizarProtocolo(
-      {required Protocolo alterarProtocolo}) {
-    // TODO: implement atualizarProtocolo
-    throw UnimplementedError();
+      {required Protocolo alterarProtocolo}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      mutation UpdateProtocolo($input: String!) {
+        updateProtocolo(input: $input) {
+          id
+          nome
+        }
+      }
+      ''';
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'input': json.encode(alterarProtocolo.toMap()),
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        Protocolo protocolo =
+            Protocolo.fromJson(result.data?['updateProtocolo']);
+        return Right(protocolo);
+      } catch (e) {
+        return Left(
+            InternalError(message: FailureMessage.errorAtualizarProtocolo));
+      }
+    } else {
+      return Left(
+          InternalError(message: FailureMessage.errorAtualizarProtocolo));
+    }
   }
 }
