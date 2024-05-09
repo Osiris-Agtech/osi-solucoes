@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocoloItemLote.dart';
 
@@ -10,6 +11,7 @@ protocolo(
   BuildContext context,
   CarouselController carouselController,
   LoteStore store,
+  ProtocoloStore protocoloStore,
   GlobalKey<FormFieldState> key,
 ) {
   return InkWell(
@@ -74,14 +76,16 @@ protocolo(
         ),
         onTap: () {
           store.setDotIndicator(4);
-          bottomSheetN3(context, carouselController, store, key);
+          bottomSheetN3(
+              context, carouselController, store, protocoloStore, key);
         },
       );
     }),
   );
 }
 
-protocoloPage(BuildContext context, LoteStore store) {
+protocoloPage(
+    BuildContext context, LoteStore store, ProtocoloStore protocoloStore) {
   final ScrollController _scrollController = ScrollController();
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
@@ -138,13 +142,13 @@ protocoloPage(BuildContext context, LoteStore store) {
                 physics: const BouncingScrollPhysics(),
                 slivers: [
                   Observer(builder: (_) {
-                    if (store.isProtocoloListLoading) {
+                    if (protocoloStore.isProtocoloListLoading) {
                       return loadingList();
                     }
-                    if (store.protocoloList.isEmpty) {
+                    if (protocoloStore.protocoloList.isEmpty) {
                       return emptyList();
                     }
-                    return showList(store);
+                    return showList(store, protocoloStore);
                   }),
                 ],
               ),
@@ -188,13 +192,14 @@ Container filterWidget(BuildContext context, LoteStore store) {
   );
 }
 
-SliverList showList(LoteStore store) {
+SliverList showList(LoteStore store, ProtocoloStore protocoloStore) {
   return SliverList(
     delegate: SliverChildBuilderDelegate(
       (BuildContext context, int index) {
-        return protocoloItemLote(index: index, store: store);
+        return protocoloItemLote(
+            index: index, store: store, protocoloStore: protocoloStore);
       },
-      childCount: store.searchProtocolo.length,
+      childCount: protocoloStore.protocoloList.length,
     ),
   );
 }

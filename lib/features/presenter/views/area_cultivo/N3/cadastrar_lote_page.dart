@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_detalhes_atv.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_detalhes_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_page.dart';
@@ -26,6 +27,7 @@ class CadastrarLotePage extends StatefulWidget {
 
 class _CadastrarLotePageState extends State<CadastrarLotePage> {
   LoteStore store = GetIt.I<LoteStore>();
+  ProtocoloStore protocoloStore = GetIt.I<ProtocoloStore>();
   CarouselController carouselController = CarouselController();
   final GlobalKey<FormFieldState> key = GlobalKey<FormFieldState>();
 
@@ -37,7 +39,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
         );
     store.buscarCulturas();
     store.buscarReservatorios();
-    store.buscarProtocolos();
+    protocoloStore.buscarProtocolos();
     store.setIsNovaCultura(false);
     store.setMostrarErroFormulario(false);
   }
@@ -72,7 +74,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                 titulo(),
                 subtitulo(),
                 const SizedBox(height: 20),
-                setor(context, carouselController, store, key),
+                setor(context, carouselController, store, protocoloStore, key),
                 Observer(builder: (_) {
                   return Visibility(
                     visible: store.mostrarErroFormulario &&
@@ -98,7 +100,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
-                lote(context, carouselController, store, key),
+                lote(context, carouselController, store, protocoloStore, key),
                 Observer(builder: (_) {
                   return Visibility(
                     visible: store.mostrarErroFormulario &&
@@ -124,7 +126,8 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
-                cultura(context, carouselController, store, key),
+                cultura(
+                    context, carouselController, store, protocoloStore, key),
                 Observer(builder: (_) {
                   return Visibility(
                     visible: store.mostrarErroFormulario &&
@@ -150,13 +153,24 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
-                reservatorio(context, carouselController, store, key),
+                reservatorio(
+                    context, carouselController, store, protocoloStore, key),
                 // fase(context),
                 const Divider(
                   thickness: 0.5,
                   color: Color(0xFFC4C4C4),
                 ),
-                protocolo(context, carouselController, store, key),
+                !store.isEditing
+                    ? protocolo(
+                        context, carouselController, store, protocoloStore, key)
+                    : IgnorePointer(
+                        child: ColorFiltered(
+                          colorFilter: const ColorFilter.mode(
+                              Colors.white, BlendMode.color),
+                          child: protocolo(context, carouselController, store,
+                              protocoloStore, key),
+                        ),
+                      ),
                 const SizedBox(height: 20),
                 saveButton(size),
               ],
@@ -270,6 +284,7 @@ bottomSheetN3(
   BuildContext context,
   CarouselController carouselController,
   LoteStore store,
+  ProtocoloStore protocoloStore,
   GlobalKey<FormFieldState> key,
 ) {
   return showModalBottomSheet<void>(
@@ -376,10 +391,11 @@ bottomSheetN3(
                       ),
                       AnimatedCrossFade(
                         duration: const Duration(milliseconds: 200),
-                        firstChild: protocoloPage(context, store),
+                        firstChild:
+                            protocoloPage(context, store, protocoloStore),
                         secondChild: store.abrirProtocoloDetalhesAtv
                             ? protocoloAtividadeDetalhes(store)
-                            : protocoloDetalhes(store),
+                            : protocoloDetalhes(store, protocoloStore),
                         crossFadeState: !store.showProtocoloDetalhes
                             ? CrossFadeState.showFirst
                             : CrossFadeState.showSecond,
@@ -575,6 +591,9 @@ class _NextStepButtonState extends State<NextStepButton> {
                 if (store.dotIndicator == 3) {
                   if (store.showReservatorioDetalhes) {
                     store.selecionarNovoLoteReservatorio();
+                  }
+                  if (store.isEditing) {
+                    Get.back();
                   }
                 }
 

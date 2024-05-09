@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 
-protocoloDetalhes(LoteStore store) {
+protocoloDetalhes(LoteStore store, ProtocoloStore protocoloStore) {
   return ListView(
     shrinkWrap: true,
     physics: const BouncingScrollPhysics(),
@@ -168,33 +170,91 @@ protocoloDetalhes(LoteStore store) {
             const SizedBox(
               height: 5,
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 2,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  dense: true,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                  title: Text(
-                    "Cultivo Teste",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Constants.kContentColorLightTheme.withOpacity(.8),
-                      fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
+              child: Container(
+                constraints: const BoxConstraints(
+                  minHeight: 200,
+                  minWidth: double.infinity,
+                ),
+                decoration: BoxDecoration(
+                  color: Constants.kCardColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Observer(builder: (_) {
+                  if ((store.loteSelecionado.protocolo?.lotes ?? []).isEmpty) {
+                    return const Padding(
+                      padding: EdgeInsets.all(24.0),
+                      child: Center(
+                        child: Text(
+                          "Não contém lotes vinculados a este reservatório",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  }
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount:
+                        (store.loteSelecionado.protocolo?.lotes ?? []).length,
+                    separatorBuilder: (context, index) => Container(
+                      height: 1,
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                      ),
+                      color: Constants.kBackgroundColor,
                     ),
-                  ),
-                  subtitle: Text(
-                    'Cultura: Alface',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Constants.kContentColorLightTheme.withOpacity(.8),
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                );
-              },
-            )
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: index == 0 ? 8.0 : 0.0,
+                              bottom: index ==
+                                      (store.loteSelecionado.protocolo?.lotes
+                                                  .length ??
+                                              0) -
+                                          1
+                                  ? 8.0
+                                  : 0.0,
+                            ),
+                            child: ListTile(
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 24),
+                              title: Text(
+                                store.loteSelecionado.protocolo?.lotes[index]
+                                        .nome ??
+                                    '---',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Constants.kContentColorLightTheme
+                                      .withOpacity(.8),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                'Cultura: ${store.loteSelecionado.protocolo?.lotes[index].nome ?? 'Sem Cultura'}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Constants.kContentColorLightTheme
+                                      .withOpacity(.8),
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }),
+              ),
+            ),
           ],
         ),
       )

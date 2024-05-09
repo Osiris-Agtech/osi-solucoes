@@ -3,7 +3,6 @@ import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart'
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
-import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 
 import '../../../../core/errors/failure.dart';
@@ -22,8 +21,6 @@ abstract class ILoteRepository {
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(int contaId);
   Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
       int reservatorioId);
-  Future<Either<Failure, Protocolo>> buscarProtocoloDetalhes(int protocoloId);
-  Future<Either<Failure, List<Protocolo>>> buscarProtocolos();
   Future<Either<Failure, List<Agenda>>> verificarAtividades(List<int> lotesIds);
   Future<Either<Failure, Lote>> registrarLote(Lote lote);
   Future<Either<Failure, Cultura>> registrarCultura(

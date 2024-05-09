@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 
 lote(
   BuildContext context,
   CarouselController carouselController,
   LoteStore store,
+  ProtocoloStore protocoloStore,
   GlobalKey<FormFieldState> key,
 ) {
   return InkWell(
@@ -73,7 +75,8 @@ lote(
         ),
         onTap: () {
           store.setDotIndicator(1);
-          bottomSheetN3(context, carouselController, store, key);
+          bottomSheetN3(
+              context, carouselController, store, protocoloStore, key);
         },
       );
     }),

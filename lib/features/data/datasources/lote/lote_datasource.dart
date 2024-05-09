@@ -4,13 +4,9 @@ import 'package:dartz/dartz.dart';
 import 'package:graphql/client.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/api_source.dart';
-import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
-import 'package:osi_solucoes/features/presenter/models/conta/conta_model.dart';
 import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
-import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
-import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 
 import '../../../../core/errors/errors.dart';
@@ -31,9 +27,6 @@ abstract class ILoteDatasource {
       {required int contaId});
   Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
       {required int reservatorioId});
-  Future<Either<Failure, Protocolo>> buscarProtocoloDetalhes(
-      {required int protocoloId});
-  Future<Either<Failure, List<Protocolo>>> buscarProtocolos();
   Future<Either<Failure, Lote>> registrarLote({required Lote lote});
   Future<Either<Failure, Lote>> migrarLote(
       {required int loteId, required int setorId, required int reservatorioId});
@@ -93,6 +86,10 @@ class LoteDatasource implements ILoteDatasource {
               id
               nome
             }
+            protocolo {
+              id
+              nome
+            }
             registro_data
             colheita_data
             bandeijas_semeadas
@@ -116,6 +113,10 @@ class LoteDatasource implements ILoteDatasource {
             id
             nome
             cultura {
+              id
+              nome
+            }
+            protocolo {
               id
               nome
             }
@@ -174,6 +175,10 @@ class LoteDatasource implements ILoteDatasource {
               }
             }
             cultura {
+              id
+              nome
+            }
+            protocolo {
               id
               nome
             }
@@ -439,74 +444,11 @@ class LoteDatasource implements ILoteDatasource {
   }
 
   @override
-  Future<Either<Failure, Protocolo>> buscarProtocoloDetalhes(
-      {required int protocoloId}) async {
-    try {
-      // Simula uma chamada de API assíncrona com delay
-      await Future.delayed(const Duration(seconds: 2));
-
-      // Gera uma lista com 3 Protocolos mockados
-      final List<Protocolo> protocolosMock = List.generate(
-          3,
-          (index) => Protocolo(
-                id: index + 1,
-                nome: "Protocolo ${index + 1}",
-                descricao: "Descrição do Protocolo ${index + 1}",
-                tipo_cultura: "Tipo de Cultura ${index + 1}",
-                sistema_cultivo: "Sistema de Cultivo ${index + 1}",
-                implantacao: "Implantação ${index + 1}",
-                created_at: DateTime.now(),
-                updated_at: DateTime.now(),
-                deleted_at: null,
-                acao: List.generate(2, (indexAcao) => Acao()),
-                cultura:
-                    Cultura(id: index, nome: 'Cultura Exemplo ${index + 1}'),
-                conta: Conta(),
-              ));
-
-      Protocolo? protocoloDetalhe = protocolosMock.firstWhere(
-        (protocolo) => protocolo.id == protocoloId,
-        orElse: () => throw Exception("Protocolo não encontrado"),
-      );
-
-      return Right(protocoloDetalhe);
-    } catch (e) {
-      return Left(ErrorProtocolo(
-          message: "Não foi possível buscar os detalhes do protocolo"));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<Protocolo>>> buscarProtocolos() async {
-    // Simule uma chamada de API assíncrona
-    await Future.delayed(const Duration(seconds: 2));
-
-    final protocolos = List.generate(
-        3,
-        (index) => Protocolo(
-              id: index + 1,
-              nome: 'Protocolo ${index + 1}',
-              descricao: 'Descrição do Protocolo ${index + 1}',
-              tipo_cultura: 'Tipo de Cultura ${index + 1}',
-              sistema_cultivo: 'Sistema de Cultivo ${index + 1}',
-              implantacao: 'Implantação ${index + 1}',
-              created_at: DateTime.now(),
-              updated_at: DateTime.now(),
-              deleted_at: null,
-              acao: [Acao(fase: Fase()), Acao(fase: Fase())],
-              cultura: Cultura(id: index, nome: 'Alface ${index + 1}'),
-              conta: Conta(),
-            ));
-
-    return Future.value(Right(protocolos));
-  }
-
-  @override
   Future<Either<Failure, Lote>> registrarLote({required Lote lote}) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     const String readRepositories = r'''
-        mutation CreateOneLote($nome: String!, $setorId: Int!, $culturaId: Int!, $reservatorioId: Int, $registroData: DateTime!, $semeaduraData: DateTime, $transplantioData: DateTime, $colheitaData: DateTime) {
+        mutation CreateOneLote($nome: String!, $setorId: Int!, $culturaId: Int!, $protocoloId: Int, $reservatorioId: Int, $registroData: DateTime!, $semeaduraData: DateTime, $transplantioData: DateTime, $colheitaData: DateTime) {
           createOneLote(
             nome: $nome,
             registroData: $registroData,
@@ -515,6 +457,7 @@ class LoteDatasource implements ILoteDatasource {
             colheitaData: $colheitaData,
             setorId: $setorId,
             culturaId: $culturaId,
+            protocoloId: $protocoloId,
             reservatorioId: $reservatorioId,
           ) {
             id
@@ -556,6 +499,7 @@ class LoteDatasource implements ILoteDatasource {
         "nome": lote.nome,
         "setorId": lote.setor!.id,
         "culturaId": lote.cultura!.id,
+        "protocoloId": lote.protocolo?.id,
         "reservatorioId": lote.reservatorio?.id,
         "registroData": lote.registro_data != null
             ? lote.registro_data?.toIso8601String()

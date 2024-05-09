@@ -1086,14 +1086,6 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     return _$buscarLotesAsyncAction.run(() => super.buscarLotes());
   }
 
-  final _$buscarProtocolosAsyncAction =
-      AsyncAction('_LoteStoreBase.buscarProtocolos');
-
-  @override
-  Future buscarProtocolos() {
-    return _$buscarProtocolosAsyncAction.run(() => super.buscarProtocolos());
-  }
-
   final _$migrarLoteAsyncAction = AsyncAction('_LoteStoreBase.migrarLote');
 
   @override
@@ -1143,15 +1135,6 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   Future buscarReservatorioDetalhes() {
     return _$buscarReservatorioDetalhesAsyncAction
         .run(() => super.buscarReservatorioDetalhes());
-  }
-
-  final _$buscarProtocoloDetalhesAsyncAction =
-      AsyncAction('_LoteStoreBase.buscarProtocoloDetalhes');
-
-  @override
-  Future buscarProtocoloDetalhes() {
-    return _$buscarProtocoloDetalhesAsyncAction
-        .run(() => super.buscarProtocoloDetalhes());
   }
 
   final _$registrarLoteAsyncAction =

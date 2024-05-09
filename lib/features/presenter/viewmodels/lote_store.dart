@@ -104,25 +104,6 @@ abstract class _LoteStoreBase with Store {
     isLoteListLoading = false;
   }
 
-  @action
-  buscarProtocolos() async {
-    isProtocoloListLoading = true;
-
-    var protocolos = await loteRepository.buscarProtocolos();
-
-    protocolos.fold(
-      (err) {
-        protocoloList = List.from([]);
-      },
-      (data) async {
-        protocoloList = List.from(data);
-        protocoloList = List.from(protocoloList);
-      },
-    );
-
-    isProtocoloListLoading = false;
-  }
-
   @computed
   List<Lote> get searchLote {
     List<Lote> result = loteList
@@ -630,24 +611,6 @@ abstract class _LoteStoreBase with Store {
 
     solucaoNutritivaList = List.from(solucaoNutritivaList);
     solucaoConcentradaList = List.from(solucaoConcentradaList);
-  }
-
-  @action
-  buscarProtocoloDetalhes() async {
-    if (protocoloDetalhes == null) {
-      return;
-    }
-    var protocolos =
-        await loteRepository.buscarProtocoloDetalhes(protocoloDetalhes!.id!);
-
-    protocolos.fold(
-      (err) {
-        toastError(message: err.message);
-      },
-      (data) async {
-        protocoloDetalhes = data;
-      },
-    );
   }
 
   @action

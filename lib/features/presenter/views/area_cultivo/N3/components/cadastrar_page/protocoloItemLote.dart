@@ -1,10 +1,14 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 
 Padding protocoloItemLote({
   required int index,
   required LoteStore store,
+  required ProtocoloStore protocoloStore,
   VoidCallback? onTap,
 }) {
   return Padding(
@@ -17,8 +21,7 @@ Padding protocoloItemLote({
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        store.setProtocoloDetalhes(store.searchProtocolo[index]);
-        store.buscarProtocoloDetalhes();
+        store.setProtocoloDetalhes(protocoloStore.protocoloList[index]);
         if (store.abrirProtocoloDetalhesAtv) {
           store.toggleAbrirProtocoloDetalhesAtv();
         }
@@ -46,7 +49,7 @@ Padding protocoloItemLote({
                         top: 5.0,
                       ),
                       child: Text(
-                        store.searchProtocolo[index].nome ?? "---",
+                        protocoloStore.protocoloList[index].nome ?? "---",
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
@@ -70,7 +73,8 @@ Padding protocoloItemLote({
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  store.searchProtocolo[index].cultura?.nome ??
+                                  protocoloStore
+                                          .protocoloList[index].cultura?.nome ??
                                       "---",
                                   style: const TextStyle(
                                     color: Constants.kPrimaryColor,
@@ -86,8 +90,8 @@ Padding protocoloItemLote({
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
-                            children: const [
-                              Text(
+                            children: [
+                              const Text(
                                 "Lotes Vinculados:",
                                 style: TextStyle(
                                   fontSize: 14,
@@ -95,11 +99,12 @@ Padding protocoloItemLote({
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(left: 5, bottom: 5),
+                                padding:
+                                    const EdgeInsets.only(left: 5, bottom: 5),
                                 child: Text(
                                   //"${store.searchReservatorio[index].lotes?.length ?? 0} Ativos",
-                                  "0 Lotes",
-                                  style: TextStyle(
+                                  "${protocoloStore.protocoloList[index].lotes.length} Lotes",
+                                  style: const TextStyle(
                                     color: Constants.kPrimaryColor,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
