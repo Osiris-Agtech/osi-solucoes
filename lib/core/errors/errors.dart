@@ -80,6 +80,12 @@ class ErrorReservatorio implements Failure {
   ErrorReservatorio({required this.message});
 }
 
+class ErrorProtocolo implements Failure {
+  @override
+  final String message;
+  ErrorProtocolo({required this.message});
+}
+
 class ErrorFertilizante implements Failure {
   @override
   final String message;
@@ -114,10 +120,4 @@ class ErrorAgenda implements Failure {
   @override
   final String message;
   ErrorAgenda({required this.message});
-}
-
-class ErrorProtocolo implements Failure {
-  @override
-  final String message;
-  ErrorProtocolo({required this.message});
 }

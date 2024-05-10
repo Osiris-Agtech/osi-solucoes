@@ -7,12 +7,14 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 
 setor(
   BuildContext context,
   CarouselController carouselController,
   LoteStore store,
+  ProtocoloStore protocoloStore,
   GlobalKey<FormFieldState> key,
 ) {
   return InkWell(
@@ -78,7 +80,8 @@ setor(
         ),
         onTap: () {
           store.setDotIndicator(0);
-          bottomSheetN3(context, carouselController, store, key);
+          bottomSheetN3(
+              context, carouselController, store, protocoloStore, key);
         },
       );
     }),

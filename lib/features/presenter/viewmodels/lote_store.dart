@@ -6,7 +6,9 @@ import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/lote/lote_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dart';
+import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
+import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
@@ -27,6 +29,9 @@ abstract class _LoteStoreBase with Store {
   bool isLoteListLoading = false;
 
   @observable
+  bool isProtocoloListLoading = false;
+
+  @observable
   String dropDownValue = "Nome";
 
   @observable
@@ -40,6 +45,12 @@ abstract class _LoteStoreBase with Store {
 
   @observable
   List<Lote> loteList = [];
+
+  @observable
+  List<Protocolo> protocoloList = [];
+
+  @observable
+  List<Fase> listaFaseDetalhes = [];
 
   @observable
   DateTime data1 = DateTime(
@@ -326,6 +337,15 @@ abstract class _LoteStoreBase with Store {
   Reservatorio reservatorioDetalhes = Reservatorio();
 
   @observable
+  Protocolo? protocoloDetalhes;
+
+  @observable
+  Protocolo? protocoloVinculado;
+
+  @observable
+  String searchProtocoloText = '';
+
+  @observable
   List<SolucaoFertilizanteConcentrada> solucaoNutritivaList = [];
 
   @observable
@@ -333,6 +353,17 @@ abstract class _LoteStoreBase with Store {
 
   @observable
   Lote novoLote = Lote();
+
+  @observable
+  bool abrirProtocoloDetalhesAtv = false;
+
+  @observable
+  bool isProtocoloValid = false;
+
+  @action
+  void toggleAbrirProtocoloDetalhesAtv() {
+    abrirProtocoloDetalhesAtv = !abrirProtocoloDetalhesAtv;
+  }
 
   @action
   selecionarNovoLoteArea(Area area) => novoLoteArea = area;
@@ -514,9 +545,42 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  setProtocoloDetalhes() {
-    // protocoloDetalhes = protocolo;
+  setProtocoloDetalhes(Protocolo protocolo) {
+    protocoloDetalhes = protocolo;
     showProtocoloDetalhes = true;
+  }
+
+  @action
+  removeProtocoloDetalhes() {
+    protocoloDetalhes = null;
+  }
+
+  @action
+  setSearchProtocoloText(String value) => searchProtocoloText = value;
+
+  @computed
+  List<Protocolo> get searchProtocolo {
+    List<Protocolo> result = protocoloList
+        .where((element) =>
+            element.nome
+                ?.toLowerCase()
+                .contains(searchProtocoloText.toLowerCase()) ??
+            false)
+        .toList();
+
+    return result;
+  }
+
+  @action
+  setProtocolo(Protocolo protocolo) {
+    protocoloVinculado = protocolo;
+    isProtocoloValid = true;
+  }
+
+  @action
+  desvincularProtocolo() {
+    protocoloVinculado = null;
+    isProtocoloValid = false;
   }
 
   @action
@@ -550,6 +614,32 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
+  prepararListaDetalhesFase() {
+    listaFaseDetalhes.clear();
+    if (protocoloDetalhes == null) {
+      return;
+    } // Limpa a lista antes de adicionar novas fases
+    if (protocoloDetalhes!.acao != null) {
+      for (var acao in protocoloDetalhes!.acao!) {
+        if (acao.fase != null) {
+          var fase = listaFaseDetalhes.firstWhere(
+            (f) => f.id == acao.fase!.id,
+            orElse: () => Fase(),
+          );
+
+          if (fase.id == null) {
+            acao.fase!.acao = [acao];
+            listaFaseDetalhes.add(acao.fase!);
+          } else {
+            fase.acao?.add(acao);
+          }
+        }
+      }
+    }
+    listaFaseDetalhes = List.from(listaFaseDetalhes);
+  }
+
+  @action
   registrarLote() async {
     SetorStore setorStore = GetIt.I<SetorStore>();
 
@@ -564,6 +654,7 @@ abstract class _LoteStoreBase with Store {
       semeadura_data: semeaduraData,
       transplantio_data: transplantioData,
       colheita_data: colheitaData,
+      protocolo: protocoloVinculado,
     );
 
     var lote = await loteRepository.registrarLote(novoLote);
@@ -638,6 +729,7 @@ abstract class _LoteStoreBase with Store {
     novoLote.semeadura_data = semeaduraData;
     novoLote.transplantio_data = transplantioData;
     novoLote.colheita_data = colheitaData;
+    novoLote.protocolo = protocoloVinculado;
 
     var alterarLote = await loteRepository.alterarLote(novoLote);
 
@@ -709,6 +801,12 @@ abstract class _LoteStoreBase with Store {
     );
 
     isNovoLoteLoading = false;
+  }
+
+  @computed
+  bool get isAlreadySelected {
+    return protocoloVinculado?.id != null &&
+        protocoloVinculado?.id == protocoloDetalhes?.id;
   }
 
   limparTudo() {
@@ -855,7 +953,7 @@ abstract class _LoteStoreBase with Store {
 
     var ids = seletedLotes.map((e) => e.id).toList();
 
-    var result = await loteRepository.finalizarLotes(ids.cast<int>());
+    await loteRepository.finalizarLotes(ids.cast<int>());
 
     // result.fold(
     //   (err) {
@@ -877,7 +975,6 @@ abstract class _LoteStoreBase with Store {
   @action
   deletarAtividadesSelecionadas() async {
     var ids = atividadesDeletadas.map((e) => e.id).toList();
-    print('atividades deletadas: $ids');
 
     var result = await loteRepository.deletarAtividades(ids.cast<int>());
 
@@ -892,7 +989,6 @@ abstract class _LoteStoreBase with Store {
   @action
   finalizarAtividadesSelecionadas() async {
     var ids = atividadesPendentes.map((e) => e.agenda.id).toList();
-    print('atividades pendentes: $ids');
 
     var result = await loteRepository.finalizarAtividades(ids.cast<int>());
 

@@ -59,4 +59,8 @@ class FailureMessage {
       'Ocorreu um erro ao cadastrar o protocolo';
   static const errorAtualizarProtocolo =
       'Ocorreu um erro ao atualizar o protocolo';
+  static const errorBuscarAgendasEmAberto =
+      'Ocorreu um erro ao buscar as atividades em aberto';
+  static const errorFinalizacaoLote =
+      'Ocorreu um erro ao finalizar as atividades em aberto';
 }
