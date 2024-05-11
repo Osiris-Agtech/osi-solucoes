@@ -273,6 +273,7 @@ class ProtocoloDatasource implements IProtocoloDatasource {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     String query = '';
+    protocolo.acao = (protocolo.acao ?? []).reversed.toList();
     for (Acao element in protocolo.acao ?? []) {
       if (element ==
           (protocolo.acao ?? [])[(protocolo.acao ?? []).length - 1]) {
@@ -360,10 +361,6 @@ class ProtocoloDatasource implements IProtocoloDatasource {
         }) {
           id
           nome
-          descricao
-          implantacao
-          sistema_cultivo
-          tipo_cultura
           cultura {
             id
             nome
@@ -374,6 +371,22 @@ class ProtocoloDatasource implements IProtocoloDatasource {
             cultura {
               id
               nome
+            }
+          }
+          sistema_cultivo
+          tipo_cultura
+          implantacao
+          acoes {
+            id
+            titulo
+            descricao
+            alerta
+            duracao_dias
+            duracao_dias_real
+            fase {
+              id
+              nome
+              duracao_dias
             }
           }
         }
