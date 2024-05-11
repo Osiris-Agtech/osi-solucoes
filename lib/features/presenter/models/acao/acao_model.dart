@@ -28,6 +28,8 @@ class Acao {
   Protocolo? protocolo;
   @JsonKey(required: false, disallowNullValue: false)
   Fase? fase;
+  @JsonKey(required: false, disallowNullValue: false)
+  int? duracao_dias_real;
 
   Acao({
     this.id,
@@ -40,6 +42,7 @@ class Acao {
     this.deleted_at,
     this.protocolo,
     this.fase,
+    this.duracao_dias_real,
   });
 
   factory Acao.fromJson(Map<String, dynamic> json) => _$AcaoFromJson(json);
@@ -52,6 +55,7 @@ class Acao {
       'titulo': titulo,
       'descricao': descricao,
       'duracao_dias': duracao_dias,
+      'duracao_dias_real': duracao_dias_real,
       'alerta': alerta,
       'created_at': created_at?.toIso8601String(),
       'updated_at': updated_at?.toIso8601String(),

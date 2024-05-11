@@ -1039,6 +1039,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  int calcularDuracaoDiasReal() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.calcularDuracaoDiasReal');
+    try {
+      return super.calcularDuracaoDiasReal();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic addToFaseList() {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.addToFaseList');
@@ -1341,6 +1352,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
         name: '_ProtocoloStoreBase.prepararEditDetalhesAtiv');
     try {
       return super.prepararEditDetalhesAtiv(indexFase, indexAcao);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  int calcularDuracaoDiasRealDetalhes() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.calcularDuracaoDiasRealDetalhes');
+    try {
+      return super.calcularDuracaoDiasRealDetalhes();
     } finally {
       _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
     }

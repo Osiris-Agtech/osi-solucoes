@@ -362,10 +362,31 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
+  int calcularDuracaoDiasReal() {
+    int duracaoTotal = 0;
+
+    int index = faseList.indexWhere((item) => item.id == selectedFase!.id);
+    if (index == -1) {
+      for (var i = 0; i < faseList.length; i++) {
+        duracaoTotal += faseList[i].duracao_dias!;
+      }
+      return duracaoTotal;
+    }
+
+    for (var i = 0; i < index; i++) {
+      duracaoTotal += faseList[i].duracao_dias!;
+    }
+
+    return duracaoTotal;
+  }
+
+  @action
   addToFaseList() {
     Acao acao = Acao(
       titulo: novoTituloAtividade,
       duracao_dias: int.parse(diaDaAtivController.text),
+      duracao_dias_real:
+          int.parse(diaDaAtivController.text) + calcularDuracaoDiasReal(),
       descricao: novoDescricaoAtividade,
       fase: selectedFase,
       alerta: true,
@@ -445,11 +466,11 @@ abstract class _ProtocoloStoreBase with Store {
   @action
   editarAcao(int indexFase, int indexAcao) {
     if (selectedFase!.id != faseList[indexFase].id) {
-      addToFaseList();
       faseList[indexFase].acao?.removeAt(indexAcao);
       if (faseList[indexFase].acao!.isEmpty) {
         faseList.removeAt(indexFase);
       }
+      addToFaseList();
       faseList = List.from(faseList);
       return;
     }
@@ -457,6 +478,8 @@ abstract class _ProtocoloStoreBase with Store {
     faseList[indexFase].acao?[indexAcao].descricao = novoDescricaoAtividade;
     faseList[indexFase].acao![indexAcao].duracao_dias =
         int.parse(diaDaAtivController.text);
+    faseList[indexFase].acao![indexAcao].duracao_dias_real =
+        int.parse(diaDaAtivController.text) + calcularDuracaoDiasReal();
     faseList[indexFase]
         .acao!
         .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
@@ -742,10 +765,32 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
+  int calcularDuracaoDiasRealDetalhes() {
+    int duracaoTotal = 0;
+
+    int index = listaFaseDetalhes
+        .indexWhere((item) => item.id == selectedDetalhesFase!.id);
+    if (index == -1) {
+      for (var i = 0; i < listaFaseDetalhes.length; i++) {
+        duracaoTotal += listaFaseDetalhes[i].duracao_dias!;
+      }
+      return duracaoTotal;
+    }
+
+    for (var i = 0; i < index; i++) {
+      duracaoTotal += listaFaseDetalhes[i].duracao_dias!;
+    }
+
+    return duracaoTotal;
+  }
+
+  @action
   addToFaseListDetalhes() {
     Acao acao = Acao(
       titulo: novoTituloDetalhesAtividade.text,
       duracao_dias: int.parse(diaDetalhesAtivController.text),
+      duracao_dias_real: int.parse(diaDetalhesAtivController.text) +
+          calcularDuracaoDiasRealDetalhes(),
       descricao: novoDescricaoDetalhesAtividade.text,
       fase: selectedDetalhesFase,
       alerta: true,
@@ -783,11 +828,11 @@ abstract class _ProtocoloStoreBase with Store {
   @action
   editarAcaoDetalhes(int indexFase, int indexAcao) {
     if (selectedDetalhesFase!.id != listaFaseDetalhes[indexFase].id) {
-      addToFaseListDetalhes();
       listaFaseDetalhes[indexFase].acao?.removeAt(indexAcao);
       if (listaFaseDetalhes[indexFase].acao!.isEmpty) {
         listaFaseDetalhes.removeAt(indexFase);
       }
+      addToFaseListDetalhes();
       listaFaseDetalhes = List.from(listaFaseDetalhes);
       return;
     }
@@ -797,6 +842,9 @@ abstract class _ProtocoloStoreBase with Store {
         novoDescricaoDetalhesAtividade.text;
     listaFaseDetalhes[indexFase].acao![indexAcao].duracao_dias =
         int.parse(diaDetalhesAtivController.text);
+    listaFaseDetalhes[indexFase].acao![indexAcao].duracao_dias_real =
+        int.parse(diaDetalhesAtivController.text) +
+            calcularDuracaoDiasRealDetalhes();
     listaFaseDetalhes[indexFase]
         .acao!
         .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));

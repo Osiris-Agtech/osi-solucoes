@@ -48,7 +48,7 @@ Padding atividadeItem({
                       child: Text(
                         acao.titulo ?? "---",
                         style: const TextStyle(
-                          fontSize: 14,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -58,11 +58,25 @@ Padding atividadeItem({
                       child: Text(
                         'Dia ${acao.duracao_dias}',
                         style: const TextStyle(
-                          fontSize: 12,
+                          fontStyle: FontStyle.italic,
+                          fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                    )
+                    ),
+                    if (acao.duracao_dias_real != acao.duracao_dias &&
+                        acao.duracao_dias_real != null)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text(
+                          'Dia Real ${acao.duracao_dias_real}',
+                          style: const TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),

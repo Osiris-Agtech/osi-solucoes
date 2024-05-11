@@ -62,6 +62,7 @@ class ProtocoloDatasource implements IProtocoloDatasource {
             descricao
             alerta
             duracao_dias
+            duracao_dias_real
             fase {
               id
               nome
@@ -278,6 +279,7 @@ class ProtocoloDatasource implements IProtocoloDatasource {
         query += """{
           titulo: "${element.titulo}",
           duracao_dias: ${element.duracao_dias},
+          duracao_dias_real: ${element.duracao_dias_real},
           descricao: "${element.descricao ?? ''}",
           fase: {
             connect: {
@@ -290,6 +292,7 @@ class ProtocoloDatasource implements IProtocoloDatasource {
         query += """{
           titulo: "${element.titulo}",
           duracao_dias: ${element.duracao_dias},
+          duracao_dias_real: ${element.duracao_dias_real},
           descricao: "${element.descricao ?? ''}",
           fase: {
             connect: {

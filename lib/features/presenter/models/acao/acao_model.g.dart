@@ -27,6 +27,7 @@ Acao _$AcaoFromJson(Map<String, dynamic> json) => Acao(
       fase: json['fase'] == null
           ? null
           : Fase.fromJson(json['fase'] as Map<String, dynamic>),
+      duracao_dias_real: json['duracao_dias_real'] as int?,
     );
 
 Map<String, dynamic> _$AcaoToJson(Acao instance) => <String, dynamic>{
@@ -40,4 +41,5 @@ Map<String, dynamic> _$AcaoToJson(Acao instance) => <String, dynamic>{
       'deleted_at': instance.deleted_at?.toIso8601String(),
       'protocolo': instance.protocolo?.toJson(),
       'fase': instance.fase?.toJson(),
+      'duracao_dias_real': instance.duracao_dias_real,
     };
