@@ -98,7 +98,6 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                         'Nenhum Protocolo Selecionado',
                     style: const TextStyle(color: Constants.kPrimaryColor),
                   ),
-                  onTap: () {},
                 ),
                 Divider(
                   color: const Color(0xFF9F9F9F).withOpacity(.6),
@@ -133,7 +132,9 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       color: Constants.kPrimaryColor,
                     ),
                     onTap: () {
-                      Get.to(() => const AgendaPage());
+                      Get.to(() => AgendaPage(
+                            loteId: store.loteSelecionado.id,
+                          ));
                     },
                   ),
                 ),
