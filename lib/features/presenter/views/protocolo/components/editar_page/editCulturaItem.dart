@@ -125,11 +125,24 @@ editCulturaPage(BuildContext context, ProtocoloStore store) {
                                     top: index == 0 ? 10 : 0),
                                 child: ListTile(
                                   leading: Observer(builder: (_) {
+                                    // Mostrar a cultura atual - caso não tenha editado ainda
+                                    if (store.novaCulturaProtocoloDetalhes ==
+                                            null &&
+                                        store.culturaList[index].nome ==
+                                            store.protocoloSelecionado?.cultura
+                                                ?.nome) {
+                                      return const Icon(
+                                        Icons.check_box,
+                                        color: Constants.kPrimaryColor,
+                                      );
+                                    }
+                                    // Caso não seja o editado nem o atual
                                     if (store.novaCulturaProtocoloDetalhes !=
                                         store.culturaList[index]) {
                                       return const Icon(Icons
                                           .check_box_outline_blank_rounded);
                                     }
+                                    // Caso seja editado
                                     return const Icon(
                                       Icons.check_box,
                                       color: Constants.kPrimaryColor,

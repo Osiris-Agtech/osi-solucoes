@@ -4,11 +4,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/modulos_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
-import 'package:osi_solucoes/features/presenter/views/protocolo/components/detalhes_page/detalhes_ativ.dart';
-import 'package:osi_solucoes/features/presenter/views/protocolo/editar_protocolo_page.dart';
 
 class DetalhesProtocolo extends StatefulWidget {
   const DetalhesProtocolo({Key? key}) : super(key: key);
@@ -67,7 +66,7 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                               splashColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onPressed: () {
-                                Get.to(() => const EditarProtocoloPage());
+                                Get.toNamed(Routes.editarProtocoloPage);
                               },
                               icon: const Icon(
                                 Icons.edit,
@@ -213,7 +212,7 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                             color: Constants.kPrimaryColor,
                           ),
                           onTap: () {
-                            Get.to(() => const DetalhesAtivPage());
+                            Get.toNamed(Routes.detalhesAtividadesProtocolo);
                           },
                         ),
                       ),

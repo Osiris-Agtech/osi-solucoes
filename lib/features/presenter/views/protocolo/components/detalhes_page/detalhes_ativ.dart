@@ -29,23 +29,24 @@ class _DetalhesAtivPageState extends State<DetalhesAtivPage> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          FloatingActionButton(
-            heroTag:
-                store.protocoloSelecionado!.id.toString() + 'floatingButton1',
-            mini: true,
-            onPressed: () {
-              _scrollController.animateTo(
-                _scrollController.position.maxScrollExtent,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              );
-            },
-            backgroundColor: Constants.kPrimaryColor,
-            child: const Icon(
-              Icons.arrow_downward,
-              size: 20,
+          if ((store.protocoloSelecionado?.acao ?? []).isNotEmpty)
+            FloatingActionButton(
+              heroTag:
+                  store.protocoloSelecionado!.id.toString() + 'floatingButton1',
+              mini: true,
+              onPressed: () {
+                _scrollController.animateTo(
+                  _scrollController.position.maxScrollExtent,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                );
+              },
+              backgroundColor: Constants.kPrimaryColor,
+              child: const Icon(
+                Icons.arrow_downward,
+                size: 20,
+              ),
             ),
-          ),
         ],
       ),
       appBar: AppBar(

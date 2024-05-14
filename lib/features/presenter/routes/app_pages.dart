@@ -19,6 +19,9 @@ import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/cadastrar
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/detalhes_usuario_page.dart';
 import 'package:osi_solucoes/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart';
 import 'package:osi_solucoes/features/presenter/views/historico/historico_page.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/components/detalhes_page/detalhes_ativ.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/detelhes_protocolo.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/editar_protocolo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/protocolo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/recuperar_senha/codigo_seguranca_page.dart';
 import 'package:osi_solucoes/features/presenter/views/recuperar_senha/nova_senha_page.dart';
@@ -214,6 +217,30 @@ class AppPages {
     GetPage(
       name: Routes.cadastrarProtocoloPage,
       page: () => const CadastrarProtocoloPage(),
+      transition: Transition.rightToLeft,
+      middlewares: [
+        EquipeViewPagePermission(),
+      ],
+    ),
+    GetPage(
+      name: Routes.detalhesProtocoloPage,
+      page: () => const DetalhesProtocolo(),
+      transition: Transition.rightToLeft,
+      middlewares: [
+        EquipeViewPagePermission(),
+      ],
+    ),
+    GetPage(
+      name: Routes.editarProtocoloPage,
+      page: () => const EditarProtocoloPage(),
+      transition: Transition.rightToLeft,
+      middlewares: [
+        EquipeViewPagePermission(),
+      ],
+    ),
+    GetPage(
+      name: Routes.detalhesAtividadesProtocolo,
+      page: () => const DetalhesAtivPage(),
       transition: Transition.rightToLeft,
       middlewares: [
         EquipeViewPagePermission(),

@@ -87,7 +87,7 @@ class ProtocoloPageState extends State<ProtocoloPage> {
         (BuildContext context, int index) {
           return protocoloItem(index: index);
         },
-        childCount: store.protocoloList.length,
+        childCount: store.getProtocoloGroup.length,
       ),
     );
   }
@@ -169,7 +169,7 @@ class ProtocoloPageState extends State<ProtocoloPage> {
       ),
       child: TextFormField(
         onChanged: ((value) => {
-              //store.setSearchReservatorioText(value),
+              store.setSeachProtocoloPage(value),
             }),
         textAlignVertical: TextAlignVertical.top,
         textAlign: TextAlign.start,

@@ -145,8 +145,8 @@ culturaPage(BuildContext context, ProtocoloStore store) {
                                     top: index == 0 ? 10 : 0),
                                 child: ListTile(
                                   leading: Observer(builder: (_) {
-                                    if (!store.novaCulturaProtocolo
-                                        .contains(store.culturaList[index])) {
+                                    if (store.novaCulturaProtocolo !=
+                                        store.culturaList[index]) {
                                       return const Icon(Icons
                                           .check_box_outline_blank_rounded);
                                     }

@@ -9,6 +9,14 @@ part of 'protocolo_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
+  Computed<List<Protocolo>>? _$getProtocoloGroupComputed;
+
+  @override
+  List<Protocolo> get getProtocoloGroup => (_$getProtocoloGroupComputed ??=
+          Computed<List<Protocolo>>(() => super.getProtocoloGroup,
+              name: '_ProtocoloStoreBase.getProtocoloGroup'))
+      .value;
+
   final _$dotIndicatorAtom = Atom(name: '_ProtocoloStoreBase.dotIndicator');
 
   @override
@@ -394,13 +402,13 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
       Atom(name: '_ProtocoloStoreBase.novaCulturaProtocolo');
 
   @override
-  List<Cultura> get novaCulturaProtocolo {
+  Cultura? get novaCulturaProtocolo {
     _$novaCulturaProtocoloAtom.reportRead();
     return super.novaCulturaProtocolo;
   }
 
   @override
-  set novaCulturaProtocolo(List<Cultura> value) {
+  set novaCulturaProtocolo(Cultura? value) {
     _$novaCulturaProtocoloAtom.reportWrite(value, super.novaCulturaProtocolo,
         () {
       super.novaCulturaProtocolo = value;
@@ -483,6 +491,22 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   set listaFaseDetalhes(List<Fase> value) {
     _$listaFaseDetalhesAtom.reportWrite(value, super.listaFaseDetalhes, () {
       super.listaFaseDetalhes = value;
+    });
+  }
+
+  final _$searchProtocoloPageAtom =
+      Atom(name: '_ProtocoloStoreBase.searchProtocoloPage');
+
+  @override
+  TextEditingController get searchProtocoloPage {
+    _$searchProtocoloPageAtom.reportRead();
+    return super.searchProtocoloPage;
+  }
+
+  @override
+  set searchProtocoloPage(TextEditingController value) {
+    _$searchProtocoloPageAtom.reportWrite(value, super.searchProtocoloPage, () {
+      super.searchProtocoloPage = value;
     });
   }
 
@@ -1017,6 +1041,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic setSeachProtocoloPage(String value) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.setSeachProtocoloPage');
+    try {
+      return super.setSeachProtocoloPage(value);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic mudarSelecaoCultura(Cultura item) {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.mudarSelecaoCultura');
@@ -1478,6 +1513,7 @@ protocoloList: ${protocoloList},
 faseDropDownList: ${faseDropDownList},
 faseList: ${faseList},
 listaFaseDetalhes: ${listaFaseDetalhes},
+searchProtocoloPage: ${searchProtocoloPage},
 novasAtividadesDetalhesProtocolo: ${novasAtividadesDetalhesProtocolo},
 novoTituloDetalhesAtividade: ${novoTituloDetalhesAtividade},
 novoDescricaoDetalhesAtividade: ${novoDescricaoDetalhesAtividade},
@@ -1492,7 +1528,8 @@ novoNomeProtocoloDetalhes: ${novoNomeProtocoloDetalhes},
 novoFormaProtocoloDetalhes: ${novoFormaProtocoloDetalhes},
 novoTipoProtocoloDetalhes: ${novoTipoProtocoloDetalhes},
 novoSistemaProtocoloDetalhes: ${novoSistemaProtocoloDetalhes},
-novaCulturaProtocoloDetalhes: ${novaCulturaProtocoloDetalhes}
+novaCulturaProtocoloDetalhes: ${novaCulturaProtocoloDetalhes},
+getProtocoloGroup: ${getProtocoloGroup}
     ''';
   }
 }

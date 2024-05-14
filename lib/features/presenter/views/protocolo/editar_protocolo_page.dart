@@ -77,7 +77,7 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                     Observer(builder: (_) {
                       return Visibility(
                         visible: store.mostrarErroFormulario &&
-                            store.novaCulturaProtocolo[0].nome == null,
+                            store.novaCulturaProtocoloDetalhes?.nome == null,
                         child: const Padding(
                           padding: EdgeInsets.only(
                             left: 16.0,
@@ -103,7 +103,7 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                     Observer(builder: (_) {
                       return Visibility(
                         visible: store.mostrarErroFormulario &&
-                            store.novaCulturaProtocolo[0].nome == null,
+                            store.novaCulturaProtocoloDetalhes?.nome == null,
                         child: const Padding(
                           padding: EdgeInsets.only(
                             left: 16.0,

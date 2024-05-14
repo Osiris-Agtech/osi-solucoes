@@ -20,6 +20,9 @@ abstract class Routes {
   static const protocoloPage = "/protocoloPage";
   static const agendaPage = "/agendaPage";
   static const cadastrarProtocoloPage = "/cadastrarProtocoloPage";
+  static const detalhesProtocoloPage = "/detalhesProtocoloPage";
+  static const detalhesAtividadesProtocolo = "/detalhesAtividadesProtocolo";
+  static const editarProtocoloPage = "/editarProtocoloPage";
   static const permissaoNegadaPage = "/permissaoNegada";
   static const lotePage = '/lotePage';
   static const cadastrarLotePage = '/cadastrarLotePage';

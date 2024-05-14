@@ -78,7 +78,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                     Observer(builder: (_) {
                       return Visibility(
                         visible: store.mostrarErroFormulario &&
-                            store.novaCulturaProtocolo[0].nome == null,
+                            store.novaCulturaProtocolo?.nome == null,
                         child: const Padding(
                           padding: EdgeInsets.only(
                             left: 16.0,
@@ -104,7 +104,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                     Observer(builder: (_) {
                       return Visibility(
                         visible: store.mostrarErroFormulario &&
-                            store.novaCulturaProtocolo[0].nome == null,
+                            store.novaCulturaProtocolo?.nome == null,
                         child: const Padding(
                           padding: EdgeInsets.only(
                             left: 16.0,
@@ -416,8 +416,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                         TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                 ),
-                store.novaCulturaProtocolo.isNotEmpty &&
-                        store.novaCulturaProtocolo[0].nome != null
+                store.novaCulturaProtocolo != null
                     ? Expanded(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -425,12 +424,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                store.novaCulturaProtocolo.length == 1
-                                    ? store.novaCulturaProtocolo[0].nome
-                                        .toString()
-                                    : store.novaCulturaProtocolo[0].nome
-                                            .toString() +
-                                        ', ...',
+                                store.novaCulturaProtocolo?.nome ?? 'Preencher',
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   color: Constants.kPrimaryColor,

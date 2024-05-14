@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
-import 'package:osi_solucoes/features/presenter/views/protocolo/detelhes_protocolo.dart';
 
 Padding protocoloItem({
   required int index,
@@ -22,8 +22,8 @@ Padding protocoloItem({
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        store.alterarProtocoloSelecionado(store.protocoloList[index]);
-        Get.to(() => const DetalhesProtocolo());
+        store.alterarProtocoloSelecionado(store.getProtocoloGroup[index]);
+        Get.toNamed(Routes.detalhesProtocoloPage);
       },
       child: Card(
         shape: RoundedRectangleBorder(
@@ -48,7 +48,7 @@ Padding protocoloItem({
                         top: 5.0,
                       ),
                       child: Text(
-                        store.protocoloList[index].nome ?? "---",
+                        store.getProtocoloGroup[index].nome ?? "---",
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
@@ -72,7 +72,8 @@ Padding protocoloItem({
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  store.protocoloList[index].cultura?.nome ??
+                                  store.getProtocoloGroup[index].cultura
+                                          ?.nome ??
                                       "---",
                                   style: const TextStyle(
                                     color: Constants.kPrimaryColor,
@@ -100,7 +101,7 @@ Padding protocoloItem({
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
                                   //"${store.searchReservatorio[index].lotes?.length ?? 0} Ativos",
-                                  "${store.protocoloList[index].lotes.length} Lotes",
+                                  "${store.getProtocoloGroup[index].lotes.length} Lotes",
                                   style: const TextStyle(
                                     color: Constants.kPrimaryColor,
                                     fontSize: 14,

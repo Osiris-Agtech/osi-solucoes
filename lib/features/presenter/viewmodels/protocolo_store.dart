@@ -93,7 +93,7 @@ abstract class _ProtocoloStoreBase with Store {
   List<Cultura> culturaList = [];
 
   @observable
-  List<Cultura> novaCulturaProtocolo = [];
+  Cultura? novaCulturaProtocolo;
 
   @observable
   List<Acao> novasAtividadesProtocolo = [];
@@ -109,6 +109,9 @@ abstract class _ProtocoloStoreBase with Store {
 
   @observable
   List<Fase> listaFaseDetalhes = [];
+
+  @observable
+  TextEditingController searchProtocoloPage = TextEditingController(text: '');
 
   @action
   setIsNovaCultura(bool value) => isNovaCultura = value;
@@ -220,6 +223,19 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
+  setSeachProtocoloPage(String value) {
+    searchProtocoloPage = TextEditingController(text: value);
+  }
+
+  @computed
+  List<Protocolo> get getProtocoloGroup => protocoloList.where((element) {
+        if (searchProtocoloPage.text.isEmpty) return true;
+        return element.nome!
+            .toLowerCase()
+            .contains(searchProtocoloPage.text.toLowerCase());
+      }).toList();
+
+  @action
   buscarFases() async {
     AuthController authController = GetIt.I<AuthController>();
     var fases = await protocoloRepository
@@ -294,9 +310,7 @@ abstract class _ProtocoloStoreBase with Store {
       implantacao: novoFormaProtocolo,
       tipo_cultura: novoTipoProtocolo,
       sistema_cultivo: novoSistemaProtocolo,
-      cultura: novaCulturaProtocolo.isNotEmpty
-          ? novaCulturaProtocolo.first
-          : null, //List.from(novaCulturaProtocolo),
+      cultura: novaCulturaProtocolo,
       acao: List.from(novasAtividadesProtocolo),
       conta: GetIt.I<AuthController>().usuario.selected_conta!.conta!,
     );
@@ -338,12 +352,7 @@ abstract class _ProtocoloStoreBase with Store {
 
   @action
   mudarSelecaoCultura(Cultura item) {
-    if (novaCulturaProtocolo.contains(item)) {
-      novaCulturaProtocolo.remove(item);
-    } else {
-      novaCulturaProtocolo.add(item);
-    }
-    novaCulturaProtocolo = List.from(novaCulturaProtocolo);
+    novaCulturaProtocolo = item;
   }
 
   @action
@@ -506,7 +515,7 @@ abstract class _ProtocoloStoreBase with Store {
   validarNovoProtocolo() {
     if (novoNomeProtocolo == null ||
         novoNomeProtocolo == "" ||
-        novaCulturaProtocolo == [] ||
+        novaCulturaProtocolo == null ||
         novasAtividadesProtocolo == [] ||
         novoTipoProtocolo == null ||
         novoTipoProtocolo == "" ||
@@ -553,11 +562,11 @@ abstract class _ProtocoloStoreBase with Store {
     novoDescricaoAtividade = null;
     selectedFase = null;
     novoDuracaoDiasFase = null;
+    novaCulturaProtocolo = null;
     novasAtividadesProtocolo.clear();
     faseList.clear();
     faseDropDownList.clear();
     diaDaAtivController.clear();
-    novaCulturaProtocolo.clear();
   }
 
   @action
