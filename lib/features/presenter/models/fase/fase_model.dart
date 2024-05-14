@@ -42,4 +42,16 @@ class Fase {
   factory Fase.fromJson(Map<String, dynamic> json) => _$FaseFromJson(json);
 
   Map<String, dynamic> toJson() => _$FaseToJson(this);
+
+  toMap() {
+    return {
+      'id': id,
+      'nome': nome,
+      'descricao': descricao,
+      'duracao_dias': duracao_dias,
+      'created_at': created_at?.toIso8601String(),
+      'updated_at': updated_at?.toIso8601String(),
+      'deleted_at': deleted_at?.toIso8601String(),
+    };
+  }
 }

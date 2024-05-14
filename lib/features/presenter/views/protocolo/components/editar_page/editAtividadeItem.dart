@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/acao/acao_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
-import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/ativBottomSheet.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/components/editar_page/editAtivBottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
 
-Padding atividadeItem({
+Padding editAtividadeItem({
   required int indexFase,
   required int indexAcao,
   required Acao acao,
@@ -82,7 +82,7 @@ Padding atividadeItem({
               ),
               InkWell(
                 onTap: () {
-                  store.alterarAlertaAcao(indexFase, indexAcao);
+                  store.alterarAlertaAcaoDetalhes(indexFase, indexAcao);
                 },
                 child: Icon(
                   acao.alerta ?? false
@@ -104,8 +104,8 @@ Padding atividadeItem({
                 ),
                 onSelected: (newValue) {
                   if (newValue == 1) {
-                    store.prepararEditAtiv(indexFase, indexAcao);
-                    getBottomSheet(AtivBottomSheet(
+                    store.prepararEditDetalhesAtiv(indexFase, indexAcao);
+                    getBottomSheet(EditAtivBottomSheet(
                       isNewRecord: false,
                       isFase: false,
                       indexAcao: indexAcao,
@@ -113,8 +113,8 @@ Padding atividadeItem({
                     ));
                     return;
                   }
-                  store.removeAcao(indexAcao, indexFase);
-                  store.atualizarNovasAtividades();
+                  store.removeAcaoDetalhes(indexAcao, indexFase);
+                  store.atualizarNovasAtividadesDetalhes();
                 },
                 itemBuilder: (_) => <PopupMenuEntry>[
                   const PopupMenuItem(

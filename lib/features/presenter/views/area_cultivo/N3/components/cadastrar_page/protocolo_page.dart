@@ -1,17 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get/get.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
-import 'package:osi_solucoes/features/presenter/views/protocolo/cadastrar_protocolo_page.dart';
-import 'package:osi_solucoes/features/presenter/views/protocolo/components/detalhes_page/protocoloItem.dart';
+import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocoloItemLote.dart';
 
 protocolo(
   BuildContext context,
   CarouselController carouselController,
   LoteStore store,
+  ProtocoloStore protocoloStore,
   GlobalKey<FormFieldState> key,
 ) {
   return InkWell(
@@ -31,8 +31,7 @@ protocolo(
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
               ),
             ),
-            store.novoLoteReservatorio.nome != null &&
-                    store.novoLoteReservatorio.nome!.isNotEmpty
+            store.protocoloVinculado != null
                 ? Expanded(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -40,7 +39,7 @@ protocolo(
                       children: [
                         Expanded(
                           child: Text(
-                            store.novoLoteReservatorio.nome ?? '---',
+                            store.protocoloVinculado?.nome ?? '---',
                             textAlign: TextAlign.end,
                             style: const TextStyle(
                               color: Constants.kPrimaryColor,
@@ -77,14 +76,17 @@ protocolo(
         ),
         onTap: () {
           store.setDotIndicator(4);
-          bottomSheetN3(context, carouselController, store, key);
+          bottomSheetN3(
+              context, carouselController, store, protocoloStore, key);
         },
       );
     }),
   );
 }
 
-protocoloPage(BuildContext context, LoteStore store) {
+protocoloPage(
+    BuildContext context, LoteStore store, ProtocoloStore protocoloStore) {
+  final ScrollController _scrollController = ScrollController();
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
     child: Column(
@@ -118,40 +120,37 @@ protocoloPage(BuildContext context, LoteStore store) {
             ),
           ),
         ),
+        const SizedBox(
+          height: 8,
+        ),
+        filterWidget(context, store),
         const Padding(
-            padding: EdgeInsets.only(top: 20, left: 30),
-            child: Text('Todos os protocolos')),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 20),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: const Color(0xffF5F5F5),
-              ),
-              child: Observer(
-                builder: (_) {
-                  return showList(store);
-                },
-              ),
+          padding: EdgeInsets.only(left: 24, top: 8),
+          child: Text(
+            "Todos os Protocolos",
+            style: TextStyle(
+              fontStyle: FontStyle.italic,
             ),
           ),
         ),
-        InkWell(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          onTap: () {
-            Get.to(() => const CadastrarProtocoloPage(isShortcut: true));
-          },
-          child: const Padding(
-            padding: EdgeInsets.only(top: 8, left: 20),
-            child: Text(
-              'Deseja adicionar um\nnovo Protocolo?',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                decoration: TextDecoration.underline,
-                color: Constants.kPrimaryColor,
+        Expanded(
+          child: PrimaryScrollController(
+            controller: _scrollController,
+            child: Scrollbar(
+              radius: const Radius.circular(12),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  Observer(builder: (_) {
+                    if (protocoloStore.isProtocoloListLoading) {
+                      return loadingList();
+                    }
+                    if (protocoloStore.protocoloList.isEmpty) {
+                      return emptyList();
+                    }
+                    return showList(store, protocoloStore);
+                  }),
+                ],
               ),
             ),
           ),
@@ -161,24 +160,87 @@ protocoloPage(BuildContext context, LoteStore store) {
   );
 }
 
-Widget showList(LoteStore store) {
-  return ListView.builder(
-    itemCount: 2, // Defina o número correto de itens aqui
-    itemBuilder: (BuildContext context, int index) {
-      return protocoloItem(
-          index: index,
-          onTap: () {
-            store.setProtocoloDetalhes();
-            // store.buscarReservatorioDetalhes();
-          });
-    },
+Container filterWidget(BuildContext context, LoteStore store) {
+  return Container(
+    height: 50,
+    color: const Color(0xFFF8F8F6),
+    padding: EdgeInsets.symmetric(
+      horizontal: MediaQuery.of(context).size.width * 0.04,
+      vertical: 5,
+    ),
+    child: TextFormField(
+      onChanged: ((value) => {
+            store.setSearchProtocoloText(value),
+          }),
+      textAlignVertical: TextAlignVertical.top,
+      textAlign: TextAlign.start,
+      decoration: const InputDecoration(
+        contentPadding: EdgeInsets.zero,
+        isDense: true,
+        border: InputBorder.none,
+        prefixIcon: IconButton(
+          onPressed: null,
+          icon: Icon(
+            Icons.search,
+            size: 24,
+          ),
+        ),
+        labelText: "Buscar...",
+        labelStyle: TextStyle(fontSize: 18),
+      ),
+    ),
   );
 }
 
-protocoloDetalhes(LoteStore store) {
-  return ListView(
-    shrinkWrap: true,
-    physics: const BouncingScrollPhysics(),
-    children: const [],
+SliverList showList(LoteStore store, ProtocoloStore protocoloStore) {
+  return SliverList(
+    delegate: SliverChildBuilderDelegate(
+      (BuildContext context, int index) {
+        return protocoloItemLote(
+            index: index, store: store, protocoloStore: protocoloStore);
+      },
+      childCount: protocoloStore.protocoloList.length,
+    ),
+  );
+}
+
+SliverList loadingList() {
+  return SliverList(
+    delegate: SliverChildListDelegate(
+      [
+        const Center(
+          child: Padding(
+            padding: EdgeInsets.only(top: 120.0),
+            child: CircularProgressIndicator(
+              strokeWidth: 1,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+SliverList emptyList() {
+  return SliverList(
+    delegate: SliverChildListDelegate(
+      [
+        const Center(
+          child: Padding(
+            padding: EdgeInsets.only(top: 120.0),
+            child: Text(
+              'Não há protocolos\ncadastrados em sua conta',
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xff6F6464),
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w800,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ],
+    ),
   );
 }

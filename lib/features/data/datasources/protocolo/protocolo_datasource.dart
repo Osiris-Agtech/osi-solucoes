@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:graphql/client.dart';
 import 'package:osi_solucoes/core/errors/errors.dart';
@@ -14,6 +16,8 @@ abstract class IProtocoloDatasource {
   Future<Either<Failure, List<Cultura>>> buscarCulturas(int contaId);
   Future<Either<Failure, List<Fase>>> buscarFases(int contaId);
   Future<Either<Failure, Fase>> registrarFase({required Fase fase});
+  Future<Either<Failure, Protocolo>> atualizarProtocolo(
+      {required Protocolo alterarProtocolo});
   Future<Either<Failure, Protocolo>> registrarProtocolo(
       {required Protocolo protocolo});
 }
@@ -58,6 +62,7 @@ class ProtocoloDatasource implements IProtocoloDatasource {
             descricao
             alerta
             duracao_dias
+            duracao_dias_real
             fase {
               id
               nome
@@ -268,12 +273,14 @@ class ProtocoloDatasource implements IProtocoloDatasource {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     String query = '';
+    protocolo.acao = (protocolo.acao ?? []).reversed.toList();
     for (Acao element in protocolo.acao ?? []) {
       if (element ==
           (protocolo.acao ?? [])[(protocolo.acao ?? []).length - 1]) {
         query += """{
           titulo: "${element.titulo}",
           duracao_dias: ${element.duracao_dias},
+          duracao_dias_real: ${element.duracao_dias_real},
           descricao: "${element.descricao ?? ''}",
           fase: {
             connect: {
@@ -286,6 +293,7 @@ class ProtocoloDatasource implements IProtocoloDatasource {
         query += """{
           titulo: "${element.titulo}",
           duracao_dias: ${element.duracao_dias},
+          duracao_dias_real: ${element.duracao_dias_real},
           descricao: "${element.descricao ?? ''}",
           fase: {
             connect: {
@@ -353,10 +361,6 @@ class ProtocoloDatasource implements IProtocoloDatasource {
         }) {
           id
           nome
-          descricao
-          implantacao
-          sistema_cultivo
-          tipo_cultura
           cultura {
             id
             nome
@@ -367,6 +371,22 @@ class ProtocoloDatasource implements IProtocoloDatasource {
             cultura {
               id
               nome
+            }
+          }
+          sistema_cultivo
+          tipo_cultura
+          implantacao
+          acoes {
+            id
+            titulo
+            descricao
+            alerta
+            duracao_dias
+            duracao_dias_real
+            fase {
+              id
+              nome
+              duracao_dias
             }
           }
         }
@@ -393,6 +413,46 @@ class ProtocoloDatasource implements IProtocoloDatasource {
     } else {
       return Left(
           InternalError(message: FailureMessage.errorCadastrarProtocolo));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Protocolo>> atualizarProtocolo(
+      {required Protocolo alterarProtocolo}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      mutation UpdateProtocolo($input: String!) {
+        updateProtocolo(input: $input) {
+          id
+          nome
+        }
+      }
+      ''';
+
+    final MutationOptions? options;
+
+    options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'input': json.encode(alterarProtocolo.toMap()),
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        Protocolo protocolo =
+            Protocolo.fromJson(result.data?['updateProtocolo']);
+        return Right(protocolo);
+      } catch (e) {
+        return Left(
+            InternalError(message: FailureMessage.errorAtualizarProtocolo));
+      }
+    } else {
+      return Left(
+          InternalError(message: FailureMessage.errorAtualizarProtocolo));
     }
   }
 }

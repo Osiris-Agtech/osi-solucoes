@@ -7,6 +7,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:osi_solucoes/features/presenter/views/agenda/agenda_page.dart';
 
 import 'components/detalhes_page/dados_cultivo.dart';
 import 'components/detalhes_page/horizontal_lista.dart';
@@ -69,45 +70,15 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                   indent: 20,
                   endIndent: 20,
                 ),
-                Observer(builder: (_) {
-                  return ListTile(
-                    dense: true,
-                    leading: const Icon(
-                      Icons.build,
-                      color: Constants.kPrimaryColor,
-                    ),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.only(right: 8),
-                          child: Text(
-                            'Protocolo Selecionado',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.normal),
-                          ),
-                        ),
-                      ],
-                    ),
-                    subtitle: Text(store.loteSelecionado.protocolo?.nome ??
-                        'Nenhum protocolo selecionado'),
-                    trailing: const Icon(
-                      Icons.chevron_right_rounded,
-                      color: Constants.kPrimaryColor,
-                    ),
-                    onTap: () {},
-                  );
-                }),
-                Divider(
-                  color: const Color(0xFF9F9F9F).withOpacity(.6),
-                  indent: 20,
-                  endIndent: 20,
-                ),
                 ListTile(
-                  dense: true,
-                  leading: const Icon(
-                    Icons.checklist,
-                    color: Constants.kPrimaryColor,
+                  leading: Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: SvgPicture.asset(
+                      "assets/icons/relatorio_icon.svg",
+                      color: Constants.kPrimaryColor,
+                      width: 24,
+                      height: 24,
+                    ),
                   ),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -115,19 +86,56 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       Padding(
                         padding: EdgeInsets.only(right: 8),
                         child: Text(
-                          'Atividades',
+                          'Protocolo Base',
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.normal),
                         ),
                       ),
                     ],
                   ),
-                  subtitle: const Text("Atividades planejadas para o cultivo"),
-                  trailing: const Icon(
-                    Icons.chevron_right_rounded,
-                    color: Constants.kPrimaryColor,
+                  subtitle: Text(
+                    store.loteSelecionado.protocolo?.nome ??
+                        'Nenhum Protocolo Selecionado',
+                    style: const TextStyle(color: Constants.kPrimaryColor),
                   ),
                   onTap: () {},
+                ),
+                Divider(
+                  color: const Color(0xFF9F9F9F).withOpacity(.6),
+                  indent: 20,
+                  endIndent: 20,
+                ),
+                InkWell(
+                  child: ListTile(
+                    leading: const Padding(
+                      padding: EdgeInsets.only(left: 8),
+                      child: Icon(
+                        Icons.event,
+                        color: Constants.kPrimaryColor,
+                      ),
+                    ),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.only(right: 8),
+                          child: Text(
+                            'Agenda de Atividades',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.normal),
+                          ),
+                        ),
+                      ],
+                    ),
+                    subtitle: const Text("Atividades planejadas para o lote"),
+                    trailing: const Icon(
+                      Icons.chevron_right_rounded,
+                      color: Constants.kPrimaryColor,
+                    ),
+                    onTap: () {
+                      Get.to(() => const AgendaPage());
+                    },
+                  ),
                 ),
                 // const SizedBox(height: 16),
                 // dateTitle(),

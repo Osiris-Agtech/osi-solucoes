@@ -102,6 +102,10 @@ class LoteDatasource implements ILoteDatasource {
               id
               nome
             }
+            protocolo {
+              id
+              nome
+            }
             registro_data
             colheita_data
             bandeijas_semeadas
@@ -134,6 +138,10 @@ class LoteDatasource implements ILoteDatasource {
             id
             nome
             cultura {
+              id
+              nome
+            }
+            protocolo {
               id
               nome
             }
@@ -192,6 +200,10 @@ class LoteDatasource implements ILoteDatasource {
               }
             }
             cultura {
+              id
+              nome
+            }
+            protocolo {
               id
               nome
             }
@@ -461,7 +473,7 @@ class LoteDatasource implements ILoteDatasource {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     const String readRepositories = r'''
-        mutation CreateOneLote($nome: String!, $setorId: Int!, $culturaId: Int!, $reservatorioId: Int, $registroData: DateTime!, $semeaduraData: DateTime, $transplantioData: DateTime, $colheitaData: DateTime) {
+        mutation CreateOneLote($nome: String!, $setorId: Int!, $culturaId: Int!, $protocoloId: Int, $reservatorioId: Int, $registroData: DateTime!, $semeaduraData: DateTime, $transplantioData: DateTime, $colheitaData: DateTime) {
           createOneLote(
             nome: $nome,
             registroData: $registroData,
@@ -470,6 +482,7 @@ class LoteDatasource implements ILoteDatasource {
             colheitaData: $colheitaData,
             setorId: $setorId,
             culturaId: $culturaId,
+            protocoloId: $protocoloId,
             reservatorioId: $reservatorioId,
           ) {
             id
@@ -511,6 +524,7 @@ class LoteDatasource implements ILoteDatasource {
         "nome": lote.nome,
         "setorId": lote.setor!.id,
         "culturaId": lote.cultura!.id,
+        "protocoloId": lote.protocolo?.id,
         "reservatorioId": lote.reservatorio?.id,
         "registroData": lote.registro_data != null
             ? lote.registro_data?.toIso8601String()

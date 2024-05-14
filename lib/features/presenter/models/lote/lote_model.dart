@@ -3,6 +3,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lotesAtividades/lotes_atividades_model.dart';
+import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 
@@ -85,6 +86,17 @@ class Lote {
   factory Lote.fromJson(Map<String, dynamic> json) => _$LoteFromJson(json);
 
   Map<String, dynamic> toJson() => _$LoteToJson(this);
+
+  toMap() {
+    return {
+      'id': id,
+      'nome': nome,
+      'fase_dias': fase_dias,
+      'fase_data': fase_data?.toIso8601String(),
+      'registro_data': registro_data?.toIso8601String(),
+      'semeadura_data': semeadura_data?.toIso8601String(),
+    };
+  }
 }
 
 class LoteByFilter {

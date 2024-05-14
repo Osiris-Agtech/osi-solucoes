@@ -28,7 +28,7 @@ class Protocolo {
   DateTime? updated_at;
   @JsonKey(required: false, disallowNullValue: false)
   DateTime? deleted_at;
-  @JsonKey(required: false, disallowNullValue: false)
+  @JsonKey(required: false, disallowNullValue: false, name: 'acoes')
   List<Acao>? acao;
   @JsonKey(required: false, disallowNullValue: false)
   Cultura? cultura;
@@ -57,4 +57,22 @@ class Protocolo {
       _$ProtocoloFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProtocoloToJson(this);
+
+  toMap() {
+    return {
+      'id': id,
+      'nome': nome,
+      'descricao': descricao,
+      'tipo_cultura': tipo_cultura,
+      'sistema_cultivo': sistema_cultivo,
+      'implantacao': implantacao,
+      'created_at': created_at?.toIso8601String(),
+      'updated_at': updated_at?.toIso8601String(),
+      'deleted_at': deleted_at?.toIso8601String(),
+      'acoes': acao?.map((e) => e.toMap()).toList(),
+      'cultura': cultura?.toMap(),
+      'conta': conta?.toMap(),
+      'lotes': lotes.map((e) => e.toMap()).toList(),
+    };
+  }
 }

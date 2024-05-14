@@ -1,17 +1,16 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
-import 'package:osi_solucoes/features/presenter/views/protocolo/detelhes_protocolo.dart';
 
-Padding protocoloItem({
+Padding protocoloItemLote({
   required int index,
+  required LoteStore store,
+  required ProtocoloStore protocoloStore,
   VoidCallback? onTap,
 }) {
-  ProtocoloStore store = GetIt.I<ProtocoloStore>();
   return Padding(
     padding: EdgeInsets.only(
       top: index == 0 ? 10 : 5,
@@ -22,8 +21,10 @@ Padding protocoloItem({
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        store.alterarProtocoloSelecionado(store.protocoloList[index]);
-        Get.to(() => const DetalhesProtocolo());
+        store.setProtocoloDetalhes(protocoloStore.protocoloList[index]);
+        if (store.abrirProtocoloDetalhesAtv) {
+          store.toggleAbrirProtocoloDetalhesAtv();
+        }
       },
       child: Card(
         shape: RoundedRectangleBorder(
@@ -48,7 +49,7 @@ Padding protocoloItem({
                         top: 5.0,
                       ),
                       child: Text(
-                        store.protocoloList[index].nome ?? "---",
+                        protocoloStore.protocoloList[index].nome ?? "---",
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
@@ -72,7 +73,8 @@ Padding protocoloItem({
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  store.protocoloList[index].cultura?.nome ??
+                                  protocoloStore
+                                          .protocoloList[index].cultura?.nome ??
                                       "---",
                                   style: const TextStyle(
                                     color: Constants.kPrimaryColor,
@@ -97,10 +99,11 @@ Padding protocoloItem({
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 5),
+                                padding:
+                                    const EdgeInsets.only(left: 5, bottom: 5),
                                 child: Text(
                                   //"${store.searchReservatorio[index].lotes?.length ?? 0} Ativos",
-                                  "${store.protocoloList[index].lotes.length} Lotes",
+                                  "${protocoloStore.protocoloList[index].lotes.length} Lotes",
                                   style: const TextStyle(
                                     color: Constants.kPrimaryColor,
                                     fontSize: 14,

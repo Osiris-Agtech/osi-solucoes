@@ -24,6 +24,22 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
+  final _$dotIndicatorEditAtom =
+      Atom(name: '_ProtocoloStoreBase.dotIndicatorEdit');
+
+  @override
+  int get dotIndicatorEdit {
+    _$dotIndicatorEditAtom.reportRead();
+    return super.dotIndicatorEdit;
+  }
+
+  @override
+  set dotIndicatorEdit(int value) {
+    _$dotIndicatorEditAtom.reportWrite(value, super.dotIndicatorEdit, () {
+      super.dotIndicatorEdit = value;
+    });
+  }
+
   final _$radioIndicatorAtom = Atom(name: '_ProtocoloStoreBase.radioIndicator');
 
   @override
@@ -470,6 +486,259 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
     });
   }
 
+  final _$novasAtividadesDetalhesProtocoloAtom =
+      Atom(name: '_ProtocoloStoreBase.novasAtividadesDetalhesProtocolo');
+
+  @override
+  List<Acao> get novasAtividadesDetalhesProtocolo {
+    _$novasAtividadesDetalhesProtocoloAtom.reportRead();
+    return super.novasAtividadesDetalhesProtocolo;
+  }
+
+  @override
+  set novasAtividadesDetalhesProtocolo(List<Acao> value) {
+    _$novasAtividadesDetalhesProtocoloAtom
+        .reportWrite(value, super.novasAtividadesDetalhesProtocolo, () {
+      super.novasAtividadesDetalhesProtocolo = value;
+    });
+  }
+
+  final _$novoTituloDetalhesAtividadeAtom =
+      Atom(name: '_ProtocoloStoreBase.novoTituloDetalhesAtividade');
+
+  @override
+  TextEditingController get novoTituloDetalhesAtividade {
+    _$novoTituloDetalhesAtividadeAtom.reportRead();
+    return super.novoTituloDetalhesAtividade;
+  }
+
+  @override
+  set novoTituloDetalhesAtividade(TextEditingController value) {
+    _$novoTituloDetalhesAtividadeAtom
+        .reportWrite(value, super.novoTituloDetalhesAtividade, () {
+      super.novoTituloDetalhesAtividade = value;
+    });
+  }
+
+  final _$novoDescricaoDetalhesAtividadeAtom =
+      Atom(name: '_ProtocoloStoreBase.novoDescricaoDetalhesAtividade');
+
+  @override
+  TextEditingController get novoDescricaoDetalhesAtividade {
+    _$novoDescricaoDetalhesAtividadeAtom.reportRead();
+    return super.novoDescricaoDetalhesAtividade;
+  }
+
+  @override
+  set novoDescricaoDetalhesAtividade(TextEditingController value) {
+    _$novoDescricaoDetalhesAtividadeAtom
+        .reportWrite(value, super.novoDescricaoDetalhesAtividade, () {
+      super.novoDescricaoDetalhesAtividade = value;
+    });
+  }
+
+  final _$selectedDetalhesFaseAtom =
+      Atom(name: '_ProtocoloStoreBase.selectedDetalhesFase');
+
+  @override
+  Fase? get selectedDetalhesFase {
+    _$selectedDetalhesFaseAtom.reportRead();
+    return super.selectedDetalhesFase;
+  }
+
+  @override
+  set selectedDetalhesFase(Fase? value) {
+    _$selectedDetalhesFaseAtom.reportWrite(value, super.selectedDetalhesFase,
+        () {
+      super.selectedDetalhesFase = value;
+    });
+  }
+
+  final _$loteFoiAlteradoAtom =
+      Atom(name: '_ProtocoloStoreBase.loteFoiAlterado');
+
+  @override
+  bool get loteFoiAlterado {
+    _$loteFoiAlteradoAtom.reportRead();
+    return super.loteFoiAlterado;
+  }
+
+  @override
+  set loteFoiAlterado(bool value) {
+    _$loteFoiAlteradoAtom.reportWrite(value, super.loteFoiAlterado, () {
+      super.loteFoiAlterado = value;
+    });
+  }
+
+  final _$diaDetalhesAtivControllerAtom =
+      Atom(name: '_ProtocoloStoreBase.diaDetalhesAtivController');
+
+  @override
+  TextEditingController get diaDetalhesAtivController {
+    _$diaDetalhesAtivControllerAtom.reportRead();
+    return super.diaDetalhesAtivController;
+  }
+
+  @override
+  set diaDetalhesAtivController(TextEditingController value) {
+    _$diaDetalhesAtivControllerAtom
+        .reportWrite(value, super.diaDetalhesAtivController, () {
+      super.diaDetalhesAtivController = value;
+    });
+  }
+
+  final _$novoTituloFaseDetalhesAtom =
+      Atom(name: '_ProtocoloStoreBase.novoTituloFaseDetalhes');
+
+  @override
+  String? get novoTituloFaseDetalhes {
+    _$novoTituloFaseDetalhesAtom.reportRead();
+    return super.novoTituloFaseDetalhes;
+  }
+
+  @override
+  set novoTituloFaseDetalhes(String? value) {
+    _$novoTituloFaseDetalhesAtom
+        .reportWrite(value, super.novoTituloFaseDetalhes, () {
+      super.novoTituloFaseDetalhes = value;
+    });
+  }
+
+  final _$novoDuracaoDiasFaseDetalhesAtom =
+      Atom(name: '_ProtocoloStoreBase.novoDuracaoDiasFaseDetalhes');
+
+  @override
+  int? get novoDuracaoDiasFaseDetalhes {
+    _$novoDuracaoDiasFaseDetalhesAtom.reportRead();
+    return super.novoDuracaoDiasFaseDetalhes;
+  }
+
+  @override
+  set novoDuracaoDiasFaseDetalhes(int? value) {
+    _$novoDuracaoDiasFaseDetalhesAtom
+        .reportWrite(value, super.novoDuracaoDiasFaseDetalhes, () {
+      super.novoDuracaoDiasFaseDetalhes = value;
+    });
+  }
+
+  final _$diaDaAtivDetalhesAtom =
+      Atom(name: '_ProtocoloStoreBase.diaDaAtivDetalhes');
+
+  @override
+  int? get diaDaAtivDetalhes {
+    _$diaDaAtivDetalhesAtom.reportRead();
+    return super.diaDaAtivDetalhes;
+  }
+
+  @override
+  set diaDaAtivDetalhes(int? value) {
+    _$diaDaAtivDetalhesAtom.reportWrite(value, super.diaDaAtivDetalhes, () {
+      super.diaDaAtivDetalhes = value;
+    });
+  }
+
+  final _$faseDropDownListDetelhesAtom =
+      Atom(name: '_ProtocoloStoreBase.faseDropDownListDetelhes');
+
+  @override
+  List<Fase> get faseDropDownListDetelhes {
+    _$faseDropDownListDetelhesAtom.reportRead();
+    return super.faseDropDownListDetelhes;
+  }
+
+  @override
+  set faseDropDownListDetelhes(List<Fase> value) {
+    _$faseDropDownListDetelhesAtom
+        .reportWrite(value, super.faseDropDownListDetelhes, () {
+      super.faseDropDownListDetelhes = value;
+    });
+  }
+
+  final _$novoNomeProtocoloDetalhesAtom =
+      Atom(name: '_ProtocoloStoreBase.novoNomeProtocoloDetalhes');
+
+  @override
+  String? get novoNomeProtocoloDetalhes {
+    _$novoNomeProtocoloDetalhesAtom.reportRead();
+    return super.novoNomeProtocoloDetalhes;
+  }
+
+  @override
+  set novoNomeProtocoloDetalhes(String? value) {
+    _$novoNomeProtocoloDetalhesAtom
+        .reportWrite(value, super.novoNomeProtocoloDetalhes, () {
+      super.novoNomeProtocoloDetalhes = value;
+    });
+  }
+
+  final _$novoFormaProtocoloDetalhesAtom =
+      Atom(name: '_ProtocoloStoreBase.novoFormaProtocoloDetalhes');
+
+  @override
+  String? get novoFormaProtocoloDetalhes {
+    _$novoFormaProtocoloDetalhesAtom.reportRead();
+    return super.novoFormaProtocoloDetalhes;
+  }
+
+  @override
+  set novoFormaProtocoloDetalhes(String? value) {
+    _$novoFormaProtocoloDetalhesAtom
+        .reportWrite(value, super.novoFormaProtocoloDetalhes, () {
+      super.novoFormaProtocoloDetalhes = value;
+    });
+  }
+
+  final _$novoTipoProtocoloDetalhesAtom =
+      Atom(name: '_ProtocoloStoreBase.novoTipoProtocoloDetalhes');
+
+  @override
+  String? get novoTipoProtocoloDetalhes {
+    _$novoTipoProtocoloDetalhesAtom.reportRead();
+    return super.novoTipoProtocoloDetalhes;
+  }
+
+  @override
+  set novoTipoProtocoloDetalhes(String? value) {
+    _$novoTipoProtocoloDetalhesAtom
+        .reportWrite(value, super.novoTipoProtocoloDetalhes, () {
+      super.novoTipoProtocoloDetalhes = value;
+    });
+  }
+
+  final _$novoSistemaProtocoloDetalhesAtom =
+      Atom(name: '_ProtocoloStoreBase.novoSistemaProtocoloDetalhes');
+
+  @override
+  String? get novoSistemaProtocoloDetalhes {
+    _$novoSistemaProtocoloDetalhesAtom.reportRead();
+    return super.novoSistemaProtocoloDetalhes;
+  }
+
+  @override
+  set novoSistemaProtocoloDetalhes(String? value) {
+    _$novoSistemaProtocoloDetalhesAtom
+        .reportWrite(value, super.novoSistemaProtocoloDetalhes, () {
+      super.novoSistemaProtocoloDetalhes = value;
+    });
+  }
+
+  final _$novaCulturaProtocoloDetalhesAtom =
+      Atom(name: '_ProtocoloStoreBase.novaCulturaProtocoloDetalhes');
+
+  @override
+  Cultura? get novaCulturaProtocoloDetalhes {
+    _$novaCulturaProtocoloDetalhesAtom.reportRead();
+    return super.novaCulturaProtocoloDetalhes;
+  }
+
+  @override
+  set novaCulturaProtocoloDetalhes(Cultura? value) {
+    _$novaCulturaProtocoloDetalhesAtom
+        .reportWrite(value, super.novaCulturaProtocoloDetalhes, () {
+      super.novaCulturaProtocoloDetalhes = value;
+    });
+  }
+
   final _$buscarProtocolosAsyncAction =
       AsyncAction('_ProtocoloStoreBase.buscarProtocolos');
 
@@ -517,6 +786,33 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   @override
   Future buscarCulturas() {
     return _$buscarCulturasAsyncAction.run(() => super.buscarCulturas());
+  }
+
+  final _$registrarFaseDetalhesAsyncAction =
+      AsyncAction('_ProtocoloStoreBase.registrarFaseDetalhes');
+
+  @override
+  Future registrarFaseDetalhes() {
+    return _$registrarFaseDetalhesAsyncAction
+        .run(() => super.registrarFaseDetalhes());
+  }
+
+  final _$buscarFasesDetalhesAsyncAction =
+      AsyncAction('_ProtocoloStoreBase.buscarFasesDetalhes');
+
+  @override
+  Future buscarFasesDetalhes() {
+    return _$buscarFasesDetalhesAsyncAction
+        .run(() => super.buscarFasesDetalhes());
+  }
+
+  final _$atualizarProtocoloAsyncAction =
+      AsyncAction('_ProtocoloStoreBase.atualizarProtocolo');
+
+  @override
+  Future atualizarProtocolo() {
+    return _$atualizarProtocoloAsyncAction
+        .run(() => super.atualizarProtocolo());
   }
 
   final _$_ProtocoloStoreBaseActionController =
@@ -710,6 +1006,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic setDotIndicatorEdit(int value) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.setDotIndicatorEdit');
+    try {
+      return super.setDotIndicatorEdit(value);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic mudarSelecaoCultura(Cultura item) {
     final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
         name: '_ProtocoloStoreBase.mudarSelecaoCultura');
@@ -726,6 +1033,17 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
         name: '_ProtocoloStoreBase.atualizarNovasAtividades');
     try {
       return super.atualizarNovasAtividades();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  int calcularDuracaoDiasReal() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.calcularDuracaoDiasReal');
+    try {
+      return super.calcularDuracaoDiasReal();
     } finally {
       _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -875,9 +1193,263 @@ mixin _$ProtocoloStore on _ProtocoloStoreBase, Store {
   }
 
   @override
+  dynamic alterarLoteFoiAlterado(bool value) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarLoteFoiAlterado');
+    try {
+      return super.alterarLoteFoiAlterado(value);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic editarNome(String name) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.editarNome');
+    try {
+      return super.editarNome(name);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic editarTipo(String tipo) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.editarTipo');
+    try {
+      return super.editarTipo(tipo);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic editarSistema(String sistema) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.editarSistema');
+    try {
+      return super.editarSistema(sistema);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic editarForma(String forma) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.editarForma');
+    try {
+      return super.editarForma(forma);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarDiaDaAtiv(int value) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarDiaDaAtiv');
+    try {
+      return super.alterarDiaDaAtiv(value);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setarDuracaoDiasFaseDetalhes(String value) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.setarDuracaoDiasFaseDetalhes');
+    try {
+      return super.setarDuracaoDiasFaseDetalhes(value);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarAlertaAcaoDetalhes(int indexFase, int indexAcao) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarAlertaAcaoDetalhes');
+    try {
+      return super.alterarAlertaAcaoDetalhes(indexFase, indexAcao);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic removeAcaoDetalhes(int indexAcao, int indexFase) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.removeAcaoDetalhes');
+    try {
+      return super.removeAcaoDetalhes(indexAcao, indexFase);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic removeFaseDetalhes(int indexFase) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.removeFaseDetalhes');
+    try {
+      return super.removeFaseDetalhes(indexFase);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic atualizarNovasAtividadesDetalhes() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.atualizarNovasAtividadesDetalhes');
+    try {
+      return super.atualizarNovasAtividadesDetalhes();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarDuracaoDiasFaseDetalhes(int value) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarDuracaoDiasFaseDetalhes');
+    try {
+      return super.alterarDuracaoDiasFaseDetalhes(value);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarTituloFaseDetalhes(String name) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarTituloFaseDetalhes');
+    try {
+      return super.alterarTituloFaseDetalhes(name);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarDropdownFaseDetalhes(Fase newFase) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.alterarDropdownFaseDetalhes');
+    try {
+      return super.alterarDropdownFaseDetalhes(newFase);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic prepararEditDetalhesAtiv(int indexFase, int indexAcao) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.prepararEditDetalhesAtiv');
+    try {
+      return super.prepararEditDetalhesAtiv(indexFase, indexAcao);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  int calcularDuracaoDiasRealDetalhes() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.calcularDuracaoDiasRealDetalhes');
+    try {
+      return super.calcularDuracaoDiasRealDetalhes();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic addToFaseListDetalhes() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.addToFaseListDetalhes');
+    try {
+      return super.addToFaseListDetalhes();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic editarAcaoDetalhes(int indexFase, int indexAcao) {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.editarAcaoDetalhes');
+    try {
+      return super.editarAcaoDetalhes(indexFase, indexAcao);
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic validarAtividadeDetalhes() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.validarAtividadeDetalhes');
+    try {
+      return super.validarAtividadeDetalhes();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic limparFaseDetalhesBottomSheet() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.limparFaseDetalhesBottomSheet');
+    try {
+      return super.limparFaseDetalhesBottomSheet();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic limparProtocoloDetalhes() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.limparProtocoloDetalhes');
+    try {
+      return super.limparProtocoloDetalhes();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic limparAtividadeBottomSheetDetalhes() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.limparAtividadeBottomSheetDetalhes');
+    try {
+      return super.limparAtividadeBottomSheetDetalhes();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic validarNovaFaseDetalhes() {
+    final _$actionInfo = _$_ProtocoloStoreBaseActionController.startAction(
+        name: '_ProtocoloStoreBase.validarNovaFaseDetalhes');
+    try {
+      return super.validarNovaFaseDetalhes();
+    } finally {
+      _$_ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 dotIndicator: ${dotIndicator},
+dotIndicatorEdit: ${dotIndicatorEdit},
 radioIndicator: ${radioIndicator},
 isValid: ${isValid},
 isNovaFaseBottonSheet: ${isNovaFaseBottonSheet},
@@ -905,7 +1477,22 @@ novasAtividadesProtocolo: ${novasAtividadesProtocolo},
 protocoloList: ${protocoloList},
 faseDropDownList: ${faseDropDownList},
 faseList: ${faseList},
-listaFaseDetalhes: ${listaFaseDetalhes}
+listaFaseDetalhes: ${listaFaseDetalhes},
+novasAtividadesDetalhesProtocolo: ${novasAtividadesDetalhesProtocolo},
+novoTituloDetalhesAtividade: ${novoTituloDetalhesAtividade},
+novoDescricaoDetalhesAtividade: ${novoDescricaoDetalhesAtividade},
+selectedDetalhesFase: ${selectedDetalhesFase},
+loteFoiAlterado: ${loteFoiAlterado},
+diaDetalhesAtivController: ${diaDetalhesAtivController},
+novoTituloFaseDetalhes: ${novoTituloFaseDetalhes},
+novoDuracaoDiasFaseDetalhes: ${novoDuracaoDiasFaseDetalhes},
+diaDaAtivDetalhes: ${diaDaAtivDetalhes},
+faseDropDownListDetelhes: ${faseDropDownListDetelhes},
+novoNomeProtocoloDetalhes: ${novoNomeProtocoloDetalhes},
+novoFormaProtocoloDetalhes: ${novoFormaProtocoloDetalhes},
+novoTipoProtocoloDetalhes: ${novoTipoProtocoloDetalhes},
+novoSistemaProtocoloDetalhes: ${novoSistemaProtocoloDetalhes},
+novaCulturaProtocoloDetalhes: ${novaCulturaProtocoloDetalhes}
     ''';
   }
 }
