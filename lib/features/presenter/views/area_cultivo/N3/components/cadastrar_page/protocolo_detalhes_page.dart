@@ -10,9 +10,7 @@ protocoloDetalhes(LoteStore store, ProtocoloStore protocoloStore) {
     physics: const BouncingScrollPhysics(),
     children: [
       Padding(
-        padding: const EdgeInsets.only(
-          left: 30,
-        ),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,

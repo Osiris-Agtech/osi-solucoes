@@ -27,7 +27,10 @@ abstract class ILoteDatasource {
       {required int contaId});
   Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
       {required int reservatorioId});
-  Future<Either<Failure, Lote>> registrarLote({required Lote lote});
+  Future<Either<Failure, Lote>> registrarLote({
+    required Lote lote,
+    required int contaId,
+  });
   Future<Either<Failure, Lote>> migrarLote(
       {required int loteId, required int setorId, required int reservatorioId});
   Future<Either<Failure, Lote>> alterarLote({required Lote alterarLote});
@@ -469,11 +472,14 @@ class LoteDatasource implements ILoteDatasource {
   }
 
   @override
-  Future<Either<Failure, Lote>> registrarLote({required Lote lote}) async {
+  Future<Either<Failure, Lote>> registrarLote({
+    required Lote lote,
+    required int contaId,
+  }) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     const String readRepositories = r'''
-        mutation CreateOneLote($nome: String!, $setorId: Int!, $culturaId: Int!, $protocoloId: Int, $reservatorioId: Int, $registroData: DateTime!, $semeaduraData: DateTime, $transplantioData: DateTime, $colheitaData: DateTime) {
+        mutation CreateOneLote($nome: String!, $contaId: Int!, $setorId: Int!, $culturaId: Int!, $protocoloId: Int, $reservatorioId: Int, $registroData: DateTime!, $semeaduraData: DateTime, $transplantioData: DateTime, $colheitaData: DateTime) {
           createOneLote(
             nome: $nome,
             registroData: $registroData,
@@ -484,6 +490,7 @@ class LoteDatasource implements ILoteDatasource {
             culturaId: $culturaId,
             protocoloId: $protocoloId,
             reservatorioId: $reservatorioId,
+            contaId: $contaId,
           ) {
             id
             nome
@@ -522,6 +529,7 @@ class LoteDatasource implements ILoteDatasource {
       document: gql(readRepositories),
       variables: <String, dynamic>{
         "nome": lote.nome,
+        "contaId": contaId,
         "setorId": lote.setor!.id,
         "culturaId": lote.cultura!.id,
         "protocoloId": lote.protocolo?.id,

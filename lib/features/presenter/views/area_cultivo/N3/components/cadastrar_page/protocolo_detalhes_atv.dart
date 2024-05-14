@@ -11,14 +11,12 @@ protocoloAtividadeDetalhes(LoteStore store) {
     physics: const BouncingScrollPhysics(),
     children: [
       Padding(
-        padding: const EdgeInsets.only(
-          left: 30,
-        ),
+        padding: const EdgeInsets.only(left: 24, right: 24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 10, left: 30),
+              padding: const EdgeInsets.only(top: 16.0),
               child: RichText(
                 textAlign: TextAlign.start,
                 text: const TextSpan(

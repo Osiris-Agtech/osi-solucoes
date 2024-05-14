@@ -133,7 +133,8 @@ class ListFases extends StatelessWidget {
             itemCount: store.listaFaseDetalhes.length,
             itemBuilder: (_, index) {
               return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(

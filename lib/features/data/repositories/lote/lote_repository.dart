@@ -67,8 +67,8 @@ class LoteRepository implements ILoteRepository {
   }
 
   @override
-  Future<Either<Failure, Lote>> registrarLote(Lote lote) async {
-    var result = await datasource.registrarLote(lote: lote);
+  Future<Either<Failure, Lote>> registrarLote(Lote lote, int contaId) async {
+    var result = await datasource.registrarLote(lote: lote, contaId: contaId);
     return result;
   }
 

@@ -657,7 +657,10 @@ abstract class _LoteStoreBase with Store {
       protocolo: protocoloVinculado,
     );
 
-    var lote = await loteRepository.registrarLote(novoLote);
+    var lote = await loteRepository.registrarLote(
+      novoLote,
+      authController.usuario.selected_conta!.conta!.id!,
+    );
 
     lote.fold(
       (err) {

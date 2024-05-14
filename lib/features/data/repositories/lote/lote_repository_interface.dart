@@ -22,7 +22,7 @@ abstract class ILoteRepository {
   Future<Either<Failure, Reservatorio>> buscarReservatorioDetalhes(
       int reservatorioId);
   Future<Either<Failure, List<Agenda>>> verificarAtividades(List<int> lotesIds);
-  Future<Either<Failure, Lote>> registrarLote(Lote lote);
+  Future<Either<Failure, Lote>> registrarLote(Lote lote, int contaId);
   Future<Either<Failure, Cultura>> registrarCultura(
       Cultura cultura, int contaId);
   Future<Either<Failure, Lote>> migrarLote(
