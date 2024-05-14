@@ -147,10 +147,11 @@ abstract class _AgendaStoreBase with Store {
   setFiltroLote(Lote? value, {int? loteId}) {
     filtroLote = value;
 
-    if (loteId != null) {
+    if (loteId != null && lotesConta.isNotEmpty) {
       filtroLote = lotesConta.firstWhere((element) => element.id == loteId);
       if (filtroLote != null) {
-        setFiltro(AgendaFilter.lote);
+        filter = AgendaFilter.lote;
+        filtroResponsavel = null;
       }
     }
   }

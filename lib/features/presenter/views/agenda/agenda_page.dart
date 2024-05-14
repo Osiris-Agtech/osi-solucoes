@@ -34,14 +34,16 @@ class AgendaPageState extends State<AgendaPage> {
     store.setInitialStateForFilter();
     store.onDaySelected(null);
     store.setPageState(AgendaState.loading);
-    store.buscarUsuariosConta().then((value) => store.buscarLotesConta().then(
-        (value) => store
-            .buscarAtividades()
-            .then((value) => store.setPageState(AgendaState.loaded))));
-
-    if (widget.loteId != null) {
-      store.setFiltroLote(null, loteId: widget.loteId);
-    }
+    store.buscarUsuariosConta().then(
+          (value) => store.buscarLotesConta().then(
+                (value) => store.buscarAtividades().then((value) {
+                  store.setPageState(AgendaState.loaded);
+                  if (widget.loteId != null) {
+                    store.setFiltroLote(null, loteId: widget.loteId);
+                  }
+                }),
+              ),
+        );
   }
 
   @override
