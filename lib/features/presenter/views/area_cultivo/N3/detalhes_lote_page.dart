@@ -50,14 +50,19 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 infoLote(),
-                horizontalList(
-                  context,
-                  reservatorioStore,
-                  store,
-                  widget.enableEditing,
+                Visibility(
+                  visible: widget.enableEditing,
+                  child: horizontalList(
+                    context,
+                    reservatorioStore,
+                    store,
+                  ),
                 ),
-                const SizedBox(
-                  height: 16,
+                Visibility(
+                  visible: widget.enableEditing,
+                  child: const SizedBox(
+                    height: 16,
+                  ),
                 ),
                 Divider(
                   color: const Color(0xFF9F9F9F).withOpacity(.6),
