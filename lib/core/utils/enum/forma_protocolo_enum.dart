@@ -1,7 +1,6 @@
 enum FormaProtocoloEnum {
   semeadura,
   mudas,
-  teste,
 }
 
 extension FormaProtocoloEnumExt on FormaProtocoloEnum {
@@ -11,8 +10,6 @@ extension FormaProtocoloEnumExt on FormaProtocoloEnum {
         return 'Semeadura';
       case FormaProtocoloEnum.mudas:
         return 'Mudas';
-      case FormaProtocoloEnum.teste:
-        return 'Teste';
       default:
         return '';
     }

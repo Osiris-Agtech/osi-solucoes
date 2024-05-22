@@ -1,7 +1,7 @@
 enum SistemaProtocoloEnum {
   hidroponia,
   solo,
-  estufa,
+  substrato,
 }
 
 extension SistemaProtocoloEnumExt on SistemaProtocoloEnum {
@@ -11,8 +11,8 @@ extension SistemaProtocoloEnumExt on SistemaProtocoloEnum {
         return 'Hidroponia';
       case SistemaProtocoloEnum.solo:
         return 'Solo (Tradicional)';
-      case SistemaProtocoloEnum.estufa:
-        return 'Estufa';
+      case SistemaProtocoloEnum.substrato:
+        return 'Substrado';
       default:
         return '';
     }

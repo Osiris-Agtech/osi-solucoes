@@ -83,23 +83,6 @@ class _EditAtivBottomSheetState extends State<EditAtivBottomSheet> {
                           contentPadding: EdgeInsets.zero,
                           tileColor: Colors.transparent,
                           selectedTileColor: Colors.transparent,
-                          title: const Text('Atividade'),
-                          value: 1,
-                          activeColor: Colors.green,
-                          groupValue: store.radioIndicator,
-                          onChanged: (value) {
-                            if (value != null) {
-                              store.alterarRadioIndicator(value);
-                            }
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: RadioListTile<int>(
-                          contentPadding: EdgeInsets.zero,
-                          tileColor: Colors.transparent,
-                          selectedTileColor: Colors.transparent,
                           title: const Text('Fase'),
                           value: 2,
                           activeColor: Colors.green,
@@ -112,6 +95,23 @@ class _EditAtivBottomSheetState extends State<EditAtivBottomSheet> {
                                     store.alterarIsNovaFaseBottonSheet(true);
                                   }
                                 },
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
+                          tileColor: Colors.transparent,
+                          selectedTileColor: Colors.transparent,
+                          title: const Text('Atividade'),
+                          value: 1,
+                          activeColor: Colors.green,
+                          groupValue: store.radioIndicator,
+                          onChanged: (value) {
+                            if (value != null) {
+                              store.alterarRadioIndicator(value);
+                            }
+                          },
                         ),
                       ),
                     ],
@@ -333,24 +333,6 @@ class _EditAtivBottomSheetState extends State<EditAtivBottomSheet> {
                           contentPadding: EdgeInsets.zero,
                           tileColor: Colors.transparent,
                           selectedTileColor: Colors.transparent,
-                          title: const Text('Atividade'),
-                          value: 1,
-                          activeColor: Colors.green,
-                          groupValue: store.radioIndicator,
-                          onChanged: (value) {
-                            if (value != null) {
-                              store.alterarRadioIndicator(value);
-                              store.alterarIsNovaFaseBottonSheet(false);
-                            }
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: RadioListTile<int>(
-                          contentPadding: EdgeInsets.zero,
-                          tileColor: Colors.transparent,
-                          selectedTileColor: Colors.transparent,
                           title: const Text('Fase'),
                           value: 2,
                           activeColor: Colors.green,
@@ -362,6 +344,24 @@ class _EditAtivBottomSheetState extends State<EditAtivBottomSheet> {
                                     store.alterarRadioIndicator(value);
                                   }
                                 },
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
+                          tileColor: Colors.transparent,
+                          selectedTileColor: Colors.transparent,
+                          title: const Text('Atividade'),
+                          value: 1,
+                          activeColor: Colors.green,
+                          groupValue: store.radioIndicator,
+                          onChanged: (value) {
+                            if (value != null) {
+                              store.alterarRadioIndicator(value);
+                              store.alterarIsNovaFaseBottonSheet(false);
+                            }
+                          },
                         ),
                       ),
                     ],
