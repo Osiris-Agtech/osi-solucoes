@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 class Constants {
   // API Conection
-  static const String stagingUrl =
-      'https://2c1f-201-71-171-36.ngrok-free.app'; //'http://200.129.247.244:4000/';
-  // static const String productionUrl = 'http://200.129.247.241:4000/';
+  static const String stagingUrl = 'http://200.129.247.244:4040/';
+  static const String devUrl = 'http://200.129.247.244:4000/';
 
   // Colors
   static const kPrimaryColor = Color.fromARGB(255, 38, 193, 100);
