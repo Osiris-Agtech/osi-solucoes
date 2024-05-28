@@ -510,6 +510,10 @@ abstract class _LoteStoreBase with Store {
       },
       (data) async {
         culturaList = List.from(data);
+        if (isEditing) {
+          novoLoteCultura = culturaList
+              .firstWhere((element) => element.id == novoLote.cultura!.id);
+        }
       },
     );
   }
@@ -828,6 +832,7 @@ abstract class _LoteStoreBase with Store {
     solucaoNutritivaList = [];
     solucaoConcentradaList = [];
     registroData = DateTime.now();
+    protocoloVinculado = null;
     semeaduraData = null;
     transplantioData = null;
     colheitaData = null;

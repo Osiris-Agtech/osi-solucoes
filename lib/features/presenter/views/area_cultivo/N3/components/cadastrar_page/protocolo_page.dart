@@ -123,7 +123,7 @@ protocoloPage(
         const SizedBox(
           height: 8,
         ),
-        filterWidget(context, store),
+        filterWidget(context, protocoloStore),
         const Padding(
           padding: EdgeInsets.only(left: 24, top: 8),
           child: Text(
@@ -160,7 +160,7 @@ protocoloPage(
   );
 }
 
-Container filterWidget(BuildContext context, LoteStore store) {
+Container filterWidget(BuildContext context, ProtocoloStore store) {
   return Container(
     height: 50,
     color: const Color(0xFFF8F8F6),
@@ -170,7 +170,7 @@ Container filterWidget(BuildContext context, LoteStore store) {
     ),
     child: TextFormField(
       onChanged: ((value) => {
-            store.setSearchProtocoloText(value),
+            store.setSeachProtocoloPage(value),
           }),
       textAlignVertical: TextAlignVertical.top,
       textAlign: TextAlign.start,
@@ -199,7 +199,7 @@ SliverList showList(LoteStore store, ProtocoloStore protocoloStore) {
         return protocoloItemLote(
             index: index, store: store, protocoloStore: protocoloStore);
       },
-      childCount: protocoloStore.protocoloList.length,
+      childCount: protocoloStore.getProtocoloGroup.length,
     ),
   );
 }
