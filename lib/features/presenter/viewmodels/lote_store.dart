@@ -943,7 +943,7 @@ abstract class _LoteStoreBase with Store {
     // Requisição para finalização "agendas" selecionadas
     finalizarAtividadesSelecionadas();
 
-    var seletedLotes = [];
+    List<Lote> seletedLotes = [];
     for (var element in finalizarLotes) {
       if (element.selected) {
         seletedLotes.add(element.lote);
@@ -955,8 +955,7 @@ abstract class _LoteStoreBase with Store {
       return;
     }
 
-    var result =
-        await loteRepository.finalizarLotes(seletedLotes as List<Lote>);
+    var result = await loteRepository.finalizarLotes(seletedLotes);
     Get.close(1);
 
     result.fold(
