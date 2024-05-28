@@ -182,30 +182,48 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
   }
 
   Widget subtitulo() {
-    return const Padding(
-      padding: EdgeInsets.only(top: 10, left: 20),
-      child: Text(
-        'Cadastrar Informações',
-        style: TextStyle(
-          fontSize: 14,
-          color: Color(0xff6F6464),
-          fontStyle: FontStyle.italic,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, left: 20),
+      child: store.isEditing
+          ? const Text(
+              'Alterando Informações',
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xff6F6464),
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
+              ),
+            )
+          : const Text(
+              'Cadastrar Informações',
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xff6F6464),
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
     );
   }
 
   Widget titulo() {
-    return const Padding(
-      padding: EdgeInsets.only(
+    return Padding(
+      padding: const EdgeInsets.only(
         left: 20,
         right: 10,
       ),
-      child: Text(
-        'Criando Novo Lote',
-        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-      ),
+      child: store.isEditing
+          ? const Text(
+              'Alterando Lote',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.w600,
+              ),
+            )
+          : const Text(
+              'Criando Novo Lote',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+            ),
     );
   }
 
