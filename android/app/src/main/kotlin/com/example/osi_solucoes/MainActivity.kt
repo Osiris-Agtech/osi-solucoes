@@ -1,4 +1,4 @@
-package com.example.osi_solucoes
+package com.osiris.osi_solucoes
 
 import io.flutter.embedding.android.FlutterActivity
 

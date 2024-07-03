@@ -430,7 +430,7 @@ class _HomePageState extends State<HomePage> {
                 delegate: MyHeaderDelegate(),
               ),
               SliverFixedExtentList(
-                itemExtent: 115, //size.height * 0.17,
+                itemExtent: 120, //size.height * 0.17,
                 delegate: SliverChildListDelegate([
                   Padding(
                     padding: EdgeInsets.symmetric(

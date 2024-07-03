@@ -96,12 +96,14 @@ class _SolucaoPage extends State<SolucaoPage> {
                       ),
                     );
                   }
+
                   return SliverPadding(
                     padding: const EdgeInsets.all(8.0),
                     sliver: SliverGrid.count(
                       crossAxisCount: 2,
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 2,
+                      childAspectRatio: 1.32,
                       children: List.generate(
                         solucaoStore.searchSolucao.length,
                         (index) => CardReceita(
