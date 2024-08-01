@@ -227,7 +227,7 @@ abstract class _GerenciarEquipeBase with Store {
         toastSuccess(message: "Alterado com sucesso");
         buscarUsuarios();
         clearDatalhes();
-        Get.close(2);
+        Get.close(1);
         Get.toNamed(Routes.gerenciarEquipePage);
       },
     );
