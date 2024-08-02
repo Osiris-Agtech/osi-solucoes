@@ -131,6 +131,19 @@ abstract class _LoteStoreBase with Store {
   @action
   selecionarSetorMigrar(Setor setor) => setorSelecionadoMigrar = setor;
 
+  @computed
+  bool get validarMigracao {
+    if (setorSelecionadoMigrar.id == null) {
+      return false;
+    }
+
+    if (loteSelecionado.id == null) {
+      return false;
+    }
+
+    return true;
+  }
+
   @action
   migrarLote(bool migrarReservatorio) async {
     isMigrateLoteLoading = true;
@@ -142,8 +155,8 @@ abstract class _LoteStoreBase with Store {
       loteSelecionado.id!,
       setorSelecionadoMigrar.id!,
       migrarReservatorio
-          ? setorSelecionadoMigrar.reservatorio!.id!
-          : loteSelecionado.reservatorio!.id!,
+          ? setorSelecionadoMigrar.reservatorio!.id
+          : loteSelecionado.reservatorio!.id,
     );
 
     lote.fold(

@@ -165,7 +165,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
     return const Padding(
       padding: EdgeInsets.only(top: 10, left: 20),
       child: Text(
-        'Cadastrar Informações',
+        'Atualização de Informações',
         style: TextStyle(
           fontSize: 14,
           color: Color(0xff6F6464),
@@ -183,7 +183,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
         right: 10,
       ),
       child: Text(
-        'Criando Novo Lote',
+        'Editar Lote',
         style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
       ),
     );

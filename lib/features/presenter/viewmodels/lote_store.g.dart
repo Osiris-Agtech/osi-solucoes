@@ -16,6 +16,13 @@ mixin _$LoteStore on _LoteStoreBase, Store {
       (_$searchLoteComputed ??= Computed<List<Lote>>(() => super.searchLote,
               name: '_LoteStoreBase.searchLote'))
           .value;
+  Computed<bool>? _$validarMigracaoComputed;
+
+  @override
+  bool get validarMigracao =>
+      (_$validarMigracaoComputed ??= Computed<bool>(() => super.validarMigracao,
+              name: '_LoteStoreBase.validarMigracao'))
+          .value;
 
   final _$isLoteListLoadingAtom =
       Atom(name: '_LoteStoreBase.isLoteListLoading');
@@ -1281,7 +1288,8 @@ reservatorioDetalhes: ${reservatorioDetalhes},
 solucaoNutritivaList: ${solucaoNutritivaList},
 solucaoConcentradaList: ${solucaoConcentradaList},
 novoLote: ${novoLote},
-searchLote: ${searchLote}
+searchLote: ${searchLote},
+validarMigracao: ${validarMigracao}
     ''';
   }
 }
