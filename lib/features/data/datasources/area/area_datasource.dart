@@ -29,8 +29,8 @@ class AreaDatasource implements IAreaDatasource {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     const String readRepositories = r'''
-        mutation CreateOneLocalizacao ($cep: String!, $endereco: String!, $bairro: String!, $cidade: String!, $pais: String!, $estado: String!, $complemento: String) {
-          createOneLocalizacao(data: {
+        mutation ($cep: String!, $endereco: String!, $bairro: String!, $cidade: String!, $pais: String!, $estado: String!, $complemento: String, $numero: String) {
+          createOneLocalizacao(
             cep: $cep,
             endereco: $endereco,
             bairro: $bairro,
@@ -38,7 +38,8 @@ class AreaDatasource implements IAreaDatasource {
             pais: $pais,
             estado: $estado,
             complemento: $complemento,
-          }) {
+            numero: $numero
+          ) {
             id
             cep
             endereco
@@ -62,13 +63,14 @@ class AreaDatasource implements IAreaDatasource {
     options = MutationOptions(
       document: gql(readRepositories),
       variables: <String, dynamic>{
-        'cep': localizacao.cep,
-        'endereco': localizacao.endereco,
-        'bairro': localizacao.bairro,
-        'cidade': localizacao.cidade,
-        'pais': localizacao.pais,
-        'estado': localizacao.estado,
+        'cep': localizacao.cep ?? '',
+        'endereco': localizacao.endereco ?? '',
+        'bairro': localizacao.bairro ?? '',
+        'cidade': localizacao.cidade ?? '',
+        'pais': localizacao.pais ?? '',
+        'estado': localizacao.estado ?? '',
         'complemento': localizacao.complemento,
+        'numero': localizacao.numero,
       },
     );
 

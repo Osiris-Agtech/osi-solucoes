@@ -155,8 +155,8 @@ abstract class _LoteStoreBase with Store {
       loteSelecionado.id!,
       setorSelecionadoMigrar.id!,
       migrarReservatorio
-          ? setorSelecionadoMigrar.reservatorio!.id
-          : loteSelecionado.reservatorio!.id,
+          ? setorSelecionadoMigrar.reservatorio?.id
+          : loteSelecionado.reservatorio?.id,
     );
 
     lote.fold(
@@ -560,7 +560,10 @@ abstract class _LoteStoreBase with Store {
       colheita_data: colheitaData,
     );
 
-    var lote = await loteRepository.registrarLote(novoLote);
+    var lote = await loteRepository.registrarLote(
+      novoLote,
+      authController.usuario.selected_conta!.conta!.id!,
+    );
 
     lote.fold(
       (err) {

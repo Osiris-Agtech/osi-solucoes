@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
+import 'package:search_cep/search_cep.dart';
 import 'package:sigma_hort_gestao_producao/features/data/repositories/area/area_repository.dart';
 import 'package:sigma_hort_gestao_producao/features/presenter/routes/routes.dart';
 import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/auth_controller.dart';
 import 'package:sigma_hort_gestao_producao/features/presenter/viewmodels/setor_store.dart';
-import 'package:search_cep/search_cep.dart';
 
 import '../../../core/utils/toast.dart';
 import '../models/area/area_model.dart';
@@ -170,7 +170,7 @@ abstract class _AreaCultivoStoreBase with Store {
   setAreaEditing(Area area) {
     novaAreaName = TextEditingController(text: area.nome);
     novaAreaDescricao = TextEditingController(text: area.descricao);
-    localizacaoSelecionada = area.localizacao!;
+    localizacaoSelecionada = area.localizacao ?? Localizacao();
     novaArea = area;
     setIsEditing(true);
     return;
