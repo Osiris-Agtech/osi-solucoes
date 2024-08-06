@@ -26,7 +26,7 @@ abstract class ILoteRepository {
   Future<Either<Failure, Cultura>> registrarCultura(
       Cultura cultura, int contaId);
   Future<Either<Failure, Lote>> migrarLote(
-      int loteId, int setorId, int reservatorioId);
+      int loteId, int setorId, int? reservatorioId);
   Future<Either<Failure, Lote>> alterarLote(Lote alterarLote);
   Future<Either<Failure, bool>> deletarAtividades(List<int> agendaIds);
   Future<Either<Failure, bool>> finalizarAtividades(List<int> agendaIds);

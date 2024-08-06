@@ -74,7 +74,7 @@ class LoteRepository implements ILoteRepository {
 
   @override
   Future<Either<Failure, Lote>> migrarLote(
-      int loteId, int setorId, int reservatorioId) async {
+      int loteId, int setorId, int? reservatorioId) async {
     var result = await datasource.migrarLote(
         loteId: loteId, setorId: setorId, reservatorioId: reservatorioId);
     return result;

@@ -141,7 +141,25 @@ abstract class _LoteStoreBase with Store {
   Setor setorSelecionadoMigrar = Setor();
 
   @action
-  selecionarSetorMigrar(Setor setor) => setorSelecionadoMigrar = setor;
+  selecionarSetorMigrar(Setor? setor) =>
+      setorSelecionadoMigrar = setor ?? Setor();
+
+  @computed
+  bool get validarMigracao {
+    if (areaSelecionada.setores!.isEmpty) {
+      return false;
+    }
+
+    if (setorSelecionadoMigrar.id == null) {
+      return false;
+    }
+
+    if (loteSelecionado.id == null) {
+      return false;
+    }
+
+    return true;
+  }
 
   @action
   migrarLote(bool migrarReservatorio) async {
@@ -154,8 +172,8 @@ abstract class _LoteStoreBase with Store {
       loteSelecionado.id!,
       setorSelecionadoMigrar.id!,
       migrarReservatorio
-          ? setorSelecionadoMigrar.reservatorio!.id!
-          : loteSelecionado.reservatorio!.id!,
+          ? setorSelecionadoMigrar.reservatorio!.id
+          : loteSelecionado.reservatorio!.id,
     );
 
     lote.fold(

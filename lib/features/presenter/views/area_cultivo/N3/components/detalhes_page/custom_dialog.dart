@@ -17,6 +17,13 @@ class _CustomDialogState extends State<CustomDialog> {
   final GlobalKey<FormFieldState> _key = GlobalKey<FormFieldState>();
 
   @override
+  initState() {
+    super.initState();
+    LoteStore store = GetIt.I<LoteStore>();
+    store.limparTudo();
+  }
+
+  @override
   Widget build(BuildContext context) {
     LoteStore store = GetIt.I<LoteStore>();
     return Dialog(
@@ -200,6 +207,7 @@ class _CustomDialogState extends State<CustomDialog> {
                                       if (value != null) {
                                         _key.currentState?.reset();
                                         store.selecionarArea(value);
+                                        store.selecionarSetorMigrar(null);
                                         store.isVisible = true;
                                       }
                                     },
@@ -250,9 +258,7 @@ class _CustomDialogState extends State<CustomDialog> {
                                         );
                                       }).toList(),
                                       onChanged: (value) {
-                                        if (value != null) {
-                                          store.selecionarSetorMigrar(value);
-                                        }
+                                        store.selecionarSetorMigrar(value);
                                       },
                                     ),
                                   ),
@@ -273,83 +279,84 @@ class _CustomDialogState extends State<CustomDialog> {
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.6,
                   height: 40,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Constants.kPrimaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                    child: Observer(builder: (_) {
-                      if (store.isMigrateLoteLoading) {
-                        return const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
-                      return const Text(
-                        "Migrar",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                  child: Observer(builder: (_) {
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Constants.kPrimaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                      );
-                    }),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text(
-                              "Deseja alterar reservatório ?",
+                      ),
+                      child: store.isMigrateLoteLoading
+                          ? const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                          : const Text(
+                              "Migrar",
                               style: TextStyle(
-                                color: Constants.kText2,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            content: const Text(
-                              "Caso aceite, o reservatório do lote será alterado automaticamente para o reservatório vinculado ao setor escolhido",
-                              style: TextStyle(
-                                color: Constants.kGreyText,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            actions: [
-                              TextButton(
-                                child: const Text(
-                                  "Sim",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  store.migrarLote(true);
+                      onPressed: !store.validarMigracao
+                          ? null
+                          : () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                      "Deseja alterar reservatório ?",
+                                      style: TextStyle(
+                                        color: Constants.kText2,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    content: const Text(
+                                      "Caso aceite, o reservatório do lote será alterado automaticamente para o reservatório vinculado ao setor escolhido",
+                                      style: TextStyle(
+                                        color: Constants.kGreyText,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text(
+                                          "Sim",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          store.migrarLote(true);
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: const Text(
+                                          "Não",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          store.migrarLote(false);
+                                        },
+                                      ),
+                                    ],
+                                  );
                                 },
-                              ),
-                              TextButton(
-                                child: const Text(
-                                  "Não",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  store.migrarLote(false);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
+                              );
+                            },
+                    );
+                  }),
                 ),
               ),
             ),

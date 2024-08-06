@@ -16,6 +16,13 @@ mixin _$LoteStore on _LoteStoreBase, Store {
       (_$searchLoteComputed ??= Computed<List<Lote>>(() => super.searchLote,
               name: '_LoteStoreBase.searchLote'))
           .value;
+  Computed<bool>? _$validarMigracaoComputed;
+
+  @override
+  bool get validarMigracao =>
+      (_$validarMigracaoComputed ??= Computed<bool>(() => super.validarMigracao,
+              name: '_LoteStoreBase.validarMigracao'))
+          .value;
   Computed<List<Protocolo>>? _$searchProtocoloComputed;
 
   @override
@@ -1307,7 +1314,7 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   }
 
   @override
-  dynamic selecionarSetorMigrar(Setor setor) {
+  dynamic selecionarSetorMigrar(Setor? setor) {
     final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
         name: '_LoteStoreBase.selecionarSetorMigrar');
     try {
@@ -1871,6 +1878,7 @@ atividadesDeletadas: ${atividadesDeletadas},
 carregandoFinalizarLotes: ${carregandoFinalizarLotes},
 lotesFinalizados: ${lotesFinalizados},
 searchLote: ${searchLote},
+validarMigracao: ${validarMigracao},
 searchProtocolo: ${searchProtocolo},
 isAlreadySelected: ${isAlreadySelected},
 getLotesGroup: ${getLotesGroup},

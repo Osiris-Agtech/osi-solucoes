@@ -32,7 +32,9 @@ abstract class ILoteDatasource {
     required int contaId,
   });
   Future<Either<Failure, Lote>> migrarLote(
-      {required int loteId, required int setorId, required int reservatorioId});
+      {required int loteId,
+      required int setorId,
+      required int? reservatorioId});
   Future<Either<Failure, Lote>> alterarLote({required Lote alterarLote});
   Future<Either<Failure, Cultura>> registrarCultura(
       {required Cultura cultura, required int contaId});
@@ -658,11 +660,11 @@ class LoteDatasource implements ILoteDatasource {
   Future<Either<Failure, Lote>> migrarLote(
       {required int loteId,
       required int setorId,
-      required int reservatorioId}) async {
+      required int? reservatorioId}) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     const String readRepositories = r'''
-        mutation MigrarLote($loteId: Int!, $setorId: Int!, $novoReservatorioId: Int!) {
+        mutation MigrarLote($loteId: Int!, $setorId: Int!, $novoReservatorioId: Int) {
           migrarLote(loteId: $loteId, setorId: $setorId, novoReservatorioId: $novoReservatorioId) {
             id
             nome
