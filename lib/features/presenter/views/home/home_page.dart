@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:osi_solucoes/features/presenter/views/home/components/productivity_chart_widget.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
 
@@ -429,112 +430,195 @@ class _HomePageState extends State<HomePage> {
                 pinned: true,
                 delegate: MyHeaderDelegate(),
               ),
-              SliverFixedExtentList(
-                itemExtent: 120, //size.height * 0.17,
-                delegate: SliverChildListDelegate([
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 20, horizontal: size.width * 0.098),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // Seção de Ações Rápidas
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: size.width * 0.05,
+                    right: size.width * 0.05,
+                    top: 20,
+                    bottom: 10,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Ações Rápidas',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'Ver todas',
+                          style: TextStyle(
+                            color: Constants.kPrimaryColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                  child: SizedBox(
+                    height: 100,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
                       children: [
-                        firstItems(
+                        modernQuickActionCard(
                           context,
                           size,
                           "card1Home".i18n(),
                           "assets/icons/gerenciar_icon.svg",
+                          const Color(0xFF6366F1),
                           onTap: () => Get.toNamed(Routes.gerenciarEquipePage),
                         ),
-                        firstItems(
+                        const SizedBox(width: 12),
+                        modernQuickActionCard(
                           context,
                           size,
                           "card2Home".i18n(),
                           "assets/icons/relatorio_icon.svg",
+                          const Color(0xFF8B5CF6),
                           onTap: () => Get.toNamed(Routes.historicoPage),
                         ),
-                        firstItems(
+                        const SizedBox(width: 12),
+                        modernQuickActionCard(
                           context,
                           size,
                           "card3Home".i18n(),
                           "assets/icons/inventario_icon.svg",
+                          const Color(0xFF06B6D4),
                           onTap: () => Get.toNamed(Routes.agendaPage),
                         ),
-                        firstItems(
+                        const SizedBox(width: 12),
+                        modernQuickActionCard(
                           context,
                           size,
                           "card4Home".i18n(),
                           "assets/icons/relatorio_icon.svg",
+                          const Color(0xFF10B981),
                           onTap: () => Get.toNamed(Routes.protocoloPage),
                         ),
                       ],
                     ),
                   ),
-                ]),
+                ),
               ),
-              SliverGrid.count(
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 12,
-                childAspectRatio: 10 / 8,
-                crossAxisCount: 2,
-                children: [
-                  gridItems(
-                    context,
-                    size,
-                    "card5Home".i18n(),
-                    "assets/icons/cultivo_icon.svg",
-                    true,
-                    path: "Setores",
-                    id: 0,
+
+              // Seção do Dashboard
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: size.width * 0.05,
+                    right: size.width * 0.05,
+                    top: 30,
+                    bottom: 10,
                   ),
-                  gridItems(
-                    context,
-                    size,
-                    "card6Home".i18n(),
-                    "assets/icons/reservatorio_icon.svg",
-                    false,
-                    path: "Reservatorios",
-                    id: 1,
+                  child: const Text(
+                    'Dashboard',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black87,
+                    ),
                   ),
-                  gridItems(
-                    context,
-                    size,
-                    "card7Home".i18n(),
-                    "assets/icons/caderno_campo_icon.svg",
-                    true,
-                    path: "CadernoCampo",
-                    id: 2,
+                ),
+              ),
+
+              // Gráfico de Produtividade
+              const SliverToBoxAdapter(
+                child: ProductivityChartWidget(),
+                // child: DailyTasksWidget(),
+                // child: FieldActivitiesWidget(),
+                //child: LotStatusPieChartWidget(),
+              ),
+
+              // Título da seção de módulos
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: size.width * 0.05,
+                    right: size.width * 0.05,
+                    top: 10,
+                    bottom: 15,
                   ),
-                  gridItems(
-                    context,
-                    size,
-                    "card8Home".i18n(),
-                    "assets/icons/solucoes_nutritivas_icon.svg",
-                    false,
-                    path: "Receitas",
-                    id: 3,
+                  child: const Text(
+                    'Módulos',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black87,
+                    ),
                   ),
-                  gridItems(
-                    context,
-                    size,
-                    "card9Home".i18n(),
-                    "assets/icons/ajustes_icon.svg",
-                    true,
-                    path: "Ajustes",
-                    id: 4,
-                  ),
-                  // gridItems(
-                  //   context,
-                  //   size,
-                  //   "card10Home".i18n(),
-                  //   "assets/icons/chat_icon.svg",
-                  //   false,
-                  //   id: 5,
-                  // ),
-                  // const SizedBox(),
-                ],
+                ),
+              ),
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                sliver: SliverGrid.count(
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                  childAspectRatio: 10 / 8,
+                  crossAxisCount: 2,
+                  children: [
+                    modernGridItems(
+                      context,
+                      size,
+                      "card5Home".i18n(),
+                      "assets/icons/cultivo_icon.svg",
+                      const Color(0xFF059669),
+                      path: "Setores",
+                      id: 0,
+                    ),
+                    modernGridItems(
+                      context,
+                      size,
+                      "card6Home".i18n(),
+                      "assets/icons/reservatorio_icon.svg",
+                      const Color(0xFF2563EB),
+                      path: "Reservatorios",
+                      id: 1,
+                    ),
+                    modernGridItems(
+                      context,
+                      size,
+                      "card7Home".i18n(),
+                      "assets/icons/caderno_campo_icon.svg",
+                      const Color(0xFFDC2626),
+                      path: "CadernoCampo",
+                      id: 2,
+                    ),
+                    modernGridItems(
+                      context,
+                      size,
+                      "card8Home".i18n(),
+                      "assets/icons/solucoes_nutritivas_icon.svg",
+                      const Color(0xFFEA580C),
+                      path: "Receitas",
+                      id: 3,
+                    ),
+                    modernGridItems(
+                      context,
+                      size,
+                      "card9Home".i18n(),
+                      "assets/icons/ajustes_icon.svg",
+                      const Color(0xFF7C3AED),
+                      path: "Ajustes",
+                      id: 4,
+                    ),
+                  ],
+                ),
               ),
               const SliverToBoxAdapter(
-                child: SizedBox(height: 24),
+                child: SizedBox(height: 40),
               ),
             ],
           ),
@@ -704,6 +788,130 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget modernQuickActionCard(
+    BuildContext context,
+    Size size,
+    String title,
+    String icon,
+    Color color, {
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        width: 90,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 2),
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 8,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  icon,
+                  width: 20,
+                  height: 20,
+                  color: color,
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMetricCard(
+      String title, String value, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 12,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  icon,
+                  color: color,
+                  size: 20,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[600],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget gridItems(
       BuildContext context, Size size, String title, String icon, bool isLeft,
       {String? path, required int id}) {
@@ -781,6 +989,91 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  Widget modernGridItems(
+    BuildContext context,
+    Size size,
+    String title,
+    String icon,
+    Color color, {
+    String? path,
+    required int id,
+  }) {
+    return InkWell(
+      onTap: () async {
+        modulosStore.setPageViewController(id);
+        Get.toNamed(Routes.modulosPage);
+      },
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 4),
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 20,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Center(
+                  child: SvgPicture.asset(
+                    icon,
+                    width: 28,
+                    height: 28,
+                    color: color,
+                  ),
+                ),
+              ),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87,
+                        height: 1.2,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      width: 30,
+                      height: 3,
+                      decoration: BoxDecoration(
+                        color: color,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
@@ -792,167 +1085,194 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    // final HomeStore store = Modular.get<HomeStore>();
     HomeStore store = GetIt.I<HomeStore>();
     final progress = shrinkOffset / maxExtent;
+    final opacity = (1 - progress).clamp(0.0, 1.0);
 
-    return Material(
-      elevation: 2,
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(45),
-        bottomRight: Radius.circular(45),
-        topLeft: Radius.zero,
-        topRight: Radius.zero,
+    return Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF134e5e),
+            Color(0xFF71b280),
+          ],
+          stops: [0.0, 1.0],
+        ),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(32),
+          bottomRight: Radius.circular(32),
+        ),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 8),
+            color: Colors.black.withOpacity(0.12),
+            blurRadius: 24,
+            spreadRadius: 0,
+          ),
+        ],
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(45),
-          bottomRight: Radius.circular(45),
-          topLeft: Radius.zero,
-          topRight: Radius.zero,
+          bottomLeft: Radius.circular(32),
+          bottomRight: Radius.circular(32),
         ),
         child: Stack(
           fit: StackFit.expand,
           children: [
-            const ColoredBox(
-              color: Colors.white,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 10.0,
-                left: 10,
-              ),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: IconButton(
-                  icon: SvgPicture.asset('assets/icons/grid.svg'),
-                  onPressed: () {
-                    store.setIsCollaped();
-                  },
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 10.0,
-                right: 20,
-              ),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    IconButton(
-                      icon: SvgPicture.asset(
-                          "assets/icons/notification_off_icon.svg"),
-                      onPressed: () {},
-                      color: Colors.black,
-                    ),
-                    store.isNotified
-                        ? Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: Colors.red,
-                              ),
-                              height: 12,
-                              width: 12,
-                            ),
-                          )
-                        : Container()
+            // Glassmorphism overlay
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white.withOpacity(0.2),
+                    Colors.white.withOpacity(0.05),
                   ],
                 ),
               ),
             ),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 100),
-              padding: EdgeInsets.lerp(
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                const EdgeInsets.only(bottom: 16),
-                progress,
+
+            // Top bar with icons
+            Positioned(
+              top: 16,
+              left: 16,
+              right: 16,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildModernIconButton(
+                    'assets/icons/grid.svg',
+                    onTap: () => store.setIsCollaped(),
+                  ),
+                  _buildNotificationButton(store),
+                ],
               ),
-              alignment: Alignment.lerp(
-                const Alignment(0, -0.5),
-                Alignment.bottomCenter,
-                progress,
-              ),
+            ),
+
+            // User profile section
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              top: progress < 0.5 ? 60 : 20,
+              left: 24,
+              right: 24,
               child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 150),
-                opacity: (1 - progress * 1.5) < 0 ? 0 : 1 - progress * 1.5,
-                child: const CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
-                  radius: 30,
+                duration: const Duration(milliseconds: 200),
+                opacity: opacity,
+                child: Column(
+                  children: [
+                    // Avatar with modern styling
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.white.withOpacity(0.3),
+                            Colors.white.withOpacity(0.1),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: const Offset(0, 4),
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 12,
+                            spreadRadius: 0,
+                          ),
+                        ],
+                      ),
+                      child: const CircleAvatar(
+                        backgroundImage: NetworkImage(
+                            'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
+                        radius: 32,
+                      ),
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // User name
+                    Observer(builder: (_) {
+                      return Text(
+                        store.authController.usuario.selected_conta?.conta
+                                ?.nome ??
+                            "...",
+                        style: const TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          letterSpacing: 0.5,
+                          shadows: [
+                            Shadow(
+                              offset: Offset(0, 2),
+                              blurRadius: 4,
+                              color: Colors.black26,
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
+                      );
+                    }),
+
+                    const SizedBox(height: 8),
+
+                    // User role with modern badge
+                    Observer(builder: (_) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.3),
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(
+                          store.authController.usuario.selected_conta?.cargo
+                                  ?.cargo ??
+                              "...",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      );
+                    }),
+                  ],
                 ),
               ),
             ),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 100),
-              padding: EdgeInsets.lerp(
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                const EdgeInsets.only(bottom: 16),
-                progress,
-              ),
-              alignment: Alignment.lerp(
-                const Alignment(0, 0.45),
-                const Alignment(0, 0.5),
-                progress,
-              ),
-              child: Observer(builder: (_) {
-                return Text(
-                  store.authController.usuario.selected_conta?.conta?.nome ??
-                      "...",
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
-                );
-              }),
-            ),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 100),
-              padding: EdgeInsets.lerp(
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                const EdgeInsets.only(bottom: 16),
-                progress,
-              ),
-              alignment: Alignment.lerp(
-                const Alignment(0, 0.8),
-                Alignment.bottomCenter,
-                progress,
-              ),
+
+            // Bottom accent line
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 300),
+              bottom: 12,
+              left: MediaQuery.of(context).size.width * 0.35,
+              right: MediaQuery.of(context).size.width * 0.35,
               child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 150),
-                opacity: (1 - progress * 2) < 0 ? 0 : 1 - progress * 2,
-                child: Observer(builder: (_) {
-                  return Text(
-                    store.authController.usuario.selected_conta?.cargo?.cargo ??
-                        "...",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black.withOpacity(.7),
-                      fontStyle: FontStyle.italic,
+                duration: const Duration(milliseconds: 200),
+                opacity: opacity * 0.6,
+                child: Container(
+                  height: 4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.white.withOpacity(0.6),
+                        Colors.white.withOpacity(0.3),
+                      ],
                     ),
-                  );
-                }),
-              ),
-            ),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 100),
-              alignment: Alignment.lerp(
-                const Alignment(0, 0.85),
-                const Alignment(0, 0.7),
-                progress,
-              ),
-              child: Container(
-                height: 3,
-                width: 80,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(2)),
-                  color: Color(0xFF767676),
+                  ),
                 ),
               ),
             ),
@@ -962,11 +1282,111 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
-  @override
-  double get maxExtent => 200;
+  Widget _buildModernIconButton(String iconPath,
+      {required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: Colors.white.withOpacity(0.3),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 2),
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: Center(
+          child: SvgPicture.asset(
+            iconPath,
+            width: 20,
+            height: 20,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNotificationButton(HomeStore store) {
+    return Observer(builder: (_) {
+      return GestureDetector(
+        onTap: () => store.toggleNotified(),
+        child: Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.3),
+              width: 1,
+            ),
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(0, 2),
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 8,
+                spreadRadius: 0,
+              ),
+            ],
+          ),
+          child: Stack(
+            children: [
+              Center(
+                child: SvgPicture.asset(
+                  "assets/icons/notification_off_icon.svg",
+                  width: 20,
+                  height: 20,
+                  color: Colors.white,
+                ),
+              ),
+              if (store.isNotified)
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    width: 12,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFF4757),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: const Offset(0, 2),
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 4,
+                          spreadRadius: 0,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
 
   @override
-  double get minExtent => 70;
+  double get maxExtent => 240;
+
+  @override
+  double get minExtent => 80;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>

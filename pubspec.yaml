@@ -67,6 +67,7 @@ dependencies:
   animations: ^2.0.2
   table_calendar: ^3.0.8
   faker: ^2.0.0
+  fl_chart: ^0.55.2
 
 dev_dependencies:
   flutter_test:
