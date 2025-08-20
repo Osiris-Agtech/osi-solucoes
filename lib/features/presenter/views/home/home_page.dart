@@ -9,7 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/productivity_chart_widget.dart';
+import 'package:osi_solucoes/features/presenter/views/home/components/lot_status_pie_chart_widget.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
 
@@ -536,10 +536,10 @@ class _HomePageState extends State<HomePage> {
 
               // Gráfico de Produtividade
               const SliverToBoxAdapter(
-                child: ProductivityChartWidget(),
+                // child: ProductivityChartWidget(),
                 // child: DailyTasksWidget(),
                 // child: FieldActivitiesWidget(),
-                //child: LotStatusPieChartWidget(),
+                child: LotStatusPieChartWidget(),
               ),
 
               // Título da seção de módulos
