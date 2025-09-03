@@ -7,14 +7,12 @@ part of 'conta_model.dart';
 // **************************************************************************
 
 Conta _$ContaFromJson(Map<String, dynamic> json) => Conta(
-      id: json['id'] as int?,
+      id: _parseToInt(json['id']),
       nivel: json['nivel'] as String?,
       nome: json['nome'] as String?,
       imagem: json['imagem'] as String?,
       cnpj: json['cnpj'] as String?,
-      created_at: json['created_at'] == null
-          ? null
-          : DateTime.parse(json['created_at'] as String),
+      created_at: _parseToDateTime(json['created_at']),
       usuarios: (json['usuarios'] as List<dynamic>?)
               ?.map((e) => ConectaConta.fromJson(e as Map<String, dynamic>))
               .toList() ??

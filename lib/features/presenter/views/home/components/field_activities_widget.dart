@@ -59,6 +59,34 @@ class FieldActivitiesWidget extends StatelessWidget {
         icon: Icons.science,
         color: Color(0xFF8B5CF6),
       ),
+      FieldActivityItem(
+        title: 'Adubação Foliar',
+        lote: 'Lote E-20',
+        user: 'Carlos Mendes',
+        icon: Icons.eco,
+        color: Color(0xFF10B981),
+      ),
+      FieldActivityItem(
+        title: 'Controle de Pragas',
+        lote: 'Lote F-03',
+        user: 'Lucia Ferreira',
+        icon: Icons.bug_report,
+        color: Color(0xFFEA580C),
+      ),
+      FieldActivityItem(
+        title: 'Medição pH',
+        lote: 'Lote G-17',
+        user: 'Roberto Alves',
+        icon: Icons.tune,
+        color: Color(0xFF7C3AED),
+      ),
+      FieldActivityItem(
+        title: 'Plantio de Mudas',
+        lote: 'Lote H-09',
+        user: 'Sandra Lima',
+        icon: Icons.local_florist,
+        color: Color(0xFF059669),
+      ),
     ],
     this.onActivityTap,
     this.onViewAll,
@@ -66,39 +94,53 @@ class FieldActivitiesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isSmallScreen = constraints.maxWidth < 600;
+        final isVerySmallScreen = constraints.maxWidth < 400;
 
-    return Padding(
-      padding: EdgeInsets.all(size.width * 0.05),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, 4),
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 20,
-              spreadRadius: 0,
+        // Calcula dimensões responsivas
+        final horizontalPadding = constraints.maxWidth * 0.05;
+        final internalPadding =
+            isVerySmallScreen ? 16.0 : (isSmallScreen ? 20.0 : 24.0);
+
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: Container(
+            height: constraints.maxHeight, // Usa toda altura disponível
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(isSmallScreen ? 16 : 20),
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(0, 4),
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 20,
+                  spreadRadius: 0,
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),
-              const SizedBox(height: 20),
-              _buildActivitiesList(),
-            ],
+            child: Padding(
+              padding: EdgeInsets.all(internalPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildHeader(isSmallScreen, isVerySmallScreen),
+                  SizedBox(height: isVerySmallScreen ? 12 : 16),
+                  Expanded(
+                      child: _buildActivitiesList(
+                          isSmallScreen, isVerySmallScreen)),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(
+      [bool isSmallScreen = false, bool isVerySmallScreen = false]) {
     final now = DateTime.now();
     final todayActivities = activities.where((activity) {
       final activityDate = activity.date ?? now;
@@ -110,32 +152,38 @@ class FieldActivitiesWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                color: Colors.black87,
+        Expanded(
+          flex: 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: isVerySmallScreen ? 18 : (isSmallScreen ? 20 : 22),
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black87,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-                fontWeight: FontWeight.w500,
+              SizedBox(height: isVerySmallScreen ? 2 : 4),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: isVerySmallScreen ? 12 : 14,
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        const SizedBox(width: 8),
         Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 6,
+          padding: EdgeInsets.symmetric(
+            horizontal: isVerySmallScreen ? 8 : 12,
+            vertical: isVerySmallScreen ? 4 : 6,
           ),
           decoration: BoxDecoration(
             color: Constants.kPrimaryColor.withOpacity(0.1),
@@ -149,13 +197,13 @@ class FieldActivitiesWidget extends StatelessWidget {
                 size: 16,
                 color: Constants.kPrimaryColor,
               ),
-              const SizedBox(width: 4),
+              SizedBox(width: isVerySmallScreen ? 2 : 4),
               Text(
                 '$todayActivities hoje',
-                style: const TextStyle(
+                style: TextStyle(
                   color: Constants.kPrimaryColor,
                   fontWeight: FontWeight.w600,
-                  fontSize: 12,
+                  fontSize: isVerySmallScreen ? 10 : 12,
                 ),
               ),
             ],
@@ -165,35 +213,42 @@ class FieldActivitiesWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildActivitiesList() {
+  Widget _buildActivitiesList(
+      [bool isSmallScreen = false, bool isVerySmallScreen = false]) {
     return Column(
       children: [
-        ...activities.asMap().entries.map((entry) {
-          final index = entry.key;
-          final activity = entry.value;
-          final isLast = index == activities.length - 1;
+        // Lista com scroll vertical
+        Expanded(
+          child: ListView.separated(
+            physics: const BouncingScrollPhysics(),
+            itemCount: activities.length,
+            separatorBuilder: (context, index) => SizedBox(
+              height: isVerySmallScreen ? 8 : 12,
+            ),
+            itemBuilder: (context, index) {
+              final activity = activities[index];
+              return _buildActivityItem(
+                  activity, index, isSmallScreen, isVerySmallScreen);
+            },
+          ),
+        ),
 
-          return Column(
-            children: [
-              _buildActivityItem(activity, index),
-              if (!isLast) const SizedBox(height: 12),
-            ],
-          );
-        }).toList(),
-        const SizedBox(height: 16),
-        _buildViewAllButton(),
+        // Botão "Ver caderno completo" fixo na parte inferior
+        SizedBox(height: isVerySmallScreen ? 12 : 16),
+        _buildViewAllButton(isSmallScreen, isVerySmallScreen),
       ],
     );
   }
 
-  Widget _buildActivityItem(FieldActivityItem activity, int index) {
+  Widget _buildActivityItem(FieldActivityItem activity, int index,
+      [bool isSmallScreen = false, bool isVerySmallScreen = false]) {
     return GestureDetector(
       onTap: () => onActivityTap?.call(index),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(isVerySmallScreen ? 12 : 16),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(isSmallScreen ? 10 : 12),
           border: Border.all(
             color: Colors.grey[100]!,
             width: 1,
@@ -203,19 +258,19 @@ class FieldActivitiesWidget extends StatelessWidget {
           children: [
             // Activity icon
             Container(
-              width: 40,
-              height: 40,
+              width: isVerySmallScreen ? 36 : 40,
+              height: isVerySmallScreen ? 36 : 40,
               decoration: BoxDecoration(
                 color: activity.color.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(isSmallScreen ? 8 : 10),
               ),
               child: Icon(
                 activity.icon,
                 color: activity.color,
-                size: 20,
+                size: isVerySmallScreen ? 16 : 20,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: isVerySmallScreen ? 8 : 12),
 
             // Activity content
             Expanded(
@@ -228,8 +283,8 @@ class FieldActivitiesWidget extends StatelessWidget {
                       Expanded(
                         child: Text(
                           activity.title,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: isVerySmallScreen ? 12 : 14,
                             fontWeight: FontWeight.w600,
                             color: Colors.black87,
                           ),
@@ -239,35 +294,35 @@ class FieldActivitiesWidget extends StatelessWidget {
                       )
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: isVerySmallScreen ? 2 : 4),
                   Row(
                     children: [
                       Icon(
                         Icons.location_on,
-                        size: 12,
+                        size: isVerySmallScreen ? 10 : 12,
                         color: Colors.grey[500],
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: isVerySmallScreen ? 2 : 4),
                       Text(
                         activity.lote,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: isVerySmallScreen ? 10 : 12,
                           color: Colors.grey[600],
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: isVerySmallScreen ? 8 : 12),
                       Icon(
                         Icons.person,
-                        size: 12,
+                        size: isVerySmallScreen ? 10 : 12,
                         color: Colors.grey[500],
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: isVerySmallScreen ? 2 : 4),
                       Expanded(
                         child: Text(
                           activity.user,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: isVerySmallScreen ? 10 : 12,
                             color: Colors.grey[600],
                             fontWeight: FontWeight.w500,
                           ),
@@ -286,15 +341,18 @@ class FieldActivitiesWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildViewAllButton() {
+  Widget _buildViewAllButton(
+      [bool isSmallScreen = false, bool isVerySmallScreen = false]) {
     return GestureDetector(
       onTap: onViewAll,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: EdgeInsets.symmetric(
+          vertical: isVerySmallScreen ? 10 : 12,
+        ),
         decoration: BoxDecoration(
           color: Constants.kPrimaryColor.withOpacity(0.05),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(isSmallScreen ? 8 : 10),
           border: Border.all(
             color: Constants.kPrimaryColor.withOpacity(0.2),
             width: 1,
@@ -302,20 +360,20 @@ class FieldActivitiesWidget extends StatelessWidget {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text(
               'Ver caderno completo',
               style: TextStyle(
                 color: Constants.kPrimaryColor,
                 fontWeight: FontWeight.w600,
-                fontSize: 14,
+                fontSize: isVerySmallScreen ? 12 : 14,
               ),
             ),
-            SizedBox(width: 4),
+            SizedBox(width: isVerySmallScreen ? 2 : 4),
             Icon(
               Icons.arrow_forward_ios,
               color: Constants.kPrimaryColor,
-              size: 12,
+              size: isVerySmallScreen ? 10 : 12,
             ),
           ],
         ),

@@ -8,6 +8,8 @@ import 'package:osi_solucoes/features/data/datasources/login/login_datasource.da
 import 'package:osi_solucoes/features/data/datasources/lote/lote_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/protocolo/protocolo_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/recuperarSenha/recuperar_senha_datasource.dart';
+import 'package:osi_solucoes/features/data/datasources/relatorioProducao/relatorioProducao_datasource.dart';
+import 'package:osi_solucoes/features/data/datasources/relatorioStatusLotes/relatorioStatusLotes_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/setor/setor_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/solucoes/solucoes_nutritivas_datasource.dart';
 import 'package:osi_solucoes/features/data/repositories/agenda/agenda_repository.dart';
@@ -17,6 +19,10 @@ import 'package:osi_solucoes/features/data/repositories/gerenciarEquipe/gerencia
 import 'package:osi_solucoes/features/data/repositories/lote/lote_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/protocolo/protocolo_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/recuperarSenha/recuperar_senha_repository.dart';
+import 'package:osi_solucoes/features/data/repositories/relatorioProducao/relatorioProducao_repository.dart';
+import 'package:osi_solucoes/features/data/repositories/relatorioProducao/relatorioProducao_repository_interface.dart';
+import 'package:osi_solucoes/features/data/repositories/relatorioStatusLotes/relatorioStatusLote_repository.dart';
+import 'package:osi_solucoes/features/data/repositories/relatorioStatusLotes/relatorioStatusLote_repository_interface.dart';
 import 'package:osi_solucoes/features/data/repositories/reservatorio/reservatorio_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/setor/setor_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_repository.dart';
@@ -26,6 +32,8 @@ import 'package:osi_solucoes/features/presenter/viewmodels/gerenciar_equipe_stor
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/recuperar_senha_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/relatorio_producao_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/relatorio_status_lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 
 import '../../features/data/datasources/area/area_datasource.dart';
@@ -74,6 +82,12 @@ Future<void> initInject() async {
       () => GerenciarEquipeDatasource());
   sl.registerLazySingleton<IRecuperarSenhaDatasource>(
       () => RecuperarSenhaDatasource());
+  sl.registerLazySingleton<IRelatorioProducaoDatasource>(
+    () => RelatorioProducaoDatasource(),
+  );
+  sl.registerLazySingleton<IRelatorioStatusLotesDatasource>(
+    () => RelatorioStatusLotesDatasource(),
+  );
 
   //repositories
   sl.registerLazySingleton<CadastroRepository>(
@@ -102,6 +116,16 @@ Future<void> initInject() async {
       () => ProtocoloRepository(datasource: sl()));
   sl.registerLazySingleton<AgendaRepository>(
       () => AgendaRepository(datasource: sl()));
+  sl.registerLazySingleton<IRelatorioProducaoRepository>(
+    () => RelatorioProducaoRepository(
+      datasource: sl<IRelatorioProducaoDatasource>(),
+    ),
+  );
+  sl.registerLazySingleton<IRelatorioStatusLoteRepository>(
+    () => RelatorioStatusLoteRepository(
+      datasource: sl<IRelatorioStatusLotesDatasource>(),
+    ),
+  );
 
   //viewmodels
   sl.registerLazySingleton<AjustesStore>(() => AjustesStore());
@@ -121,6 +145,11 @@ Future<void> initInject() async {
   sl.registerLazySingleton<SolucaoStore>(() => SolucaoStore());
   sl.registerLazySingleton<GerenciarEquipeStore>(() => GerenciarEquipeStore());
   sl.registerLazySingleton<ProtocoloStore>(() => ProtocoloStore());
+  sl.registerLazySingleton<RelatorioProducaoStore>(
+      () => RelatorioProducaoStore());
+  sl.registerLazySingleton<RelatorioStatusLoteStore>(
+    () => RelatorioStatusLoteStore(),
+  );
 
   sl.registerFactoryParam<MultiAccountsPage, Usuario, bool>(
     (param1, param2) => MultiAccountsPage(

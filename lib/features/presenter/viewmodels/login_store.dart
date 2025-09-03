@@ -55,6 +55,7 @@ abstract class _LoginStoreBase with Store {
     bool isMultipleAccount = false;
 
     var users = await loginRepository.login(email.text, senha.text, email.text);
+    print(users);
 
     users.fold(
       (err) {

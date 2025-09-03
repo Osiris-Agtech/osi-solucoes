@@ -9,7 +9,10 @@ import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/lot_status_pie_chart_widget.dart';
+import 'package:osi_solucoes/features/presenter/views/home/components/daily_tasks_widget.dart';
+import 'package:osi_solucoes/features/presenter/views/home/components/field_activities_widget.dart';
+import 'package:osi_solucoes/features/presenter/views/home/components/lot_status_metrics_widget_clean.dart';
+import 'package:osi_solucoes/features/presenter/views/home/components/productivity_chart_container.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
 
@@ -31,6 +34,16 @@ class _HomePageState extends State<HomePage> {
   ModulosStore modulosStore = GetIt.I<ModulosStore>();
   HomeStore store = GetIt.I<HomeStore>();
   final Duration duration = const Duration(milliseconds: 300);
+
+  // Variáveis para o carousel do dashboard
+  final PageController _dashboardPageController = PageController();
+  int _currentDashboardIndex = 0;
+  final List<String> _dashboardTitles = [
+    'Produtividade',
+    'Tarefas Diárias',
+    'Atividades do Campo',
+    'Status dos Lotes',
+  ];
 
   Future<bool> exitApp() async {
     showDialog<bool>(
@@ -76,6 +89,12 @@ class _HomePageState extends State<HomePage> {
       ),
     );
     return true;
+  }
+
+  @override
+  void dispose() {
+    _dashboardPageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -523,23 +542,84 @@ class _HomePageState extends State<HomePage> {
                     top: 30,
                     bottom: 10,
                   ),
-                  child: const Text(
-                    'Dashboard',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black87,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        _dashboardTitles[_currentDashboardIndex],
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          _buildCarouselButton(
+                            Icons.keyboard_arrow_left,
+                            () => _previousDashboard(),
+                            _currentDashboardIndex > 0,
+                          ),
+                          const SizedBox(width: 8),
+                          _buildCarouselButton(
+                            Icons.keyboard_arrow_right,
+                            () => _nextDashboard(),
+                            _currentDashboardIndex <
+                                _dashboardTitles.length - 1,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
 
-              // Gráfico de Produtividade
-              const SliverToBoxAdapter(
-                // child: ProductivityChartWidget(),
-                // child: DailyTasksWidget(),
-                // child: FieldActivitiesWidget(),
-                child: LotStatusPieChartWidget(),
+              // Carousel de Widgets do Dashboard
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 400, // Altura fixa para o carousel
+                  child: PageView(
+                    controller: _dashboardPageController,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentDashboardIndex = index;
+                      });
+                    },
+                    children: const [
+                      ProductivityChartContainer(),
+                      DailyTasksWidget(),
+                      FieldActivitiesWidget(),
+                      LotStatusMetricsWidget(
+                        title: 'Status dos Lotes',
+                        subtitle: 'Situação atual',
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Indicadores do Carousel
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      _dashboardTitles.length,
+                      (index) => Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        width: _currentDashboardIndex == index ? 24 : 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: _currentDashboardIndex == index
+                              ? Constants.kPrimaryColor
+                              : Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
 
               // Título da seção de módulos
@@ -1070,6 +1150,56 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  // Métodos para controle do carousel do dashboard
+  void _nextDashboard() {
+    if (_currentDashboardIndex < _dashboardTitles.length - 1) {
+      HapticFeedback.lightImpact(); // Feedback tátil
+      _dashboardPageController.nextPage(
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeInOutCubic,
+      );
+    }
+  }
+
+  void _previousDashboard() {
+    if (_currentDashboardIndex > 0) {
+      HapticFeedback.lightImpact(); // Feedback tátil
+      _dashboardPageController.previousPage(
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeInOutCubic,
+      );
+    }
+  }
+
+  Widget _buildCarouselButton(IconData icon, VoidCallback onTap, bool enabled) {
+    return GestureDetector(
+      onTap: enabled ? onTap : null,
+      child: Container(
+        width: 32,
+        height: 32,
+        decoration: BoxDecoration(
+          color: enabled ? Constants.kPrimaryColor : Colors.grey[300],
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: enabled
+              ? [
+                  BoxShadow(
+                    offset: const Offset(0, 2),
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 4,
+                    spreadRadius: 0,
+                  ),
+                ]
+              : [],
+        ),
+        child: Icon(
+          icon,
+          size: 20,
+          color: enabled ? Colors.white : Colors.grey[600],
         ),
       ),
     );

@@ -8,14 +8,32 @@ import '../usuario/usuario_model.dart';
 
 part 'conectaConta_model.g.dart';
 
+// Função helper para converter String para int
+int? _parseToInt(dynamic value) {
+  if (value == null) return null;
+  if (value is int) return value;
+  if (value is String) {
+    return int.tryParse(value);
+  }
+  if (value is double) return value.toInt();
+  return null;
+}
+
 @JsonSerializable(explicitToJson: true)
 class ConectaConta {
-  @JsonKey(required: false, disallowNullValue: false)
+  @JsonKey(
+    required: false,
+    disallowNullValue: false,
+    fromJson: _parseToInt,
+  )
   int? id;
+
   @JsonKey(required: false, disallowNullValue: false)
   Cargo? cargo;
+
   @JsonKey(required: false, disallowNullValue: false)
   Conta? conta;
+
   @JsonKey(required: false, disallowNullValue: false)
   Usuario? usuario;
 
@@ -26,8 +44,23 @@ class ConectaConta {
     this.usuario,
   });
 
-  factory ConectaConta.fromJson(Map<String, dynamic> json) =>
-      _$ConectaContaFromJson(json);
+  factory ConectaConta.fromJson(Map<String, dynamic> json) {
+    try {
+      // Remove __typename se existir
+      json.remove('__typename');
+      print('🔍 ConectaConta JSON: $json');
+      return _$ConectaContaFromJson(json);
+    } catch (e) {
+      print('❌ Erro na conversão ConectaConta: $e');
+      print('📋 JSON problemático: $json');
+      rethrow;
+    }
+  }
 
   Map<String, dynamic> toJson() => _$ConectaContaToJson(this);
+
+  @override
+  String toString() {
+    return 'ConectaConta{id: $id, conta: ${conta?.nome}, cargo: ${cargo?.cargo}}';
+  }
 }

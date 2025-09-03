@@ -7,7 +7,7 @@ part of 'conectaConta_model.dart';
 // **************************************************************************
 
 ConectaConta _$ConectaContaFromJson(Map<String, dynamic> json) => ConectaConta(
-      id: json['id'] as int?,
+      id: _parseToInt(json['id']),
       cargo: json['cargo'] == null
           ? null
           : Cargo.fromJson(json['cargo'] as Map<String, dynamic>),

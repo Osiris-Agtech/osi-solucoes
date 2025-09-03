@@ -63,6 +63,38 @@ class DailyTasksWidget extends StatelessWidget {
         icon: Icons.description,
         color: Color(0xFF6366F1),
       ),
+      TaskItem(
+        title: 'Manutenção equipamentos',
+        subtitle: 'Setor C - 10:30',
+        isCompleted: true,
+        priority: 'medium',
+        icon: Icons.build,
+        color: Color(0xFFEA580C),
+      ),
+      TaskItem(
+        title: 'Verificar pH da água',
+        subtitle: 'Reservatório - 13:00',
+        isCompleted: false,
+        priority: 'high',
+        icon: Icons.science,
+        color: Color(0xFFDC2626),
+      ),
+      TaskItem(
+        title: 'Monitorar temperatura',
+        subtitle: 'Estufa - 15:30',
+        isCompleted: false,
+        priority: 'medium',
+        icon: Icons.thermostat,
+        color: Color(0xFF7C3AED),
+      ),
+      TaskItem(
+        title: 'Preparar solução nutritiva',
+        subtitle: 'Laboratório - 17:00',
+        isCompleted: false,
+        priority: 'high',
+        icon: Icons.local_drink,
+        color: Color(0xFF10B981),
+      ),
     ],
     this.onTaskToggle,
     this.onViewAll,
@@ -70,39 +102,52 @@ class DailyTasksWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isSmallScreen = constraints.maxWidth < 600;
+        final isVerySmallScreen = constraints.maxWidth < 400;
 
-    return Padding(
-      padding: EdgeInsets.all(size.width * 0.05),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, 4),
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 20,
-              spreadRadius: 0,
+        // Calcula dimensões responsivas
+        final horizontalPadding = constraints.maxWidth * 0.05;
+        final internalPadding =
+            isVerySmallScreen ? 16.0 : (isSmallScreen ? 20.0 : 24.0);
+
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: Container(
+            height: constraints.maxHeight, // Usa toda altura disponível
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(isSmallScreen ? 16 : 20),
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(0, 4),
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 20,
+                  spreadRadius: 0,
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),
-              const SizedBox(height: 20),
-              _buildTasksList(),
-            ],
+            child: Padding(
+              padding: EdgeInsets.all(internalPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildHeader(isSmallScreen, isVerySmallScreen),
+                  SizedBox(height: isVerySmallScreen ? 12 : 16),
+                  Expanded(
+                      child: _buildTasksList(isSmallScreen, isVerySmallScreen)),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(
+      [bool isSmallScreen = false, bool isVerySmallScreen = false]) {
     final completedTasks = tasks.where((task) => task.isCompleted).length;
     final totalTasks = tasks.length;
     final completionPercentage =
@@ -111,34 +156,40 @@ class DailyTasksWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                color: Colors.black87,
+        Expanded(
+          flex: 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: isVerySmallScreen ? 18 : (isSmallScreen ? 20 : 22),
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black87,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-                fontWeight: FontWeight.w500,
+              SizedBox(height: isVerySmallScreen ? 2 : 4),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: isVerySmallScreen ? 12 : 14,
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        const SizedBox(width: 8),
         Column(
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 6,
+              padding: EdgeInsets.symmetric(
+                horizontal: isVerySmallScreen ? 8 : 12,
+                vertical: isVerySmallScreen ? 4 : 6,
               ),
               decoration: BoxDecoration(
                 color:
@@ -180,35 +231,42 @@ class DailyTasksWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTasksList() {
+  Widget _buildTasksList(
+      [bool isSmallScreen = false, bool isVerySmallScreen = false]) {
     return Column(
       children: [
-        ...tasks.asMap().entries.map((entry) {
-          final index = entry.key;
-          final task = entry.value;
-          final isLast = index == tasks.length - 1;
+        // Lista com scroll vertical
+        Expanded(
+          child: ListView.separated(
+            physics: const BouncingScrollPhysics(),
+            itemCount: tasks.length,
+            separatorBuilder: (context, index) => SizedBox(
+              height: isVerySmallScreen ? 8 : 12,
+            ),
+            itemBuilder: (context, index) {
+              final task = tasks[index];
+              return _buildTaskItem(
+                  task, index, isSmallScreen, isVerySmallScreen);
+            },
+          ),
+        ),
 
-          return Column(
-            children: [
-              _buildTaskItem(task, index),
-              if (!isLast) const SizedBox(height: 12),
-            ],
-          );
-        }).toList(),
-        const SizedBox(height: 16),
-        _buildViewAllButton(),
+        // Botão "Ver todas" fixo na parte inferior
+        SizedBox(height: isVerySmallScreen ? 12 : 16),
+        _buildViewAllButton(isSmallScreen, isVerySmallScreen),
       ],
     );
   }
 
-  Widget _buildTaskItem(TaskItem task, int index) {
+  Widget _buildTaskItem(TaskItem task, int index,
+      [bool isSmallScreen = false, bool isVerySmallScreen = false]) {
     return GestureDetector(
       onTap: () => onTaskToggle?.call(index),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(isVerySmallScreen ? 12 : 16),
         decoration: BoxDecoration(
           color: task.isCompleted ? Colors.grey[50] : Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(isSmallScreen ? 10 : 12),
           border: Border.all(
             color: task.isCompleted ? Colors.grey[200]! : Colors.grey[100]!,
             width: 1,
@@ -218,20 +276,20 @@ class DailyTasksWidget extends StatelessWidget {
           children: [
             // Checkbox/Icon
             Container(
-              width: 40,
-              height: 40,
+              width: isVerySmallScreen ? 36 : 40,
+              height: isVerySmallScreen ? 36 : 40,
               decoration: BoxDecoration(
                 color:
                     task.isCompleted ? task.color : task.color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(isSmallScreen ? 8 : 10),
               ),
               child: Icon(
                 task.isCompleted ? Icons.check : task.icon,
                 color: task.isCompleted ? Colors.white : task.color,
-                size: 20,
+                size: isVerySmallScreen ? 16 : 20,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: isVerySmallScreen ? 8 : 12),
 
             // Task content
             Expanded(
@@ -241,24 +299,28 @@ class DailyTasksWidget extends StatelessWidget {
                   Text(
                     task.title,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: isVerySmallScreen ? 12 : 14,
                       fontWeight: FontWeight.w600,
                       color:
                           task.isCompleted ? Colors.grey[500] : Colors.black87,
                       decoration:
                           task.isCompleted ? TextDecoration.lineThrough : null,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 2),
+                  SizedBox(height: isVerySmallScreen ? 1 : 2),
                   Text(
                     task.subtitle,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: isVerySmallScreen ? 10 : 12,
                       color: task.isCompleted
                           ? Colors.grey[400]
                           : Colors.grey[600],
                       fontWeight: FontWeight.w500,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
@@ -266,8 +328,8 @@ class DailyTasksWidget extends StatelessWidget {
 
             // Priority indicator
             Container(
-              width: 8,
-              height: 8,
+              width: isVerySmallScreen ? 6 : 8,
+              height: isVerySmallScreen ? 6 : 8,
               decoration: BoxDecoration(
                 color: _getPriorityColor(task.priority),
                 shape: BoxShape.circle,
@@ -279,15 +341,18 @@ class DailyTasksWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildViewAllButton() {
+  Widget _buildViewAllButton(
+      [bool isSmallScreen = false, bool isVerySmallScreen = false]) {
     return GestureDetector(
       onTap: onViewAll,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: EdgeInsets.symmetric(
+          vertical: isVerySmallScreen ? 10 : 12,
+        ),
         decoration: BoxDecoration(
           color: Constants.kPrimaryColor.withOpacity(0.05),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(isSmallScreen ? 8 : 10),
           border: Border.all(
             color: Constants.kPrimaryColor.withOpacity(0.2),
             width: 1,
@@ -295,20 +360,20 @@ class DailyTasksWidget extends StatelessWidget {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text(
               'Ver todas as tarefas',
               style: TextStyle(
                 color: Constants.kPrimaryColor,
                 fontWeight: FontWeight.w600,
-                fontSize: 14,
+                fontSize: isVerySmallScreen ? 12 : 14,
               ),
             ),
-            SizedBox(width: 4),
+            SizedBox(width: isVerySmallScreen ? 2 : 4),
             Icon(
               Icons.arrow_forward_ios,
               color: Constants.kPrimaryColor,
-              size: 12,
+              size: isVerySmallScreen ? 10 : 12,
             ),
           ],
         ),

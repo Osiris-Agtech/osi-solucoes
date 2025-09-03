@@ -7,16 +7,15 @@ part of 'usuario_model.dart';
 // **************************************************************************
 
 Usuario _$UsuarioFromJson(Map<String, dynamic> json) => Usuario(
-      id: json['id'] as int?,
+      id: _parseToInt(json['id']),
       nome: json['nome'] as String?,
       email: json['email'] as String?,
       senha: json['senha'] as String?,
       cod_acesso: json['cod_acesso'] as String?,
-      acesso_externo: json['acesso_externo'] as bool?,
-      ativo: json['ativo'] as bool?,
-      created_at: json['created_at'] == null
-          ? null
-          : DateTime.parse(json['created_at'] as String),
+      acesso_externo: _parseToBool(json['acesso_externo']),
+      ativo: _parseToBool(json['ativo']),
+      created_at: _parseToDateTime(json['created_at']),
+      fk_pessoas_id: _parseToInt(json['fk_pessoas_id']),
       pessoa: json['pessoa'] == null
           ? null
           : Pessoa.fromJson(json['pessoa'] as Map<String, dynamic>),
@@ -38,6 +37,7 @@ Map<String, dynamic> _$UsuarioToJson(Usuario instance) => <String, dynamic>{
       'acesso_externo': instance.acesso_externo,
       'ativo': instance.ativo,
       'created_at': instance.created_at?.toIso8601String(),
+      'fk_pessoas_id': instance.fk_pessoas_id,
       'pessoa': instance.pessoa?.toJson(),
       'contas': instance.contas?.map((e) => e.toJson()).toList(),
       'selected_conta': instance.selected_conta?.toJson(),

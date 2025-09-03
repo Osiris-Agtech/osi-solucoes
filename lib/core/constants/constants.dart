@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class Constants {
   // API Conection
-  static const String stagingUrl = 'http://200.129.247.244:4040/';
-  static const String devUrl = 'http://200.129.247.244:4000/';
+  static const String stagingUrl = 'http://localhost:4000/graphql';
+  static const String devUrl = 'http://localhost:4000/graphql';
 
   // Colors
   static const kPrimaryColor = Color.fromARGB(255, 38, 193, 100);

@@ -7,7 +7,7 @@ part of 'pessoa_model.dart';
 // **************************************************************************
 
 Pessoa _$PessoaFromJson(Map<String, dynamic> json) => Pessoa(
-      id: json['id'] as int?,
+      id: _parseToInt(json['id']),
       nome: json['nome'] as String?,
       sobrenome: json['sobrenome'] as String?,
       telefone: json['telefone'] as String?,
@@ -15,9 +15,7 @@ Pessoa _$PessoaFromJson(Map<String, dynamic> json) => Pessoa(
       cidade: json['cidade'] as String?,
       estado: json['estado'] as String?,
       pais: json['pais'] as String?,
-      created_at: json['created_at'] == null
-          ? null
-          : DateTime.parse(json['created_at'] as String),
+      created_at: _parseToDateTime(json['created_at']),
       usuarios: (json['usuarios'] as List<dynamic>?)
               ?.map((e) => Usuario.fromJson(e as Map<String, dynamic>))
               .toList() ??

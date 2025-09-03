@@ -7,7 +7,7 @@ part of 'cargo_model.dart';
 // **************************************************************************
 
 Cargo _$CargoFromJson(Map<String, dynamic> json) => Cargo(
-      id: json['id'] as int?,
+      id: _parseToInt(json['id']),
       cargo: json['cargo'] as String?,
       permissoes: (json['permissoes'] as List<dynamic>?)
           ?.map((e) => CargoPermissao.fromJson(e as Map<String, dynamic>))
@@ -35,8 +35,12 @@ ConcatenatedPermission _$ConcatenatedPermissionFromJson(
         Map<String, dynamic> json) =>
     ConcatenatedPermission(
       title: json['title'] as String?,
-      permissionRead: json['permissionRead'] as bool? ?? false,
-      permissionWrite: json['permissionWrite'] as bool? ?? false,
+      permissionRead: json['permissionRead'] == null
+          ? false
+          : _parseToBool(json['permissionRead']),
+      permissionWrite: json['permissionWrite'] == null
+          ? false
+          : _parseToBool(json['permissionWrite']),
     );
 
 Map<String, dynamic> _$ConcatenatedPermissionToJson(

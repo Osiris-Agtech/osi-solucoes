@@ -20,89 +20,212 @@ class LoginDatasource implements ILoginDatasource {
     try {
       GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-      const String readRepositories = r'''
-        query BuscarUsuarios($senha: String!, $email: String, $codigo: String) {
-          usuarios(where: {
-            OR: [
-              {
-                AND: [
-                  {
-                    email: {
-                      equals: $email
-                    },
-                    senha: {
-                      equals: $senha
-                    }
-                  }
-                ]
-              },
-              {
-                AND: [
-                  {
-                    cod_acesso: {
-                      equals: $codigo
-                    },
-                    senha: {
-                      equals: $senha
-                    }
-                  }
-                ]
-              }
-            ] 
-          }) {
-            id
-            nome
-            email
-            senha
-            contas {
-              conta {
+      List<Usuario> usuarios = [];
+
+      // Strategy 1: Tentar login por email primeiro
+      if (email.isNotEmpty) {
+        const String loginPorEmail = r'''
+          query BuscarUsuarioPorEmail($email: String!) {
+            usuarios(where: {
+              email: $email
+            }) {
+              id
+              nome
+              email
+              senha
+              ativo
+              cod_acesso
+              acesso_externo
+              fk_pessoas_id
+              pessoa {
                 id
                 nome
-                nivel
               }
-              cargo {
-                id
-                cargo
-                permissoes {
-                  permissao {
-                    id
-                    nome
+              contas {
+                conta {
+                  id
+                  nome
+                  nivel
+                }
+                cargo {
+                  id
+                  cargo
+                  permissoes {
+                    permissao {
+                      id
+                      nome
+                    }
                   }
                 }
               }
             }
           }
+        ''';
+
+        final QueryOptions optionsEmail = QueryOptions(
+          document: gql(loginPorEmail),
+          variables: <String, dynamic>{
+            'email': email,
+          },
+        );
+
+        final QueryResult resultEmail = await client.query(optionsEmail);
+
+        if (!resultEmail.hasException &&
+            resultEmail.data?['usuarios'] != null) {
+          List? usuariosPorEmail = resultEmail.data?['usuarios'] as List?;
+
+          if (usuariosPorEmail != null && usuariosPorEmail.isNotEmpty) {
+            // Validar senha manualmente no código
+            for (var usuarioData in usuariosPorEmail) {
+              Usuario usuario = Usuario.fromJson(usuarioData);
+
+              // Verificar se a senha confere e se o usuário está ativo
+              if (usuario.senha == password && (usuario.ativo ?? false)) {
+                usuarios.add(usuario);
+                break; // Encontrou o usuário correto
+              }
+            }
+          }
         }
-      ''';
-
-      final QueryOptions? options;
-
-      options = QueryOptions(
-        document: gql(readRepositories),
-        variables: <String, dynamic>{
-          'email': email,
-          'codigo': code,
-          'senha': password,
-        },
-      );
-
-      final QueryResult result = await client.query(options);
-
-      if (!result.hasException) {
-        if (result.data?['usuarios'] == []) return const Right([]);
-
-        List? usuario = result.data?['usuarios']
-            ?.map((item) => Usuario.fromJson(item))
-            .toList();
-        if (usuario == null || usuario.isEmpty) {
-          return Left(ErrorLogin(message: FailureMessage.userNotFoundMessage));
-        }
-
-        List<Usuario> users = usuario.cast<Usuario>();
-        return Right(users);
-      } else {
-        return Left(ErrorLogin(message: FailureMessage.errorLoginMessage));
       }
+
+      // Strategy 2: Se não encontrou por email, tentar por código de acesso
+      if (usuarios.isEmpty && code.isNotEmpty) {
+        const String loginPorCodigo = r'''
+          query BuscarUsuarioPorCodigo($cod_acesso: String!) {
+            usuarios(where: {
+              cod_acesso: $cod_acesso
+            }) {
+              id
+              nome
+              email
+              senha
+              ativo
+              cod_acesso
+              acesso_externo
+              fk_pessoas_id
+              pessoa {
+                id
+                nome
+              }
+              contas {
+                conta {
+                  id
+                  nome
+                  nivel
+                }
+                cargo {
+                  id
+                  cargo
+                  permissoes {
+                    permissao {
+                      id
+                      nome
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ''';
+
+        final QueryOptions optionsCodigo = QueryOptions(
+          document: gql(loginPorCodigo),
+          variables: <String, dynamic>{
+            'cod_acesso': code,
+          },
+        );
+
+        final QueryResult resultCodigo = await client.query(optionsCodigo);
+
+        if (!resultCodigo.hasException &&
+            resultCodigo.data?['usuarios'] != null) {
+          List? usuariosPorCodigo = resultCodigo.data?['usuarios'] as List?;
+
+          if (usuariosPorCodigo != null && usuariosPorCodigo.isNotEmpty) {
+            // Validar senha manualmente no código
+            for (var usuarioData in usuariosPorCodigo) {
+              Usuario usuario = Usuario.fromJson(usuarioData);
+
+              // Verificar se a senha confere e se o usuário está ativo
+              if (usuario.senha == password && (usuario.ativo ?? false)) {
+                usuarios.add(usuario);
+                break; // Encontrou o usuário correto
+              }
+            }
+          }
+        }
+      }
+
+      // Strategy 3: Se ainda não encontrou e temos email, usar a query específica
+      if (usuarios.isEmpty && email.isNotEmpty) {
+        const String usuarioPorEmailQuery = r'''
+          query UsuarioPorEmail($email: String!) {
+            usuarioPorEmail(email: $email) {
+              id
+              nome
+              email
+              senha
+              ativo
+              cod_acesso
+              acesso_externo
+              fk_pessoas_id
+              pessoa {
+                id
+                nome
+              }
+              contas {
+                conta {
+                  id
+                  nome
+                  nivel
+                }
+                cargo {
+                  id
+                  cargo
+                  permissoes {
+                    permissao {
+                      id
+                      nome
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ''';
+
+        final QueryOptions optionsEspecifica = QueryOptions(
+          document: gql(usuarioPorEmailQuery),
+          variables: <String, dynamic>{
+            'email': email,
+          },
+        );
+
+        final QueryResult resultEspecifica =
+            await client.query(optionsEspecifica);
+
+        if (!resultEspecifica.hasException &&
+            resultEspecifica.data?['usuarioPorEmail'] != null) {
+          var usuarioData = resultEspecifica.data?['usuarioPorEmail'];
+
+          if (usuarioData != null) {
+            Usuario usuario = Usuario.fromJson(usuarioData);
+
+            // Verificar se a senha confere e se o usuário está ativo
+            if (usuario.senha == password && (usuario.ativo ?? false)) {
+              usuarios.add(usuario);
+            }
+          }
+        }
+      }
+
+      if (usuarios.isEmpty) {
+        return Left(ErrorLogin(message: FailureMessage.userNotFoundMessage));
+      }
+
+      return Right(usuarios);
     } catch (e) {
       return Left(ErrorLogin(message: FailureMessage.errorLoginMessage));
     }
