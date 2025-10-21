@@ -83,6 +83,5 @@ class ErrorRelatorioStatusLotes implements Failure {
 
   ErrorRelatorioStatusLotes({required this.message});
 
-  @override
   List<Object?> get props => [message];
 }

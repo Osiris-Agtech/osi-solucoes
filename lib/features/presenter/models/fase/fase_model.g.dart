@@ -7,10 +7,10 @@ part of 'fase_model.dart';
 // **************************************************************************
 
 Fase _$FaseFromJson(Map<String, dynamic> json) => Fase(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       descricao: json['descricao'] as String?,
-      duracao_dias: json['duracao_dias'] as int?,
+      duracao_dias: (json['duracao_dias'] as num?)?.toInt(),
       created_at: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),

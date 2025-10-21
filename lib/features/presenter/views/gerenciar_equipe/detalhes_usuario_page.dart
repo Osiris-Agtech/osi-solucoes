@@ -8,7 +8,7 @@ import '../../models/cargo/cargo_model.dart';
 import '../../viewmodels/gerenciar_equipe_store.dart';
 
 class DetalhesUsuarioPage extends StatefulWidget {
-  const DetalhesUsuarioPage({Key? key}) : super(key: key);
+  const DetalhesUsuarioPage({super.key});
 
   @override
   State<DetalhesUsuarioPage> createState() => _DetalhesUsuarioPageState();
@@ -20,7 +20,7 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       await store.buscarCargos();
       store.setInitialCargo();
     });
@@ -145,7 +145,7 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
               store.setAtivo(value);
             },
             activeTrackColor: Constants.kPrimaryColor,
-            activeColor: Constants.kCardColor,
+            activeThumbColor: Constants.kCardColor,
             inactiveTrackColor: Constants.kGreyText2,
             inactiveThumbColor: Constants.kCardColor,
           ),

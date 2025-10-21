@@ -7,7 +7,7 @@ import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcen
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 
 class DetalhesSolucao extends StatefulWidget {
-  const DetalhesSolucao({Key? key}) : super(key: key);
+  const DetalhesSolucao({super.key});
 
   @override
   State<DetalhesSolucao> createState() => _DetalhesSolucaoState();

@@ -52,7 +52,7 @@ Container autorPage(BuildContext context, CadernoCampoStore store) {
           //MOCK PARA DROPDOWN
           child: Observer(builder: (_) {
             return DropdownButtonFormField<Usuario>(
-              value: store.selectedUsuario,
+              initialValue: store.selectedUsuario,
               hint: const Text(
                 'Selecionar autor',
                 style: TextStyle(fontStyle: FontStyle.italic),

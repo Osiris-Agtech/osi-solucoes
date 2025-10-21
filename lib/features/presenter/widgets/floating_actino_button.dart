@@ -11,9 +11,9 @@ import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 class NewFloatingActionButton extends StatefulWidget {
   final int nivel;
   const NewFloatingActionButton({
-    Key? key,
+    super.key,
     required this.nivel,
-  }) : super(key: key);
+  });
 
   @override
   State<NewFloatingActionButton> createState() =>

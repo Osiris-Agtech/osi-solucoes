@@ -14,9 +14,9 @@ import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
 part 'setor_store.g.dart';
 
-class SetorStore = _SetorStoreBase with _$SetorStore;
+class SetorStore = SetorStoreBase with _$SetorStore;
 
-abstract class _SetorStoreBase with Store {
+abstract class SetorStoreBase with Store {
   SetorRepository setorRepository = GetIt.I<SetorRepository>();
   AuthController authController = GetIt.I<AuthController>();
 
@@ -41,7 +41,7 @@ abstract class _SetorStoreBase with Store {
   List<Setor> setorList = [];
 
   @action
-  changeOrder() => order == "asc" ? order = "desc" : order = "asc";
+  String changeOrder() => order == "asc" ? order = "desc" : order = "asc";
 
   @observable
   DateTime data1 = DateTime(
@@ -51,22 +51,22 @@ abstract class _SetorStoreBase with Store {
   DateTime data2 = DateTime.now();
 
   @action
-  setData1(DateTime value) => data1 = value;
+  DateTime setData1(DateTime value) => data1 = value;
 
   @action
-  setData2(DateTime value) => data2 = value;
+  DateTime setData2(DateTime value) => data2 = value;
 
   @action
-  setAreaSelecionada(Area estufa) => areaSelecionada = estufa;
+  Area setAreaSelecionada(Area estufa) => areaSelecionada = estufa;
 
   @action
-  setDropDown(String value) => dropDownValue = value;
+  String setDropDown(String value) => dropDownValue = value;
 
   @action
-  setSearchSetorText(String value) => searchSetorText = value;
+  String setSearchSetorText(String value) => searchSetorText = value;
 
   @action
-  buscarSetores() async {
+  Future<void> buscarSetores() async {
     isSetorListLoading = true;
 
     SetorRepository setorRepository = GetIt.I<SetorRepository>();
@@ -140,13 +140,13 @@ abstract class _SetorStoreBase with Store {
   Setor novoSetor = Setor();
 
   @action
-  setIsEditing(bool value) => isEditing = value;
+  bool setIsEditing(bool value) => isEditing = value;
 
   @action
-  setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
+  bool setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
 
   @action
-  setSetorEditing(Setor setor) {
+  void setSetorEditing(Setor setor) {
     novoSetorName = TextEditingController(text: setor.nome);
     novoSetorDescription = TextEditingController(text: setor.descricao);
     novoSetorReservatorio = setor.reservatorio ?? Reservatorio();
@@ -157,19 +157,19 @@ abstract class _SetorStoreBase with Store {
   }
 
   @action
-  setDotIndicator(int value) {
+  void setDotIndicator(int value) {
     if (value >= 0 && value <= 1) {
       dotIndicator = value;
     }
   }
 
   @action
-  setShowTextFormField(bool value) {
+  void setShowTextFormField(bool value) {
     showTextFormField = value;
   }
 
   @action
-  buscarReservatorios() async {
+  Future<void> buscarReservatorios() async {
     var reservatorios = await setorRepository
         .buscarReservatorios(authController.usuario.selected_conta!.conta!.id!);
 
@@ -184,7 +184,7 @@ abstract class _SetorStoreBase with Store {
   }
 
   @action
-  limparTudo() {
+  void limparTudo() {
     reservatorioList.clear();
     novoSetorName.clear();
     novoSetorDescription.clear();
@@ -192,16 +192,16 @@ abstract class _SetorStoreBase with Store {
   }
 
   @action
-  alterarNome(String name) {
+  void alterarNome(String name) {
     novoSetorName = TextEditingController(text: name);
   }
 
   @action
-  setReservatorioSelecionada(Reservatorio reservatorio) =>
+  Reservatorio setReservatorioSelecionada(Reservatorio reservatorio) =>
       novoSetorReservatorio = reservatorio;
 
   @action
-  validarCadastro() {
+  bool validarCadastro() {
     bool validate = novoSetorName.text.isNotEmpty;
 
     mostrarErroFormulario = !validate;
@@ -209,7 +209,7 @@ abstract class _SetorStoreBase with Store {
   }
 
   @action
-  registrarSetor() async {
+  Future<void> registrarSetor() async {
     SetorRepository setorRepository = GetIt.I<SetorRepository>();
     AreaCultivoStore areaCultivoStore = GetIt.I<AreaCultivoStore>();
 
@@ -241,7 +241,7 @@ abstract class _SetorStoreBase with Store {
   }
 
   @action
-  alterarSetor() async {
+  Future<void> alterarSetor() async {
     SetorRepository setorRepository = GetIt.I<SetorRepository>();
     LoteStore loteStore = GetIt.I<LoteStore>();
     isNovoSetorLoading = true;
@@ -270,5 +270,4 @@ abstract class _SetorStoreBase with Store {
     isNovoSetorLoading = false;
   }
   // #################### END CADASTRO SETOR #######################
-
 }

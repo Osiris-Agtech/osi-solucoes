@@ -15,9 +15,9 @@ import '../../data/repositories/cadastro/cadastro_repository.dart';
 
 part 'cadastro_store.g.dart';
 
-class CadastroStore = _CadastroStoreBase with _$CadastroStore;
+class CadastroStore = CadastroStoreBase with _$CadastroStore;
 
-abstract class _CadastroStoreBase with Store {
+abstract class CadastroStoreBase with Store {
   // late CadastroRepository repository = Modular.get<CadastroRepository>();
   // late AppController appController = Modular.get();
   CadastroRepository repository = GetIt.I<CadastroRepository>();
@@ -75,7 +75,7 @@ abstract class _CadastroStoreBase with Store {
   String codigoGerado = "";
 
   @action
-  gerarCodigo() {
+  String gerarCodigo() {
     var rng = Random();
     codigoGerado = "";
     for (var i = 0; i < 4; i++) {
@@ -85,7 +85,7 @@ abstract class _CadastroStoreBase with Store {
   }
 
   @action
-  enviarCodigoEmail() async {
+  Future<String> enviarCodigoEmail() async {
     String strReturn = "";
     var response =
         await repository.enviarEmail(codigoGerado, email.text, nome.text);
@@ -98,7 +98,7 @@ abstract class _CadastroStoreBase with Store {
   }
 
   @action
-  verificaCodigo() {
+  bool verificaCodigo() {
     code = primeiroDigito.text +
         segundoDigito.text +
         terceiroDigito.text +
@@ -110,7 +110,7 @@ abstract class _CadastroStoreBase with Store {
   }
 
   @action
-  toggleObscure() {
+  void toggleObscure() {
     isObscure = !isObscure;
   }
 
@@ -145,7 +145,7 @@ abstract class _CadastroStoreBase with Store {
   }
 
   @action
-  verificaEmail() async {
+  Future<String> verificaEmail() async {
     String strReturn = "";
     var response = await repository.verificaUser(email.text);
 
@@ -157,7 +157,7 @@ abstract class _CadastroStoreBase with Store {
   }
 
   @action
-  cadastraUser() async {
+  Future<String> cadastraUser() async {
     String strReturn = "";
     var usuario = await repository.cadastraConta(
       nome: nome.text,

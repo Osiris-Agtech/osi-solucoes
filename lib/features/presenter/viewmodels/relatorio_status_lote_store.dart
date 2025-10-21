@@ -10,10 +10,10 @@ import '../../../core/utils/toast.dart';
 
 part 'relatorio_status_lote_store.g.dart';
 
-class RelatorioStatusLoteStore = _RelatorioStatusLoteStoreBase
+class RelatorioStatusLoteStore = RelatorioStatusLoteStoreBase
     with _$RelatorioStatusLoteStore;
 
-abstract class _RelatorioStatusLoteStoreBase with Store {
+abstract class RelatorioStatusLoteStoreBase with Store {
   @observable
   bool isLoading = false;
 
@@ -134,7 +134,7 @@ abstract class _RelatorioStatusLoteStoreBase with Store {
     try {
       String hex = colorHex.replaceAll('#', '');
       if (hex.length == 6) {
-        hex = 'FF' + hex; // Adiciona alpha
+        hex = 'FF$hex'; // Adiciona alpha
       }
       return Color(int.parse(hex, radix: 16));
     } catch (e) {
@@ -148,6 +148,7 @@ abstract class _RelatorioStatusLoteStoreBase with Store {
   }
 
   // Método para mapear labels para cores específicas
+  // ignore: unused_element
   Color _getColorForLabel(String label) {
     switch (label.toLowerCase()) {
       case 'ativos':

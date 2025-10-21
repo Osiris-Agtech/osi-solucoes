@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:dartz/dartz.dart';
 import 'package:graphql/client.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
@@ -98,6 +100,5 @@ class ErrorRelatorioProducao implements Failure {
 
   ErrorRelatorioProducao({required this.message});
 
-  @override
   List<Object?> get props => [message];
 }

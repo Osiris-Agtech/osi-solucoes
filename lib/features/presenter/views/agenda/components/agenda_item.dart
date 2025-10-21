@@ -92,8 +92,8 @@ Padding agendaItem({
                                 color: Constants.kGreyLight,
                                 boxShadow: [
                                   BoxShadow(
-                                    color:
-                                        Constants.kGreyMedium.withOpacity(.3),
+                                    color: Constants.kGreyMedium
+                                        .withValues(alpha: .3),
                                     blurRadius: 2,
                                     offset: const Offset(1, 2),
                                   ),

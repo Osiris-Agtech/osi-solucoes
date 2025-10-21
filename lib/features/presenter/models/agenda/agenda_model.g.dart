@@ -7,7 +7,7 @@ part of 'agenda_model.dart';
 // **************************************************************************
 
 Agenda _$AgendaFromJson(Map<String, dynamic> json) => Agenda(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       titulo: json['titulo'] as String?,
       descricao: json['descricao'] as String?,
       ativo: json['ativo'] as bool?,

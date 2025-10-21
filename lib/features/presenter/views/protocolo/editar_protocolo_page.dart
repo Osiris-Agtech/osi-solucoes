@@ -11,22 +11,22 @@ import '../../../../core/utils/toast.dart';
 
 class EditarProtocoloPage extends StatefulWidget {
   const EditarProtocoloPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<EditarProtocoloPage> createState() => _EditarProtocoloPageState();
 }
 
 class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
-  CarouselController carouselController = CarouselController();
-  CarouselController controlerPages = CarouselController();
+  CarouselSliderController carouselController = CarouselSliderController();
+  CarouselSliderController controlerPages = CarouselSliderController();
   ProtocoloStore store = GetIt.I<ProtocoloStore>();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       store.buscarCulturas();
       store.buscarFasesDetalhes();
       store.prepararListaDetalhesFase();
@@ -284,30 +284,31 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
           height: 40,
           child: Observer(builder: (_) {
             return ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Constants.kPrimaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Constants.kPrimaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: const Text(
-                  "Atualizar",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                onPressed: store.loteFoiAlterado == true
-                    ? () {
-                        if (!store.loteFoiAlterado) {
-                          toastError(
-                              message:
-                                  "Realize alguma alteração para atualizar o protocolo!");
-                          return;
-                        }
-                        store.atualizarProtocolo();
+              ),
+              onPressed: store.loteFoiAlterado == true
+                  ? () {
+                      if (!store.loteFoiAlterado) {
+                        toastError(
+                            message:
+                                "Realize alguma alteração para atualizar o protocolo!");
+                        return;
                       }
-                    : null);
+                      store.atualizarProtocolo();
+                    }
+                  : null,
+              child: const Text(
+                "Atualizar",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            );
           }),
         ),
       ),

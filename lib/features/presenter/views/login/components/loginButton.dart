@@ -10,7 +10,7 @@ import 'package:osi_solucoes/features/presenter/views/login/components/loadingDi
 import '../../../viewmodels/login_store.dart';
 import '../multi_account_page.dart';
 
-loginButton(
+Padding loginButton(
   Size size,
   GlobalKey<FormState> formKey,
   LoginStore store,
@@ -22,7 +22,7 @@ loginButton(
       width: size.width * .7,
       height: 45,
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(primary: Constants.kPrimaryColor),
+        style: ElevatedButton.styleFrom(backgroundColor: Constants.kPrimaryColor),
         child: Text(
           "textButton".i18n(),
           style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),

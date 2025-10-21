@@ -2,7 +2,8 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as datetime_picker;
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,7 @@ import 'package:osi_solucoes/features/presenter/views/area_cultivo/components/to
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
 class LotePage extends StatefulWidget {
-  const LotePage({Key? key}) : super(key: key);
+  const LotePage({super.key});
 
   @override
   State<LotePage> createState() => _LotePageState();
@@ -126,10 +127,10 @@ class _LotePageState extends State<LotePage> {
 class AppBar extends StatefulWidget {
   final Setor setorN2;
   const AppBar({
-    Key? key,
+    super.key,
     required this.setorN2,
     required this.store,
-  }) : super(key: key);
+  });
 
   final LoteStore store;
 
@@ -141,8 +142,8 @@ class _AppBarState extends State<AppBar> {
   SetorStore setorStore = GetIt.I<SetorStore>();
   LoteStore loteStore = GetIt.I<LoteStore>();
 
-  CarouselController carouselController = CarouselController();
-  CarouselController controlerPages = CarouselController();
+  CarouselSliderController carouselController = CarouselSliderController();
+  CarouselSliderController controlerPages = CarouselSliderController();
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (_) {
@@ -183,7 +184,10 @@ class _AppBarState extends State<AppBar> {
                       PopupMenuButton(
                         icon: SvgPicture.asset(
                           "assets/icons/settings_icon.svg",
-                          color: Constants.kButtonGrey,
+                          colorFilter: ColorFilter.mode(
+                            Constants.kButtonGrey,
+                            BlendMode.srcIn,
+                          ),
                           height: 20,
                         ),
                         itemBuilder: (context) => [
@@ -194,7 +198,7 @@ class _AppBarState extends State<AppBar> {
                               ],
                             ),
                             onTap: () async {
-                              await setorStore.setSetorEditing(widget.setorN2);
+                              setorStore.setSetorEditing(widget.setorN2);
                               Get.toNamed(Routes.cadastrarSetorPage);
                             },
                           ),
@@ -265,10 +269,12 @@ class _AppBarState extends State<AppBar> {
                                         const Text("De:"),
                                         InkWell(
                                           onTap: () {
-                                            DatePicker.showDatePicker(
+                                            datetime_picker.DatePicker
+                                                .showDatePicker(
                                               context,
                                               currentTime: widget.store.data1,
-                                              locale: LocaleType.pt,
+                                              locale:
+                                                  datetime_picker.LocaleType.pt,
                                               showTitleActions: true,
                                               minTime: DateTime(2018, 3, 5),
                                               maxTime: DateTime(2030, 12, 30),
@@ -277,7 +283,8 @@ class _AppBarState extends State<AppBar> {
                                                 await widget.store
                                                     .buscarLotes();
                                               },
-                                              theme: const DatePickerTheme(
+                                              theme: const datetime_picker
+                                                  .DatePickerTheme(
                                                 doneStyle: TextStyle(
                                                   color:
                                                       Constants.kPrimaryColor,
@@ -310,10 +317,12 @@ class _AppBarState extends State<AppBar> {
                                         const Text("Até"),
                                         InkWell(
                                           onTap: () {
-                                            DatePicker.showDatePicker(
+                                            datetime_picker.DatePicker
+                                                .showDatePicker(
                                               context,
                                               currentTime: widget.store.data2,
-                                              locale: LocaleType.pt,
+                                              locale:
+                                                  datetime_picker.LocaleType.pt,
                                               showTitleActions: true,
                                               minTime: DateTime(2018, 3, 5),
                                               maxTime: DateTime(2030, 12, 30),
@@ -322,7 +331,8 @@ class _AppBarState extends State<AppBar> {
                                                 await widget.store
                                                     .buscarLotes();
                                               },
-                                              theme: const DatePickerTheme(
+                                              theme: const datetime_picker
+                                                  .DatePickerTheme(
                                                 doneStyle: TextStyle(
                                                   color:
                                                       Constants.kPrimaryColor,
@@ -426,7 +436,7 @@ class _AppBarState extends State<AppBar> {
 
 class CardLote extends StatefulWidget {
   final Lote lote;
-  const CardLote({Key? key, required this.lote}) : super(key: key);
+  const CardLote({super.key, required this.lote});
 
   @override
   State<CardLote> createState() => _CardLoteState();

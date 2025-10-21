@@ -173,7 +173,7 @@ class FlutterRoundedCupertinoDatePickerWidget extends StatefulWidget {
   ///
   /// [use24hFormat] decides whether 24 hour format is used. Defaults to false.
   FlutterRoundedCupertinoDatePickerWidget(
-      {Key? key,
+      {super.key,
       this.mode = CupertinoDatePickerMode.dateAndTime,
       required this.onDateTimeChanged,
       DateTime? initialDateTime,
@@ -192,8 +192,7 @@ class FlutterRoundedCupertinoDatePickerWidget extends StatefulWidget {
         assert(
           minuteInterval > 0 && 60 % minuteInterval == 0,
           'minute interval is not a positive integer factor of 60',
-        ),
-        super(key: key) {
+        ) {
     assert(
       mode != CupertinoDatePickerMode.dateAndTime ||
           minimumDate == null ||
@@ -746,7 +745,7 @@ class _CupertinoDatePickerDateTimeState
               topLeft: Radius.circular(widget.borderRadius),
               topRight: Radius.circular(widget.borderRadius))),
       child: MediaQuery(
-        data: const MediaQueryData(textScaleFactor: 1.0),
+        data: const MediaQueryData(textScaler: TextScaler.linear(1.0)),
         child: DefaultTextStyle.merge(
           style: _kDefaultPickerTextStyle,
           child: CustomMultiChildLayout(
@@ -935,7 +934,7 @@ class _CupertinoDatePickerDateState
     final int desiredDay =
         DateTime(selectedYear, selectedMonth, selectedDay).day;
     if (desiredDay != selectedDay) {
-      SchedulerBinding.instance?.addPostFrameCallback((Duration timestamp) {
+      SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
         dayController.animateToItem(
           // The next valid date is also the amount of days overflown.
           dayController.selectedItem - desiredDay,
@@ -1005,8 +1004,6 @@ class _CupertinoDatePickerDateState
           estimatedColumnWidths[_PickerColumnType.month.index]!
         ];
         break;
-      default:
-        assert(false, 'date order is not specified');
     }
 
     final List<Widget> pickers = <Widget>[];
@@ -1049,7 +1046,7 @@ class _CupertinoDatePickerDateState
         color: widget.background,
       ),
       child: MediaQuery(
-        data: const MediaQueryData(textScaleFactor: 1.0),
+        data: const MediaQueryData(textScaler: TextScaler.linear(1.0)),
         child: NotificationListener<ScrollEndNotification>(
           onNotification: _keepInValidRange,
           child: DefaultTextStyle.merge(
@@ -1110,7 +1107,7 @@ class FlutterRoundedCupertinoDurationPickerWidget extends StatefulWidget {
   /// [secondInterval] is the granularity of the second spinner. Must be a
   /// positive integer factor of 60.
   FlutterRoundedCupertinoDurationPickerWidget(
-      {Key? key,
+      {super.key,
       this.mode = CupertinoTimerPickerMode.hms,
       this.initialTimerDuration = Duration.zero,
       this.minuteInterval = 1,
@@ -1125,8 +1122,7 @@ class FlutterRoundedCupertinoDurationPickerWidget extends StatefulWidget {
         assert(minuteInterval > 0 && 60 % minuteInterval == 0),
         assert(secondInterval > 0 && 60 % secondInterval == 0),
         assert(initialTimerDuration.inMinutes % minuteInterval == 0),
-        assert(initialTimerDuration.inSeconds % secondInterval == 0),
-        super(key: key);
+        assert(initialTimerDuration.inSeconds % secondInterval == 0);
 
   /// The mode of the timer picker.
   final CupertinoTimerPickerMode mode;
@@ -1539,7 +1535,7 @@ class _CupertinoTimerPickerState
         data: const MediaQueryData(
           // The native iOS picker's text scaling is fixed, so we will also fix it
           // as well in our picker.
-          textScaleFactor: 1.0,
+          textScaler: TextScaler.linear(1.0),
         ),
         child: picker,
       ),

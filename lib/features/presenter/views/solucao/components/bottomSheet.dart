@@ -8,8 +8,8 @@ import 'package:osi_solucoes/features/presenter/views/solucao/components/pagesNo
 
 Future<void> bottomSheet(
     BuildContext context,
-    CarouselController controlerPages,
-    CarouselController carouselController,
+    CarouselSliderController controlerPages,
+    CarouselSliderController carouselController,
     SolucaoStore store) {
   return showModalBottomSheet<void>(
     backgroundColor: Constants.kBackgroundColor,

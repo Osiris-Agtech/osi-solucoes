@@ -7,7 +7,7 @@ part of 'localizacao_model.dart';
 // **************************************************************************
 
 Localizacao _$LocalizacaoFromJson(Map<String, dynamic> json) => Localizacao(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       cep: json['cep'] as String?,
       endereco: json['endereco'] as String?,
       created_at: json['created_at'] == null

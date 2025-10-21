@@ -9,7 +9,7 @@ part of 'fertilizanteNutriente_model.dart';
 FertilizanteNutriente _$FertilizanteNutrienteFromJson(
         Map<String, dynamic> json) =>
     FertilizanteNutriente(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       teor_nutriente: json['teor_nutriente'] as String?,
       fertilizante: json['fertilizante'] == null
           ? null

@@ -7,7 +7,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/recuperar_senha_store.dart';
 
 class NovaSenhaPage extends StatefulWidget {
-  const NovaSenhaPage({Key? key}) : super(key: key);
+  const NovaSenhaPage({super.key});
 
   @override
   State<NovaSenhaPage> createState() => _NovaSenhaPageState();
@@ -143,7 +143,7 @@ class _NovaSenhaPageState extends State<NovaSenhaPage> {
                   height: 40,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Constants.kPrimaryColor,
+                      backgroundColor: Constants.kPrimaryColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
@@ -197,7 +197,7 @@ class _NovaSenhaPageState extends State<NovaSenhaPage> {
     );
   }
 
-  _titulo() {
+  Padding _titulo() {
     return const Padding(
       padding: EdgeInsets.only(
         left: 20,
@@ -214,7 +214,7 @@ class _NovaSenhaPageState extends State<NovaSenhaPage> {
     );
   }
 
-  _appBar() {
+  AppBar _appBar() {
     return AppBar(
       backgroundColor: Constants.kBackgroundColor,
       elevation: 0,

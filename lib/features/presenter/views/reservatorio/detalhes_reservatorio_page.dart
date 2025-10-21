@@ -13,7 +13,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.d
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 
 class DetalhesReservatorio extends StatefulWidget {
-  const DetalhesReservatorio({Key? key}) : super(key: key);
+  const DetalhesReservatorio({super.key});
 
   @override
   State<DetalhesReservatorio> createState() => _DetalhesReservatorioState();
@@ -22,7 +22,7 @@ class DetalhesReservatorio extends StatefulWidget {
 class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
   ReservatoriosStore store = GetIt.I<ReservatoriosStore>();
   final ScrollController _scrollController = ScrollController();
-  CarouselController carouselController = CarouselController();
+  CarouselSliderController carouselController = CarouselSliderController();
   ModulosStore modulosStore = GetIt.I<ModulosStore>();
 
   @override
@@ -79,11 +79,13 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                                       ],
                                     ),
                                     onTap: () async {
-                                      await store.carregarDadosReservatorio(
-                                          store.reservatorioDetalhes);
+                                      store.carregarDadosReservatorio(
+                                        store.reservatorioDetalhes,
+                                      );
                                       store.setIsEditing(true);
                                       Get.toNamed(
-                                          Routes.cadastrarReservatoriosPage);
+                                        Routes.cadastrarReservatoriosPage,
+                                      );
                                     },
                                   ),
                                 ],
@@ -118,7 +120,7 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                               splashColor: Colors.transparent,
                               hoverColor: Colors.transparent,
                               onTap: () async {
-                                await modulosStore.setPageViewController(4);
+                                modulosStore.setPageViewController(4);
                                 Get.toNamed(
                                   Routes.modulosPage,
                                 );
@@ -388,7 +390,7 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                               color: Constants.kSecondBackgroundColor,
                               activeColor: Theme.of(context)
                                   .primaryColor
-                                  .withOpacity(.7),
+                                  .withValues(alpha: .7),
                               activeShape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
@@ -442,7 +444,7 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Constants.kContentColorLightTheme
-                                      .withOpacity(.8),
+                                      .withValues(alpha: .8),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -451,7 +453,7 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Constants.kContentColorLightTheme
-                                      .withOpacity(.7),
+                                      .withValues(alpha: .7),
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),
@@ -460,7 +462,7 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Constants.kContentColorLightTheme
-                                      .withOpacity(.7),
+                                      .withValues(alpha: .7),
                                   fontWeight: FontWeight.normal,
                                 ),
                                 textAlign: TextAlign.center,
@@ -480,7 +482,7 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
     );
   }
 
-  _concentradaItem(int index) {
+  ListTile _concentradaItem(int index) {
     return ListTile(
       dense: true,
       visualDensity: const VisualDensity(horizontal: 0, vertical: -4),

@@ -14,8 +14,8 @@ import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components
 
 SizedBox pagesFinalizacaoLote(
   BuildContext context,
-  CarouselController carouselController,
-  CarouselController controlerPages,
+  CarouselSliderController carouselController,
+  CarouselSliderController controlerPages,
 ) {
   LoteStore store = GetIt.I<LoteStore>();
 
@@ -135,13 +135,12 @@ SizedBox pagesFinalizacaoLote(
 }
 
 class NextStepButton extends StatefulWidget {
-  final CarouselController carouselController;
-  final CarouselController controlerPages;
+  final CarouselSliderController carouselController;
+  final CarouselSliderController controlerPages;
   const NextStepButton(
-      {Key? key,
+      {super.key,
       required this.carouselController,
-      required this.controlerPages})
-      : super(key: key);
+      required this.controlerPages});
 
   @override
   State<NextStepButton> createState() => _NextStepButtonState();
@@ -155,7 +154,7 @@ class _NextStepButtonState extends State<NextStepButton> {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        primary: Constants.kPrimaryColor,
+        backgroundColor: Constants.kPrimaryColor,
       ),
       child: Center(
         child: Padding(

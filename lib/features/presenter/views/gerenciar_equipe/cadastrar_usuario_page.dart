@@ -8,7 +8,7 @@ import '../../../../core/constants/constants.dart';
 import '../../viewmodels/gerenciar_equipe_store.dart';
 
 class CadastrarUsuarioPage extends StatefulWidget {
-  const CadastrarUsuarioPage({Key? key}) : super(key: key);
+  const CadastrarUsuarioPage({super.key});
 
   @override
   State<CadastrarUsuarioPage> createState() => _CadastrarUsuarioPageState();
@@ -20,7 +20,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       store.buscarCargos();
     });
   }
@@ -70,7 +70,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                       Padding(
                         padding: const EdgeInsets.only(left: 20, right: 10),
                         child: Divider(
-                          color: Constants.kGreyText2.withOpacity(0.3),
+                          color: Constants.kGreyText2.withValues(alpha: .3),
                         ),
                       ),
                       info(context),
@@ -127,10 +127,10 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
       child: Column(
         children: [
           SizedBox(
+            height: MediaQuery.of(context).size.height * 0.20,
             child: Image.asset(
               "assets/images/cadastro_usuario.png",
             ),
-            height: MediaQuery.of(context).size.height * 0.20,
           ),
           const SizedBox(
             height: 10,
@@ -142,7 +142,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
-                color: Constants.kText2.withOpacity(0.75),
+                color: Constants.kText2.withValues(alpha: .75),
               ),
               children: <TextSpan>[
                 const TextSpan(
@@ -158,7 +158,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 18,
-                    color: Constants.kText2.withOpacity(0.75),
+                    color: Constants.kText2.withValues(alpha: .75),
                   ),
                 ),
               ],
@@ -286,12 +286,12 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                   fontWeight: FontWeight.w600,
                 ),
                 enabledBorder: UnderlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Constants.kGreyText2.withOpacity(0.3)),
+                  borderSide: BorderSide(
+                      color: Constants.kGreyText2.withValues(alpha: .3)),
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Constants.kGreyText2.withOpacity(0.3)),
+                  borderSide: BorderSide(
+                      color: Constants.kGreyText2.withValues(alpha: .3)),
                 ),
               ),
             );
@@ -335,12 +335,12 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                   fontWeight: FontWeight.w600,
                 ),
                 enabledBorder: UnderlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Constants.kGreyText2.withOpacity(0.3)),
+                  borderSide: BorderSide(
+                      color: Constants.kGreyText2.withValues(alpha: .3)),
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Constants.kGreyText2.withOpacity(0.3)),
+                  borderSide: BorderSide(
+                      color: Constants.kGreyText2.withValues(alpha: .3)),
                 ),
               ),
             );
@@ -394,12 +394,12 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                 fontWeight: FontWeight.w600,
               ),
               enabledBorder: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Constants.kGreyText2.withOpacity(0.3)),
+                borderSide: BorderSide(
+                    color: Constants.kGreyText2.withValues(alpha: .3)),
               ),
               focusedBorder: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Constants.kGreyText2.withOpacity(0.3)),
+                borderSide: BorderSide(
+                    color: Constants.kGreyText2.withValues(alpha: .3)),
               ),
             ),
           ),
@@ -495,7 +495,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
               height: 38,
               child: TextButton(
                 style: TextButton.styleFrom(
-                  primary: Constants.kPrimaryColor,
+                  backgroundColor: Constants.kPrimaryColor,
                   textStyle: const TextStyle(
                     fontSize: 20,
                     color: Constants.kPrimaryColor,
@@ -567,7 +567,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
           height: 40,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Constants.kPrimaryColor,
+              backgroundColor: Constants.kPrimaryColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),

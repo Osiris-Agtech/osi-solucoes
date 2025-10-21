@@ -6,7 +6,7 @@ import '../../../../../core/constants/constants.dart';
 
 class CustomAnimatedBottomBar extends StatelessWidget {
   CustomAnimatedBottomBar({
-    Key? key,
+    super.key,
     this.selectedIndex = 0,
     this.showElevation = true,
     this.iconSize = 24,
@@ -18,8 +18,7 @@ class CustomAnimatedBottomBar extends StatelessWidget {
     required this.items,
     required this.onItemSelected,
     this.curve = Curves.linear,
-  })  : assert(items.length >= 2 && items.length <= 5),
-        super(key: key);
+  }) : assert(items.length >= 2 && items.length <= 5);
 
   final int selectedIndex;
   final double iconSize;
@@ -35,7 +34,9 @@ class CustomAnimatedBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = backgroundColor ?? Theme.of(context).bottomAppBarColor;
+    final bgColor = backgroundColor ??
+        Theme.of(context).bottomNavigationBarTheme.backgroundColor ??
+        Constants.kBackgroundColor;
 
     return Container(
       decoration: BoxDecoration(
@@ -87,7 +88,6 @@ class _ItemWidget extends StatelessWidget {
   final Curve curve;
 
   const _ItemWidget({
-    Key? key,
     required this.item,
     required this.isSelected,
     required this.backgroundColor,
@@ -95,7 +95,7 @@ class _ItemWidget extends StatelessWidget {
     required this.itemCornerRadius,
     required this.iconSize,
     this.curve = Curves.linear,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +108,9 @@ class _ItemWidget extends StatelessWidget {
         duration: animationDuration,
         curve: curve,
         decoration: BoxDecoration(
-          color:
-              isSelected ? item.activeColor.withOpacity(0.2) : backgroundColor,
+          color: isSelected
+              ? item.activeColor.withValues(alpha: 0.2)
+              : backgroundColor,
           borderRadius: BorderRadius.circular(itemCornerRadius),
         ),
         child: SingleChildScrollView(
@@ -124,7 +125,7 @@ class _ItemWidget extends StatelessWidget {
                   data: IconThemeData(
                     size: iconSize,
                     color: isSelected
-                        ? item.activeColor.withOpacity(1)
+                        ? item.activeColor.withValues(alpha: 1)
                         : item.inactiveColor ?? item.activeColor,
                   ),
                   child: item.icon,

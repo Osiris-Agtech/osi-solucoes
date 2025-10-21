@@ -35,7 +35,7 @@ class Cultura {
 
   Map<String, dynamic> toJson() => _$CulturaToJson(this);
 
-  toMap() {
+  Map<String, Object?> toMap() {
     return {
       'id': id,
       'nome': nome,

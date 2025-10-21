@@ -10,9 +10,7 @@ extension FormaProtocoloEnumExt on FormaProtocoloEnum {
         return 'Semeadura';
       case FormaProtocoloEnum.mudas:
         return 'Mudas';
-      default:
-        return '';
-    }
+      }
   }
 }
 

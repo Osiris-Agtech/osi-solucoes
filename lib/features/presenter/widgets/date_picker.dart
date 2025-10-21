@@ -134,7 +134,7 @@ Future<DateTime?> datePickerNative(BuildContext context, DateTime initialDate) {
     builder: (BuildContext context, child) {
       return Theme(
         data: Theme.of(context).copyWith(
-          dialogTheme: DialogTheme(
+          dialogTheme: DialogThemeData(
             // backgroundColor: getBackgroundColor(),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16.0),

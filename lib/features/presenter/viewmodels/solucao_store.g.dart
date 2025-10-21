@@ -6,16 +6,16 @@ part of 'solucao_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$SolucaoStore on _SolucaoStoreBase, Store {
+mixin _$SolucaoStore on SolucaoStoreBase, Store {
   Computed<List<Fertilizante>>? _$selectedFertilizantesComputed;
 
   @override
   List<Fertilizante> get selectedFertilizantes =>
       (_$selectedFertilizantesComputed ??= Computed<List<Fertilizante>>(
               () => super.selectedFertilizantes,
-              name: '_SolucaoStoreBase.selectedFertilizantes'))
+              name: 'SolucaoStoreBase.selectedFertilizantes'))
           .value;
   Computed<List<FertilizanteNutriente>>? _$nutrientesCalculadosComputed;
 
@@ -23,14 +23,14 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
   List<FertilizanteNutriente> get nutrientesCalculados =>
       (_$nutrientesCalculadosComputed ??= Computed<List<FertilizanteNutriente>>(
               () => super.nutrientesCalculados,
-              name: '_SolucaoStoreBase.nutrientesCalculados'))
+              name: 'SolucaoStoreBase.nutrientesCalculados'))
           .value;
   Computed<List<SolucaoNutritiva>>? _$searchSolucaoComputed;
 
   @override
   List<SolucaoNutritiva> get searchSolucao => (_$searchSolucaoComputed ??=
           Computed<List<SolucaoNutritiva>>(() => super.searchSolucao,
-              name: '_SolucaoStoreBase.searchSolucao'))
+              name: 'SolucaoStoreBase.searchSolucao'))
       .value;
   Computed<List<SelecaoFertilizante>>? _$showFertilizantesNaoUtilizadosComputed;
 
@@ -39,7 +39,7 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
       (_$showFertilizantesNaoUtilizadosComputed ??=
               Computed<List<SelecaoFertilizante>>(
                   () => super.showFertilizantesNaoUtilizados,
-                  name: '_SolucaoStoreBase.showFertilizantesNaoUtilizados'))
+                  name: 'SolucaoStoreBase.showFertilizantesNaoUtilizados'))
           .value;
   Computed<List<SelecaoFertilizante>>? _$showSelectedFertilizantesComputed;
 
@@ -48,10 +48,11 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
       (_$showSelectedFertilizantesComputed ??=
               Computed<List<SelecaoFertilizante>>(
                   () => super.showSelectedFertilizantes,
-                  name: '_SolucaoStoreBase.showSelectedFertilizantes'))
+                  name: 'SolucaoStoreBase.showSelectedFertilizantes'))
           .value;
 
-  final _$valueAtom = Atom(name: '_SolucaoStoreBase.value');
+  late final _$valueAtom =
+      Atom(name: 'SolucaoStoreBase.value', context: context);
 
   @override
   int get value {
@@ -66,8 +67,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$mostrarErroFormularioAtom =
-      Atom(name: '_SolucaoStoreBase.mostrarErroFormulario');
+  late final _$mostrarErroFormularioAtom =
+      Atom(name: 'SolucaoStoreBase.mostrarErroFormulario', context: context);
 
   @override
   bool get mostrarErroFormulario {
@@ -83,8 +84,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$isSolucaoListLoadingAtom =
-      Atom(name: '_SolucaoStoreBase.isSolucaoListLoading');
+  late final _$isSolucaoListLoadingAtom =
+      Atom(name: 'SolucaoStoreBase.isSolucaoListLoading', context: context);
 
   @override
   bool get isSolucaoListLoading {
@@ -100,8 +101,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$isNovaSolucaoLoadingAtom =
-      Atom(name: '_SolucaoStoreBase.isNovaSolucaoLoading');
+  late final _$isNovaSolucaoLoadingAtom =
+      Atom(name: 'SolucaoStoreBase.isNovaSolucaoLoading', context: context);
 
   @override
   bool get isNovaSolucaoLoading {
@@ -117,8 +118,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$isFertilizanteListLoadingAtom =
-      Atom(name: '_SolucaoStoreBase.isFertilizanteListLoading');
+  late final _$isFertilizanteListLoadingAtom = Atom(
+      name: 'SolucaoStoreBase.isFertilizanteListLoading', context: context);
 
   @override
   bool get isFertilizanteListLoading {
@@ -134,8 +135,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$isSolucaoDetalhesLoadingAtom =
-      Atom(name: '_SolucaoStoreBase.isSolucaoDetalhesLoading');
+  late final _$isSolucaoDetalhesLoadingAtom =
+      Atom(name: 'SolucaoStoreBase.isSolucaoDetalhesLoading', context: context);
 
   @override
   bool get isSolucaoDetalhesLoading {
@@ -151,7 +152,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$dotIndicatorAtom = Atom(name: '_SolucaoStoreBase.dotIndicator');
+  late final _$dotIndicatorAtom =
+      Atom(name: 'SolucaoStoreBase.dotIndicator', context: context);
 
   @override
   int get dotIndicator {
@@ -166,7 +168,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$novaSolucaoAtom = Atom(name: '_SolucaoStoreBase.novaSolucao');
+  late final _$novaSolucaoAtom =
+      Atom(name: 'SolucaoStoreBase.novaSolucao', context: context);
 
   @override
   SolucaoNutritiva get novaSolucao {
@@ -181,7 +184,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$solucaoListAtom = Atom(name: '_SolucaoStoreBase.solucaoList');
+  late final _$solucaoListAtom =
+      Atom(name: 'SolucaoStoreBase.solucaoList', context: context);
 
   @override
   List<SolucaoNutritiva> get solucaoList {
@@ -196,8 +200,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$fertilizanteListAtom =
-      Atom(name: '_SolucaoStoreBase.fertilizanteList');
+  late final _$fertilizanteListAtom =
+      Atom(name: 'SolucaoStoreBase.fertilizanteList', context: context);
 
   @override
   List<SelecaoFertilizante> get fertilizanteList {
@@ -212,8 +216,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$expandedFertilizantesAtom =
-      Atom(name: '_SolucaoStoreBase.expandedFertilizantes');
+  late final _$expandedFertilizantesAtom =
+      Atom(name: 'SolucaoStoreBase.expandedFertilizantes', context: context);
 
   @override
   List<ItemFertilizante> get expandedFertilizantes {
@@ -229,8 +233,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$quantidadeFertilizantesAtom =
-      Atom(name: '_SolucaoStoreBase.quantidadeFertilizantes');
+  late final _$quantidadeFertilizantesAtom =
+      Atom(name: 'SolucaoStoreBase.quantidadeFertilizantes', context: context);
 
   @override
   List<String> get quantidadeFertilizantes {
@@ -246,7 +250,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$nutrientesListAtom = Atom(name: '_SolucaoStoreBase.nutrientesList');
+  late final _$nutrientesListAtom =
+      Atom(name: 'SolucaoStoreBase.nutrientesList', context: context);
 
   @override
   List<FertilizanteNutrienteMap> get nutrientesList {
@@ -261,8 +266,9 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$solucaoConcentradaListDetalhesAtom =
-      Atom(name: '_SolucaoStoreBase.solucaoConcentradaListDetalhes');
+  late final _$solucaoConcentradaListDetalhesAtom = Atom(
+      name: 'SolucaoStoreBase.solucaoConcentradaListDetalhes',
+      context: context);
 
   @override
   List<SolucaoFertilizanteConcentrada> get solucaoConcentradaListDetalhes {
@@ -279,7 +285,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$novaSolucaoNameAtom = Atom(name: '_SolucaoStoreBase.novaSolucaoName');
+  late final _$novaSolucaoNameAtom =
+      Atom(name: 'SolucaoStoreBase.novaSolucaoName', context: context);
 
   @override
   TextEditingController get novaSolucaoName {
@@ -294,8 +301,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$solucaoSelecionadaAtom =
-      Atom(name: '_SolucaoStoreBase.solucaoSelecionada');
+  late final _$solucaoSelecionadaAtom =
+      Atom(name: 'SolucaoStoreBase.solucaoSelecionada', context: context);
 
   @override
   SolucaoNutritiva get solucaoSelecionada {
@@ -310,8 +317,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$condutividadeEletricaAtom =
-      Atom(name: '_SolucaoStoreBase.condutividadeEletrica');
+  late final _$condutividadeEletricaAtom =
+      Atom(name: 'SolucaoStoreBase.condutividadeEletrica', context: context);
 
   @override
   TextEditingController get condutividadeEletrica {
@@ -327,8 +334,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$searchSolucaoTextAtom =
-      Atom(name: '_SolucaoStoreBase.searchSolucaoText');
+  late final _$searchSolucaoTextAtom =
+      Atom(name: 'SolucaoStoreBase.searchSolucaoText', context: context);
 
   @override
   String get searchSolucaoText {
@@ -343,8 +350,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$fertilizantesEscolhidosAtom =
-      Atom(name: '_SolucaoStoreBase.fertilizantesEscolhidos');
+  late final _$fertilizantesEscolhidosAtom =
+      Atom(name: 'SolucaoStoreBase.fertilizantesEscolhidos', context: context);
 
   @override
   List<SelecaoFertilizante> get fertilizantesEscolhidos {
@@ -360,8 +367,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$fatorConcentracaoAtom =
-      Atom(name: '_SolucaoStoreBase.fatorConcentracao');
+  late final _$fatorConcentracaoAtom =
+      Atom(name: 'SolucaoStoreBase.fatorConcentracao', context: context);
 
   @override
   TextEditingController get fatorConcentracao {
@@ -376,8 +383,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$volumeConcentracaoAtom =
-      Atom(name: '_SolucaoStoreBase.volumeConcentracao');
+  late final _$volumeConcentracaoAtom =
+      Atom(name: 'SolucaoStoreBase.volumeConcentracao', context: context);
 
   @override
   TextEditingController get volumeConcentracao {
@@ -392,8 +399,8 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$solucaoConcentradaListAtom =
-      Atom(name: '_SolucaoStoreBase.solucaoConcentradaList');
+  late final _$solucaoConcentradaListAtom =
+      Atom(name: 'SolucaoStoreBase.solucaoConcentradaList', context: context);
 
   @override
   List<SolucaoConcentrada> get solucaoConcentradaList {
@@ -409,149 +416,150 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
     });
   }
 
-  final _$buscarSolucoesAsyncAction =
-      AsyncAction('_SolucaoStoreBase.buscarSolucoes');
+  late final _$buscarSolucoesAsyncAction =
+      AsyncAction('SolucaoStoreBase.buscarSolucoes', context: context);
 
   @override
-  Future buscarSolucoes() {
+  Future<void> buscarSolucoes() {
     return _$buscarSolucoesAsyncAction.run(() => super.buscarSolucoes());
   }
 
-  final _$buscarFertilizantesAsyncAction =
-      AsyncAction('_SolucaoStoreBase.buscarFertilizantes');
+  late final _$buscarFertilizantesAsyncAction =
+      AsyncAction('SolucaoStoreBase.buscarFertilizantes', context: context);
 
   @override
-  Future buscarFertilizantes() {
+  Future<void> buscarFertilizantes() {
     return _$buscarFertilizantesAsyncAction
         .run(() => super.buscarFertilizantes());
   }
 
-  final _$buscarDetalhesSolucaoAsyncAction =
-      AsyncAction('_SolucaoStoreBase.buscarDetalhesSolucao');
+  late final _$buscarDetalhesSolucaoAsyncAction =
+      AsyncAction('SolucaoStoreBase.buscarDetalhesSolucao', context: context);
 
   @override
-  Future buscarDetalhesSolucao() {
+  Future<void> buscarDetalhesSolucao() {
     return _$buscarDetalhesSolucaoAsyncAction
         .run(() => super.buscarDetalhesSolucao());
   }
 
-  final _$cadastrarSolucaoNutritivaAsyncAction =
-      AsyncAction('_SolucaoStoreBase.cadastrarSolucaoNutritiva');
+  late final _$cadastrarSolucaoNutritivaAsyncAction = AsyncAction(
+      'SolucaoStoreBase.cadastrarSolucaoNutritiva',
+      context: context);
 
   @override
-  Future cadastrarSolucaoNutritiva({bool isShortcut = false}) {
+  Future<void> cadastrarSolucaoNutritiva({bool isShortcut = false}) {
     return _$cadastrarSolucaoNutritivaAsyncAction
         .run(() => super.cadastrarSolucaoNutritiva(isShortcut: isShortcut));
   }
 
-  final _$criarSolucaoConcentradaAsyncAction =
-      AsyncAction('_SolucaoStoreBase.criarSolucaoConcentrada');
+  late final _$criarSolucaoConcentradaAsyncAction =
+      AsyncAction('SolucaoStoreBase.criarSolucaoConcentrada', context: context);
 
   @override
-  Future criarSolucaoConcentrada() {
+  Future<void> criarSolucaoConcentrada() {
     return _$criarSolucaoConcentradaAsyncAction
         .run(() => super.criarSolucaoConcentrada());
   }
 
-  final _$_SolucaoStoreBaseActionController =
-      ActionController(name: '_SolucaoStoreBase');
+  late final _$SolucaoStoreBaseActionController =
+      ActionController(name: 'SolucaoStoreBase', context: context);
 
   @override
   void increment() {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.increment');
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.increment');
     try {
       return super.increment();
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setDotIndicator(int value) {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.setDotIndicator');
+  void setDotIndicator(int value) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.setDotIndicator');
     try {
       return super.setDotIndicator(value);
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setMostrarErroFormulario(bool value) {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.setMostrarErroFormulario');
+  bool setMostrarErroFormulario(bool value) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.setMostrarErroFormulario');
     try {
       return super.setMostrarErroFormulario(value);
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setExpandedCard(int index) {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.setExpandedCard');
+  void setExpandedCard(int index) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.setExpandedCard');
     try {
       return super.setExpandedCard(index);
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setsearchSolucaoText(String value) {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.setsearchSolucaoText');
+  String setsearchSolucaoText(String value) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.setsearchSolucaoText');
     try {
       return super.setsearchSolucaoText(value);
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic selecionarSolucao(SolucaoNutritiva solucaoNutritiva) {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.selecionarSolucao');
+  SolucaoNutritiva selecionarSolucao(SolucaoNutritiva solucaoNutritiva) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.selecionarSolucao');
     try {
       return super.selecionarSolucao(solucaoNutritiva);
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic removeFromExpendedList(int id) {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.removeFromExpendedList');
+  void removeFromExpendedList(int id) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.removeFromExpendedList');
     try {
       return super.removeFromExpendedList(id);
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic changeSelecaoFertilizante(int index, bool value) {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.changeSelecaoFertilizante');
+  void changeSelecaoFertilizante(int index, bool value) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.changeSelecaoFertilizante');
     try {
       return super.changeSelecaoFertilizante(index, value);
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setFertilizanteQuantidade(int id, String value) {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.setFertilizanteQuantidade');
+  void setFertilizanteQuantidade(int id, String value) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.setFertilizanteQuantidade');
     try {
       return super.setFertilizanteQuantidade(id, value);
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
@@ -560,182 +568,183 @@ mixin _$SolucaoStore on _SolucaoStoreBase, Store {
       {required double quantidadeOriginal,
       required double volumeConcentrada,
       required double fator}) {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.calcularQuantidadeFertilizanteConcentrada');
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.calcularQuantidadeFertilizanteConcentrada');
     try {
       return super.calcularQuantidadeFertilizanteConcentrada(
           quantidadeOriginal: quantidadeOriginal,
           volumeConcentrada: volumeConcentrada,
           fator: fator);
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic multiplicarTeorNitratoEAmonia() {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.multiplicarTeorNitratoEAmonia');
+  void multiplicarTeorNitratoEAmonia() {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.multiplicarTeorNitratoEAmonia');
     try {
       return super.multiplicarTeorNitratoEAmonia();
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic validarFertilizantes() {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.validarFertilizantes');
+  bool validarFertilizantes() {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.validarFertilizantes');
     try {
       return super.validarFertilizantes();
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   double calcularCoeficienteEletrico() {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.calcularCoeficienteEletrico');
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.calcularCoeficienteEletrico');
     try {
       return super.calcularCoeficienteEletrico();
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic generateSolucaoFertilizanteConcentrada() {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.generateSolucaoFertilizanteConcentrada');
+  List<SolucaoFertilizanteConcentrada>
+      generateSolucaoFertilizanteConcentrada() {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.generateSolucaoFertilizanteConcentrada');
     try {
       return super.generateSolucaoFertilizanteConcentrada();
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic validateNewSN() {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.validateNewSN');
+  bool validateNewSN() {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.validateNewSN');
     try {
       return super.validateNewSN();
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   bool validarCadastroConcentrada() {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.validarCadastroConcentrada');
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.validarCadastroConcentrada');
     try {
       return super.validarCadastroConcentrada();
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic clearAll() {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.clearAll');
+  void clearAll() {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.clearAll');
     try {
       return super.clearAll();
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setFertilizantesEscolhidos() {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.setFertilizantesEscolhidos');
+  void setFertilizantesEscolhidos() {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.setFertilizantesEscolhidos');
     try {
       return super.setFertilizantesEscolhidos();
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic changeSelecaoFertilizantesEscolhidos(int index, bool value) {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.changeSelecaoFertilizantesEscolhidos');
+  void changeSelecaoFertilizantesEscolhidos(int index, bool value) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.changeSelecaoFertilizantesEscolhidos');
     try {
       return super.changeSelecaoFertilizantesEscolhidos(index, value);
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic addFertilizanteParaSolucao(int indexSolucaoConcentrada) {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.addFertilizanteParaSolucao');
+  void addFertilizanteParaSolucao(int indexSolucaoConcentrada) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.addFertilizanteParaSolucao');
     try {
       return super.addFertilizanteParaSolucao(indexSolucaoConcentrada);
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic clearSolucaoConcentrada() {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.clearSolucaoConcentrada');
+  void clearSolucaoConcentrada() {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.clearSolucaoConcentrada');
     try {
       return super.clearSolucaoConcentrada();
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setNomeSolucaoConcentrada(String nomeSolucaoConcentrada, int index) {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.setNomeSolucaoConcentrada');
+  void setNomeSolucaoConcentrada(String nomeSolucaoConcentrada, int index) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.setNomeSolucaoConcentrada');
     try {
       return super.setNomeSolucaoConcentrada(nomeSolucaoConcentrada, index);
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic addToSolucaoConcentradaList() {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.addToSolucaoConcentradaList');
+  void addToSolucaoConcentradaList() {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.addToSolucaoConcentradaList');
     try {
       return super.addToSolucaoConcentradaList();
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic deleteSolucaoConcentradaToTheList(int index) {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.deleteSolucaoConcentradaToTheList');
+  void deleteSolucaoConcentradaToTheList(int index) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.deleteSolucaoConcentradaToTheList');
     try {
       return super.deleteSolucaoConcentradaToTheList(index);
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   bool checkCompatibilidade(
       {required int number, required int indexConcentrada}) {
-    final _$actionInfo = _$_SolucaoStoreBaseActionController.startAction(
-        name: '_SolucaoStoreBase.checkCompatibilidade');
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.checkCompatibilidade');
     try {
       return super.checkCompatibilidade(
           number: number, indexConcentrada: indexConcentrada);
     } finally {
-      _$_SolucaoStoreBaseActionController.endAction(_$actionInfo);
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

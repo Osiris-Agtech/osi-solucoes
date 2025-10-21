@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
-colheita(BuildContext context, LoteStore store) {
+Padding colheita(BuildContext context, LoteStore store) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20.0),
     child: ListTile(
@@ -54,7 +54,7 @@ colheita(BuildContext context, LoteStore store) {
   );
 }
 
-transplantio(BuildContext context, LoteStore store) {
+Padding transplantio(BuildContext context, LoteStore store) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20.0),
     child: ListTile(
@@ -107,7 +107,7 @@ transplantio(BuildContext context, LoteStore store) {
   );
 }
 
-semeadura(BuildContext context, LoteStore store) {
+Padding semeadura(BuildContext context, LoteStore store) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20.0),
     child: ListTile(
@@ -159,7 +159,7 @@ semeadura(BuildContext context, LoteStore store) {
   );
 }
 
-registro(BuildContext context, LoteStore store) {
+Padding registro(BuildContext context, LoteStore store) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20.0),
     child: ListTile(

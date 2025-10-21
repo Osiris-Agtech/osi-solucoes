@@ -4,7 +4,7 @@ import 'era_mode.dart';
 import 'flutter_cupertino_rounded_date_picker_widget.dart';
 
 class CupertinoRoundedDurationPicker {
-  static show(BuildContext context,
+  static Future show(BuildContext context,
       {Function(Duration)? onDurationChanged,
       int minuteInterval = 1,
       Duration? initialTimerDuration,

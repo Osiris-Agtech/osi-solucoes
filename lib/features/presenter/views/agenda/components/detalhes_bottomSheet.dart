@@ -13,7 +13,7 @@ import '../../../models/usuario/usuario_model.dart';
 import '../../../widgets/date_picker.dart';
 
 class DetalhesBottomSheet extends StatefulWidget {
-  const DetalhesBottomSheet({Key? key, this.agenda}) : super(key: key);
+  const DetalhesBottomSheet({super.key, this.agenda});
 
   final Agenda? agenda;
 
@@ -98,11 +98,11 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
                         children: const [
                           CircleAvatar(
                             radius: 25,
+                            backgroundColor: Constants.kCardColor,
                             child: Icon(
                               Icons.edit,
                               color: Constants.kPrimaryColor,
                             ),
-                            backgroundColor: Constants.kCardColor,
                           ),
                           SizedBox(
                             height: 8,
@@ -172,11 +172,11 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
                         children: const [
                           CircleAvatar(
                             radius: 25,
+                            backgroundColor: Constants.kCardColor,
                             child: Icon(
                               Icons.delete_outline_rounded,
                               color: Constants.kErrorColor,
                             ),
-                            backgroundColor: Constants.kCardColor,
                           ),
                           SizedBox(
                             height: 8,
@@ -294,7 +294,8 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
                               color: Constants.kGreyLight,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Constants.kGreyMedium.withOpacity(.5),
+                                  color: Constants.kGreyMedium
+                                      .withValues(alpha: .5),
                                   blurRadius: 3,
                                   offset: const Offset(1, 2),
                                 ),
@@ -379,7 +380,7 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
                 height: 40,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Constants.kBackgroundColor,
+                    backgroundColor: Constants.kBackgroundColor,
                     side: BorderSide(
                       color: (widget.agenda?.finalizado ?? false)
                           ? Constants.kGreyMedium
@@ -612,7 +613,7 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Observer(builder: (_) {
                 return DropdownButtonFormField<Usuario>(
-                  value: store.usuarioAtividade,
+                  initialValue: store.usuarioAtividade,
                   hint: const Text(
                     'Selecionar Responsável',
                     style: TextStyle(fontStyle: FontStyle.italic),
@@ -710,7 +711,7 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
                   height: 40,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Constants.kPrimaryColor,
+                      backgroundColor: Constants.kPrimaryColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),

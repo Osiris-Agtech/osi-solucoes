@@ -6,7 +6,7 @@ import '../material_rounded_date_picker_style.dart';
 
 class FlutterRoundedDatePickerHeader extends StatelessWidget {
   const FlutterRoundedDatePickerHeader(
-      {Key? key,
+      {super.key,
       required this.selectedDate,
       required this.mode,
       required this.onModeChanged,
@@ -16,8 +16,7 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
       this.imageHeader,
       this.description = "",
       this.fontFamily,
-      this.style})
-      : super(key: key);
+      this.style});
 
   final DateTime selectedDate;
   final DatePickerMode mode;
@@ -88,7 +87,7 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
     } else {
       switch (themeData.brightness) {
         case Brightness.dark:
-          backgroundColor = themeData.colorScheme.background;
+          backgroundColor = themeData.colorScheme.surface;
           break;
         case Brightness.light:
           backgroundColor = themeData.primaryColor;
@@ -104,8 +103,7 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
         // mainAxisAlignment = MainAxisAlignment.start;
         break;
       case Orientation.portrait:
-      default:
-        padding = style?.paddingDateYearHeader ?? const EdgeInsets.all(16.0);
+      padding = style?.paddingDateYearHeader ?? const EdgeInsets.all(16.0);
         // mainAxisAlignment = MainAxisAlignment.center;
         break;
     }
@@ -235,12 +233,7 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
 }
 
 class _DateHeaderButton extends StatelessWidget {
-  const _DateHeaderButton({
-    Key? key,
-    this.onTap,
-    this.color,
-    this.child,
-  }) : super(key: key);
+  const _DateHeaderButton(this.onTap, this.color, this.child);
 
   final VoidCallback? onTap;
   final Color? color;

@@ -33,7 +33,7 @@ class FlutterRoundedMonthPicker extends StatefulWidget {
   /// Rarely used directly. Instead, typically used as part of the dialog shown
   /// by [showDatePicker].
   FlutterRoundedMonthPicker(
-      {Key? key,
+      {super.key,
       required this.selectedDate,
       required this.onChanged,
       required this.firstDate,
@@ -52,9 +52,7 @@ class FlutterRoundedMonthPicker extends StatefulWidget {
       this.listDateDisabled,
       this.onTapDay,
       this.onMonthChange})
-      : assert(!firstDate.isAfter(lastDate)),
-//        assert(selectedDate.isAfter(firstDate) || selectedDate.isAtSameMomentAs(firstDate)),
-        super(key: key);
+      : assert(!firstDate.isAfter(lastDate));
 
   final DatePickerMode mode;
   final ValueChanged<DatePickerMode> onModeChanged;
@@ -129,7 +127,7 @@ class _FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker>
     _chevronOpacityAnimation = _chevronOpacityController.drive(
       _chevronOpacityTween,
     );
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await _onMonthChange(_currentDisplayedMonthDate);
     });
   }
@@ -141,7 +139,7 @@ class _FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker>
       final int monthPage = _monthDelta(widget.firstDate, widget.selectedDate);
       _dayPickerController = PageController(initialPage: monthPage);
       _handleMonthPageChanged(monthPage);
-      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
         await _onMonthChange(_currentDisplayedMonthDate);
       });
     }
@@ -387,7 +385,7 @@ class _FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker>
 // Defines semantic traversal order of the top-level widgets inside the month
 // picker.
 class _MonthPickerSortKey extends OrdinalSortKey {
-  const _MonthPickerSortKey(double order) : super(order);
+  const _MonthPickerSortKey(super.order);
 
   static const _MonthPickerSortKey previousMonth = _MonthPickerSortKey(1.0);
   static const _MonthPickerSortKey nextMonth = _MonthPickerSortKey(2.0);

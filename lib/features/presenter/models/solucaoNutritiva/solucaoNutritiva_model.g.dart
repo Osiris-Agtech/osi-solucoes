@@ -8,7 +8,7 @@ part of 'solucaoNutritiva_model.dart';
 
 SolucaoNutritiva _$SolucaoNutritivaFromJson(Map<String, dynamic> json) =>
     SolucaoNutritiva(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       c_eletrica: json['c_eletrica'] as String?,
       created_at: json['created_at'] == null

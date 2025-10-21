@@ -9,10 +9,10 @@ import '../../../core/utils/toast.dart';
 
 part 'relatorio_producao_store.g.dart';
 
-class RelatorioProducaoStore = _RelatorioProducaoStoreBase
+class RelatorioProducaoStore = RelatorioProducaoStoreBase
     with _$RelatorioProducaoStore;
 
-abstract class _RelatorioProducaoStoreBase with Store {
+abstract class RelatorioProducaoStoreBase with Store {
   @observable
   bool isLoading = false;
 
@@ -135,6 +135,7 @@ abstract class _RelatorioProducaoStoreBase with Store {
   }
 
   // Métodos auxiliares
+  // ignore: unused_element
   Color _parseColor(String? colorHex) {
     if (colorHex == null || colorHex.isEmpty) {
       return const Color(0xFF059669); // Cor padrão
@@ -143,7 +144,7 @@ abstract class _RelatorioProducaoStoreBase with Store {
     try {
       String hex = colorHex.replaceAll('#', '');
       if (hex.length == 6) {
-        hex = 'FF' + hex; // Adiciona alpha
+        hex = 'FF$hex'; // Adiciona alpha
       }
       return Color(int.parse(hex, radix: 16));
     } catch (e) {
@@ -152,6 +153,7 @@ abstract class _RelatorioProducaoStoreBase with Store {
   }
 
   // Método para mapear nomes de cultura para cores específicas (fallback)
+  // ignore: unused_element
   Color _getColorForCulture(String cultureName) {
     switch (cultureName.toLowerCase()) {
       case 'alface':

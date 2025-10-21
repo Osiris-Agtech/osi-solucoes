@@ -4,7 +4,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 
-protocoloDetalhes(LoteStore store, ProtocoloStore protocoloStore) {
+ListView protocoloDetalhes(LoteStore store, ProtocoloStore protocoloStore) {
   return ListView(
     shrinkWrap: true,
     physics: const BouncingScrollPhysics(),
@@ -231,7 +231,7 @@ protocoloDetalhes(LoteStore store, ProtocoloStore protocoloStore) {
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Constants.kContentColorLightTheme
-                                      .withOpacity(.8),
+                                      .withValues(alpha: .8),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -240,7 +240,7 @@ protocoloDetalhes(LoteStore store, ProtocoloStore protocoloStore) {
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Constants.kContentColorLightTheme
-                                      .withOpacity(.8),
+                                      .withValues(alpha: .8),
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),

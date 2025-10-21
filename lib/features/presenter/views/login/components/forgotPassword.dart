@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 
-forgotPassword() {
+TextButton forgotPassword() {
   return TextButton(
     child: Text(
       "textTextButton".i18n(),

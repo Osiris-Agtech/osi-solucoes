@@ -17,7 +17,7 @@ class FlutterRoundedButtonAction extends StatelessWidget {
   final Color? background;
 
   const FlutterRoundedButtonAction(
-      {Key? key,
+      {super.key,
       required this.localizations,
       this.textButtonNegative,
       this.textButtonPositive,
@@ -30,8 +30,7 @@ class FlutterRoundedButtonAction extends StatelessWidget {
       this.textStyleButtonAction,
       required this.borderRadius,
       this.paddingActionBar,
-      this.background})
-      : super(key: key);
+      this.background});
 
   List<Widget> _buildActionsButton() {
     final Widget negativeButton = TextButton(
@@ -74,7 +73,7 @@ class FlutterRoundedButtonAction extends StatelessWidget {
           borderRadius: orientation == Orientation.landscape
               ? BorderRadius.only(bottomRight: Radius.circular(borderRadius))
               : BorderRadius.vertical(bottom: Radius.circular(borderRadius))),
-      child: ButtonBar(
+      child: OverflowBar(
         alignment: textActionButton != null
             ? MainAxisAlignment.spaceBetween
             : MainAxisAlignment.end,

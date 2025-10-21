@@ -1,7 +1,8 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as dtp;
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,7 @@ import 'package:osi_solucoes/features/presenter/views/area_cultivo/components/to
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
 class SetorPage extends StatefulWidget {
-  const SetorPage({Key? key}) : super(key: key);
+  const SetorPage({super.key});
   @override
   SetorPageState createState() => SetorPageState();
 }
@@ -119,10 +120,10 @@ class SetorPageState extends State<SetorPage> {
 class AppBar extends StatefulWidget {
   final Area areaN1;
   const AppBar({
-    Key? key,
+    super.key,
     required this.areaN1,
     required this.store,
-  }) : super(key: key);
+  });
 
   final SetorStore store;
 
@@ -161,7 +162,10 @@ class _AppBarState extends State<AppBar> {
                     child: PopupMenuButton(
                       icon: SvgPicture.asset(
                         "assets/icons/settings_icon.svg",
-                        color: Constants.kButtonGrey,
+                        colorFilter: ColorFilter.mode(
+                          Constants.kButtonGrey,
+                          BlendMode.src,
+                        ),
                         height: 20,
                       ),
                       itemBuilder: (context) => [
@@ -172,7 +176,7 @@ class _AppBarState extends State<AppBar> {
                             ],
                           ),
                           onTap: () async {
-                            await areaStore.setAreaEditing(widget.areaN1);
+                            areaStore.setAreaEditing(widget.areaN1);
                             Get.toNamed(Routes.cadastrarAreaCultivoPage);
                           },
                         ),
@@ -242,10 +246,10 @@ class _AppBarState extends State<AppBar> {
                                         const Text("De:"),
                                         InkWell(
                                           onTap: () {
-                                            DatePicker.showDatePicker(
+                                            dtp.DatePicker.showDatePicker(
                                               context,
                                               currentTime: store.data1,
-                                              locale: LocaleType.pt,
+                                              locale: dtp.LocaleType.pt,
                                               showTitleActions: true,
                                               minTime: DateTime(2018, 3, 5),
                                               maxTime: DateTime(2030, 12, 30),
@@ -253,7 +257,7 @@ class _AppBarState extends State<AppBar> {
                                                 store.setData1(date);
                                                 await store.buscarSetores();
                                               },
-                                              theme: const DatePickerTheme(
+                                              theme: const dtp.DatePickerTheme(
                                                 doneStyle: TextStyle(
                                                   color:
                                                       Constants.kPrimaryColor,
@@ -286,10 +290,10 @@ class _AppBarState extends State<AppBar> {
                                         const Text("Até"),
                                         InkWell(
                                           onTap: () {
-                                            DatePicker.showDatePicker(
+                                            dtp.DatePicker.showDatePicker(
                                               context,
                                               currentTime: store.data2,
-                                              locale: LocaleType.pt,
+                                              locale: dtp.LocaleType.pt,
                                               showTitleActions: true,
                                               minTime: DateTime(2018, 3, 5),
                                               maxTime: DateTime(2030, 12, 30),
@@ -297,7 +301,7 @@ class _AppBarState extends State<AppBar> {
                                                 store.setData2(date);
                                                 await store.buscarSetores();
                                               },
-                                              theme: const DatePickerTheme(
+                                              theme: const dtp.DatePickerTheme(
                                                 doneStyle: TextStyle(
                                                   color:
                                                       Constants.kPrimaryColor,
@@ -401,7 +405,7 @@ class _AppBarState extends State<AppBar> {
 
 class CardSetor extends StatefulWidget {
   final Setor setor;
-  const CardSetor({Key? key, required this.setor}) : super(key: key);
+  const CardSetor({super.key, required this.setor});
 
   @override
   State<CardSetor> createState() => _CardSetorState();

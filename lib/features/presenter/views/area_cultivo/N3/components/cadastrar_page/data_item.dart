@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
-datas(BuildContext context, LoteStore store) {
+Column datas(BuildContext context, LoteStore store) {
   return Column(
     children: [
       const ListTile(
@@ -24,7 +24,7 @@ datas(BuildContext context, LoteStore store) {
   );
 }
 
-registroItem(LoteStore store, BuildContext context) {
+Padding registroItem(LoteStore store, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 10.0),
     child: ListTile(
@@ -82,7 +82,7 @@ registroItem(LoteStore store, BuildContext context) {
   );
 }
 
-semeaduraItem(LoteStore store, BuildContext context) {
+Padding semeaduraItem(LoteStore store, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 10.0),
     child: ListTile(
@@ -138,7 +138,7 @@ semeaduraItem(LoteStore store, BuildContext context) {
   );
 }
 
-transplantioItem(LoteStore store, BuildContext context) {
+Padding transplantioItem(LoteStore store, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 10.0),
     child: ListTile(
@@ -197,7 +197,7 @@ transplantioItem(LoteStore store, BuildContext context) {
   );
 }
 
-colheitaItem(LoteStore store, BuildContext context) {
+Padding colheitaItem(LoteStore store, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 10.0),
     child: ListTile(

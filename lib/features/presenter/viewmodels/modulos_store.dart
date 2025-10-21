@@ -8,9 +8,9 @@ import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 
 part 'modulos_store.g.dart';
 
-class ModulosStore = _ModulosStoreBase with _$ModulosStore;
+class ModulosStore = ModulosStoreBase with _$ModulosStore;
 
-abstract class _ModulosStoreBase with Store {
+abstract class ModulosStoreBase with Store {
   AreaCultivoStore areaCultivoStore = GetIt.I<AreaCultivoStore>();
   ReservatoriosStore reservatoriosStore = GetIt.I<ReservatoriosStore>();
   CadernoCampoStore cadernoCampoStore = GetIt.I<CadernoCampoStore>();
@@ -21,7 +21,7 @@ abstract class _ModulosStoreBase with Store {
   int pageviewController = 2;
 
   @action
-  setPageViewController(int id) {
+  void setPageViewController(int id) {
     pageviewController = id;
     switch (id) {
       case 0:

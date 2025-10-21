@@ -7,9 +7,9 @@ import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart'
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocoloItemLote.dart';
 
-protocolo(
+InkWell protocolo(
   BuildContext context,
-  CarouselController carouselController,
+  CarouselSliderController carouselController,
   LoteStore store,
   ProtocoloStore protocoloStore,
   GlobalKey<FormFieldState> key,
@@ -84,9 +84,9 @@ protocolo(
   );
 }
 
-protocoloPage(
+SizedBox protocoloPage(
     BuildContext context, LoteStore store, ProtocoloStore protocoloStore) {
-  final ScrollController _scrollController = ScrollController();
+  final ScrollController scrollController = ScrollController();
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
     child: Column(
@@ -135,7 +135,7 @@ protocoloPage(
         ),
         Expanded(
           child: PrimaryScrollController(
-            controller: _scrollController,
+            controller: scrollController,
             child: Scrollbar(
               radius: const Radius.circular(12),
               child: CustomScrollView(

@@ -6,14 +6,14 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 
 class TopAppBarArea extends StatelessWidget {
   const TopAppBarArea({
-    Key? key,
+    super.key,
     this.path,
     this.navigate,
     required this.namePage1,
     required this.namePage2,
     this.subtitle,
     this.onPressed,
-  }) : super(key: key);
+  });
   final bool? navigate;
   final String? path;
   final String namePage1;

@@ -7,9 +7,9 @@ part of 'lote_model.dart';
 // **************************************************************************
 
 Lote _$LoteFromJson(Map<String, dynamic> json) => Lote(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       nome: json['nome'] as String?,
-      fase_dias: json['fase_dias'] as int?,
+      fase_dias: (json['fase_dias'] as num?)?.toInt(),
       fase_data: json['fase_data'] == null
           ? null
           : DateTime.parse(json['fase_data'] as String),
@@ -25,12 +25,12 @@ Lote _$LoteFromJson(Map<String, dynamic> json) => Lote(
       colheita_data: json['colheita_data'] == null
           ? null
           : DateTime.parse(json['colheita_data'] as String),
-      proxima_fase: json['proxima_fase'] as int?,
+      proxima_fase: (json['proxima_fase'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
-      bandeijas_semeadas: json['bandeijas_semeadas'] as int?,
-      mudas_transplantadas: json['mudas_transplantadas'] as int?,
-      plantas_colhidas: json['plantas_colhidas'] as int?,
-      embalagens_produzidas: json['embalagens_produzidas'] as int?,
+      bandeijas_semeadas: (json['bandeijas_semeadas'] as num?)?.toInt(),
+      mudas_transplantadas: (json['mudas_transplantadas'] as num?)?.toInt(),
+      plantas_colhidas: (json['plantas_colhidas'] as num?)?.toInt(),
+      embalagens_produzidas: (json['embalagens_produzidas'] as num?)?.toInt(),
       reservatorio: json['reservatorio'] == null
           ? null
           : Reservatorio.fromJson(json['reservatorio'] as Map<String, dynamic>),

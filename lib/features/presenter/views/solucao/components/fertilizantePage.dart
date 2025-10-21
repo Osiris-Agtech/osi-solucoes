@@ -9,7 +9,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 import '../../../../../../core/constants/constants.dart';
 
 Widget fertilizantePage(
-    BuildContext context, CarouselController controlerPages) {
+    BuildContext context, CarouselSliderController controlerPages) {
   SolucaoStore store = GetIt.I<SolucaoStore>();
 
   return SizedBox(

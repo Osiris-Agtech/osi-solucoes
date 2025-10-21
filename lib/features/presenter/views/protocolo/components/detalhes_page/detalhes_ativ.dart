@@ -6,7 +6,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart'
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/detalhes_page/atividadeItemDetalhes.dart';
 
 class DetalhesAtivPage extends StatefulWidget {
-  const DetalhesAtivPage({Key? key}) : super(key: key);
+  const DetalhesAtivPage({super.key});
 
   @override
   State<DetalhesAtivPage> createState() => _DetalhesAtivPageState();
@@ -32,7 +32,7 @@ class _DetalhesAtivPageState extends State<DetalhesAtivPage> {
           if ((store.protocoloSelecionado?.acao ?? []).isNotEmpty)
             FloatingActionButton(
               heroTag:
-                  store.protocoloSelecionado!.id.toString() + 'floatingButton1',
+                  '${store.protocoloSelecionado!.id}floatingButton1',
               mini: true,
               onPressed: () {
                 _scrollController.animateTo(
@@ -114,10 +114,9 @@ class _DetalhesAtivPageState extends State<DetalhesAtivPage> {
 
 class ListFases extends StatelessWidget {
   const ListFases({
-    Key? key,
+    super.key,
     required ScrollController scrollController,
-  })  : _scrollController = scrollController,
-        super(key: key);
+  })  : _scrollController = scrollController;
 
   final ScrollController _scrollController;
 
@@ -196,7 +195,7 @@ class ListFases extends StatelessWidget {
                                           indexAcao: entry.key,
                                           acao: entry.value,
                                         ))
-                                    .toList()
+                                    
                               ],
                             );
                           } else {

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -12,9 +12,9 @@ import '../models/usuario/usuario_model.dart';
 
 part 'login_store.g.dart';
 
-class LoginStore = _LoginStoreBase with _$LoginStore;
+class LoginStore = LoginStoreBase with _$LoginStore;
 
-abstract class _LoginStoreBase with Store {
+abstract class LoginStoreBase with Store {
   // late LoginRepository loginRepository = Modular.get();
   // late AppController appController = Modular.get();
   final LoginRepository loginRepository = GetIt.I<LoginRepository>();
@@ -33,24 +33,24 @@ abstract class _LoginStoreBase with Store {
   bool isObscure = true;
 
   @action
-  toggleObscure() {
+  void toggleObscure() {
     isObscure = !isObscure;
   }
 
   @action
-  setEmailController(String value) => email.text = value;
+  String setEmailController(String value) => email.text = value;
 
   @action
-  setSenhaController(String value) => senha.text = value;
+  String setSenhaController(String value) => senha.text = value;
 
   @action
-  clearFields() {
+  void clearFields() {
     email.clear();
     senha.clear();
   }
 
   @action
-  login() async {
+  Future<String> login() async {
     bool isValidLogin = false;
     bool isMultipleAccount = false;
 
@@ -85,7 +85,7 @@ abstract class _LoginStoreBase with Store {
     return "loginValido".i18n();
   }
 
-  validateEmail(String? value) {
+  String? validateEmail(String? value) {
     if (value!.isEmpty) {
       return "erroValidacaoEmailVazio".i18n();
     } else {
@@ -102,7 +102,7 @@ abstract class _LoginStoreBase with Store {
     }
   }
 
-  validateSenha(String? value) {
+  String? validateSenha(String? value) {
     if (value!.isEmpty) {
       return "erroValidacaoSenhaVazio".i18n();
     } else if (value.length < 6) {

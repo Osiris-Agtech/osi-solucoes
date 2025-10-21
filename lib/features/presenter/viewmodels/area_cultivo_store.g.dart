@@ -6,18 +6,19 @@ part of 'area_cultivo_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
+mixin _$AreaCultivoStore on AreaCultivoStoreBase, Store {
   Computed<List<Area>>? _$searchAreaComputed;
 
   @override
   List<Area> get searchArea =>
       (_$searchAreaComputed ??= Computed<List<Area>>(() => super.searchArea,
-              name: '_AreaCultivoStoreBase.searchArea'))
+              name: 'AreaCultivoStoreBase.searchArea'))
           .value;
 
-  final _$isAreaLoadingAtom = Atom(name: '_AreaCultivoStoreBase.isAreaLoading');
+  late final _$isAreaLoadingAtom =
+      Atom(name: 'AreaCultivoStoreBase.isAreaLoading', context: context);
 
   @override
   bool get isAreaLoading {
@@ -32,7 +33,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$dropDownValueAtom = Atom(name: '_AreaCultivoStoreBase.dropDownValue');
+  late final _$dropDownValueAtom =
+      Atom(name: 'AreaCultivoStoreBase.dropDownValue', context: context);
 
   @override
   String get dropDownValue {
@@ -47,7 +49,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$orderAtom = Atom(name: '_AreaCultivoStoreBase.order');
+  late final _$orderAtom =
+      Atom(name: 'AreaCultivoStoreBase.order', context: context);
 
   @override
   String get order {
@@ -62,7 +65,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$data2Atom = Atom(name: '_AreaCultivoStoreBase.data2');
+  late final _$data2Atom =
+      Atom(name: 'AreaCultivoStoreBase.data2', context: context);
 
   @override
   DateTime get data2 {
@@ -77,7 +81,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$data1Atom = Atom(name: '_AreaCultivoStoreBase.data1');
+  late final _$data1Atom =
+      Atom(name: 'AreaCultivoStoreBase.data1', context: context);
 
   @override
   DateTime get data1 {
@@ -92,7 +97,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$valueAtom = Atom(name: '_AreaCultivoStoreBase.value');
+  late final _$valueAtom =
+      Atom(name: 'AreaCultivoStoreBase.value', context: context);
 
   @override
   int get value {
@@ -107,7 +113,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$areaListAtom = Atom(name: '_AreaCultivoStoreBase.areaList');
+  late final _$areaListAtom =
+      Atom(name: 'AreaCultivoStoreBase.areaList', context: context);
 
   @override
   List<Area> get areaList {
@@ -122,8 +129,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$searchAreaTextAtom =
-      Atom(name: '_AreaCultivoStoreBase.searchAreaText');
+  late final _$searchAreaTextAtom =
+      Atom(name: 'AreaCultivoStoreBase.searchAreaText', context: context);
 
   @override
   String get searchAreaText {
@@ -138,8 +145,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$mostrarErroFormularioAtom =
-      Atom(name: '_AreaCultivoStoreBase.mostrarErroFormulario');
+  late final _$mostrarErroFormularioAtom = Atom(
+      name: 'AreaCultivoStoreBase.mostrarErroFormulario', context: context);
 
   @override
   bool get mostrarErroFormulario {
@@ -155,8 +162,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$isNovaAreaLoadingAtom =
-      Atom(name: '_AreaCultivoStoreBase.isNovaAreaLoading');
+  late final _$isNovaAreaLoadingAtom =
+      Atom(name: 'AreaCultivoStoreBase.isNovaAreaLoading', context: context);
 
   @override
   bool get isNovaAreaLoading {
@@ -171,8 +178,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$showTextFormFieldAtom =
-      Atom(name: '_AreaCultivoStoreBase.showTextFormField');
+  late final _$showTextFormFieldAtom =
+      Atom(name: 'AreaCultivoStoreBase.showTextFormField', context: context);
 
   @override
   bool get showTextFormField {
@@ -187,7 +194,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$isEditingAtom = Atom(name: '_AreaCultivoStoreBase.isEditing');
+  late final _$isEditingAtom =
+      Atom(name: 'AreaCultivoStoreBase.isEditing', context: context);
 
   @override
   bool get isEditing {
@@ -202,7 +210,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$dotIndicatorAtom = Atom(name: '_AreaCultivoStoreBase.dotIndicator');
+  late final _$dotIndicatorAtom =
+      Atom(name: 'AreaCultivoStoreBase.dotIndicator', context: context);
 
   @override
   int get dotIndicator {
@@ -217,8 +226,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$localizacaoListAtom =
-      Atom(name: '_AreaCultivoStoreBase.localizacaoList');
+  late final _$localizacaoListAtom =
+      Atom(name: 'AreaCultivoStoreBase.localizacaoList', context: context);
 
   @override
   List<Localizacao> get localizacaoList {
@@ -233,7 +242,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$novaAreaAtom = Atom(name: '_AreaCultivoStoreBase.novaArea');
+  late final _$novaAreaAtom =
+      Atom(name: 'AreaCultivoStoreBase.novaArea', context: context);
 
   @override
   Area get novaArea {
@@ -248,7 +258,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$responseCEPAtom = Atom(name: '_AreaCultivoStoreBase.responseCEP');
+  late final _$responseCEPAtom =
+      Atom(name: 'AreaCultivoStoreBase.responseCEP', context: context);
 
   @override
   String? get responseCEP {
@@ -263,8 +274,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$localizacaoSelecionadaAtom =
-      Atom(name: '_AreaCultivoStoreBase.localizacaoSelecionada');
+  late final _$localizacaoSelecionadaAtom = Atom(
+      name: 'AreaCultivoStoreBase.localizacaoSelecionada', context: context);
 
   @override
   Localizacao get localizacaoSelecionada {
@@ -280,7 +291,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$novaAreaNameAtom = Atom(name: '_AreaCultivoStoreBase.novaAreaName');
+  late final _$novaAreaNameAtom =
+      Atom(name: 'AreaCultivoStoreBase.novaAreaName', context: context);
 
   @override
   TextEditingController get novaAreaName {
@@ -295,8 +307,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$novaAreaDescricaoAtom =
-      Atom(name: '_AreaCultivoStoreBase.novaAreaDescricao');
+  late final _$novaAreaDescricaoAtom =
+      Atom(name: 'AreaCultivoStoreBase.novaAreaDescricao', context: context);
 
   @override
   TextEditingController get novaAreaDescricao {
@@ -311,7 +323,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$cepAtom = Atom(name: '_AreaCultivoStoreBase.cep');
+  late final _$cepAtom =
+      Atom(name: 'AreaCultivoStoreBase.cep', context: context);
 
   @override
   TextEditingController get cep {
@@ -326,7 +339,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$enderecoAtom = Atom(name: '_AreaCultivoStoreBase.endereco');
+  late final _$enderecoAtom =
+      Atom(name: 'AreaCultivoStoreBase.endereco', context: context);
 
   @override
   TextEditingController get endereco {
@@ -341,7 +355,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$bairroAtom = Atom(name: '_AreaCultivoStoreBase.bairro');
+  late final _$bairroAtom =
+      Atom(name: 'AreaCultivoStoreBase.bairro', context: context);
 
   @override
   TextEditingController get bairro {
@@ -356,7 +371,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$cidadeAtom = Atom(name: '_AreaCultivoStoreBase.cidade');
+  late final _$cidadeAtom =
+      Atom(name: 'AreaCultivoStoreBase.cidade', context: context);
 
   @override
   TextEditingController get cidade {
@@ -371,7 +387,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$numeroAtom = Atom(name: '_AreaCultivoStoreBase.numero');
+  late final _$numeroAtom =
+      Atom(name: 'AreaCultivoStoreBase.numero', context: context);
 
   @override
   TextEditingController get numero {
@@ -386,7 +403,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$complementoAtom = Atom(name: '_AreaCultivoStoreBase.complemento');
+  late final _$complementoAtom =
+      Atom(name: 'AreaCultivoStoreBase.complemento', context: context);
 
   @override
   TextEditingController get complemento {
@@ -401,7 +419,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$paisAtom = Atom(name: '_AreaCultivoStoreBase.pais');
+  late final _$paisAtom =
+      Atom(name: 'AreaCultivoStoreBase.pais', context: context);
 
   @override
   TextEditingController get pais {
@@ -416,7 +435,8 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$estadoAtom = Atom(name: '_AreaCultivoStoreBase.estado');
+  late final _$estadoAtom =
+      Atom(name: 'AreaCultivoStoreBase.estado', context: context);
 
   @override
   TextEditingController get estado {
@@ -431,231 +451,233 @@ mixin _$AreaCultivoStore on _AreaCultivoStoreBase, Store {
     });
   }
 
-  final _$buscarAreaAsyncAction =
-      AsyncAction('_AreaCultivoStoreBase.buscarArea');
+  late final _$buscarAreaAsyncAction =
+      AsyncAction('AreaCultivoStoreBase.buscarArea', context: context);
 
   @override
-  Future buscarArea() {
+  Future<void> buscarArea() {
     return _$buscarAreaAsyncAction.run(() => super.buscarArea());
   }
 
-  final _$cadastrarNovaLocalizacaoAsyncAction =
-      AsyncAction('_AreaCultivoStoreBase.cadastrarNovaLocalizacao');
+  late final _$cadastrarNovaLocalizacaoAsyncAction = AsyncAction(
+      'AreaCultivoStoreBase.cadastrarNovaLocalizacao',
+      context: context);
 
   @override
-  Future cadastrarNovaLocalizacao(BuildContext context) {
+  Future<void> cadastrarNovaLocalizacao(BuildContext context) {
     return _$cadastrarNovaLocalizacaoAsyncAction
         .run(() => super.cadastrarNovaLocalizacao(context));
   }
 
-  final _$buscarLocalizacoesAsyncAction =
-      AsyncAction('_AreaCultivoStoreBase.buscarLocalizacoes');
+  late final _$buscarLocalizacoesAsyncAction =
+      AsyncAction('AreaCultivoStoreBase.buscarLocalizacoes', context: context);
 
   @override
-  Future buscarLocalizacoes() {
+  Future<void> buscarLocalizacoes() {
     return _$buscarLocalizacoesAsyncAction
         .run(() => super.buscarLocalizacoes());
   }
 
-  final _$registrarAreaAsyncAction =
-      AsyncAction('_AreaCultivoStoreBase.registrarArea');
+  late final _$registrarAreaAsyncAction =
+      AsyncAction('AreaCultivoStoreBase.registrarArea', context: context);
 
   @override
-  Future registrarArea() {
+  Future<void> registrarArea() {
     return _$registrarAreaAsyncAction.run(() => super.registrarArea());
   }
 
-  final _$alterarAreaAsyncAction =
-      AsyncAction('_AreaCultivoStoreBase.alterarArea');
+  late final _$alterarAreaAsyncAction =
+      AsyncAction('AreaCultivoStoreBase.alterarArea', context: context);
 
   @override
-  Future alterarArea() {
+  Future<void> alterarArea() {
     return _$alterarAreaAsyncAction.run(() => super.alterarArea());
   }
 
-  final _$buscaCEPAsyncAction = AsyncAction('_AreaCultivoStoreBase.buscaCEP');
+  late final _$buscaCEPAsyncAction =
+      AsyncAction('AreaCultivoStoreBase.buscaCEP', context: context);
 
   @override
   Future<String> buscaCEP() {
     return _$buscaCEPAsyncAction.run(() => super.buscaCEP());
   }
 
-  final _$_AreaCultivoStoreBaseActionController =
-      ActionController(name: '_AreaCultivoStoreBase');
+  late final _$AreaCultivoStoreBaseActionController =
+      ActionController(name: 'AreaCultivoStoreBase', context: context);
 
   @override
-  dynamic setDropDown(String value) {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.setDropDown');
+  String setDropDown(String value) {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.setDropDown');
     try {
       return super.setDropDown(value);
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic changeOrder() {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.changeOrder');
+  String changeOrder() {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.changeOrder');
     try {
       return super.changeOrder();
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setData2(DateTime value) {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.setData2');
+  DateTime setData2(DateTime value) {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.setData2');
     try {
       return super.setData2(value);
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setData1(DateTime value) {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.setData1');
+  DateTime setData1(DateTime value) {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.setData1');
     try {
       return super.setData1(value);
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void increment() {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.increment');
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.increment');
     try {
       return super.increment();
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setSearchAreaText(String value) {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.setSearchAreaText');
+  String setSearchAreaText(String value) {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.setSearchAreaText');
     try {
       return super.setSearchAreaText(value);
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setIsEditing(bool value) {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.setIsEditing');
+  bool setIsEditing(bool value) {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.setIsEditing');
     try {
       return super.setIsEditing(value);
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setMostrarErroFormulario(bool value) {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.setMostrarErroFormulario');
+  bool setMostrarErroFormulario(bool value) {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.setMostrarErroFormulario');
     try {
       return super.setMostrarErroFormulario(value);
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setAreaEditing(Area area) {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.setAreaEditing');
+  void setAreaEditing(Area area) {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.setAreaEditing');
     try {
       return super.setAreaEditing(area);
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic validarCadastro() {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.validarCadastro');
+  bool validarCadastro() {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.validarCadastro');
     try {
       return super.validarCadastro();
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setLocalizacaoSelecionada(int index) {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.setLocalizacaoSelecionada');
+  Localizacao setLocalizacaoSelecionada(int index) {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.setLocalizacaoSelecionada');
     try {
       return super.setLocalizacaoSelecionada(index);
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic limparLocalizacao() {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.limparLocalizacao');
+  void limparLocalizacao() {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.limparLocalizacao');
     try {
       return super.limparLocalizacao();
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setDotIndicator(int value) {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.setDotIndicator');
+  void setDotIndicator(int value) {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.setDotIndicator');
     try {
       return super.setDotIndicator(value);
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setShowTextFormField(bool value) {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.setShowTextFormField');
+  void setShowTextFormField(bool value) {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.setShowTextFormField');
     try {
       return super.setShowTextFormField(value);
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic alterarNome(String name) {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.alterarNome');
+  void alterarNome(String name) {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.alterarNome');
     try {
       return super.alterarNome(name);
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic limparTudo() {
-    final _$actionInfo = _$_AreaCultivoStoreBaseActionController.startAction(
-        name: '_AreaCultivoStoreBase.limparTudo');
+  void limparTudo() {
+    final _$actionInfo = _$AreaCultivoStoreBaseActionController.startAction(
+        name: 'AreaCultivoStoreBase.limparTudo');
     try {
       return super.limparTudo();
     } finally {
-      _$_AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
+      _$AreaCultivoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

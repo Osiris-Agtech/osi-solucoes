@@ -11,7 +11,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.da
 import 'package:osi_solucoes/features/presenter/views/login/components/loadingDialog.dart';
 
 Widget novaLocalizacaoPage(BuildContext context,
-    CarouselController controlerPages, AreaCultivoStore store) {
+    CarouselSliderController controlerPages, AreaCultivoStore store) {
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
     child: Padding(
@@ -83,7 +83,7 @@ Widget novaLocalizacaoPage(BuildContext context,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),
-                      primary: Constants.kPrimaryColor,
+                      backgroundColor: Constants.kPrimaryColor,
                     ),
                     onPressed: () {
                       store.cadastrarNovaLocalizacao(context);
@@ -112,8 +112,8 @@ Widget novaLocalizacaoPage(BuildContext context,
 
 class FormularioNovaLocalizacao extends StatefulWidget {
   const FormularioNovaLocalizacao({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<FormularioNovaLocalizacao> createState() =>
@@ -143,6 +143,7 @@ class _FormularioNovaLocalizacaoState extends State<FormularioNovaLocalizacao> {
                   if (value.length == 10) {
                     showCircularProgressIndicator(context);
                     await store.buscaCEP();
+                    if (!context.mounted) return;
                     Navigator.pop(context);
                   }
                 },

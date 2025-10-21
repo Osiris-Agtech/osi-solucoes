@@ -15,9 +15,9 @@ import '../models/localizacao/localizacao_model.dart';
 
 part 'area_cultivo_store.g.dart';
 
-class AreaCultivoStore = _AreaCultivoStoreBase with _$AreaCultivoStore;
+class AreaCultivoStore = AreaCultivoStoreBase with _$AreaCultivoStore;
 
-abstract class _AreaCultivoStoreBase with Store {
+abstract class AreaCultivoStoreBase with Store {
   @observable
   bool isAreaLoading = false;
 
@@ -25,26 +25,26 @@ abstract class _AreaCultivoStoreBase with Store {
   String dropDownValue = "Nome";
 
   @action
-  setDropDown(String value) => dropDownValue = value;
+  String setDropDown(String value) => dropDownValue = value;
 
   @observable
   String order = "asc";
 
   @action
-  changeOrder() => order == "asc" ? order = "desc" : order = "asc";
+  String changeOrder() => order == "asc" ? order = "desc" : order = "asc";
 
   @observable
   DateTime data2 = DateTime.now();
 
   @action
-  setData2(DateTime value) => data2 = value;
+  DateTime setData2(DateTime value) => data2 = value;
 
   @observable
   DateTime data1 = DateTime(
       DateTime.now().year, DateTime.now().month - 1, DateTime.now().day);
 
   @action
-  setData1(DateTime value) => data1 = value;
+  DateTime setData1(DateTime value) => data1 = value;
 
   @observable
   int value = 0;
@@ -58,7 +58,7 @@ abstract class _AreaCultivoStoreBase with Store {
   List<Area> areaList = [];
 
   @action
-  buscarArea() async {
+  Future<void> buscarArea() async {
     isAreaLoading = true;
     AreaRepository areaRepository = GetIt.I<AreaRepository>();
     AuthController authController = GetIt.I<AuthController>();
@@ -86,7 +86,7 @@ abstract class _AreaCultivoStoreBase with Store {
   String searchAreaText = '';
 
   @action
-  setSearchAreaText(String value) => searchAreaText = value;
+  String setSearchAreaText(String value) => searchAreaText = value;
 
   @computed
   List<Area> get searchArea {
@@ -161,13 +161,13 @@ abstract class _AreaCultivoStoreBase with Store {
   TextEditingController estado = TextEditingController();
 
   @action
-  setIsEditing(bool value) => isEditing = value;
+  bool setIsEditing(bool value) => isEditing = value;
 
   @action
-  setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
+  bool setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
 
   @action
-  setAreaEditing(Area area) {
+  void setAreaEditing(Area area) {
     novaAreaName = TextEditingController(text: area.nome);
     novaAreaDescricao = TextEditingController(text: area.descricao);
     localizacaoSelecionada = area.localizacao!;
@@ -177,7 +177,7 @@ abstract class _AreaCultivoStoreBase with Store {
   }
 
   @action
-  cadastrarNovaLocalizacao(BuildContext context) async {
+  Future<void> cadastrarNovaLocalizacao(BuildContext context) async {
     AreaRepository areaRepository = GetIt.I<AreaRepository>();
     AuthController authController = GetIt.I<AuthController>();
 
@@ -209,7 +209,7 @@ abstract class _AreaCultivoStoreBase with Store {
   }
 
   @action
-  buscarLocalizacoes() async {
+  Future<void> buscarLocalizacoes() async {
     AreaRepository areaRepository = GetIt.I<AreaRepository>();
     AuthController authController = GetIt.I<AuthController>();
 
@@ -228,7 +228,7 @@ abstract class _AreaCultivoStoreBase with Store {
   }
 
   @action
-  validarCadastro() {
+  bool validarCadastro() {
     bool validate = novaAreaName.text.isNotEmpty;
 
     mostrarErroFormulario = !validate;
@@ -236,7 +236,7 @@ abstract class _AreaCultivoStoreBase with Store {
   }
 
   @action
-  registrarArea() async {
+  Future<void> registrarArea() async {
     AuthController authController = GetIt.I<AuthController>();
     AreaRepository areaRepository = GetIt.I<AreaRepository>();
     isNovaAreaLoading = true;
@@ -267,7 +267,7 @@ abstract class _AreaCultivoStoreBase with Store {
   }
 
   @action
-  alterarArea() async {
+  Future<void> alterarArea() async {
     AuthController authController = GetIt.I<AuthController>();
     AreaRepository areaRepository = GetIt.I<AreaRepository>();
     SetorStore setorStore = GetIt.I<SetorStore>();
@@ -300,11 +300,11 @@ abstract class _AreaCultivoStoreBase with Store {
   }
 
   @action
-  setLocalizacaoSelecionada(int index) =>
+  Localizacao setLocalizacaoSelecionada(int index) =>
       localizacaoSelecionada = localizacaoList[index];
 
   @action
-  limparLocalizacao() {
+  void limparLocalizacao() {
     cep.clear();
     endereco.clear();
     bairro.clear();
@@ -316,19 +316,19 @@ abstract class _AreaCultivoStoreBase with Store {
   }
 
   @action
-  setDotIndicator(int value) {
+  void setDotIndicator(int value) {
     if (value >= 0 && value <= 1) {
       dotIndicator = value;
     }
   }
 
   @action
-  setShowTextFormField(bool value) {
+  void setShowTextFormField(bool value) {
     showTextFormField = value;
   }
 
   @action
-  alterarNome(String name) {
+  void alterarNome(String name) {
     novaAreaName = TextEditingController(text: name);
   }
 
@@ -362,7 +362,7 @@ abstract class _AreaCultivoStoreBase with Store {
   //####################### END CADASTRAR AREA DE CULTIVO ##########################
 
   @action
-  limparTudo() {
+  void limparTudo() {
     novaAreaName.clear();
     novaAreaDescricao.clear();
     limparLocalizacao();

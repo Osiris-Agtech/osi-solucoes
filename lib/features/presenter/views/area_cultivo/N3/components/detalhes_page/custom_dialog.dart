@@ -7,7 +7,7 @@ import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
 class CustomDialog extends StatefulWidget {
-  const CustomDialog({Key? key}) : super(key: key);
+  const CustomDialog({super.key});
 
   @override
   State<CustomDialog> createState() => _CustomDialogState();
@@ -282,25 +282,11 @@ class _CustomDialogState extends State<CustomDialog> {
                   child: Observer(builder: (_) {
                     return ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Constants.kPrimaryColor,
+                        backgroundColor: Constants.kPrimaryColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
-                      child: store.isMigrateLoteLoading
-                          ? const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: CircularProgressIndicator(),
-                              ),
-                            )
-                          : const Text(
-                              "Migrar",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
                       onPressed: !store.validarMigracao
                           ? null
                           : () {
@@ -355,6 +341,20 @@ class _CustomDialogState extends State<CustomDialog> {
                                 },
                               );
                             },
+                      child: store.isMigrateLoteLoading
+                          ? const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                          : const Text(
+                              "Migrar",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                     );
                   }),
                 ),

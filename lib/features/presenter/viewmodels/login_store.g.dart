@@ -6,10 +6,10 @@ part of 'login_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$LoginStore on _LoginStoreBase, Store {
-  final _$emailAtom = Atom(name: '_LoginStoreBase.email');
+mixin _$LoginStore on LoginStoreBase, Store {
+  late final _$emailAtom = Atom(name: 'LoginStoreBase.email', context: context);
 
   @override
   TextEditingController get email {
@@ -24,7 +24,7 @@ mixin _$LoginStore on _LoginStoreBase, Store {
     });
   }
 
-  final _$senhaAtom = Atom(name: '_LoginStoreBase.senha');
+  late final _$senhaAtom = Atom(name: 'LoginStoreBase.senha', context: context);
 
   @override
   TextEditingController get senha {
@@ -39,7 +39,8 @@ mixin _$LoginStore on _LoginStoreBase, Store {
     });
   }
 
-  final _$userListAtom = Atom(name: '_LoginStoreBase.userList');
+  late final _$userListAtom =
+      Atom(name: 'LoginStoreBase.userList', context: context);
 
   @override
   List<Usuario> get userList {
@@ -54,7 +55,8 @@ mixin _$LoginStore on _LoginStoreBase, Store {
     });
   }
 
-  final _$isObscureAtom = Atom(name: '_LoginStoreBase.isObscure');
+  late final _$isObscureAtom =
+      Atom(name: 'LoginStoreBase.isObscure', context: context);
 
   @override
   bool get isObscure {
@@ -69,57 +71,58 @@ mixin _$LoginStore on _LoginStoreBase, Store {
     });
   }
 
-  final _$loginAsyncAction = AsyncAction('_LoginStoreBase.login');
+  late final _$loginAsyncAction =
+      AsyncAction('LoginStoreBase.login', context: context);
 
   @override
-  Future login() {
+  Future<String> login() {
     return _$loginAsyncAction.run(() => super.login());
   }
 
-  final _$_LoginStoreBaseActionController =
-      ActionController(name: '_LoginStoreBase');
+  late final _$LoginStoreBaseActionController =
+      ActionController(name: 'LoginStoreBase', context: context);
 
   @override
-  dynamic toggleObscure() {
-    final _$actionInfo = _$_LoginStoreBaseActionController.startAction(
-        name: '_LoginStoreBase.toggleObscure');
+  void toggleObscure() {
+    final _$actionInfo = _$LoginStoreBaseActionController.startAction(
+        name: 'LoginStoreBase.toggleObscure');
     try {
       return super.toggleObscure();
     } finally {
-      _$_LoginStoreBaseActionController.endAction(_$actionInfo);
+      _$LoginStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setEmailController(String value) {
-    final _$actionInfo = _$_LoginStoreBaseActionController.startAction(
-        name: '_LoginStoreBase.setEmailController');
+  String setEmailController(String value) {
+    final _$actionInfo = _$LoginStoreBaseActionController.startAction(
+        name: 'LoginStoreBase.setEmailController');
     try {
       return super.setEmailController(value);
     } finally {
-      _$_LoginStoreBaseActionController.endAction(_$actionInfo);
+      _$LoginStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setSenhaController(String value) {
-    final _$actionInfo = _$_LoginStoreBaseActionController.startAction(
-        name: '_LoginStoreBase.setSenhaController');
+  String setSenhaController(String value) {
+    final _$actionInfo = _$LoginStoreBaseActionController.startAction(
+        name: 'LoginStoreBase.setSenhaController');
     try {
       return super.setSenhaController(value);
     } finally {
-      _$_LoginStoreBaseActionController.endAction(_$actionInfo);
+      _$LoginStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic clearFields() {
-    final _$actionInfo = _$_LoginStoreBaseActionController.startAction(
-        name: '_LoginStoreBase.clearFields');
+  void clearFields() {
+    final _$actionInfo = _$LoginStoreBaseActionController.startAction(
+        name: 'LoginStoreBase.clearFields');
     try {
       return super.clearFields();
     } finally {
-      _$_LoginStoreBaseActionController.endAction(_$actionInfo);
+      _$LoginStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

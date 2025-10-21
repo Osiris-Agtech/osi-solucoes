@@ -13,8 +13,8 @@ class ConnectivityServiceImpl implements ConnectivityService {
   Future<bool> isOnline() async {
     final result = await connectivity.checkConnectivity();
 
-    final isOnline = (result == ConnectivityResult.wifi ||
-        result == ConnectivityResult.mobile);
+    final isOnline = result.contains(ConnectivityResult.wifi) ||
+        result.contains(ConnectivityResult.mobile);
 
     return isOnline;
   }

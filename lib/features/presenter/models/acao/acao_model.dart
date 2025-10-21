@@ -49,7 +49,7 @@ class Acao {
 
   Map<String, dynamic> toJson() => _$AcaoToJson(this);
 
-  toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'id': id,
       'titulo': titulo,

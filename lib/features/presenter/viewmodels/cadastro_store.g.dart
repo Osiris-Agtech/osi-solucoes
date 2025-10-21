@@ -6,10 +6,11 @@ part of 'cadastro_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$CadastroStore on _CadastroStoreBase, Store {
-  final _$nomeAtom = Atom(name: '_CadastroStoreBase.nome');
+mixin _$CadastroStore on CadastroStoreBase, Store {
+  late final _$nomeAtom =
+      Atom(name: 'CadastroStoreBase.nome', context: context);
 
   @override
   TextEditingController get nome {
@@ -24,7 +25,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$sobrenomeAtom = Atom(name: '_CadastroStoreBase.sobrenome');
+  late final _$sobrenomeAtom =
+      Atom(name: 'CadastroStoreBase.sobrenome', context: context);
 
   @override
   TextEditingController get sobrenome {
@@ -39,7 +41,7 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$cepAtom = Atom(name: '_CadastroStoreBase.cep');
+  late final _$cepAtom = Atom(name: 'CadastroStoreBase.cep', context: context);
 
   @override
   TextEditingController get cep {
@@ -54,7 +56,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$logradouroAtom = Atom(name: '_CadastroStoreBase.logradouro');
+  late final _$logradouroAtom =
+      Atom(name: 'CadastroStoreBase.logradouro', context: context);
 
   @override
   TextEditingController get logradouro {
@@ -69,7 +72,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$complementoAtom = Atom(name: '_CadastroStoreBase.complemento');
+  late final _$complementoAtom =
+      Atom(name: 'CadastroStoreBase.complemento', context: context);
 
   @override
   TextEditingController get complemento {
@@ -84,7 +88,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$bairroAtom = Atom(name: '_CadastroStoreBase.bairro');
+  late final _$bairroAtom =
+      Atom(name: 'CadastroStoreBase.bairro', context: context);
 
   @override
   TextEditingController get bairro {
@@ -99,7 +104,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$cidadeAtom = Atom(name: '_CadastroStoreBase.cidade');
+  late final _$cidadeAtom =
+      Atom(name: 'CadastroStoreBase.cidade', context: context);
 
   @override
   TextEditingController get cidade {
@@ -114,7 +120,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$estadoAtom = Atom(name: '_CadastroStoreBase.estado');
+  late final _$estadoAtom =
+      Atom(name: 'CadastroStoreBase.estado', context: context);
 
   @override
   TextEditingController get estado {
@@ -129,7 +136,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$paisAtom = Atom(name: '_CadastroStoreBase.pais');
+  late final _$paisAtom =
+      Atom(name: 'CadastroStoreBase.pais', context: context);
 
   @override
   TextEditingController get pais {
@@ -144,7 +152,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$telefoneAtom = Atom(name: '_CadastroStoreBase.telefone');
+  late final _$telefoneAtom =
+      Atom(name: 'CadastroStoreBase.telefone', context: context);
 
   @override
   TextEditingController get telefone {
@@ -159,7 +168,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$cnpjContaAtom = Atom(name: '_CadastroStoreBase.cnpjConta');
+  late final _$cnpjContaAtom =
+      Atom(name: 'CadastroStoreBase.cnpjConta', context: context);
 
   @override
   TextEditingController get cnpjConta {
@@ -174,7 +184,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$emailAtom = Atom(name: '_CadastroStoreBase.email');
+  late final _$emailAtom =
+      Atom(name: 'CadastroStoreBase.email', context: context);
 
   @override
   TextEditingController get email {
@@ -189,7 +200,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$senhaAtom = Atom(name: '_CadastroStoreBase.senha');
+  late final _$senhaAtom =
+      Atom(name: 'CadastroStoreBase.senha', context: context);
 
   @override
   TextEditingController get senha {
@@ -204,7 +216,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$responseCEPAtom = Atom(name: '_CadastroStoreBase.responseCEP');
+  late final _$responseCEPAtom =
+      Atom(name: 'CadastroStoreBase.responseCEP', context: context);
 
   @override
   String? get responseCEP {
@@ -219,7 +232,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$isObscureAtom = Atom(name: '_CadastroStoreBase.isObscure');
+  late final _$isObscureAtom =
+      Atom(name: 'CadastroStoreBase.isObscure', context: context);
 
   @override
   bool get isObscure {
@@ -234,7 +248,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$primeiroDigitoAtom = Atom(name: '_CadastroStoreBase.primeiroDigito');
+  late final _$primeiroDigitoAtom =
+      Atom(name: 'CadastroStoreBase.primeiroDigito', context: context);
 
   @override
   TextEditingController get primeiroDigito {
@@ -249,7 +264,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$segundoDigitoAtom = Atom(name: '_CadastroStoreBase.segundoDigito');
+  late final _$segundoDigitoAtom =
+      Atom(name: 'CadastroStoreBase.segundoDigito', context: context);
 
   @override
   TextEditingController get segundoDigito {
@@ -264,7 +280,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$terceiroDigitoAtom = Atom(name: '_CadastroStoreBase.terceiroDigito');
+  late final _$terceiroDigitoAtom =
+      Atom(name: 'CadastroStoreBase.terceiroDigito', context: context);
 
   @override
   TextEditingController get terceiroDigito {
@@ -279,7 +296,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$quartoDigitoAtom = Atom(name: '_CadastroStoreBase.quartoDigito');
+  late final _$quartoDigitoAtom =
+      Atom(name: 'CadastroStoreBase.quartoDigito', context: context);
 
   @override
   TextEditingController get quartoDigito {
@@ -294,7 +312,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$codeAtom = Atom(name: '_CadastroStoreBase.code');
+  late final _$codeAtom =
+      Atom(name: 'CadastroStoreBase.code', context: context);
 
   @override
   String? get code {
@@ -309,7 +328,8 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$codigoGeradoAtom = Atom(name: '_CadastroStoreBase.codigoGerado');
+  late final _$codigoGeradoAtom =
+      Atom(name: 'CadastroStoreBase.codigoGerado', context: context);
 
   @override
   String get codigoGerado {
@@ -324,70 +344,71 @@ mixin _$CadastroStore on _CadastroStoreBase, Store {
     });
   }
 
-  final _$enviarCodigoEmailAsyncAction =
-      AsyncAction('_CadastroStoreBase.enviarCodigoEmail');
+  late final _$enviarCodigoEmailAsyncAction =
+      AsyncAction('CadastroStoreBase.enviarCodigoEmail', context: context);
 
   @override
-  Future enviarCodigoEmail() {
+  Future<String> enviarCodigoEmail() {
     return _$enviarCodigoEmailAsyncAction.run(() => super.enviarCodigoEmail());
   }
 
-  final _$buscaCEPAsyncAction = AsyncAction('_CadastroStoreBase.buscaCEP');
+  late final _$buscaCEPAsyncAction =
+      AsyncAction('CadastroStoreBase.buscaCEP', context: context);
 
   @override
   Future<String> buscaCEP() {
     return _$buscaCEPAsyncAction.run(() => super.buscaCEP());
   }
 
-  final _$verificaEmailAsyncAction =
-      AsyncAction('_CadastroStoreBase.verificaEmail');
+  late final _$verificaEmailAsyncAction =
+      AsyncAction('CadastroStoreBase.verificaEmail', context: context);
 
   @override
-  Future verificaEmail() {
+  Future<String> verificaEmail() {
     return _$verificaEmailAsyncAction.run(() => super.verificaEmail());
   }
 
-  final _$cadastraUserAsyncAction =
-      AsyncAction('_CadastroStoreBase.cadastraUser');
+  late final _$cadastraUserAsyncAction =
+      AsyncAction('CadastroStoreBase.cadastraUser', context: context);
 
   @override
-  Future cadastraUser() {
+  Future<String> cadastraUser() {
     return _$cadastraUserAsyncAction.run(() => super.cadastraUser());
   }
 
-  final _$_CadastroStoreBaseActionController =
-      ActionController(name: '_CadastroStoreBase');
+  late final _$CadastroStoreBaseActionController =
+      ActionController(name: 'CadastroStoreBase', context: context);
 
   @override
-  dynamic gerarCodigo() {
-    final _$actionInfo = _$_CadastroStoreBaseActionController.startAction(
-        name: '_CadastroStoreBase.gerarCodigo');
+  String gerarCodigo() {
+    final _$actionInfo = _$CadastroStoreBaseActionController.startAction(
+        name: 'CadastroStoreBase.gerarCodigo');
     try {
       return super.gerarCodigo();
     } finally {
-      _$_CadastroStoreBaseActionController.endAction(_$actionInfo);
+      _$CadastroStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic verificaCodigo() {
-    final _$actionInfo = _$_CadastroStoreBaseActionController.startAction(
-        name: '_CadastroStoreBase.verificaCodigo');
+  bool verificaCodigo() {
+    final _$actionInfo = _$CadastroStoreBaseActionController.startAction(
+        name: 'CadastroStoreBase.verificaCodigo');
     try {
       return super.verificaCodigo();
     } finally {
-      _$_CadastroStoreBaseActionController.endAction(_$actionInfo);
+      _$CadastroStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic toggleObscure() {
-    final _$actionInfo = _$_CadastroStoreBaseActionController.startAction(
-        name: '_CadastroStoreBase.toggleObscure');
+  void toggleObscure() {
+    final _$actionInfo = _$CadastroStoreBaseActionController.startAction(
+        name: 'CadastroStoreBase.toggleObscure');
     try {
       return super.toggleObscure();
     } finally {
-      _$_CadastroStoreBaseActionController.endAction(_$actionInfo);
+      _$CadastroStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

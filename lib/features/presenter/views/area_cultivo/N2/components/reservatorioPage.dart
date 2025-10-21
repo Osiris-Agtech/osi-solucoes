@@ -116,7 +116,7 @@ Widget reservatorioPage(BuildContext context, SetorStore store) {
           padding: const EdgeInsets.only(top: 45, left: 10, right: 10),
           child: Observer(builder: (_) {
             return DropdownButtonFormField<Reservatorio>(
-              value: store.novoSetorReservatorio.id != null
+              initialValue: store.novoSetorReservatorio.id != null
                   ? store.reservatorioList.firstWhere(
                       (element) => element.id == store.novoSetorReservatorio.id)
                   : null,

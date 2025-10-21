@@ -41,8 +41,8 @@ extension StringExtensionCNPJ on String {
 enum EmailValidationError { invalid }
 
 class Email extends FormzInput<String, EmailValidationError> {
-  const Email.pure([String value = '']) : super.pure(value);
-  const Email.dirty([String value = '']) : super.dirty(value);
+  const Email.pure([super.value = '']) : super.pure();
+  const Email.dirty([super.value = '']) : super.dirty();
 
   static final _emailRegex = RegExp(
     r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
@@ -59,8 +59,8 @@ class Email extends FormzInput<String, EmailValidationError> {
 enum PasswordValidationError { invalid }
 
 class Password extends FormzInput<String, PasswordValidationError> {
-  const Password.pure([String value = '']) : super.pure(value);
-  const Password.dirty([String value = '']) : super.dirty(value);
+  const Password.pure([super.value = '']) : super.pure();
+  const Password.dirty([super.value = '']) : super.dirty();
 
   @override
   PasswordValidationError? validator(String? value) {

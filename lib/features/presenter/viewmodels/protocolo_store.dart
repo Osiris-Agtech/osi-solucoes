@@ -14,9 +14,9 @@ import '../models/acao/acao_model.dart';
 
 part 'protocolo_store.g.dart';
 
-class ProtocoloStore = _ProtocoloStoreBase with _$ProtocoloStore;
+class ProtocoloStore = ProtocoloStoreBase with _$ProtocoloStore;
 
-abstract class _ProtocoloStoreBase with Store {
+abstract class ProtocoloStoreBase with Store {
   ProtocoloRepository protocoloRepository = GetIt.I<ProtocoloRepository>();
   // AuthController authController = GetIt.I<AuthController>();
 
@@ -114,96 +114,96 @@ abstract class _ProtocoloStoreBase with Store {
   TextEditingController searchProtocoloPage = TextEditingController(text: '');
 
   @action
-  setIsNovaCultura(bool value) => isNovaCultura = value;
+  bool setIsNovaCultura(bool value) => isNovaCultura = value;
 
   @action
-  setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
+  bool setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
 
   @action
-  setDiaDaAtiv(int value) => diaDaAtiv = value;
+  int setDiaDaAtiv(int value) => diaDaAtiv = value;
 
   @action
-  alterarForma(String forma) {
+  void alterarForma(String forma) {
     novoFormaProtocolo = forma;
   }
 
   @action
-  alterarSistema(String sistema) {
+  void alterarSistema(String sistema) {
     novoSistemaProtocolo = sistema;
   }
 
   @action
-  alterarTipo(String tipo) {
+  void alterarTipo(String tipo) {
     novoTipoProtocolo = tipo;
   }
 
   @action
-  alterarNome(String name) {
+  void alterarNome(String name) {
     novoNomeProtocolo = name;
   }
 
   @action
-  alterarTituloFase(String name) {
+  void alterarTituloFase(String name) {
     novoTituloFase = name;
   }
 
   @action
-  alterarTituloAtividade(String name) {
+  void alterarTituloAtividade(String name) {
     novoTituloAtividade = name;
   }
 
   @action
-  alterarDescricaoAtividade(String name) {
+  void alterarDescricaoAtividade(String name) {
     novoDescricaoAtividade = name;
   }
 
   @action
-  alterarDropdownFase(Fase newFase) {
+  void alterarDropdownFase(Fase newFase) {
     selectedFase = newFase;
   }
 
   @action
-  alterarProtocoloSelecionado(Protocolo novoProtocolo) {
+  void alterarProtocoloSelecionado(Protocolo novoProtocolo) {
     protocoloSelecionado = novoProtocolo;
   }
 
   @action
-  alterarRadioIndicator(int value) {
+  void alterarRadioIndicator(int value) {
     radioIndicator = value;
   }
 
   @action
-  alterarDuracaoDiasFase(int value) {
+  void alterarDuracaoDiasFase(int value) {
     novoDuracaoDiasFase = value;
   }
 
   @action
-  setarDuracaoDiasFase(String value) {
+  void setarDuracaoDiasFase(String value) {
     diaDaAtivController.clear();
     diaDaAtivController = TextEditingController(text: value);
   }
 
   @action
-  alterarIsNovaFaseBottonSheet(bool value) {
+  void alterarIsNovaFaseBottonSheet(bool value) {
     isNovaFaseBottonSheet = value;
   }
 
   @action
-  setDotIndicator(int value) {
+  void setDotIndicator(int value) {
     if (value >= 0 && value <= 5) {
       dotIndicator = value;
     }
   }
 
   @action
-  setDotIndicatorEdit(int value) {
+  void setDotIndicatorEdit(int value) {
     if (value >= 0 && value <= 5) {
       dotIndicatorEdit = value;
     }
   }
 
   @action
-  buscarProtocolos() async {
+  Future<void> buscarProtocolos() async {
     isProtocoloListLoading = true;
 
     AuthController authController = GetIt.I<AuthController>();
@@ -223,7 +223,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  setSeachProtocoloPage(String value) {
+  void setSeachProtocoloPage(String value) {
     searchProtocoloPage = TextEditingController(text: value);
   }
 
@@ -236,7 +236,7 @@ abstract class _ProtocoloStoreBase with Store {
       }).toList();
 
   @action
-  buscarFases() async {
+  Future<void> buscarFases() async {
     AuthController authController = GetIt.I<AuthController>();
     var fases = await protocoloRepository
         .buscarFases(authController.usuario.selected_conta!.conta!.id!);
@@ -252,7 +252,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  registrarFase() async {
+  Future<void> registrarFase() async {
     isProtocoloListLoading = true;
 
     if (novoTituloFase != null && novoTituloFase != "") {
@@ -277,7 +277,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  registrarCultura() async {
+  Future<void> registrarCultura() async {
     if (novaCulturaController.text.isNotEmpty) {
       Cultura novaCultura = Cultura(
         nome: novaCulturaController.text,
@@ -302,7 +302,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  registrarProtocolo() async {
+  Future<void> registrarProtocolo() async {
     isProtocoloListLoading = true;
 
     Protocolo novoProtocolo = Protocolo(
@@ -331,7 +331,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  buscarCulturas() async {
+  Future<void> buscarCulturas() async {
     isProtocoloListLoading = true;
 
     AuthController authController = GetIt.I<AuthController>();
@@ -351,12 +351,12 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  mudarSelecaoCultura(Cultura item) {
+  void mudarSelecaoCultura(Cultura item) {
     novaCulturaProtocolo = item;
   }
 
   @action
-  atualizarNovasAtividades() {
+  void atualizarNovasAtividades() {
     novasAtividadesProtocolo
         .clear(); // Limpa a lista antes de adicionar novas ações
     for (var fase in faseList) {
@@ -390,7 +390,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  addToFaseList() {
+  void addToFaseList() {
     Acao acao = Acao(
       titulo: novoTituloAtividade,
       duracao_dias: int.parse(diaDaAtivController.text),
@@ -426,14 +426,14 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  alterarAlertaAcao(int indexFase, int indexAcao) {
+  void alterarAlertaAcao(int indexFase, int indexAcao) {
     faseList[indexFase].acao?[indexAcao].alerta =
         !(faseList[indexFase].acao?[indexAcao].alerta ?? false);
     faseList = List.from(faseList);
   }
 
   @action
-  prepararListaDetalhesFase() {
+  void prepararListaDetalhesFase() {
     listaFaseDetalhes = List.from([]);
 
     if (protocoloSelecionado?.acao != null) {
@@ -463,7 +463,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  prepararEditAtiv(int indexFase, int indexAcao) {
+  void prepararEditAtiv(int indexFase, int indexAcao) {
     selectedFase = faseList[indexFase];
     novoTituloAtividade = faseList[indexFase].acao?[indexAcao].titulo ?? "";
     novoDescricaoAtividade =
@@ -473,7 +473,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  editarAcao(int indexFase, int indexAcao) {
+  void editarAcao(int indexFase, int indexAcao) {
     if (selectedFase!.id != faseList[indexFase].id) {
       faseList[indexFase].acao?.removeAt(indexAcao);
       if (faseList[indexFase].acao!.isEmpty) {
@@ -496,7 +496,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  removeAcao(int indexAcao, int indexFase) {
+  void removeAcao(int indexAcao, int indexFase) {
     faseList[indexFase].acao?.removeAt(indexAcao);
     if (faseList[indexFase].acao!.isEmpty) {
       faseList.removeAt(indexFase);
@@ -505,14 +505,14 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  removeFase(int indexFase) {
+  void removeFase(int indexFase) {
     faseList[indexFase].acao?.clear();
     faseList.removeAt(indexFase);
     faseList = List.from(faseList);
   }
 
   @action
-  validarNovoProtocolo() {
+  void validarNovoProtocolo() {
     if (novoNomeProtocolo == null ||
         novoNomeProtocolo == "" ||
         novaCulturaProtocolo == null ||
@@ -530,7 +530,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  validarNovaFase() {
+  void validarNovaFase() {
     if (novoTituloFase == null ||
         novoTituloFase == "" ||
         novoDuracaoDiasFase == null) {
@@ -541,7 +541,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  validarAtividade() {
+  void validarAtividade() {
     if (novoTituloAtividade == null ||
         novoTituloAtividade == "" ||
         selectedFase == null ||
@@ -553,7 +553,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  limparTudo() {
+  void limparTudo() {
     novoNomeProtocolo = null;
     novoFormaProtocolo = null;
     novoTipoProtocolo = null;
@@ -570,13 +570,13 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  limparFaseBottomSheet() {
+  void limparFaseBottomSheet() {
     novoTituloFase = null;
     novoDuracaoDiasFase = null;
   }
 
   @action
-  limparAtividadeBottomSheet() {
+  void limparAtividadeBottomSheet() {
     novoTituloAtividade = null;
     selectedFase = null;
     novoDescricaoAtividade = null;
@@ -632,50 +632,50 @@ abstract class _ProtocoloStoreBase with Store {
   Cultura? novaCulturaProtocoloDetalhes;
 
   @action
-  alterarLoteFoiAlterado(bool value) {
+  void alterarLoteFoiAlterado(bool value) {
     loteFoiAlterado = value;
   }
 
   @action
-  editarNome(String name) {
+  void editarNome(String name) {
     novoNomeProtocoloDetalhes = name;
     alterarLoteFoiAlterado(true);
   }
 
-  editarCultura(Cultura item) {
+  void editarCultura(Cultura item) {
     novaCulturaProtocoloDetalhes = item;
     alterarLoteFoiAlterado(true);
   }
 
   @action
-  editarTipo(String tipo) {
+  void editarTipo(String tipo) {
     novoTipoProtocoloDetalhes = tipo;
     alterarLoteFoiAlterado(true);
   }
 
   @action
-  editarSistema(String sistema) {
+  void editarSistema(String sistema) {
     novoSistemaProtocoloDetalhes = sistema;
     alterarLoteFoiAlterado(true);
   }
 
   @action
-  editarForma(String forma) {
+  void editarForma(String forma) {
     novoFormaProtocoloDetalhes = forma;
     alterarLoteFoiAlterado(true);
   }
 
   @action
-  alterarDiaDaAtiv(int value) => diaDaAtivDetalhes = value;
+  int alterarDiaDaAtiv(int value) => diaDaAtivDetalhes = value;
 
   @action
-  setarDuracaoDiasFaseDetalhes(String value) {
+  void setarDuracaoDiasFaseDetalhes(String value) {
     diaDetalhesAtivController.clear();
     diaDetalhesAtivController = TextEditingController(text: value);
   }
 
   @action
-  alterarAlertaAcaoDetalhes(int indexFase, int indexAcao) {
+  void alterarAlertaAcaoDetalhes(int indexFase, int indexAcao) {
     listaFaseDetalhes[indexFase].acao?[indexAcao].alerta =
         !(listaFaseDetalhes[indexFase].acao?[indexAcao].alerta ?? false);
 
@@ -684,7 +684,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  removeAcaoDetalhes(int indexAcao, int indexFase) {
+  void removeAcaoDetalhes(int indexAcao, int indexFase) {
     listaFaseDetalhes[indexFase].acao?.removeAt(indexAcao);
     if (listaFaseDetalhes[indexFase].acao!.isEmpty) {
       listaFaseDetalhes.removeAt(indexFase);
@@ -694,7 +694,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  removeFaseDetalhes(int indexFase) {
+  void removeFaseDetalhes(int indexFase) {
     listaFaseDetalhes[indexFase].acao?.clear();
     listaFaseDetalhes.removeAt(indexFase);
     listaFaseDetalhes = List.from(listaFaseDetalhes);
@@ -702,7 +702,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  atualizarNovasAtividadesDetalhes() {
+  void atualizarNovasAtividadesDetalhes() {
     novasAtividadesDetalhesProtocolo
         .clear(); // Limpa a lista antes de adicionar novas ações
     for (var fase in listaFaseDetalhes) {
@@ -718,7 +718,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  registrarFaseDetalhes() async {
+  Future<void> registrarFaseDetalhes() async {
     isProtocoloListLoading = true;
 
     if (novoTituloFaseDetalhes != null && novoTituloFaseDetalhes != "") {
@@ -744,22 +744,22 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  alterarDuracaoDiasFaseDetalhes(int value) {
+  void alterarDuracaoDiasFaseDetalhes(int value) {
     novoDuracaoDiasFaseDetalhes = value;
   }
 
   @action
-  alterarTituloFaseDetalhes(String name) {
+  void alterarTituloFaseDetalhes(String name) {
     novoTituloFaseDetalhes = name;
   }
 
   @action
-  alterarDropdownFaseDetalhes(Fase newFase) {
+  void alterarDropdownFaseDetalhes(Fase newFase) {
     selectedDetalhesFase = newFase;
   }
 
   @action
-  prepararEditDetalhesAtiv(int indexFase, int indexAcao) {
+  void prepararEditDetalhesAtiv(int indexFase, int indexAcao) {
     selectedDetalhesFase = faseDropDownListDetelhes.firstWhereOrNull(
         (element) => element.id == listaFaseDetalhes[indexFase].id);
     novoTituloDetalhesAtividade = TextEditingController(
@@ -794,7 +794,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  addToFaseListDetalhes() {
+  void addToFaseListDetalhes() {
     Acao acao = Acao(
       titulo: novoTituloDetalhesAtividade.text,
       duracao_dias: int.parse(diaDetalhesAtivController.text),
@@ -835,7 +835,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  editarAcaoDetalhes(int indexFase, int indexAcao) {
+  void editarAcaoDetalhes(int indexFase, int indexAcao) {
     if (selectedDetalhesFase!.id != listaFaseDetalhes[indexFase].id) {
       listaFaseDetalhes[indexFase].acao?.removeAt(indexAcao);
       if (listaFaseDetalhes[indexFase].acao!.isEmpty) {
@@ -862,7 +862,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  buscarFasesDetalhes() async {
+  Future<void> buscarFasesDetalhes() async {
     AuthController authController = GetIt.I<AuthController>();
     var fases = await protocoloRepository
         .buscarFases(authController.usuario.selected_conta!.conta!.id!);
@@ -879,7 +879,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  atualizarProtocolo() async {
+  Future<void> atualizarProtocolo() async {
     isProtocoloListLoading = true;
     protocoloSelecionado!.nome =
         novoNomeProtocoloDetalhes ?? protocoloSelecionado!.nome;
@@ -911,7 +911,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  validarAtividadeDetalhes() {
+  void validarAtividadeDetalhes() {
     if (novoTituloDetalhesAtividade.text == "" ||
         selectedDetalhesFase == null ||
         diaDetalhesAtivController.text == "") {
@@ -922,13 +922,13 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  limparFaseDetalhesBottomSheet() {
+  void limparFaseDetalhesBottomSheet() {
     novoTituloFaseDetalhes = null;
     novoDuracaoDiasFaseDetalhes = null;
   }
 
   @action
-  limparProtocoloDetalhes() {
+  void limparProtocoloDetalhes() {
     novoNomeProtocoloDetalhes = null;
     novaCulturaProtocoloDetalhes = null;
     novoFormaProtocoloDetalhes = null;
@@ -937,7 +937,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  limparAtividadeBottomSheetDetalhes() {
+  void limparAtividadeBottomSheetDetalhes() {
     novoTituloDetalhesAtividade.clear();
     selectedDetalhesFase = null;
     novoDescricaoDetalhesAtividade.clear();
@@ -945,7 +945,7 @@ abstract class _ProtocoloStoreBase with Store {
   }
 
   @action
-  validarNovaFaseDetalhes() {
+  void validarNovaFaseDetalhes() {
     if (novoTituloFaseDetalhes == null ||
         novoTituloFaseDetalhes == "" ||
         novoDuracaoDiasFaseDetalhes == null) {

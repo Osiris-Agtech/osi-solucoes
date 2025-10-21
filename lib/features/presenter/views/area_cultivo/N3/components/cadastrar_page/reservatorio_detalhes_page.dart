@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
-reservatorioDetalhesPage(LoteStore store) {
+ListView reservatorioDetalhesPage(LoteStore store) {
   return ListView(
     shrinkWrap: true,
     physics: const BouncingScrollPhysics(),
@@ -175,7 +175,8 @@ reservatorioDetalhesPage(LoteStore store) {
                   store.reservatorioDetalhes.lotes![index].nome ?? "...",
                   style: TextStyle(
                     fontSize: 16,
-                    color: Constants.kContentColorLightTheme.withOpacity(.8),
+                    color:
+                        Constants.kContentColorLightTheme.withValues(alpha: .8),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -183,7 +184,8 @@ reservatorioDetalhesPage(LoteStore store) {
                   'Setor: ${store.reservatorioDetalhes.lotes![index].setor?.nome ?? '--'}',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Constants.kContentColorLightTheme.withOpacity(.7),
+                    color:
+                        Constants.kContentColorLightTheme.withValues(alpha: .7),
                     fontWeight: FontWeight.normal,
                   ),
                 ),
@@ -191,7 +193,8 @@ reservatorioDetalhesPage(LoteStore store) {
                   '${store.reservatorioDetalhes.lotes![index].bandeijas_semeadas ?? '--'}\nbandejas',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Constants.kContentColorLightTheme.withOpacity(.7),
+                    color:
+                        Constants.kContentColorLightTheme.withValues(alpha: .7),
                     fontWeight: FontWeight.normal,
                   ),
                   textAlign: TextAlign.center,

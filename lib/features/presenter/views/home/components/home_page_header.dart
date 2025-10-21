@@ -42,7 +42,7 @@ abstract class NetworkingPageHeader implements SliverPersistentHeaderDelegate {
             'Lorem ipsum',
             style: TextStyle(
               fontSize: 32.0,
-              color: Colors.white.withOpacity(titleOpacity(shrinkOffset)),
+              color: Colors.white.withValues(alpha: titleOpacity(shrinkOffset)),
             ),
           ),
         ),

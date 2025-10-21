@@ -16,7 +16,7 @@ import 'components/registrarButton.dart';
 
 class LoginPage extends StatefulWidget {
   final String title;
-  const LoginPage({Key? key, this.title = 'LoginPage'}) : super(key: key);
+  const LoginPage({super.key, this.title = 'LoginPage'});
   @override
   LoginPageState createState() => LoginPageState();
 }
@@ -85,7 +85,7 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  _formSenha(Size size) {
+  Observer _formSenha(Size size) {
     return Observer(
       builder: (_) {
         return Padding(
@@ -106,7 +106,7 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  _formEmail(Size size) {
+  Observer _formEmail(Size size) {
     return Observer(
       builder: (_) {
         return Padding(
@@ -127,7 +127,7 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  _logo(Size size) {
+  SizedBox _logo(Size size) {
     return SizedBox(
       child: Image.asset(
         "assets/images/logo_ufmt.png",
@@ -137,14 +137,14 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  _expanded({required int flex}) {
+  Expanded _expanded({required int flex}) {
     return Expanded(
       flex: flex,
       child: Container(),
     );
   }
 
-  formFieldLogin({
+  SizedBox formFieldLogin({
     TextEditingController? controllerText,
     String? labelText,
     required bool isSenha,

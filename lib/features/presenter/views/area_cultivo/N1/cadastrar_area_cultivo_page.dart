@@ -8,7 +8,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.da
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components/bottomSheet.dart';
 
 class CadastrarAreaCultivo extends StatefulWidget {
-  const CadastrarAreaCultivo({Key? key}) : super(key: key);
+  const CadastrarAreaCultivo({super.key});
 
   @override
   State<CadastrarAreaCultivo> createState() => _CadastrarAreaCultivoState();
@@ -16,8 +16,8 @@ class CadastrarAreaCultivo extends StatefulWidget {
 
 class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
   AreaCultivoStore store = GetIt.I<AreaCultivoStore>();
-  CarouselController carouselController = CarouselController();
-  CarouselController controlerPages = CarouselController();
+  CarouselSliderController carouselController = CarouselSliderController();
+  CarouselSliderController controlerPages = CarouselSliderController();
 
   @override
   void initState() {
@@ -185,7 +185,7 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
           child: Observer(builder: (_) {
             return ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Constants.kPrimaryColor,
+                backgroundColor: Constants.kPrimaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),

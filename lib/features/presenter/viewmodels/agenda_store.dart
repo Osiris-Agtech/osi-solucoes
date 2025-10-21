@@ -16,9 +16,9 @@ import 'auth_controller.dart';
 
 part 'agenda_store.g.dart';
 
-class AgendaStore = _AgendaStoreBase with _$AgendaStore;
+class AgendaStore = AgendaStoreBase with _$AgendaStore;
 
-abstract class _AgendaStoreBase with Store {
+abstract class AgendaStoreBase with Store {
   AgendaRepository agendaRepository = GetIt.I<AgendaRepository>();
 
   @observable
@@ -49,13 +49,13 @@ abstract class _AgendaStoreBase with Store {
   List<Lote> lotesConta = [];
 
   @action
-  setShowEditPage(bool value) => showEditPage = value;
+  bool setShowEditPage(bool value) => showEditPage = value;
 
   @action
-  setPageState(AgendaState value) => state = value;
+  AgendaState setPageState(AgendaState value) => state = value;
 
   @action
-  buscarAtividades() async {
+  Future<void> buscarAtividades() async {
     state = AgendaState.loading;
 
     AuthController authController = GetIt.I<AuthController>();
@@ -84,7 +84,7 @@ abstract class _AgendaStoreBase with Store {
   }
 
   @action
-  buscarUsuariosConta() async {
+  Future<void> buscarUsuariosConta() async {
     AuthController authController = GetIt.I<AuthController>();
     CadernoCampoRepository cadernoCampoRepository =
         GetIt.I<CadernoCampoRepository>();
@@ -113,7 +113,7 @@ abstract class _AgendaStoreBase with Store {
   }
 
   @action
-  buscarLotesConta() async {
+  Future<void> buscarLotesConta() async {
     AuthController authController = GetIt.I<AuthController>();
 
     var usuariosContaResult = await agendaRepository
@@ -130,21 +130,21 @@ abstract class _AgendaStoreBase with Store {
   }
 
   @action
-  setInitialStateForFilter() {
+  void setInitialStateForFilter() {
     filter = AgendaFilter.todos;
     filtroLote = null;
     filtroResponsavel = null;
   }
 
   @action
-  setFiltro(AgendaFilter? value) {
+  void setFiltro(AgendaFilter? value) {
     filter = value ?? AgendaFilter.todos;
     filtroLote = null;
     filtroResponsavel = null;
   }
 
   @action
-  setFiltroLote(Lote? value, {int? loteId}) {
+  void setFiltroLote(Lote? value, {int? loteId}) {
     filtroLote = value;
 
     if (loteId != null && lotesConta.isNotEmpty) {
@@ -157,7 +157,7 @@ abstract class _AgendaStoreBase with Store {
   }
 
   @action
-  setFiltroResponsavel(Usuario? value) {
+  void setFiltroResponsavel(Usuario? value) {
     filtroResponsavel = value;
   }
 
@@ -226,7 +226,7 @@ abstract class _AgendaStoreBase with Store {
   }
 
   @action
-  marcarAtividadeComoFeita(int id) async {
+  Future<void> marcarAtividadeComoFeita(int id) async {
     Get.back();
     showEditPage = false;
     state = AgendaState.loading;
@@ -248,7 +248,7 @@ abstract class _AgendaStoreBase with Store {
   }
 
   @action
-  deletarAtividade(int id) async {
+  Future<void> deletarAtividade(int id) async {
     Get.back();
     showEditPage = false;
     state = AgendaState.loading;
@@ -283,13 +283,13 @@ abstract class _AgendaStoreBase with Store {
   Usuario? usuarioAtividade;
 
   @action
-  setDataAtividade(DateTime? value) => dataAtividade = value;
+  DateTime? setDataAtividade(DateTime? value) => dataAtividade = value;
 
   @action
-  setUsuarioAtividade(Usuario? value) => usuarioAtividade = value;
+  Usuario? setUsuarioAtividade(Usuario? value) => usuarioAtividade = value;
 
   @action
-  carregarDadosDaAtividade(Agenda agenda) {
+  void carregarDadosDaAtividade(Agenda agenda) {
     tituloController.text = agenda.titulo ?? '';
     descricaoController.text = agenda.descricao ?? '';
     dataAtividade = agenda.data;
@@ -312,7 +312,7 @@ abstract class _AgendaStoreBase with Store {
   }
 
   @action
-  limparDadosDaAtividade() {
+  void limparDadosDaAtividade() {
     tituloController.text = '';
     descricaoController.text = '';
     dataAtividade = DateTime.now();
@@ -320,7 +320,7 @@ abstract class _AgendaStoreBase with Store {
   }
 
   @action
-  editAgenda(Agenda agenda) async {
+  Future<void> editAgenda(Agenda agenda) async {
     Get.back();
     showEditPage = false;
     state = AgendaState.loading;
@@ -343,7 +343,7 @@ abstract class _AgendaStoreBase with Store {
   }
 
   @action
-  cadastrarAtividade() async {
+  Future<void> cadastrarAtividade() async {
     Get.back();
     showEditPage = false;
     state = AgendaState.loading;

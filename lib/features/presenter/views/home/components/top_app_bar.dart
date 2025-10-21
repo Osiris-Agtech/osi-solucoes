@@ -4,13 +4,13 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 
 class TopAppBar extends StatelessWidget {
   const TopAppBar({
-    Key? key,
+    super.key,
     this.path,
     this.navigate,
     required this.namePage,
     this.subtitle,
     this.onPressed,
-  }) : super(key: key);
+  });
   final bool? navigate;
   final String? path;
   final String namePage;

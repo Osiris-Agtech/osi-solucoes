@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -15,9 +16,9 @@ import '../models/reservatorio/reservatorio_model.dart';
 
 part 'ajustes_store.g.dart';
 
-class AjustesStore = _AjustesStoreBase with _$AjustesStore;
+class AjustesStore = AjustesStoreBase with _$AjustesStore;
 
-abstract class _AjustesStoreBase with Store {
+abstract class AjustesStoreBase with Store {
   @observable
   int selectedItem = 25;
 
@@ -25,7 +26,7 @@ abstract class _AjustesStoreBase with Store {
   List<int> quantityList = List<int>.generate(50, (int i) => i);
 
   @action
-  newValueItem(int newValue) => selectedItem = newValue;
+  int newValueItem(int newValue) => selectedItem = newValue;
 
   @observable
   TextEditingController cEletricoAtual = TextEditingController();
@@ -41,13 +42,13 @@ abstract class _AjustesStoreBase with Store {
   TextEditingController reservatorio = TextEditingController();
 
   @action
-  volumeAjusteAgua() =>
+  double volumeAjusteAgua() =>
       double.parse(
           volumeDesejado.text.replaceAll('.', '').replaceAll(',', '.')) -
       double.parse(volumeAtual.text.replaceAll('.', '').replaceAll(',', '.'));
 
   @action
-  validarCampos() {
+  bool validarCampos() {
     // Condutividade Elétrica Atual
     if (cEletricoAtual.text.isEmpty ||
         double.parse(
@@ -91,7 +92,7 @@ abstract class _AjustesStoreBase with Store {
   }
 
   @action
-  clearAll() {
+  void clearAll() {
     cEletricoAtual.clear();
     cEletricoDesejado.clear();
     volumeAtual.clear();
@@ -113,13 +114,13 @@ abstract class _AjustesStoreBase with Store {
   List<SolucaoFertilizanteConcentrada> solucaoConcentradaList = [];
 
   @action
-  selectReservatorio(Reservatorio reservatorio) {
+  void selectReservatorio(Reservatorio reservatorio) {
     selectedReservatorio = reservatorio;
     getConcentradaList();
   }
 
   @action
-  buscarReservatorios() async {
+  Future<void> buscarReservatorios() async {
     AjusteRepository ajusteRepository = GetIt.I<AjusteRepository>();
     AuthController authController = GetIt.I<AuthController>();
 
@@ -138,7 +139,7 @@ abstract class _AjustesStoreBase with Store {
   }
 
   @action
-  getConcentradaList() {
+  void getConcentradaList() {
     solucaoConcentradaList.clear();
     for (SolucaoFertilizanteConcentrada fertilizante
         in selectedReservatorio.solucao?.solucoes_fertilizantes_concentradas ??
@@ -175,7 +176,7 @@ abstract class _AjustesStoreBase with Store {
   // Função auxiliar para o calculo
   // @returns double cet
   @action
-  calculoLado(SolucaoFertilizanteConcentrada fertilizante, String ce) {
+  double calculoLado(SolucaoFertilizanteConcentrada fertilizante, String ce) {
     // Parse - string to double
     double quantidadeFertilizanteSN = double.parse(fertilizante.quantidade!);
     double ceDesejado = double.parse(
@@ -203,7 +204,7 @@ abstract class _AjustesStoreBase with Store {
   // Calcula as quantidades de reposição de cada fertilizante
   // @returns Retorna um array de reposicaoFert()
   @action
-  calculoAjusteReposicao() {
+  void calculoAjusteReposicao() {
     reposicaoFert = [];
     selectedReservatorio.solucao?.solucoes_fertilizantes_concentradas
         ?.forEach((fertilizante) {
@@ -235,7 +236,7 @@ abstract class _AjustesStoreBase with Store {
   // Calcula as quantidades de reposição para solução concentrada
   // @returns double volumeConcentrado
   @action
-  calculoAjusteConcentrada(double reposicaoFert) {
+  void calculoAjusteConcentrada(double reposicaoFert) {
     //parses string to double
     double ceDesejado = double.parse(
         cEletricoDesejado.text.replaceAll('.', '').replaceAll(',', '.'));
@@ -265,7 +266,7 @@ abstract class _AjustesStoreBase with Store {
   // #################### INICIO REGISTRO DE ATIVIDADE ##################################
 
   @action
-  registrarAtividade() async {
+  Future<void> registrarAtividade() async {
     AuthController authController = GetIt.I<AuthController>();
     AjusteRepository ajusteRepository = GetIt.I<AjusteRepository>();
 
@@ -298,7 +299,7 @@ abstract class _AjustesStoreBase with Store {
   }
 
   @action
-  montandoDescricao() {
+  Uint8List montandoDescricao() {
     // Construindo strings para descrição
     var volumeAjuste = (double.parse(
                 volumeDesejado.text.replaceAll('.', '').replaceAll(',', '.')) -
@@ -337,5 +338,4 @@ abstract class _AjustesStoreBase with Store {
     return encoded;
   }
   // #################### FIM REGISTRO DE ATIVIDADE ##################################
-
 }

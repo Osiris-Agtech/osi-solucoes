@@ -6,43 +6,43 @@ part of 'lote_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$LoteStore on _LoteStoreBase, Store {
+mixin _$LoteStore on LoteStoreBase, Store {
   Computed<List<Lote>>? _$searchLoteComputed;
 
   @override
   List<Lote> get searchLote =>
       (_$searchLoteComputed ??= Computed<List<Lote>>(() => super.searchLote,
-              name: '_LoteStoreBase.searchLote'))
+              name: 'LoteStoreBase.searchLote'))
           .value;
   Computed<bool>? _$validarMigracaoComputed;
 
   @override
   bool get validarMigracao =>
       (_$validarMigracaoComputed ??= Computed<bool>(() => super.validarMigracao,
-              name: '_LoteStoreBase.validarMigracao'))
+              name: 'LoteStoreBase.validarMigracao'))
           .value;
   Computed<List<Protocolo>>? _$searchProtocoloComputed;
 
   @override
   List<Protocolo> get searchProtocolo => (_$searchProtocoloComputed ??=
           Computed<List<Protocolo>>(() => super.searchProtocolo,
-              name: '_LoteStoreBase.searchProtocolo'))
+              name: 'LoteStoreBase.searchProtocolo'))
       .value;
   Computed<bool>? _$isAlreadySelectedComputed;
 
   @override
   bool get isAlreadySelected => (_$isAlreadySelectedComputed ??= Computed<bool>(
           () => super.isAlreadySelected,
-          name: '_LoteStoreBase.isAlreadySelected'))
+          name: 'LoteStoreBase.isAlreadySelected'))
       .value;
   Computed<List<LoteSelection>>? _$getLotesGroupComputed;
 
   @override
   List<LoteSelection> get getLotesGroup => (_$getLotesGroupComputed ??=
           Computed<List<LoteSelection>>(() => super.getLotesGroup,
-              name: '_LoteStoreBase.getLotesGroup'))
+              name: 'LoteStoreBase.getLotesGroup'))
       .value;
   Computed<List<LoteSelection>>? _$lotesParaFinalizarComputed;
 
@@ -50,18 +50,18 @@ mixin _$LoteStore on _LoteStoreBase, Store {
   List<LoteSelection> get lotesParaFinalizar =>
       (_$lotesParaFinalizarComputed ??= Computed<List<LoteSelection>>(
               () => super.lotesParaFinalizar,
-              name: '_LoteStoreBase.lotesParaFinalizar'))
+              name: 'LoteStoreBase.lotesParaFinalizar'))
           .value;
   Computed<bool>? _$marcarTodasAtividadesComputed;
 
   @override
   bool get marcarTodasAtividades => (_$marcarTodasAtividadesComputed ??=
           Computed<bool>(() => super.marcarTodasAtividades,
-              name: '_LoteStoreBase.marcarTodasAtividades'))
+              name: 'LoteStoreBase.marcarTodasAtividades'))
       .value;
 
-  final _$isLoteListLoadingAtom =
-      Atom(name: '_LoteStoreBase.isLoteListLoading');
+  late final _$isLoteListLoadingAtom =
+      Atom(name: 'LoteStoreBase.isLoteListLoading', context: context);
 
   @override
   bool get isLoteListLoading {
@@ -76,8 +76,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$isProtocoloListLoadingAtom =
-      Atom(name: '_LoteStoreBase.isProtocoloListLoading');
+  late final _$isProtocoloListLoadingAtom =
+      Atom(name: 'LoteStoreBase.isProtocoloListLoading', context: context);
 
   @override
   bool get isProtocoloListLoading {
@@ -93,7 +93,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$dropDownValueAtom = Atom(name: '_LoteStoreBase.dropDownValue');
+  late final _$dropDownValueAtom =
+      Atom(name: 'LoteStoreBase.dropDownValue', context: context);
 
   @override
   String get dropDownValue {
@@ -108,7 +109,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$searchLoteTextAtom = Atom(name: '_LoteStoreBase.searchLoteText');
+  late final _$searchLoteTextAtom =
+      Atom(name: 'LoteStoreBase.searchLoteText', context: context);
 
   @override
   String get searchLoteText {
@@ -123,7 +125,7 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$orderAtom = Atom(name: '_LoteStoreBase.order');
+  late final _$orderAtom = Atom(name: 'LoteStoreBase.order', context: context);
 
   @override
   String get order {
@@ -138,7 +140,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$setorSelecionadoAtom = Atom(name: '_LoteStoreBase.setorSelecionado');
+  late final _$setorSelecionadoAtom =
+      Atom(name: 'LoteStoreBase.setorSelecionado', context: context);
 
   @override
   Setor get setorSelecionado {
@@ -153,7 +156,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$loteListAtom = Atom(name: '_LoteStoreBase.loteList');
+  late final _$loteListAtom =
+      Atom(name: 'LoteStoreBase.loteList', context: context);
 
   @override
   List<Lote> get loteList {
@@ -168,7 +172,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$protocoloListAtom = Atom(name: '_LoteStoreBase.protocoloList');
+  late final _$protocoloListAtom =
+      Atom(name: 'LoteStoreBase.protocoloList', context: context);
 
   @override
   List<Protocolo> get protocoloList {
@@ -183,8 +188,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$listaFaseDetalhesAtom =
-      Atom(name: '_LoteStoreBase.listaFaseDetalhes');
+  late final _$listaFaseDetalhesAtom =
+      Atom(name: 'LoteStoreBase.listaFaseDetalhes', context: context);
 
   @override
   List<Fase> get listaFaseDetalhes {
@@ -199,7 +204,7 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$data1Atom = Atom(name: '_LoteStoreBase.data1');
+  late final _$data1Atom = Atom(name: 'LoteStoreBase.data1', context: context);
 
   @override
   DateTime get data1 {
@@ -214,7 +219,7 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$data2Atom = Atom(name: '_LoteStoreBase.data2');
+  late final _$data2Atom = Atom(name: 'LoteStoreBase.data2', context: context);
 
   @override
   DateTime get data2 {
@@ -229,7 +234,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$areaListAtom = Atom(name: '_LoteStoreBase.areaList');
+  late final _$areaListAtom =
+      Atom(name: 'LoteStoreBase.areaList', context: context);
 
   @override
   List<Area> get areaList {
@@ -244,7 +250,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$isAreaLoadingAtom = Atom(name: '_LoteStoreBase.isAreaLoading');
+  late final _$isAreaLoadingAtom =
+      Atom(name: 'LoteStoreBase.isAreaLoading', context: context);
 
   @override
   bool get isAreaLoading {
@@ -259,8 +266,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$isDetalhesLoteLoadingAtom =
-      Atom(name: '_LoteStoreBase.isDetalhesLoteLoading');
+  late final _$isDetalhesLoteLoadingAtom =
+      Atom(name: 'LoteStoreBase.isDetalhesLoteLoading', context: context);
 
   @override
   bool get isDetalhesLoteLoading {
@@ -276,8 +283,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$isMigrateLoteLoadingAtom =
-      Atom(name: '_LoteStoreBase.isMigrateLoteLoading');
+  late final _$isMigrateLoteLoadingAtom =
+      Atom(name: 'LoteStoreBase.isMigrateLoteLoading', context: context);
 
   @override
   bool get isMigrateLoteLoading {
@@ -293,7 +300,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$loteSelecionadoAtom = Atom(name: '_LoteStoreBase.loteSelecionado');
+  late final _$loteSelecionadoAtom =
+      Atom(name: 'LoteStoreBase.loteSelecionado', context: context);
 
   @override
   Lote get loteSelecionado {
@@ -308,7 +316,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$areaSelecionadaAtom = Atom(name: '_LoteStoreBase.areaSelecionada');
+  late final _$areaSelecionadaAtom =
+      Atom(name: 'LoteStoreBase.areaSelecionada', context: context);
 
   @override
   Area get areaSelecionada {
@@ -323,8 +332,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$setorSelecionadoMigrarAtom =
-      Atom(name: '_LoteStoreBase.setorSelecionadoMigrar');
+  late final _$setorSelecionadoMigrarAtom =
+      Atom(name: 'LoteStoreBase.setorSelecionadoMigrar', context: context);
 
   @override
   Setor get setorSelecionadoMigrar {
@@ -340,8 +349,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$mostrarErroFormularioAtom =
-      Atom(name: '_LoteStoreBase.mostrarErroFormulario');
+  late final _$mostrarErroFormularioAtom =
+      Atom(name: 'LoteStoreBase.mostrarErroFormulario', context: context);
 
   @override
   bool get mostrarErroFormulario {
@@ -357,8 +366,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$showTextFormFieldAtom =
-      Atom(name: '_LoteStoreBase.showTextFormField');
+  late final _$showTextFormFieldAtom =
+      Atom(name: 'LoteStoreBase.showTextFormField', context: context);
 
   @override
   bool get showTextFormField {
@@ -373,7 +382,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$isEditingAtom = Atom(name: '_LoteStoreBase.isEditing');
+  late final _$isEditingAtom =
+      Atom(name: 'LoteStoreBase.isEditing', context: context);
 
   @override
   bool get isEditing {
@@ -388,8 +398,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$isBandeijasEditingAtom =
-      Atom(name: '_LoteStoreBase.isBandeijasEditing');
+  late final _$isBandeijasEditingAtom =
+      Atom(name: 'LoteStoreBase.isBandeijasEditing', context: context);
 
   @override
   bool get isBandeijasEditing {
@@ -404,7 +414,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$isMudasEditingAtom = Atom(name: '_LoteStoreBase.isMudasEditing');
+  late final _$isMudasEditingAtom =
+      Atom(name: 'LoteStoreBase.isMudasEditing', context: context);
 
   @override
   bool get isMudasEditing {
@@ -419,7 +430,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$isPlantasEditingAtom = Atom(name: '_LoteStoreBase.isPlantasEditing');
+  late final _$isPlantasEditingAtom =
+      Atom(name: 'LoteStoreBase.isPlantasEditing', context: context);
 
   @override
   bool get isPlantasEditing {
@@ -434,8 +446,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$isEmbalagensEditingAtom =
-      Atom(name: '_LoteStoreBase.isEmbalagensEditing');
+  late final _$isEmbalagensEditingAtom =
+      Atom(name: 'LoteStoreBase.isEmbalagensEditing', context: context);
 
   @override
   bool get isEmbalagensEditing {
@@ -450,7 +462,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$isVisibleAtom = Atom(name: '_LoteStoreBase.isVisible');
+  late final _$isVisibleAtom =
+      Atom(name: 'LoteStoreBase.isVisible', context: context);
 
   @override
   bool get isVisible {
@@ -465,8 +478,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$isNovaAreaLoadingAtom =
-      Atom(name: '_LoteStoreBase.isNovaAreaLoading');
+  late final _$isNovaAreaLoadingAtom =
+      Atom(name: 'LoteStoreBase.isNovaAreaLoading', context: context);
 
   @override
   bool get isNovaAreaLoading {
@@ -481,8 +494,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$isNovoLoteLoadingAtom =
-      Atom(name: '_LoteStoreBase.isNovoLoteLoading');
+  late final _$isNovoLoteLoadingAtom =
+      Atom(name: 'LoteStoreBase.isNovoLoteLoading', context: context);
 
   @override
   bool get isNovoLoteLoading {
@@ -497,8 +510,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$showReservatorioDetalhesAtom =
-      Atom(name: '_LoteStoreBase.showReservatorioDetalhes');
+  late final _$showReservatorioDetalhesAtom =
+      Atom(name: 'LoteStoreBase.showReservatorioDetalhes', context: context);
 
   @override
   bool get showReservatorioDetalhes {
@@ -514,8 +527,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$showProtocoloDetalhesAtom =
-      Atom(name: '_LoteStoreBase.showProtocoloDetalhes');
+  late final _$showProtocoloDetalhesAtom =
+      Atom(name: 'LoteStoreBase.showProtocoloDetalhes', context: context);
 
   @override
   bool get showProtocoloDetalhes {
@@ -531,7 +544,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$isNovaCulturaAtom = Atom(name: '_LoteStoreBase.isNovaCultura');
+  late final _$isNovaCulturaAtom =
+      Atom(name: 'LoteStoreBase.isNovaCultura', context: context);
 
   @override
   bool get isNovaCultura {
@@ -546,7 +560,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$dotIndicatorAtom = Atom(name: '_LoteStoreBase.dotIndicator');
+  late final _$dotIndicatorAtom =
+      Atom(name: 'LoteStoreBase.dotIndicator', context: context);
 
   @override
   int get dotIndicator {
@@ -561,7 +576,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$culturaListAtom = Atom(name: '_LoteStoreBase.culturaList');
+  late final _$culturaListAtom =
+      Atom(name: 'LoteStoreBase.culturaList', context: context);
 
   @override
   List<Cultura> get culturaList {
@@ -576,7 +592,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$novoLoteSetorAtom = Atom(name: '_LoteStoreBase.novoLoteSetor');
+  late final _$novoLoteSetorAtom =
+      Atom(name: 'LoteStoreBase.novoLoteSetor', context: context);
 
   @override
   Setor get novoLoteSetor {
@@ -591,7 +608,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$novoLoteAreaAtom = Atom(name: '_LoteStoreBase.novoLoteArea');
+  late final _$novoLoteAreaAtom =
+      Atom(name: 'LoteStoreBase.novoLoteArea', context: context);
 
   @override
   Area get novoLoteArea {
@@ -606,7 +624,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$novoLoteNameAtom = Atom(name: '_LoteStoreBase.novoLoteName');
+  late final _$novoLoteNameAtom =
+      Atom(name: 'LoteStoreBase.novoLoteName', context: context);
 
   @override
   TextEditingController get novoLoteName {
@@ -621,8 +640,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$novaCulturaControllerAtom =
-      Atom(name: '_LoteStoreBase.novaCulturaController');
+  late final _$novaCulturaControllerAtom =
+      Atom(name: 'LoteStoreBase.novaCulturaController', context: context);
 
   @override
   TextEditingController get novaCulturaController {
@@ -638,8 +657,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$bandeijasSemeadasControllerAtom =
-      Atom(name: '_LoteStoreBase.bandeijasSemeadasController');
+  late final _$bandeijasSemeadasControllerAtom =
+      Atom(name: 'LoteStoreBase.bandeijasSemeadasController', context: context);
 
   @override
   TextEditingController get bandeijasSemeadasController {
@@ -655,8 +674,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$mudasTransplantadasControllerAtom =
-      Atom(name: '_LoteStoreBase.mudasTransplantadasController');
+  late final _$mudasTransplantadasControllerAtom = Atom(
+      name: 'LoteStoreBase.mudasTransplantadasController', context: context);
 
   @override
   TextEditingController get mudasTransplantadasController {
@@ -672,8 +691,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$plantasColhidasControllerAtom =
-      Atom(name: '_LoteStoreBase.plantasColhidasController');
+  late final _$plantasColhidasControllerAtom =
+      Atom(name: 'LoteStoreBase.plantasColhidasController', context: context);
 
   @override
   TextEditingController get plantasColhidasController {
@@ -689,8 +708,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$embalagensProduzidasControllerAtom =
-      Atom(name: '_LoteStoreBase.embalagensProduzidasController');
+  late final _$embalagensProduzidasControllerAtom = Atom(
+      name: 'LoteStoreBase.embalagensProduzidasController', context: context);
 
   @override
   TextEditingController get embalagensProduzidasController {
@@ -706,7 +725,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$novoLoteCulturaAtom = Atom(name: '_LoteStoreBase.novoLoteCultura');
+  late final _$novoLoteCulturaAtom =
+      Atom(name: 'LoteStoreBase.novoLoteCultura', context: context);
 
   @override
   Cultura get novoLoteCultura {
@@ -721,8 +741,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$novoLoteReservatorioAtom =
-      Atom(name: '_LoteStoreBase.novoLoteReservatorio');
+  late final _$novoLoteReservatorioAtom =
+      Atom(name: 'LoteStoreBase.novoLoteReservatorio', context: context);
 
   @override
   Reservatorio get novoLoteReservatorio {
@@ -738,7 +758,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$registroDataAtom = Atom(name: '_LoteStoreBase.registroData');
+  late final _$registroDataAtom =
+      Atom(name: 'LoteStoreBase.registroData', context: context);
 
   @override
   DateTime get registroData {
@@ -753,7 +774,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$semeaduraDataAtom = Atom(name: '_LoteStoreBase.semeaduraData');
+  late final _$semeaduraDataAtom =
+      Atom(name: 'LoteStoreBase.semeaduraData', context: context);
 
   @override
   DateTime? get semeaduraData {
@@ -768,7 +790,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$transplantioDataAtom = Atom(name: '_LoteStoreBase.transplantioData');
+  late final _$transplantioDataAtom =
+      Atom(name: 'LoteStoreBase.transplantioData', context: context);
 
   @override
   DateTime? get transplantioData {
@@ -783,7 +806,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$colheitaDataAtom = Atom(name: '_LoteStoreBase.colheitaData');
+  late final _$colheitaDataAtom =
+      Atom(name: 'LoteStoreBase.colheitaData', context: context);
 
   @override
   DateTime? get colheitaData {
@@ -798,8 +822,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$novoLoteDescricaoAtom =
-      Atom(name: '_LoteStoreBase.novoLoteDescricao');
+  late final _$novoLoteDescricaoAtom =
+      Atom(name: 'LoteStoreBase.novoLoteDescricao', context: context);
 
   @override
   TextEditingController get novoLoteDescricao {
@@ -814,7 +838,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$reservatorioListAtom = Atom(name: '_LoteStoreBase.reservatorioList');
+  late final _$reservatorioListAtom =
+      Atom(name: 'LoteStoreBase.reservatorioList', context: context);
 
   @override
   List<Reservatorio> get reservatorioList {
@@ -829,8 +854,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$reservatorioDetalhesAtom =
-      Atom(name: '_LoteStoreBase.reservatorioDetalhes');
+  late final _$reservatorioDetalhesAtom =
+      Atom(name: 'LoteStoreBase.reservatorioDetalhes', context: context);
 
   @override
   Reservatorio get reservatorioDetalhes {
@@ -846,8 +871,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$protocoloDetalhesAtom =
-      Atom(name: '_LoteStoreBase.protocoloDetalhes');
+  late final _$protocoloDetalhesAtom =
+      Atom(name: 'LoteStoreBase.protocoloDetalhes', context: context);
 
   @override
   Protocolo? get protocoloDetalhes {
@@ -862,8 +887,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$protocoloVinculadoAtom =
-      Atom(name: '_LoteStoreBase.protocoloVinculado');
+  late final _$protocoloVinculadoAtom =
+      Atom(name: 'LoteStoreBase.protocoloVinculado', context: context);
 
   @override
   Protocolo? get protocoloVinculado {
@@ -878,8 +903,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$searchProtocoloTextAtom =
-      Atom(name: '_LoteStoreBase.searchProtocoloText');
+  late final _$searchProtocoloTextAtom =
+      Atom(name: 'LoteStoreBase.searchProtocoloText', context: context);
 
   @override
   String get searchProtocoloText {
@@ -894,8 +919,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$solucaoNutritivaListAtom =
-      Atom(name: '_LoteStoreBase.solucaoNutritivaList');
+  late final _$solucaoNutritivaListAtom =
+      Atom(name: 'LoteStoreBase.solucaoNutritivaList', context: context);
 
   @override
   List<SolucaoFertilizanteConcentrada> get solucaoNutritivaList {
@@ -911,8 +936,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$solucaoConcentradaListAtom =
-      Atom(name: '_LoteStoreBase.solucaoConcentradaList');
+  late final _$solucaoConcentradaListAtom =
+      Atom(name: 'LoteStoreBase.solucaoConcentradaList', context: context);
 
   @override
   List<SolucaoFertilizanteConcentrada> get solucaoConcentradaList {
@@ -928,7 +953,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$novoLoteAtom = Atom(name: '_LoteStoreBase.novoLote');
+  late final _$novoLoteAtom =
+      Atom(name: 'LoteStoreBase.novoLote', context: context);
 
   @override
   Lote get novoLote {
@@ -943,8 +969,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$abrirProtocoloDetalhesAtvAtom =
-      Atom(name: '_LoteStoreBase.abrirProtocoloDetalhesAtv');
+  late final _$abrirProtocoloDetalhesAtvAtom =
+      Atom(name: 'LoteStoreBase.abrirProtocoloDetalhesAtv', context: context);
 
   @override
   bool get abrirProtocoloDetalhesAtv {
@@ -960,7 +986,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$isProtocoloValidAtom = Atom(name: '_LoteStoreBase.isProtocoloValid');
+  late final _$isProtocoloValidAtom =
+      Atom(name: 'LoteStoreBase.isProtocoloValid', context: context);
 
   @override
   bool get isProtocoloValid {
@@ -975,7 +1002,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$searchLotePageAtom = Atom(name: '_LoteStoreBase.searchLotePage');
+  late final _$searchLotePageAtom =
+      Atom(name: 'LoteStoreBase.searchLotePage', context: context);
 
   @override
   TextEditingController get searchLotePage {
@@ -990,7 +1018,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$plantasColhidasAtom = Atom(name: '_LoteStoreBase.plantasColhidas');
+  late final _$plantasColhidasAtom =
+      Atom(name: 'LoteStoreBase.plantasColhidas', context: context);
 
   @override
   int? get plantasColhidas {
@@ -1005,8 +1034,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$embalagensProduzidasAtom =
-      Atom(name: '_LoteStoreBase.embalagensProduzidas');
+  late final _$embalagensProduzidasAtom =
+      Atom(name: 'LoteStoreBase.embalagensProduzidas', context: context);
 
   @override
   int? get embalagensProduzidas {
@@ -1022,7 +1051,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$finalizarLotesAtom = Atom(name: '_LoteStoreBase.finalizarLotes');
+  late final _$finalizarLotesAtom =
+      Atom(name: 'LoteStoreBase.finalizarLotes', context: context);
 
   @override
   List<LoteSelection> get finalizarLotes {
@@ -1037,8 +1067,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$atividadesPendentesAtom =
-      Atom(name: '_LoteStoreBase.atividadesPendentes');
+  late final _$atividadesPendentesAtom =
+      Atom(name: 'LoteStoreBase.atividadesPendentes', context: context);
 
   @override
   List<AgendaSelection> get atividadesPendentes {
@@ -1053,8 +1083,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$atividadesDeletadasAtom =
-      Atom(name: '_LoteStoreBase.atividadesDeletadas');
+  late final _$atividadesDeletadasAtom =
+      Atom(name: 'LoteStoreBase.atividadesDeletadas', context: context);
 
   @override
   List<Agenda> get atividadesDeletadas {
@@ -1069,8 +1099,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$carregandoFinalizarLotesAtom =
-      Atom(name: '_LoteStoreBase.carregandoFinalizarLotes');
+  late final _$carregandoFinalizarLotesAtom =
+      Atom(name: 'LoteStoreBase.carregandoFinalizarLotes', context: context);
 
   @override
   bool get carregandoFinalizarLotes {
@@ -1086,7 +1116,8 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$lotesFinalizadosAtom = Atom(name: '_LoteStoreBase.lotesFinalizados');
+  late final _$lotesFinalizadosAtom =
+      Atom(name: 'LoteStoreBase.lotesFinalizados', context: context);
 
   @override
   List<Lote> get lotesFinalizados {
@@ -1101,710 +1132,715 @@ mixin _$LoteStore on _LoteStoreBase, Store {
     });
   }
 
-  final _$buscarLotesAsyncAction = AsyncAction('_LoteStoreBase.buscarLotes');
+  late final _$buscarLotesAsyncAction =
+      AsyncAction('LoteStoreBase.buscarLotes', context: context);
 
   @override
-  Future buscarLotes() {
+  Future<void> buscarLotes() {
     return _$buscarLotesAsyncAction.run(() => super.buscarLotes());
   }
 
-  final _$migrarLoteAsyncAction = AsyncAction('_LoteStoreBase.migrarLote');
+  late final _$migrarLoteAsyncAction =
+      AsyncAction('LoteStoreBase.migrarLote', context: context);
 
   @override
-  Future migrarLote(bool migrarReservatorio) {
+  Future<void> migrarLote(bool migrarReservatorio) {
     return _$migrarLoteAsyncAction
         .run(() => super.migrarLote(migrarReservatorio));
   }
 
-  final _$buscarDetalhesLoteAsyncAction =
-      AsyncAction('_LoteStoreBase.buscarDetalhesLote');
+  late final _$buscarDetalhesLoteAsyncAction =
+      AsyncAction('LoteStoreBase.buscarDetalhesLote', context: context);
 
   @override
-  Future buscarDetalhesLote() {
+  Future<void> buscarDetalhesLote() {
     return _$buscarDetalhesLoteAsyncAction
         .run(() => super.buscarDetalhesLote());
   }
 
-  final _$buscarAreasListAsyncAction =
-      AsyncAction('_LoteStoreBase.buscarAreasList');
+  late final _$buscarAreasListAsyncAction =
+      AsyncAction('LoteStoreBase.buscarAreasList', context: context);
 
   @override
-  Future buscarAreasList() {
+  Future<void> buscarAreasList() {
     return _$buscarAreasListAsyncAction.run(() => super.buscarAreasList());
   }
 
-  final _$buscarCulturasAsyncAction =
-      AsyncAction('_LoteStoreBase.buscarCulturas');
+  late final _$buscarCulturasAsyncAction =
+      AsyncAction('LoteStoreBase.buscarCulturas', context: context);
 
   @override
-  Future buscarCulturas() {
+  Future<void> buscarCulturas() {
     return _$buscarCulturasAsyncAction.run(() => super.buscarCulturas());
   }
 
-  final _$buscarReservatoriosAsyncAction =
-      AsyncAction('_LoteStoreBase.buscarReservatorios');
+  late final _$buscarReservatoriosAsyncAction =
+      AsyncAction('LoteStoreBase.buscarReservatorios', context: context);
 
   @override
-  Future buscarReservatorios() {
+  Future<void> buscarReservatorios() {
     return _$buscarReservatoriosAsyncAction
         .run(() => super.buscarReservatorios());
   }
 
-  final _$buscarReservatorioDetalhesAsyncAction =
-      AsyncAction('_LoteStoreBase.buscarReservatorioDetalhes');
+  late final _$buscarReservatorioDetalhesAsyncAction =
+      AsyncAction('LoteStoreBase.buscarReservatorioDetalhes', context: context);
 
   @override
-  Future buscarReservatorioDetalhes() {
+  Future<void> buscarReservatorioDetalhes() {
     return _$buscarReservatorioDetalhesAsyncAction
         .run(() => super.buscarReservatorioDetalhes());
   }
 
-  final _$registrarLoteAsyncAction =
-      AsyncAction('_LoteStoreBase.registrarLote');
+  late final _$registrarLoteAsyncAction =
+      AsyncAction('LoteStoreBase.registrarLote', context: context);
 
   @override
-  Future registrarLote() {
+  Future<void> registrarLote() {
     return _$registrarLoteAsyncAction.run(() => super.registrarLote());
   }
 
-  final _$registrarCulturaAsyncAction =
-      AsyncAction('_LoteStoreBase.registrarCultura');
+  late final _$registrarCulturaAsyncAction =
+      AsyncAction('LoteStoreBase.registrarCultura', context: context);
 
   @override
-  Future registrarCultura() {
+  Future<void> registrarCultura() {
     return _$registrarCulturaAsyncAction.run(() => super.registrarCultura());
   }
 
-  final _$alterarLoteAsyncAction = AsyncAction('_LoteStoreBase.alterarLote');
+  late final _$alterarLoteAsyncAction =
+      AsyncAction('LoteStoreBase.alterarLote', context: context);
 
   @override
-  Future alterarLote() {
+  Future<void> alterarLote() {
     return _$alterarLoteAsyncAction.run(() => super.alterarLote());
   }
 
-  final _$alterarProducaoLoteAsyncAction =
-      AsyncAction('_LoteStoreBase.alterarProducaoLote');
+  late final _$alterarProducaoLoteAsyncAction =
+      AsyncAction('LoteStoreBase.alterarProducaoLote', context: context);
 
   @override
-  Future alterarProducaoLote() {
+  Future<void> alterarProducaoLote() {
     return _$alterarProducaoLoteAsyncAction
         .run(() => super.alterarProducaoLote());
   }
 
-  final _$alterarDatasLoteAsyncAction =
-      AsyncAction('_LoteStoreBase.alterarDatasLote');
+  late final _$alterarDatasLoteAsyncAction =
+      AsyncAction('LoteStoreBase.alterarDatasLote', context: context);
 
   @override
-  Future alterarDatasLote() {
+  Future<void> alterarDatasLote() {
     return _$alterarDatasLoteAsyncAction.run(() => super.alterarDatasLote());
   }
 
-  final _$finalizarTodosLotesAsyncAction =
-      AsyncAction('_LoteStoreBase.finalizarTodosLotes');
+  late final _$finalizarTodosLotesAsyncAction =
+      AsyncAction('LoteStoreBase.finalizarTodosLotes', context: context);
 
   @override
-  Future finalizarTodosLotes() {
+  Future<void> finalizarTodosLotes() {
     return _$finalizarTodosLotesAsyncAction
         .run(() => super.finalizarTodosLotes());
   }
 
-  final _$deletarAtividadesSelecionadasAsyncAction =
-      AsyncAction('_LoteStoreBase.deletarAtividadesSelecionadas');
+  late final _$deletarAtividadesSelecionadasAsyncAction = AsyncAction(
+      'LoteStoreBase.deletarAtividadesSelecionadas',
+      context: context);
 
   @override
-  Future deletarAtividadesSelecionadas() {
+  Future<void> deletarAtividadesSelecionadas() {
     return _$deletarAtividadesSelecionadasAsyncAction
         .run(() => super.deletarAtividadesSelecionadas());
   }
 
-  final _$finalizarAtividadesSelecionadasAsyncAction =
-      AsyncAction('_LoteStoreBase.finalizarAtividadesSelecionadas');
+  late final _$finalizarAtividadesSelecionadasAsyncAction = AsyncAction(
+      'LoteStoreBase.finalizarAtividadesSelecionadas',
+      context: context);
 
   @override
-  Future finalizarAtividadesSelecionadas() {
+  Future<void> finalizarAtividadesSelecionadas() {
     return _$finalizarAtividadesSelecionadasAsyncAction
         .run(() => super.finalizarAtividadesSelecionadas());
   }
 
-  final _$verificarAtividadesAsyncAction =
-      AsyncAction('_LoteStoreBase.verificarAtividades');
+  late final _$verificarAtividadesAsyncAction =
+      AsyncAction('LoteStoreBase.verificarAtividades', context: context);
 
   @override
-  Future verificarAtividades() {
+  Future<void> verificarAtividades() {
     return _$verificarAtividadesAsyncAction
         .run(() => super.verificarAtividades());
   }
 
-  final _$buscarLotesFinalizadosAsyncAction =
-      AsyncAction('_LoteStoreBase.buscarLotesFinalizados');
+  late final _$buscarLotesFinalizadosAsyncAction =
+      AsyncAction('LoteStoreBase.buscarLotesFinalizados', context: context);
 
   @override
-  Future buscarLotesFinalizados() {
+  Future<void> buscarLotesFinalizados() {
     return _$buscarLotesFinalizadosAsyncAction
         .run(() => super.buscarLotesFinalizados());
   }
 
-  final _$_LoteStoreBaseActionController =
-      ActionController(name: '_LoteStoreBase');
+  late final _$LoteStoreBaseActionController =
+      ActionController(name: 'LoteStoreBase', context: context);
 
   @override
-  dynamic setData1(DateTime value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setData1');
+  DateTime setData1(DateTime value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setData1');
     try {
       return super.setData1(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setData2(DateTime value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setData2');
+  DateTime setData2(DateTime value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setData2');
     try {
       return super.setData2(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic changeOrder() {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.changeOrder');
+  String changeOrder() {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.changeOrder');
     try {
       return super.changeOrder();
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setSetorSelecionado(Setor setor) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setSetorSelecionado');
+  Setor setSetorSelecionado(Setor setor) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setSetorSelecionado');
     try {
       return super.setSetorSelecionado(setor);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setDropDown(String value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setDropDown');
+  String setDropDown(String value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setDropDown');
     try {
       return super.setDropDown(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setSearchLoteText(String value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setSearchLoteText');
+  String setSearchLoteText(String value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setSearchLoteText');
     try {
       return super.setSearchLoteText(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic selecionarSetorMigrar(Setor? setor) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.selecionarSetorMigrar');
+  Setor selecionarSetorMigrar(Setor? setor) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.selecionarSetorMigrar');
     try {
       return super.selecionarSetorMigrar(setor);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic selecionarLote(Lote lote) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.selecionarLote');
+  Lote selecionarLote(Lote lote) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.selecionarLote');
     try {
       return super.selecionarLote(lote);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic selecionarArea(Area area) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.selecionarArea');
+  Area selecionarArea(Area area) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.selecionarArea');
     try {
       return super.selecionarArea(area);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void toggleAbrirProtocoloDetalhesAtv() {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.toggleAbrirProtocoloDetalhesAtv');
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.toggleAbrirProtocoloDetalhesAtv');
     try {
       return super.toggleAbrirProtocoloDetalhesAtv();
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic selecionarNovoLoteArea(Area area) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.selecionarNovoLoteArea');
+  Area selecionarNovoLoteArea(Area area) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.selecionarNovoLoteArea');
     try {
       return super.selecionarNovoLoteArea(area);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic selecionarNovoLoteSetor(Setor setor) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.selecionarNovoLoteSetor');
+  Setor selecionarNovoLoteSetor(Setor setor) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.selecionarNovoLoteSetor');
     try {
       return super.selecionarNovoLoteSetor(setor);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setMostrarErroFormulario(bool value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setMostrarErroFormulario');
+  bool setMostrarErroFormulario(bool value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setMostrarErroFormulario');
     try {
       return super.setMostrarErroFormulario(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic carregarAreaSetor() {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.carregarAreaSetor');
+  void carregarAreaSetor() {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.carregarAreaSetor');
     try {
       return super.carregarAreaSetor();
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setNovoLoteCultura(int index) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setNovoLoteCultura');
+  Cultura setNovoLoteCultura(int index) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setNovoLoteCultura');
     try {
       return super.setNovoLoteCultura(index);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic selecionarNovoLoteReservatorio() {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.selecionarNovoLoteReservatorio');
+  void selecionarNovoLoteReservatorio() {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.selecionarNovoLoteReservatorio');
     try {
       return super.selecionarNovoLoteReservatorio();
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic selecionarNovoLoteProtocolo() {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.selecionarNovoLoteProtocolo');
+  void selecionarNovoLoteProtocolo() {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.selecionarNovoLoteProtocolo');
     try {
       return super.selecionarNovoLoteProtocolo();
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setRegistroData(DateTime dateTime) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setRegistroData');
+  DateTime setRegistroData(DateTime dateTime) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setRegistroData');
     try {
       return super.setRegistroData(dateTime);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setSemeaduraData(DateTime dateTime) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setSemeaduraData');
+  DateTime setSemeaduraData(DateTime dateTime) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setSemeaduraData');
     try {
       return super.setSemeaduraData(dateTime);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setTransplantioData(DateTime dateTime) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setTransplantioData');
+  DateTime setTransplantioData(DateTime dateTime) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setTransplantioData');
     try {
       return super.setTransplantioData(dateTime);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setColheitaData(DateTime dateTime) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setColheitaData');
+  DateTime setColheitaData(DateTime dateTime) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setColheitaData');
     try {
       return super.setColheitaData(dateTime);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setIsEditing(bool value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setIsEditing');
+  bool setIsEditing(bool value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setIsEditing');
     try {
       return super.setIsEditing(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setIsBandeijaEditing(bool value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setIsBandeijaEditing');
+  void setIsBandeijaEditing(bool value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setIsBandeijaEditing');
     try {
       return super.setIsBandeijaEditing(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setIsMudasEditing(bool value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setIsMudasEditing');
+  void setIsMudasEditing(bool value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setIsMudasEditing');
     try {
       return super.setIsMudasEditing(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setIsPlantasEditing(bool value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setIsPlantasEditing');
+  void setIsPlantasEditing(bool value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setIsPlantasEditing');
     try {
       return super.setIsPlantasEditing(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setIsEmbalagensEditing(bool value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setIsEmbalagensEditing');
+  void setIsEmbalagensEditing(bool value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setIsEmbalagensEditing');
     try {
       return super.setIsEmbalagensEditing(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic alterarNome(String name) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.alterarNome');
+  void alterarNome(String name) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.alterarNome');
     try {
       return super.alterarNome(name);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setLoteEditing(Lote lote) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setLoteEditing');
+  void setLoteEditing(Lote lote) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setLoteEditing');
     try {
       return super.setLoteEditing(lote);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setDotIndicator(int value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setDotIndicator');
+  void setDotIndicator(int value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setDotIndicator');
     try {
       return super.setDotIndicator(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setShowReservatorioDetalhes(bool value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setShowReservatorioDetalhes');
+  bool setShowReservatorioDetalhes(bool value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setShowReservatorioDetalhes');
     try {
       return super.setShowReservatorioDetalhes(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setShowProtocoloDetalhes(bool value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setShowProtocoloDetalhes');
+  bool setShowProtocoloDetalhes(bool value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setShowProtocoloDetalhes');
     try {
       return super.setShowProtocoloDetalhes(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setIsNovaCultura(bool value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setIsNovaCultura');
+  bool setIsNovaCultura(bool value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setIsNovaCultura');
     try {
       return super.setIsNovaCultura(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setReservatorioDetalhes(Reservatorio reservatorio) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setReservatorioDetalhes');
+  void setReservatorioDetalhes(Reservatorio reservatorio) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setReservatorioDetalhes');
     try {
       return super.setReservatorioDetalhes(reservatorio);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setProtocoloDetalhes(Protocolo protocolo) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setProtocoloDetalhes');
+  void setProtocoloDetalhes(Protocolo protocolo) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setProtocoloDetalhes');
     try {
       return super.setProtocoloDetalhes(protocolo);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic removeProtocoloDetalhes() {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.removeProtocoloDetalhes');
+  void removeProtocoloDetalhes() {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.removeProtocoloDetalhes');
     try {
       return super.removeProtocoloDetalhes();
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setSearchProtocoloText(String value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setSearchProtocoloText');
+  String setSearchProtocoloText(String value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setSearchProtocoloText');
     try {
       return super.setSearchProtocoloText(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setProtocolo(Protocolo protocolo) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setProtocolo');
+  void setProtocolo(Protocolo protocolo) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setProtocolo');
     try {
       return super.setProtocolo(protocolo);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic desvincularProtocolo() {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.desvincularProtocolo');
+  void desvincularProtocolo() {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.desvincularProtocolo');
     try {
       return super.desvincularProtocolo();
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic prepararListaDetalhesFase() {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.prepararListaDetalhesFase');
+  void prepararListaDetalhesFase() {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.prepararListaDetalhesFase');
     try {
       return super.prepararListaDetalhesFase();
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic validarRegistro() {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.validarRegistro');
+  bool validarRegistro() {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.validarRegistro');
     try {
       return super.validarRegistro();
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic listaLotesParaFinalizar() {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.listaLotesParaFinalizar');
+  void listaLotesParaFinalizar() {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.listaLotesParaFinalizar');
     try {
       return super.listaLotesParaFinalizar();
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setSeachLotePage(String value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.setSeachLotePage');
+  void setSeachLotePage(String value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.setSeachLotePage');
     try {
       return super.setSeachLotePage(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic selecionarLoteParaFinalizar(int index) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.selecionarLoteParaFinalizar');
+  void selecionarLoteParaFinalizar(int index) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.selecionarLoteParaFinalizar');
     try {
       return super.selecionarLoteParaFinalizar(index);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic selecionarAtividadesParaFinalizar(int index) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.selecionarAtividadesParaFinalizar');
+  void selecionarAtividadesParaFinalizar(int index) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.selecionarAtividadesParaFinalizar');
     try {
       return super.selecionarAtividadesParaFinalizar(index);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic preencherPlantasColhidas(String value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.preencherPlantasColhidas');
+  void preencherPlantasColhidas(String value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.preencherPlantasColhidas');
     try {
       return super.preencherPlantasColhidas(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic preencherEmbalagensProduzidas(String value) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.preencherEmbalagensProduzidas');
+  void preencherEmbalagensProduzidas(String value) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.preencherEmbalagensProduzidas');
     try {
       return super.preencherEmbalagensProduzidas(value);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic deletarAtividades(int index) {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.deletarAtividades');
+  void deletarAtividades(int index) {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.deletarAtividades');
     try {
       return super.deletarAtividades(index);
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic verificarMarcarTodos() {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.verificarMarcarTodos');
+  void verificarMarcarTodos() {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.verificarMarcarTodos');
     try {
       return super.verificarMarcarTodos();
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   bool podemosFinalizarLotes() {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.podemosFinalizarLotes');
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.podemosFinalizarLotes');
     try {
       return super.podemosFinalizarLotes();
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   bool lotesSelecionadosEstaVazio() {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.lotesSelecionadosEstaVazio');
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.lotesSelecionadosEstaVazio');
     try {
       return super.lotesSelecionadosEstaVazio();
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic limparFinalizacao() {
-    final _$actionInfo = _$_LoteStoreBaseActionController.startAction(
-        name: '_LoteStoreBase.limparFinalizacao');
+  void limparFinalizacao() {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.limparFinalizacao');
     try {
       return super.limparFinalizacao();
     } finally {
-      _$_LoteStoreBaseActionController.endAction(_$actionInfo);
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

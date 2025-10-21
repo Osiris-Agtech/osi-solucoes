@@ -4,7 +4,7 @@
 
 import 'package:flutter/material.dart';
 
-showCircularProgressIndicator(BuildContext context) {
+void showCircularProgressIndicator(BuildContext context) {
   showDialog(
     barrierDismissible: false,
     context: context,
@@ -14,7 +14,7 @@ showCircularProgressIndicator(BuildContext context) {
   );
 }
 
-showLoaderDialog(BuildContext context, String error) {
+void showLoaderDialog(BuildContext context, String error) {
   showDialog(
     barrierDismissible: false,
     context: context,

@@ -12,8 +12,7 @@ import 'components/detalhes_page/protocoloItem.dart';
 
 class ProtocoloPage extends StatefulWidget {
   final String title;
-  const ProtocoloPage({Key? key, this.title = 'ProtocoloPage'})
-      : super(key: key);
+  const ProtocoloPage({super.key, this.title = 'ProtocoloPage'});
   @override
   ProtocoloPageState createState() => ProtocoloPageState();
 }
@@ -72,12 +71,12 @@ class ProtocoloPageState extends State<ProtocoloPage> {
       onPressed: () {
         Get.toNamed(Routes.cadastrarProtocoloPage);
       },
+      backgroundColor: Constants.kPrimaryColor,
       child: const Icon(
         Icons.add,
         size: 30,
         color: Colors.white,
       ),
-      backgroundColor: Constants.kPrimaryColor,
     );
   }
 
@@ -150,11 +149,11 @@ class ProtocoloPageState extends State<ProtocoloPage> {
         subtitle: "Lista de protocolos cadastrados",
       ),
       bottom: PreferredSize(
-        child: filterWidget(context),
         preferredSize: const Size(
           double.infinity,
           60, //MediaQuery.of(context).size.height * 0.06,
         ),
+        child: filterWidget(context),
       ),
     );
   }
@@ -191,7 +190,7 @@ class ProtocoloPageState extends State<ProtocoloPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
               ),
-              primary: Constants.kPrimaryColor,
+              backgroundColor: Constants.kPrimaryColor,
             ),
             child: const Text(
               "nome",

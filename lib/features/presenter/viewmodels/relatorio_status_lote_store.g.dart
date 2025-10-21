@@ -6,52 +6,53 @@ part of 'relatorio_status_lote_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$RelatorioStatusLoteStore on _RelatorioStatusLoteStoreBase, Store {
+mixin _$RelatorioStatusLoteStore on RelatorioStatusLoteStoreBase, Store {
   Computed<List<LotStatusData>>? _$lotStatusDataComputed;
 
   @override
   List<LotStatusData> get lotStatusData => (_$lotStatusDataComputed ??=
           Computed<List<LotStatusData>>(() => super.lotStatusData,
-              name: '_RelatorioStatusLoteStoreBase.lotStatusData'))
+              name: 'RelatorioStatusLoteStoreBase.lotStatusData'))
       .value;
   Computed<String>? _$reportTitleComputed;
 
   @override
   String get reportTitle =>
       (_$reportTitleComputed ??= Computed<String>(() => super.reportTitle,
-              name: '_RelatorioStatusLoteStoreBase.reportTitle'))
+              name: 'RelatorioStatusLoteStoreBase.reportTitle'))
           .value;
   Computed<String>? _$reportSubtitleComputed;
 
   @override
   String get reportSubtitle =>
       (_$reportSubtitleComputed ??= Computed<String>(() => super.reportSubtitle,
-              name: '_RelatorioStatusLoteStoreBase.reportSubtitle'))
+              name: 'RelatorioStatusLoteStoreBase.reportSubtitle'))
           .value;
   Computed<bool>? _$hasDataComputed;
 
   @override
   bool get hasData => (_$hasDataComputed ??= Computed<bool>(() => super.hasData,
-          name: '_RelatorioStatusLoteStoreBase.hasData'))
+          name: 'RelatorioStatusLoteStoreBase.hasData'))
       .value;
   Computed<Map<String, int>>? _$estatisticasResumoComputed;
 
   @override
   Map<String, int> get estatisticasResumo => (_$estatisticasResumoComputed ??=
           Computed<Map<String, int>>(() => super.estatisticasResumo,
-              name: '_RelatorioStatusLoteStoreBase.estatisticasResumo'))
+              name: 'RelatorioStatusLoteStoreBase.estatisticasResumo'))
       .value;
   Computed<double>? _$percentualConclusaoComputed;
 
   @override
   double get percentualConclusao => (_$percentualConclusaoComputed ??=
           Computed<double>(() => super.percentualConclusao,
-              name: '_RelatorioStatusLoteStoreBase.percentualConclusao'))
+              name: 'RelatorioStatusLoteStoreBase.percentualConclusao'))
       .value;
 
-  final _$isLoadingAtom = Atom(name: '_RelatorioStatusLoteStoreBase.isLoading');
+  late final _$isLoadingAtom =
+      Atom(name: 'RelatorioStatusLoteStoreBase.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -66,7 +67,8 @@ mixin _$RelatorioStatusLoteStore on _RelatorioStatusLoteStoreBase, Store {
     });
   }
 
-  final _$hasErrorAtom = Atom(name: '_RelatorioStatusLoteStoreBase.hasError');
+  late final _$hasErrorAtom =
+      Atom(name: 'RelatorioStatusLoteStoreBase.hasError', context: context);
 
   @override
   bool get hasError {
@@ -81,8 +83,8 @@ mixin _$RelatorioStatusLoteStore on _RelatorioStatusLoteStoreBase, Store {
     });
   }
 
-  final _$errorMessageAtom =
-      Atom(name: '_RelatorioStatusLoteStoreBase.errorMessage');
+  late final _$errorMessageAtom =
+      Atom(name: 'RelatorioStatusLoteStoreBase.errorMessage', context: context);
 
   @override
   String get errorMessage {
@@ -97,8 +99,8 @@ mixin _$RelatorioStatusLoteStore on _RelatorioStatusLoteStoreBase, Store {
     });
   }
 
-  final _$relatorioDataAtom =
-      Atom(name: '_RelatorioStatusLoteStoreBase.relatorioData');
+  late final _$relatorioDataAtom = Atom(
+      name: 'RelatorioStatusLoteStoreBase.relatorioData', context: context);
 
   @override
   RelatorioStatusLotes? get relatorioData {
@@ -113,8 +115,8 @@ mixin _$RelatorioStatusLoteStore on _RelatorioStatusLoteStoreBase, Store {
     });
   }
 
-  final _$widgetDataAtom =
-      Atom(name: '_RelatorioStatusLoteStoreBase.widgetData');
+  late final _$widgetDataAtom =
+      Atom(name: 'RelatorioStatusLoteStoreBase.widgetData', context: context);
 
   @override
   List<LotStatusData> get widgetData {
@@ -129,8 +131,9 @@ mixin _$RelatorioStatusLoteStore on _RelatorioStatusLoteStoreBase, Store {
     });
   }
 
-  final _$buscarRelatorioStatusLotesAsyncAction =
-      AsyncAction('_RelatorioStatusLoteStoreBase.buscarRelatorioStatusLotes');
+  late final _$buscarRelatorioStatusLotesAsyncAction = AsyncAction(
+      'RelatorioStatusLoteStoreBase.buscarRelatorioStatusLotes',
+      context: context);
 
   @override
   Future<void> buscarRelatorioStatusLotes({int? contaId}) {
@@ -138,8 +141,8 @@ mixin _$RelatorioStatusLoteStore on _RelatorioStatusLoteStoreBase, Store {
         .run(() => super.buscarRelatorioStatusLotes(contaId: contaId));
   }
 
-  final _$refreshDataAsyncAction =
-      AsyncAction('_RelatorioStatusLoteStoreBase.refreshData');
+  late final _$refreshDataAsyncAction =
+      AsyncAction('RelatorioStatusLoteStoreBase.refreshData', context: context);
 
   @override
   Future<void> refreshData({int? contaId}) {
@@ -147,50 +150,50 @@ mixin _$RelatorioStatusLoteStore on _RelatorioStatusLoteStoreBase, Store {
         .run(() => super.refreshData(contaId: contaId));
   }
 
-  final _$_RelatorioStatusLoteStoreBaseActionController =
-      ActionController(name: '_RelatorioStatusLoteStoreBase');
+  late final _$RelatorioStatusLoteStoreBaseActionController =
+      ActionController(name: 'RelatorioStatusLoteStoreBase', context: context);
 
   @override
   void setLoading(bool value) {
-    final _$actionInfo = _$_RelatorioStatusLoteStoreBaseActionController
-        .startAction(name: '_RelatorioStatusLoteStoreBase.setLoading');
+    final _$actionInfo = _$RelatorioStatusLoteStoreBaseActionController
+        .startAction(name: 'RelatorioStatusLoteStoreBase.setLoading');
     try {
       return super.setLoading(value);
     } finally {
-      _$_RelatorioStatusLoteStoreBaseActionController.endAction(_$actionInfo);
+      _$RelatorioStatusLoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setError(bool hasErr, String message) {
-    final _$actionInfo = _$_RelatorioStatusLoteStoreBaseActionController
-        .startAction(name: '_RelatorioStatusLoteStoreBase.setError');
+    final _$actionInfo = _$RelatorioStatusLoteStoreBaseActionController
+        .startAction(name: 'RelatorioStatusLoteStoreBase.setError');
     try {
       return super.setError(hasErr, message);
     } finally {
-      _$_RelatorioStatusLoteStoreBaseActionController.endAction(_$actionInfo);
+      _$RelatorioStatusLoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setRelatorioData(RelatorioStatusLotes data) {
-    final _$actionInfo = _$_RelatorioStatusLoteStoreBaseActionController
-        .startAction(name: '_RelatorioStatusLoteStoreBase.setRelatorioData');
+    final _$actionInfo = _$RelatorioStatusLoteStoreBaseActionController
+        .startAction(name: 'RelatorioStatusLoteStoreBase.setRelatorioData');
     try {
       return super.setRelatorioData(data);
     } finally {
-      _$_RelatorioStatusLoteStoreBaseActionController.endAction(_$actionInfo);
+      _$RelatorioStatusLoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void clearData() {
-    final _$actionInfo = _$_RelatorioStatusLoteStoreBaseActionController
-        .startAction(name: '_RelatorioStatusLoteStoreBase.clearData');
+    final _$actionInfo = _$RelatorioStatusLoteStoreBaseActionController
+        .startAction(name: 'RelatorioStatusLoteStoreBase.clearData');
     try {
       return super.clearData();
     } finally {
-      _$_RelatorioStatusLoteStoreBaseActionController.endAction(_$actionInfo);
+      _$RelatorioStatusLoteStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

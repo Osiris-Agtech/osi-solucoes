@@ -6,9 +6,9 @@ import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 
-lote(
+InkWell lote(
   BuildContext context,
-  CarouselController carouselController,
+  CarouselSliderController carouselController,
   LoteStore store,
   ProtocoloStore protocoloStore,
   GlobalKey<FormFieldState> key,
@@ -83,7 +83,7 @@ lote(
   );
 }
 
-lotePage(BuildContext context, LoteStore store) {
+Container lotePage(BuildContext context, LoteStore store) {
   return Container(
     height: MediaQuery.of(context).size.height * 0.9,
     margin: EdgeInsets.only(

@@ -31,11 +31,11 @@ class ThaiDateUtils {
     "ธ.ค.",
   ];
 
-  static getMonthNameShot(int month) {
+  static String getMonthNameShot(int month) {
     return MONTH_SHORT_TH[month - 1];
   }
 
-  static getMonthNameFull(int month) {
+  static String getMonthNameFull(int month) {
     return MONTH_FULL_TH[month - 1];
   }
 }

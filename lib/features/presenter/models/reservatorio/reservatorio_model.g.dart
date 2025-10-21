@@ -7,7 +7,7 @@ part of 'reservatorio_model.dart';
 // **************************************************************************
 
 Reservatorio _$ReservatorioFromJson(Map<String, dynamic> json) => Reservatorio(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       volume: json['volume'] as String?,
       created_at: json['created_at'] == null

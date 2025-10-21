@@ -10,8 +10,12 @@ import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_res
 import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/receitaPage.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/volumePage.dart';
 
-SizedBox pagesNewReservatorio(BuildContext context, ReservatoriosStore store,
-    CarouselController carouselController, CarouselController controlerPages) {
+SizedBox pagesNewReservatorio(
+  BuildContext context,
+  ReservatoriosStore store,
+  CarouselSliderController carouselController,
+  CarouselSliderController controlerPages,
+) {
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
     child: Column(
@@ -110,7 +114,7 @@ SizedBox pagesNewReservatorio(BuildContext context, ReservatoriosStore store,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24)),
-                  primary: Constants.kPrimaryColor,
+                  backgroundColor: Constants.kPrimaryColor,
                 ),
                 child: Center(
                   child: Row(

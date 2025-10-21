@@ -6,9 +6,9 @@ import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 
-reservatorio(
+InkWell reservatorio(
   BuildContext context,
-  CarouselController carouselController,
+  CarouselSliderController carouselController,
   LoteStore store,
   ProtocoloStore protocoloStore,
   GlobalKey<FormFieldState> key,
@@ -84,7 +84,7 @@ reservatorio(
   );
 }
 
-reservatorioPage(BuildContext context, LoteStore store) {
+SizedBox reservatorioPage(BuildContext context, LoteStore store) {
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
     child: Column(

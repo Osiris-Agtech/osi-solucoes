@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -13,7 +12,7 @@ import 'package:osi_solucoes/features/presenter/views/area_cultivo/components/to
 import '../area_cultivo/N3/detalhes_lote_page.dart';
 
 class HistoricoPage extends StatefulWidget {
-  const HistoricoPage({Key? key}) : super(key: key);
+  const HistoricoPage({super.key});
 
   @override
   State<HistoricoPage> createState() => _HistoricoPageState();
@@ -101,7 +100,7 @@ class _HistoricoPageState extends State<HistoricoPage> {
 
 // ignore: camel_case_types
 class AppBar extends StatefulWidget {
-  const AppBar({Key? key}) : super(key: key);
+  const AppBar({super.key});
 
   @override
   State<AppBar> createState() => _AppBarState();
@@ -145,7 +144,7 @@ class _AppBarState extends State<AppBar> {
 
 class CardLoteFinalizado extends StatefulWidget {
   final Lote lote;
-  const CardLoteFinalizado({Key? key, required this.lote}) : super(key: key);
+  const CardLoteFinalizado({super.key, required this.lote});
 
   @override
   State<CardLoteFinalizado> createState() => _CardLoteState();

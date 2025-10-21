@@ -8,7 +8,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
 class ResultadoLote extends StatefulWidget {
   final Lote? lote;
-  const ResultadoLote({Key? key, required this.lote}) : super(key: key);
+  const ResultadoLote({super.key, required this.lote});
 
   @override
   State<ResultadoLote> createState() => _ResultadoLoteState();
@@ -120,7 +120,7 @@ class _ResultadoLoteState extends State<ResultadoLote> {
                     height: 40,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Constants.kPrimaryColor,
+                        backgroundColor: Constants.kPrimaryColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),

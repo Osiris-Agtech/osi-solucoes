@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
-import 'package:rive/rive.dart';
+import 'package:rive/rive.dart' as rive;
 import 'package:flutter/material.dart';
 
 import '../../viewmodels/cadastro_store.dart';
@@ -13,8 +13,7 @@ import '../home/home_page.dart';
 
 class ConfirmaSegurancaPage extends StatefulWidget {
   final String title;
-  const ConfirmaSegurancaPage({Key? key, this.title = 'ConfirmaPage'})
-      : super(key: key);
+  const ConfirmaSegurancaPage({super.key, this.title = 'ConfirmaPage'});
   @override
   ConfirmaSegurancaPageState createState() => ConfirmaSegurancaPageState();
 }
@@ -193,7 +192,7 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
                             fontFamily: "MontSerrat "),
                         children: <TextSpan>[
                           TextSpan(
-                            text: " " + 'confirmaText4'.i18n(),
+                            text: " ${'confirmaText4'.i18n()}",
                             style: const TextStyle(
                                 color: Color(0xFF1C5EC1), fontSize: 12),
                             recognizer: TapGestureRecognizer()
@@ -203,11 +202,12 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
                                 await Future.delayed(
                                   const Duration(seconds: 1),
                                 );
+                                if (!context.mounted) return;
                                 Navigator.pop(context);
                               },
                           ),
                           TextSpan(
-                            text: '\n' + "confirmaText5".i18n(),
+                            text: '\n${"confirmaText5".i18n()}',
                             style: const TextStyle(
                                 fontSize: 12, color: Colors.black),
                           ),
@@ -222,7 +222,7 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
                       height: 45,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: Constants.kPrimaryColor),
+                            backgroundColor: Constants.kPrimaryColor),
                         child: Text(
                           "TextButtonConfirmar".i18n(),
                           style: const TextStyle(
@@ -235,17 +235,19 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
                             await Future.delayed(const Duration(seconds: 2));
                             res == "sucesso"
                                 ? {
-                                    showDoneAnimation(context),
+                                    if (context.mounted)
+                                      showDoneAnimation(context),
                                     await Future.delayed(
                                         const Duration(milliseconds: 1400)),
                                     Get.offAll(() => const HomePage()),
                                   }
                                 : {
-                                    showErrorDialog(context, res),
+                                    if (context.mounted)
+                                      showErrorDialog(context, res),
                                     await Future.delayed(
                                         const Duration(seconds: 2)),
-                                    Navigator.pop(context),
-                                    Navigator.pop(context),
+                                    if (context.mounted) Navigator.pop(context),
+                                    if (context.mounted) Navigator.pop(context),
                                   };
                           } else {
                             showErrorDialog(context, "Código Incorreto");
@@ -272,7 +274,7 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
     );
   }
 
-  showCircularProgressIndicator(BuildContext context) {
+  void showCircularProgressIndicator(BuildContext context) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -282,7 +284,7 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
     );
   }
 
-  showDoneAnimation(BuildContext context) {
+  void showDoneAnimation(BuildContext context) {
     showDialog(
       barrierDismissible: false,
       barrierColor: Colors.white,
@@ -292,14 +294,15 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
           child: SizedBox(
             height: 250,
             width: 250,
-            child: RiveAnimation.asset("assets/animation/doneAnimation.riv"),
+            child:
+                rive.RiveAnimation.asset("assets/animation/doneAnimation.riv"),
           ),
         );
       },
     );
   }
 
-  showErrorDialog(BuildContext context, String error) {
+  void showErrorDialog(BuildContext context, String error) {
     showDialog(
       barrierDismissible: true,
       context: context,

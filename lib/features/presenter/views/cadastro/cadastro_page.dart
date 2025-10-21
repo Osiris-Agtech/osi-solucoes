@@ -15,7 +15,7 @@ import '../home/home_page.dart';
 
 class CadastroPage extends StatefulWidget {
   final String title;
-  const CadastroPage({Key? key, this.title = 'CadastroPage'}) : super(key: key);
+  const CadastroPage({super.key, this.title = 'CadastroPage'});
   @override
   CadastroPageState createState() => CadastroPageState();
 }
@@ -95,12 +95,12 @@ class CadastroPageState extends State<CadastroPage> {
                             children: const [
                               CircleAvatar(
                                 backgroundColor: Constants.kPrimaryColor,
+                                minRadius: 45,
                                 child: Icon(
                                   Icons.person,
                                   color: Constants.kBackgroundColor,
                                   size: 50,
                                 ),
-                                minRadius: 45,
                               ),
                               // Positioned(
                               //   bottom: 0,
@@ -289,7 +289,7 @@ class CadastroPageState extends State<CadastroPage> {
                               height: 45,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    primary: Constants.kPrimaryColor),
+                                    backgroundColor: Constants.kPrimaryColor),
                                 child: Text(
                                   "TextButtonConfirmar".i18n(),
                                   style: const TextStyle(
@@ -311,7 +311,8 @@ class CadastroPageState extends State<CadastroPage> {
                                           const Duration(seconds: 2));
                                       res == "sucesso"
                                           ? {
-                                              showDoneAnimation(context),
+                                              if (context.mounted)
+                                                showDoneAnimation(context),
                                               await Future.delayed(
                                                   const Duration(
                                                       milliseconds: 1400)),
@@ -319,11 +320,14 @@ class CadastroPageState extends State<CadastroPage> {
                                                   () => const HomePage()),
                                             }
                                           : {
-                                              showErrorDialog(context, res),
+                                              if (context.mounted)
+                                                showErrorDialog(context, res),
                                               await Future.delayed(
                                                   const Duration(seconds: 2)),
-                                              Navigator.pop(context),
-                                              Navigator.pop(context),
+                                              if (context.mounted)
+                                                Navigator.pop(context),
+                                              if (context.mounted)
+                                                Navigator.pop(context),
                                             };
 
                                       /// ###### FLUXO COM VALIDAÇÃO DE E-MAIL #####
@@ -342,9 +346,11 @@ class CadastroPageState extends State<CadastroPage> {
                                       //   Navigator.pop(context);
                                       // }
                                     } else {
+                                      if (!context.mounted) return;
                                       showErrorDialog(context, response);
                                       await Future.delayed(
                                           const Duration(seconds: 2));
+                                      if (!context.mounted) return;
                                       Navigator.pop(context);
                                       Navigator.pop(context);
                                     }
@@ -415,7 +421,7 @@ class CadastroPageState extends State<CadastroPage> {
         } else if (labelText == "labelTextConsult3".i18n()) {
           showCircularProgressIndicator(context);
           await store.buscaCEP();
-          Navigator.pop(context);
+          if (mounted) Navigator.pop(context);
           focusNode.nextFocus();
         } else {
           focusNode.nextFocus();
@@ -425,7 +431,7 @@ class CadastroPageState extends State<CadastroPage> {
         if (labelText == "labelTextConsult3".i18n() && value.length == 10) {
           showCircularProgressIndicator(context);
           await store.buscaCEP();
-          Navigator.pop(context);
+          if (mounted) Navigator.pop(context);
           focusNode.nextFocus();
         }
       },
@@ -477,7 +483,7 @@ class CadastroPageState extends State<CadastroPage> {
     );
   }
 
-  showCircularProgressIndicator(BuildContext context) {
+  void showCircularProgressIndicator(BuildContext context) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -487,7 +493,7 @@ class CadastroPageState extends State<CadastroPage> {
     );
   }
 
-  showErrorDialog(BuildContext context, String error) {
+  void showErrorDialog(BuildContext context, String error) {
     showDialog(
       barrierDismissible: false,
       context: context,

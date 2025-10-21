@@ -1,33 +1,11 @@
 import 'package:flutter/material.dart';
 
-///  This function creates a MaterialColor(Color, Map<int, Color>) from a Color(int).
-///
-/// Returned object has this shape:
-/// MaterialColor(
-///   0xFF000000,
-///   const <int, Color>{
-///     50:  const Color(0xFFe0e0e0),
-///     100: const Color(0xFFb3b3b3),
-///     200: const Color(0xFF808080),
-///     300: const Color(0xFF4d4d4d),
-///     400: const Color(0xFF262626),
-///     500: const Color(0xFF000000),
-///     600: const Color(0xFF000000),
-///     700: const Color(0xFF000000),
-///     800: const Color(0xFF000000),
-///     900: const Color(0xFF000000),
-///   },
-/// );
-///
-/// Example of use:
-///   [...]
-///   primarySwatch: createMaterialColor(Color(0xFF174378)),
-///   [...]
-
 MaterialColor createMaterialColor(Color color) {
   List strengths = <double>[.05];
   Map<int, Color> swatch = <int, Color>{};
-  final int r = color.red, g = color.green, b = color.blue;
+  final int r = (color.r * 255.0).round() & 0xff;
+  final int g = (color.g * 255.0).round() & 0xff;
+  final int b = (color.b * 255.0).round() & 0xff;
 
   for (int i = 1; i < 10; i++) {
     strengths.add(0.1 * i);
@@ -41,5 +19,5 @@ MaterialColor createMaterialColor(Color color) {
       1,
     );
   }
-  return MaterialColor(color.value, swatch);
+  return MaterialColor(color.toARGB32(), swatch);
 }

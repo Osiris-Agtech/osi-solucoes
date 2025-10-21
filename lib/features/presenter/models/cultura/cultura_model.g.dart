@@ -7,7 +7,7 @@ part of 'cultura_model.dart';
 // **************************************************************************
 
 Cultura _$CulturaFromJson(Map<String, dynamic> json) => Cultura(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       privado: json['privado'] as bool?,
       created_at: json['created_at'] == null

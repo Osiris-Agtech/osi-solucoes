@@ -118,12 +118,12 @@ Padding atividadeItem({
                 },
                 itemBuilder: (_) => <PopupMenuEntry>[
                   const PopupMenuItem(
-                    child: Text('Editar'),
                     value: 1,
+                    child: Text('Editar'),
                   ),
                   const PopupMenuItem(
-                    child: Text('Apagar'),
                     value: 2,
+                    child: Text('Apagar'),
                   ),
                 ],
               ),

@@ -58,7 +58,7 @@ class Protocolo {
 
   Map<String, dynamic> toJson() => _$ProtocoloToJson(this);
 
-  toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'id': id,
       'nome': nome,

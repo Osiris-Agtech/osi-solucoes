@@ -6,10 +6,11 @@ part of 'ajustes_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$AjustesStore on _AjustesStoreBase, Store {
-  final _$selectedItemAtom = Atom(name: '_AjustesStoreBase.selectedItem');
+mixin _$AjustesStore on AjustesStoreBase, Store {
+  late final _$selectedItemAtom =
+      Atom(name: 'AjustesStoreBase.selectedItem', context: context);
 
   @override
   int get selectedItem {
@@ -24,7 +25,8 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$quantityListAtom = Atom(name: '_AjustesStoreBase.quantityList');
+  late final _$quantityListAtom =
+      Atom(name: 'AjustesStoreBase.quantityList', context: context);
 
   @override
   List<int> get quantityList {
@@ -39,7 +41,8 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$cEletricoAtualAtom = Atom(name: '_AjustesStoreBase.cEletricoAtual');
+  late final _$cEletricoAtualAtom =
+      Atom(name: 'AjustesStoreBase.cEletricoAtual', context: context);
 
   @override
   TextEditingController get cEletricoAtual {
@@ -54,8 +57,8 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$cEletricoDesejadoAtom =
-      Atom(name: '_AjustesStoreBase.cEletricoDesejado');
+  late final _$cEletricoDesejadoAtom =
+      Atom(name: 'AjustesStoreBase.cEletricoDesejado', context: context);
 
   @override
   TextEditingController get cEletricoDesejado {
@@ -70,7 +73,8 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$volumeAtualAtom = Atom(name: '_AjustesStoreBase.volumeAtual');
+  late final _$volumeAtualAtom =
+      Atom(name: 'AjustesStoreBase.volumeAtual', context: context);
 
   @override
   TextEditingController get volumeAtual {
@@ -85,7 +89,8 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$volumeDesejadoAtom = Atom(name: '_AjustesStoreBase.volumeDesejado');
+  late final _$volumeDesejadoAtom =
+      Atom(name: 'AjustesStoreBase.volumeDesejado', context: context);
 
   @override
   TextEditingController get volumeDesejado {
@@ -100,7 +105,7 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$pHAtom = Atom(name: '_AjustesStoreBase.pH');
+  late final _$pHAtom = Atom(name: 'AjustesStoreBase.pH', context: context);
 
   @override
   TextEditingController get pH {
@@ -115,7 +120,8 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$reservatorioAtom = Atom(name: '_AjustesStoreBase.reservatorio');
+  late final _$reservatorioAtom =
+      Atom(name: 'AjustesStoreBase.reservatorio', context: context);
 
   @override
   TextEditingController get reservatorio {
@@ -130,8 +136,8 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$selectedReservatorioAtom =
-      Atom(name: '_AjustesStoreBase.selectedReservatorio');
+  late final _$selectedReservatorioAtom =
+      Atom(name: 'AjustesStoreBase.selectedReservatorio', context: context);
 
   @override
   Reservatorio get selectedReservatorio {
@@ -147,8 +153,8 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$reservatorioListAtom =
-      Atom(name: '_AjustesStoreBase.reservatorioList');
+  late final _$reservatorioListAtom =
+      Atom(name: 'AjustesStoreBase.reservatorioList', context: context);
 
   @override
   List<Reservatorio> get reservatorioList {
@@ -163,8 +169,8 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$solucaoConcentradaListAtom =
-      Atom(name: '_AjustesStoreBase.solucaoConcentradaList');
+  late final _$solucaoConcentradaListAtom =
+      Atom(name: 'AjustesStoreBase.solucaoConcentradaList', context: context);
 
   @override
   List<SolucaoFertilizanteConcentrada> get solucaoConcentradaList {
@@ -180,7 +186,8 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$ceAguaAtom = Atom(name: '_AjustesStoreBase.ceAgua');
+  late final _$ceAguaAtom =
+      Atom(name: 'AjustesStoreBase.ceAgua', context: context);
 
   @override
   double get ceAgua {
@@ -195,8 +202,8 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$volumeConcentradoAtom =
-      Atom(name: '_AjustesStoreBase.volumeConcentrado');
+  late final _$volumeConcentradoAtom =
+      Atom(name: 'AjustesStoreBase.volumeConcentrado', context: context);
 
   @override
   String get volumeConcentrado {
@@ -211,8 +218,8 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$fatorConcentracaoRecebidoAtom =
-      Atom(name: '_AjustesStoreBase.fatorConcentracaoRecebido');
+  late final _$fatorConcentracaoRecebidoAtom = Atom(
+      name: 'AjustesStoreBase.fatorConcentracaoRecebido', context: context);
 
   @override
   double get fatorConcentracaoRecebido {
@@ -228,7 +235,8 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$reposicaoFertAtom = Atom(name: '_AjustesStoreBase.reposicaoFert');
+  late final _$reposicaoFertAtom =
+      Atom(name: 'AjustesStoreBase.reposicaoFert', context: context);
 
   @override
   List<ReposicaoFert> get reposicaoFert {
@@ -243,134 +251,134 @@ mixin _$AjustesStore on _AjustesStoreBase, Store {
     });
   }
 
-  final _$buscarReservatoriosAsyncAction =
-      AsyncAction('_AjustesStoreBase.buscarReservatorios');
+  late final _$buscarReservatoriosAsyncAction =
+      AsyncAction('AjustesStoreBase.buscarReservatorios', context: context);
 
   @override
-  Future buscarReservatorios() {
+  Future<void> buscarReservatorios() {
     return _$buscarReservatoriosAsyncAction
         .run(() => super.buscarReservatorios());
   }
 
-  final _$registrarAtividadeAsyncAction =
-      AsyncAction('_AjustesStoreBase.registrarAtividade');
+  late final _$registrarAtividadeAsyncAction =
+      AsyncAction('AjustesStoreBase.registrarAtividade', context: context);
 
   @override
-  Future registrarAtividade() {
+  Future<void> registrarAtividade() {
     return _$registrarAtividadeAsyncAction
         .run(() => super.registrarAtividade());
   }
 
-  final _$_AjustesStoreBaseActionController =
-      ActionController(name: '_AjustesStoreBase');
+  late final _$AjustesStoreBaseActionController =
+      ActionController(name: 'AjustesStoreBase', context: context);
 
   @override
-  dynamic newValueItem(int newValue) {
-    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.newValueItem');
+  int newValueItem(int newValue) {
+    final _$actionInfo = _$AjustesStoreBaseActionController.startAction(
+        name: 'AjustesStoreBase.newValueItem');
     try {
       return super.newValueItem(newValue);
     } finally {
-      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+      _$AjustesStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic volumeAjusteAgua() {
-    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.volumeAjusteAgua');
+  double volumeAjusteAgua() {
+    final _$actionInfo = _$AjustesStoreBaseActionController.startAction(
+        name: 'AjustesStoreBase.volumeAjusteAgua');
     try {
       return super.volumeAjusteAgua();
     } finally {
-      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+      _$AjustesStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic validarCampos() {
-    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.validarCampos');
+  bool validarCampos() {
+    final _$actionInfo = _$AjustesStoreBaseActionController.startAction(
+        name: 'AjustesStoreBase.validarCampos');
     try {
       return super.validarCampos();
     } finally {
-      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+      _$AjustesStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic clearAll() {
-    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.clearAll');
+  void clearAll() {
+    final _$actionInfo = _$AjustesStoreBaseActionController.startAction(
+        name: 'AjustesStoreBase.clearAll');
     try {
       return super.clearAll();
     } finally {
-      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+      _$AjustesStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic selectReservatorio(Reservatorio reservatorio) {
-    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.selectReservatorio');
+  void selectReservatorio(Reservatorio reservatorio) {
+    final _$actionInfo = _$AjustesStoreBaseActionController.startAction(
+        name: 'AjustesStoreBase.selectReservatorio');
     try {
       return super.selectReservatorio(reservatorio);
     } finally {
-      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+      _$AjustesStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic getConcentradaList() {
-    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.getConcentradaList');
+  void getConcentradaList() {
+    final _$actionInfo = _$AjustesStoreBaseActionController.startAction(
+        name: 'AjustesStoreBase.getConcentradaList');
     try {
       return super.getConcentradaList();
     } finally {
-      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+      _$AjustesStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic calculoLado(SolucaoFertilizanteConcentrada fertilizante, String ce) {
-    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.calculoLado');
+  double calculoLado(SolucaoFertilizanteConcentrada fertilizante, String ce) {
+    final _$actionInfo = _$AjustesStoreBaseActionController.startAction(
+        name: 'AjustesStoreBase.calculoLado');
     try {
       return super.calculoLado(fertilizante, ce);
     } finally {
-      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+      _$AjustesStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic calculoAjusteReposicao() {
-    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.calculoAjusteReposicao');
+  void calculoAjusteReposicao() {
+    final _$actionInfo = _$AjustesStoreBaseActionController.startAction(
+        name: 'AjustesStoreBase.calculoAjusteReposicao');
     try {
       return super.calculoAjusteReposicao();
     } finally {
-      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+      _$AjustesStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic calculoAjusteConcentrada(double reposicaoFert) {
-    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.calculoAjusteConcentrada');
+  void calculoAjusteConcentrada(double reposicaoFert) {
+    final _$actionInfo = _$AjustesStoreBaseActionController.startAction(
+        name: 'AjustesStoreBase.calculoAjusteConcentrada');
     try {
       return super.calculoAjusteConcentrada(reposicaoFert);
     } finally {
-      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+      _$AjustesStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic montandoDescricao() {
-    final _$actionInfo = _$_AjustesStoreBaseActionController.startAction(
-        name: '_AjustesStoreBase.montandoDescricao');
+  Uint8List montandoDescricao() {
+    final _$actionInfo = _$AjustesStoreBaseActionController.startAction(
+        name: 'AjustesStoreBase.montandoDescricao');
     try {
       return super.montandoDescricao();
     } finally {
-      _$_AjustesStoreBaseActionController.endAction(_$actionInfo);
+      _$AjustesStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

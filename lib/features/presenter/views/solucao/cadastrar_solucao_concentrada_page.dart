@@ -9,9 +9,9 @@ import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 class CadastrarSolucaoConcentradaPage extends StatefulWidget {
   final bool isShortcut;
   const CadastrarSolucaoConcentradaPage({
-    Key? key,
+    super.key,
     this.isShortcut = false,
-  }) : super(key: key);
+  });
 
   @override
   State<CadastrarSolucaoConcentradaPage> createState() =>
@@ -131,7 +131,7 @@ class _CadastrarSolucaoConcentradaPageState
     );
   }
 
-  _fator(BuildContext context) {
+  Padding _fator(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
         left: 20,
@@ -161,7 +161,7 @@ class _CadastrarSolucaoConcentradaPageState
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        store.fatorConcentracao.text + 'x',
+                        '${store.fatorConcentracao.text}x',
                         textAlign: TextAlign.end,
                         style: const TextStyle(
                           color: Constants.kPrimaryColor,
@@ -203,7 +203,7 @@ class _CadastrarSolucaoConcentradaPageState
     );
   }
 
-  _fatorTextField(BuildContext context) {
+  Future<void> _fatorTextField(BuildContext context) {
     return showModalBottomSheet<void>(
       backgroundColor: Constants.kBackgroundColor,
       context: context,
@@ -286,7 +286,7 @@ class _CadastrarSolucaoConcentradaPageState
   }
 // -----------------------------------------------------------------------------
 
-  _volume(BuildContext context) {
+  Padding _volume(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
         left: 20,
@@ -318,7 +318,7 @@ class _CadastrarSolucaoConcentradaPageState
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        store.volumeConcentracao.text + ' Litros',
+                        '${store.volumeConcentracao.text} Litros',
                         textAlign: TextAlign.end,
                         style: const TextStyle(
                           color: Constants.kPrimaryColor,
@@ -360,7 +360,7 @@ class _CadastrarSolucaoConcentradaPageState
     );
   }
 
-  _volumeTextField(BuildContext context) {
+  Future<void> _volumeTextField(BuildContext context) {
     return showModalBottomSheet<void>(
       backgroundColor: Constants.kBackgroundColor,
       context: context,
@@ -442,7 +442,7 @@ class _CadastrarSolucaoConcentradaPageState
     );
   }
 
-  _saveButton(Size size) {
+  Padding _saveButton(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       child: SizedBox(
@@ -450,7 +450,7 @@ class _CadastrarSolucaoConcentradaPageState
         height: 40,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: Constants.kPrimaryColor,
+            backgroundColor: Constants.kPrimaryColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             ),
@@ -480,7 +480,7 @@ class _CadastrarSolucaoConcentradaPageState
     );
   }
 
-  _cardListSolucao() {
+  Observer _cardListSolucao() {
     return Observer(builder: (_) {
       if (store.solucaoConcentradaList.isEmpty) {
         return Column(
@@ -509,7 +509,7 @@ class _CadastrarSolucaoConcentradaPageState
     });
   }
 
-  _addCard() {
+  Padding _addCard() {
     return Padding(
       padding: const EdgeInsets.only(
         top: 10,
@@ -719,7 +719,7 @@ class _CadastrarSolucaoConcentradaPageState
     );
   }
 
-  _solucaoConcentradaFertList(String? nome, int indexConcentrada) {
+  Future<void> _solucaoConcentradaFertList(String? nome, int indexConcentrada) {
     return showModalBottomSheet<void>(
       constraints:
           BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.6),
@@ -846,7 +846,7 @@ class _CadastrarSolucaoConcentradaPageState
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Constants.kPrimaryColor,
+                          backgroundColor: Constants.kPrimaryColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),

@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
@@ -10,7 +9,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart'
 import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 
 class DetalhesProtocolo extends StatefulWidget {
-  const DetalhesProtocolo({Key? key}) : super(key: key);
+  const DetalhesProtocolo({super.key});
 
   @override
   State<DetalhesProtocolo> createState() => _DetalhesProtocoloState();
@@ -300,7 +299,7 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                                             fontSize: 20,
                                             color: Constants
                                                 .kContentColorLightTheme
-                                                .withOpacity(.8),
+                                                .withValues(alpha: .8),
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -310,7 +309,7 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                                             fontSize: 12,
                                             color: Constants
                                                 .kContentColorLightTheme
-                                                .withOpacity(.8),
+                                                .withValues(alpha: .8),
                                             fontWeight: FontWeight.normal,
                                           ),
                                         ),

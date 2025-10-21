@@ -19,9 +19,9 @@ import '../models/area/area_model.dart';
 
 part 'lote_store.g.dart';
 
-class LoteStore = _LoteStoreBase with _$LoteStore;
+class LoteStore = LoteStoreBase with _$LoteStore;
 
-abstract class _LoteStoreBase with Store {
+abstract class LoteStoreBase with Store {
   LoteRepository loteRepository = GetIt.I<LoteRepository>();
   AuthController authController = GetIt.I<AuthController>();
 
@@ -60,25 +60,25 @@ abstract class _LoteStoreBase with Store {
   DateTime data2 = DateTime.now();
 
   @action
-  setData1(DateTime value) => data1 = value;
+  DateTime setData1(DateTime value) => data1 = value;
 
   @action
-  setData2(DateTime value) => data2 = value;
+  DateTime setData2(DateTime value) => data2 = value;
 
   @action
-  changeOrder() => order == "asc" ? order = "desc" : order = "asc";
+  String changeOrder() => order == "asc" ? order = "desc" : order = "asc";
 
   @action
-  setSetorSelecionado(Setor setor) => setorSelecionado = setor;
+  Setor setSetorSelecionado(Setor setor) => setorSelecionado = setor;
 
   @action
-  setDropDown(String value) => dropDownValue = value;
+  String setDropDown(String value) => dropDownValue = value;
 
   @action
-  setSearchLoteText(String value) => searchLoteText = value;
+  String setSearchLoteText(String value) => searchLoteText = value;
 
   @action
-  buscarLotes() async {
+  Future<void> buscarLotes() async {
     isLoteListLoading = true;
 
     LoteRepository loteRepository = GetIt.I<LoteRepository>();
@@ -141,7 +141,7 @@ abstract class _LoteStoreBase with Store {
   Setor setorSelecionadoMigrar = Setor();
 
   @action
-  selecionarSetorMigrar(Setor? setor) =>
+  Setor selecionarSetorMigrar(Setor? setor) =>
       setorSelecionadoMigrar = setor ?? Setor();
 
   @computed
@@ -162,7 +162,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  migrarLote(bool migrarReservatorio) async {
+  Future<void> migrarLote(bool migrarReservatorio) async {
     isMigrateLoteLoading = true;
 
     SetorStore setorStore = GetIt.I<SetorStore>();
@@ -191,13 +191,13 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  selecionarLote(Lote lote) => loteSelecionado = lote;
+  Lote selecionarLote(Lote lote) => loteSelecionado = lote;
 
   @action
-  selecionarArea(Area area) => areaSelecionada = area;
+  Area selecionarArea(Area area) => areaSelecionada = area;
 
   @action
-  buscarDetalhesLote() async {
+  Future<void> buscarDetalhesLote() async {
     isDetalhesLoteLoading = true;
 
     LoteRepository loteRepository = GetIt.I<LoteRepository>();
@@ -233,7 +233,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  buscarAreasList() async {
+  Future<void> buscarAreasList() async {
     isAreaLoading = true;
 
     var areaListResult = await loteRepository
@@ -384,16 +384,16 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  selecionarNovoLoteArea(Area area) => novoLoteArea = area;
+  Area selecionarNovoLoteArea(Area area) => novoLoteArea = area;
 
   @action
-  selecionarNovoLoteSetor(Setor setor) => novoLoteSetor = setor;
+  Setor selecionarNovoLoteSetor(Setor setor) => novoLoteSetor = setor;
 
   @action
-  setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
+  bool setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
 
   @action
-  carregarAreaSetor() {
+  void carregarAreaSetor() {
     SetorStore setorStore = GetIt.I<SetorStore>();
 
     if (setorStore.areaSelecionada.id != null) {
@@ -412,36 +412,37 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  setNovoLoteCultura(int index) => novoLoteCultura = culturaList[index];
+  Cultura setNovoLoteCultura(int index) => novoLoteCultura = culturaList[index];
 
   @action
-  selecionarNovoLoteReservatorio() {
+  void selecionarNovoLoteReservatorio() {
     novoLoteReservatorio = reservatorioDetalhes;
     setShowReservatorioDetalhes(false);
   }
 
   @action
-  selecionarNovoLoteProtocolo() {
+  void selecionarNovoLoteProtocolo() {
     setShowReservatorioDetalhes(false);
   }
 
   @action
-  setRegistroData(DateTime dateTime) => registroData = dateTime;
+  DateTime setRegistroData(DateTime dateTime) => registroData = dateTime;
 
   @action
-  setSemeaduraData(DateTime dateTime) => semeaduraData = dateTime;
+  DateTime setSemeaduraData(DateTime dateTime) => semeaduraData = dateTime;
 
   @action
-  setTransplantioData(DateTime dateTime) => transplantioData = dateTime;
+  DateTime setTransplantioData(DateTime dateTime) =>
+      transplantioData = dateTime;
 
   @action
-  setColheitaData(DateTime dateTime) => colheitaData = dateTime;
+  DateTime setColheitaData(DateTime dateTime) => colheitaData = dateTime;
 
   @action
-  setIsEditing(bool value) => isEditing = value;
+  bool setIsEditing(bool value) => isEditing = value;
 
   @action
-  setIsBandeijaEditing(bool value) {
+  void setIsBandeijaEditing(bool value) {
     isBandeijasEditing = value;
     if (!value &&
         bandeijasSemeadasController.text !=
@@ -453,7 +454,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  setIsMudasEditing(bool value) {
+  void setIsMudasEditing(bool value) {
     isMudasEditing = value;
     if (!value &&
         mudasTransplantadasController.text !=
@@ -465,7 +466,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  setIsPlantasEditing(bool value) {
+  void setIsPlantasEditing(bool value) {
     isPlantasEditing = value;
     if (!value &&
         plantasColhidasController.text !=
@@ -477,7 +478,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  setIsEmbalagensEditing(bool value) {
+  void setIsEmbalagensEditing(bool value) {
     isEmbalagensEditing = value;
     if (!value &&
         embalagensProduzidasController.text !=
@@ -489,12 +490,12 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  alterarNome(String name) {
+  void alterarNome(String name) {
     novoLoteName = TextEditingController(text: name);
   }
 
   @action
-  setLoteEditing(Lote lote) {
+  void setLoteEditing(Lote lote) {
     novoLoteName = TextEditingController(text: lote.nome);
     novoLoteCultura = lote.cultura ?? Cultura();
     novoLoteReservatorio = lote.reservatorio ?? Reservatorio();
@@ -510,14 +511,14 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  setDotIndicator(int value) {
+  void setDotIndicator(int value) {
     if (value >= 0 && value <= 4) {
       dotIndicator = value;
     }
   }
 
   @action
-  buscarCulturas() async {
+  Future<void> buscarCulturas() async {
     var culturas = await loteRepository
         .buscarCulturas(authController.usuario.selected_conta!.conta!.id!);
 
@@ -537,7 +538,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  buscarReservatorios() async {
+  Future<void> buscarReservatorios() async {
     var reservatorios = await loteRepository
         .buscarReservatorios(authController.usuario.selected_conta!.conta!.id!);
 
@@ -552,33 +553,34 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  setShowReservatorioDetalhes(bool value) => showReservatorioDetalhes = value;
+  bool setShowReservatorioDetalhes(bool value) =>
+      showReservatorioDetalhes = value;
 
   @action
-  setShowProtocoloDetalhes(bool value) => showProtocoloDetalhes = value;
+  bool setShowProtocoloDetalhes(bool value) => showProtocoloDetalhes = value;
 
   @action
-  setIsNovaCultura(bool value) => isNovaCultura = value;
+  bool setIsNovaCultura(bool value) => isNovaCultura = value;
 
   @action
-  setReservatorioDetalhes(Reservatorio reservatorio) {
+  void setReservatorioDetalhes(Reservatorio reservatorio) {
     reservatorioDetalhes = reservatorio;
     showReservatorioDetalhes = true;
   }
 
   @action
-  setProtocoloDetalhes(Protocolo protocolo) {
+  void setProtocoloDetalhes(Protocolo protocolo) {
     protocoloDetalhes = protocolo;
     showProtocoloDetalhes = true;
   }
 
   @action
-  removeProtocoloDetalhes() {
+  void removeProtocoloDetalhes() {
     protocoloDetalhes = null;
   }
 
   @action
-  setSearchProtocoloText(String value) => searchProtocoloText = value;
+  String setSearchProtocoloText(String value) => searchProtocoloText = value;
 
   @computed
   List<Protocolo> get searchProtocolo {
@@ -594,19 +596,19 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  setProtocolo(Protocolo protocolo) {
+  void setProtocolo(Protocolo protocolo) {
     protocoloVinculado = protocolo;
     isProtocoloValid = true;
   }
 
   @action
-  desvincularProtocolo() {
+  void desvincularProtocolo() {
     protocoloVinculado = null;
     isProtocoloValid = false;
   }
 
   @action
-  buscarReservatorioDetalhes() async {
+  Future<void> buscarReservatorioDetalhes() async {
     var reservatorios = await loteRepository
         .buscarReservatorioDetalhes(reservatorioDetalhes.id!);
 
@@ -636,7 +638,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  prepararListaDetalhesFase() {
+  void prepararListaDetalhesFase() {
     listaFaseDetalhes.clear();
     if (protocoloDetalhes == null) {
       return;
@@ -662,7 +664,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  registrarLote() async {
+  Future<void> registrarLote() async {
     SetorStore setorStore = GetIt.I<SetorStore>();
 
     isNovoLoteLoading = true;
@@ -702,7 +704,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  registrarCultura() async {
+  Future<void> registrarCultura() async {
     if (novaCulturaController.text.isNotEmpty) {
       Cultura novaCultura = Cultura(
         nome: novaCulturaController.text,
@@ -725,7 +727,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  validarRegistro() {
+  bool validarRegistro() {
     bool isValid = novoLoteName.text.isNotEmpty &&
         novoLoteSetor.id != null &&
         novoLoteCultura.id != null;
@@ -741,7 +743,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  alterarLote() async {
+  Future<void> alterarLote() async {
     LoteRepository loteRepository = GetIt.I<LoteRepository>();
     isNovoLoteLoading = true;
 
@@ -775,7 +777,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  alterarProducaoLote() async {
+  Future<void> alterarProducaoLote() async {
     LoteRepository loteRepository = GetIt.I<LoteRepository>();
     isNovoLoteLoading = true;
 
@@ -804,7 +806,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  alterarDatasLote() async {
+  Future<void> alterarDatasLote() async {
     LoteRepository loteRepository = GetIt.I<LoteRepository>();
     isNovoLoteLoading = true;
 
@@ -834,7 +836,7 @@ abstract class _LoteStoreBase with Store {
         protocoloVinculado?.id == protocoloDetalhes?.id;
   }
 
-  limparTudo() {
+  void limparTudo() {
     showTextFormField = false;
     isVisible = false;
     showReservatorioDetalhes = false;
@@ -882,7 +884,7 @@ abstract class _LoteStoreBase with Store {
   bool carregandoFinalizarLotes = false;
 
   @action
-  listaLotesParaFinalizar() {
+  void listaLotesParaFinalizar() {
     finalizarLotes.clear();
     for (var lote in loteList) {
       finalizarLotes.add(LoteSelection(lote: lote, selected: false));
@@ -891,33 +893,33 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  setSeachLotePage(String value) {
+  void setSeachLotePage(String value) {
     searchLotePage = TextEditingController(text: value);
   }
 
   @action
-  selecionarLoteParaFinalizar(int index) {
+  void selecionarLoteParaFinalizar(int index) {
     finalizarLotes[index].selected = !finalizarLotes[index].selected;
     finalizarLotes = List.from(finalizarLotes);
   }
 
   @action
-  selecionarAtividadesParaFinalizar(int index) {
+  void selecionarAtividadesParaFinalizar(int index) {
     atividadesPendentes[index].selected = !atividadesPendentes[index].selected;
     atividadesPendentes = List.from(atividadesPendentes);
   }
 
   @action
-  preencherPlantasColhidas(String value) {
+  void preencherPlantasColhidas(String value) {
     plantasColhidas = value.isNotEmpty ? int.parse(value) : 0;
   }
 
   @action
-  preencherEmbalagensProduzidas(String value) {
+  void preencherEmbalagensProduzidas(String value) {
     embalagensProduzidas = value.isNotEmpty ? int.parse(value) : 0;
   }
 
-  salvarDetalhesLote(int loteId) {
+  void salvarDetalhesLote(int loteId) {
     var loteSelecionado =
         finalizarLotes.firstWhere((element) => element.lote.id == loteId);
 
@@ -928,7 +930,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  deletarAtividades(int index) {
+  void deletarAtividades(int index) {
     atividadesDeletadas.add(atividadesPendentes[index].agenda);
     atividadesPendentes.removeAt(index);
 
@@ -937,7 +939,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  verificarMarcarTodos() {
+  void verificarMarcarTodos() {
     for (var atividade in atividadesPendentes) {
       atividade.selected = true;
     }
@@ -956,7 +958,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  finalizarTodosLotes() async {
+  Future<void> finalizarTodosLotes() async {
     isNovoLoteLoading = true;
     SetorStore setorStore = GetIt.I<SetorStore>();
 
@@ -999,7 +1001,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  deletarAtividadesSelecionadas() async {
+  Future<void> deletarAtividadesSelecionadas() async {
     var ids = atividadesDeletadas.map((e) => e.id).toList();
 
     var result = await loteRepository.deletarAtividades(ids.cast<int>());
@@ -1013,7 +1015,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  finalizarAtividadesSelecionadas() async {
+  Future<void> finalizarAtividadesSelecionadas() async {
     var ids = atividadesPendentes.map((e) => e.agenda.id).toList();
 
     var result = await loteRepository.finalizarAtividades(ids.cast<int>());
@@ -1032,7 +1034,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  verificarAtividades() async {
+  Future<void> verificarAtividades() async {
     carregandoFinalizarLotes = true;
 
     var lotesIds = finalizarLotes
@@ -1058,7 +1060,7 @@ abstract class _LoteStoreBase with Store {
   }
 
   @action
-  limparFinalizacao() {
+  void limparFinalizacao() {
     finalizarLotes.clear();
     atividadesPendentes.clear();
     searchLotePage = TextEditingController(text: '');
@@ -1088,7 +1090,7 @@ abstract class _LoteStoreBase with Store {
   List<Lote> lotesFinalizados = [];
 
   @action
-  buscarLotesFinalizados() async {
+  Future<void> buscarLotesFinalizados() async {
     isLoteListLoading = true;
 
     LoteRepository loteRepository = GetIt.I<LoteRepository>();
@@ -1135,7 +1137,7 @@ abstract class _LoteStoreBase with Store {
     isLoteListLoading = false;
   }
 
-  showLotesFinalizadosErrorToast() {
+  void showLotesFinalizadosErrorToast() {
     toastError(message: 'Ocorreu um erro ao buscar os lotes finalizados');
   }
 }

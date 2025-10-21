@@ -8,8 +8,8 @@ import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/p
 
 Future<void> bottomSheet(
   BuildContext context,
-  CarouselController carouselController,
-  CarouselController controlerPages,
+  CarouselSliderController carouselController,
+  CarouselSliderController controlerPages,
   CadernoCampoStore store
 ) {
   return showModalBottomSheet<void>(

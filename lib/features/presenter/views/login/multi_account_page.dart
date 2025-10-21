@@ -13,8 +13,7 @@ class MultiAccountsPage extends StatefulWidget {
   final Usuario user;
   final bool isLoggedIn;
   const MultiAccountsPage(
-      {Key? key, required this.user, required this.isLoggedIn})
-      : super(key: key);
+      {super.key, required this.user, required this.isLoggedIn});
 
   @override
   State<MultiAccountsPage> createState() => _MultiAccountsPageState();
@@ -251,7 +250,7 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
     );
   }
 
-  showCircularProgressIndicator(BuildContext context) {
+  void showCircularProgressIndicator(BuildContext context) {
     showDialog(
       barrierDismissible: false,
       context: context,

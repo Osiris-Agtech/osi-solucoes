@@ -8,8 +8,8 @@ import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components
 
 Future<void> bottomSheet(
   BuildContext context,
-  CarouselController carouselController,
-  CarouselController controlerPages,
+  CarouselSliderController carouselController,
+  CarouselSliderController controlerPages,
   SetorStore store
 ) {
   return showModalBottomSheet<void>(

@@ -14,8 +14,7 @@ import 'components/detalhes_page/horizontal_lista.dart';
 
 class DetalhesLotePage extends StatefulWidget {
   final bool enableEditing;
-  const DetalhesLotePage({Key? key, this.enableEditing = true})
-      : super(key: key);
+  const DetalhesLotePage({super.key, this.enableEditing = true});
 
   @override
   State<DetalhesLotePage> createState() => _DetalhesLotePageState();
@@ -66,7 +65,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                   ),
                 ),
                 Divider(
-                  color: const Color(0xFF9F9F9F).withOpacity(.6),
+                  color: const Color(0xFF9F9F9F).withValues(alpha: .6),
                   indent: 20,
                   endIndent: 20,
                 ),
@@ -75,7 +74,10 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     padding: const EdgeInsets.only(left: 8),
                     child: SvgPicture.asset(
                       "assets/icons/relatorio_icon.svg",
-                      color: Constants.kPrimaryColor,
+                      colorFilter: ColorFilter.mode(
+                        Constants.kPrimaryColor,
+                        BlendMode.src,
+                      ),
                       width: 24,
                       height: 24,
                     ),
@@ -100,7 +102,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                   ),
                 ),
                 Divider(
-                  color: const Color(0xFF9F9F9F).withOpacity(.6),
+                  color: const Color(0xFF9F9F9F).withValues(alpha: .6),
                   indent: 20,
                   endIndent: 20,
                 ),
@@ -149,7 +151,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                 // colheita(context, store),
                 // const SizedBox(height: 16),
                 Divider(
-                  color: const Color(0xFF9F9F9F).withOpacity(.6),
+                  color: const Color(0xFF9F9F9F).withValues(alpha: .6),
                   indent: 20,
                   endIndent: 20,
                 ),
@@ -165,7 +167,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                   height: 16,
                 ),
                 // Divider(
-                //   color: const Color(0xFF9F9F9F).withOpacity(.6),
+                //   color: const Color(0xFF9F9F9F).withValues(alpha: .6),
                 //   indent: 20,
                 //   endIndent: 20,
                 // ),
@@ -179,7 +181,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
     );
   }
 
-  appBar() {
+  AppBar appBar() {
     return AppBar(
       elevation: 0,
       backgroundColor: Constants.kBackgroundColor,
@@ -200,7 +202,10 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     child: PopupMenuButton(
                       icon: SvgPicture.asset(
                         "assets/icons/settings_icon.svg",
-                        color: Constants.kButtonGrey,
+                        colorFilter: ColorFilter.mode(
+                          Constants.kButtonGrey,
+                          BlendMode.src,
+                        ),
                         height: 20,
                       ),
                       itemBuilder: (context) => [
@@ -211,7 +216,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                             ],
                           ),
                           onTap: () async {
-                            await store.setLoteEditing(store.loteSelecionado);
+                            store.setLoteEditing(store.loteSelecionado);
                             Get.toNamed(Routes.cadastrarLotePage);
                           },
                         ),
@@ -225,7 +230,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
     );
   }
 
-  configuracaoButton() {
+  Padding configuracaoButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: ListTile(
@@ -253,14 +258,14 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
           color: Constants.kPrimaryColor,
         ),
         onTap: () async {
-          await store.setLoteEditing(store.loteSelecionado);
+          store.setLoteEditing(store.loteSelecionado);
           Get.toNamed(Routes.cadastrarLotePage);
         },
       ),
     );
   }
 
-  producaoTitle() {
+  Padding producaoTitle() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
@@ -285,7 +290,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
     );
   }
 
-  dateTitle() {
+  Padding dateTitle() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
@@ -310,7 +315,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
     );
   }
 
-  infoLote() {
+  Column infoLote() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -347,7 +352,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
           child: Text(
             '${store.loteSelecionado.setor?.area?.nome ?? '-'} / ${store.loteSelecionado.setor?.nome ?? '-'}',
             style: TextStyle(
-              color: Constants.kText2.withOpacity(.8),
+              color: Constants.kText2.withValues(alpha: .8),
               fontSize: 18,
               fontWeight: FontWeight.w500,
               fontStyle: FontStyle.italic,
@@ -364,7 +369,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
               Text(
                 'Cultura: ',
                 style: TextStyle(
-                  color: Constants.kText2.withOpacity(.8),
+                  color: Constants.kText2.withValues(alpha: .8),
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
                 ),

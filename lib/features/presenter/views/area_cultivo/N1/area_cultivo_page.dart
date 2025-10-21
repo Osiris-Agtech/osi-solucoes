@@ -1,22 +1,22 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as dtp;
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
-import '../../../viewmodels/area_cultivo_store.dart';
 import '../../home/components/top_app_bar.dart';
 
 class AreaCultivoPage extends StatefulWidget {
-  const AreaCultivoPage({Key? key}) : super(key: key);
+  const AreaCultivoPage({super.key});
   @override
   AreaCultivoPageState createState() => AreaCultivoPageState();
 }
@@ -95,7 +95,7 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
     );
   }
 
-  showList() {
+  Observer showList() {
     return Observer(builder: (_) {
       return SliverList(
         delegate: SliverChildBuilderDelegate(
@@ -115,7 +115,7 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
 }
 
 class CardArea extends StatefulWidget {
-  const CardArea({Key? key, required this.area}) : super(key: key);
+  const CardArea({super.key, required this.area});
   final Area area;
 
   @override
@@ -191,7 +191,7 @@ class _CardAreaState extends State<CardArea> {
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
-                            color: Constants.kText2.withOpacity(.9),
+                            color: Constants.kText2.withValues(alpha: .9),
                           ),
                         ),
                       ),
@@ -212,7 +212,10 @@ class _CardAreaState extends State<CardArea> {
                                 child: SvgPicture.asset(
                                   "assets/icons/location_icon.svg",
                                   height: 18,
-                                  color: Constants.kGreyText,
+                                  colorFilter: ColorFilter.mode(
+                                    Constants.kGreyText,
+                                    BlendMode.src,
+                                  ),
                                 ),
                               ),
                             ),
@@ -273,8 +276,8 @@ class _CardAreaState extends State<CardArea> {
 // ignore: camel_case_types
 class AppBar extends StatefulWidget {
   const AppBar({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<AppBar> createState() => _AppBarState();
@@ -355,10 +358,10 @@ class _AppBarState extends State<AppBar> {
                                         const Text("De:"),
                                         InkWell(
                                           onTap: () {
-                                            DatePicker.showDatePicker(
+                                            dtp.DatePicker.showDatePicker(
                                               context,
                                               currentTime: store.data1,
-                                              locale: LocaleType.pt,
+                                              locale: dtp.LocaleType.pt,
                                               showTitleActions: true,
                                               minTime: DateTime(2018, 3, 5),
                                               maxTime: DateTime(2030, 12, 30),
@@ -366,11 +369,11 @@ class _AppBarState extends State<AppBar> {
                                                 store.setData1(date);
                                                 await store.buscarArea();
                                               },
-                                              theme: const DatePickerTheme(
+                                              theme: const dtp.DatePickerTheme(
                                                 doneStyle: TextStyle(
                                                   color:
                                                       Constants.kPrimaryColor,
-                                                  fontSize: 16,
+                                                  fontSize: 16.0,
                                                 ),
                                               ),
                                             );
@@ -399,10 +402,10 @@ class _AppBarState extends State<AppBar> {
                                         const Text("Até"),
                                         InkWell(
                                           onTap: () {
-                                            DatePicker.showDatePicker(
+                                            dtp.DatePicker.showDatePicker(
                                               context,
                                               currentTime: store.data2,
-                                              locale: LocaleType.pt,
+                                              locale: dtp.LocaleType.pt,
                                               showTitleActions: true,
                                               minTime: DateTime(2018, 3, 5),
                                               maxTime: DateTime(2030, 12, 30),
@@ -410,7 +413,7 @@ class _AppBarState extends State<AppBar> {
                                                 store.setData2(date);
                                                 await store.buscarArea();
                                               },
-                                              theme: const DatePickerTheme(
+                                              theme: const dtp.DatePickerTheme(
                                                 doneStyle: TextStyle(
                                                   color:
                                                       Constants.kPrimaryColor,

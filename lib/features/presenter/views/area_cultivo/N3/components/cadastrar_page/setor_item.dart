@@ -10,9 +10,9 @@ import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 
-setor(
+InkWell setor(
   BuildContext context,
-  CarouselController carouselController,
+  CarouselSliderController carouselController,
   LoteStore store,
   ProtocoloStore protocoloStore,
   GlobalKey<FormFieldState> key,
@@ -88,7 +88,7 @@ setor(
   );
 }
 
-setorPage(
+SizedBox setorPage(
   BuildContext context,
   LoteStore store,
   GlobalKey<FormFieldState> key,
@@ -159,7 +159,7 @@ setorPage(
                         width: 200,
                         child: Observer(builder: (_) {
                           return DropdownButtonFormField<Area>(
-                            value: store.novoLoteArea.id != null
+                            initialValue: store.novoLoteArea.id != null
                                 ? store.novoLoteArea
                                 : null,
                             hint: const Text(
@@ -208,7 +208,7 @@ setorPage(
                           child: Observer(builder: (_) {
                             return DropdownButtonFormField<Setor>(
                               key: key,
-                              value: store.novoLoteSetor.id != null
+                              initialValue: store.novoLoteSetor.id != null
                                   ? store.novoLoteSetor
                                   : null,
                               hint: const Text(

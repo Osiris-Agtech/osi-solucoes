@@ -19,12 +19,12 @@ class AtivBottomSheet extends StatefulWidget {
   final int? indexAcao;
 
   const AtivBottomSheet({
-    Key? key,
+    super.key,
     this.isFase = false,
     required this.isNewRecord,
     this.indexFase,
     this.indexAcao,
-  }) : super(key: key);
+  });
 
   @override
   State<AtivBottomSheet> createState() => _AtivBottomSheetState();
@@ -243,7 +243,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     height: 40,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Constants.kPrimaryColor,
+                        backgroundColor: Constants.kPrimaryColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -436,7 +436,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     height: 40,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Constants.kPrimaryColor,
+                        backgroundColor: Constants.kPrimaryColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),

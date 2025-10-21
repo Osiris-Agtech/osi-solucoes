@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, avoid_print
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:osi_solucoes/features/presenter/models/cargoPermissao/cargo_permissao_model.dart';

@@ -16,7 +16,7 @@ import '../home/components/top_app_bar.dart';
 
 class AjustesPage extends StatefulWidget {
   final String title;
-  const AjustesPage({Key? key, this.title = 'AjustesPage'}) : super(key: key);
+  const AjustesPage({super.key, this.title = 'AjustesPage'});
   @override
   AjustesPageState createState() => AjustesPageState();
 }
@@ -62,8 +62,8 @@ class AjustesPageState extends State<AjustesPage> {
                           store.selectedReservatorio.nome!.isNotEmpty
                       ? () async {
                           if (store.validarCampos()) {
-                            await store.calculoAjusteReposicao();
-                            await store.montandoDescricao();
+                            store.calculoAjusteReposicao();
+                            store.montandoDescricao();
                             Get.toNamed(Routes.resultadoajustePage);
                           }
                         }
@@ -117,8 +117,9 @@ class AjustesPageState extends State<AjustesPage> {
                             builder: (_) {
                               return DropdownSearch<Reservatorio>(
                                 key: dropDownKey,
-                                mode: Mode.MENU,
-                                items: store.reservatorioList,
+                                mode: Mode.form,
+                                items: (filter, infiniteScrollProps) =>
+                                    store.reservatorioList,
                                 dropdownBuilder: (context, selectedItem) {
                                   if (selectedItem != null) {
                                     return Text(
@@ -134,75 +135,100 @@ class AjustesPageState extends State<AjustesPage> {
                                   );
                                 },
                                 filterFn: (reservatorio, nome) {
-                                  bool contains = reservatorio!.nome!
+                                  bool contains = reservatorio.nome!
                                       .toLowerCase()
-                                      .contains(nome!.toLowerCase());
+                                      .contains(nome.toLowerCase());
                                   return contains;
                                 },
-                                popupItemBuilder:
-                                    (ctx, reservatorio, selected) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16.0),
-                                    child: DropdownMenuItem<Reservatorio>(
-                                      value: reservatorio,
-                                      child: Text(
-                                        reservatorio.nome!,
-                                        overflow: TextOverflow.visible,
+                                popupProps: PopupProps.dialog(
+                                  // showSearchBox agora está dentro de popupProps
+                                  showSearchBox: true,
+
+                                  // itemBuilder mudou a assinatura (não tem mais 'selected', agora é 'isDisabled' e 'isSelected')
+                                  itemBuilder: (ctx, reservatorio, isDisabled,
+                                      isSelected) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0),
+                                      child: DropdownMenuItem<Reservatorio>(
+                                        value: reservatorio,
+                                        child: Text(
+                                          reservatorio.nome!,
+                                          overflow: TextOverflow.visible,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                                emptyBuilder: (ctx, _) {
-                                  return const Center(
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Text(
-                                        'Nenhum reservatório com solução nutritiva encontrado',
-                                        textAlign: TextAlign.center,
+                                    );
+                                  },
+
+                                  // emptyBuilder agora está dentro de popupProps
+                                  emptyBuilder: (ctx, searchText) {
+                                    return const Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: Text(
+                                          'Nenhum reservatório com solução nutritiva encontrado',
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                                dropDownButton: const Icon(
-                                  Icons.arrow_drop_down,
-                                  size: 30,
-                                  color: Constants.kPrimaryColor,
+                                    );
+                                  },
                                 ),
-                                dropdownSearchDecoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  prefixIconConstraints: const BoxConstraints(
-                                      maxHeight: 50, maxWidth: 50),
-                                  contentPadding:
-                                      const EdgeInsets.only(top: 15),
-                                  alignLabelWithHint: true,
-                                  hintText: "Buscar Reservatório...",
-                                  prefixIcon: Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 10.0, left: 10, top: 5),
-                                    child: Observer(builder: (_) {
-                                      return store.selectedReservatorio.nome !=
-                                                  null &&
-                                              store.selectedReservatorio.nome!
-                                                  .isNotEmpty
-                                          ? SvgPicture.asset(
-                                              "assets/icons/reservatorio_icon.svg",
-                                            )
-                                          : Opacity(
-                                              opacity: 0.6,
-                                              child: SvgPicture.asset(
+                                suffixProps: DropdownSuffixProps(
+                                  dropdownButtonProps: DropdownButtonProps(
+                                    iconClosed: const Icon(
+                                      Icons.arrow_drop_down,
+                                      size: 30,
+                                      color: Constants.kPrimaryColor,
+                                    ),
+                                    iconOpened: const Icon(
+                                      Icons.arrow_drop_down,
+                                      size: 30,
+                                      color: Constants.kPrimaryColor,
+                                    ),
+                                  ),
+                                ),
+                                decoratorProps: DropDownDecoratorProps(
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    prefixIconConstraints: const BoxConstraints(
+                                      maxHeight: 50,
+                                      maxWidth: 50,
+                                    ),
+                                    contentPadding:
+                                        const EdgeInsets.only(top: 15),
+                                    alignLabelWithHint: true,
+                                    hintText: "Buscar Reservatório...",
+                                    prefixIcon: Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 10.0,
+                                        left: 10,
+                                        top: 5,
+                                      ),
+                                      child: Observer(builder: (_) {
+                                        return store.selectedReservatorio
+                                                        .nome !=
+                                                    null &&
+                                                store.selectedReservatorio.nome!
+                                                    .isNotEmpty
+                                            ? SvgPicture.asset(
                                                 "assets/icons/reservatorio_icon.svg",
-                                              ),
-                                            );
-                                    }),
+                                              )
+                                            : Opacity(
+                                                opacity: 0.6,
+                                                child: SvgPicture.asset(
+                                                  "assets/icons/reservatorio_icon.svg",
+                                                ),
+                                              );
+                                      }),
+                                    ),
                                   ),
                                 ),
                                 onChanged: (reservatorio) {
                                   store.selectReservatorio(reservatorio!);
                                 },
-                                showSearchBox: true,
-                                showAsSuffixIcons: true,
+                                // showSearchBox: true,
+                                // showAsSuffixIcons: true,
                               );
                             },
                           ),
@@ -698,8 +724,8 @@ class AjustesPageState extends State<AjustesPage> {
 
 class ButtonWidget extends StatefulWidget {
   const ButtonWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ButtonWidget> createState() => _ButtonWidgetState();
@@ -723,7 +749,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24)),
-              primary: Constants.kPrimaryColor,
+              backgroundColor: Constants.kPrimaryColor,
             ),
             child: const Text(
               'Calcular',
@@ -756,6 +782,8 @@ class MySeparator extends StatelessWidget {
         final dashHeight = height;
         final dashCount = (boxWidth / (2 * dashWidth)).floor();
         return Flex(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          direction: Axis.horizontal,
           children: List.generate(dashCount, (_) {
             return SizedBox(
               width: dashWidth,
@@ -765,8 +793,6 @@ class MySeparator extends StatelessWidget {
               ),
             );
           }),
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          direction: Axis.horizontal,
         );
       },
     );

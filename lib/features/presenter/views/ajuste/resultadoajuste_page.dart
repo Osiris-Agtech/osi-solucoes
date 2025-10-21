@@ -12,8 +12,7 @@ import '../home/components/top_app_bar.dart';
 
 class ResultadoajustePage extends StatefulWidget {
   final String title;
-  const ResultadoajustePage({Key? key, this.title = 'ResultadoajustePage'})
-      : super(key: key);
+  const ResultadoajustePage({super.key, this.title = 'ResultadoajustePage'});
   @override
   ResultadoajustePageState createState() => ResultadoajustePageState();
 }
@@ -81,7 +80,7 @@ class ResultadoajustePageState extends State<ResultadoajustePage>
   }
 }
 
-showConfirmDialog(BuildContext context) {
+void showConfirmDialog(BuildContext context) {
   final AjustesStore store = GetIt.I<AjustesStore>();
   showModalBottomSheet(
       context: context,
@@ -129,8 +128,8 @@ showConfirmDialog(BuildContext context) {
                   ),
                 ),
                 Expanded(
-                  child: Container(),
                   flex: 3,
+                  child: Container(),
                 ),
                 const Text(
                   'Caso registre, o ajuste ficará salvo no caderno de campo',
@@ -141,8 +140,8 @@ showConfirmDialog(BuildContext context) {
                       color: Color(0xB2333333)),
                 ),
                 Expanded(
-                  child: Container(),
                   flex: 4,
+                  child: Container(),
                 ),
                 Center(
                   child: SizedBox(
@@ -150,7 +149,7 @@ showConfirmDialog(BuildContext context) {
                     height: 30,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: Constants.kPrimaryColor),
+                          backgroundColor: Constants.kPrimaryColor),
                       child: const Text(
                         "Sim",
                         style: TextStyle(
@@ -158,6 +157,7 @@ showConfirmDialog(BuildContext context) {
                       ),
                       onPressed: () async {
                         await store.registrarAtividade();
+                        if(!context.mounted) return;
                         showDoneAnimation(context);
                         await Future.delayed(
                             const Duration(milliseconds: 1500));
@@ -192,15 +192,15 @@ showConfirmDialog(BuildContext context) {
                   ),
                 ),
                 Expanded(
-                  child: Container(),
                   flex: 4,
+                  child: Container(),
                 ),
               ],
             ));
       });
 }
 
-showDoneAnimation(BuildContext context) {
+void showDoneAnimation(BuildContext context) {
   showDialog(
     barrierDismissible: false,
     barrierColor: Colors.white,
@@ -218,9 +218,9 @@ showDoneAnimation(BuildContext context) {
 
 class TabSolucaoConcentrada extends StatelessWidget {
   const TabSolucaoConcentrada({
-    Key? key,
+    super.key,
     required this.scrollController1,
-  }) : super(key: key);
+  });
 
   final ScrollController scrollController1;
 
@@ -420,8 +420,8 @@ class TabSolucaoConcentrada extends StatelessWidget {
 
 class ButtonCompleted extends StatelessWidget {
   const ButtonCompleted({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -435,7 +435,7 @@ class ButtonCompleted extends StatelessWidget {
           width: MediaQuery.of(context).size.width * .69,
           height: 40,
           child: ElevatedButton(
-            style: ElevatedButton.styleFrom(primary: Constants.kPrimaryColor),
+            style: ElevatedButton.styleFrom(backgroundColor: Constants.kPrimaryColor),
             child: const Text(
               "Concluir",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
@@ -452,9 +452,9 @@ class ButtonCompleted extends StatelessWidget {
 
 class AppBarCustom extends StatelessWidget {
   const AppBarCustom({
-    Key? key,
+    super.key,
     required this.tabController,
-  }) : super(key: key);
+  });
 
   final TabController tabController;
 
@@ -500,9 +500,9 @@ class TabFertilizantes extends StatelessWidget {
   final AjustesStore store = GetIt.I<AjustesStore>();
 
   TabFertilizantes({
-    Key? key,
+    super.key,
     required this.scrollController1,
-  }) : super(key: key);
+  });
 
   final ScrollController scrollController1;
 
@@ -579,7 +579,7 @@ class TabFertilizantes extends StatelessWidget {
               child: Card(
                 color: const Color(0xffF5F5F5),
                 child: Scrollbar(
-                  isAlwaysShown: true,
+                  thumbVisibility: true,
                   controller: scrollController1,
                   radius: const Radius.circular(12),
                   child: ListView.builder(

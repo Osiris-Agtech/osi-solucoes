@@ -12,23 +12,23 @@ import '../../../../core/utils/toast.dart';
 class CadastrarProtocoloPage extends StatefulWidget {
   final bool isShortcut;
   const CadastrarProtocoloPage({
-    Key? key,
+    super.key,
     this.isShortcut = false,
-  }) : super(key: key);
+  });
 
   @override
   State<CadastrarProtocoloPage> createState() => _CadastrarProtocoloPageState();
 }
 
 class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
-  CarouselController carouselController = CarouselController();
-  CarouselController controlerPages = CarouselController();
+  CarouselSliderController carouselController = CarouselSliderController();
+  CarouselSliderController controlerPages = CarouselSliderController();
   ProtocoloStore store = GetIt.I<ProtocoloStore>();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       store.buscarCulturas();
       store.buscarFases();
       store.setMostrarErroFormulario(false);
@@ -286,7 +286,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
           child: Observer(builder: (_) {
             return ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Constants.kPrimaryColor,
+                backgroundColor: Constants.kPrimaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),

@@ -10,7 +10,8 @@ import 'package:osi_solucoes/features/presenter/views/solucao/cadastrar_solucao_
 
 import '../../../../../../core/constants/constants.dart';
 
-Widget receitaPage(BuildContext context, CarouselController controlerPages) {
+Widget receitaPage(
+    BuildContext context, CarouselSliderController controlerPages) {
   ReservatoriosStore store = GetIt.I<ReservatoriosStore>();
 
   return SizedBox(

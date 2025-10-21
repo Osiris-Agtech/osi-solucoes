@@ -7,11 +7,11 @@ part of 'solucaoConta_model.dart';
 // **************************************************************************
 
 SolucaoConta _$SolucaoContaFromJson(Map<String, dynamic> json) => SolucaoConta(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       created_at: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
-      conta_original: json['conta_original'] as int?,
+      conta_original: (json['conta_original'] as num?)?.toInt(),
       conta: json['conta'] == null
           ? null
           : Conta.fromJson(json['conta'] as Map<String, dynamic>),

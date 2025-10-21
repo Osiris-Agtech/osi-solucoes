@@ -5,7 +5,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_atividadeItemDetalhes.dart';
 
-protocoloAtividadeDetalhes(LoteStore store) {
+ListView protocoloAtividadeDetalhes(LoteStore store) {
   return ListView(
     shrinkWrap: true,
     physics: const BouncingScrollPhysics(),
@@ -75,7 +75,7 @@ protocoloAtividadeDetalhes(LoteStore store) {
 }
 
 class ListFases extends StatelessWidget {
-  const ListFases({Key? key}) : super(key: key);
+  const ListFases({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +155,7 @@ class ListFases extends StatelessWidget {
                                     indexAcao: entry.key,
                                     acao: entry.value,
                                   ))
-                              .toList()
+                              
                         ],
                       );
                     } else {

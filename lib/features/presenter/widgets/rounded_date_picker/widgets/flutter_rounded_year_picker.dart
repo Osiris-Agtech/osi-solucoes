@@ -27,7 +27,7 @@ class FlutterRoundedYearPicker extends StatefulWidget {
   /// Rarely used directly. Instead, typically used as part of the dialog shown
   /// by [showDatePicker].
   FlutterRoundedYearPicker(
-      {Key? key,
+      {super.key,
       required this.selectedDate,
       required this.onChanged,
       required this.firstDate,
@@ -36,8 +36,7 @@ class FlutterRoundedYearPicker extends StatefulWidget {
       this.fontFamily,
       this.dragStartBehavior = DragStartBehavior.start,
       this.style})
-      : assert(!firstDate.isAfter(lastDate)),
-        super(key: key);
+      : assert(!firstDate.isAfter(lastDate));
 
   /// The currently selected date.
   ///

@@ -8,7 +8,7 @@ part of 'lotes_atividades_model.dart';
 
 LotesAtividades _$LotesAtividadesFromJson(Map<String, dynamic> json) =>
     LotesAtividades(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       atividade: json['atividade'] == null
           ? null
           : Atividade.fromJson(json['atividade'] as Map<String, dynamic>),

@@ -4,14 +4,14 @@ import '../models/usuario/usuario_model.dart';
 
 part 'auth_controller.g.dart';
 
-class AuthController = _AuthControllerBase with _$AuthController;
+class AuthController = AuthControllerBase with _$AuthController;
 
-abstract class _AuthControllerBase with Store {
+abstract class AuthControllerBase with Store {
   @observable
   Usuario usuario = Usuario();
 
   @action
-  setUser(Usuario user) => usuario = user;
+  Usuario setUser(Usuario user) => usuario = user;
 
   // @observable
   // bool isDevelop = false;

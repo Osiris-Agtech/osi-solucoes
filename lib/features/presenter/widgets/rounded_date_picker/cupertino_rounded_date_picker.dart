@@ -4,7 +4,7 @@ import 'era_mode.dart';
 import 'flutter_cupertino_rounded_date_picker_widget.dart';
 
 class CupertinoRoundedDatePicker {
-  static show(BuildContext context,
+  static Future show(BuildContext context,
       {Locale? locale,
       DateTime? initialDate,
       DateTime? minimumDate,

@@ -40,17 +40,17 @@ class LotStatusMetricsWidget extends StatefulWidget {
   final VoidCallback? onViewAll;
 
   const LotStatusMetricsWidget({
-    Key? key,
+    super.key,
     this.title = 'Status dos Lotes',
     this.subtitle = 'Situação atual',
     this.onViewAll,
-  }) : super(key: key);
+  });
 
   @override
-  _LotStatusMetricsWidgetState createState() => _LotStatusMetricsWidgetState();
+  LotStatusMetricsWidgetState createState() => LotStatusMetricsWidgetState();
 }
 
-class _LotStatusMetricsWidgetState extends State<LotStatusMetricsWidget>
+class LotStatusMetricsWidgetState extends State<LotStatusMetricsWidget>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
@@ -186,7 +186,7 @@ class _LotStatusMetricsWidgetState extends State<LotStatusMetricsWidget>
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: Colors.black.withValues(alpha: .08),
                   blurRadius: 20,
                   offset: const Offset(0, 4),
                 ),
@@ -287,10 +287,10 @@ class _LotStatusMetricsWidgetState extends State<LotStatusMetricsWidget>
     return Container(
       padding: EdgeInsets.all(isVerySmall ? 12 : 16),
       decoration: BoxDecoration(
-        color: Constants.kPrimaryColor.withOpacity(0.05),
+        color: Constants.kPrimaryColor.withValues(alpha: .05),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Constants.kPrimaryColor.withOpacity(0.1),
+          color: Constants.kPrimaryColor.withValues(alpha: .1),
         ),
       ),
       child: Row(
@@ -379,13 +379,13 @@ class _LotStatusMetricsWidgetState extends State<LotStatusMetricsWidget>
                   ),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? data.color.withOpacity(0.1)
+                        ? data.color.withValues(alpha: .1)
                         : Colors.grey[50],
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isSelected
                           ? data.color
-                          : Colors.grey.withOpacity(0.2),
+                          : Colors.grey.withValues(alpha: .2),
                       width: isSelected ? 2 : 1,
                     ),
                   ),
@@ -402,7 +402,7 @@ class _LotStatusMetricsWidgetState extends State<LotStatusMetricsWidget>
                             Container(
                               padding: const EdgeInsets.all(6),
                               decoration: BoxDecoration(
-                                color: data.color.withOpacity(0.2),
+                                color: data.color.withValues(alpha: .2),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Icon(
@@ -496,10 +496,10 @@ class _LotStatusMetricsWidgetState extends State<LotStatusMetricsWidget>
       margin: EdgeInsets.only(top: isVerySmall ? 4 : 8),
       padding: EdgeInsets.all(isVerySmall ? 8 : 10),
       decoration: BoxDecoration(
-        color: selectedData.color.withOpacity(0.05),
+        color: selectedData.color.withValues(alpha: .05),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: selectedData.color.withOpacity(0.2),
+          color: selectedData.color.withValues(alpha: .2),
         ),
       ),
       child: Column(
@@ -527,7 +527,7 @@ class _LotStatusMetricsWidgetState extends State<LotStatusMetricsWidget>
                   vertical: isVerySmall ? 1 : 2,
                 ),
                 decoration: BoxDecoration(
-                  color: selectedData.color.withOpacity(0.1),
+                  color: selectedData.color.withValues(alpha: .1),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -567,7 +567,7 @@ class _LotStatusMetricsWidgetState extends State<LotStatusMetricsWidget>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: .08),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -588,7 +588,7 @@ class _LotStatusMetricsWidgetState extends State<LotStatusMetricsWidget>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: .08),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -629,8 +629,8 @@ class _LotStatusMetricsWidgetState extends State<LotStatusMetricsWidget>
               icon: const Icon(Icons.refresh, size: 16),
               label: const Text('Tentar novamente'),
               style: ElevatedButton.styleFrom(
-                primary: Constants.kPrimaryColor,
-                onPrimary: Colors.white,
+                backgroundColor: Constants.kPrimaryColor,
+                foregroundColor: Colors.white,
                 elevation: 0,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -651,7 +651,7 @@ class _LotStatusMetricsWidgetState extends State<LotStatusMetricsWidget>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: .08),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),

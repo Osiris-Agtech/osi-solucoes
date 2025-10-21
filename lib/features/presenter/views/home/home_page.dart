@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -23,13 +25,13 @@ import '../../viewmodels/modulos_store.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
-  const HomePage({Key? key, this.title = "Home"}) : super(key: key);
+  const HomePage({super.key, this.title = "Home"});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   final AuthController authController = GetIt.I<AuthController>();
   ModulosStore modulosStore = GetIt.I<ModulosStore>();
   HomeStore store = GetIt.I<HomeStore>();
@@ -57,13 +59,13 @@ class _HomePageState extends State<HomePage> {
           'Tem certeza que deseja fechar o APP ?',
           style: TextStyle(
             fontSize: 18,
-            color: Colors.black.withOpacity(.75),
+            color: Colors.black.withValues(alpha: .75),
             fontWeight: FontWeight.w600,
           ),
         ),
         actions: [
           TextButton(
-            style: TextButton.styleFrom(primary: Colors.grey),
+            style: TextButton.styleFrom(backgroundColor: Colors.grey),
             onPressed: () async {
               exit(0); // kill app
             },
@@ -106,8 +108,8 @@ class _HomePageState extends State<HomePage> {
         statusBarIconBrightness: Brightness.dark,
       ),
       child: SafeArea(
-        child: WillPopScope(
-          onWillPop: () => exitApp(),
+        child: PopScope(
+          onPopInvokedWithResult: (_, __) => exitApp(),
           child: Scaffold(
             backgroundColor: Constants.kSecondBackgroundColor,
             body: Stack(
@@ -213,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                             "...",
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.white.withOpacity(.8),
+                          color: Colors.white.withValues(alpha: .8),
                           fontStyle: FontStyle.italic,
                         ),
                       );
@@ -223,7 +225,7 @@ class _HomePageState extends State<HomePage> {
               ),
               // Expanded(flex: 1, child: Container()),
               Divider(
-                color: const Color(0xFF9F9F9F).withOpacity(.4),
+                color: const Color(0xFF9F9F9F).withValues(alpha: .4),
               ),
               // Expanded(flex: 1, child: Container()),
               Padding(
@@ -237,7 +239,8 @@ class _HomePageState extends State<HomePage> {
                       IconButton(
                         icon: SvgPicture.asset(
                           "assets/icons/settings_icon.svg",
-                          color: Constants.kBackgroundColor.withOpacity(.8),
+                          color:
+                              Constants.kBackgroundColor.withValues(alpha: .8),
                         ),
                         onPressed: () {},
                       ),
@@ -263,7 +266,10 @@ class _HomePageState extends State<HomePage> {
                       IconButton(
                         icon: SvgPicture.asset(
                           "assets/icons/hexagon_icon.svg",
-                          color: Constants.kBackgroundColor.withOpacity(.8),
+                          colorFilter: ColorFilter.mode(
+                            Constants.kBackgroundColor.withValues(alpha: .8),
+                            BlendMode.src,
+                          ),
                         ),
                         onPressed: () {},
                       ),
@@ -318,7 +324,7 @@ class _HomePageState extends State<HomePage> {
                           onPressed: () {},
                           icon: Icon(
                             Icons.published_with_changes,
-                            color: Colors.white.withOpacity(.8),
+                            color: Colors.white.withValues(alpha: .8),
                           ),
                         ),
                         Padding(
@@ -334,7 +340,7 @@ class _HomePageState extends State<HomePage> {
                 );
               }),
               Divider(
-                color: const Color(0xFF9F9F9F).withOpacity(.4),
+                color: const Color(0xFF9F9F9F).withValues(alpha: .4),
               ),
               Padding(
                 padding: EdgeInsets.only(left: sizeWidth * 0.122
@@ -347,7 +353,10 @@ class _HomePageState extends State<HomePage> {
                       IconButton(
                         icon: SvgPicture.asset(
                           "assets/icons/info_icon.svg",
-                          color: Constants.kBackgroundColor.withOpacity(.8),
+                          colorFilter: ColorFilter.mode(
+                            Constants.kBackgroundColor.withValues(alpha: .8),
+                            BlendMode.src,
+                          ),
                         ),
                         onPressed: () {},
                       ),
@@ -385,7 +394,8 @@ class _HomePageState extends State<HomePage> {
                       IconButton(
                         icon: SvgPicture.asset(
                           "assets/icons/external_link_icon.svg",
-                          color: Constants.kBackgroundColor.withOpacity(.8),
+                          color:
+                              Constants.kBackgroundColor.withValues(alpha: .8),
                         ),
                         onPressed: () {},
                       ),
@@ -723,6 +733,7 @@ class _HomePageState extends State<HomePage> {
       collapsedHeight: 65,
       toolbarHeight: 50,
       bottom: PreferredSize(
+        preferredSize: const Size(double.infinity, 3),
         child: Divider(
           color: Colors.black,
           height: 21,
@@ -730,7 +741,6 @@ class _HomePageState extends State<HomePage> {
           indent: size.width * 0.39,
           endIndent: size.width * 0.39,
         ),
-        preferredSize: const Size(double.infinity, 3),
       ),
       title: Image.asset(
         "assets/images/osiris-logo.png",
@@ -783,12 +793,12 @@ class _HomePageState extends State<HomePage> {
                 padding: EdgeInsets.only(top: size.height * 0.03),
                 child: const CircleAvatar(
                   backgroundColor: Constants.kPrimaryColor,
+                  minRadius: 25,
                   child: Icon(
                     Icons.person,
                     color: Constants.kBackgroundColor,
                     size: 25,
                   ),
-                  minRadius: 25,
                 ),
               ),
               Padding(
@@ -888,7 +898,7 @@ class _HomePageState extends State<HomePage> {
           boxShadow: [
             BoxShadow(
               offset: const Offset(0, 2),
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
               blurRadius: 8,
               spreadRadius: 0,
             ),
@@ -902,7 +912,7 @@ class _HomePageState extends State<HomePage> {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.15),
+                color: color.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
@@ -942,7 +952,7 @@ class _HomePageState extends State<HomePage> {
         boxShadow: [
           BoxShadow(
             offset: const Offset(0, 2),
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 12,
             spreadRadius: 0,
           ),
@@ -958,7 +968,7 @@ class _HomePageState extends State<HomePage> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.15),
+                  color: color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
@@ -1055,7 +1065,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black.withOpacity(.7),
+                        color: Colors.black.withValues(alpha: .7),
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -1092,7 +1102,7 @@ class _HomePageState extends State<HomePage> {
           boxShadow: [
             BoxShadow(
               offset: const Offset(0, 4),
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 20,
               spreadRadius: 0,
             ),
@@ -1108,7 +1118,7 @@ class _HomePageState extends State<HomePage> {
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.15),
+                  color: color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Center(
@@ -1189,7 +1199,7 @@ class _HomePageState extends State<HomePage> {
               ? [
                   BoxShadow(
                     offset: const Offset(0, 2),
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 4,
                     spreadRadius: 0,
                   ),
@@ -1237,7 +1247,7 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
         boxShadow: [
           BoxShadow(
             offset: const Offset(0, 8),
-            color: Colors.black.withOpacity(0.12),
+            color: Colors.black.withValues(alpha: 0.12),
             blurRadius: 24,
             spreadRadius: 0,
           ),
@@ -1258,8 +1268,8 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.white.withOpacity(0.2),
-                    Colors.white.withOpacity(0.05),
+                    Colors.white.withValues(alpha: 0.2),
+                    Colors.white.withValues(alpha: 0.05),
                   ],
                 ),
               ),
@@ -1301,8 +1311,8 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                         shape: BoxShape.circle,
                         gradient: LinearGradient(
                           colors: [
-                            Colors.white.withOpacity(0.3),
-                            Colors.white.withOpacity(0.1),
+                            Colors.white.withValues(alpha: 0.3),
+                            Colors.white.withValues(alpha: 0.1),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -1310,7 +1320,7 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                         boxShadow: [
                           BoxShadow(
                             offset: const Offset(0, 4),
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withValues(alpha: 0.1),
                             blurRadius: 12,
                             spreadRadius: 0,
                           ),
@@ -1358,10 +1368,10 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.3),
+                            color: Colors.white.withValues(alpha: 0.3),
                             width: 1,
                           ),
                         ),
@@ -1398,8 +1408,8 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                     borderRadius: BorderRadius.circular(2),
                     gradient: LinearGradient(
                       colors: [
-                        Colors.white.withOpacity(0.6),
-                        Colors.white.withOpacity(0.3),
+                        Colors.white.withValues(alpha: 0.6),
+                        Colors.white.withValues(alpha: 0.3),
                       ],
                     ),
                   ),
@@ -1420,16 +1430,16 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
         width: 44,
         height: 44,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Colors.white.withOpacity(0.3),
+            color: Colors.white.withValues(alpha: 0.3),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
               offset: const Offset(0, 2),
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 8,
               spreadRadius: 0,
             ),
@@ -1455,16 +1465,16 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
           width: 44,
           height: 44,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Colors.white.withOpacity(0.3),
+              color: Colors.white.withValues(alpha: 0.3),
               width: 1,
             ),
             boxShadow: [
               BoxShadow(
                 offset: const Offset(0, 2),
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 8,
                 spreadRadius: 0,
               ),
@@ -1497,7 +1507,7 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                       boxShadow: [
                         BoxShadow(
                           offset: const Offset(0, 2),
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withValues(alpha: 0.2),
                           blurRadius: 4,
                           spreadRadius: 0,
                         ),

@@ -6,10 +6,11 @@ part of 'recuperar_senha_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
-  final _$isLoadingAtom = Atom(name: '_RecuperarSenhaStoreBase.isLoading');
+mixin _$RecuperarSenhaStore on RecuperarSenhaStoreBase, Store {
+  late final _$isLoadingAtom =
+      Atom(name: 'RecuperarSenhaStoreBase.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -24,8 +25,8 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
     });
   }
 
-  final _$mostrarSenhaAtom =
-      Atom(name: '_RecuperarSenhaStoreBase.mostrarSenha');
+  late final _$mostrarSenhaAtom =
+      Atom(name: 'RecuperarSenhaStoreBase.mostrarSenha', context: context);
 
   @override
   bool get mostrarSenha {
@@ -40,8 +41,8 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
     });
   }
 
-  final _$mostrarConfirmarSenhaAtom =
-      Atom(name: '_RecuperarSenhaStoreBase.mostrarConfirmarSenha');
+  late final _$mostrarConfirmarSenhaAtom = Atom(
+      name: 'RecuperarSenhaStoreBase.mostrarConfirmarSenha', context: context);
 
   @override
   bool get mostrarConfirmarSenha {
@@ -57,8 +58,8 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
     });
   }
 
-  final _$usuarioEncontradoAtom =
-      Atom(name: '_RecuperarSenhaStoreBase.usuarioEncontrado');
+  late final _$usuarioEncontradoAtom =
+      Atom(name: 'RecuperarSenhaStoreBase.usuarioEncontrado', context: context);
 
   @override
   Usuario? get usuarioEncontrado {
@@ -73,7 +74,8 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
     });
   }
 
-  final _$emailAtom = Atom(name: '_RecuperarSenhaStoreBase.email');
+  late final _$emailAtom =
+      Atom(name: 'RecuperarSenhaStoreBase.email', context: context);
 
   @override
   TextEditingController get email {
@@ -88,8 +90,8 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
     });
   }
 
-  final _$codigoGeradoAtom =
-      Atom(name: '_RecuperarSenhaStoreBase.codigoGerado');
+  late final _$codigoGeradoAtom =
+      Atom(name: 'RecuperarSenhaStoreBase.codigoGerado', context: context);
 
   @override
   String get codigoGerado {
@@ -104,7 +106,8 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
     });
   }
 
-  final _$codigo1Atom = Atom(name: '_RecuperarSenhaStoreBase.codigo1');
+  late final _$codigo1Atom =
+      Atom(name: 'RecuperarSenhaStoreBase.codigo1', context: context);
 
   @override
   TextEditingController get codigo1 {
@@ -119,7 +122,8 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
     });
   }
 
-  final _$codigo2Atom = Atom(name: '_RecuperarSenhaStoreBase.codigo2');
+  late final _$codigo2Atom =
+      Atom(name: 'RecuperarSenhaStoreBase.codigo2', context: context);
 
   @override
   TextEditingController get codigo2 {
@@ -134,7 +138,8 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
     });
   }
 
-  final _$codigo3Atom = Atom(name: '_RecuperarSenhaStoreBase.codigo3');
+  late final _$codigo3Atom =
+      Atom(name: 'RecuperarSenhaStoreBase.codigo3', context: context);
 
   @override
   TextEditingController get codigo3 {
@@ -149,7 +154,8 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
     });
   }
 
-  final _$codigo4Atom = Atom(name: '_RecuperarSenhaStoreBase.codigo4');
+  late final _$codigo4Atom =
+      Atom(name: 'RecuperarSenhaStoreBase.codigo4', context: context);
 
   @override
   TextEditingController get codigo4 {
@@ -164,7 +170,8 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
     });
   }
 
-  final _$novaSenhaAtom = Atom(name: '_RecuperarSenhaStoreBase.novaSenha');
+  late final _$novaSenhaAtom =
+      Atom(name: 'RecuperarSenhaStoreBase.novaSenha', context: context);
 
   @override
   TextEditingController get novaSenha {
@@ -179,8 +186,8 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
     });
   }
 
-  final _$confirmarNovaSenhaAtom =
-      Atom(name: '_RecuperarSenhaStoreBase.confirmarNovaSenha');
+  late final _$confirmarNovaSenhaAtom = Atom(
+      name: 'RecuperarSenhaStoreBase.confirmarNovaSenha', context: context);
 
   @override
   TextEditingController get confirmarNovaSenha {
@@ -195,104 +202,104 @@ mixin _$RecuperarSenhaStore on _RecuperarSenhaStoreBase, Store {
     });
   }
 
-  final _$verificarEmailAsyncAction =
-      AsyncAction('_RecuperarSenhaStoreBase.verificarEmail');
+  late final _$verificarEmailAsyncAction =
+      AsyncAction('RecuperarSenhaStoreBase.verificarEmail', context: context);
 
   @override
-  Future verificarEmail() {
+  Future<void> verificarEmail() {
     return _$verificarEmailAsyncAction.run(() => super.verificarEmail());
   }
 
-  final _$gerarCodigoAsyncAction =
-      AsyncAction('_RecuperarSenhaStoreBase.gerarCodigo');
+  late final _$gerarCodigoAsyncAction =
+      AsyncAction('RecuperarSenhaStoreBase.gerarCodigo', context: context);
 
   @override
-  Future gerarCodigo() {
+  Future<void> gerarCodigo() {
     return _$gerarCodigoAsyncAction.run(() => super.gerarCodigo());
   }
 
-  final _$enviarCodigoAsyncAction =
-      AsyncAction('_RecuperarSenhaStoreBase.enviarCodigo');
+  late final _$enviarCodigoAsyncAction =
+      AsyncAction('RecuperarSenhaStoreBase.enviarCodigo', context: context);
 
   @override
   Future<bool> enviarCodigo() {
     return _$enviarCodigoAsyncAction.run(() => super.enviarCodigo());
   }
 
-  final _$alterarSenhaAsyncAction =
-      AsyncAction('_RecuperarSenhaStoreBase.alterarSenha');
+  late final _$alterarSenhaAsyncAction =
+      AsyncAction('RecuperarSenhaStoreBase.alterarSenha', context: context);
 
   @override
-  Future alterarSenha() {
+  Future<void> alterarSenha() {
     return _$alterarSenhaAsyncAction.run(() => super.alterarSenha());
   }
 
-  final _$_RecuperarSenhaStoreBaseActionController =
-      ActionController(name: '_RecuperarSenhaStoreBase');
+  late final _$RecuperarSenhaStoreBaseActionController =
+      ActionController(name: 'RecuperarSenhaStoreBase', context: context);
 
   @override
-  dynamic switchMostrarSenha() {
-    final _$actionInfo = _$_RecuperarSenhaStoreBaseActionController.startAction(
-        name: '_RecuperarSenhaStoreBase.switchMostrarSenha');
+  void switchMostrarSenha() {
+    final _$actionInfo = _$RecuperarSenhaStoreBaseActionController.startAction(
+        name: 'RecuperarSenhaStoreBase.switchMostrarSenha');
     try {
       return super.switchMostrarSenha();
     } finally {
-      _$_RecuperarSenhaStoreBaseActionController.endAction(_$actionInfo);
+      _$RecuperarSenhaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic switchMostrarConfirmarSenha() {
-    final _$actionInfo = _$_RecuperarSenhaStoreBaseActionController.startAction(
-        name: '_RecuperarSenhaStoreBase.switchMostrarConfirmarSenha');
+  void switchMostrarConfirmarSenha() {
+    final _$actionInfo = _$RecuperarSenhaStoreBaseActionController.startAction(
+        name: 'RecuperarSenhaStoreBase.switchMostrarConfirmarSenha');
     try {
       return super.switchMostrarConfirmarSenha();
     } finally {
-      _$_RecuperarSenhaStoreBaseActionController.endAction(_$actionInfo);
+      _$RecuperarSenhaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic clearEmailPage() {
-    final _$actionInfo = _$_RecuperarSenhaStoreBaseActionController.startAction(
-        name: '_RecuperarSenhaStoreBase.clearEmailPage');
+  void clearEmailPage() {
+    final _$actionInfo = _$RecuperarSenhaStoreBaseActionController.startAction(
+        name: 'RecuperarSenhaStoreBase.clearEmailPage');
     try {
       return super.clearEmailPage();
     } finally {
-      _$_RecuperarSenhaStoreBaseActionController.endAction(_$actionInfo);
+      _$RecuperarSenhaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic clearCodigoPage() {
-    final _$actionInfo = _$_RecuperarSenhaStoreBaseActionController.startAction(
-        name: '_RecuperarSenhaStoreBase.clearCodigoPage');
+  void clearCodigoPage() {
+    final _$actionInfo = _$RecuperarSenhaStoreBaseActionController.startAction(
+        name: 'RecuperarSenhaStoreBase.clearCodigoPage');
     try {
       return super.clearCodigoPage();
     } finally {
-      _$_RecuperarSenhaStoreBaseActionController.endAction(_$actionInfo);
+      _$RecuperarSenhaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic clearNovaSenhaPage() {
-    final _$actionInfo = _$_RecuperarSenhaStoreBaseActionController.startAction(
-        name: '_RecuperarSenhaStoreBase.clearNovaSenhaPage');
+  void clearNovaSenhaPage() {
+    final _$actionInfo = _$RecuperarSenhaStoreBaseActionController.startAction(
+        name: 'RecuperarSenhaStoreBase.clearNovaSenhaPage');
     try {
       return super.clearNovaSenhaPage();
     } finally {
-      _$_RecuperarSenhaStoreBaseActionController.endAction(_$actionInfo);
+      _$RecuperarSenhaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic validarCodigo() {
-    final _$actionInfo = _$_RecuperarSenhaStoreBaseActionController.startAction(
-        name: '_RecuperarSenhaStoreBase.validarCodigo');
+  void validarCodigo() {
+    final _$actionInfo = _$RecuperarSenhaStoreBaseActionController.startAction(
+        name: 'RecuperarSenhaStoreBase.validarCodigo');
     try {
       return super.validarCodigo();
     } finally {
-      _$_RecuperarSenhaStoreBaseActionController.endAction(_$actionInfo);
+      _$RecuperarSenhaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

@@ -1,10 +1,9 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 
-cultura(
+InkWell cultura(
   BuildContext context,
   CarouselController carouselController,
   GlobalKey<FormFieldState> key,
@@ -82,7 +81,7 @@ cultura(
   );
 }
 
-culturaPage(BuildContext context, ProtocoloStore store) {
+SingleChildScrollView culturaPage(BuildContext context, ProtocoloStore store) {
   return SingleChildScrollView(
     child: SizedBox(
       height: MediaQuery.of(context).size.height * 0.9 - 130,
@@ -197,7 +196,7 @@ culturaPage(BuildContext context, ProtocoloStore store) {
   );
 }
 
-addCulturaTextFormField(ProtocoloStore store) {
+Column addCulturaTextFormField(ProtocoloStore store) {
   return Column(
     children: [
       Row(
@@ -236,10 +235,11 @@ addCulturaTextFormField(ProtocoloStore store) {
           ),
           ElevatedButton(
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith((states) {
+              backgroundColor: WidgetStateProperty.resolveWith((states) {
                 return Constants.kPrimaryColor;
               }),
             ),
+            onPressed: store.registrarCultura,
             child: const Text(
               "Cadastrar",
               style: TextStyle(
@@ -248,7 +248,6 @@ addCulturaTextFormField(ProtocoloStore store) {
                 fontStyle: FontStyle.italic,
               ),
             ),
-            onPressed: store.registrarCultura,
           ),
         ],
       ),
@@ -256,7 +255,7 @@ addCulturaTextFormField(ProtocoloStore store) {
   );
 }
 
-addCulturaButton(ProtocoloStore store) {
+TextButton addCulturaButton(ProtocoloStore store) {
   return TextButton(
     onPressed: () => store.setIsNovaCultura(true),
     child: const Text(

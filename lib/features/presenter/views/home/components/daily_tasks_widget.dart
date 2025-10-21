@@ -27,7 +27,7 @@ class DailyTasksWidget extends StatelessWidget {
   final VoidCallback? onViewAll;
 
   const DailyTasksWidget({
-    Key? key,
+    super.key,
     this.title = 'Tarefas Diárias',
     this.subtitle = 'Hoje',
     this.tasks = const [
@@ -98,7 +98,7 @@ class DailyTasksWidget extends StatelessWidget {
     ],
     this.onTaskToggle,
     this.onViewAll,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +122,7 @@ class DailyTasksWidget extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   offset: const Offset(0, 4),
-                  color: Colors.black.withOpacity(0.08),
+                  color: Colors.black.withValues(alpha: .08),
                   blurRadius: 20,
                   spreadRadius: 0,
                 ),
@@ -192,8 +192,8 @@ class DailyTasksWidget extends StatelessWidget {
                 vertical: isVerySmallScreen ? 4 : 6,
               ),
               decoration: BoxDecoration(
-                color:
-                    _getCompletionColor(completionPercentage).withOpacity(0.1),
+                color: _getCompletionColor(completionPercentage)
+                    .withValues(alpha: .1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -279,8 +279,9 @@ class DailyTasksWidget extends StatelessWidget {
               width: isVerySmallScreen ? 36 : 40,
               height: isVerySmallScreen ? 36 : 40,
               decoration: BoxDecoration(
-                color:
-                    task.isCompleted ? task.color : task.color.withOpacity(0.1),
+                color: task.isCompleted
+                    ? task.color
+                    : task.color.withValues(alpha: .1),
                 borderRadius: BorderRadius.circular(isSmallScreen ? 8 : 10),
               ),
               child: Icon(
@@ -351,10 +352,10 @@ class DailyTasksWidget extends StatelessWidget {
           vertical: isVerySmallScreen ? 10 : 12,
         ),
         decoration: BoxDecoration(
-          color: Constants.kPrimaryColor.withOpacity(0.05),
+          color: Constants.kPrimaryColor.withValues(alpha: .05),
           borderRadius: BorderRadius.circular(isSmallScreen ? 8 : 10),
           border: Border.all(
-            color: Constants.kPrimaryColor.withOpacity(0.2),
+            color: Constants.kPrimaryColor.withValues(alpha: .2),
             width: 1,
           ),
         ),

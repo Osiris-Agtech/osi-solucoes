@@ -7,7 +7,7 @@ part of 'atividade_model.dart';
 // **************************************************************************
 
 Atividade _$AtividadeFromJson(Map<String, dynamic> json) => Atividade(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       descricao: json['descricao'] as String?,
       privado: json['privado'] as bool?,

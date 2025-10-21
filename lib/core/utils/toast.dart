@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../constants/constants.dart';
 
-toastError({required String? message}) {
+void toastError({required String? message}) {
   Get.rawSnackbar(
     backgroundColor: Colors.red,
     message: message ?? 'Não foi possíovel realizar essa requisição',
@@ -11,7 +11,7 @@ toastError({required String? message}) {
   );
 }
 
-toastSuccess({required String message}) {
+void toastSuccess({required String message}) {
   Get.rawSnackbar(
     backgroundColor: Constants.kPrimaryColor,
     message: message,

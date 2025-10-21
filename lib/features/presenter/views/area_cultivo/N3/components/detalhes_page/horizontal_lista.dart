@@ -36,7 +36,7 @@ SingleChildScrollView horizontalList(
                 onTap: () async {
                   reservatorioStore.setReservatorioDetalhes(
                       store.loteSelecionado.reservatorio!);
-                  await modulosStore.setPageViewController(1);
+                  modulosStore.setPageViewController(1);
                   Get.toNamed(
                     Routes.modulosPage,
                     // () => const ModulosPage(),
@@ -48,10 +48,10 @@ SingleChildScrollView horizontalList(
                   children: [
                     CircleAvatar(
                       radius: 25,
+                      backgroundColor: Constants.kCardColor,
                       child: SvgPicture.asset(
                         "assets/icons/reservatorio_icon.svg",
                       ),
-                      backgroundColor: Constants.kCardColor,
                     ),
                     const SizedBox(
                       height: 8,
@@ -78,12 +78,12 @@ SingleChildScrollView horizontalList(
           children: [
             CircleAvatar(
               radius: 25,
+              backgroundColor: Constants.kCardColor,
               child: SvgPicture.asset(
                 "assets/icons/caderno_campo_icon.svg",
                 height: 25,
                 width: 25,
               ),
-              backgroundColor: Constants.kCardColor,
             ),
             const SizedBox(
               height: 8,
@@ -110,10 +110,10 @@ SingleChildScrollView horizontalList(
             children: [
               CircleAvatar(
                 radius: 25,
+                backgroundColor: Constants.kCardColor,
                 child: SvgPicture.asset(
                   "assets/icons/migrar_lote.svg",
                 ),
-                backgroundColor: Constants.kCardColor,
               ),
               const SizedBox(
                 height: 8,

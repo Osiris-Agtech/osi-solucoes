@@ -9,8 +9,8 @@ import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_res
 
 Future<void> bottomSheet(
     BuildContext context,
-    CarouselController controlerPages,
-    CarouselController carouselController,
+    CarouselSliderController controlerPages,
+    CarouselSliderController carouselController,
     ReservatoriosStore store) {
   return showModalBottomSheet<void>(
     backgroundColor: Constants.kBackgroundColor,

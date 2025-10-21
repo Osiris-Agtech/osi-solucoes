@@ -14,9 +14,9 @@ import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 
 part 'reservatorios_store.g.dart';
 
-class ReservatoriosStore = _ReservatoriosStoreBase with _$ReservatoriosStore;
+class ReservatoriosStore = ReservatoriosStoreBase with _$ReservatoriosStore;
 
-abstract class _ReservatoriosStoreBase with Store {
+abstract class ReservatoriosStoreBase with Store {
   ReservatorioRepository reservatorioRepository =
       GetIt.I<ReservatorioRepository>();
   AuthController authController = GetIt.I<AuthController>();
@@ -36,10 +36,10 @@ abstract class _ReservatoriosStoreBase with Store {
   double indexDotDetalhe = 0.0;
 
   @action
-  setIndexDotDetalhe(double value) => indexDotDetalhe = value;
+  double setIndexDotDetalhe(double value) => indexDotDetalhe = value;
 
   @action
-  setReservatorioDetalhes(Reservatorio reservatorio) {
+  void setReservatorioDetalhes(Reservatorio reservatorio) {
     reservatorioDetalhes = reservatorio;
   }
 
@@ -53,7 +53,7 @@ abstract class _ReservatoriosStoreBase with Store {
   }
 
   @action
-  buscarReservatorioDetalhes() async {
+  Future<void> buscarReservatorioDetalhes() async {
     var reservatorios = await reservatorioRepository
         .buscarReservatorioDetalhes(reservatorioDetalhes.id!);
 
@@ -145,7 +145,8 @@ abstract class _ReservatoriosStoreBase with Store {
   String searchReservatorioText = '';
 
   @action
-  setSearchReservatorioText(String value) => searchReservatorioText = value;
+  String setSearchReservatorioText(String value) =>
+      searchReservatorioText = value;
 
   @computed
   List<Reservatorio> get searchReservatorio {
@@ -161,20 +162,20 @@ abstract class _ReservatoriosStoreBase with Store {
   }
 
   @action
-  setDotIndicator(int value) {
+  void setDotIndicator(int value) {
     if (value >= 0 && value <= 2) {
       dotIndicator = value;
     }
   }
 
   @action
-  setIsEditing(bool value) => isEditing = value;
+  bool setIsEditing(bool value) => isEditing = value;
 
   @action
-  setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
+  bool setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
 
   @action
-  setSolucaoDetalhes(SolucaoNutritiva solucao) async {
+  Future<void> setSolucaoDetalhes(SolucaoNutritiva solucao) async {
     solucaoDetalhes = solucao;
 
     isDetalhesSolucaoLoading = true;
@@ -300,19 +301,19 @@ abstract class _ReservatoriosStoreBase with Store {
   }
 
   @action
-  setSolucaoNutritiva(SolucaoNutritiva solucao) {
+  void setSolucaoNutritiva(SolucaoNutritiva solucao) {
     solucaoNutritiva = solucao;
     isSolucaoNutritivaValid = true;
   }
 
   @action
-  desvincularSolucaoNutritiva() {
+  void desvincularSolucaoNutritiva() {
     solucaoNutritiva = SolucaoNutritiva();
     isSolucaoNutritivaValid = false;
   }
 
   @action
-  buscarReservatorios() async {
+  Future<void> buscarReservatorios() async {
     isReservatorioListLoading = true;
 
     var reservatorios = await reservatorioRepository
@@ -332,7 +333,7 @@ abstract class _ReservatoriosStoreBase with Store {
   }
 
   @action
-  buscarSolucoes() async {
+  Future<void> buscarSolucoes() async {
     isSolucaoListLoading = true;
 
     var solucoes = await reservatorioRepository
@@ -353,7 +354,7 @@ abstract class _ReservatoriosStoreBase with Store {
   }
 
   @action
-  validarReservatorio() {
+  bool validarReservatorio() {
     bool validate = novoReservatorioName.text.isNotEmpty &&
         novoReservatorioVolume.text.isNotEmpty;
 
@@ -362,7 +363,7 @@ abstract class _ReservatoriosStoreBase with Store {
   }
 
   @action
-  registrarReservatorio({bool isShortcut = false}) async {
+  Future<void> registrarReservatorio({bool isShortcut = false}) async {
     isNovoReservatorioLoading = true;
 
     novoReservatorio = Reservatorio(
@@ -381,12 +382,12 @@ abstract class _ReservatoriosStoreBase with Store {
       },
       (data) async {
         await buscarReservatorios();
-        await limparNovoReservatorio();
+        limparNovoReservatorio();
 
         if (isShortcut) {
           SetorStore setorStore = GetIt.I<SetorStore>();
           await setorStore.buscarReservatorios();
-          await setorStore.setReservatorioSelecionada(data);
+          setorStore.setReservatorioSelecionada(data);
         }
 
         Get.close(1);
@@ -398,7 +399,7 @@ abstract class _ReservatoriosStoreBase with Store {
   }
 
   @action
-  carregarDadosReservatorio(Reservatorio reservatorio) {
+  void carregarDadosReservatorio(Reservatorio reservatorio) {
     novoReservatorioName = TextEditingController(text: reservatorio.nome ?? '');
     novoReservatorioVolume =
         TextEditingController(text: reservatorio.volume ?? '');
@@ -408,7 +409,7 @@ abstract class _ReservatoriosStoreBase with Store {
   }
 
   @action
-  updateReservatorio() async {
+  Future<void> updateReservatorio() async {
     isNovoReservatorioLoading = true;
 
     novoReservatorio = Reservatorio(
@@ -439,7 +440,7 @@ abstract class _ReservatoriosStoreBase with Store {
   }
 
   @action
-  limparNovoReservatorio() {
+  void limparNovoReservatorio() {
     isSolucaoNutritivaValid = false;
     isEditing = false;
     novoReservatorio = Reservatorio();

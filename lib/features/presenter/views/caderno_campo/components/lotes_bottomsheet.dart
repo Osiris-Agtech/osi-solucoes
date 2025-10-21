@@ -6,7 +6,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
 
 class LotesBottomSheet extends StatefulWidget {
-  const LotesBottomSheet({Key? key}) : super(key: key);
+  const LotesBottomSheet({super.key});
 
   @override
   State<LotesBottomSheet> createState() => _LotesBottomSheetState();
@@ -108,11 +108,20 @@ class _LotesBottomSheetState extends State<LotesBottomSheet> {
                   child: Observer(builder: (_) {
                     return ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Constants.kPrimaryColor,
+                        backgroundColor: Constants.kPrimaryColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
+                      onPressed: store.selectedLotes.isNotEmpty
+                          ? () {
+                              if (store.isEditing) {
+                                // store.alterarSetor();
+                              } else {
+                                store.cadastrarAtividade();
+                              }
+                            }
+                          : null, //store.registrarReservatorio(),
                       child: store.isNovoRegistroLoading
                           ? const SizedBox(
                               height: 25,
@@ -128,15 +137,6 @@ class _LotesBottomSheetState extends State<LotesBottomSheet> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                      onPressed: store.selectedLotes.isNotEmpty
-                          ? () {
-                              if (store.isEditing) {
-                                // store.alterarSetor();
-                              } else {
-                                store.cadastrarAtividade();
-                              }
-                            }
-                          : null, //store.registrarReservatorio(),
                     );
                   }),
                 ),

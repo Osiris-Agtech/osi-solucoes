@@ -7,7 +7,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/recuperar_senha_store.dart';
 
 class RecuperarSenhaPage extends StatefulWidget {
-  const RecuperarSenhaPage({Key? key}) : super(key: key);
+  const RecuperarSenhaPage({super.key});
 
   @override
   State<RecuperarSenhaPage> createState() => _RecuperarSenhaPageState();
@@ -121,7 +121,7 @@ class _RecuperarSenhaPageState extends State<RecuperarSenhaPage> {
                 height: 40,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Constants.kPrimaryColor,
+                    backgroundColor: Constants.kPrimaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
@@ -186,7 +186,7 @@ class _RecuperarSenhaPageState extends State<RecuperarSenhaPage> {
     );
   }
 
-  _titulo() {
+  Padding _titulo() {
     return const Padding(
       padding: EdgeInsets.only(
         left: 20,
@@ -203,7 +203,7 @@ class _RecuperarSenhaPageState extends State<RecuperarSenhaPage> {
     );
   }
 
-  _appBar() {
+  AppBar _appBar() {
     return AppBar(
       backgroundColor: Constants.kBackgroundColor,
       elevation: 0,

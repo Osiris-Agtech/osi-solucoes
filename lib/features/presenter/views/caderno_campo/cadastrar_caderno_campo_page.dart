@@ -13,7 +13,7 @@ import '../../../../../core/constants/constants.dart';
 import 'package:intl/intl.dart';
 
 class CadastroCadernoCampoPage extends StatefulWidget {
-  const CadastroCadernoCampoPage({Key? key}) : super(key: key);
+  const CadastroCadernoCampoPage({super.key});
 
   @override
   State<CadastroCadernoCampoPage> createState() =>
@@ -21,14 +21,14 @@ class CadastroCadernoCampoPage extends StatefulWidget {
 }
 
 class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
-  CarouselController carouselController = CarouselController();
-  CarouselController controlerPages = CarouselController();
+  CarouselSliderController carouselController = CarouselSliderController();
+  CarouselSliderController controlerPages = CarouselSliderController();
   CadernoCampoStore store = GetIt.I<CadernoCampoStore>();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       store.groupLotesBy();
       store.buscarUsuariosConta();
     });
@@ -262,7 +262,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
           child: Observer(builder: (_) {
             return ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Constants.kPrimaryColor,
+                backgroundColor: Constants.kPrimaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),

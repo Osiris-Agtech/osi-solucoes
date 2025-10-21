@@ -6,7 +6,7 @@ import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/views/cadastro/cadastro_page.dart';
 
-registrarButton(Size size) {
+Container registrarButton(Size size) {
   return Container(
     padding: EdgeInsets.only(
         // top: size.height * 0.06,

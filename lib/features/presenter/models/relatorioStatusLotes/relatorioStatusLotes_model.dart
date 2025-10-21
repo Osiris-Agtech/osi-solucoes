@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import "package:json_annotation/json_annotation.dart";
 
 part "relatorioStatusLotes_model.g.dart";

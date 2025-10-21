@@ -8,8 +8,8 @@ import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadas
 
 Future<void> bottomSheet(
     BuildContext context,
-    CarouselController carouselController,
-    CarouselController controlerPages,
+    CarouselSliderController carouselController,
+    CarouselSliderController controlerPages,
     ProtocoloStore store) {
   return showModalBottomSheet<void>(
     backgroundColor: Constants.kBackgroundColor,

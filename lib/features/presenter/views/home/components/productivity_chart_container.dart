@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -7,8 +9,8 @@ import 'package:osi_solucoes/features/presenter/views/home/components/productivi
 
 class ProductivityChartContainer extends StatefulWidget {
   const ProductivityChartContainer({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ProductivityChartContainer> createState() =>
@@ -103,7 +105,7 @@ class _ProductivityChartContainerState
     try {
       String hex = colorHex.replaceAll('#', '');
       if (hex.length == 6) {
-        hex = 'FF' + hex; // Adiciona alpha
+        hex = 'FF$hex'; // Adiciona alpha
       }
       return Color(int.parse(hex, radix: 16));
     } catch (e) {
@@ -123,7 +125,7 @@ class _ProductivityChartContainerState
           boxShadow: [
             BoxShadow(
               offset: const Offset(0, 4),
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: .08),
               blurRadius: 20,
               spreadRadius: 0,
             ),
@@ -166,7 +168,7 @@ class _ProductivityChartContainerState
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.orange.withOpacity(0.1),
+                      color: Colors.orange.withValues(alpha: .1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
@@ -271,7 +273,7 @@ class _ProductivityChartContainerState
           boxShadow: [
             BoxShadow(
               offset: const Offset(0, 4),
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: .08),
               blurRadius: 20,
               spreadRadius: 0,
             ),
@@ -314,7 +316,7 @@ class _ProductivityChartContainerState
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: Constants.kPrimaryColor.withOpacity(0.1),
+                      color: Constants.kPrimaryColor.withValues(alpha: .1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
@@ -389,7 +391,7 @@ class _ProductivityChartContainerState
           boxShadow: [
             BoxShadow(
               offset: const Offset(0, 4),
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: .08),
               blurRadius: 20,
               spreadRadius: 0,
             ),
@@ -432,7 +434,7 @@ class _ProductivityChartContainerState
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.red.withOpacity(0.1),
+                      color: Colors.red.withValues(alpha: .1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
@@ -529,7 +531,7 @@ class _ProductivityChartContainerState
           boxShadow: [
             BoxShadow(
               offset: const Offset(0, 4),
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: .08),
               blurRadius: 20,
               spreadRadius: 0,
             ),
@@ -572,7 +574,7 @@ class _ProductivityChartContainerState
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.1),
+                      color: Colors.grey.withValues(alpha: .1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(

@@ -7,7 +7,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.d
 
 class ExpandedLoteCard extends StatefulWidget {
   final int index;
-  const ExpandedLoteCard({Key? key, required this.index}) : super(key: key);
+  const ExpandedLoteCard({super.key, required this.index});
 
   @override
   State<ExpandedLoteCard> createState() => _ExpandedLoteCardState();

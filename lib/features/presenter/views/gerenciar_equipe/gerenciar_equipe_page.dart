@@ -12,7 +12,7 @@ import '../../../../core/constants/constants.dart';
 import '../../viewmodels/gerenciar_equipe_store.dart';
 
 class GerenciarEquipePage extends StatefulWidget {
-  const GerenciarEquipePage({Key? key}) : super(key: key);
+  const GerenciarEquipePage({super.key});
 
   @override
   State<GerenciarEquipePage> createState() => _GerenciarEquipePage();
@@ -44,11 +44,11 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
             onPressed: () {
               Get.toNamed(Routes.cadastrarUsuarioPage);
             },
+            backgroundColor: Constants.kPrimaryColor,
             child: const Icon(
               Icons.add,
               size: 32,
             ),
-            backgroundColor: Constants.kPrimaryColor,
           ),
           body: Form(
             key: formKey,
@@ -192,9 +192,9 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
 // ignore: camel_case_types
 class AppBar extends StatefulWidget {
   const AppBar({
-    Key? key,
+    super.key,
     required this.store,
-  }) : super(key: key);
+  });
 
   final GerenciarEquipeStore store;
 
@@ -257,7 +257,7 @@ class _AppBarState extends State<AppBar> {
 
 class CardUsuario extends StatefulWidget {
   final Usuario user;
-  const CardUsuario({Key? key, required this.user}) : super(key: key);
+  const CardUsuario({super.key, required this.user});
 
   @override
   State<CardUsuario> createState() => _CardUsuarioState();

@@ -1,8 +1,11 @@
+// ignore_for_file: avoid_print
+
 import "package:json_annotation/json_annotation.dart";
 
 part "relatorioProducao_model.g.dart";
 
 // Função helper para converter String para int
+// ignore: unused_element
 int? _parseToInt(dynamic value) {
   if (value == null) return null;
   if (value is int) return value;

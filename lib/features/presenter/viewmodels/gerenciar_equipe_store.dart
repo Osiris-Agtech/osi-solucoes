@@ -16,9 +16,9 @@ import '../../../core/utils/toast.dart';
 
 part 'gerenciar_equipe_store.g.dart';
 
-class GerenciarEquipeStore = _GerenciarEquipeBase with _$GerenciarEquipeStore;
+class GerenciarEquipeStore = GerenciarEquipeBase with _$GerenciarEquipeStore;
 
-abstract class _GerenciarEquipeBase with Store {
+abstract class GerenciarEquipeBase with Store {
   //####################### START LISTAGEM DE USUARIOS ##########################
 
   @observable
@@ -39,7 +39,7 @@ abstract class _GerenciarEquipeBase with Store {
   }
 
   @action
-  buscarUsuarios() async {
+  Future<void> buscarUsuarios() async {
     AuthController authController = GetIt.I<AuthController>();
     GerenciarEquipeRepository gerenciarEquipeRepository =
         GetIt.I<GerenciarEquipeRepository>();
@@ -91,7 +91,7 @@ abstract class _GerenciarEquipeBase with Store {
   String searchUserText = '';
 
   @action
-  setsearchUserText(String value) => searchUserText = value;
+  String setsearchUserText(String value) => searchUserText = value;
 
   @computed
   List<Usuario> get searchUser {
@@ -124,16 +124,16 @@ abstract class _GerenciarEquipeBase with Store {
   Cargo? cargoSelecionadoDetalhesPage;
 
   @action
-  setUsuarioSelecionado(Usuario value) {
+  void setUsuarioSelecionado(Usuario value) {
     usuarioSelecionado = value;
     ativoIsChanged = usuarioSelecionado.ativo ?? false;
   }
 
   @action
-  setAtivo(bool value) => ativoIsChanged = value;
+  bool setAtivo(bool value) => ativoIsChanged = value;
 
   @action
-  clearDatalhes() {
+  void clearDatalhes() {
     ativoIsChanged = false;
     cargoSelecionado = null;
     cargoSelecionadoDetalhesPage = null;
@@ -142,7 +142,7 @@ abstract class _GerenciarEquipeBase with Store {
   }
 
   @action
-  setInitialCargo() {
+  void setInitialCargo() {
     cargoSelecionadoDetalhesPage = null;
     for (var element in cargosList) {
       if (element.id == usuarioSelecionado.selected_conta?.cargo?.id) {
@@ -152,10 +152,11 @@ abstract class _GerenciarEquipeBase with Store {
   }
 
   @action
-  setCargoDetalhesPage(Cargo cargo) => cargoSelecionadoDetalhesPage = cargo;
+  Cargo setCargoDetalhesPage(Cargo cargo) =>
+      cargoSelecionadoDetalhesPage = cargo;
 
   @action
-  buscarCargos() async {
+  Future<void> buscarCargos() async {
     GerenciarEquipeRepository gerenciarEquipeRepository =
         GetIt.I<GerenciarEquipeRepository>();
     isUserListLoading = true;
@@ -207,7 +208,7 @@ abstract class _GerenciarEquipeBase with Store {
 
   //update de usuarios
   @action
-  alterarUsuario() async {
+  Future<void> alterarUsuario() async {
     GerenciarEquipeRepository gerenciarEquipeRepository =
         GetIt.I<GerenciarEquipeRepository>();
     AuthController authController = GetIt.I<AuthController>();
@@ -256,7 +257,7 @@ abstract class _GerenciarEquipeBase with Store {
   bool pessoaFound = false;
 
   @action
-  clearCadastro() {
+  void clearCadastro() {
     cargoSelecionado = null;
     email.clear();
     nome.clear();
@@ -265,26 +266,26 @@ abstract class _GerenciarEquipeBase with Store {
   }
 
   @action
-  setCargo(Cargo cargo) => cargoSelecionado = cargo;
+  Cargo setCargo(Cargo cargo) => cargoSelecionado = cargo;
 
   @action
-  setEmail(String value) {
+  void setEmail(String value) {
     email = TextEditingController(text: value);
   }
 
   @action
-  setNome(String value) {
+  void setNome(String value) {
     nome = TextEditingController(text: value);
   }
 
   @action
-  setSobrenome(String value) {
+  void setSobrenome(String value) {
     sobrenome = TextEditingController(text: value);
   }
 
   //Encontrar nome e sobrenome pelo email
   @action
-  buscarPessoa() async {
+  Future<void> buscarPessoa() async {
     GerenciarEquipeRepository gerenciarEquipeRepository =
         GetIt.I<GerenciarEquipeRepository>();
     isUserListLoading = true;
@@ -309,7 +310,7 @@ abstract class _GerenciarEquipeBase with Store {
   }
 
   @action
-  registrarUsuario() async {
+  Future<void> registrarUsuario() async {
     GerenciarEquipeRepository gerenciarEquipeRepository =
         GetIt.I<GerenciarEquipeRepository>();
     AuthController authController = GetIt.I<AuthController>();
@@ -349,5 +350,4 @@ abstract class _GerenciarEquipeBase with Store {
   }
 
   //####################### END CADASTRAR USUARIO  ##########################
-
 }

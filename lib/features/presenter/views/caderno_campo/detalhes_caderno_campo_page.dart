@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
-import 'package:timelines/timelines.dart';
+// import 'package:timelines/timelines.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert' show jsonDecode, utf8;
 
@@ -18,8 +18,7 @@ import '../../viewmodels/caderno_campo_store.dart';
 
 class DetalhesCadernoCampoPage extends StatefulWidget {
   final String title;
-  const DetalhesCadernoCampoPage({Key? key, this.title = 'CadernoCampoPage'})
-      : super(key: key);
+  const DetalhesCadernoCampoPage({super.key, this.title = 'CadernoCampoPage'});
   @override
   DetalhesCadernoCampoPageState createState() =>
       DetalhesCadernoCampoPageState();
@@ -32,7 +31,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       store.buscarAtividades();
     });
     super.initState();
@@ -100,95 +99,99 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                     padding: const EdgeInsets.only(
                       left: 24,
                     ),
-                    child: Timeline.tileBuilder(
-                      controller: scrollController,
-                      shrinkWrap: true,
-                      theme: TimelineThemeData(
-                        nodePosition: 0,
-                        color: const Color(0xff989898),
-                        // indicatorTheme: const IndicatorThemeData(
-                        //   position: 0,
-                        //   size: 20.0,
-                        // ),
-                        connectorTheme: const ConnectorThemeData(
-                          thickness: 2.5,
-                        ),
-                      ),
-                      builder: TimelineTileBuilder.connected(
-                        itemCount: store.getLotesAtividadesFilter.length,
-                        contentsBuilder: (_, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                              left: 12,
-                              top: 20,
-                              right: 20,
-                            ),
-                            child: SingleChildScrollView(
-                              child: Observer(builder: (_) {
-                                return Card(
-                                  elevation: 2,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                      16.0,
-                                      16.0,
-                                      0.0,
-                                      16.0,
-                                    ),
-                                    child: ExpansionPanelList(
-                                      expandedHeaderPadding:
-                                          const EdgeInsets.only(bottom: 5),
-                                      elevation: 0,
-                                      expansionCallback: (__, bool isExpanded) {
-                                        store.setExpandedCard(index);
-                                      },
-                                      children: [
-                                        ExpansionPanel(
-                                          backgroundColor:
-                                              Constants.kBackgroundColor,
-                                          canTapOnHeader: true,
-                                          headerBuilder: (BuildContext context,
-                                              bool isExpanded) {
-                                            return headerCard(
-                                              store
-                                                  .getLotesAtividadesFilter[
-                                                      index]
-                                                  .atividade,
-                                              store
-                                                  .getLotesAtividadesFilter[
-                                                      index]
-                                                  .usuario,
-                                            );
-                                          },
-                                          body: bodyCard(store
-                                              .getLotesAtividadesFilter[index]
-                                              .atividade),
-                                          isExpanded: store.expandedCard[index],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }),
-                            ),
-                          );
-                        },
-                        indicatorBuilder: (_, index) {
-                          return const DotIndicator(
-                            // position: 0.04,
-                            color: Constants.kPrimaryColor,
-                          );
-                        },
-                        connectorBuilder: (_, index, ___) =>
-                            const DashedLineConnector(
-                          color: Constants.kPrimaryColor,
-                          dash: 4,
-                          gap: 4,
-                        ),
-                      ),
-                    ),
+
+                    ///
+                    /// TODO: Implementar timeline
+                    ///
+                    // child: Timeline.tileBuilder(
+                    //   controller: scrollController,
+                    //   shrinkWrap: true,
+                    //   theme: TimelineThemeData(
+                    //     nodePosition: 0,
+                    //     color: const Color(0xff989898),
+                    //     // indicatorTheme: const IndicatorThemeData(
+                    //     //   position: 0,
+                    //     //   size: 20.0,
+                    //     // ),
+                    //     connectorTheme: const ConnectorThemeData(
+                    //       thickness: 2.5,
+                    //     ),
+                    //   ),
+                    //   builder: TimelineTileBuilder.connected(
+                    //     itemCount: store.getLotesAtividadesFilter.length,
+                    //     contentsBuilder: (_, index) {
+                    //       return Padding(
+                    //         padding: const EdgeInsets.only(
+                    //           left: 12,
+                    //           top: 20,
+                    //           right: 20,
+                    //         ),
+                    //         child: SingleChildScrollView(
+                    //           child: Observer(builder: (_) {
+                    //             return Card(
+                    //               elevation: 2,
+                    //               shape: RoundedRectangleBorder(
+                    //                 borderRadius: BorderRadius.circular(15.0),
+                    //               ),
+                    //               child: Padding(
+                    //                 padding: const EdgeInsets.fromLTRB(
+                    //                   16.0,
+                    //                   16.0,
+                    //                   0.0,
+                    //                   16.0,
+                    //                 ),
+                    //                 child: ExpansionPanelList(
+                    //                   expandedHeaderPadding:
+                    //                       const EdgeInsets.only(bottom: 5),
+                    //                   elevation: 0,
+                    //                   expansionCallback: (__, bool isExpanded) {
+                    //                     store.setExpandedCard(index);
+                    //                   },
+                    //                   children: [
+                    //                     ExpansionPanel(
+                    //                       backgroundColor:
+                    //                           Constants.kBackgroundColor,
+                    //                       canTapOnHeader: true,
+                    //                       headerBuilder: (BuildContext context,
+                    //                           bool isExpanded) {
+                    //                         return headerCard(
+                    //                           store
+                    //                               .getLotesAtividadesFilter[
+                    //                                   index]
+                    //                               .atividade,
+                    //                           store
+                    //                               .getLotesAtividadesFilter[
+                    //                                   index]
+                    //                               .usuario,
+                    //                         );
+                    //                       },
+                    //                       body: bodyCard(store
+                    //                           .getLotesAtividadesFilter[index]
+                    //                           .atividade),
+                    //                       isExpanded: store.expandedCard[index],
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //               ),
+                    //             );
+                    //           }),
+                    //         ),
+                    //       );
+                    //     },
+                    //     indicatorBuilder: (_, index) {
+                    //       return const DotIndicator(
+                    //         // position: 0.04,
+                    //         color: Constants.kPrimaryColor,
+                    //       );
+                    //     },
+                    //     connectorBuilder: (_, index, ___) =>
+                    //         const DashedLineConnector(
+                    //       color: Constants.kPrimaryColor,
+                    //       dash: 4,
+                    //       gap: 4,
+                    //     ),
+                    //   ),
+                    // ),
                   ),
                 );
               }),
@@ -199,7 +202,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
     );
   }
 
-  bodyCard(Atividade? atividade) {
+  Padding bodyCard(Atividade? atividade) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 24.0),
       child: Text(
@@ -216,7 +219,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
     );
   }
 
-  headerCard(Atividade? atividade, Usuario? usuario) {
+  Row headerCard(Atividade? atividade, Usuario? usuario) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -261,7 +264,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: Constants.kText2.withOpacity(0.8),
+                    color: Constants.kText2.withValues(alpha: .8),
                   ),
                 ),
               ),
@@ -304,7 +307,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
     );
   }
 
-  expandedCard(int index) {
+  Column expandedCard(int index) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -347,8 +350,8 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
 // ignore: camel_case_types
 class AppBar extends StatefulWidget {
   const AppBar({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<AppBar> createState() => _AppBarState();

@@ -19,7 +19,7 @@ import 'components/cadastrar_page/reservatorio_item.dart';
 import 'components/cadastrar_page/setor_item.dart';
 
 class CadastrarLotePage extends StatefulWidget {
-  const CadastrarLotePage({Key? key}) : super(key: key);
+  const CadastrarLotePage({super.key});
 
   @override
   State<CadastrarLotePage> createState() => _CadastrarLotePageState();
@@ -28,7 +28,7 @@ class CadastrarLotePage extends StatefulWidget {
 class _CadastrarLotePageState extends State<CadastrarLotePage> {
   LoteStore store = GetIt.I<LoteStore>();
   ProtocoloStore protocoloStore = GetIt.I<ProtocoloStore>();
-  CarouselController carouselController = CarouselController();
+  CarouselSliderController carouselController = CarouselSliderController();
   final GlobalKey<FormFieldState> key = GlobalKey<FormFieldState>();
 
   @override
@@ -250,7 +250,7 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
           height: 40,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Constants.kPrimaryColor,
+              backgroundColor: Constants.kPrimaryColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
@@ -298,9 +298,9 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
   }
 }
 
-bottomSheetN3(
+Future<void> bottomSheetN3(
   BuildContext context,
-  CarouselController carouselController,
+  CarouselSliderController carouselController,
   LoteStore store,
   ProtocoloStore protocoloStore,
   GlobalKey<FormFieldState> key,
@@ -446,9 +446,9 @@ bottomSheetN3(
   );
 }
 
-bottomSheetProtocol(
+Future<void> bottomSheetProtocol(
   BuildContext context,
-  CarouselController carouselController,
+  CarouselSliderController carouselController,
   LoteStore store,
   GlobalKey<FormFieldState> key,
 ) {
@@ -482,11 +482,11 @@ bottomSheetProtocol(
 }
 
 class BackStepButton extends StatefulWidget {
-  final CarouselController carouselController;
+  final CarouselSliderController carouselController;
   const BackStepButton({
-    Key? key,
+    super.key,
     required this.carouselController,
-  }) : super(key: key);
+  });
 
   @override
   State<BackStepButton> createState() => _BackStepButtonState();
@@ -540,11 +540,11 @@ class _BackStepButtonState extends State<BackStepButton> {
 }
 
 class NextStepButton extends StatefulWidget {
-  final CarouselController carouselController;
+  final CarouselSliderController carouselController;
   const NextStepButton({
-    Key? key,
+    super.key,
     required this.carouselController,
-  }) : super(key: key);
+  });
 
   @override
   State<NextStepButton> createState() => _NextStepButtonState();
@@ -562,7 +562,7 @@ class _NextStepButtonState extends State<NextStepButton> {
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24)),
-                primary: store.isAlreadySelected && store.showProtocoloDetalhes
+                backgroundColor: store.isAlreadySelected && store.showProtocoloDetalhes
                     ? Constants.kErrorColor
                     : Constants.kPrimaryColor,
               ),

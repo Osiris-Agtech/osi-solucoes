@@ -15,8 +15,7 @@ import '../../viewmodels/modulos_store.dart';
 class ModulosPage extends StatefulWidget {
   final String title;
   final int page;
-  const ModulosPage({Key? key, this.title = 'ModulosPage', this.page = 0})
-      : super(key: key);
+  const ModulosPage({super.key, this.title = 'ModulosPage', this.page = 0});
   @override
   ModulosPageState createState() => ModulosPageState();
 }

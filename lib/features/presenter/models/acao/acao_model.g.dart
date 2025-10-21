@@ -7,10 +7,10 @@ part of 'acao_model.dart';
 // **************************************************************************
 
 Acao _$AcaoFromJson(Map<String, dynamic> json) => Acao(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       titulo: json['titulo'] as String?,
       descricao: json['descricao'] as String?,
-      duracao_dias: json['duracao_dias'] as int?,
+      duracao_dias: (json['duracao_dias'] as num?)?.toInt(),
       alerta: json['alerta'] as bool?,
       created_at: json['created_at'] == null
           ? null
@@ -27,7 +27,7 @@ Acao _$AcaoFromJson(Map<String, dynamic> json) => Acao(
       fase: json['fase'] == null
           ? null
           : Fase.fromJson(json['fase'] as Map<String, dynamic>),
-      duracao_dias_real: json['duracao_dias_real'] as int?,
+      duracao_dias_real: (json['duracao_dias_real'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$AcaoToJson(Acao instance) => <String, dynamic>{

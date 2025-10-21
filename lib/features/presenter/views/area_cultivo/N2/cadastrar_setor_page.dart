@@ -1,4 +1,4 @@
-import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -9,15 +9,15 @@ import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components
 import '../../../../../core/constants/constants.dart';
 
 class CadastrarSetorPage extends StatefulWidget {
-  const CadastrarSetorPage({Key? key}) : super(key: key);
+  const CadastrarSetorPage({super.key});
 
   @override
   State<CadastrarSetorPage> createState() => _CadastrarSetorPageState();
 }
 
 class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
-  CarouselController carouselController = CarouselController();
-  CarouselController controlerPages = CarouselController();
+  CarouselSliderController carouselController = CarouselSliderController();
+  CarouselSliderController controlerPages = CarouselSliderController();
   SetorStore store = GetIt.I<SetorStore>();
 
   @override
@@ -250,7 +250,7 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
           child: Observer(builder: (_) {
             return ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Constants.kPrimaryColor,
+                backgroundColor: Constants.kPrimaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),

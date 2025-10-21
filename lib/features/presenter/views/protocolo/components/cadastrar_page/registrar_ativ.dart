@@ -8,8 +8,8 @@ import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadas
 
 import '../../../../widgets/get_bottom_sheet.dart';
 
-registrarAtivPage(BuildContext context, ProtocoloStore store) {
-  final ScrollController _scrollController = ScrollController();
+Scaffold registrarAtivPage(BuildContext context, ProtocoloStore store) {
+  final ScrollController scrollController = ScrollController();
 
   return Scaffold(
     backgroundColor: Constants.kBackgroundColor,
@@ -19,9 +19,9 @@ registrarAtivPage(BuildContext context, ProtocoloStore store) {
         FloatingActionButton(
           mini: true,
           onPressed: () {
-            if (_scrollController.hasClients) {
-              _scrollController.animateTo(
-                _scrollController.position.maxScrollExtent,
+            if (scrollController.hasClients) {
+              scrollController.animateTo(
+                scrollController.position.maxScrollExtent,
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.easeInOut,
               );
@@ -105,7 +105,7 @@ registrarAtivPage(BuildContext context, ProtocoloStore store) {
               ),
             );
           }
-          return ListFases(scrollController: _scrollController);
+          return ListFases(scrollController: scrollController);
         }),
         const SizedBox(height: 24),
       ],
@@ -115,10 +115,9 @@ registrarAtivPage(BuildContext context, ProtocoloStore store) {
 
 class ListFases extends StatelessWidget {
   const ListFases({
-    Key? key,
+    super.key,
     required ScrollController scrollController,
-  })  : _scrollController = scrollController,
-        super(key: key);
+  }) : _scrollController = scrollController;
 
   final ScrollController _scrollController;
 
@@ -129,7 +128,7 @@ class ListFases extends StatelessWidget {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-          color: Constants.kCardColor.withOpacity(0.2),
+          color: Constants.kCardColor.withValues(alpha: .2),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Observer(builder: (_) {
@@ -224,7 +223,6 @@ class ListFases extends StatelessWidget {
                                             acao: entry.value,
                                             store: store,
                                           ))
-                                      .toList()
                                 ],
                               );
                             } else {

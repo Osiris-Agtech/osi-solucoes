@@ -43,7 +43,7 @@ class Fase {
 
   Map<String, dynamic> toJson() => _$FaseToJson(this);
 
-  toMap() {
+  Map<String, Object?> toMap() {
     return {
       'id': id,
       'nome': nome,

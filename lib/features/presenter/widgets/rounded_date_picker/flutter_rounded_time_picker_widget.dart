@@ -287,7 +287,6 @@ class _DayPeriodControl extends StatelessWidget {
           ],
         );
       case Orientation.portrait:
-      default:
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -596,7 +595,6 @@ _TimePickerHeaderFormat _buildHeaderFormat({
         fragment3: minute(),
       ));
     case TimeOfDayFormat.HH_colon_mm:
-    default:
       return format(piece(
         pivotIndex: 1,
         fragment1: hour(),
@@ -777,7 +775,6 @@ class _TimePickerHeader extends StatelessWidget {
       case Orientation.landscape:
         return headerTextTheme.displaySmall!.copyWith(fontSize: 50.0);
       case Orientation.portrait:
-      default:
         return headerTextTheme.displayMedium!.copyWith(fontSize: 60.0);
     }
   }
@@ -800,7 +797,6 @@ class _TimePickerHeader extends StatelessWidget {
         padding = const EdgeInsets.symmetric(horizontal: 16.0);
         break;
       case Orientation.portrait:
-      default:
         height = _kTimePickerHeaderPortraitHeight;
         padding = const EdgeInsets.symmetric(horizontal: 24.0);
         break;
@@ -812,8 +808,7 @@ class _TimePickerHeader extends StatelessWidget {
         backgroundColor = themeData.primaryColor;
         break;
       case Brightness.dark:
-      default:
-        backgroundColor = themeData.colorScheme.background;
+        backgroundColor = themeData.colorScheme.surface;
         break;
     }
 
@@ -825,7 +820,6 @@ class _TimePickerHeader extends StatelessWidget {
         inactiveColor = Colors.black54;
         break;
       case Brightness.dark:
-      default:
         activeColor = Colors.white;
         inactiveColor = Colors.white70;
         break;
@@ -1457,8 +1451,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
         backgroundColor = Colors.grey[200]!;
         break;
       case Brightness.dark:
-      default:
-        backgroundColor = themeData.colorScheme.background;
+        backgroundColor = themeData.colorScheme.surface;
         break;
     }
 
@@ -1527,8 +1520,7 @@ class _TimePickerDialog extends StatefulWidget {
   ///
   /// [initialTime] must not be null.
   const _TimePickerDialog(
-      {Key? key,
-      required this.initialTime,
+      {required this.initialTime,
       required this.borderRadius,
       this.imageHeader,
       this.fontFamily,
@@ -1536,8 +1528,7 @@ class _TimePickerDialog extends StatefulWidget {
       this.positiveBtn,
       this.leftBtn,
       this.onLeftBtn,
-      this.style})
-      : super(key: key);
+      this.style});
 
   /// The time initially selected when the dialog is shown.
   final TimeOfDay initialTime;
@@ -1783,7 +1774,6 @@ class _TimePickerDialogState extends State<_TimePickerDialog> {
                 ),
               );
             case Orientation.portrait:
-            default:
               return SizedBox(
                 width: _kTimePickerWidthPortrait,
                 height: timePickerHeightPortrait,
@@ -1805,7 +1795,7 @@ class _TimePickerDialogState extends State<_TimePickerDialog> {
 
     return Theme(
       data: theme.copyWith(
-        dialogBackgroundColor: Colors.transparent,
+        dialogTheme: DialogThemeData(backgroundColor: Colors.transparent),
       ),
       child: dialog,
     );

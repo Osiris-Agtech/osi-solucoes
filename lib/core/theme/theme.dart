@@ -6,11 +6,10 @@ ThemeData lightThemeData(BuildContext context) {
   return ThemeData.light().copyWith(
     primaryColor: Constants.kPrimaryColor,
     scaffoldBackgroundColor: Colors.white,
-    backgroundColor: Colors.white,
     appBarTheme: appBarTheme,
     cardColor: Constants.kCardColor,
     iconTheme: const IconThemeData(color: Constants.kContentColorLightTheme),
-    textTheme: const TextTheme(bodyText1: TextStyle(fontFamily: "Montserrat")),
+    textTheme: const TextTheme(bodyLarge: TextStyle(fontFamily: "Montserrat")),
 
     // GoogleFonts.interTextTheme(Theme.of(context).textTheme)
     //     .apply(bodyColor: kContentColorLightTheme),
@@ -21,8 +20,8 @@ ThemeData lightThemeData(BuildContext context) {
     // ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
-      selectedItemColor: Constants.kContentColorLightTheme.withOpacity(0.7),
-      unselectedItemColor: Constants.kContentColorLightTheme.withOpacity(0.32),
+      selectedItemColor: Constants.kContentColorLightTheme.withValues(alpha: 0.7),
+      unselectedItemColor: Constants.kContentColorLightTheme.withValues(alpha: 0.32),
       selectedIconTheme: const IconThemeData(color: Constants.kPrimaryColor),
       showUnselectedLabels: true,
     ),

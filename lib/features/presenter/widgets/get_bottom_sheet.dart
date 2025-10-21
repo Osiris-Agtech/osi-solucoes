@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 
-getBottomSheet(Widget child) {
+void getBottomSheet(Widget child) {
   Get.bottomSheet(
     child,
     isScrollControlled: true,

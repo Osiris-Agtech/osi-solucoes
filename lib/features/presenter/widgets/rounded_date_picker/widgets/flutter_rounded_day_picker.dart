@@ -62,7 +62,7 @@ class FlutterRoundedDayPicker extends StatelessWidget {
   ///
   /// Rarely used directly. Instead, typically used as part of a [MonthPicker].
   FlutterRoundedDayPicker(
-      {Key? key,
+      {super.key,
       required this.selectedDate,
       required this.currentDate,
       required this.onChanged,
@@ -82,9 +82,7 @@ class FlutterRoundedDayPicker extends StatelessWidget {
       this.builderDay,
       this.listDateDisabled,
       this.onTapDay})
-      : assert(!firstDate.isAfter(lastDate)),
-//        assert(selectedDate.isAfter(firstDate) || selectedDate.isAtSameMomentAs(firstDate)),
-        super(key: key);
+      : assert(!firstDate.isAfter(lastDate));
 
   final DatePickerMode mode;
   final ValueChanged<DatePickerMode> onModeChanged;

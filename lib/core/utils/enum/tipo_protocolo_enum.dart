@@ -16,9 +16,7 @@ extension TipoProtocoloEnumExt on TipoProtocoloEnum {
         return 'Romana';
       case TipoProtocoloEnum.roxa:
         return 'Roxa';
-      default:
-        return '';
-    }
+      }
   }
 }
 

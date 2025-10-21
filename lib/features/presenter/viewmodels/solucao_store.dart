@@ -16,9 +16,9 @@ import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.d
 
 part 'solucao_store.g.dart';
 
-class SolucaoStore = _SolucaoStoreBase with _$SolucaoStore;
+class SolucaoStore = SolucaoStoreBase with _$SolucaoStore;
 
-abstract class _SolucaoStoreBase with Store {
+abstract class SolucaoStoreBase with Store {
   @observable
   int value = 0;
 
@@ -79,31 +79,31 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  setDotIndicator(int value) {
+  void setDotIndicator(int value) {
     if (value >= 0 && value <= 1) {
       dotIndicator = value;
     }
   }
 
   @action
-  setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
+  bool setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
 
   @action
-  setExpandedCard(int index) {
+  void setExpandedCard(int index) {
     expandedFertilizantes[index].isExpanded =
         !expandedFertilizantes[index].isExpanded;
     expandedFertilizantes = List.from(expandedFertilizantes);
   }
 
   @action
-  setsearchSolucaoText(String value) => searchSolucaoText = value;
+  String setsearchSolucaoText(String value) => searchSolucaoText = value;
 
   @action
-  selecionarSolucao(SolucaoNutritiva solucaoNutritiva) =>
+  SolucaoNutritiva selecionarSolucao(SolucaoNutritiva solucaoNutritiva) =>
       solucaoSelecionada = solucaoNutritiva;
 
   @action
-  buscarSolucoes() async {
+  Future<void> buscarSolucoes() async {
     AuthController authController = GetIt.I<AuthController>();
     SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
     isSolucaoListLoading = true;
@@ -125,7 +125,7 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  removeFromExpendedList(int id) {
+  void removeFromExpendedList(int id) {
     expandedFertilizantes
         .removeWhere((element) => element.fertilizante.id == id);
 
@@ -140,7 +140,7 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  changeSelecaoFertilizante(int index, bool value) {
+  void changeSelecaoFertilizante(int index, bool value) {
     // Seção para expansão dos Cards
     int indexList = expandedFertilizantes.indexWhere((element) =>
         element.fertilizante.id == fertilizanteList[index].fertilizante.id);
@@ -167,7 +167,7 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  setFertilizanteQuantidade(int id, String value) {
+  void setFertilizanteQuantidade(int id, String value) {
     int index = expandedFertilizantes
         .indexWhere((element) => element.fertilizante.id == id);
     if (index != -1) {
@@ -177,7 +177,7 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  buscarFertilizantes() async {
+  Future<void> buscarFertilizantes() async {
     SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
     isFertilizanteListLoading = true;
     fertilizanteList = [];
@@ -219,7 +219,7 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  buscarDetalhesSolucao() async {
+  Future<void> buscarDetalhesSolucao() async {
     SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
     isSolucaoDetalhesLoading = true;
 
@@ -309,7 +309,7 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  multiplicarTeorNitratoEAmonia() {
+  void multiplicarTeorNitratoEAmonia() {
     double teorNitrogenio = double.tryParse(nutrientesList
                 .firstWhereOrNull((element) => element.key == 'N')
                 ?.values[0]
@@ -337,7 +337,7 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  validarFertilizantes() {
+  bool validarFertilizantes() {
     if (expandedFertilizantes.isEmpty) {
       toastError(
           message: 'Selecione pelo menos um fertilizante para a solução');
@@ -357,7 +357,7 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  cadastrarSolucaoNutritiva({bool isShortcut = false}) async {
+  Future<void> cadastrarSolucaoNutritiva({bool isShortcut = false}) async {
     isNovaSolucaoLoading = true;
     SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
     AuthController authController = GetIt.I<AuthController>();
@@ -383,7 +383,7 @@ abstract class _SolucaoStoreBase with Store {
         if (isShortcut) {
           ReservatoriosStore reservatoriosStore = GetIt.I<ReservatoriosStore>();
           await reservatoriosStore.buscarSolucoes();
-          await reservatoriosStore.setSolucaoNutritiva(data);
+          reservatoriosStore.setSolucaoNutritiva(data);
           Get.close(1);
         }
 
@@ -408,7 +408,8 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  generateSolucaoFertilizanteConcentrada() {
+  List<SolucaoFertilizanteConcentrada>
+      generateSolucaoFertilizanteConcentrada() {
     List<SolucaoFertilizanteConcentrada> list = [];
 
     if (solucaoConcentradaList.isEmpty) {
@@ -448,7 +449,7 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  validateNewSN() {
+  bool validateNewSN() {
     bool validate =
         novaSolucaoName.text.isNotEmpty && expandedFertilizantes.isNotEmpty;
 
@@ -504,7 +505,7 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  clearAll() {
+  void clearAll() {
     novaSolucaoName.clear();
     expandedFertilizantes.clear();
     quantidadeFertilizantes.clear();
@@ -637,7 +638,7 @@ abstract class _SolucaoStoreBase with Store {
   // List<int> compatibilidadeConcentrada = [];
 
   @action
-  setFertilizantesEscolhidos() {
+  void setFertilizantesEscolhidos() {
     fertilizantesEscolhidos = [];
     for (var item in expandedFertilizantes) {
       fertilizantesEscolhidos.add(
@@ -651,13 +652,13 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  changeSelecaoFertilizantesEscolhidos(int index, bool value) {
+  void changeSelecaoFertilizantesEscolhidos(int index, bool value) {
     fertilizantesEscolhidos[index].selected = value;
     fertilizantesEscolhidos = List.from(fertilizantesEscolhidos);
   }
 
   @action
-  addFertilizanteParaSolucao(int indexSolucaoConcentrada) {
+  void addFertilizanteParaSolucao(int indexSolucaoConcentrada) {
     for (var item in showFertilizantesNaoUtilizados) {
       if (item.selected) {
         if (solucaoConcentradaList[indexSolucaoConcentrada]
@@ -677,7 +678,7 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  criarSolucaoConcentrada() async {
+  Future<void> criarSolucaoConcentrada() async {
     SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
 
     for (var i = 0; i < solucaoConcentradaList.length; i++) {
@@ -703,28 +704,28 @@ abstract class _SolucaoStoreBase with Store {
   }
 
   @action
-  clearSolucaoConcentrada() {
+  void clearSolucaoConcentrada() {
     solucaoConcentradaList = [];
     fatorConcentracao = TextEditingController();
     volumeConcentracao = TextEditingController();
   }
 
   @action
-  setNomeSolucaoConcentrada(String nomeSolucaoConcentrada, int index) {
+  void setNomeSolucaoConcentrada(String nomeSolucaoConcentrada, int index) {
     if (nomeSolucaoConcentrada.isEmpty) return;
     solucaoConcentradaList[index].nome = nomeSolucaoConcentrada.trim();
     solucaoConcentradaList = List.from(solucaoConcentradaList);
   }
 
   @action
-  addToSolucaoConcentradaList() {
+  void addToSolucaoConcentradaList() {
     solucaoConcentradaList.add(SolucaoConcentrada());
     solucaoConcentradaList = List.from(solucaoConcentradaList);
     setFertilizantesEscolhidos();
   }
 
   @action
-  deleteSolucaoConcentradaToTheList(int index) {
+  void deleteSolucaoConcentradaToTheList(int index) {
     solucaoConcentradaList.removeAt(index);
     solucaoConcentradaList = List.from(solucaoConcentradaList);
     setFertilizantesEscolhidos();

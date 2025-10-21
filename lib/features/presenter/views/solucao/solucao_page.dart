@@ -15,7 +15,7 @@ import 'package:osi_solucoes/features/presenter/views/solucao/detalhes_solucao.d
 import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
 
 class SolucaoPage extends StatefulWidget {
-  const SolucaoPage({Key? key}) : super(key: key);
+  const SolucaoPage({super.key});
 
   @override
   State<SolucaoPage> createState() => _SolucaoPage();
@@ -50,11 +50,11 @@ class _SolucaoPage extends State<SolucaoPage> {
                 transition: Transition.rightToLeft,
               );
             },
+            backgroundColor: Constants.kPrimaryColor,
             child: const Icon(
               Icons.add,
               size: 32,
             ),
-            backgroundColor: Constants.kPrimaryColor,
           ),
           backgroundColor: Constants.kSecondBackgroundColor,
           body: Form(
@@ -125,9 +125,9 @@ class _SolucaoPage extends State<SolucaoPage> {
 // ignore: camel_case_types
 class AppBar extends StatefulWidget {
   const AppBar({
-    Key? key,
+    super.key,
     required this.store,
-  }) : super(key: key);
+  });
 
   final SolucaoStore store;
 
@@ -190,8 +190,7 @@ class _AppBarState extends State<AppBar> {
 
 class CardReceita extends StatefulWidget {
   final SolucaoNutritiva solucaoNutritiva;
-  const CardReceita({Key? key, required this.solucaoNutritiva})
-      : super(key: key);
+  const CardReceita({super.key, required this.solucaoNutritiva});
 
   @override
   State<CardReceita> createState() => _CardReceitaState();

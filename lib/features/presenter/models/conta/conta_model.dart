@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, avoid_print
 
 import 'package:json_annotation/json_annotation.dart';
 
@@ -83,7 +83,7 @@ class Conta {
 
   Map<String, dynamic> toJson() => _$ContaToJson(this);
 
-  toMap() {
+  Map<String, Object?> toMap() {
     return {
       'id': id,
       'nivel': nivel,

@@ -6,39 +6,40 @@ part of 'agenda_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$AgendaStore on _AgendaStoreBase, Store {
+mixin _$AgendaStore on AgendaStoreBase, Store {
   Computed<List<Agenda>>? _$listaParaSerUsadaComputed;
 
   @override
   List<Agenda> get listaParaSerUsada => (_$listaParaSerUsadaComputed ??=
           Computed<List<Agenda>>(() => super.listaParaSerUsada,
-              name: '_AgendaStoreBase.listaParaSerUsada'))
+              name: 'AgendaStoreBase.listaParaSerUsada'))
       .value;
   Computed<List<Agenda>>? _$filtrarPorLoteComputed;
 
   @override
   List<Agenda> get filtrarPorLote => (_$filtrarPorLoteComputed ??=
           Computed<List<Agenda>>(() => super.filtrarPorLote,
-              name: '_AgendaStoreBase.filtrarPorLote'))
+              name: 'AgendaStoreBase.filtrarPorLote'))
       .value;
   Computed<List<Agenda>>? _$filtrarPorResponsavelComputed;
 
   @override
   List<Agenda> get filtrarPorResponsavel => (_$filtrarPorResponsavelComputed ??=
           Computed<List<Agenda>>(() => super.filtrarPorResponsavel,
-              name: '_AgendaStoreBase.filtrarPorResponsavel'))
+              name: 'AgendaStoreBase.filtrarPorResponsavel'))
       .value;
   Computed<List<Agenda>>? _$filteredAtividadesComputed;
 
   @override
   List<Agenda> get filteredAtividades => (_$filteredAtividadesComputed ??=
           Computed<List<Agenda>>(() => super.filteredAtividades,
-              name: '_AgendaStoreBase.filteredAtividades'))
+              name: 'AgendaStoreBase.filteredAtividades'))
       .value;
 
-  final _$stateAtom = Atom(name: '_AgendaStoreBase.state');
+  late final _$stateAtom =
+      Atom(name: 'AgendaStoreBase.state', context: context);
 
   @override
   AgendaState get state {
@@ -53,7 +54,8 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$filterAtom = Atom(name: '_AgendaStoreBase.filter');
+  late final _$filterAtom =
+      Atom(name: 'AgendaStoreBase.filter', context: context);
 
   @override
   AgendaFilter get filter {
@@ -68,7 +70,8 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$filtroLoteAtom = Atom(name: '_AgendaStoreBase.filtroLote');
+  late final _$filtroLoteAtom =
+      Atom(name: 'AgendaStoreBase.filtroLote', context: context);
 
   @override
   Lote? get filtroLote {
@@ -83,8 +86,8 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$filtroResponsavelAtom =
-      Atom(name: '_AgendaStoreBase.filtroResponsavel');
+  late final _$filtroResponsavelAtom =
+      Atom(name: 'AgendaStoreBase.filtroResponsavel', context: context);
 
   @override
   Usuario? get filtroResponsavel {
@@ -99,7 +102,8 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$showEditPageAtom = Atom(name: '_AgendaStoreBase.showEditPage');
+  late final _$showEditPageAtom =
+      Atom(name: 'AgendaStoreBase.showEditPage', context: context);
 
   @override
   bool get showEditPage {
@@ -114,7 +118,8 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$selectedDayAtom = Atom(name: '_AgendaStoreBase.selectedDay');
+  late final _$selectedDayAtom =
+      Atom(name: 'AgendaStoreBase.selectedDay', context: context);
 
   @override
   DateTime? get selectedDay {
@@ -129,7 +134,8 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$atividadeListAtom = Atom(name: '_AgendaStoreBase.atividadeList');
+  late final _$atividadeListAtom =
+      Atom(name: 'AgendaStoreBase.atividadeList', context: context);
 
   @override
   List<Agenda> get atividadeList {
@@ -144,7 +150,8 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$usuariosContaAtom = Atom(name: '_AgendaStoreBase.usuariosConta');
+  late final _$usuariosContaAtom =
+      Atom(name: 'AgendaStoreBase.usuariosConta', context: context);
 
   @override
   List<Usuario> get usuariosConta {
@@ -159,7 +166,8 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$lotesContaAtom = Atom(name: '_AgendaStoreBase.lotesConta');
+  late final _$lotesContaAtom =
+      Atom(name: 'AgendaStoreBase.lotesConta', context: context);
 
   @override
   List<Lote> get lotesConta {
@@ -174,8 +182,8 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$tituloControllerAtom =
-      Atom(name: '_AgendaStoreBase.tituloController');
+  late final _$tituloControllerAtom =
+      Atom(name: 'AgendaStoreBase.tituloController', context: context);
 
   @override
   TextEditingController get tituloController {
@@ -190,8 +198,8 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$descricaoControllerAtom =
-      Atom(name: '_AgendaStoreBase.descricaoController');
+  late final _$descricaoControllerAtom =
+      Atom(name: 'AgendaStoreBase.descricaoController', context: context);
 
   @override
   TextEditingController get descricaoController {
@@ -206,7 +214,8 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$dataAtividadeAtom = Atom(name: '_AgendaStoreBase.dataAtividade');
+  late final _$dataAtividadeAtom =
+      Atom(name: 'AgendaStoreBase.dataAtividade', context: context);
 
   @override
   DateTime? get dataAtividade {
@@ -221,8 +230,8 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$usuarioAtividadeAtom =
-      Atom(name: '_AgendaStoreBase.usuarioAtividade');
+  late final _$usuarioAtividadeAtom =
+      Atom(name: 'AgendaStoreBase.usuarioAtividade', context: context);
 
   @override
   Usuario? get usuarioAtividade {
@@ -237,207 +246,208 @@ mixin _$AgendaStore on _AgendaStoreBase, Store {
     });
   }
 
-  final _$buscarAtividadesAsyncAction =
-      AsyncAction('_AgendaStoreBase.buscarAtividades');
+  late final _$buscarAtividadesAsyncAction =
+      AsyncAction('AgendaStoreBase.buscarAtividades', context: context);
 
   @override
-  Future buscarAtividades() {
+  Future<void> buscarAtividades() {
     return _$buscarAtividadesAsyncAction.run(() => super.buscarAtividades());
   }
 
-  final _$buscarUsuariosContaAsyncAction =
-      AsyncAction('_AgendaStoreBase.buscarUsuariosConta');
+  late final _$buscarUsuariosContaAsyncAction =
+      AsyncAction('AgendaStoreBase.buscarUsuariosConta', context: context);
 
   @override
-  Future buscarUsuariosConta() {
+  Future<void> buscarUsuariosConta() {
     return _$buscarUsuariosContaAsyncAction
         .run(() => super.buscarUsuariosConta());
   }
 
-  final _$buscarLotesContaAsyncAction =
-      AsyncAction('_AgendaStoreBase.buscarLotesConta');
+  late final _$buscarLotesContaAsyncAction =
+      AsyncAction('AgendaStoreBase.buscarLotesConta', context: context);
 
   @override
-  Future buscarLotesConta() {
+  Future<void> buscarLotesConta() {
     return _$buscarLotesContaAsyncAction.run(() => super.buscarLotesConta());
   }
 
-  final _$marcarAtividadeComoFeitaAsyncAction =
-      AsyncAction('_AgendaStoreBase.marcarAtividadeComoFeita');
+  late final _$marcarAtividadeComoFeitaAsyncAction =
+      AsyncAction('AgendaStoreBase.marcarAtividadeComoFeita', context: context);
 
   @override
-  Future marcarAtividadeComoFeita(int id) {
+  Future<void> marcarAtividadeComoFeita(int id) {
     return _$marcarAtividadeComoFeitaAsyncAction
         .run(() => super.marcarAtividadeComoFeita(id));
   }
 
-  final _$deletarAtividadeAsyncAction =
-      AsyncAction('_AgendaStoreBase.deletarAtividade');
+  late final _$deletarAtividadeAsyncAction =
+      AsyncAction('AgendaStoreBase.deletarAtividade', context: context);
 
   @override
-  Future deletarAtividade(int id) {
+  Future<void> deletarAtividade(int id) {
     return _$deletarAtividadeAsyncAction.run(() => super.deletarAtividade(id));
   }
 
-  final _$editAgendaAsyncAction = AsyncAction('_AgendaStoreBase.editAgenda');
+  late final _$editAgendaAsyncAction =
+      AsyncAction('AgendaStoreBase.editAgenda', context: context);
 
   @override
-  Future editAgenda(Agenda agenda) {
+  Future<void> editAgenda(Agenda agenda) {
     return _$editAgendaAsyncAction.run(() => super.editAgenda(agenda));
   }
 
-  final _$cadastrarAtividadeAsyncAction =
-      AsyncAction('_AgendaStoreBase.cadastrarAtividade');
+  late final _$cadastrarAtividadeAsyncAction =
+      AsyncAction('AgendaStoreBase.cadastrarAtividade', context: context);
 
   @override
-  Future cadastrarAtividade() {
+  Future<void> cadastrarAtividade() {
     return _$cadastrarAtividadeAsyncAction
         .run(() => super.cadastrarAtividade());
   }
 
-  final _$_AgendaStoreBaseActionController =
-      ActionController(name: '_AgendaStoreBase');
+  late final _$AgendaStoreBaseActionController =
+      ActionController(name: 'AgendaStoreBase', context: context);
 
   @override
-  dynamic setShowEditPage(bool value) {
-    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
-        name: '_AgendaStoreBase.setShowEditPage');
+  bool setShowEditPage(bool value) {
+    final _$actionInfo = _$AgendaStoreBaseActionController.startAction(
+        name: 'AgendaStoreBase.setShowEditPage');
     try {
       return super.setShowEditPage(value);
     } finally {
-      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+      _$AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setPageState(AgendaState value) {
-    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
-        name: '_AgendaStoreBase.setPageState');
+  AgendaState setPageState(AgendaState value) {
+    final _$actionInfo = _$AgendaStoreBaseActionController.startAction(
+        name: 'AgendaStoreBase.setPageState');
     try {
       return super.setPageState(value);
     } finally {
-      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+      _$AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setInitialStateForFilter() {
-    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
-        name: '_AgendaStoreBase.setInitialStateForFilter');
+  void setInitialStateForFilter() {
+    final _$actionInfo = _$AgendaStoreBaseActionController.startAction(
+        name: 'AgendaStoreBase.setInitialStateForFilter');
     try {
       return super.setInitialStateForFilter();
     } finally {
-      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+      _$AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setFiltro(AgendaFilter? value) {
-    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
-        name: '_AgendaStoreBase.setFiltro');
+  void setFiltro(AgendaFilter? value) {
+    final _$actionInfo = _$AgendaStoreBaseActionController.startAction(
+        name: 'AgendaStoreBase.setFiltro');
     try {
       return super.setFiltro(value);
     } finally {
-      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+      _$AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setFiltroLote(Lote? value, {int? loteId}) {
-    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
-        name: '_AgendaStoreBase.setFiltroLote');
+  void setFiltroLote(Lote? value, {int? loteId}) {
+    final _$actionInfo = _$AgendaStoreBaseActionController.startAction(
+        name: 'AgendaStoreBase.setFiltroLote');
     try {
       return super.setFiltroLote(value, loteId: loteId);
     } finally {
-      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+      _$AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setFiltroResponsavel(Usuario? value) {
-    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
-        name: '_AgendaStoreBase.setFiltroResponsavel');
+  void setFiltroResponsavel(Usuario? value) {
+    final _$actionInfo = _$AgendaStoreBaseActionController.startAction(
+        name: 'AgendaStoreBase.setFiltroResponsavel');
     try {
       return super.setFiltroResponsavel(value);
     } finally {
-      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+      _$AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   List<Agenda> getEventsForDay(DateTime day) {
-    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
-        name: '_AgendaStoreBase.getEventsForDay');
+    final _$actionInfo = _$AgendaStoreBaseActionController.startAction(
+        name: 'AgendaStoreBase.getEventsForDay');
     try {
       return super.getEventsForDay(day);
     } finally {
-      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+      _$AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void onDaySelected(DateTime? day) {
-    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
-        name: '_AgendaStoreBase.onDaySelected');
+    final _$actionInfo = _$AgendaStoreBaseActionController.startAction(
+        name: 'AgendaStoreBase.onDaySelected');
     try {
       return super.onDaySelected(day);
     } finally {
-      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+      _$AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setDataAtividade(DateTime? value) {
-    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
-        name: '_AgendaStoreBase.setDataAtividade');
+  DateTime? setDataAtividade(DateTime? value) {
+    final _$actionInfo = _$AgendaStoreBaseActionController.startAction(
+        name: 'AgendaStoreBase.setDataAtividade');
     try {
       return super.setDataAtividade(value);
     } finally {
-      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+      _$AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setUsuarioAtividade(Usuario? value) {
-    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
-        name: '_AgendaStoreBase.setUsuarioAtividade');
+  Usuario? setUsuarioAtividade(Usuario? value) {
+    final _$actionInfo = _$AgendaStoreBaseActionController.startAction(
+        name: 'AgendaStoreBase.setUsuarioAtividade');
     try {
       return super.setUsuarioAtividade(value);
     } finally {
-      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+      _$AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic carregarDadosDaAtividade(Agenda agenda) {
-    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
-        name: '_AgendaStoreBase.carregarDadosDaAtividade');
+  void carregarDadosDaAtividade(Agenda agenda) {
+    final _$actionInfo = _$AgendaStoreBaseActionController.startAction(
+        name: 'AgendaStoreBase.carregarDadosDaAtividade');
     try {
       return super.carregarDadosDaAtividade(agenda);
     } finally {
-      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+      _$AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   Agenda atualizarDadosDaAtividade(Agenda agenda) {
-    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
-        name: '_AgendaStoreBase.atualizarDadosDaAtividade');
+    final _$actionInfo = _$AgendaStoreBaseActionController.startAction(
+        name: 'AgendaStoreBase.atualizarDadosDaAtividade');
     try {
       return super.atualizarDadosDaAtividade(agenda);
     } finally {
-      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+      _$AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic limparDadosDaAtividade() {
-    final _$actionInfo = _$_AgendaStoreBaseActionController.startAction(
-        name: '_AgendaStoreBase.limparDadosDaAtividade');
+  void limparDadosDaAtividade() {
+    final _$actionInfo = _$AgendaStoreBaseActionController.startAction(
+        name: 'AgendaStoreBase.limparDadosDaAtividade');
     try {
       return super.limparDadosDaAtividade();
     } finally {
-      _$_AgendaStoreBaseActionController.endAction(_$actionInfo);
+      _$AgendaStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

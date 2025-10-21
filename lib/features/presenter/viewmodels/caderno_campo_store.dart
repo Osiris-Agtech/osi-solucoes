@@ -17,9 +17,9 @@ import "package:collection/collection.dart";
 
 part 'caderno_campo_store.g.dart';
 
-class CadernoCampoStore = _CadernoCampoStoreBase with _$CadernoCampoStore;
+class CadernoCampoStore = CadernoCampoStoreBase with _$CadernoCampoStore;
 
-abstract class _CadernoCampoStoreBase with Store {
+abstract class CadernoCampoStoreBase with Store {
   @observable
   List<Lote> loteList = [];
 
@@ -54,30 +54,30 @@ abstract class _CadernoCampoStoreBase with Store {
   TextEditingController searchLote = TextEditingController();
 
   @action
-  setSearchAtividade(String value) =>
+  TextEditingController setSearchAtividade(String value) =>
       searchAtividade = TextEditingController(text: value);
 
   @action
-  setSearchLote(String value) =>
+  TextEditingController setSearchLote(String value) =>
       searchLote = TextEditingController(text: value);
 
   @action
-  selecionarDropButtonArea(Area area) => dropButtonArea = area;
+  Area selecionarDropButtonArea(Area area) => dropButtonArea = area;
 
   @action
-  selecionarDropButtonSetor(Setor setor) => dropButtonSetor = setor;
+  Setor selecionarDropButtonSetor(Setor setor) => dropButtonSetor = setor;
 
   @action
-  setLoteSelecionado(Lote lote) => loteSelecionado = lote;
+  Lote setLoteSelecionado(Lote lote) => loteSelecionado = lote;
 
   @action
-  setExpandedCard(int index) {
+  void setExpandedCard(int index) {
     expandedCard[index] = !expandedCard[index];
     expandedCard = List.from(expandedCard);
   }
 
   @action
-  buscarLotesByConta() async {
+  Future<void> buscarLotesByConta() async {
     isLoteListLoading = true;
 
     CadernoCampoRepository cadernoCampoRepository =
@@ -102,7 +102,7 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
-  buscarAtividades() async {
+  Future<void> buscarAtividades() async {
     isLoteListLoading = true;
 
     CadernoCampoRepository cadernoCampoRepository =
@@ -146,7 +146,7 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
-  buscarLotesBySetor() async {
+  Future<void> buscarLotesBySetor() async {
     isLoteListLoading = true;
 
     CadernoCampoRepository cadernoCampoRepository =
@@ -169,7 +169,7 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
-  buscarLotesByArea() async {
+  Future<void> buscarLotesByArea() async {
     isLoteListLoading = true;
 
     CadernoCampoRepository cadernoCampoRepository =
@@ -192,7 +192,7 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
-  buscarAreasList() async {
+  Future<void> buscarAreasList() async {
     isAreaLoading = true;
 
     AuthController authController = GetIt.I<AuthController>();
@@ -214,10 +214,10 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
-  limparLoteSelecionado() => loteSelecionado = Lote();
+  Lote limparLoteSelecionado() => loteSelecionado = Lote();
 
   @action
-  limparLotes() {
+  void limparLotes() {
     loteList.clear();
     areaList.clear();
     isLoteListLoading = false;
@@ -305,10 +305,10 @@ abstract class _CadernoCampoStoreBase with Store {
   Lote loteCadastro = Lote();
 
   @action
-  selectDateRegistro(DateTime value) => dateRegistro = value;
+  DateTime selectDateRegistro(DateTime value) => dateRegistro = value;
 
   @action
-  selectTimeRegistro(TimeOfDay value) => dateRegistro = DateTime(
+  DateTime selectTimeRegistro(TimeOfDay value) => dateRegistro = DateTime(
       dateRegistro.year,
       dateRegistro.month,
       dateRegistro.day,
@@ -316,12 +316,12 @@ abstract class _CadernoCampoStoreBase with Store {
       value.minute);
 
   @action
-  setSeachLotePage(String value) {
+  void setSeachLotePage(String value) {
     searchLotePage = TextEditingController(text: value);
   }
 
   @action
-  selectUser(Usuario? usuario) {
+  void selectUser(Usuario? usuario) {
     selectedUsuario = usuario;
     if (usuario != null) {
       novoAutorName = TextEditingController(
@@ -332,34 +332,34 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
-  setDotIndicator(int value) {
+  void setDotIndicator(int value) {
     if (value >= 0 && value <= 2) {
       dotIndicator = value;
     }
   }
 
   @action
-  setSelectedGroup(String name) {
+  void setSelectedGroup(String name) {
     selectedGroup = name;
   }
 
   @action
-  setShowTextFormField(bool value) {
+  void setShowTextFormField(bool value) {
     showTextFormField = value;
   }
 
   @action
-  setIsCadastroLoteLoading(bool value) {
+  void setIsCadastroLoteLoading(bool value) {
     isCadastroLoteLoading = value;
   }
 
   @action
-  alterarAtividadeNome(String name) {
+  void alterarAtividadeNome(String name) {
     novoAtividadeName = TextEditingController(text: name);
   }
 
   @action
-  selectLotesGroup(int index, bool value) {
+  void selectLotesGroup(int index, bool value) {
     getLotesGroup[index].selected = value;
     for (var i = 0; i < getLotesGroup[index].lotesSelection.length; i++) {
       getLotesGroup[index].lotesSelection[i].selected = value;
@@ -369,7 +369,7 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
-  selectLotesByLote(Lote lote, bool value) {
+  void selectLotesByLote(Lote lote, bool value) {
     for (var i = 0; i < lotesGroup.length; i++) {
       for (var item in lotesGroup[i].lotesSelection) {
         if (item.lote.id == lote.id) item.selected = value;
@@ -380,13 +380,13 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
-  selectLotesSelection(int index1, int index2, bool value) {
+  void selectLotesSelection(int index1, int index2, bool value) {
     getLotesGroup[index1].lotesSelection[index2].selected = value;
     lotesGroup = List.from(lotesGroup);
   }
 
   @action
-  buscarUsuariosConta() async {
+  Future<void> buscarUsuariosConta() async {
     isAreaLoading = true;
 
     AuthController authController = GetIt.I<AuthController>();
@@ -417,7 +417,7 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
-  validarCadastro() {
+  bool validarCadastro() {
     bool validate = novoAtividadeName.text.isNotEmpty &&
         novaDescricao.text.isNotEmpty &&
         selectedUsuario != null;
@@ -427,7 +427,7 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
-  cadastrarAtividade() async {
+  Future<void> cadastrarAtividade() async {
     isNovoRegistroLoading = true;
 
     AuthController authController = GetIt.I<AuthController>();
@@ -472,7 +472,7 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
-  groupLotesBy() async {
+  Future<void> groupLotesBy() async {
     isCadastroLoteLoading = true;
 
     await buscarLotesByConta();
@@ -535,7 +535,7 @@ abstract class _CadernoCampoStoreBase with Store {
   }
 
   @action
-  limparTudo() {
+  void limparTudo() {
     dotIndicator = 0;
     isCadastroLoteLoading = false;
     showTextFormField = false;

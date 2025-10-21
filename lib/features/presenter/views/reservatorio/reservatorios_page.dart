@@ -12,8 +12,7 @@ import '../home/components/top_app_bar.dart';
 
 class ReservatoriosPage extends StatefulWidget {
   final String title;
-  const ReservatoriosPage({Key? key, this.title = 'ReservatoriosPage'})
-      : super(key: key);
+  const ReservatoriosPage({super.key, this.title = 'ReservatoriosPage'});
   @override
   ReservatoriosPageState createState() => ReservatoriosPageState();
 }
@@ -72,12 +71,12 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
         store.setIsEditing(false);
         Get.toNamed(Routes.cadastrarReservatoriosPage);
       },
+      backgroundColor: Constants.kPrimaryColor,
       child: const Icon(
         Icons.add,
         size: 30,
         color: Colors.white,
       ),
-      backgroundColor: Constants.kPrimaryColor,
     );
   }
 
@@ -151,11 +150,11 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
         },
       ),
       bottom: PreferredSize(
-        child: filterWidget(context),
         preferredSize: const Size(
           double.infinity,
           60, //MediaQuery.of(context).size.height * 0.06,
         ),
+        child: filterWidget(context),
       ),
     );
   }
@@ -192,7 +191,7 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
               ),
-              primary: Constants.kPrimaryColor,
+              backgroundColor: Constants.kPrimaryColor,
             ),
             child: const Text(
               "nome",

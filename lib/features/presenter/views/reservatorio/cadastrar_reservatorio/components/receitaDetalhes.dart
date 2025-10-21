@@ -9,8 +9,8 @@ import 'package:osi_solucoes/features/presenter/models/relacaoNutriente/relacaoN
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 
-Widget receitaDetalhe(BuildContext context, CarouselController controlerPages,
-    ReservatoriosStore store) {
+Widget receitaDetalhe(BuildContext context,
+    CarouselSliderController controlerPages, ReservatoriosStore store) {
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.8,
     child: Column(
@@ -24,7 +24,7 @@ Widget receitaDetalhe(BuildContext context, CarouselController controlerPages,
               width: 80,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: Constants.kContentColorLightTheme.withOpacity(.4),
+                color: Constants.kContentColorLightTheme.withValues(alpha: .4),
               ),
             ),
           ),
@@ -275,15 +275,10 @@ Widget receitaDetalhe(BuildContext context, CarouselController controlerPages,
                                   ),
                                   child: ListTile(
                                     dense: true,
-                                    title: Text('(' +
-                                        (item.nutriente?.sigla ?? '-') +
-                                        ') ' +
-                                        (item.nutriente?.nome ?? '-')),
+                                    title: Text(
+                                        '(${item.nutriente?.sigla ?? '-'}) ${item.nutriente?.nome ?? '-'}'),
                                     trailing: Text(
-                                        double.parse(item.teor_nutriente!)
-                                                .toStringAsFixed(2)
-                                                .replaceAll(".", ",") +
-                                            ' mg/L'),
+                                        '${double.parse(item.teor_nutriente!).toStringAsFixed(2).replaceAll(".", ",")} mg/L'),
                                   ),
                                 );
                               },
@@ -311,7 +306,7 @@ Widget receitaDetalhe(BuildContext context, CarouselController controlerPages,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(24),
                           ),
-                          primary: isAlreadySelected
+                          backgroundColor: isAlreadySelected
                               ? Constants.kErrorColor
                               : Constants.kPrimaryColor,
                         ),

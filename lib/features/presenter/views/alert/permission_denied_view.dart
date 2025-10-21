@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PermissionDeniedPage extends StatefulWidget {
-  const PermissionDeniedPage({Key? key}) : super(key: key);
+  const PermissionDeniedPage({super.key});
 
   @override
   State<PermissionDeniedPage> createState() => _PermissionDeniedPageState();

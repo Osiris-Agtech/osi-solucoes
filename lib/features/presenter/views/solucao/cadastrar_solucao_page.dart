@@ -1,4 +1,4 @@
-import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -16,9 +16,9 @@ import '../../routes/routes.dart';
 class CadastrarSolucaoPage extends StatefulWidget {
   final bool isShortcut;
   const    CadastrarSolucaoPage({
-    Key? key,
+    super.key,
     this.isShortcut = false,
-  }) : super(key: key);
+  });
 
   @override
   State<CadastrarSolucaoPage> createState() => _CadastrarSolucaoPageState();
@@ -26,8 +26,8 @@ class CadastrarSolucaoPage extends StatefulWidget {
 
 class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     with TickerProviderStateMixin {
-  CarouselController carouselController = CarouselController();
-  CarouselController controlerPages = CarouselController();
+  CarouselSliderController carouselController = CarouselSliderController();
+  CarouselSliderController controlerPages = CarouselSliderController();
   SolucaoStore store = GetIt.I<SolucaoStore>();
   late TabController tabController;
 
@@ -163,7 +163,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     );
   }
 
-  _cardListWithData() {
+  Column _cardListWithData() {
     return Column(
       children: [
         Padding(
@@ -221,7 +221,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     );
   }
 
-  _fertilizanteCardList() {
+  Padding _fertilizanteCardList() {
     return Padding(
       padding: const EdgeInsets.only(top: 10, bottom: 20),
       child: Container(
@@ -298,7 +298,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     );
   }
 
-  _relacaoList() {
+  Padding _relacaoList() {
     return Padding(
       padding: const EdgeInsets.only(top: 10, bottom: 20),
       child: Container(
@@ -386,7 +386,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     );
   }
 
-  bodyCard(ItemFertilizante itemFertilizante, int index) {
+  Padding bodyCard(ItemFertilizante itemFertilizante, int index) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0, right: 16),
       child: Column(
@@ -424,7 +424,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     );
   }
 
-  headerCard(ItemFertilizante itemFertilizante) {
+  ListTile headerCard(ItemFertilizante itemFertilizante) {
     return ListTile(
       contentPadding: const EdgeInsets.only(right: 0),
       dense: true,
@@ -492,7 +492,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     );
   }
 
-  _nome(BuildContext context) {
+  Padding _nome(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: InkWell(
@@ -562,7 +562,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     );
   }
 
-  _fertilizantes(BuildContext context) {
+  Padding _fertilizantes(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: InkWell(
@@ -644,7 +644,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     );
   }
 
-  _nextButton(Size size) {
+  Padding _nextButton(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       child: SizedBox(
@@ -652,7 +652,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
         height: 40,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: Constants.kPrimaryColor,
+            backgroundColor: Constants.kPrimaryColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             ),

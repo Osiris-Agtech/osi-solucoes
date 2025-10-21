@@ -14,7 +14,7 @@ import '../widgets/flutter_rounded_year_picker.dart';
 
 class FlutterRoundedDatePickerDialog extends StatefulWidget {
   const FlutterRoundedDatePickerDialog({
-    Key? key,
+    super.key,
     this.title = '',
     this.titleTextStyle,
     this.headerLine = const Color(0xffF3F3F3),
@@ -42,7 +42,7 @@ class FlutterRoundedDatePickerDialog extends StatefulWidget {
     this.onTapDay,
     this.onMonthChange,
     this.subtitle,
-  }) : super(key: key);
+  });
 
   final DateTime initialDate;
   final DateTime firstDate;
@@ -210,7 +210,6 @@ class _FlutterRoundedDatePickerDialogState
           style: widget.styleYearPicker,
         );
       case DatePickerMode.day:
-      default:
         return FlutterRoundedMonthPicker(
             key: _pickerKey,
             mode: _mode,
@@ -328,7 +327,6 @@ class _FlutterRoundedDatePickerDialogState
               ),
             );
           case Orientation.portrait:
-          default:
             return ClipRRect(
               borderRadius: BorderRadius.circular(widget.borderRadius),
               child: Container(
@@ -488,7 +486,8 @@ class _FlutterRoundedDatePickerDialogState
     );
 
     return Theme(
-      data: theme.copyWith(dialogBackgroundColor: Colors.transparent),
+      data: theme.copyWith(
+          dialogTheme: DialogThemeData(backgroundColor: Colors.transparent)),
       child: dialog,
     );
   }

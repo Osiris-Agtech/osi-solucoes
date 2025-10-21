@@ -13,9 +13,7 @@ extension SistemaProtocoloEnumExt on SistemaProtocoloEnum {
         return 'Solo (Tradicional)';
       case SistemaProtocoloEnum.substrato:
         return 'Substrado';
-      default:
-        return '';
-    }
+      }
   }
 }
 

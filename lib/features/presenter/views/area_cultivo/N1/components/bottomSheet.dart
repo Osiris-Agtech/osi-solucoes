@@ -9,8 +9,8 @@ import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components
 
 Future<void> bottomSheet(
     BuildContext context,
-    CarouselController controlerPages,
-    CarouselController carouselController,
+    CarouselSliderController controlerPages,
+    CarouselSliderController carouselController,
     AreaCultivoStore store) {
   return showModalBottomSheet<void>(
     backgroundColor: Constants.kBackgroundColor,

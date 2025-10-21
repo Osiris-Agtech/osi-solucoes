@@ -12,10 +12,10 @@ class CadastrarReservatorioPage extends StatefulWidget {
   final String title;
   final bool isShortcut;
   const CadastrarReservatorioPage({
-    Key? key,
+    super.key,
     this.title = 'CadastrarReservatorioPage',
     this.isShortcut = false,
-  }) : super(key: key);
+  });
   @override
   CadastrarReservatorioPageState createState() =>
       CadastrarReservatorioPageState();
@@ -23,8 +23,8 @@ class CadastrarReservatorioPage extends StatefulWidget {
 
 class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
   ReservatoriosStore store = GetIt.I<ReservatoriosStore>();
-  CarouselController carouselController = CarouselController();
-  CarouselController controlerPages = CarouselController();
+  CarouselSliderController carouselController = CarouselSliderController();
+  CarouselSliderController controlerPages = CarouselSliderController();
 
   @override
   void dispose() {
@@ -161,7 +161,7 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
           child: Observer(builder: (_) {
             return ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Constants.kPrimaryColor,
+                backgroundColor: Constants.kPrimaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -283,7 +283,7 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
                         children: [
                           Expanded(
                             child: Text(
-                              store.novoReservatorioVolume.text + " Litros",
+                              "${store.novoReservatorioVolume.text} Litros",
                               textAlign: TextAlign.end,
                               style: const TextStyle(
                                   color: Constants.kPrimaryColor,

@@ -17,6 +17,7 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
       systemNavigationBarIconBrightness: Brightness.dark,
       statusBarColor: Constants.kBackgroundColor,
       statusBarIconBrightness: Brightness.dark,
@@ -26,7 +27,7 @@ void main() async {
 }
 
 class AppWidget extends StatelessWidget {
-  const AppWidget({Key? key}) : super(key: key);
+  const AppWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +47,8 @@ class AppWidget extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Gerenciador de Cultivos',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         fontFamily: "Montserrat",
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
       ),
       initialRoute: Routes.splashPage,
       getPages: AppPages.routes,

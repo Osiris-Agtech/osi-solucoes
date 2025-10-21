@@ -6,18 +6,19 @@ part of 'gerenciar_equipe_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
+mixin _$GerenciarEquipeStore on GerenciarEquipeBase, Store {
   Computed<List<Usuario>>? _$searchUserComputed;
 
   @override
   List<Usuario> get searchUser =>
       (_$searchUserComputed ??= Computed<List<Usuario>>(() => super.searchUser,
-              name: '_GerenciarEquipeBase.searchUser'))
+              name: 'GerenciarEquipeBase.searchUser'))
           .value;
 
-  final _$valueAtom = Atom(name: '_GerenciarEquipeBase.value');
+  late final _$valueAtom =
+      Atom(name: 'GerenciarEquipeBase.value', context: context);
 
   @override
   int get value {
@@ -32,8 +33,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$isUserListLoadingAtom =
-      Atom(name: '_GerenciarEquipeBase.isUserListLoading');
+  late final _$isUserListLoadingAtom =
+      Atom(name: 'GerenciarEquipeBase.isUserListLoading', context: context);
 
   @override
   bool get isUserListLoading {
@@ -48,7 +49,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$userListAtom = Atom(name: '_GerenciarEquipeBase.userList');
+  late final _$userListAtom =
+      Atom(name: 'GerenciarEquipeBase.userList', context: context);
 
   @override
   List<Usuario> get userList {
@@ -63,7 +65,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$userMapAtom = Atom(name: '_GerenciarEquipeBase.userMap');
+  late final _$userMapAtom =
+      Atom(name: 'GerenciarEquipeBase.userMap', context: context);
 
   @override
   List<UserMap> get userMap {
@@ -78,8 +81,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$searchUserTextAtom =
-      Atom(name: '_GerenciarEquipeBase.searchUserText');
+  late final _$searchUserTextAtom =
+      Atom(name: 'GerenciarEquipeBase.searchUserText', context: context);
 
   @override
   String get searchUserText {
@@ -94,8 +97,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$usuarioSelecionadoAtom =
-      Atom(name: '_GerenciarEquipeBase.usuarioSelecionado');
+  late final _$usuarioSelecionadoAtom =
+      Atom(name: 'GerenciarEquipeBase.usuarioSelecionado', context: context);
 
   @override
   Usuario get usuarioSelecionado {
@@ -110,7 +113,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$novoUsuarioAtom = Atom(name: '_GerenciarEquipeBase.novoUsuario');
+  late final _$novoUsuarioAtom =
+      Atom(name: 'GerenciarEquipeBase.novoUsuario', context: context);
 
   @override
   Usuario get novoUsuario {
@@ -125,8 +129,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$ativoIsChangedAtom =
-      Atom(name: '_GerenciarEquipeBase.ativoIsChanged');
+  late final _$ativoIsChangedAtom =
+      Atom(name: 'GerenciarEquipeBase.ativoIsChanged', context: context);
 
   @override
   bool get ativoIsChanged {
@@ -141,7 +145,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$cargosListAtom = Atom(name: '_GerenciarEquipeBase.cargosList');
+  late final _$cargosListAtom =
+      Atom(name: 'GerenciarEquipeBase.cargosList', context: context);
 
   @override
   List<Cargo> get cargosList {
@@ -156,8 +161,9 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$cargoSelecionadoDetalhesPageAtom =
-      Atom(name: '_GerenciarEquipeBase.cargoSelecionadoDetalhesPage');
+  late final _$cargoSelecionadoDetalhesPageAtom = Atom(
+      name: 'GerenciarEquipeBase.cargoSelecionadoDetalhesPage',
+      context: context);
 
   @override
   Cargo? get cargoSelecionadoDetalhesPage {
@@ -173,8 +179,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$cargoSelecionadoAtom =
-      Atom(name: '_GerenciarEquipeBase.cargoSelecionado');
+  late final _$cargoSelecionadoAtom =
+      Atom(name: 'GerenciarEquipeBase.cargoSelecionado', context: context);
 
   @override
   Cargo? get cargoSelecionado {
@@ -189,8 +195,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$usuarioEncontradoAtom =
-      Atom(name: '_GerenciarEquipeBase.usuarioEncontrado');
+  late final _$usuarioEncontradoAtom =
+      Atom(name: 'GerenciarEquipeBase.usuarioEncontrado', context: context);
 
   @override
   Usuario? get usuarioEncontrado {
@@ -205,7 +211,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$emailAtom = Atom(name: '_GerenciarEquipeBase.email');
+  late final _$emailAtom =
+      Atom(name: 'GerenciarEquipeBase.email', context: context);
 
   @override
   TextEditingController get email {
@@ -220,7 +227,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$nomeAtom = Atom(name: '_GerenciarEquipeBase.nome');
+  late final _$nomeAtom =
+      Atom(name: 'GerenciarEquipeBase.nome', context: context);
 
   @override
   TextEditingController get nome {
@@ -235,7 +243,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$sobrenomeAtom = Atom(name: '_GerenciarEquipeBase.sobrenome');
+  late final _$sobrenomeAtom =
+      Atom(name: 'GerenciarEquipeBase.sobrenome', context: context);
 
   @override
   TextEditingController get sobrenome {
@@ -250,7 +259,8 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$pessoaFoundAtom = Atom(name: '_GerenciarEquipeBase.pessoaFound');
+  late final _$pessoaFoundAtom =
+      Atom(name: 'GerenciarEquipeBase.pessoaFound', context: context);
 
   @override
   bool get pessoaFound {
@@ -265,178 +275,178 @@ mixin _$GerenciarEquipeStore on _GerenciarEquipeBase, Store {
     });
   }
 
-  final _$buscarUsuariosAsyncAction =
-      AsyncAction('_GerenciarEquipeBase.buscarUsuarios');
+  late final _$buscarUsuariosAsyncAction =
+      AsyncAction('GerenciarEquipeBase.buscarUsuarios', context: context);
 
   @override
-  Future buscarUsuarios() {
+  Future<void> buscarUsuarios() {
     return _$buscarUsuariosAsyncAction.run(() => super.buscarUsuarios());
   }
 
-  final _$buscarCargosAsyncAction =
-      AsyncAction('_GerenciarEquipeBase.buscarCargos');
+  late final _$buscarCargosAsyncAction =
+      AsyncAction('GerenciarEquipeBase.buscarCargos', context: context);
 
   @override
-  Future buscarCargos() {
+  Future<void> buscarCargos() {
     return _$buscarCargosAsyncAction.run(() => super.buscarCargos());
   }
 
-  final _$alterarUsuarioAsyncAction =
-      AsyncAction('_GerenciarEquipeBase.alterarUsuario');
+  late final _$alterarUsuarioAsyncAction =
+      AsyncAction('GerenciarEquipeBase.alterarUsuario', context: context);
 
   @override
-  Future alterarUsuario() {
+  Future<void> alterarUsuario() {
     return _$alterarUsuarioAsyncAction.run(() => super.alterarUsuario());
   }
 
-  final _$buscarPessoaAsyncAction =
-      AsyncAction('_GerenciarEquipeBase.buscarPessoa');
+  late final _$buscarPessoaAsyncAction =
+      AsyncAction('GerenciarEquipeBase.buscarPessoa', context: context);
 
   @override
-  Future buscarPessoa() {
+  Future<void> buscarPessoa() {
     return _$buscarPessoaAsyncAction.run(() => super.buscarPessoa());
   }
 
-  final _$registrarUsuarioAsyncAction =
-      AsyncAction('_GerenciarEquipeBase.registrarUsuario');
+  late final _$registrarUsuarioAsyncAction =
+      AsyncAction('GerenciarEquipeBase.registrarUsuario', context: context);
 
   @override
-  Future registrarUsuario() {
+  Future<void> registrarUsuario() {
     return _$registrarUsuarioAsyncAction.run(() => super.registrarUsuario());
   }
 
-  final _$_GerenciarEquipeBaseActionController =
-      ActionController(name: '_GerenciarEquipeBase');
+  late final _$GerenciarEquipeBaseActionController =
+      ActionController(name: 'GerenciarEquipeBase', context: context);
 
   @override
   void increment() {
-    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
-        name: '_GerenciarEquipeBase.increment');
+    final _$actionInfo = _$GerenciarEquipeBaseActionController.startAction(
+        name: 'GerenciarEquipeBase.increment');
     try {
       return super.increment();
     } finally {
-      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+      _$GerenciarEquipeBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setsearchUserText(String value) {
-    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
-        name: '_GerenciarEquipeBase.setsearchUserText');
+  String setsearchUserText(String value) {
+    final _$actionInfo = _$GerenciarEquipeBaseActionController.startAction(
+        name: 'GerenciarEquipeBase.setsearchUserText');
     try {
       return super.setsearchUserText(value);
     } finally {
-      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+      _$GerenciarEquipeBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setUsuarioSelecionado(Usuario value) {
-    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
-        name: '_GerenciarEquipeBase.setUsuarioSelecionado');
+  void setUsuarioSelecionado(Usuario value) {
+    final _$actionInfo = _$GerenciarEquipeBaseActionController.startAction(
+        name: 'GerenciarEquipeBase.setUsuarioSelecionado');
     try {
       return super.setUsuarioSelecionado(value);
     } finally {
-      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+      _$GerenciarEquipeBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setAtivo(bool value) {
-    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
-        name: '_GerenciarEquipeBase.setAtivo');
+  bool setAtivo(bool value) {
+    final _$actionInfo = _$GerenciarEquipeBaseActionController.startAction(
+        name: 'GerenciarEquipeBase.setAtivo');
     try {
       return super.setAtivo(value);
     } finally {
-      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+      _$GerenciarEquipeBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic clearDatalhes() {
-    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
-        name: '_GerenciarEquipeBase.clearDatalhes');
+  void clearDatalhes() {
+    final _$actionInfo = _$GerenciarEquipeBaseActionController.startAction(
+        name: 'GerenciarEquipeBase.clearDatalhes');
     try {
       return super.clearDatalhes();
     } finally {
-      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+      _$GerenciarEquipeBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setInitialCargo() {
-    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
-        name: '_GerenciarEquipeBase.setInitialCargo');
+  void setInitialCargo() {
+    final _$actionInfo = _$GerenciarEquipeBaseActionController.startAction(
+        name: 'GerenciarEquipeBase.setInitialCargo');
     try {
       return super.setInitialCargo();
     } finally {
-      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+      _$GerenciarEquipeBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setCargoDetalhesPage(Cargo cargo) {
-    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
-        name: '_GerenciarEquipeBase.setCargoDetalhesPage');
+  Cargo setCargoDetalhesPage(Cargo cargo) {
+    final _$actionInfo = _$GerenciarEquipeBaseActionController.startAction(
+        name: 'GerenciarEquipeBase.setCargoDetalhesPage');
     try {
       return super.setCargoDetalhesPage(cargo);
     } finally {
-      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+      _$GerenciarEquipeBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic clearCadastro() {
-    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
-        name: '_GerenciarEquipeBase.clearCadastro');
+  void clearCadastro() {
+    final _$actionInfo = _$GerenciarEquipeBaseActionController.startAction(
+        name: 'GerenciarEquipeBase.clearCadastro');
     try {
       return super.clearCadastro();
     } finally {
-      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+      _$GerenciarEquipeBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setCargo(Cargo cargo) {
-    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
-        name: '_GerenciarEquipeBase.setCargo');
+  Cargo setCargo(Cargo cargo) {
+    final _$actionInfo = _$GerenciarEquipeBaseActionController.startAction(
+        name: 'GerenciarEquipeBase.setCargo');
     try {
       return super.setCargo(cargo);
     } finally {
-      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+      _$GerenciarEquipeBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setEmail(String value) {
-    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
-        name: '_GerenciarEquipeBase.setEmail');
+  void setEmail(String value) {
+    final _$actionInfo = _$GerenciarEquipeBaseActionController.startAction(
+        name: 'GerenciarEquipeBase.setEmail');
     try {
       return super.setEmail(value);
     } finally {
-      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+      _$GerenciarEquipeBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setNome(String value) {
-    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
-        name: '_GerenciarEquipeBase.setNome');
+  void setNome(String value) {
+    final _$actionInfo = _$GerenciarEquipeBaseActionController.startAction(
+        name: 'GerenciarEquipeBase.setNome');
     try {
       return super.setNome(value);
     } finally {
-      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+      _$GerenciarEquipeBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setSobrenome(String value) {
-    final _$actionInfo = _$_GerenciarEquipeBaseActionController.startAction(
-        name: '_GerenciarEquipeBase.setSobrenome');
+  void setSobrenome(String value) {
+    final _$actionInfo = _$GerenciarEquipeBaseActionController.startAction(
+        name: 'GerenciarEquipeBase.setSobrenome');
     try {
       return super.setSobrenome(value);
     } finally {
-      _$_GerenciarEquipeBaseActionController.endAction(_$actionInfo);
+      _$GerenciarEquipeBaseActionController.endAction(_$actionInfo);
     }
   }
 

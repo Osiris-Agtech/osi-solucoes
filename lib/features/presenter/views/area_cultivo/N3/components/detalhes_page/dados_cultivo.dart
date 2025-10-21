@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
-embalagensProduzidas(LoteStore store, {bool enableEditing = true}) {
+Padding embalagensProduzidas(LoteStore store, {bool enableEditing = true}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20.0),
     child: ListTile(
@@ -69,7 +69,7 @@ embalagensProduzidas(LoteStore store, {bool enableEditing = true}) {
   );
 }
 
-plantasColhidas(LoteStore store, {bool enableEditing = true}) {
+Padding plantasColhidas(LoteStore store, {bool enableEditing = true}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20.0),
     child: ListTile(
@@ -135,7 +135,7 @@ plantasColhidas(LoteStore store, {bool enableEditing = true}) {
   );
 }
 
-mudasTransplantadas(LoteStore store, {bool enableEditing = true}) {
+Padding mudasTransplantadas(LoteStore store, {bool enableEditing = true}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20.0),
     child: ListTile(
@@ -201,7 +201,7 @@ mudasTransplantadas(LoteStore store, {bool enableEditing = true}) {
   );
 }
 
-bandeijasSemeadas(LoteStore store, {bool enableEditing = true}) {
+Padding bandeijasSemeadas(LoteStore store, {bool enableEditing = true}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20.0),
     child: ListTile(

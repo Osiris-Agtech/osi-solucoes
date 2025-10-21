@@ -13,11 +13,11 @@ abstract class HomeStoreBase with Store {
   bool isNotified = false;
 
   @action
-  toggleNotified() => isNotified = !isNotified;
+  bool toggleNotified() => isNotified = !isNotified;
 
   @observable
   bool isCollapsed = true;
 
   @action
-  setIsCollaped() => isCollapsed = !isCollapsed;
+  bool setIsCollaped() => isCollapsed = !isCollapsed;
 }

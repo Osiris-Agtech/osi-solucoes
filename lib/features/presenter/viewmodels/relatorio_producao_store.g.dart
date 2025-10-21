@@ -6,63 +6,63 @@ part of 'relatorio_producao_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$RelatorioProducaoStore on _RelatorioProducaoStoreBase, Store {
+mixin _$RelatorioProducaoStore on RelatorioProducaoStoreBase, Store {
   Computed<List<CultureData>>? _$cultureDataComputed;
 
   @override
   List<CultureData> get cultureData => (_$cultureDataComputed ??=
           Computed<List<CultureData>>(() => super.cultureData,
-              name: '_RelatorioProducaoStoreBase.cultureData'))
+              name: 'RelatorioProducaoStoreBase.cultureData'))
       .value;
   Computed<String>? _$reportTitleComputed;
 
   @override
   String get reportTitle =>
       (_$reportTitleComputed ??= Computed<String>(() => super.reportTitle,
-              name: '_RelatorioProducaoStoreBase.reportTitle'))
+              name: 'RelatorioProducaoStoreBase.reportTitle'))
           .value;
   Computed<String>? _$reportSubtitleComputed;
 
   @override
   String get reportSubtitle =>
       (_$reportSubtitleComputed ??= Computed<String>(() => super.reportSubtitle,
-              name: '_RelatorioProducaoStoreBase.reportSubtitle'))
+              name: 'RelatorioProducaoStoreBase.reportSubtitle'))
           .value;
   Computed<String>? _$totalUnitComputed;
 
   @override
   String get totalUnit =>
       (_$totalUnitComputed ??= Computed<String>(() => super.totalUnit,
-              name: '_RelatorioProducaoStoreBase.totalUnit'))
+              name: 'RelatorioProducaoStoreBase.totalUnit'))
           .value;
   Computed<List<String>>? _$monthsComputed;
 
   @override
   List<String> get months =>
       (_$monthsComputed ??= Computed<List<String>>(() => super.months,
-              name: '_RelatorioProducaoStoreBase.months'))
+              name: 'RelatorioProducaoStoreBase.months'))
           .value;
   Computed<List<double>>? _$monthlyDataComputed;
 
   @override
   List<double> get monthlyData =>
       (_$monthlyDataComputed ??= Computed<List<double>>(() => super.monthlyData,
-              name: '_RelatorioProducaoStoreBase.monthlyData'))
+              name: 'RelatorioProducaoStoreBase.monthlyData'))
           .value;
   Computed<bool>? _$hasDataComputed;
 
   @override
   bool get hasData => (_$hasDataComputed ??= Computed<bool>(() => super.hasData,
-          name: '_RelatorioProducaoStoreBase.hasData'))
+          name: 'RelatorioProducaoStoreBase.hasData'))
       .value;
   Computed<double>? _$totalProductionComputed;
 
   @override
   double get totalProduction => (_$totalProductionComputed ??= Computed<double>(
           () => super.totalProduction,
-          name: '_RelatorioProducaoStoreBase.totalProduction'))
+          name: 'RelatorioProducaoStoreBase.totalProduction'))
       .value;
   Computed<Map<String, dynamic>>? _$estatisticasResumoComputed;
 
@@ -70,17 +70,18 @@ mixin _$RelatorioProducaoStore on _RelatorioProducaoStoreBase, Store {
   Map<String, dynamic> get estatisticasResumo =>
       (_$estatisticasResumoComputed ??= Computed<Map<String, dynamic>>(
               () => super.estatisticasResumo,
-              name: '_RelatorioProducaoStoreBase.estatisticasResumo'))
+              name: 'RelatorioProducaoStoreBase.estatisticasResumo'))
           .value;
   Computed<double>? _$mediaProducaoMensalComputed;
 
   @override
   double get mediaProducaoMensal => (_$mediaProducaoMensalComputed ??=
           Computed<double>(() => super.mediaProducaoMensal,
-              name: '_RelatorioProducaoStoreBase.mediaProducaoMensal'))
+              name: 'RelatorioProducaoStoreBase.mediaProducaoMensal'))
       .value;
 
-  final _$isLoadingAtom = Atom(name: '_RelatorioProducaoStoreBase.isLoading');
+  late final _$isLoadingAtom =
+      Atom(name: 'RelatorioProducaoStoreBase.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -95,7 +96,8 @@ mixin _$RelatorioProducaoStore on _RelatorioProducaoStoreBase, Store {
     });
   }
 
-  final _$hasErrorAtom = Atom(name: '_RelatorioProducaoStoreBase.hasError');
+  late final _$hasErrorAtom =
+      Atom(name: 'RelatorioProducaoStoreBase.hasError', context: context);
 
   @override
   bool get hasError {
@@ -110,8 +112,8 @@ mixin _$RelatorioProducaoStore on _RelatorioProducaoStoreBase, Store {
     });
   }
 
-  final _$errorMessageAtom =
-      Atom(name: '_RelatorioProducaoStoreBase.errorMessage');
+  late final _$errorMessageAtom =
+      Atom(name: 'RelatorioProducaoStoreBase.errorMessage', context: context);
 
   @override
   String get errorMessage {
@@ -126,8 +128,8 @@ mixin _$RelatorioProducaoStore on _RelatorioProducaoStoreBase, Store {
     });
   }
 
-  final _$relatorioDataAtom =
-      Atom(name: '_RelatorioProducaoStoreBase.relatorioData');
+  late final _$relatorioDataAtom =
+      Atom(name: 'RelatorioProducaoStoreBase.relatorioData', context: context);
 
   @override
   RelatorioProducao? get relatorioData {
@@ -142,7 +144,8 @@ mixin _$RelatorioProducaoStore on _RelatorioProducaoStoreBase, Store {
     });
   }
 
-  final _$widgetDataAtom = Atom(name: '_RelatorioProducaoStoreBase.widgetData');
+  late final _$widgetDataAtom =
+      Atom(name: 'RelatorioProducaoStoreBase.widgetData', context: context);
 
   @override
   List<CultureData> get widgetData {
@@ -157,8 +160,9 @@ mixin _$RelatorioProducaoStore on _RelatorioProducaoStoreBase, Store {
     });
   }
 
-  final _$buscarRelatorioProducaoAsyncAction =
-      AsyncAction('_RelatorioProducaoStoreBase.buscarRelatorioProducao');
+  late final _$buscarRelatorioProducaoAsyncAction = AsyncAction(
+      'RelatorioProducaoStoreBase.buscarRelatorioProducao',
+      context: context);
 
   @override
   Future<void> buscarRelatorioProducao() {
@@ -166,58 +170,58 @@ mixin _$RelatorioProducaoStore on _RelatorioProducaoStoreBase, Store {
         .run(() => super.buscarRelatorioProducao());
   }
 
-  final _$refreshDataAsyncAction =
-      AsyncAction('_RelatorioProducaoStoreBase.refreshData');
+  late final _$refreshDataAsyncAction =
+      AsyncAction('RelatorioProducaoStoreBase.refreshData', context: context);
 
   @override
   Future<void> refreshData() {
     return _$refreshDataAsyncAction.run(() => super.refreshData());
   }
 
-  final _$_RelatorioProducaoStoreBaseActionController =
-      ActionController(name: '_RelatorioProducaoStoreBase');
+  late final _$RelatorioProducaoStoreBaseActionController =
+      ActionController(name: 'RelatorioProducaoStoreBase', context: context);
 
   @override
   void setLoading(bool value) {
-    final _$actionInfo = _$_RelatorioProducaoStoreBaseActionController
-        .startAction(name: '_RelatorioProducaoStoreBase.setLoading');
+    final _$actionInfo = _$RelatorioProducaoStoreBaseActionController
+        .startAction(name: 'RelatorioProducaoStoreBase.setLoading');
     try {
       return super.setLoading(value);
     } finally {
-      _$_RelatorioProducaoStoreBaseActionController.endAction(_$actionInfo);
+      _$RelatorioProducaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setError(bool hasErr, String message) {
-    final _$actionInfo = _$_RelatorioProducaoStoreBaseActionController
-        .startAction(name: '_RelatorioProducaoStoreBase.setError');
+    final _$actionInfo = _$RelatorioProducaoStoreBaseActionController
+        .startAction(name: 'RelatorioProducaoStoreBase.setError');
     try {
       return super.setError(hasErr, message);
     } finally {
-      _$_RelatorioProducaoStoreBaseActionController.endAction(_$actionInfo);
+      _$RelatorioProducaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setRelatorioData(RelatorioProducao data) {
-    final _$actionInfo = _$_RelatorioProducaoStoreBaseActionController
-        .startAction(name: '_RelatorioProducaoStoreBase.setRelatorioData');
+    final _$actionInfo = _$RelatorioProducaoStoreBaseActionController
+        .startAction(name: 'RelatorioProducaoStoreBase.setRelatorioData');
     try {
       return super.setRelatorioData(data);
     } finally {
-      _$_RelatorioProducaoStoreBaseActionController.endAction(_$actionInfo);
+      _$RelatorioProducaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void clearData() {
-    final _$actionInfo = _$_RelatorioProducaoStoreBaseActionController
-        .startAction(name: '_RelatorioProducaoStoreBase.clearData');
+    final _$actionInfo = _$RelatorioProducaoStoreBaseActionController
+        .startAction(name: 'RelatorioProducaoStoreBase.clearData');
     try {
       return super.clearData();
     } finally {
-      _$_RelatorioProducaoStoreBaseActionController.endAction(_$actionInfo);
+      _$RelatorioProducaoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

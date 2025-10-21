@@ -18,8 +18,7 @@ import 'components/detalhes_bottomSheet.dart';
 class AgendaPage extends StatefulWidget {
   final String title;
   final int? loteId;
-  const AgendaPage({Key? key, this.loteId, this.title = 'AgendaPage'})
-      : super(key: key);
+  const AgendaPage({super.key, this.loteId, this.title = 'AgendaPage'});
   @override
   AgendaPageState createState() => AgendaPageState();
 }
@@ -100,7 +99,7 @@ class AgendaPageState extends State<AgendaPage> {
                                 width: 150,
                                 child: Observer(builder: (_) {
                                   return DropdownButtonFormField<AgendaFilter>(
-                                    value: store.filter,
+                                    initialValue: store.filter,
                                     hint: const Text(
                                       'Filtro',
                                       style: TextStyle(
@@ -134,7 +133,7 @@ class AgendaPageState extends State<AgendaPage> {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 8.0),
                                 child: DropdownButtonFormField<Lote>(
-                                  value: store.filtroLote,
+                                  initialValue: store.filtroLote,
                                   hint: const Text(
                                     'Selecionar Lote',
                                     style:
@@ -156,7 +155,7 @@ class AgendaPageState extends State<AgendaPage> {
                             return Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: DropdownButtonFormField<Usuario>(
-                                value: store.filtroResponsavel,
+                                initialValue: store.filtroResponsavel,
                                 hint: const Text(
                                   'Selecionar Responsável',
                                   style: TextStyle(fontStyle: FontStyle.italic),
@@ -312,7 +311,7 @@ class AgendaPageState extends State<AgendaPage> {
     );
   }
 
-  _showList() {
+  SliverToBoxAdapter _showList() {
     return SliverToBoxAdapter(
       child: Container(
         constraints: BoxConstraints(
@@ -358,7 +357,7 @@ class AgendaPageState extends State<AgendaPage> {
     );
   }
 
-  _emptyList() {
+  SliverList _emptyList() {
     return SliverList(
       delegate: SliverChildListDelegate(
         [
@@ -391,7 +390,7 @@ class AgendaPageState extends State<AgendaPage> {
     );
   }
 
-  _loadingList() {
+  SliverList _loadingList() {
     return SliverList(
       delegate: SliverChildListDelegate(
         [

@@ -7,7 +7,7 @@ part of 'protocolo_model.dart';
 // **************************************************************************
 
 Protocolo _$ProtocoloFromJson(Map<String, dynamic> json) => Protocolo(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       descricao: json['descricao'] as String?,
       implantacao: json['implantacao'] as String?,

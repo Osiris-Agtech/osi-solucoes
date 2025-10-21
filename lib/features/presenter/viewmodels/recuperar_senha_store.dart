@@ -11,9 +11,9 @@ import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 
 part 'recuperar_senha_store.g.dart';
 
-class RecuperarSenhaStore = _RecuperarSenhaStoreBase with _$RecuperarSenhaStore;
+class RecuperarSenhaStore = RecuperarSenhaStoreBase with _$RecuperarSenhaStore;
 
-abstract class _RecuperarSenhaStoreBase with Store {
+abstract class RecuperarSenhaStoreBase with Store {
   @observable
   bool isLoading = false;
 
@@ -51,22 +51,22 @@ abstract class _RecuperarSenhaStoreBase with Store {
   TextEditingController confirmarNovaSenha = TextEditingController();
 
   @action
-  switchMostrarSenha() {
+  void switchMostrarSenha() {
     mostrarSenha = !mostrarSenha;
   }
 
   @action
-  switchMostrarConfirmarSenha() {
+  void switchMostrarConfirmarSenha() {
     mostrarConfirmarSenha = !mostrarConfirmarSenha;
   }
 
   @action
-  clearEmailPage() {
+  void clearEmailPage() {
     email = TextEditingController();
   }
 
   @action
-  clearCodigoPage() {
+  void clearCodigoPage() {
     codigoGerado = '';
     codigo1 = TextEditingController();
     codigo2 = TextEditingController();
@@ -75,13 +75,13 @@ abstract class _RecuperarSenhaStoreBase with Store {
   }
 
   @action
-  clearNovaSenhaPage() {
+  void clearNovaSenhaPage() {
     novaSenha = TextEditingController();
     confirmarNovaSenha = TextEditingController();
   }
 
   @action
-  verificarEmail() async {
+  Future<void> verificarEmail() async {
     isLoading = true;
     RecuperarSenhaRepository recuperarSenhaRepository =
         GetIt.I<RecuperarSenhaRepository>();
@@ -106,7 +106,7 @@ abstract class _RecuperarSenhaStoreBase with Store {
   }
 
   @action
-  gerarCodigo() async {
+  Future<void> gerarCodigo() async {
     String token1, token2, token3, token4;
     var rng = Random();
     token1 = rng.nextInt(9).toString();
@@ -143,7 +143,7 @@ abstract class _RecuperarSenhaStoreBase with Store {
   }
 
   @action
-  validarCodigo() {
+  void validarCodigo() {
     String codigoDigitado =
         codigo1.text + codigo2.text + codigo3.text + codigo4.text;
 
@@ -155,7 +155,7 @@ abstract class _RecuperarSenhaStoreBase with Store {
   }
 
   @action
-  alterarSenha() async {
+  Future<void> alterarSenha() async {
     if (usuarioEncontrado == null) {
       toastError(message: "Erro ao encontrar usuário");
       return;

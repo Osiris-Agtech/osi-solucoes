@@ -16,8 +16,7 @@ import '../../viewmodels/caderno_campo_store.dart';
 
 class CadernoCampoPage extends StatefulWidget {
   final String title;
-  const CadernoCampoPage({Key? key, this.title = 'CadernoCampoPage'})
-      : super(key: key);
+  const CadernoCampoPage({super.key, this.title = 'CadernoCampoPage'});
   @override
   CadernoCampoPageState createState() => CadernoCampoPageState();
 }
@@ -83,7 +82,7 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
                         Expanded(
                           child: Observer(builder: (_) {
                             return DropdownButtonFormField<Area>(
-                              value: store.dropButtonArea.id != null
+                              initialValue: store.dropButtonArea.id != null
                                   ? store.dropButtonArea
                                   : null,
                               hint: const Text(
@@ -117,7 +116,7 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
                           child: Observer(builder: (_) {
                             return DropdownButtonFormField<Setor>(
                               key: key,
-                              value: store.dropButtonSetor.id != null
+                              initialValue: store.dropButtonSetor.id != null
                                   ? store.dropButtonSetor
                                   : null,
                               hint: const Text(
@@ -210,8 +209,8 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
 // ignore: camel_case_types
 class AppBar extends StatefulWidget {
   const AppBar({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<AppBar> createState() => _AppBarState();
@@ -321,7 +320,7 @@ class _AppBarState extends State<AppBar> {
 
 class CardLote extends StatefulWidget {
   final Lote lote;
-  const CardLote({Key? key, required this.lote}) : super(key: key);
+  const CardLote({super.key, required this.lote});
 
   @override
   State<CardLote> createState() => _CardLoteState();

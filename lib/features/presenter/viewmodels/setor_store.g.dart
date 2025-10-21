@@ -6,18 +6,19 @@ part of 'setor_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$SetorStore on _SetorStoreBase, Store {
+mixin _$SetorStore on SetorStoreBase, Store {
   Computed<List<Setor>>? _$searchSetorComputed;
 
   @override
   List<Setor> get searchSetor =>
       (_$searchSetorComputed ??= Computed<List<Setor>>(() => super.searchSetor,
-              name: '_SetorStoreBase.searchSetor'))
+              name: 'SetorStoreBase.searchSetor'))
           .value;
 
-  final _$searchSetorTextAtom = Atom(name: '_SetorStoreBase.searchSetorText');
+  late final _$searchSetorTextAtom =
+      Atom(name: 'SetorStoreBase.searchSetorText', context: context);
 
   @override
   String get searchSetorText {
@@ -32,7 +33,8 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$dropDownValueAtom = Atom(name: '_SetorStoreBase.dropDownValue');
+  late final _$dropDownValueAtom =
+      Atom(name: 'SetorStoreBase.dropDownValue', context: context);
 
   @override
   String get dropDownValue {
@@ -47,7 +49,7 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$orderAtom = Atom(name: '_SetorStoreBase.order');
+  late final _$orderAtom = Atom(name: 'SetorStoreBase.order', context: context);
 
   @override
   String get order {
@@ -62,8 +64,8 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$isSetorListLoadingAtom =
-      Atom(name: '_SetorStoreBase.isSetorListLoading');
+  late final _$isSetorListLoadingAtom =
+      Atom(name: 'SetorStoreBase.isSetorListLoading', context: context);
 
   @override
   bool get isSetorListLoading {
@@ -78,7 +80,8 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$areaSelecionadaAtom = Atom(name: '_SetorStoreBase.areaSelecionada');
+  late final _$areaSelecionadaAtom =
+      Atom(name: 'SetorStoreBase.areaSelecionada', context: context);
 
   @override
   Area get areaSelecionada {
@@ -93,7 +96,8 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$setorListAtom = Atom(name: '_SetorStoreBase.setorList');
+  late final _$setorListAtom =
+      Atom(name: 'SetorStoreBase.setorList', context: context);
 
   @override
   List<Setor> get setorList {
@@ -108,7 +112,7 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$data1Atom = Atom(name: '_SetorStoreBase.data1');
+  late final _$data1Atom = Atom(name: 'SetorStoreBase.data1', context: context);
 
   @override
   DateTime get data1 {
@@ -123,7 +127,7 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$data2Atom = Atom(name: '_SetorStoreBase.data2');
+  late final _$data2Atom = Atom(name: 'SetorStoreBase.data2', context: context);
 
   @override
   DateTime get data2 {
@@ -138,7 +142,8 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$isEditingAtom = Atom(name: '_SetorStoreBase.isEditing');
+  late final _$isEditingAtom =
+      Atom(name: 'SetorStoreBase.isEditing', context: context);
 
   @override
   bool get isEditing {
@@ -153,8 +158,8 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$mostrarErroFormularioAtom =
-      Atom(name: '_SetorStoreBase.mostrarErroFormulario');
+  late final _$mostrarErroFormularioAtom =
+      Atom(name: 'SetorStoreBase.mostrarErroFormulario', context: context);
 
   @override
   bool get mostrarErroFormulario {
@@ -170,7 +175,8 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$reservatorioListAtom = Atom(name: '_SetorStoreBase.reservatorioList');
+  late final _$reservatorioListAtom =
+      Atom(name: 'SetorStoreBase.reservatorioList', context: context);
 
   @override
   List<Reservatorio> get reservatorioList {
@@ -185,7 +191,8 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$novoSetorNameAtom = Atom(name: '_SetorStoreBase.novoSetorName');
+  late final _$novoSetorNameAtom =
+      Atom(name: 'SetorStoreBase.novoSetorName', context: context);
 
   @override
   TextEditingController get novoSetorName {
@@ -200,8 +207,8 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$novoSetorDescriptionAtom =
-      Atom(name: '_SetorStoreBase.novoSetorDescription');
+  late final _$novoSetorDescriptionAtom =
+      Atom(name: 'SetorStoreBase.novoSetorDescription', context: context);
 
   @override
   TextEditingController get novoSetorDescription {
@@ -217,8 +224,8 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$novoSetorReservatorioAtom =
-      Atom(name: '_SetorStoreBase.novoSetorReservatorio');
+  late final _$novoSetorReservatorioAtom =
+      Atom(name: 'SetorStoreBase.novoSetorReservatorio', context: context);
 
   @override
   Reservatorio get novoSetorReservatorio {
@@ -234,8 +241,8 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$showTextFormFieldAtom =
-      Atom(name: '_SetorStoreBase.showTextFormField');
+  late final _$showTextFormFieldAtom =
+      Atom(name: 'SetorStoreBase.showTextFormField', context: context);
 
   @override
   bool get showTextFormField {
@@ -250,8 +257,8 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$isNovoSetorLoadingAtom =
-      Atom(name: '_SetorStoreBase.isNovoSetorLoading');
+  late final _$isNovoSetorLoadingAtom =
+      Atom(name: 'SetorStoreBase.isNovoSetorLoading', context: context);
 
   @override
   bool get isNovoSetorLoading {
@@ -266,7 +273,8 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$dotIndicatorAtom = Atom(name: '_SetorStoreBase.dotIndicator');
+  late final _$dotIndicatorAtom =
+      Atom(name: 'SetorStoreBase.dotIndicator', context: context);
 
   @override
   int get dotIndicator {
@@ -281,7 +289,8 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$novoSetorAtom = Atom(name: '_SetorStoreBase.novoSetor');
+  late final _$novoSetorAtom =
+      Atom(name: 'SetorStoreBase.novoSetor', context: context);
 
   @override
   Setor get novoSetor {
@@ -296,203 +305,204 @@ mixin _$SetorStore on _SetorStoreBase, Store {
     });
   }
 
-  final _$buscarSetoresAsyncAction =
-      AsyncAction('_SetorStoreBase.buscarSetores');
+  late final _$buscarSetoresAsyncAction =
+      AsyncAction('SetorStoreBase.buscarSetores', context: context);
 
   @override
-  Future buscarSetores() {
+  Future<void> buscarSetores() {
     return _$buscarSetoresAsyncAction.run(() => super.buscarSetores());
   }
 
-  final _$buscarReservatoriosAsyncAction =
-      AsyncAction('_SetorStoreBase.buscarReservatorios');
+  late final _$buscarReservatoriosAsyncAction =
+      AsyncAction('SetorStoreBase.buscarReservatorios', context: context);
 
   @override
-  Future buscarReservatorios() {
+  Future<void> buscarReservatorios() {
     return _$buscarReservatoriosAsyncAction
         .run(() => super.buscarReservatorios());
   }
 
-  final _$registrarSetorAsyncAction =
-      AsyncAction('_SetorStoreBase.registrarSetor');
+  late final _$registrarSetorAsyncAction =
+      AsyncAction('SetorStoreBase.registrarSetor', context: context);
 
   @override
-  Future registrarSetor() {
+  Future<void> registrarSetor() {
     return _$registrarSetorAsyncAction.run(() => super.registrarSetor());
   }
 
-  final _$alterarSetorAsyncAction = AsyncAction('_SetorStoreBase.alterarSetor');
+  late final _$alterarSetorAsyncAction =
+      AsyncAction('SetorStoreBase.alterarSetor', context: context);
 
   @override
-  Future alterarSetor() {
+  Future<void> alterarSetor() {
     return _$alterarSetorAsyncAction.run(() => super.alterarSetor());
   }
 
-  final _$_SetorStoreBaseActionController =
-      ActionController(name: '_SetorStoreBase');
+  late final _$SetorStoreBaseActionController =
+      ActionController(name: 'SetorStoreBase', context: context);
 
   @override
-  dynamic changeOrder() {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.changeOrder');
+  String changeOrder() {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.changeOrder');
     try {
       return super.changeOrder();
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setData1(DateTime value) {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.setData1');
+  DateTime setData1(DateTime value) {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.setData1');
     try {
       return super.setData1(value);
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setData2(DateTime value) {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.setData2');
+  DateTime setData2(DateTime value) {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.setData2');
     try {
       return super.setData2(value);
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setAreaSelecionada(Area estufa) {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.setAreaSelecionada');
+  Area setAreaSelecionada(Area estufa) {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.setAreaSelecionada');
     try {
       return super.setAreaSelecionada(estufa);
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setDropDown(String value) {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.setDropDown');
+  String setDropDown(String value) {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.setDropDown');
     try {
       return super.setDropDown(value);
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setSearchSetorText(String value) {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.setSearchSetorText');
+  String setSearchSetorText(String value) {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.setSearchSetorText');
     try {
       return super.setSearchSetorText(value);
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setIsEditing(bool value) {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.setIsEditing');
+  bool setIsEditing(bool value) {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.setIsEditing');
     try {
       return super.setIsEditing(value);
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setMostrarErroFormulario(bool value) {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.setMostrarErroFormulario');
+  bool setMostrarErroFormulario(bool value) {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.setMostrarErroFormulario');
     try {
       return super.setMostrarErroFormulario(value);
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setSetorEditing(Setor setor) {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.setSetorEditing');
+  void setSetorEditing(Setor setor) {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.setSetorEditing');
     try {
       return super.setSetorEditing(setor);
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setDotIndicator(int value) {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.setDotIndicator');
+  void setDotIndicator(int value) {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.setDotIndicator');
     try {
       return super.setDotIndicator(value);
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setShowTextFormField(bool value) {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.setShowTextFormField');
+  void setShowTextFormField(bool value) {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.setShowTextFormField');
     try {
       return super.setShowTextFormField(value);
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic limparTudo() {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.limparTudo');
+  void limparTudo() {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.limparTudo');
     try {
       return super.limparTudo();
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic alterarNome(String name) {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.alterarNome');
+  void alterarNome(String name) {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.alterarNome');
     try {
       return super.alterarNome(name);
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setReservatorioSelecionada(Reservatorio reservatorio) {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.setReservatorioSelecionada');
+  Reservatorio setReservatorioSelecionada(Reservatorio reservatorio) {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.setReservatorioSelecionada');
     try {
       return super.setReservatorioSelecionada(reservatorio);
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic validarCadastro() {
-    final _$actionInfo = _$_SetorStoreBaseActionController.startAction(
-        name: '_SetorStoreBase.validarCadastro');
+  bool validarCadastro() {
+    final _$actionInfo = _$SetorStoreBaseActionController.startAction(
+        name: 'SetorStoreBase.validarCadastro');
     try {
       return super.validarCadastro();
     } finally {
-      _$_SetorStoreBaseActionController.endAction(_$actionInfo);
+      _$SetorStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

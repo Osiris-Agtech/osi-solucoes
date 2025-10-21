@@ -9,7 +9,7 @@ part of 'solucaoFertilizanteConcentrada_model.dart';
 SolucaoFertilizanteConcentrada _$SolucaoFertilizanteConcentradaFromJson(
         Map<String, dynamic> json) =>
     SolucaoFertilizanteConcentrada(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       quantidade: json['quantidade'] as String?,
       concentrada: json['concentrada'] == null
           ? null

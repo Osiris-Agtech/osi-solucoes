@@ -13,11 +13,11 @@ class CustomTextFormField extends StatefulWidget {
   final String? value;
 
   const CustomTextFormField({
-    Key? key,
+    super.key,
     this.onChanged,
     this.value,
     this.onEditingComplete,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();

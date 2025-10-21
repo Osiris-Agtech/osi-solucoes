@@ -8,7 +8,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 
 class EditFaseBottomSheetFaseBottomSheet extends StatefulWidget {
-  const EditFaseBottomSheetFaseBottomSheet({Key? key}) : super(key: key);
+  const EditFaseBottomSheetFaseBottomSheet({super.key});
 
   @override
   State<EditFaseBottomSheetFaseBottomSheet> createState() =>
@@ -98,7 +98,7 @@ class _EditFaseBottomSheetFaseBottomSheet
                         const SizedBox(height: 8),
                         Text(
                           'Dia ${index + 1}',
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ],
                     );
@@ -115,7 +115,7 @@ class _EditFaseBottomSheetFaseBottomSheet
                     height: 40,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Constants.kPrimaryColor,
+                          backgroundColor: Constants.kPrimaryColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),

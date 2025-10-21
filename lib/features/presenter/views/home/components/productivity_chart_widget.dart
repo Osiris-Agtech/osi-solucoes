@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, unused_element
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
@@ -22,7 +24,7 @@ class ProductivityChartWidget extends StatefulWidget {
   final List<String> months;
 
   const ProductivityChartWidget({
-    Key? key,
+    super.key,
     this.title = 'Produção por Cultura',
     this.subtitle = 'Últimos 6 meses',
     this.totalUnit = 'plantas',
@@ -39,7 +41,7 @@ class ProductivityChartWidget extends StatefulWidget {
       ),
     ],
     this.months = const ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-  }) : super(key: key);
+  });
 
   @override
   State<ProductivityChartWidget> createState() =>
@@ -159,7 +161,7 @@ class _ProductivityChartWidgetState extends State<ProductivityChartWidget> {
                 boxShadow: [
                   BoxShadow(
                     offset: const Offset(0, 4),
-                    color: Colors.black.withOpacity(0.08),
+                    color: Colors.black.withValues(alpha: .08),
                     blurRadius: 20,
                     spreadRadius: 0,
                   ),
@@ -291,7 +293,7 @@ class _ProductivityChartWidgetState extends State<ProductivityChartWidget> {
         vertical: isSmallScreen ? 6 : 8,
       ),
       decoration: BoxDecoration(
-        color: Constants.kPrimaryColor.withOpacity(0.1),
+        color: Constants.kPrimaryColor.withValues(alpha: .1),
         borderRadius: BorderRadius.circular(isSmallScreen ? 8 : 12),
       ),
       child: Column(
@@ -425,7 +427,7 @@ class _ProductivityChartWidgetState extends State<ProductivityChartWidget> {
         maxY: maxValue,
         barTouchData: BarTouchData(
           touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Colors.grey[800]!,
+            // tooltipBgColor: Colors.grey[800]!,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               String cultureName;
               if (rodIndex < widget.cultureData.length) {
@@ -491,7 +493,7 @@ class _ProductivityChartWidgetState extends State<ProductivityChartWidget> {
           horizontalInterval: _getYAxisInterval(),
           getDrawingHorizontalLine: (value) {
             return FlLine(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: .1),
               strokeWidth: 1,
             );
           },
@@ -566,8 +568,8 @@ class _ProductivityChartWidgetState extends State<ProductivityChartWidget> {
       toY: y1,
       color: isSelected
           ? (widget.cultureData.isNotEmpty
-              ? widget.cultureData[0].color.withOpacity(0.8)
-              : const Color(0xFF059669).withOpacity(0.8))
+              ? widget.cultureData[0].color.withValues(alpha: .8)
+              : const Color(0xFF059669).withValues(alpha: .8))
           : (widget.cultureData.isNotEmpty
               ? widget.cultureData[0].color
               : const Color(0xFF059669)),
@@ -583,8 +585,8 @@ class _ProductivityChartWidgetState extends State<ProductivityChartWidget> {
       toY: y2,
       color: isSelected
           ? (widget.cultureData.length > 1
-              ? widget.cultureData[1].color.withOpacity(0.8)
-              : const Color(0xFF8B5CF6).withOpacity(0.8))
+              ? widget.cultureData[1].color.withValues(alpha: .8)
+              : const Color(0xFF8B5CF6).withValues(alpha: .8))
           : (widget.cultureData.length > 1
               ? widget.cultureData[1].color
               : const Color(0xFF8B5CF6)),

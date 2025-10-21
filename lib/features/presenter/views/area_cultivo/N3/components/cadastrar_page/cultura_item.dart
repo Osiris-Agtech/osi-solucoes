@@ -6,9 +6,9 @@ import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
 
-cultura(
+InkWell cultura(
   BuildContext context,
-  CarouselController carouselController,
+  CarouselSliderController carouselController,
   LoteStore store,
   ProtocoloStore protocoloStore,
   GlobalKey<FormFieldState> key,
@@ -84,7 +84,7 @@ cultura(
   );
 }
 
-culturaPage(BuildContext context, LoteStore store) {
+SizedBox culturaPage(BuildContext context, LoteStore store) {
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
     child: Column(
@@ -177,7 +177,7 @@ culturaPage(BuildContext context, LoteStore store) {
   );
 }
 
-addCulturaTextFormField(LoteStore store) {
+Column addCulturaTextFormField(LoteStore store) {
   return Column(
     children: [
       Row(
@@ -206,10 +206,11 @@ addCulturaTextFormField(LoteStore store) {
           ),
           ElevatedButton(
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith((states) {
+              backgroundColor: WidgetStateProperty.resolveWith((states) {
                 return Constants.kPrimaryColor;
               }),
             ),
+            onPressed: store.registrarCultura,
             child: const Text(
               "Cadastrar",
               style: TextStyle(
@@ -218,7 +219,6 @@ addCulturaTextFormField(LoteStore store) {
                 fontStyle: FontStyle.italic,
               ),
             ),
-            onPressed: store.registrarCultura,
           ),
         ],
       ),
@@ -226,7 +226,7 @@ addCulturaTextFormField(LoteStore store) {
   );
 }
 
-addCulturaButton(LoteStore store) {
+TextButton addCulturaButton(LoteStore store) {
   return TextButton(
     onPressed: () => store.setIsNovaCultura(true),
     child: const Text(

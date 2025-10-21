@@ -27,7 +27,7 @@ class FieldActivitiesWidget extends StatelessWidget {
   final VoidCallback? onViewAll;
 
   const FieldActivitiesWidget({
-    Key? key,
+    super.key,
     this.title = 'Caderno de Campo',
     this.subtitle = 'Últimas atividades',
     this.activities = const [
@@ -90,7 +90,7 @@ class FieldActivitiesWidget extends StatelessWidget {
     ],
     this.onActivityTap,
     this.onViewAll,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +114,7 @@ class FieldActivitiesWidget extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   offset: const Offset(0, 4),
-                  color: Colors.black.withOpacity(0.08),
+                  color: Colors.black.withValues(alpha: .08),
                   blurRadius: 20,
                   spreadRadius: 0,
                 ),
@@ -186,7 +186,7 @@ class FieldActivitiesWidget extends StatelessWidget {
             vertical: isVerySmallScreen ? 4 : 6,
           ),
           decoration: BoxDecoration(
-            color: Constants.kPrimaryColor.withOpacity(0.1),
+            color: Constants.kPrimaryColor.withValues(alpha: .1),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
@@ -261,7 +261,7 @@ class FieldActivitiesWidget extends StatelessWidget {
               width: isVerySmallScreen ? 36 : 40,
               height: isVerySmallScreen ? 36 : 40,
               decoration: BoxDecoration(
-                color: activity.color.withOpacity(0.15),
+                color: activity.color.withValues(alpha: .15),
                 borderRadius: BorderRadius.circular(isSmallScreen ? 8 : 10),
               ),
               child: Icon(
@@ -351,10 +351,10 @@ class FieldActivitiesWidget extends StatelessWidget {
           vertical: isVerySmallScreen ? 10 : 12,
         ),
         decoration: BoxDecoration(
-          color: Constants.kPrimaryColor.withOpacity(0.05),
+          color: Constants.kPrimaryColor.withValues(alpha: .05),
           borderRadius: BorderRadius.circular(isSmallScreen ? 8 : 10),
           border: Border.all(
-            color: Constants.kPrimaryColor.withOpacity(0.2),
+            color: Constants.kPrimaryColor.withValues(alpha: .2),
             width: 1,
           ),
         ),

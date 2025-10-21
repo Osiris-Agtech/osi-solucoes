@@ -7,7 +7,7 @@ part of 'area_model.dart';
 // **************************************************************************
 
 Area _$AreaFromJson(Map<String, dynamic> json) => Area(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       descricao: json['descricao'] as String?,
       imagem: json['imagem'] as String?,
