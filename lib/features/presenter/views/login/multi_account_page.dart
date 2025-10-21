@@ -142,6 +142,7 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
                                             conta;
                                         await Future.delayed(
                                             const Duration(seconds: 2));
+                                        if (!context.mounted) return;
                                         Navigator.pop(context);
                                         Get.offAll(() => const HomePage());
                                       },

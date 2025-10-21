@@ -253,13 +253,15 @@ class _FlutterRoundedDatePickerDialogState
       background: widget.styleDatePicker?.backgroundActionBar,
     );
 
-    Color backgroundPicker = theme.dialogBackgroundColor;
+    Color backgroundPicker = theme.dialogTheme.backgroundColor ?? Colors.white;
     if (_mode == DatePickerMode.day) {
       backgroundPicker = widget.styleDatePicker?.backgroundPicker ??
-          theme.dialogBackgroundColor;
+          theme.dialogTheme.backgroundColor ??
+          Colors.white;
     } else {
       backgroundPicker = widget.styleYearPicker?.backgroundPicker ??
-          theme.dialogBackgroundColor;
+          theme.dialogTheme.backgroundColor ??
+          Colors.white;
     }
 
     final Dialog dialog = Dialog(

@@ -45,8 +45,8 @@ class LoginPageState extends State<LoginPage> {
         statusBarIconBrightness: Brightness.dark,
       ),
       child: SafeArea(
-        child: WillPopScope(
-          onWillPop: () async => false,
+        child: PopScope(
+          onPopInvokedWithResult: (_, __) async => false,
           child: Scaffold(
             backgroundColor: Constants.kSecondBackgroundColor,
             body: GestureDetector(
@@ -200,8 +200,10 @@ class LoginPageState extends State<LoginPage> {
                           ),
                         );
                       } else {
+                        if (!mounted) return;
                         showLoaderDialog(context, response);
                         await Future.delayed(const Duration(seconds: 2));
+                        if (!mounted) return;
                         Navigator.pop(context);
                         Navigator.pop(context);
                       }

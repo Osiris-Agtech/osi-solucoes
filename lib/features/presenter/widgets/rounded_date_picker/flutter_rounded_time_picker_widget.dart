@@ -1731,7 +1731,7 @@ class _TimePickerDialogState extends State<_TimePickerDialog> {
 
           final Widget pickerAndActions = Container(
             decoration: BoxDecoration(
-              color: theme.dialogBackgroundColor,
+              color: theme.dialogTheme.backgroundColor ?? Colors.white,
               borderRadius: borderRadiusData,
             ),
             child: Column(

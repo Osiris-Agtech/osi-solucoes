@@ -22,7 +22,8 @@ Padding loginButton(
       width: size.width * .7,
       height: 45,
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: Constants.kPrimaryColor),
+        style:
+            ElevatedButton.styleFrom(backgroundColor: Constants.kPrimaryColor),
         child: Text(
           "textButton".i18n(),
           style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
@@ -50,8 +51,10 @@ Padding loginButton(
               //   },
               // );
             } else {
+              if (!context.mounted) return;
               showLoaderDialog(context, response);
               await Future.delayed(const Duration(seconds: 3));
+              if (!context.mounted) return;
               Navigator.pop(context);
               Navigator.pop(context);
             }

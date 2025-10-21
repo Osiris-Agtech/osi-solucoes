@@ -68,7 +68,10 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                               child: PopupMenuButton(
                                 icon: SvgPicture.asset(
                                   "assets/icons/settings_icon.svg",
-                                  color: Constants.kButtonGrey,
+                                  colorFilter: ColorFilter.mode(
+                                    Constants.kButtonGrey,
+                                    BlendMode.src,
+                                  ),
                                   height: 20,
                                 ),
                                 itemBuilder: (context) => [

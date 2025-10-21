@@ -1185,7 +1185,7 @@ class _CupertinoTimerPickerState
   Widget _buildLabel(String text) {
     return Text(
       text,
-      textScaleFactor: 0.9,
+      textScaler: TextScaler.linear(0.9),
       style: TextStyle(
           fontWeight: FontWeight.w600,
           fontFamily: widget.fontFamily,

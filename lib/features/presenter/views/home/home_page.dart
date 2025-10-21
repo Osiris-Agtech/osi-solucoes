@@ -239,8 +239,10 @@ class HomePageState extends State<HomePage> {
                       IconButton(
                         icon: SvgPicture.asset(
                           "assets/icons/settings_icon.svg",
-                          color:
-                              Constants.kBackgroundColor.withValues(alpha: .8),
+                          colorFilter: ColorFilter.mode(
+                            Constants.kBackgroundColor.withValues(alpha: .8),
+                            BlendMode.src,
+                          ),
                         ),
                         onPressed: () {},
                       ),
@@ -394,8 +396,10 @@ class HomePageState extends State<HomePage> {
                       IconButton(
                         icon: SvgPicture.asset(
                           "assets/icons/external_link_icon.svg",
-                          color:
-                              Constants.kBackgroundColor.withValues(alpha: .8),
+                          colorFilter: ColorFilter.mode(
+                            Constants.kBackgroundColor.withValues(alpha: .8),
+                            BlendMode.src,
+                          ),
                         ),
                         onPressed: () {},
                       ),
@@ -920,7 +924,10 @@ class HomePageState extends State<HomePage> {
                   icon,
                   width: 20,
                   height: 20,
-                  color: color,
+                  colorFilter: ColorFilter.mode(
+                    color,
+                    BlendMode.src,
+                  ),
                 ),
               ),
             ),
@@ -1126,7 +1133,7 @@ class HomePageState extends State<HomePage> {
                     icon,
                     width: 28,
                     height: 28,
-                    color: color,
+                    colorFilter: ColorFilter.mode(color, BlendMode.src),
                   ),
                 ),
               ),
@@ -1450,7 +1457,10 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
             iconPath,
             width: 20,
             height: 20,
-            color: Colors.white,
+            colorFilter: ColorFilter.mode(
+              Colors.white,
+              BlendMode.src,
+            ),
           ),
         ),
       ),
@@ -1487,7 +1497,10 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                   "assets/icons/notification_off_icon.svg",
                   width: 20,
                   height: 20,
-                  color: Colors.white,
+                  colorFilter: ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.src,
+                  ),
                 ),
               ),
               if (store.isNotified)
