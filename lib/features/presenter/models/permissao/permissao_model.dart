@@ -7,7 +7,7 @@ part 'permissao_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Permissao {
   @JsonKey(required: false, disallowNullValue: false)
-  int? id;
+  String? id;
   @JsonKey(required: false, disallowNullValue: false)
   String? nome;
   @JsonKey(required: false, disallowNullValue: false)

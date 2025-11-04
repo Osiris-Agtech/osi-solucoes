@@ -12,10 +12,16 @@ class LoginRepository implements ILoginRepository {
   });
 
   @override
-  Future<Either<Failure, List<Usuario>>> login(
-      String email, String senha, String codigo) async {
-    var result =
-        await datasource.login(email: email, password: senha, code: codigo);
+  Future<Either<Failure, Usuario>> login({
+    required String senha,
+    String? email,
+    String? codigo,
+  }) async {
+    var result = await datasource.login(
+      email: email,
+      password: senha,
+      code: codigo,
+    );
 
     return result;
   }

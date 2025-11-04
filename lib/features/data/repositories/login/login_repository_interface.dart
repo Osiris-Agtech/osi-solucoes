@@ -4,6 +4,9 @@ import '../../../../core/errors/failure.dart';
 import '../../../presenter/models/usuario/usuario_model.dart';
 
 abstract class ILoginRepository {
-  Future<Either<Failure, List<Usuario>>> login(
-      String email, String senha, String codigo);
+  Future<Either<Failure, Usuario>> login({
+    required String senha,
+    String? email,
+    String? codigo,
+  });
 }

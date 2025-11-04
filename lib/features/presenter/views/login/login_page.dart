@@ -42,7 +42,8 @@ class LoginPageState extends State<LoginPage> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Constants.kSecondBackgroundColor,
-        statusBarIconBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Constants.kSecondBackgroundColor,
       ),
       child: SafeArea(
         child: PopScope(

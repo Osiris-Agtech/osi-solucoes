@@ -9,7 +9,7 @@ part 'cargo_permissao_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class CargoPermissao {
   @JsonKey(required: false, disallowNullValue: false)
-  int? id;
+  String? id;
   @JsonKey(required: false, disallowNullValue: false)
   Cargo? cargo;
   @JsonKey(required: false, disallowNullValue: false)

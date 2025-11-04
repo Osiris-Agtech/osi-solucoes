@@ -49,57 +49,82 @@ abstract class LoginStoreBase with Store {
     senha.clear();
   }
 
+  /// Verifica se o texto informado é um email válido
+  bool _isValidEmail(String text) {
+    final emailRegex = RegExp(
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
+    );
+    return emailRegex.hasMatch(text);
+  }
+
   @action
   Future<String> login() async {
-    bool isValidLogin = false;
-    bool isMultipleAccount = false;
+    // Login por email ou código de acesso (campo email aceita ambos)
+    final loginIdentifier = email.text.trim();
+    final password = senha.text;
 
-    var users = await loginRepository.login(email.text, senha.text, email.text);
-    print(users);
-
-    users.fold(
-      (err) {
-        isValidLogin = false;
-      }, // ifLeft callback
-      (data) async {
-        userList = List.from(data);
-        isValidLogin = true;
-
-        authController.setUser(data[0]);
-
-        if (userList[0].contas!.length > 1) {
-          isMultipleAccount = true;
-        } else {
-          authController.usuario.selected_conta = userList[0].contas![0];
-        }
-
-        await LocalStorage().storageUser(data[0]);
-      },
-    ); // ifRight callback
-
-    if (!isValidLogin) {
+    if (loginIdentifier.isEmpty || password.isEmpty) {
       return "loginInvalido".i18n();
     }
-    if (isMultipleAccount) return "multiple";
 
-    return "loginValido".i18n();
+    // Identifica se é email ou código de acesso
+    final isEmail = _isValidEmail(loginIdentifier);
+    
+    // Chama o repositório que delega para o datasource
+    final usersResult = await loginRepository.login(
+      email: isEmail ? loginIdentifier : null,
+      codigo: isEmail ? null : loginIdentifier,
+      senha: password,
+    );
+
+    // Trata erros
+    if (usersResult.isLeft()) {
+      return usersResult.fold(
+        (error) => error.message,
+        (_) => "",
+      );
+    }
+
+    // Extrai a lista de usuários do Right
+    final data = usersResult.fold(
+      (_) => null,
+      (users) => users,
+    );
+
+    if (data == null) {
+      return "loginInvalido".i18n();
+    }
+
+    // A API já retorna a lista de usuários corretamente validada
+    userList = List.from([data]);
+
+    // Define o usuário principal no auth controller
+    authController.setUser(data);
+
+    // Se o usuário tem múltiplas contas, retorna "multiple" para mostrar a página de seleção
+    final hasMultipleAccounts = data.contas != null && data.contas!.length > 1;
+
+    if (hasMultipleAccounts) {
+      return "multiple";
+    }
+
+    // Se tem apenas uma conta, seleciona automaticamente e salva
+    if (data.contas != null && data.contas!.isNotEmpty) {
+      authController.usuario.selected_conta = data.contas![0];
+    }
+
+    await LocalStorage().storageUser(data);
+
+    return "sucesso";
   }
 
   String? validateEmail(String? value) {
     if (value!.isEmpty) {
       return "erroValidacaoEmailVazio".i18n();
-    } else {
-      // ## Pode receber tanto e-mail quanto código de acesso
-      // String pattern =
-      //     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-      // RegExp regex = RegExp(pattern);
-      // if (!regex.hasMatch(value)) {
-      //   return "ErroValidacaoEmailInvalido".i18n();
-      // } else {
-      //   return null;
-      // }
-      return null;
     }
+    // Não valida formato pois pode ser email OU código de acesso
+    // A validação do formato é feita internamente no método login()
+    return null;
   }
 
   String? validateSenha(String? value) {

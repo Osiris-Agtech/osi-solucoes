@@ -59,25 +59,11 @@ class Cargo {
     this.concatenatedPermission,
   });
 
-  factory Cargo.fromJson(Map<String, dynamic> json) {
-    try {
-      // Remove __typename se existir
-      json.remove('__typename');
-      print('🔍 Cargo JSON: $json');
-      return _$CargoFromJson(json);
-    } catch (e) {
-      print('❌ Erro na conversão Cargo: $e');
-      print('📋 JSON problemático: $json');
-      rethrow;
-    }
-  }
+  factory Cargo.fromJson(Map<String, dynamic> json) =>
+      _$CargoFromJson(json);
 
   Map<String, dynamic> toJson() => _$CargoToJson(this);
 
-  @override
-  String toString() {
-    return 'Cargo{id: $id, cargo: $cargo}';
-  }
 }
 
 @JsonSerializable(explicitToJson: true)
