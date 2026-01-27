@@ -8,7 +8,7 @@ part of 'conta_model.dart';
 
 Conta _$ContaFromJson(Map<String, dynamic> json) => Conta(
       id: _parseToInt(json['id']),
-      nivel: json['nivel'] as String?,
+      nivel: _parseIntToString(json['nivel']),
       nome: json['nome'] as String?,
       imagem: json['imagem'] as String?,
       cnpj: json['cnpj'] as String?,

@@ -149,13 +149,9 @@ class Usuario {
   // Factory method customizado que limpa os dados antes da conversão
   factory Usuario.fromJson(Map<String, dynamic> json) {
     try {
-      print('🔍 JSON original: $json');
       final cleanedJson = _cleanGraphQLData(json);
-      print('🧹 JSON limpo: $cleanedJson');
       return _$UsuarioFromJson(cleanedJson);
     } catch (e) {
-      print('❌ Erro na conversão Usuario: $e');
-      print('📋 JSON problemático: $json');
       rethrow;
     }
   }

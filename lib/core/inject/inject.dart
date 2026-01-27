@@ -10,6 +10,7 @@ import 'package:osi_solucoes/features/data/datasources/protocolo/protocolo_datas
 import 'package:osi_solucoes/features/data/datasources/recuperarSenha/recuperar_senha_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/relatorioProducao/relatorioProducao_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/relatorioStatusLotes/relatorioStatusLotes_datasource.dart';
+import 'package:osi_solucoes/features/data/datasources/homeDashboard/home_dashboard_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/setor/setor_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/solucoes/solucoes_nutritivas_datasource.dart';
 import 'package:osi_solucoes/features/data/repositories/agenda/agenda_repository.dart';
@@ -23,6 +24,8 @@ import 'package:osi_solucoes/features/data/repositories/relatorioProducao/relato
 import 'package:osi_solucoes/features/data/repositories/relatorioProducao/relatorioProducao_repository_interface.dart';
 import 'package:osi_solucoes/features/data/repositories/relatorioStatusLotes/relatorioStatusLote_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/relatorioStatusLotes/relatorioStatusLote_repository_interface.dart';
+import 'package:osi_solucoes/features/data/repositories/homeDashboard/home_dashboard_repository.dart';
+import 'package:osi_solucoes/features/data/repositories/homeDashboard/home_dashboard_repository_interface.dart';
 import 'package:osi_solucoes/features/data/repositories/reservatorio/reservatorio_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/setor/setor_repository.dart';
 import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_repository.dart';
@@ -88,6 +91,9 @@ Future<void> initInject() async {
   sl.registerLazySingleton<IRelatorioStatusLotesDatasource>(
     () => RelatorioStatusLotesDatasource(),
   );
+  sl.registerLazySingleton<IHomeDashboardDatasource>(
+    () => HomeDashboardDatasource(),
+  );
 
   //repositories
   sl.registerLazySingleton<CadastroRepository>(
@@ -126,6 +132,11 @@ Future<void> initInject() async {
       datasource: sl<IRelatorioStatusLotesDatasource>(),
     ),
   );
+  sl.registerLazySingleton<IHomeDashboardRepository>(
+    () => HomeDashboardRepository(
+      datasource: sl<IHomeDashboardDatasource>(),
+    ),
+  );
 
   //viewmodels
   sl.registerLazySingleton<AjustesStore>(() => AjustesStore());
@@ -137,7 +148,9 @@ Future<void> initInject() async {
   sl.registerLazySingleton<CadastroStore>(() => CadastroStore());
   sl.registerLazySingleton<RecuperarSenhaStore>(() => RecuperarSenhaStore());
   sl.registerLazySingleton<CadernoCampoStore>(() => CadernoCampoStore());
-  sl.registerLazySingleton<HomeStore>(() => HomeStore());
+  sl.registerLazySingleton<HomeStore>(() => HomeStore(
+    homeDashboardRepository: sl<IHomeDashboardRepository>(),
+  ));
   sl.registerLazySingleton<LoginStore>(() => LoginStore());
   sl.registerLazySingleton<ModulosStore>(() => ModulosStore());
   sl.registerLazySingleton<ReservatoriosStore>(() => ReservatoriosStore());

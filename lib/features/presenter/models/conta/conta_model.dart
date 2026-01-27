@@ -17,6 +17,15 @@ int? _parseToInt(dynamic value) {
   return null;
 }
 
+// Função helper para converter int ou String para String
+String? _parseIntToString(dynamic value) {
+  if (value == null) return null;
+  if (value is String) return value;
+  if (value is int) return value.toString();
+  if (value is double) return value.toInt().toString();
+  return null;
+}
+
 // Função helper para converter String para DateTime
 DateTime? _parseToDateTime(dynamic value) {
   if (value == null) return null;
@@ -36,7 +45,11 @@ class Conta {
   )
   int? id;
 
-  @JsonKey(required: false, disallowNullValue: false)
+  @JsonKey(
+    required: false,
+    disallowNullValue: false,
+    fromJson: _parseIntToString,
+  )
   String? nivel;
 
   @JsonKey(required: false, disallowNullValue: false)
@@ -70,10 +83,12 @@ class Conta {
 
   factory Conta.fromJson(Map<String, dynamic> json) {
     try {
+      // Criar uma cópia para não modificar o original
+      final jsonCopy = Map<String, dynamic>.from(json);
       // Remove __typename se existir
-      json.remove('__typename');
-      print('🔍 Conta JSON: $json');
-      return _$ContaFromJson(json);
+      jsonCopy.remove('__typename');
+      print('🔍 Conta JSON: $jsonCopy');
+      return _$ContaFromJson(jsonCopy);
     } catch (e) {
       print('❌ Erro na conversão Conta: $e');
       print('📋 JSON problemático: $json');

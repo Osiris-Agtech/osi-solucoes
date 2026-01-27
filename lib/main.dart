@@ -6,12 +6,18 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:get/get.dart';
 import 'package:osi_solucoes/core/services/auth_service.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:osi_solucoes/firebase_options.dart';
 
 import 'core/inject/inject.dart';
 import 'features/presenter/routes/app_pages.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Inicializar Firebase
+  await _initializeFirebase();
+
   await Get.putAsync(() => AuthService().init());
   await initInject();
   SystemChrome.setSystemUIOverlayStyle(
@@ -24,6 +30,30 @@ void main() async {
     ),
   );
   runApp(const AppWidget());
+}
+
+/// Inicializa o Firebase de forma segura
+///
+/// Para configurar o Firebase completamente:
+/// 1. Instale o FlutterFire CLI: dart pub global activate flutterfire_cli
+/// 2. Execute: flutterfire configure
+/// 3. Descomente a importação de firebase_options.dart no topo do arquivo
+/// 4. Descomente as linhas marcadas com "Opção 1" abaixo
+Future<void> _initializeFirebase() async {
+  print('🔥 [FIREBASE] Inicializando Firebase...');
+  try {
+    // Inicializa Firebase com as opções geradas pelo FlutterFire CLI
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    print('✅ [FIREBASE] Firebase inicializado com sucesso');
+    print('   └─ Project ID: ${DefaultFirebaseOptions.currentPlatform.projectId}');
+  } catch (e, stackTrace) {
+    // Firebase não disponível ou não configurado, app continua funcionando
+    print('⚠️ [FIREBASE] Firebase não inicializado: $e');
+    print('   StackTrace: $stackTrace');
+    print('   O app continuará funcionando com atalhos padrão');
+  }
 }
 
 class AppWidget extends StatelessWidget {

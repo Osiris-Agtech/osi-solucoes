@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/services/navigation_analytics.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/detalhes_reservatorio_page.dart';
 
@@ -18,7 +20,15 @@ Padding reservatorioItem(int index, ReservatoriosStore store) {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        store.setReservatorioDetalhes(store.searchReservatorio[index]);
+        final reservatorio = store.searchReservatorio[index];
+        store.setReservatorioDetalhes(reservatorio);
+        // Rastrear navegação com ID e nome do recurso
+        NavigationAnalytics.logNavigation(
+          Routes.detalhesReservatorio,
+          resourceId: reservatorio.id?.toString(),
+          resourceType: 'reservatorio',
+          resourceName: reservatorio.nome,
+        );
         // Get.toNamed(Routes.detalhesReservatorio);
         Get.to(() => const DetalhesReservatorio());
       },

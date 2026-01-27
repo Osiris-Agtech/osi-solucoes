@@ -8,7 +8,7 @@ part of 'cargo_permissao_model.dart';
 
 CargoPermissao _$CargoPermissaoFromJson(Map<String, dynamic> json) =>
     CargoPermissao(
-      id: json['id'] as String?,
+      id: _parseToInt(json['id']),
       cargo: json['cargo'] == null
           ? null
           : Cargo.fromJson(json['cargo'] as Map<String, dynamic>),

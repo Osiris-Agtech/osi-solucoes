@@ -46,10 +46,12 @@ class ConectaConta {
 
   factory ConectaConta.fromJson(Map<String, dynamic> json) {
     try {
+      // Criar uma cópia para não modificar o original
+      final jsonCopy = Map<String, dynamic>.from(json);
       // Remove __typename se existir
-      json.remove('__typename');
-      print('🔍 ConectaConta JSON: $json');
-      return _$ConectaContaFromJson(json);
+      jsonCopy.remove('__typename');
+      print('🔍 ConectaConta JSON: $jsonCopy');
+      return _$ConectaContaFromJson(jsonCopy);
     } catch (e) {
       print('❌ Erro na conversão ConectaConta: $e');
       print('📋 JSON problemático: $json');

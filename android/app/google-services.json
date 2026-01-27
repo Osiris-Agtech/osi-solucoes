@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "928279287020",
+    "project_id": "adaptative-user-interface",
+    "storage_bucket": "adaptative-user-interface.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928279287020:android:fe01ffecd2c40e3c4ac1c9",
+        "android_client_info": {
+          "package_name": "com.example.poc_aui"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBx4a3rTuaqhiPwWcLXuJMtTNoVOuc5I2U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928279287020:android:121a7fcc0cd2ebf14ac1c9",
+        "android_client_info": {
+          "package_name": "com.osiris.osi_solucoes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBx4a3rTuaqhiPwWcLXuJMtTNoVOuc5I2U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

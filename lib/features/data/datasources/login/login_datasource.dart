@@ -26,7 +26,7 @@ class LoginDatasource implements ILoginDatasource {
 
       const String loginMutation = r'''
         mutation Login($email: String, $senha: String!, $codigo: String) {
-          login(data: {email: $email, senha: $senha, codigo: $codigo}) {
+          login(email: $email, senha: $senha, codigo: $codigo) {
             token
             usuario {
               id
@@ -35,7 +35,6 @@ class LoginDatasource implements ILoginDatasource {
               ativo
               cod_acesso
               acesso_externo
-              fk_pessoas_id
               pessoa {
                 id
                 nome

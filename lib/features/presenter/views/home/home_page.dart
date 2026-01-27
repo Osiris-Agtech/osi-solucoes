@@ -5,23 +5,22 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:osi_solucoes/features/presenter/models/homeDashboard/home_dashboard_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/daily_tasks_widget.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/field_activities_widget.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/lot_status_metrics_widget_clean.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/productivity_chart_container.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
 
 import '../../../../core/services/local_storage.dart';
+import '../../../../core/services/navigation_analytics.dart';
 import '../../viewmodels/auth_controller.dart';
 import '../../viewmodels/home_store.dart';
 import '../../viewmodels/modulos_store.dart';
+import '../../models/shortcut/shortcut_model.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -41,11 +40,93 @@ class HomePageState extends State<HomePage> {
   final PageController _dashboardPageController = PageController();
   int _currentDashboardIndex = 0;
   final List<String> _dashboardTitles = [
-    'Produtividade',
-    'Tarefas Diárias',
-    'Atividades do Campo',
-    'Status dos Lotes',
+    'Lotes em Produção',
+    'Tarefas Pendentes',
+    'Produção Total',
+    'Top Culturas',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    print('🏠 [HOME_PAGE] Inicializando HomePage...');
+    
+    // Carregar dados do dashboard quando a página é aberta
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print('🏠 [HOME_PAGE] Carregando dados...');
+      store.carregarHome();
+      store.loadAdaptiveInterface().then((_) {
+        print('🏠 [HOME_PAGE] Interface adaptativa carregada, aplicando dashboard...');
+        // Ajustar dashboard quando a interface adaptativa for carregada
+        _applyAdaptiveDashboard();
+      }).catchError((e) {
+        print('❌ [HOME_PAGE] Erro ao carregar interface adaptativa: $e');
+      });
+    });
+  }
+
+  /// Aplica o dashboard adaptativo recomendado pelo ML
+  void _applyAdaptiveDashboard() {
+    print('📊 [HOME_PAGE] Verificando aplicação de dashboard adaptativo...');
+    
+    if (store.adaptiveDashboard == null) {
+      print('   └─ ⚠️ Nenhum dashboard recomendado (null)');
+      return;
+    }
+    
+    if (store.dashboardConfidence <= 0.5) {
+      print('   └─ ⚠️ Confiança muito baixa (${(store.dashboardConfidence * 100).toStringAsFixed(1)}%), não aplicando');
+      return;
+    }
+    
+    final dashboardName = store.adaptiveDashboard!;
+    final index = _getDashboardIndex(dashboardName);
+    
+    print('   └─ Dashboard recomendado: "$dashboardName"');
+    print('   └─ Confiança: ${(store.dashboardConfidence * 100).toStringAsFixed(1)}%');
+    print('   └─ Índice mapeado: $index');
+    
+    if (index < 0) {
+      print('   └─ ❌ Dashboard não encontrado na lista (_dashboardTitles)');
+      return;
+    }
+    
+    if (index >= _dashboardTitles.length) {
+      print('   └─ ❌ Índice fora do range (máximo: ${_dashboardTitles.length - 1})');
+      return;
+    }
+    
+    print('   └─ ✅ Aplicando dashboard no índice $index...');
+    
+    // Aguarda o próximo frame para garantir que o PageView está pronto
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_dashboardPageController.hasClients) {
+        print('   └─ ✅ PageView pronto, animando para índice $index');
+        _dashboardPageController.animateToPage(
+          index,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+        setState(() {
+          _currentDashboardIndex = index;
+        });
+        print('   └─ ✅ Dashboard adaptativo aplicado com sucesso!');
+      } else {
+        print('   └─ ⚠️ PageView ainda não está pronto');
+      }
+    });
+  }
+
+  /// Mapeia o nome do dashboard para o índice do carousel
+  int _getDashboardIndex(String dashboardName) {
+    return _dashboardTitles.indexOf(dashboardName);
+  }
+
+  @override
+  void dispose() {
+    _dashboardPageController.dispose();
+    super.dispose();
+  }
 
   Future<bool> exitApp() async {
     showDialog<bool>(
@@ -91,12 +172,6 @@ class HomePageState extends State<HomePage> {
       ),
     );
     return true;
-  }
-
-  @override
-  void dispose() {
-    _dashboardPageController.dispose();
-    super.dispose();
   }
 
   @override
@@ -463,7 +538,7 @@ class HomePageState extends State<HomePage> {
                 pinned: true,
                 delegate: MyHeaderDelegate(),
               ),
-              // Seção de Ações Rápidas
+              // Seção de Ações Rápidas Inteligentes
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.only(
@@ -483,68 +558,136 @@ class HomePageState extends State<HomePage> {
                           color: Colors.black87,
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'Ver todas',
-                          style: TextStyle(
-                            color: Constants.kPrimaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
+                      Observer(builder: (_) {
+                        if (store.recommendedShortcuts.isNotEmpty && 
+                            store.recommendedShortcuts.any((s) => s.confidence > 0.5)) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Constants.kPrimaryColor.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.auto_awesome,
+                                  size: 14,
+                                  color: Constants.kPrimaryColor,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Inteligente',
+                                  style: TextStyle(
+                                    color: Constants.kPrimaryColor,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      }),
                     ],
                   ),
                 ),
               ),
               SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                  child: SizedBox(
-                    height: 100,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        modernQuickActionCard(
-                          context,
-                          size,
-                          "card1Home".i18n(),
-                          "assets/icons/gerenciar_icon.svg",
-                          const Color(0xFF6366F1),
-                          onTap: () => Get.toNamed(Routes.gerenciarEquipePage),
+                child: Observer(builder: (_) {
+                  if (store.isLoadingShortcuts) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: size.width * 0.05, vertical: 20),
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+
+                  // Se há atalhos recomendados, mostra eles
+                  if (store.recommendedShortcuts.isNotEmpty) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                      child: SizedBox(
+                        height: 100,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: store.recommendedShortcuts.map((shortcut) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: _buildSmartShortcutCard(
+                                context,
+                                size,
+                                shortcut,
+                              ),
+                            );
+                          }).toList(),
                         ),
-                        const SizedBox(width: 12),
-                        modernQuickActionCard(
-                          context,
-                          size,
-                          "card2Home".i18n(),
-                          "assets/icons/relatorio_icon.svg",
-                          const Color(0xFF8B5CF6),
-                          onTap: () => Get.toNamed(Routes.historicoPage),
-                        ),
-                        const SizedBox(width: 12),
-                        modernQuickActionCard(
-                          context,
-                          size,
-                          "card3Home".i18n(),
-                          "assets/icons/inventario_icon.svg",
-                          const Color(0xFF06B6D4),
-                          onTap: () => Get.toNamed(Routes.agendaPage),
-                        ),
-                        const SizedBox(width: 12),
-                        modernQuickActionCard(
-                          context,
-                          size,
-                          "card4Home".i18n(),
-                          "assets/icons/relatorio_icon.svg",
-                          const Color(0xFF10B981),
-                          onTap: () => Get.toNamed(Routes.protocoloPage),
-                        ),
-                      ],
+                      ),
+                    );
+                  }
+                  
+                  // Fallback: mostra atalhos padrão
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                    child: SizedBox(
+                      height: 100,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          modernQuickActionCard(
+                            context,
+                            size,
+                            "card1Home".i18n(),
+                            "assets/icons/gerenciar_icon.svg",
+                            const Color(0xFF6366F1),
+                            onTap: () {
+                              NavigationAnalytics.logNavigation(Routes.gerenciarEquipePage);
+                              Get.toNamed(Routes.gerenciarEquipePage);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          modernQuickActionCard(
+                            context,
+                            size,
+                            "card2Home".i18n(),
+                            "assets/icons/relatorio_icon.svg",
+                            const Color(0xFF8B5CF6),
+                            onTap: () {
+                              NavigationAnalytics.logNavigation(Routes.historicoPage);
+                              Get.toNamed(Routes.historicoPage);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          modernQuickActionCard(
+                            context,
+                            size,
+                            "card3Home".i18n(),
+                            "assets/icons/inventario_icon.svg",
+                            const Color(0xFF06B6D4),
+                            onTap: () {
+                              NavigationAnalytics.logNavigation(Routes.agendaPage);
+                              Get.toNamed(Routes.agendaPage);
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          modernQuickActionCard(
+                            context,
+                            size,
+                            "card4Home".i18n(),
+                            "assets/icons/relatorio_icon.svg",
+                            const Color(0xFF10B981),
+                            onTap: () {
+                              NavigationAnalytics.logNavigation(Routes.protocoloPage);
+                              Get.toNamed(Routes.protocoloPage);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }),
               ),
 
               // Seção do Dashboard
@@ -559,12 +702,55 @@ class HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        _dashboardTitles[_currentDashboardIndex],
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black87,
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Text(
+                              _dashboardTitles[_currentDashboardIndex],
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            Observer(builder: (_) {
+                              // Mostra indicador se o dashboard foi adaptado pelo ML
+                              if (store.adaptiveDashboard != null &&
+                                  store.dashboardConfidence > 0.5 &&
+                                  store.adaptiveDashboard == _dashboardTitles[_currentDashboardIndex]) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: Constants.kPrimaryColor.withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.auto_awesome,
+                                          size: 14,
+                                          color: Constants.kPrimaryColor,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          'Recomendado',
+                                          style: TextStyle(
+                                            color: Constants.kPrimaryColor,
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+                              return const SizedBox.shrink();
+                            }),
+                          ],
                         ),
                       ),
                       Row(
@@ -578,8 +764,7 @@ class HomePageState extends State<HomePage> {
                           _buildCarouselButton(
                             Icons.keyboard_arrow_right,
                             () => _nextDashboard(),
-                            _currentDashboardIndex <
-                                _dashboardTitles.length - 1,
+                            _currentDashboardIndex < _dashboardTitles.length - 1,
                           ),
                         ],
                       ),
@@ -588,28 +773,133 @@ class HomePageState extends State<HomePage> {
                 ),
               ),
 
-              // Carousel de Widgets do Dashboard
+              // Carousel de Cards de Métricas
               SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 400, // Altura fixa para o carousel
-                  child: PageView(
-                    controller: _dashboardPageController,
-                    onPageChanged: (index) {
-                      setState(() {
-                        _currentDashboardIndex = index;
-                      });
-                    },
-                    children: const [
-                      ProductivityChartContainer(),
-                      DailyTasksWidget(),
-                      FieldActivitiesWidget(),
-                      LotStatusMetricsWidget(
-                        title: 'Status dos Lotes',
-                        subtitle: 'Situação atual',
-                      ),
-                    ],
-                  ),
-                ),
+                child: Observer(builder: (_) {
+                  // Aplica dashboard adaptativo quando disponível
+                  if (store.adaptiveDashboard != null && 
+                      store.dashboardConfidence > 0.5 &&
+                      _dashboardPageController.hasClients) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      final dashboardName = store.adaptiveDashboard!;
+                      final index = _getDashboardIndex(dashboardName);
+                      if (index >= 0 && 
+                          index < _dashboardTitles.length && 
+                          index != _currentDashboardIndex) {
+                        _dashboardPageController.animateToPage(
+                          index,
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        );
+                        setState(() {
+                          _currentDashboardIndex = index;
+                        });
+                      }
+                    });
+                  }
+                  
+                  return SizedBox(
+                    height: size.height * 0.5, // Usar 50% da altura da tela
+                    child: Observer(builder: (_) {
+                      if (store.isLoading) {
+                      return const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(40.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                    if (store.hasError) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(40.0),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Erro: ${store.errorMessage}',
+                                style: const TextStyle(color: Colors.red),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton(
+                                onPressed: () => store.carregarHome(),
+                                child: const Text('Tentar novamente'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                    final dashboard = store.dashboard;
+                    if (dashboard == null) {
+                      return const SizedBox.shrink();
+                    }
+
+                    return PageView(
+                      controller: _dashboardPageController,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentDashboardIndex = index;
+                        });
+                      },
+                      children: [
+                        // Card 1: Lotes em Produção
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                          child: _buildMetricCard(
+                            context,
+                            size,
+                            'Lotes em Produção',
+                            '${dashboard.resumo?.lotesAtivos ?? 0}',
+                            'de ${dashboard.resumo?.totalLotes ?? 0} lotes',
+                            Icons.agriculture,
+                            const Color(0xFF059669),
+                          ),
+                        ),
+                        // Card 2: Tarefas Pendentes
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                          child: _buildMetricCard(
+                            context,
+                            size,
+                            'Tarefas Pendentes',
+                            '${dashboard.tarefas?.pendentesHoje ?? 0}',
+                            'hoje • ${dashboard.tarefas?.atrasadas ?? 0} atrasadas',
+                            Icons.task_alt,
+                            const Color(0xFFDC2626),
+                          ),
+                        ),
+                        // Card 3: Produção Total
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                          child: _buildMetricCard(
+                            context,
+                            size,
+                            'Produção Total',
+                            '${dashboard.producao?.totalPlantasColhidas ?? 0}',
+                            _formatPeriodoProducao(dashboard.producao),
+                            Icons.eco,
+                            const Color(0xFF2563EB),
+                          ),
+                        ),
+                        // Card 4: Top Culturas
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                          child: _buildMetricCard(
+                            context,
+                            size,
+                            'Top Culturas',
+                            _formatCulturas(dashboard.culturas),
+                            'em produção',
+                            Icons.local_florist,
+                            const Color(0xFF8B5CF6),
+                          ),
+                        ),
+                      ],
+                    );
+                    }),
+                  );
+                }),
               ),
 
               // Indicadores do Carousel
@@ -949,66 +1239,6 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildMetricCard(
-      String title, String value, IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(0, 2),
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 12,
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(
-                  icon,
-                  color: color,
-                  size: 20,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey[600],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget gridItems(
       BuildContext context, Size size, String title, String icon, bool isLeft,
       {String? path, required int id}) {
@@ -1030,6 +1260,7 @@ class HomePageState extends State<HomePage> {
         child: InkWell(
           onTap: () async {
             modulosStore.setPageViewController(id);
+            // modulosPage é apenas container de navegação, não deve ser rastreado
             Get.toNamed(
               Routes.modulosPage,
               // () => const ModulosPage(),
@@ -1099,6 +1330,7 @@ class HomePageState extends State<HomePage> {
     return InkWell(
       onTap: () async {
         modulosStore.setPageViewController(id);
+        // modulosPage é apenas container de navegação, não deve ser rastreado
         Get.toNamed(Routes.modulosPage);
       },
       borderRadius: BorderRadius.circular(20),
@@ -1173,9 +1405,37 @@ class HomePageState extends State<HomePage> {
   }
 
   // Métodos para controle do carousel do dashboard
+  String _formatCulturas(List<HomeCultura>? culturas) {
+    if (culturas == null || culturas.isEmpty) return 'Nenhuma';
+    if (culturas.length == 1) {
+      return '${culturas.first.nome}\n${culturas.first.quantidade} lotes';
+    }
+    // Formato mais legível para múltiplas culturas
+    final top3 = culturas.take(3).toList();
+    if (top3.length == 2) {
+      return '${top3[0].nome}: ${top3[0].quantidade}\n${top3[1].nome}: ${top3[1].quantidade}';
+    }
+    return top3.map((c) => '${c.nome}: ${c.quantidade}').join('\n');
+  }
+
+  String _formatPeriodoProducao(HomeProducao? producao) {
+    if (producao == null || producao.periodoInicio == null || producao.periodoFim == null) {
+      return 'plantas colhidas';
+    }
+    try {
+      final inicio = DateTime.parse(producao.periodoInicio!);
+      final fim = DateTime.parse(producao.periodoFim!);
+      final inicioFormatado = '${inicio.day}/${inicio.month}/${inicio.year}';
+      final fimFormatado = '${fim.day}/${fim.month}/${fim.year}';
+      return 'de $inicioFormatado a $fimFormatado';
+    } catch (e) {
+      return 'plantas colhidas';
+    }
+  }
+
   void _nextDashboard() {
     if (_currentDashboardIndex < _dashboardTitles.length - 1) {
-      HapticFeedback.lightImpact(); // Feedback tátil
+      HapticFeedback.lightImpact();
       _dashboardPageController.nextPage(
         duration: const Duration(milliseconds: 350),
         curve: Curves.easeInOutCubic,
@@ -1185,11 +1445,260 @@ class HomePageState extends State<HomePage> {
 
   void _previousDashboard() {
     if (_currentDashboardIndex > 0) {
-      HapticFeedback.lightImpact(); // Feedback tátil
+      HapticFeedback.lightImpact();
       _dashboardPageController.previousPage(
         duration: const Duration(milliseconds: 350),
         curve: Curves.easeInOutCubic,
       );
+    }
+  }
+
+  Widget _buildMetricCard(
+    BuildContext context,
+    Size size,
+    String title,
+    String value,
+    String subtitle,
+    IconData icon,
+    Color color,
+  ) {
+    return Container(
+      padding: EdgeInsets.all(size.width * 0.06), // Padding responsivo
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 4),
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 20,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          // Ícone maior e mais destacado
+          Container(
+            padding: EdgeInsets.all(size.width * 0.04),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Icon(
+              icon,
+              color: color,
+              size: size.width * 0.12, // Ícone responsivo e maior
+            ),
+          ),
+          SizedBox(height: size.height * 0.03),
+          // Valor principal - muito maior
+          Flexible(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: size.width * 0.15, // Fonte responsiva e grande
+                fontWeight: FontWeight.w800,
+                color: Colors.black87,
+                height: 1.2,
+                letterSpacing: -1,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 4, // Permitir múltiplas linhas para culturas
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          SizedBox(height: size.height * 0.015),
+          // Título
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: size.width * 0.045, // Fonte maior
+              fontWeight: FontWeight.w700,
+              color: Colors.grey[800],
+              letterSpacing: 0.3,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          if (subtitle.isNotEmpty) ...[
+            SizedBox(height: size.height * 0.01),
+            // Subtítulo
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
+              child: Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: size.width * 0.035, // Fonte maior
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSmartShortcutCard(
+    BuildContext context,
+    Size size,
+    ShortcutModel shortcut,
+  ) {
+    return InkWell(
+      onTap: () {
+        // Track navigation e clique no atalho
+        NavigationAnalytics.logNavigation(shortcut.route);
+        NavigationAnalytics.logShortcutClick(shortcut.route, shortcut.confidence);
+        
+        // Se tiver resourceId, navegar com recurso específico
+        if (shortcut.resourceId != null && shortcut.resourceType != null) {
+          _navigateWithResource(shortcut);
+        } else {
+          Get.toNamed(shortcut.route);
+        }
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        width: 90,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: shortcut.confidence > 0.7
+              ? Border.all(
+                  color: shortcut.color.withValues(alpha: 0.3),
+                  width: 2,
+                )
+              : null,
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 2),
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 8,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: shortcut.color.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      shortcut.icon,
+                      width: 20,
+                      height: 20,
+                      colorFilter: ColorFilter.mode(
+                        shortcut.color,
+                        BlendMode.src,
+                      ),
+                    ),
+                  ),
+                ),
+                if (shortcut.confidence > 0.7)
+                  Positioned(
+                    top: -2,
+                    right: -2,
+                    child: Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: shortcut.color,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.star,
+                        size: 8,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              shortcut.displayTitle, // ⚠️ MUDANÇA: usa displayTitle para mostrar nome do recurso
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            if (shortcut.context != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: shortcut.color.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: const Text(
+                    '⭐',
+                    style: TextStyle(fontSize: 8),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Navega para uma rota com recurso específico
+  /// Se tiver resourceId, tenta buscar e selecionar o recurso antes de navegar
+  Future<void> _navigateWithResource(ShortcutModel shortcut) async {
+    try {
+      print('🔗 [HOME_PAGE] Navegando com recurso específico:');
+      print('   └─ Rota: ${shortcut.route}');
+      print('   └─ Tipo: ${shortcut.resourceType}');
+      print('   └─ ID: ${shortcut.resourceId}');
+      print('   └─ Nome: ${shortcut.resourceName}');
+
+      // Por enquanto, navegação normal
+      // Futuramente você pode implementar:
+      // 1. Buscar o recurso pelo ID (ex: buscar lote por ID)
+      // 2. Selecionar no store apropriado (ex: loteStore.selecionarLote(lote))
+      // 3. Navegar para a rota de detalhes
+      
+      // Exemplo futuro para lotes:
+      // if (shortcut.resourceType == 'lote' && shortcut.resourceId != null) {
+      //   final loteStore = GetIt.I<LoteStore>();
+      //   final lote = await loteRepository.buscarLotePorId(int.parse(shortcut.resourceId!));
+      //   loteStore.selecionarLote(lote);
+      //   Get.toNamed(Routes.detalhesLotePage);
+      //   return;
+      // }
+
+      // Fallback: navegação normal
+      Get.toNamed(shortcut.route);
+    } catch (e) {
+      print('❌ [HOME_PAGE] Erro ao navegar com recurso: $e');
+      // Fallback: navegação normal
+      Get.toNamed(shortcut.route);
     }
   }
 
