@@ -74,14 +74,16 @@ abstract class HomeStoreBase with Store {
           print('   └─ Usando ${recommendedShortcuts.length} atalhos padrão');
         },
         (response) {
-          recommendedShortcuts = response.shortcuts;
+          // Garante que sempre haverá pelo menos 4 atalhos
+          recommendedShortcuts = _ensureMinimumShortcuts(response.shortcuts);
           adaptiveDashboard = response.dashboard;
           dashboardConfidence = response.dashboardConfidence;
           
           print('✅ [HOME_STORE] Interface adaptativa atualizada:');
           print('   └─ Dashboard recomendado: ${adaptiveDashboard ?? 'null'}');
           print('   └─ Confiança do dashboard: ${(dashboardConfidence * 100).toStringAsFixed(1)}%');
-          print('   └─ Atalhos recomendados: ${recommendedShortcuts.length}');
+          print('   └─ Atalhos recomendados: ${response.shortcuts.length}');
+          print('   └─ Atalhos finais (completados): ${recommendedShortcuts.length}');
           
           if (adaptiveDashboard != null && dashboardConfidence > 0.5) {
             print('   └─ ✅ Dashboard será aplicado automaticamente');
@@ -99,6 +101,49 @@ abstract class HomeStoreBase with Store {
       isLoadingShortcuts = false;
       print('🏠 [HOME_STORE] Carregamento finalizado');
     }
+  }
+
+  /// Garante que a lista tenha pelo menos 4 atalhos, completando com padrões se necessário
+  List<ShortcutModel> _ensureMinimumShortcuts(List<ShortcutModel> shortcuts) {
+    const int minShortcuts = 4;
+    
+    // Se já tem 4 ou mais, retorna como está
+    if (shortcuts.length >= minShortcuts) {
+      return shortcuts;
+    }
+    
+    // Obtém as rotas já presentes para evitar duplicatas
+    final existingRoutes = shortcuts.map((s) => s.route).toSet();
+    
+    // Obtém os atalhos padrão
+    final defaultShortcuts = _getDefaultShortcuts();
+    
+    // Cria uma cópia da lista de atalhos recomendados
+    final result = List<ShortcutModel>.from(shortcuts);
+    
+    // Completa com atalhos padrão que não estão na lista
+    for (final defaultShortcut in defaultShortcuts) {
+      if (result.length >= minShortcuts) break;
+      
+      // Adiciona apenas se a rota não estiver presente
+      if (!existingRoutes.contains(defaultShortcut.route)) {
+        result.add(defaultShortcut);
+        existingRoutes.add(defaultShortcut.route);
+      }
+    }
+    
+    // Se ainda não tiver 4, completa com os primeiros padrões disponíveis
+    if (result.length < minShortcuts) {
+      for (final defaultShortcut in defaultShortcuts) {
+        if (result.length >= minShortcuts) break;
+        if (!existingRoutes.contains(defaultShortcut.route)) {
+          result.add(defaultShortcut);
+          existingRoutes.add(defaultShortcut.route);
+        }
+      }
+    }
+    
+    return result;
   }
 
   List<ShortcutModel> _getDefaultShortcuts() {

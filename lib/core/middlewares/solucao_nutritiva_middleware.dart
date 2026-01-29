@@ -14,7 +14,8 @@ class SNViewPagePermission extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
-        ?.any((element) => element.permissao?.nome == Permissions.solucaoNutritivaView);
+        ?.any((element) =>
+            element.permissao?.nome == Permissions.solucaoNutritivaView);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);
@@ -30,7 +31,8 @@ class SNEditPagePermission extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
-        ?.any((element) => element.permissao?.nome == Permissions.solucaoNutritivaEdit);
+        ?.any((element) =>
+            element.permissao?.nome == Permissions.solucaoNutritivaEdit);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);

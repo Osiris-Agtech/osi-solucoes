@@ -76,7 +76,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       "assets/icons/relatorio_icon.svg",
                       colorFilter: ColorFilter.mode(
                         Constants.kPrimaryColor,
-                        BlendMode.src,
+                        BlendMode.srcIn,
                       ),
                       width: 24,
                       height: 24,
@@ -204,7 +204,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                         "assets/icons/settings_icon.svg",
                         colorFilter: ColorFilter.mode(
                           Constants.kButtonGrey,
-                          BlendMode.src,
+                          BlendMode.srcIn,
                         ),
                         height: 20,
                       ),

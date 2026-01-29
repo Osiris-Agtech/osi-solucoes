@@ -14,7 +14,8 @@ class CadernoCampoViewPagePermission extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
-        ?.any((element) => element.permissao?.nome == Permissions.cadernoCampoView);
+        ?.any((element) =>
+            element.permissao?.nome == Permissions.cadernoCampoView);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);
@@ -30,7 +31,8 @@ class CadernoCampoEditPagePermission extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
-        ?.any((element) => element.permissao?.nome == Permissions.cadernoCampoEdit);
+        ?.any((element) =>
+            element.permissao?.nome == Permissions.cadernoCampoEdit);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);

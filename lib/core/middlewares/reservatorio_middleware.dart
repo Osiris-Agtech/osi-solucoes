@@ -14,7 +14,8 @@ class ReservatorioViewPagePermission extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
-        ?.any((element) => element.permissao?.nome == Permissions.reservatorioView);
+        ?.any((element) =>
+            element.permissao?.nome == Permissions.reservatorioView);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);
@@ -30,7 +31,8 @@ class ReservatorioEditPagePermission extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
-        ?.any((element) => element.permissao?.nome == Permissions.reservatorioEdit);
+        ?.any((element) =>
+            element.permissao?.nome == Permissions.reservatorioEdit);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);

@@ -14,7 +14,8 @@ class EquipeViewPagePermission extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
-        ?.any((element) => element.permissao?.nome == Permissions.gerenciaEquipeView);
+        ?.any((element) =>
+            element.permissao?.nome == Permissions.gerenciaEquipeView);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);
@@ -30,7 +31,8 @@ class EquipeEditPagePermission extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
-        ?.any((element) => element.permissao?.nome == Permissions.gerenciaEquipeEdit);
+        ?.any((element) =>
+            element.permissao?.nome == Permissions.gerenciaEquipeEdit);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);

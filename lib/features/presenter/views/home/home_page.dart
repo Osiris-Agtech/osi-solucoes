@@ -50,13 +50,14 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     print('🏠 [HOME_PAGE] Inicializando HomePage...');
-    
+
     // Carregar dados do dashboard quando a página é aberta
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print('🏠 [HOME_PAGE] Carregando dados...');
       store.carregarHome();
       store.loadAdaptiveInterface().then((_) {
-        print('🏠 [HOME_PAGE] Interface adaptativa carregada, aplicando dashboard...');
+        print(
+            '🏠 [HOME_PAGE] Interface adaptativa carregada, aplicando dashboard...');
         // Ajustar dashboard quando a interface adaptativa for carregada
         _applyAdaptiveDashboard();
       }).catchError((e) {
@@ -68,36 +69,39 @@ class HomePageState extends State<HomePage> {
   /// Aplica o dashboard adaptativo recomendado pelo ML
   void _applyAdaptiveDashboard() {
     print('📊 [HOME_PAGE] Verificando aplicação de dashboard adaptativo...');
-    
+
     if (store.adaptiveDashboard == null) {
       print('   └─ ⚠️ Nenhum dashboard recomendado (null)');
       return;
     }
-    
+
     if (store.dashboardConfidence <= 0.5) {
-      print('   └─ ⚠️ Confiança muito baixa (${(store.dashboardConfidence * 100).toStringAsFixed(1)}%), não aplicando');
+      print(
+          '   └─ ⚠️ Confiança muito baixa (${(store.dashboardConfidence * 100).toStringAsFixed(1)}%), não aplicando');
       return;
     }
-    
+
     final dashboardName = store.adaptiveDashboard!;
     final index = _getDashboardIndex(dashboardName);
-    
+
     print('   └─ Dashboard recomendado: "$dashboardName"');
-    print('   └─ Confiança: ${(store.dashboardConfidence * 100).toStringAsFixed(1)}%');
+    print(
+        '   └─ Confiança: ${(store.dashboardConfidence * 100).toStringAsFixed(1)}%');
     print('   └─ Índice mapeado: $index');
-    
+
     if (index < 0) {
       print('   └─ ❌ Dashboard não encontrado na lista (_dashboardTitles)');
       return;
     }
-    
+
     if (index >= _dashboardTitles.length) {
-      print('   └─ ❌ Índice fora do range (máximo: ${_dashboardTitles.length - 1})');
+      print(
+          '   └─ ❌ Índice fora do range (máximo: ${_dashboardTitles.length - 1})');
       return;
     }
-    
+
     print('   └─ ✅ Aplicando dashboard no índice $index...');
-    
+
     // Aguarda o próximo frame para garantir que o PageView está pronto
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_dashboardPageController.hasClients) {
@@ -209,164 +213,248 @@ class HomePageState extends State<HomePage> {
         width: size.width,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-              colors: [Color(0xFF333333), Color(0xFF2F6947)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              stops: [0.7, 3]),
+            colors: [Color(0xFF333333), Color(0xFF2F6947)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.7, 3],
+          ),
         ),
         child: SizedBox(
           height: sizeHeight,
           width: sizeWidth,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Expanded(flex: 1, child: Container()),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 30,
-                  left: sizeWidth * 0.02,
-                ),
-                child: IconButton(
-                  alignment: Alignment.centerLeft,
-                  onPressed: () {
-                    store.setIsCollaped();
-                  },
-                  icon: const Icon(
-                    Icons.close,
-                    color: Constants.kBackgroundColor,
-                    size: 24,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Expanded(flex: 1, child: Container()),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 30,
+                    left: sizeWidth * 0.02,
                   ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  right: (sizeWidth * 0.33),
-                  bottom: 10,
-                ),
-                child: const Center(
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
-                    radius: 32.5,
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: size.width * 0.24),
-                    child: Observer(builder: (_) {
-                      return Text(
-                        store.authController.usuario.selected_conta?.conta
-                                ?.nome ??
-                            "...",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 30,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      );
-                    }),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: size.height * 0.003,
-                      right: size.width * 0.24,
-                      bottom: 10,
+                  child: IconButton(
+                    alignment: Alignment.centerLeft,
+                    onPressed: () {
+                      store.setIsCollaped();
+                    },
+                    icon: const Icon(
+                      Icons.close,
+                      color: Constants.kBackgroundColor,
+                      size: 24,
                     ),
-                    child: Observer(builder: (_) {
-                      return Text(
-                        store.authController.usuario.selected_conta?.cargo
-                                ?.cargo ??
-                            "...",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white.withValues(alpha: .8),
-                          fontStyle: FontStyle.italic,
-                        ),
-                      );
-                    }),
-                  ),
-                ],
-              ),
-              // Expanded(flex: 1, child: Container()),
-              Divider(
-                color: const Color(0xFF9F9F9F).withValues(alpha: .4),
-              ),
-              // Expanded(flex: 1, child: Container()),
-              Padding(
-                padding: EdgeInsets.only(
-                    // top: size.height * 0.05,
-                    left: sizeWidth * 0.122),
-                child: InkWell(
-                  onTap: () {},
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: SvgPicture.asset(
-                          "assets/icons/settings_icon.svg",
-                          colorFilter: ColorFilter.mode(
-                            Constants.kBackgroundColor.withValues(alpha: .8),
-                            BlendMode.src,
-                          ),
-                        ),
-                        onPressed: () {},
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.02),
-                        child: Text(
-                          "itemMenu1".i18n(),
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 16),
-                        ),
-                      ),
-                    ],
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeWidth * 0.122, top: size.height * 0.02),
-                child: InkWell(
-                  onTap: () {},
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: SvgPicture.asset(
-                          "assets/icons/hexagon_icon.svg",
-                          colorFilter: ColorFilter.mode(
-                            Constants.kBackgroundColor.withValues(alpha: .8),
-                            BlendMode.src,
-                          ),
-                        ),
-                        onPressed: () {},
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.02),
-                        child: Text(
-                          "itemMenu2".i18n(),
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 16),
-                        ),
-                      ),
-                    ],
+                Padding(
+                  padding: EdgeInsets.only(
+                    right: (sizeWidth * 0.33),
+                    bottom: 10,
+                  ),
+                  child: const Center(
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                          'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
+                      radius: 32.5,
+                    ),
                   ),
                 ),
-              ),
-              Observer(builder: (_) {
-                if (store.authController.usuario.contas!.length < 2) {
-                  return Container();
-                }
-                return Padding(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: size.width * 0.24),
+                      child: Observer(builder: (_) {
+                        return Text(
+                          store.authController.usuario.selected_conta?.conta
+                                  ?.nome ??
+                              "...",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 30,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        );
+                      }),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: size.height * 0.003,
+                        right: size.width * 0.24,
+                        bottom: 10,
+                      ),
+                      child: Observer(builder: (_) {
+                        return Text(
+                          store.authController.usuario.selected_conta?.cargo
+                                  ?.cargo ??
+                              "...",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white.withValues(alpha: .8),
+                            fontStyle: FontStyle.italic,
+                          ),
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+                // Expanded(flex: 1, child: Container()),
+                // Divider removido para eliminar a barrinha branca
+                // Expanded(flex: 1, child: Container()),
+                Padding(
+                  padding: EdgeInsets.only(
+                      // top: size.height * 0.05,
+                      left: sizeWidth * 0.122),
+                  child: InkWell(
+                    onTap: () {},
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: SvgPicture.asset(
+                            "assets/icons/settings_icon.svg",
+                            colorFilter: ColorFilter.mode(
+                              Constants.kBackgroundColor.withValues(alpha: .8),
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          onPressed: () {},
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: size.width * 0.02),
+                          child: Text(
+                            "itemMenu1".i18n(),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: sizeWidth * 0.122, top: size.height * 0.02),
+                  child: InkWell(
+                    onTap: () {},
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: SvgPicture.asset(
+                            "assets/icons/hexagon_icon.svg",
+                            colorFilter: ColorFilter.mode(
+                              Constants.kBackgroundColor.withValues(alpha: .8),
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          onPressed: () {},
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: size.width * 0.02),
+                          child: Text(
+                            "itemMenu2".i18n(),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Observer(builder: (_) {
+                  if (store.authController.usuario.contas!.length < 2) {
+                    return Container();
+                  }
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        left: sizeWidth * 0.122, top: size.height * 0.02),
+                    child: InkWell(
+                      onTap: () async {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          },
+                        );
+                        await Future.delayed(const Duration(seconds: 1));
+                        store.setIsCollaped();
+                        Get.to(
+                          () => MultiAccountsPage(
+                            isLoggedIn: true,
+                            user: store.authController.usuario,
+                          ),
+                        );
+                        // Modular.to.pushNamed(
+                        //   "/Login/MultiAccounts/",
+                        //   arguments: {
+                        //     "user": store.appController.usuario,
+                        //     "isLoggedIn": true,
+                        //   },
+                        // );
+                      },
+                      child: Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.published_with_changes,
+                              color: Colors.white.withValues(alpha: .8),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: size.width * 0.02),
+                            child: const Text(
+                              "Trocar Conta",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+                Divider(
+                  color: const Color(0xFF9F9F9F).withValues(alpha: .4),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: sizeWidth * 0.122
+                      // , top: size.height * 0.05
+                      ),
+                  child: InkWell(
+                    onTap: () {},
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: SvgPicture.asset(
+                            "assets/icons/info_icon.svg",
+                            colorFilter: ColorFilter.mode(
+                              Constants.kBackgroundColor.withValues(alpha: .8),
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          onPressed: () {},
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: size.width * 0.02),
+                          child: Text(
+                            "itemMenu3".i18n(),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
                   padding: EdgeInsets.only(
                       left: sizeWidth * 0.122, top: size.height * 0.02),
                   child: InkWell(
@@ -379,129 +467,51 @@ class HomePageState extends State<HomePage> {
                               child: CircularProgressIndicator());
                         },
                       );
-                      await Future.delayed(const Duration(seconds: 1));
+                      await LocalStorage().deleteUser();
+                      await Future.delayed(const Duration(seconds: 2));
                       store.setIsCollaped();
-                      Get.to(
-                        () => MultiAccountsPage(
-                          isLoggedIn: true,
-                          user: store.authController.usuario,
-                        ),
-                      );
-                      // Modular.to.pushNamed(
-                      //   "/Login/MultiAccounts/",
-                      //   arguments: {
-                      //     "user": store.appController.usuario,
-                      //     "isLoggedIn": true,
-                      //   },
-                      // );
+                      Get.offAll(() => const SplashPage());
                     },
                     child: Row(
                       children: [
                         IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.published_with_changes,
-                            color: Colors.white.withValues(alpha: .8),
+                          icon: SvgPicture.asset(
+                            "assets/icons/external_link_icon.svg",
+                            colorFilter: ColorFilter.mode(
+                              Constants.kBackgroundColor.withValues(alpha: .8),
+                              BlendMode.srcIn,
+                            ),
                           ),
+                          onPressed: () {},
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: size.width * 0.02),
-                          child: const Text(
-                            "Trocar Conta",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          child: Text(
+                            "itemMenu4".i18n(),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16),
                           ),
                         ),
                       ],
                     ),
                   ),
-                );
-              }),
-              Divider(
-                color: const Color(0xFF9F9F9F).withValues(alpha: .4),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: sizeWidth * 0.122
-                    // , top: size.height * 0.05
-                    ),
-                child: InkWell(
-                  onTap: () {},
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: SvgPicture.asset(
-                          "assets/icons/info_icon.svg",
-                          colorFilter: ColorFilter.mode(
-                            Constants.kBackgroundColor.withValues(alpha: .8),
-                            BlendMode.src,
-                          ),
-                        ),
-                        onPressed: () {},
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.02),
-                        child: Text(
-                          "itemMenu3".i18n(),
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 16),
-                        ),
-                      ),
-                    ],
+                ),
+                // Spacer e Expanded removidos - não podem ser usados dentro de SingleChildScrollView
+                SizedBox(
+                    height: size.height *
+                        0.3), // Espaçamento fixo ao invés de Spacer
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: sizeWidth * 0.14,
+                  ),
+                  child: Text(
+                    "versao".i18n(),
+                    style: const TextStyle(color: Colors.white, fontSize: 14),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeWidth * 0.122, top: size.height * 0.02),
-                child: InkWell(
-                  onTap: () async {
-                    showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const Center(child: CircularProgressIndicator());
-                      },
-                    );
-                    await LocalStorage().deleteUser();
-                    await Future.delayed(const Duration(seconds: 2));
-                    store.setIsCollaped();
-                    Get.offAll(() => const SplashPage());
-                  },
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: SvgPicture.asset(
-                          "assets/icons/external_link_icon.svg",
-                          colorFilter: ColorFilter.mode(
-                            Constants.kBackgroundColor.withValues(alpha: .8),
-                            BlendMode.src,
-                          ),
-                        ),
-                        onPressed: () {},
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.02),
-                        child: Text(
-                          "itemMenu4".i18n(),
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 16),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const Spacer(),
-              Padding(
-                padding: EdgeInsets.only(
-                  left: sizeWidth * 0.14,
-                ),
-                child: Text(
-                  "versao".i18n(),
-                  style: const TextStyle(color: Colors.white, fontSize: 14),
-                ),
-              ),
-              Expanded(flex: 1, child: Container()),
-            ],
+                SizedBox(height: 20), // Espaçamento fixo ao invés de Expanded
+              ],
+            ),
           ),
         ),
       ),
@@ -559,12 +569,15 @@ class HomePageState extends State<HomePage> {
                         ),
                       ),
                       Observer(builder: (_) {
-                        if (store.recommendedShortcuts.isNotEmpty && 
-                            store.recommendedShortcuts.any((s) => s.confidence > 0.5)) {
+                        if (store.recommendedShortcuts.isNotEmpty &&
+                            store.recommendedShortcuts
+                                .any((s) => s.confidence > 0.5)) {
                           return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: Constants.kPrimaryColor.withValues(alpha: 0.1),
+                              color: Constants.kPrimaryColor
+                                  .withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
@@ -598,7 +611,8 @@ class HomePageState extends State<HomePage> {
                 child: Observer(builder: (_) {
                   if (store.isLoadingShortcuts) {
                     return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: size.width * 0.05, vertical: 20),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: size.width * 0.05, vertical: 20),
                       child: const Center(
                         child: CircularProgressIndicator(),
                       ),
@@ -608,7 +622,8 @@ class HomePageState extends State<HomePage> {
                   // Se há atalhos recomendados, mostra eles
                   if (store.recommendedShortcuts.isNotEmpty) {
                     return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: size.width * 0.05),
                       child: SizedBox(
                         height: 100,
                         child: ListView(
@@ -627,10 +642,11 @@ class HomePageState extends State<HomePage> {
                       ),
                     );
                   }
-                  
+
                   // Fallback: mostra atalhos padrão
                   return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.width * 0.05),
                     child: SizedBox(
                       height: 100,
                       child: ListView(
@@ -643,7 +659,8 @@ class HomePageState extends State<HomePage> {
                             "assets/icons/gerenciar_icon.svg",
                             const Color(0xFF6366F1),
                             onTap: () {
-                              NavigationAnalytics.logNavigation(Routes.gerenciarEquipePage);
+                              NavigationAnalytics.logNavigation(
+                                  Routes.gerenciarEquipePage);
                               Get.toNamed(Routes.gerenciarEquipePage);
                             },
                           ),
@@ -655,7 +672,8 @@ class HomePageState extends State<HomePage> {
                             "assets/icons/relatorio_icon.svg",
                             const Color(0xFF8B5CF6),
                             onTap: () {
-                              NavigationAnalytics.logNavigation(Routes.historicoPage);
+                              NavigationAnalytics.logNavigation(
+                                  Routes.historicoPage);
                               Get.toNamed(Routes.historicoPage);
                             },
                           ),
@@ -667,7 +685,8 @@ class HomePageState extends State<HomePage> {
                             "assets/icons/inventario_icon.svg",
                             const Color(0xFF06B6D4),
                             onTap: () {
-                              NavigationAnalytics.logNavigation(Routes.agendaPage);
+                              NavigationAnalytics.logNavigation(
+                                  Routes.agendaPage);
                               Get.toNamed(Routes.agendaPage);
                             },
                           ),
@@ -679,7 +698,8 @@ class HomePageState extends State<HomePage> {
                             "assets/icons/relatorio_icon.svg",
                             const Color(0xFF10B981),
                             onTap: () {
-                              NavigationAnalytics.logNavigation(Routes.protocoloPage);
+                              NavigationAnalytics.logNavigation(
+                                  Routes.protocoloPage);
                               Get.toNamed(Routes.protocoloPage);
                             },
                           ),
@@ -702,7 +722,7 @@ class HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
+                      Flexible(
                         child: Row(
                           children: [
                             Text(
@@ -717,13 +737,17 @@ class HomePageState extends State<HomePage> {
                               // Mostra indicador se o dashboard foi adaptado pelo ML
                               if (store.adaptiveDashboard != null &&
                                   store.dashboardConfidence > 0.5 &&
-                                  store.adaptiveDashboard == _dashboardTitles[_currentDashboardIndex]) {
+                                  store.adaptiveDashboard ==
+                                      _dashboardTitles[
+                                          _currentDashboardIndex]) {
                                 return Padding(
                                   padding: const EdgeInsets.only(left: 8),
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
                                     decoration: BoxDecoration(
-                                      color: Constants.kPrimaryColor.withValues(alpha: 0.1),
+                                      color: Constants.kPrimaryColor
+                                          .withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Row(
@@ -764,7 +788,8 @@ class HomePageState extends State<HomePage> {
                           _buildCarouselButton(
                             Icons.keyboard_arrow_right,
                             () => _nextDashboard(),
-                            _currentDashboardIndex < _dashboardTitles.length - 1,
+                            _currentDashboardIndex <
+                                _dashboardTitles.length - 1,
                           ),
                         ],
                       ),
@@ -777,14 +802,14 @@ class HomePageState extends State<HomePage> {
               SliverToBoxAdapter(
                 child: Observer(builder: (_) {
                   // Aplica dashboard adaptativo quando disponível
-                  if (store.adaptiveDashboard != null && 
+                  if (store.adaptiveDashboard != null &&
                       store.dashboardConfidence > 0.5 &&
                       _dashboardPageController.hasClients) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       final dashboardName = store.adaptiveDashboard!;
                       final index = _getDashboardIndex(dashboardName);
-                      if (index >= 0 && 
-                          index < _dashboardTitles.length && 
+                      if (index >= 0 &&
+                          index < _dashboardTitles.length &&
                           index != _currentDashboardIndex) {
                         _dashboardPageController.animateToPage(
                           index,
@@ -797,106 +822,110 @@ class HomePageState extends State<HomePage> {
                       }
                     });
                   }
-                  
+
                   return SizedBox(
                     height: size.height * 0.5, // Usar 50% da altura da tela
                     child: Observer(builder: (_) {
                       if (store.isLoading) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(40.0),
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    }
-                    if (store.hasError) {
-                      return Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(40.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                'Erro: ${store.errorMessage}',
-                                style: const TextStyle(color: Colors.red),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 16),
-                              ElevatedButton(
-                                onPressed: () => store.carregarHome(),
-                                child: const Text('Tentar novamente'),
-                              ),
-                            ],
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(40.0),
+                            child: CircularProgressIndicator(),
                           ),
-                        ),
-                      );
-                    }
-                    final dashboard = store.dashboard;
-                    if (dashboard == null) {
-                      return const SizedBox.shrink();
-                    }
+                        );
+                      }
+                      if (store.hasError) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(40.0),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Erro: ${store.errorMessage}',
+                                  style: const TextStyle(color: Colors.red),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: () => store.carregarHome(),
+                                  child: const Text('Tentar novamente'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                      final dashboard = store.dashboard;
+                      if (dashboard == null) {
+                        return const SizedBox.shrink();
+                      }
 
-                    return PageView(
-                      controller: _dashboardPageController,
-                      onPageChanged: (index) {
-                        setState(() {
-                          _currentDashboardIndex = index;
-                        });
-                      },
-                      children: [
-                        // Card 1: Lotes em Produção
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                          child: _buildMetricCard(
-                            context,
-                            size,
-                            'Lotes em Produção',
-                            '${dashboard.resumo?.lotesAtivos ?? 0}',
-                            'de ${dashboard.resumo?.totalLotes ?? 0} lotes',
-                            Icons.agriculture,
-                            const Color(0xFF059669),
+                      return PageView(
+                        controller: _dashboardPageController,
+                        onPageChanged: (index) {
+                          setState(() {
+                            _currentDashboardIndex = index;
+                          });
+                        },
+                        children: [
+                          // Card 1: Lotes em Produção
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: size.width * 0.05),
+                            child: _buildMetricCard(
+                              context,
+                              size,
+                              'Lotes em Produção',
+                              '${dashboard.resumo?.lotesAtivos ?? 0}',
+                              'de ${dashboard.resumo?.totalLotes ?? 0} lotes',
+                              Icons.agriculture,
+                              const Color(0xFF059669),
+                            ),
                           ),
-                        ),
-                        // Card 2: Tarefas Pendentes
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                          child: _buildMetricCard(
-                            context,
-                            size,
-                            'Tarefas Pendentes',
-                            '${dashboard.tarefas?.pendentesHoje ?? 0}',
-                            'hoje • ${dashboard.tarefas?.atrasadas ?? 0} atrasadas',
-                            Icons.task_alt,
-                            const Color(0xFFDC2626),
+                          // Card 2: Tarefas Pendentes
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: size.width * 0.05),
+                            child: _buildMetricCard(
+                              context,
+                              size,
+                              'Tarefas Pendentes',
+                              '${dashboard.tarefas?.pendentesHoje ?? 0}',
+                              'hoje • ${dashboard.tarefas?.atrasadas ?? 0} atrasadas',
+                              Icons.task_alt,
+                              const Color(0xFFDC2626),
+                            ),
                           ),
-                        ),
-                        // Card 3: Produção Total
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                          child: _buildMetricCard(
-                            context,
-                            size,
-                            'Produção Total',
-                            '${dashboard.producao?.totalPlantasColhidas ?? 0}',
-                            _formatPeriodoProducao(dashboard.producao),
-                            Icons.eco,
-                            const Color(0xFF2563EB),
+                          // Card 3: Produção Total
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: size.width * 0.05),
+                            child: _buildMetricCard(
+                              context,
+                              size,
+                              'Produção Total',
+                              '${dashboard.producao?.totalPlantasColhidas ?? 0}',
+                              _formatPeriodoProducao(dashboard.producao),
+                              Icons.eco,
+                              const Color(0xFF2563EB),
+                            ),
                           ),
-                        ),
-                        // Card 4: Top Culturas
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                          child: _buildMetricCard(
-                            context,
-                            size,
-                            'Top Culturas',
-                            _formatCulturas(dashboard.culturas),
-                            'em produção',
-                            Icons.local_florist,
-                            const Color(0xFF8B5CF6),
+                          // Card 4: Top Culturas
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: size.width * 0.05),
+                            child: _buildMetricCard(
+                              context,
+                              size,
+                              'Top Culturas',
+                              _formatCulturas(dashboard.culturas),
+                              'em produção',
+                              Icons.local_florist,
+                              const Color(0xFF8B5CF6),
+                            ),
                           ),
-                        ),
-                      ],
-                    );
+                        ],
+                      );
                     }),
                   );
                 }),
@@ -1216,7 +1245,7 @@ class HomePageState extends State<HomePage> {
                   height: 20,
                   colorFilter: ColorFilter.mode(
                     color,
-                    BlendMode.src,
+                    BlendMode.srcIn,
                   ),
                 ),
               ),
@@ -1272,45 +1301,48 @@ class HomePageState extends State<HomePage> {
               borderRadius: BorderRadius.circular(15.0),
             ),
             elevation: 2,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 10, top: 10),
-                    child: IconButton(
-                      icon: SvgPicture.asset(
-                        icon,
-                        height: 25,
-                        width: 25,
+            child: SizedBox(
+              height: 120, // Altura fixa para o Card
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10, top: 10),
+                      child: IconButton(
+                        icon: SvgPicture.asset(
+                          icon,
+                          height: 25,
+                          width: 25,
+                        ),
+                        onPressed: null,
                       ),
-                      onPressed: null,
                     ),
                   ),
-                ),
-                const Spacer(),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                      bottom: 20,
-                      right: 16,
-                    ),
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black.withValues(alpha: .7),
+                  const Spacer(), // Agora pode ser usado porque o Column tem altura definida
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        bottom: 20,
+                        right: 16,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black.withValues(alpha: .7),
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -1365,7 +1397,7 @@ class HomePageState extends State<HomePage> {
                     icon,
                     width: 28,
                     height: 28,
-                    colorFilter: ColorFilter.mode(color, BlendMode.src),
+                    colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
                   ),
                 ),
               ),
@@ -1419,7 +1451,9 @@ class HomePageState extends State<HomePage> {
   }
 
   String _formatPeriodoProducao(HomeProducao? producao) {
-    if (producao == null || producao.periodoInicio == null || producao.periodoFim == null) {
+    if (producao == null ||
+        producao.periodoInicio == null ||
+        producao.periodoFim == null) {
       return 'plantas colhidas';
     }
     try {
@@ -1555,8 +1589,9 @@ class HomePageState extends State<HomePage> {
       onTap: () {
         // Track navigation e clique no atalho
         NavigationAnalytics.logNavigation(shortcut.route);
-        NavigationAnalytics.logShortcutClick(shortcut.route, shortcut.confidence);
-        
+        NavigationAnalytics.logShortcutClick(
+            shortcut.route, shortcut.confidence);
+
         // Se tiver resourceId, navegar com recurso específico
         if (shortcut.resourceId != null && shortcut.resourceType != null) {
           _navigateWithResource(shortcut);
@@ -1567,7 +1602,7 @@ class HomePageState extends State<HomePage> {
       borderRadius: BorderRadius.circular(12),
       child: Container(
         width: 90,
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -1586,83 +1621,75 @@ class HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Stack(
-              children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: shortcut.color.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      shortcut.icon,
-                      width: 20,
-                      height: 20,
-                      colorFilter: ColorFilter.mode(
-                        shortcut.color,
-                        BlendMode.src,
-                      ),
+        child: ClipRect(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: shortcut.color.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  ),
-                ),
-                if (shortcut.confidence > 0.7)
-                  Positioned(
-                    top: -2,
-                    right: -2,
-                    child: Container(
-                      width: 12,
-                      height: 12,
-                      decoration: BoxDecoration(
-                        color: shortcut.color,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 1.5,
+                    child: Center(
+                      child: SvgPicture.asset(
+                        shortcut.icon,
+                        width: 16,
+                        height: 16,
+                        colorFilter: ColorFilter.mode(
+                          shortcut.color,
+                          BlendMode.srcIn,
                         ),
                       ),
-                      child: const Icon(
-                        Icons.star,
-                        size: 8,
-                        color: Colors.white,
-                      ),
                     ),
                   ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              shortcut.displayTitle, // ⚠️ MUDANÇA: usa displayTitle para mostrar nome do recurso
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
+                  if (shortcut.confidence > 0.7)
+                    Positioned(
+                      top: -1,
+                      right: -1,
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          color: shortcut.color,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 1.5,
+                          ),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '⭐',
+                            style: TextStyle(fontSize: 6),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            if (shortcut.context != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: shortcut.color.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(4),
+              const SizedBox(height: 4),
+              Flexible(
+                child: Text(
+                  shortcut.displayTitle,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                    height: 1.1,
                   ),
-                  child: const Text(
-                    '⭐',
-                    style: TextStyle(fontSize: 8),
-                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -1683,7 +1710,7 @@ class HomePageState extends State<HomePage> {
       // 1. Buscar o recurso pelo ID (ex: buscar lote por ID)
       // 2. Selecionar no store apropriado (ex: loteStore.selecionarLote(lote))
       // 3. Navegar para a rota de detalhes
-      
+
       // Exemplo futuro para lotes:
       // if (shortcut.resourceType == 'lote' && shortcut.resourceId != null) {
       //   final loteStore = GetIt.I<LoteStore>();
@@ -1908,30 +1935,6 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                 ),
               ),
             ),
-
-            // Bottom accent line
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 300),
-              bottom: 12,
-              left: MediaQuery.of(context).size.width * 0.35,
-              right: MediaQuery.of(context).size.width * 0.35,
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 200),
-                opacity: opacity * 0.6,
-                child: Container(
-                  height: 4,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2),
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.white.withValues(alpha: 0.6),
-                        Colors.white.withValues(alpha: 0.3),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -1968,7 +1971,7 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
             height: 20,
             colorFilter: ColorFilter.mode(
               Colors.white,
-              BlendMode.src,
+              BlendMode.srcIn,
             ),
           ),
         ),
@@ -2008,7 +2011,7 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                   height: 20,
                   colorFilter: ColorFilter.mode(
                     Colors.white,
-                    BlendMode.src,
+                    BlendMode.srcIn,
                   ),
                 ),
               ),

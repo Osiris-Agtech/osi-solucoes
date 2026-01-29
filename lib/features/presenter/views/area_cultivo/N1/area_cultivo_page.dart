@@ -214,7 +214,7 @@ class _CardAreaState extends State<CardArea> {
                                   height: 18,
                                   colorFilter: ColorFilter.mode(
                                     Constants.kGreyText,
-                                    BlendMode.src,
+                                    BlendMode.srcIn,
                                   ),
                                 ),
                               ),

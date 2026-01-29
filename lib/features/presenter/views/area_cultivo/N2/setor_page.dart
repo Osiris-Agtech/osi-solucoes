@@ -164,7 +164,7 @@ class _AppBarState extends State<AppBar> {
                         "assets/icons/settings_icon.svg",
                         colorFilter: ColorFilter.mode(
                           Constants.kButtonGrey,
-                          BlendMode.src,
+                          BlendMode.srcIn,
                         ),
                         height: 20,
                       ),

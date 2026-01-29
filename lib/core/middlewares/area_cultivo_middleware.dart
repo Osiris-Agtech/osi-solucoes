@@ -14,7 +14,8 @@ class N1ViewPagePermission extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
-        ?.any((element) => element.permissao?.nome == Permissions.areaCultivoN1View);
+        ?.any((element) =>
+            element.permissao?.nome == Permissions.areaCultivoN1View);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);
@@ -30,7 +31,8 @@ class N1EditPagePermission extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
-        ?.any((element) => element.permissao?.nome == Permissions.areaCultivoN1Edit);
+        ?.any((element) =>
+            element.permissao?.nome == Permissions.areaCultivoN1Edit);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);
@@ -46,7 +48,8 @@ class N2ViewPagePermission extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
-        ?.any((element) => element.permissao?.nome == Permissions.areaCultivoN2View);
+        ?.any((element) =>
+            element.permissao?.nome == Permissions.areaCultivoN2View);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);
@@ -62,7 +65,8 @@ class N2EditPagePermission extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
-        ?.any((element) => element.permissao?.nome == Permissions.areaCultivoN2Edit);
+        ?.any((element) =>
+            element.permissao?.nome == Permissions.areaCultivoN2Edit);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);
@@ -78,7 +82,8 @@ class N3ViewPagePermission extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
-        ?.any((element) => element.permissao?.nome == Permissions.areaCultivoN3View);
+        ?.any((element) =>
+            element.permissao?.nome == Permissions.areaCultivoN3View);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);
@@ -94,7 +99,8 @@ class N3EditPagePermission extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     bool? validate = authController.usuario.selected_conta?.cargo?.permissoes
-        ?.any((element) => element.permissao?.nome == Permissions.areaCultivoN3Edit);
+        ?.any((element) =>
+            element.permissao?.nome == Permissions.areaCultivoN3Edit);
     return validate != null && validate
         ? null
         : const RouteSettings(name: Routes.permissaoNegadaPage);
