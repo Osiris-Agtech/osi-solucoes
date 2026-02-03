@@ -7,7 +7,7 @@ part of 'permissao_model.dart';
 // **************************************************************************
 
 Permissao _$PermissaoFromJson(Map<String, dynamic> json) => Permissao(
-      id: _parseToInt(json['id']),
+      id: _parseToString(json['id']),
       nome: json['nome'] as String?,
       created_at: json['created_at'] == null
           ? null
