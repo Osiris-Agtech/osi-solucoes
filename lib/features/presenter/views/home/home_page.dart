@@ -19,8 +19,10 @@ import '../../../../core/services/local_storage.dart';
 import '../../../../core/services/navigation_analytics.dart';
 import '../../viewmodels/auth_controller.dart';
 import '../../viewmodels/home_store.dart';
+import '../../viewmodels/lote_store.dart';
 import '../../viewmodels/modulos_store.dart';
 import '../../models/shortcut/shortcut_model.dart';
+import '../../models/setor/setor_model.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -39,7 +41,7 @@ class HomePageState extends State<HomePage> {
   // Variáveis para o carousel do dashboard
   final PageController _dashboardPageController = PageController();
   int _currentDashboardIndex = 0;
-  final List<String> _dashboardTitles = [
+  List<String> _dashboardTitles = [
     'Lotes em Produção',
     'Tarefas Pendentes',
     'Produção Total',
@@ -66,7 +68,8 @@ class HomePageState extends State<HomePage> {
     });
   }
 
-  /// Aplica o dashboard adaptativo recomendado pelo ML
+  /// Reordena _dashboardTitles colocando o dashboard recomendado na posição 0.
+  /// Chamado uma única vez após loadAdaptiveInterface() completar.
   void _applyAdaptiveDashboard() {
     print('📊 [HOME_PAGE] Verificando aplicação de dashboard adaptativo...');
 
@@ -82,48 +85,34 @@ class HomePageState extends State<HomePage> {
     }
 
     final dashboardName = store.adaptiveDashboard!;
-    final index = _getDashboardIndex(dashboardName);
+    const defaultOrder = [
+      'Lotes em Produção',
+      'Tarefas Pendentes',
+      'Produção Total',
+      'Top Culturas',
+    ];
 
-    print('   └─ Dashboard recomendado: "$dashboardName"');
-    print(
-        '   └─ Confiança: ${(store.dashboardConfidence * 100).toStringAsFixed(1)}%');
-    print('   └─ Índice mapeado: $index');
-
-    if (index < 0) {
+    if (!defaultOrder.contains(dashboardName)) {
       print('   └─ ❌ Dashboard não encontrado na lista (_dashboardTitles)');
       return;
     }
 
-    if (index >= _dashboardTitles.length) {
-      print(
-          '   └─ ❌ Índice fora do range (máximo: ${_dashboardTitles.length - 1})');
-      return;
-    }
+    print('   └─ Dashboard recomendado: "$dashboardName"');
+    print(
+        '   └─ Confiança: ${(store.dashboardConfidence * 100).toStringAsFixed(1)}%');
+    print('   └─ ✅ Reordenando lista com "$dashboardName" na posição 0...');
 
-    print('   └─ ✅ Aplicando dashboard no índice $index...');
+    final ordered = [
+      dashboardName,
+      ...defaultOrder.where((t) => t != dashboardName),
+    ];
 
-    // Aguarda o próximo frame para garantir que o PageView está pronto
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_dashboardPageController.hasClients) {
-        print('   └─ ✅ PageView pronto, animando para índice $index');
-        _dashboardPageController.animateToPage(
-          index,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
-        setState(() {
-          _currentDashboardIndex = index;
-        });
-        print('   └─ ✅ Dashboard adaptativo aplicado com sucesso!');
-      } else {
-        print('   └─ ⚠️ PageView ainda não está pronto');
-      }
+    setState(() {
+      _dashboardTitles = ordered;
+      _currentDashboardIndex = 0;
     });
-  }
 
-  /// Mapeia o nome do dashboard para o índice do carousel
-  int _getDashboardIndex(String dashboardName) {
-    return _dashboardTitles.indexOf(dashboardName);
+    print('   └─ ✅ Lista reordenada: $_dashboardTitles');
   }
 
   @override
@@ -800,30 +789,7 @@ class HomePageState extends State<HomePage> {
 
               // Carousel de Cards de Métricas
               SliverToBoxAdapter(
-                child: Observer(builder: (_) {
-                  // Aplica dashboard adaptativo quando disponível
-                  if (store.adaptiveDashboard != null &&
-                      store.dashboardConfidence > 0.5 &&
-                      _dashboardPageController.hasClients) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      final dashboardName = store.adaptiveDashboard!;
-                      final index = _getDashboardIndex(dashboardName);
-                      if (index >= 0 &&
-                          index < _dashboardTitles.length &&
-                          index != _currentDashboardIndex) {
-                        _dashboardPageController.animateToPage(
-                          index,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                        );
-                        setState(() {
-                          _currentDashboardIndex = index;
-                        });
-                      }
-                    });
-                  }
-
-                  return SizedBox(
+                child: SizedBox(
                     height: size.height * 0.5, // Usar 50% da altura da tela
                     child: Observer(builder: (_) {
                       if (store.isLoading) {
@@ -927,8 +893,7 @@ class HomePageState extends State<HomePage> {
                         ],
                       );
                     }),
-                  );
-                }),
+                ),
               ),
 
               // Indicadores do Carousel
@@ -1587,8 +1552,9 @@ class HomePageState extends State<HomePage> {
   ) {
     return InkWell(
       onTap: () {
-        // Track navigation e clique no atalho
-        NavigationAnalytics.logNavigation(shortcut.route);
+        // Bloquear cliques duplos enquanto um lote está sendo carregado
+        if (GetIt.I<LoteStore>().isLoadingLotePorId) return;
+
         NavigationAnalytics.logShortcutClick(
             shortcut.route, shortcut.confidence);
 
@@ -1596,6 +1562,7 @@ class HomePageState extends State<HomePage> {
         if (shortcut.resourceId != null && shortcut.resourceType != null) {
           _navigateWithResource(shortcut);
         } else {
+          NavigationAnalytics.logNavigation(shortcut.route);
           Get.toNamed(shortcut.route);
         }
       },
@@ -1629,24 +1596,40 @@ class HomePageState extends State<HomePage> {
               Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  Container(
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: shortcut.color.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: SvgPicture.asset(
-                        shortcut.icon,
-                        width: 16,
-                        height: 16,
-                        colorFilter: ColorFilter.mode(
-                          shortcut.color,
-                          BlendMode.srcIn,
+                  Observer(
+                    builder: (_) {
+                      final isLoading =
+                          GetIt.I<LoteStore>().isLoadingLotePorId &&
+                              shortcut.resourceType == 'lote';
+                      return Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: shortcut.color.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      ),
-                    ),
+                        child: Center(
+                          child: isLoading
+                              ? SizedBox(
+                                  width: 14,
+                                  height: 14,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: shortcut.color,
+                                  ),
+                                )
+                              : SvgPicture.asset(
+                                  shortcut.icon,
+                                  width: 16,
+                                  height: 16,
+                                  colorFilter: ColorFilter.mode(
+                                    shortcut.color,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                        ),
+                      );
+                    },
                   ),
                   if (shortcut.confidence > 0.7)
                     Positioned(
@@ -1695,38 +1678,58 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  /// Navega para uma rota com recurso específico
-  /// Se tiver resourceId, tenta buscar e selecionar o recurso antes de navegar
+  /// Navega para uma rota com recurso específico.
+  /// Para lotes, busca os detalhes via API e prepara o store antes de navegar.
+  /// Para setores, seta o setor no store e navega para a lista de lotes.
   Future<void> _navigateWithResource(ShortcutModel shortcut) async {
-    try {
-      print('🔗 [HOME_PAGE] Navegando com recurso específico:');
-      print('   └─ Rota: ${shortcut.route}');
-      print('   └─ Tipo: ${shortcut.resourceType}');
-      print('   └─ ID: ${shortcut.resourceId}');
-      print('   └─ Nome: ${shortcut.resourceName}');
+    if (shortcut.resourceType == 'lote' && shortcut.resourceId != null) {
+      final id = int.tryParse(shortcut.resourceId!);
+      if (id == null) {
+        // resourceId inválido — fallback para navegação normal
+        NavigationAnalytics.logNavigation(shortcut.route);
+        Get.toNamed(shortcut.route);
+        return;
+      }
 
-      // Por enquanto, navegação normal
-      // Futuramente você pode implementar:
-      // 1. Buscar o recurso pelo ID (ex: buscar lote por ID)
-      // 2. Selecionar no store apropriado (ex: loteStore.selecionarLote(lote))
-      // 3. Navegar para a rota de detalhes
+      NavigationAnalytics.logNavigation(
+        Routes.detalhesLotePage,
+        resourceId: shortcut.resourceId,
+        resourceType: 'lote',
+        resourceName: shortcut.resourceName,
+      );
 
-      // Exemplo futuro para lotes:
-      // if (shortcut.resourceType == 'lote' && shortcut.resourceId != null) {
-      //   final loteStore = GetIt.I<LoteStore>();
-      //   final lote = await loteRepository.buscarLotePorId(int.parse(shortcut.resourceId!));
-      //   loteStore.selecionarLote(lote);
-      //   Get.toNamed(Routes.detalhesLotePage);
-      //   return;
-      // }
-
-      // Fallback: navegação normal
-      Get.toNamed(shortcut.route);
-    } catch (e) {
-      print('❌ [HOME_PAGE] Erro ao navegar com recurso: $e');
-      // Fallback: navegação normal
-      Get.toNamed(shortcut.route);
+      final loteStore = GetIt.I<LoteStore>();
+      final success = await loteStore.buscarLotePorId(id);
+      if (success) {
+        Get.toNamed(Routes.detalhesLotePage);
+      }
+      return;
     }
+
+    if (shortcut.resourceType == 'setor' && shortcut.resourceId != null) {
+      final id = int.tryParse(shortcut.resourceId!);
+      if (id == null) {
+        NavigationAnalytics.logNavigation(shortcut.route);
+        Get.toNamed(shortcut.route);
+        return;
+      }
+
+      NavigationAnalytics.logNavigation(
+        Routes.lotePage,
+        resourceId: shortcut.resourceId,
+        resourceType: 'setor',
+        resourceName: shortcut.resourceName,
+      );
+
+      GetIt.I<LoteStore>()
+          .setSetorSelecionado(Setor(id: id, nome: shortcut.resourceName));
+      Get.toNamed(Routes.lotePage);
+      return;
+    }
+
+    // Fallback: navegação normal para rotas sem recurso específico
+    NavigationAnalytics.logNavigation(shortcut.route);
+    Get.toNamed(shortcut.route);
   }
 
   Widget _buildCarouselButton(IconData icon, VoidCallback onTap, bool enabled) {

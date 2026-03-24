@@ -49,6 +49,14 @@ abstract class AjustesStoreBase with Store {
 
   @action
   bool validarCampos() {
+    // Solução nutritiva vinculada ao reservatório
+    if (selectedReservatorio.solucao == null) {
+      toastError(
+          message:
+              'O reservatório selecionado não possui solução nutritiva cadastrada');
+      return false;
+    }
+
     // Condutividade Elétrica Atual
     if (cEletricoAtual.text.isEmpty ||
         double.parse(
@@ -130,9 +138,7 @@ abstract class AjustesStoreBase with Store {
       (err) {
         reservatorioList = List.from([]);
       },
-      (data) async {
-        reservatorioList = data;
-        reservatorioList.removeWhere((element) => element.solucao == null);
+      (data) {
         reservatorioList = List.from(data);
       },
     );

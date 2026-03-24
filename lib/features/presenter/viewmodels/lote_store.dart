@@ -196,6 +196,34 @@ abstract class LoteStoreBase with Store {
   @action
   Area selecionarArea(Area area) => areaSelecionada = area;
 
+  @observable
+  bool isLoadingLotePorId = false;
+
+  /// Busca um lote por ID e prepara o store para navegação direta (ex: atalhos da home).
+  /// Retorna true se bem-sucedido, false caso contrário.
+  @action
+  Future<bool> buscarLotePorId(int id) async {
+    isLoadingLotePorId = true;
+    try {
+      final result = await loteRepository.buscarDetalhesLote(id);
+      return result.fold(
+        (err) {
+          toastError(message: 'Lote não encontrado');
+          return false;
+        },
+        (lote) {
+          selecionarLote(lote);
+          if (lote.setor?.id != null) {
+            setSetorSelecionado(lote.setor!);
+          }
+          return true;
+        },
+      );
+    } finally {
+      isLoadingLotePorId = false;
+    }
+  }
+
   @action
   Future<void> buscarDetalhesLote() async {
     isDetalhesLoteLoading = true;

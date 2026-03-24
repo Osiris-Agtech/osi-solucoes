@@ -349,6 +349,22 @@ mixin _$LoteStore on LoteStoreBase, Store {
     });
   }
 
+  late final _$isLoadingLotePorIdAtom =
+      Atom(name: 'LoteStoreBase.isLoadingLotePorId', context: context);
+
+  @override
+  bool get isLoadingLotePorId {
+    _$isLoadingLotePorIdAtom.reportRead();
+    return super.isLoadingLotePorId;
+  }
+
+  @override
+  set isLoadingLotePorId(bool value) {
+    _$isLoadingLotePorIdAtom.reportWrite(value, super.isLoadingLotePorId, () {
+      super.isLoadingLotePorId = value;
+    });
+  }
+
   late final _$mostrarErroFormularioAtom =
       Atom(name: 'LoteStoreBase.mostrarErroFormulario', context: context);
 
@@ -1149,6 +1165,14 @@ mixin _$LoteStore on LoteStoreBase, Store {
         .run(() => super.migrarLote(migrarReservatorio));
   }
 
+  late final _$buscarLotePorIdAsyncAction =
+      AsyncAction('LoteStoreBase.buscarLotePorId', context: context);
+
+  @override
+  Future<bool> buscarLotePorId(int id) {
+    return _$buscarLotePorIdAsyncAction.run(() => super.buscarLotePorId(id));
+  }
+
   late final _$buscarDetalhesLoteAsyncAction =
       AsyncAction('LoteStoreBase.buscarDetalhesLote', context: context);
 
@@ -1865,6 +1889,7 @@ isMigrateLoteLoading: ${isMigrateLoteLoading},
 loteSelecionado: ${loteSelecionado},
 areaSelecionada: ${areaSelecionada},
 setorSelecionadoMigrar: ${setorSelecionadoMigrar},
+isLoadingLotePorId: ${isLoadingLotePorId},
 mostrarErroFormulario: ${mostrarErroFormulario},
 showTextFormField: ${showTextFormField},
 isEditing: ${isEditing},

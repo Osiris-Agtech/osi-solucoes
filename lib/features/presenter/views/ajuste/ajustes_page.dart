@@ -1,8 +1,6 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
@@ -24,7 +22,6 @@ class AjustesPage extends StatefulWidget {
 class AjustesPageState extends State<AjustesPage> {
   AjustesStore store = GetIt.I<AjustesStore>();
   final formKey = GlobalKey<FormState>();
-  final dropDownKey = GlobalKey<DropdownSearchState<String>>();
 
   @override
   void initState() {
@@ -115,120 +112,66 @@ class AjustesPageState extends State<AjustesPage> {
                           ),
                           child: Observer(
                             builder: (_) {
-                              return DropdownSearch<Reservatorio>(
-                                key: dropDownKey,
-                                mode: Mode.form,
-                                items: (filter, infiniteScrollProps) =>
-                                    store.reservatorioList,
-                                dropdownBuilder: (context, selectedItem) {
-                                  if (selectedItem != null) {
-                                    return Text(
-                                      selectedItem.nome!,
-                                      overflow: TextOverflow.visible,
-                                    );
+                              final reservatorios = store.reservatorioList;
+                              final selectedId =
+                                  store.selectedReservatorio.id;
+                              final selected = selectedId != null &&
+                                      reservatorios
+                                          .any((r) => r.id == selectedId)
+                                  ? reservatorios
+                                      .firstWhere((r) => r.id == selectedId)
+                                  : null;
+                              return DropdownButtonFormField<Reservatorio>(
+                                initialValue: selected,
+                                hint: const Text(
+                                  'Selecione o Reservatório',
+                                  style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    color: Constants.kGreyText2,
+                                  ),
+                                ),
+                                isExpanded: true,
+                                iconEnabledColor: Constants.kPrimaryColor,
+                                borderRadius: BorderRadius.circular(5),
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding:
+                                      EdgeInsets.symmetric(vertical: 14),
+                                ),
+                                selectedItemBuilder: (context) {
+                                  return reservatorios
+                                      .map(
+                                        (r) => Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            r.nome ?? '',
+                                            style: const TextStyle(
+                                              color: Constants.kPrimaryColor,
+                                              fontStyle: FontStyle.italic,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .toList();
+                                },
+                                items: reservatorios
+                                    .map(
+                                      (r) => DropdownMenuItem<Reservatorio>(
+                                        value: r,
+                                        child: Text(
+                                          r.nome ?? '-',
+                                          style: const TextStyle(
+                                            color: Constants.kGreyText,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    store.selectReservatorio(value);
                                   }
-                                  return const Text(
-                                    'Selecione o Reservatório',
-                                    overflow: TextOverflow.visible,
-                                    style:
-                                        TextStyle(color: Constants.kGreyText2),
-                                  );
                                 },
-                                filterFn: (reservatorio, nome) {
-                                  bool contains = reservatorio.nome!
-                                      .toLowerCase()
-                                      .contains(nome.toLowerCase());
-                                  return contains;
-                                },
-                                popupProps: PopupProps.dialog(
-                                  // showSearchBox agora está dentro de popupProps
-                                  showSearchBox: true,
-
-                                  // itemBuilder mudou a assinatura (não tem mais 'selected', agora é 'isDisabled' e 'isSelected')
-                                  itemBuilder: (ctx, reservatorio, isDisabled,
-                                      isSelected) {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0),
-                                      child: DropdownMenuItem<Reservatorio>(
-                                        value: reservatorio,
-                                        child: Text(
-                                          reservatorio.nome!,
-                                          overflow: TextOverflow.visible,
-                                        ),
-                                      ),
-                                    );
-                                  },
-
-                                  // emptyBuilder agora está dentro de popupProps
-                                  emptyBuilder: (ctx, searchText) {
-                                    return const Center(
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: Text(
-                                          'Nenhum reservatório com solução nutritiva encontrado',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                suffixProps: DropdownSuffixProps(
-                                  dropdownButtonProps: DropdownButtonProps(
-                                    iconClosed: const Icon(
-                                      Icons.arrow_drop_down,
-                                      size: 30,
-                                      color: Constants.kPrimaryColor,
-                                    ),
-                                    iconOpened: const Icon(
-                                      Icons.arrow_drop_down,
-                                      size: 30,
-                                      color: Constants.kPrimaryColor,
-                                    ),
-                                  ),
-                                ),
-                                decoratorProps: DropDownDecoratorProps(
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    prefixIconConstraints: const BoxConstraints(
-                                      maxHeight: 50,
-                                      maxWidth: 50,
-                                    ),
-                                    contentPadding:
-                                        const EdgeInsets.only(top: 15),
-                                    alignLabelWithHint: true,
-                                    hintText: "Buscar Reservatório...",
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.only(
-                                        right: 10.0,
-                                        left: 10,
-                                        top: 5,
-                                      ),
-                                      child: Observer(builder: (_) {
-                                        return store.selectedReservatorio
-                                                        .nome !=
-                                                    null &&
-                                                store.selectedReservatorio.nome!
-                                                    .isNotEmpty
-                                            ? SvgPicture.asset(
-                                                "assets/icons/reservatorio_icon.svg",
-                                              )
-                                            : Opacity(
-                                                opacity: 0.6,
-                                                child: SvgPicture.asset(
-                                                  "assets/icons/reservatorio_icon.svg",
-                                                ),
-                                              );
-                                      }),
-                                    ),
-                                  ),
-                                ),
-                                onChanged: (reservatorio) {
-                                  store.selectReservatorio(reservatorio!);
-                                },
-                                // showSearchBox: true,
-                                // showAsSuffixIcons: true,
                               );
                             },
                           ),
