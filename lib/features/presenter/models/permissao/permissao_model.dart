@@ -4,12 +4,12 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'permissao_model.g.dart';
 
-int? _parseToInt(dynamic value) {
+// Função helper para converter int ou String para String
+String? _parseToString(dynamic value) {
   if (value == null) return null;
-  if (value is int) return value;
-  if (value is String) return int.tryParse(value);
-  if (value is double) return value.toInt();
-  return null;
+  if (value is String) return value;
+  if (value is int) return value.toString();
+  return value.toString();
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -17,9 +17,9 @@ class Permissao {
   @JsonKey(
     required: false,
     disallowNullValue: false,
-    fromJson: _parseToInt,
+    fromJson: _parseToString,
   )
-  int? id;
+  String? id;
   @JsonKey(required: false, disallowNullValue: false)
   String? nome;
   @JsonKey(required: false, disallowNullValue: false)
