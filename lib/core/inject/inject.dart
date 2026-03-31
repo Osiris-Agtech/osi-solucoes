@@ -11,6 +11,11 @@ import 'package:osi_solucoes/features/data/datasources/recuperarSenha/recuperar_
 import 'package:osi_solucoes/features/data/datasources/relatorioProducao/relatorioProducao_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/relatorioStatusLotes/relatorioStatusLotes_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/homeDashboard/home_dashboard_datasource.dart';
+import 'package:osi_solucoes/features/data/datasources/relatorio_ciclo_cultura/relatorio_ciclo_cultura_datasource.dart';
+import 'package:osi_solucoes/features/data/datasources/relatorio_produtividade_setor/relatorio_produtividade_setor_datasource.dart';
+import 'package:osi_solucoes/features/data/datasources/relatorio_desempenho_equipe/relatorio_desempenho_equipe_datasource.dart';
+import 'package:osi_solucoes/features/data/datasources/relatorio_agenda_tarefas/relatorio_agenda_tarefas_datasource.dart';
+import 'package:osi_solucoes/core/services/export_service.dart';
 import 'package:osi_solucoes/features/data/datasources/setor/setor_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/solucoes/solucoes_nutritivas_datasource.dart';
 import 'package:osi_solucoes/features/data/repositories/agenda/agenda_repository.dart';
@@ -37,6 +42,10 @@ import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart'
 import 'package:osi_solucoes/features/presenter/viewmodels/recuperar_senha_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/relatorio_producao_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/relatorio_status_lote_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/relatorio_ciclo_cultura_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/relatorio_produtividade_setor_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/relatorio_desempenho_equipe_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/relatorio_agenda_tarefas_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 
 import '../../features/data/datasources/area/area_datasource.dart';
@@ -93,6 +102,18 @@ Future<void> initInject() async {
   );
   sl.registerLazySingleton<IHomeDashboardDatasource>(
     () => HomeDashboardDatasource(),
+  );
+  sl.registerLazySingleton<IRelatorioCicloCulturaDatasource>(
+    () => RelatorioCicloCulturaDatasource(),
+  );
+  sl.registerLazySingleton<IRelatorioProdutividadeSetorDatasource>(
+    () => RelatorioProdutividadeSetorDatasource(),
+  );
+  sl.registerLazySingleton<IRelatorioDesempenhoEquipeDatasource>(
+    () => RelatorioDesempenhoEquipeDatasource(),
+  );
+  sl.registerLazySingleton<IRelatorioAgendaTarefasDatasource>(
+    () => RelatorioAgendaTarefasDatasource(),
   );
 
   //repositories
@@ -163,6 +184,19 @@ Future<void> initInject() async {
   sl.registerLazySingleton<RelatorioStatusLoteStore>(
     () => RelatorioStatusLoteStore(),
   );
+  sl.registerLazySingleton<RelatorioCicloCulturaStore>(
+    () => RelatorioCicloCulturaStore(),
+  );
+  sl.registerLazySingleton<RelatorioProdutividadeSetorStore>(
+    () => RelatorioProdutividadeSetorStore(),
+  );
+  sl.registerLazySingleton<RelatorioDesempenhoEquipeStore>(
+    () => RelatorioDesempenhoEquipeStore(),
+  );
+  sl.registerLazySingleton<RelatorioAgendaTarefasStore>(
+    () => RelatorioAgendaTarefasStore(),
+  );
+  sl.registerLazySingleton<ExportService>(() => ExportService());
 
   sl.registerFactoryParam<MultiAccountsPage, Usuario, bool>(
     (param1, param2) => MultiAccountsPage(

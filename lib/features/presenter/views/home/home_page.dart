@@ -692,6 +692,19 @@ class HomePageState extends State<HomePage> {
                               Get.toNamed(Routes.protocoloPage);
                             },
                           ),
+                          const SizedBox(width: 12),
+                          modernQuickActionCard(
+                            context,
+                            size,
+                            'Relatórios',
+                            "assets/icons/relatorio_icon.svg",
+                            const Color(0xFFE11D48),
+                            onTap: () {
+                              NavigationAnalytics.logNavigation(
+                                  Routes.relatoriosPage);
+                              Get.toNamed(Routes.relatoriosPage);
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -986,11 +999,20 @@ class HomePageState extends State<HomePage> {
                     modernGridItems(
                       context,
                       size,
+                      "cardRelatoriosHome".i18n(),
+                      "assets/icons/relatorio_icon.svg",
+                      const Color(0xFF0891B2),
+                      path: "Relatorios",
+                      id: 4,
+                    ),
+                    modernGridItems(
+                      context,
+                      size,
                       "card9Home".i18n(),
                       "assets/icons/ajustes_icon.svg",
                       const Color(0xFF7C3AED),
                       path: "Ajustes",
-                      id: 4,
+                      id: 5,
                     ),
                   ],
                 ),

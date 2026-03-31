@@ -39,4 +39,11 @@ abstract class Routes {
   static const codigoSeguranca = '/codigoSeguranca';
   static const novaSenha = '/novaSenha';
   static const historicoPage = '/historicoPage';
+  static const relatoriosPage = '/relatoriosPage';
+  static const relatorioCircoCulturaPage = '/relatorioCircoCulturaPage';
+  static const relatorioProducaoPage = '/relatorioProducaoPage';
+  static const relatorioStatusLotesPage = '/relatorioStatusLotesPage';
+  static const relatorioProdutividadeSetorPage = '/relatorioProdutividadeSetorPage';
+  static const relatorioDesempenhoEquipePage = '/relatorioDesempenhoEquipePage';
+  static const relatorioAgendaTarefasPage = '/relatorioAgendaTarefasPage';
 }

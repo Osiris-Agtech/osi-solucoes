@@ -7,6 +7,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/views/ajuste/ajustes_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/area_cultivo_page.dart';
 import 'package:osi_solucoes/features/presenter/views/caderno_campo/caderno_campo_page.dart';
+import 'package:osi_solucoes/features/presenter/views/relatorios/relatorios_page.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/reservatorios_page.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/solucao_page.dart';
 
@@ -29,6 +30,7 @@ class ModulosPageState extends State<ModulosPage> {
       const ReservatoriosPage(),
       const CadernoCampoPage(),
       const SolucaoPage(),
+      const RelatoriosPage(),
       const AjustesPage(),
     ];
     return Observer(builder: (_) {
@@ -151,11 +153,19 @@ class ModulosPageState extends State<ModulosPage> {
                 label: 'Soluções',
               ),
               BottomNavigationBarItem(
+                icon: const Icon(
+                  Icons.bar_chart_outlined,
+                  size: 25,
+                ),
+                activeIcon: const Icon(
+                  Icons.bar_chart,
+                  size: 25,
+                ),
+                label: 'Relatórios',
+              ),
+              BottomNavigationBarItem(
                 icon: SvgPicture.asset(
                   "assets/icons/ajustes_icon.svg",
-                  // color: store.pageviewController == 4
-                  //     ? null
-                  //     : const Color.fromRGBO(51, 51, 51, 0.8),
                   height: 25,
                   width: 25,
                 ),

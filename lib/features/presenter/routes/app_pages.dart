@@ -44,6 +44,11 @@ import '../views/onboarding/splash_page.dart';
 import '../views/protocolo/cadastrar_protocolo_page.dart';
 import '../views/reservatorio/reservatorios_page.dart';
 import '../views/solucao/solucao_page.dart';
+import '../views/relatorios/ciclo_cultura/relatorio_ciclo_cultura_page.dart';
+import '../views/relatorios/relatorios_page.dart';
+import '../views/relatorios/produtividade_setor/relatorio_produtividade_setor_page.dart';
+import '../views/relatorios/desempenho_equipe/relatorio_desempenho_equipe_page.dart';
+import '../views/relatorios/agenda_tarefas/relatorio_agenda_tarefas_page.dart';
 
 class AppPages {
   static final List<GetPage> routes = [
@@ -298,6 +303,31 @@ class AppPages {
     GetPage(
       name: Routes.historicoPage,
       page: () => const HistoricoPage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.relatorioCircoCulturaPage,
+      page: () => const RelatorioCicloCulturaPage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.relatoriosPage,
+      page: () => const RelatoriosPage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.relatorioProdutividadeSetorPage,
+      page: () => const RelatorioProdutividadeSetorPage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.relatorioDesempenhoEquipePage,
+      page: () => const RelatorioDesempenhoEquipePage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.relatorioAgendaTarefasPage,
+      page: () => const RelatorioAgendaTarefasPage(),
       transition: Transition.rightToLeft,
     ),
   ];
