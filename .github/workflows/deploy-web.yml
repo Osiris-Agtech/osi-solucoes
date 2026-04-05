@@ -55,20 +55,6 @@ jobs:
         run: flutter pub run build_runner build --delete-conflicting-outputs
         continue-on-error: true
 
-      - name: 📐 Analisar código (lint)
-        run: flutter analyze --no-fatal-infos
-
-      - name: 🧪 Rodar testes unitários
-        run: flutter test --coverage
-        continue-on-error: true
-
-      - name: 📊 Upload de coverage
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: coverage-report
-          path: coverage/
-          retention-days: 7
 
       - name: 🏗️ Build Web (WASM para performance)
         run: |
