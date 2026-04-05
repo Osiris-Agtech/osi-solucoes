@@ -106,8 +106,6 @@ jobs:
           projectId: adaptative-user-interface
           channelId: live
           entryPoint: ./
-        env:
-          FIREBASE_CLI_EXPERIMENTS: webframeworks
 
       - name: ✅ Deploy concluído
         run: echo "🎉 Deploy realizado com sucesso!"
@@ -145,8 +143,6 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
           projectId: adaptative-user-interface
           entryPoint: ./
-        env:
-          FIREBASE_CLI_EXPERIMENTS: webframeworks
 
       - name: 💬 Comentário no PR com URL de preview
         if: steps.firebase-preview.outputs.details_url != ''
