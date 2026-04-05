@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/utils/responsive_breakpoints.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
@@ -193,312 +194,230 @@ class HomePageState extends State<HomePage> {
   }
 
   Widget menu(BuildContext context, Size size) {
-    double sizeWidth = size.width * 0.76;
-    double sizeHeight = size.height;
+    final isMobile = ResponsiveBreakpoints.isMobile(context);
+    final isTablet = ResponsiveBreakpoints.isTablet(context);
+    final useDrawerOverlay = isMobile || isTablet;
+
+    // Em mobile/tablet, usamos o drawer overlay (renderizado no home())
+    // Em desktop, renderizamos o menu lateral fixo
+    if (useDrawerOverlay) {
+      return const SizedBox.shrink();
+    }
+
+    final menuWidth = 320.0;
+
     return Align(
       alignment: Alignment.topLeft,
       child: Container(
-        height: sizeHeight,
+        height: size.height,
         width: size.width,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF333333), Color(0xFF2F6947)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            stops: [0.7, 3],
-          ),
-        ),
-        child: SizedBox(
-          height: sizeHeight,
-          width: sizeWidth,
-          child: SingleChildScrollView(
+        color: Colors.black.withValues(alpha: 0.3),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Container(
+            width: menuWidth,
+            height: size.height,
+            decoration: BoxDecoration(
+              color: Constants.kBackgroundColor,
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(4, 0),
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 20,
+                  spreadRadius: 0,
+                ),
+              ],
+            ),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Expanded(flex: 1, child: Container()),
+                // Header com botão de fechar
                 Padding(
-                  padding: EdgeInsets.only(
-                    top: 30,
-                    left: sizeWidth * 0.02,
-                  ),
-                  child: IconButton(
-                    alignment: Alignment.centerLeft,
-                    onPressed: () {
-                      store.setIsCollaped();
-                    },
-                    icon: const Icon(
-                      Icons.close,
-                      color: Constants.kBackgroundColor,
-                      size: 24,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    right: (sizeWidth * 0.33),
-                    bottom: 10,
-                  ),
-                  child: const Center(
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
-                      radius: 32.5,
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: size.width * 0.24),
-                      child: Observer(builder: (_) {
-                        return Text(
-                          store.authController.usuario.selected_conta?.conta
-                                  ?.nome ??
-                              "...",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 30,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        );
-                      }),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: size.height * 0.003,
-                        right: size.width * 0.24,
-                        bottom: 10,
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Menu',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black87,
+                        ),
                       ),
-                      child: Observer(builder: (_) {
-                        return Text(
-                          store.authController.usuario.selected_conta?.cargo
-                                  ?.cargo ??
-                              "...",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white.withValues(alpha: .8),
-                            fontStyle: FontStyle.italic,
-                          ),
-                        );
-                      }),
-                    ),
-                  ],
-                ),
-                // Expanded(flex: 1, child: Container()),
-                // Divider removido para eliminar a barrinha branca
-                // Expanded(flex: 1, child: Container()),
-                Padding(
-                  padding: EdgeInsets.only(
-                      // top: size.height * 0.05,
-                      left: sizeWidth * 0.122),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: SvgPicture.asset(
-                            "assets/icons/settings_icon.svg",
-                            colorFilter: ColorFilter.mode(
-                              Constants.kBackgroundColor.withValues(alpha: .8),
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                          onPressed: () {},
+                      IconButton(
+                        onPressed: () => store.setIsCollaped(),
+                        icon: const Icon(Icons.close),
+                        iconSize: 22,
+                        color: Colors.black54,
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(
+                          minWidth: 36,
+                          minHeight: 36,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: size.width * 0.02),
-                          child: Text(
-                            "itemMenu1".i18n(),
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 16),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
+
+                const SizedBox(height: 24),
+
+                // Seção do usuário com ícone genérico
                 Padding(
-                  padding: EdgeInsets.only(
-                      left: sizeWidth * 0.122, top: size.height * 0.02),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: SvgPicture.asset(
-                            "assets/icons/hexagon_icon.svg",
-                            colorFilter: ColorFilter.mode(
-                              Constants.kBackgroundColor.withValues(alpha: .8),
-                              BlendMode.srcIn,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: Constants.kPrimaryColor.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.person,
+                          color: Constants.kPrimaryColor,
+                          size: 28,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Observer(
+                              builder: (_) {
+                                final nome = store
+                                        .authController
+                                        .usuario
+                                        .selected_conta
+                                        ?.conta
+                                        ?.nome ??
+                                    'Usuário';
+                                return Text(
+                                  'Olá, $nome',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black87,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                );
+                              },
                             ),
-                          ),
-                          onPressed: () {},
+                            const SizedBox(height: 2),
+                            Observer(
+                              builder: (_) {
+                                final cargo = store
+                                        .authController
+                                        .usuario
+                                        .selected_conta
+                                        ?.cargo
+                                        ?.cargo ??
+                                    'Cargo';
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Constants.kPrimaryColor
+                                        .withValues(alpha: 0.1),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    cargo,
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                      color: Constants.kPrimaryColor,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: size.width * 0.02),
-                          child: Text(
-                            "itemMenu2".i18n(),
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 16),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-                Observer(builder: (_) {
-                  if (store.authController.usuario.contas!.length < 2) {
-                    return Container();
-                  }
-                  return Padding(
-                    padding: EdgeInsets.only(
-                        left: sizeWidth * 0.122, top: size.height * 0.02),
-                    child: InkWell(
-                      onTap: () async {
-                        showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return const Center(
-                                child: CircularProgressIndicator());
+
+                const SizedBox(height: 24),
+                const Divider(height: 1, indent: 16, endIndent: 16),
+                const SizedBox(height: 8),
+
+                // Itens do menu
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    children: [
+                      // Trocar Conta (apenas se multi-conta)
+                      Observer(builder: (_) {
+                        if (store.authController.usuario.contas!.length < 2) {
+                          return const SizedBox.shrink();
+                        }
+                        return _buildModernMenuItem(
+                          icon: Icons.swap_horiz,
+                          title: 'Trocar Conta',
+                          onTap: () async {
+                            store.setIsCollaped();
+                            Get.to(
+                              () => MultiAccountsPage(
+                                isLoggedIn: true,
+                                user: store.authController.usuario,
+                              ),
+                            );
                           },
+                          iconColor: const Color(0xFF6366F1),
                         );
-                        await Future.delayed(const Duration(seconds: 1));
-                        store.setIsCollaped();
-                        Get.to(
-                          () => MultiAccountsPage(
-                            isLoggedIn: true,
-                            user: store.authController.usuario,
-                          ),
-                        );
-                        // Modular.to.pushNamed(
-                        //   "/Login/MultiAccounts/",
-                        //   arguments: {
-                        //     "user": store.appController.usuario,
-                        //     "isLoggedIn": true,
-                        //   },
-                        // );
-                      },
-                      child: Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.published_with_changes,
-                              color: Colors.white.withValues(alpha: .8),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: size.width * 0.02),
-                            child: const Text(
-                              "Trocar Conta",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-                Divider(
-                  color: const Color(0xFF9F9F9F).withValues(alpha: .4),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: sizeWidth * 0.122
-                      // , top: size.height * 0.05
-                      ),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: SvgPicture.asset(
-                            "assets/icons/info_icon.svg",
-                            colorFilter: ColorFilter.mode(
-                              Constants.kBackgroundColor.withValues(alpha: .8),
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                          onPressed: () {},
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: size.width * 0.02),
-                          child: Text(
-                            "itemMenu3".i18n(),
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 16),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: sizeWidth * 0.122, top: size.height * 0.02),
-                  child: InkWell(
-                    onTap: () async {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const Center(
-                              child: CircularProgressIndicator());
+                      }),
+
+                      _buildModernMenuItem(
+                        icon: Icons.info_outline,
+                        title: 'Sobre o App',
+                        onTap: () {
+                          store.setIsCollaped();
+                          // TODO: Implementar tela sobre
                         },
-                      );
-                      await LocalStorage().deleteUser();
-                      await Future.delayed(const Duration(seconds: 2));
-                      store.setIsCollaped();
-                      Get.offAll(() => const SplashPage());
-                    },
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: SvgPicture.asset(
-                            "assets/icons/external_link_icon.svg",
-                            colorFilter: ColorFilter.mode(
-                              Constants.kBackgroundColor.withValues(alpha: .8),
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                          onPressed: () {},
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: size.width * 0.02),
-                          child: Text(
-                            "itemMenu4".i18n(),
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 16),
-                          ),
-                        ),
-                      ],
+                        iconColor: const Color(0xFF06B6D4),
+                      ),
+
+                      const SizedBox(height: 8),
+                      const Divider(height: 1),
+                      const SizedBox(height: 8),
+
+                      // Logout
+                      _buildModernMenuItem(
+                        icon: Icons.logout,
+                        title: 'Sair',
+                        onTap: () async {
+                          store.setIsCollaped();
+                          await LocalStorage().deleteUser();
+                          Get.offAll(() => const SplashPage());
+                        },
+                        iconColor: const Color(0xFFDC2626),
+                        showTrailing: true,
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Versão do app
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    'versao'.i18n(),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[500],
                     ),
                   ),
                 ),
-                // Spacer e Expanded removidos - não podem ser usados dentro de SingleChildScrollView
-                SizedBox(
-                    height: size.height *
-                        0.3), // Espaçamento fixo ao invés de Spacer
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: sizeWidth * 0.14,
-                  ),
-                  child: Text(
-                    "versao".i18n(),
-                    style: const TextStyle(color: Colors.white, fontSize: 14),
-                  ),
-                ),
-                SizedBox(height: 20), // Espaçamento fixo ao invés de Expanded
+                const SizedBox(height: 8),
               ],
             ),
           ),
@@ -507,31 +426,98 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  /// Item moderno do menu com ícone, título e opcional trailing
+  Widget _buildModernMenuItem({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    Color iconColor = Colors.black54,
+    bool showTrailing = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: iconColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  icon,
+                  color: iconColor,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+              if (showTrailing)
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Colors.black38,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget home(BuildContext context, Size size) {
     size = MediaQuery.of(context).size;
+    final isMobile = ResponsiveBreakpoints.isMobile(context);
+    final isTablet = ResponsiveBreakpoints.isTablet(context);
+    final useDrawerOverlay = isMobile || isTablet;
+
     return Observer(builder: (_) {
-      return AnimatedPositioned(
-        duration: duration,
-        top: store.isCollapsed ? 0 : size.height * 0.1,
-        bottom: store.isCollapsed ? 0 : 0.1 * size.height,
-        left: store.isCollapsed ? 0 : 0.76 * size.width,
-        right: store.isCollapsed ? 0 : -.8 * size.width,
-        child: Container(
-          constraints: const BoxConstraints(
-            minWidth: 256,
-            minHeight: 600,
-          ),
-          height: store.isCollapsed ? size.height : size.height * 0.8,
-          width: store.isCollapsed ? size.width : size.width * 0.8,
-          decoration: BoxDecoration(
-            borderRadius: store.isCollapsed
-                ? BorderRadius.circular(0)
-                : BorderRadius.circular(30),
-            color: Constants.kSecondBackgroundColor,
-          ),
-          child: CustomScrollView(
-            physics: const BouncingScrollPhysics(),
-            slivers: [
+      // Em mobile/tablet, o conteúdo ocupa 100% da tela (menu é overlay)
+      // Em desktop, o conteúdo é comprimido pelo menu lateral
+      final leftOffset = useDrawerOverlay ? 0.0 : (store.isCollapsed ? 0.0 : 320.0);
+      final rightOffset = useDrawerOverlay ? 0.0 : (store.isCollapsed ? 0.0 : 0.0);
+      final contentWidth = useDrawerOverlay ? size.width : (store.isCollapsed ? size.width : size.width - 320.0);
+
+      return Stack(
+        children: [
+          // Conteúdo principal
+          AnimatedPositioned(
+            duration: useDrawerOverlay ? const Duration(milliseconds: 0) : duration,
+            top: 0,
+            bottom: 0,
+            left: useDrawerOverlay ? 0 : leftOffset,
+            right: rightOffset,
+            child: Container(
+              constraints: const BoxConstraints(
+                minWidth: 256,
+                minHeight: 600,
+              ),
+              height: size.height,
+              width: useDrawerOverlay ? size.width : contentWidth,
+              decoration: BoxDecoration(
+                color: Constants.kSecondBackgroundColor,
+              ),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
               // sliverAppBarWidget(size),
               const SliverPersistentHeader(
                 pinned: true,
@@ -549,14 +535,24 @@ class HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Ações Rápidas',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black87,
+                      Flexible(
+                        child: Text(
+                          'Ações Rápidas',
+                          style: TextStyle(
+                            fontSize: ResponsiveBreakpoints.responsiveFontSize(
+                              context,
+                              mobile: 16,
+                              tablet: 18,
+                              desktop: 20,
+                            ),
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black87,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                      const SizedBox(width: 8),
                       Observer(builder: (_) {
                         if (store.recommendedShortcuts.isNotEmpty &&
                             store.recommendedShortcuts
@@ -578,12 +574,16 @@ class HomePageState extends State<HomePage> {
                                   color: Constants.kPrimaryColor,
                                 ),
                                 const SizedBox(width: 4),
-                                Text(
-                                  'Inteligente',
-                                  style: TextStyle(
-                                    color: Constants.kPrimaryColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
+                                Flexible(
+                                  child: Text(
+                                    'Inteligente',
+                                    style: TextStyle(
+                                      color: Constants.kPrimaryColor,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ],
@@ -641,6 +641,19 @@ class HomePageState extends State<HomePage> {
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: [
+                          modernQuickActionCard(
+                            context,
+                            size,
+                            "card1Home".i18n(),
+                            "assets/icons/gerenciar_icon.svg",
+                            const Color(0xFF6366F1),
+                            onTap: () {
+                              NavigationAnalytics.logNavigation(
+                                  Routes.gerenciarEquipePage);
+                              Get.toNamed(Routes.gerenciarEquipePage);
+                            },
+                          ),
+                          const SizedBox(width: 12),
                           modernQuickActionCard(
                             context,
                             size,
@@ -721,191 +734,220 @@ class HomePageState extends State<HomePage> {
                     top: 30,
                     bottom: 10,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Text(
-                              _dashboardTitles[_currentDashboardIndex],
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black87,
-                              ),
-                            ),
-                            Observer(builder: (_) {
-                              // Mostra indicador se o dashboard foi adaptado pelo ML
-                              if (store.adaptiveDashboard != null &&
-                                  store.dashboardConfidence > 0.5 &&
-                                  store.adaptiveDashboard ==
-                                      _dashboardTitles[
-                                          _currentDashboardIndex]) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: Constants.kPrimaryColor
-                                          .withValues(alpha: 0.1),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.auto_awesome,
-                                          size: 14,
-                                          color: Constants.kPrimaryColor,
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          'Recomendado',
-                                          style: TextStyle(
-                                            color: Constants.kPrimaryColor,
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }
-                              return const SizedBox.shrink();
-                            }),
-                          ],
-                        ),
-                      ),
-                      Row(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isNarrow = constraints.maxWidth < 300;
+                      return Flex(
+                        direction: isNarrow ? Axis.vertical : Axis.horizontal,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          _buildCarouselButton(
-                            Icons.keyboard_arrow_left,
-                            () => _previousDashboard(),
-                            _currentDashboardIndex > 0,
+                          Flexible(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    _dashboardTitles[_currentDashboardIndex],
+                                    style: TextStyle(
+                                      fontSize: isNarrow ? 16 : 20,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black87,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Observer(builder: (_) {
+                                  if (store.adaptiveDashboard != null &&
+                                      store.dashboardConfidence > 0.5 &&
+                                      store.adaptiveDashboard ==
+                                          _dashboardTitles[
+                                              _currentDashboardIndex]) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(left: 6),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 6, vertical: 3),
+                                        decoration: BoxDecoration(
+                                          color: Constants.kPrimaryColor
+                                              .withValues(alpha: 0.1),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.auto_awesome,
+                                              size: 12,
+                                              color: Constants.kPrimaryColor,
+                                            ),
+                                            const SizedBox(width: 3),
+                                            Flexible(
+                                              child: Text(
+                                                'Recomendado',
+                                                style: TextStyle(
+                                                  color: Constants.kPrimaryColor,
+                                                  fontSize: isNarrow ? 9 : 11,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  return const SizedBox.shrink();
+                                }),
+                              ],
+                            ),
                           ),
-                          const SizedBox(width: 8),
-                          _buildCarouselButton(
-                            Icons.keyboard_arrow_right,
-                            () => _nextDashboard(),
-                            _currentDashboardIndex <
-                                _dashboardTitles.length - 1,
+                          SizedBox(height: isNarrow ? 8 : 0, width: isNarrow ? 0 : 8),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              _buildCarouselButton(
+                                Icons.keyboard_arrow_left,
+                                () => _previousDashboard(),
+                                _currentDashboardIndex > 0,
+                              ),
+                              const SizedBox(width: 8),
+                              _buildCarouselButton(
+                                Icons.keyboard_arrow_right,
+                                () => _nextDashboard(),
+                                _currentDashboardIndex <
+                                    _dashboardTitles.length - 1,
+                              ),
+                            ],
                           ),
                         ],
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
               ),
 
               // Carousel de Cards de Métricas
               SliverToBoxAdapter(
-                child: SizedBox(
-                    height: size.height * 0.5, // Usar 50% da altura da tela
-                    child: Observer(builder: (_) {
-                      if (store.isLoading) {
-                        return const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(40.0),
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
-                      if (store.hasError) {
-                        return Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(40.0),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Erro: ${store.errorMessage}',
-                                  style: const TextStyle(color: Colors.red),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 16),
-                                ElevatedButton(
-                                  onPressed: () => store.carregarHome(),
-                                  child: const Text('Tentar novamente'),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }
-                      final dashboard = store.dashboard;
-                      if (dashboard == null) {
-                        return const SizedBox.shrink();
-                      }
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Altura responsiva para o carousel
+                    final carouselHeight = ResponsiveBreakpoints.responsiveHeight(
+                      context,
+                      mobile: size.height * 0.45,
+                      tablet: size.height * 0.40,
+                      desktop: size.height * 0.35,
+                    );
 
-                      return PageView(
-                        controller: _dashboardPageController,
-                        onPageChanged: (index) {
-                          setState(() {
-                            _currentDashboardIndex = index;
-                          });
-                        },
-                        children: [
-                          // Card 1: Lotes em Produção
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: size.width * 0.05),
-                            child: _buildMetricCard(
-                              context,
-                              size,
-                              'Lotes em Produção',
-                              '${dashboard.resumo?.lotesAtivos ?? 0}',
-                              'de ${dashboard.resumo?.totalLotes ?? 0} lotes',
-                              Icons.agriculture,
-                              const Color(0xFF059669),
+                    return SizedBox(
+                      height: carouselHeight,
+                      child: Observer(builder: (_) {
+                        if (store.isLoading) {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(40.0),
+                              child: CircularProgressIndicator(),
                             ),
-                          ),
-                          // Card 2: Tarefas Pendentes
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: size.width * 0.05),
-                            child: _buildMetricCard(
-                              context,
-                              size,
-                              'Tarefas Pendentes',
-                              '${dashboard.tarefas?.pendentesHoje ?? 0}',
-                              'hoje • ${dashboard.tarefas?.atrasadas ?? 0} atrasadas',
-                              Icons.task_alt,
-                              const Color(0xFFDC2626),
+                          );
+                        }
+                        if (store.hasError) {
+                          return Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(40.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Erro: ${store.errorMessage}',
+                                    style: const TextStyle(color: Colors.red),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 16),
+                                  ElevatedButton(
+                                    onPressed: () => store.carregarHome(),
+                                    child: const Text('Tentar novamente'),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          // Card 3: Produção Total
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: size.width * 0.05),
-                            child: _buildMetricCard(
-                              context,
-                              size,
-                              'Produção Total',
-                              '${dashboard.producao?.totalPlantasColhidas ?? 0}',
-                              _formatPeriodoProducao(dashboard.producao),
-                              Icons.eco,
-                              const Color(0xFF2563EB),
+                          );
+                        }
+                        final dashboard = store.dashboard;
+                        if (dashboard == null) {
+                          return const SizedBox.shrink();
+                        }
+
+                        return PageView(
+                          controller: _dashboardPageController,
+                          onPageChanged: (index) {
+                            setState(() {
+                              _currentDashboardIndex = index;
+                            });
+                          },
+                          children: [
+                            // Card 1: Lotes em Produção
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: size.width * 0.05),
+                              child: _buildMetricCard(
+                                context,
+                                size,
+                                'Lotes em Produção',
+                                '${dashboard.resumo?.lotesAtivos ?? 0}',
+                                'de ${dashboard.resumo?.totalLotes ?? 0} lotes',
+                                Icons.agriculture,
+                                const Color(0xFF059669),
+                              ),
                             ),
-                          ),
-                          // Card 4: Top Culturas
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: size.width * 0.05),
-                            child: _buildMetricCard(
-                              context,
-                              size,
-                              'Top Culturas',
-                              _formatCulturas(dashboard.culturas),
-                              'em produção',
-                              Icons.local_florist,
-                              const Color(0xFF8B5CF6),
+                            // Card 2: Tarefas Pendentes
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: size.width * 0.05),
+                              child: _buildMetricCard(
+                                context,
+                                size,
+                                'Tarefas Pendentes',
+                                '${dashboard.tarefas?.pendentesHoje ?? 0}',
+                                'hoje • ${dashboard.tarefas?.atrasadas ?? 0} atrasadas',
+                                Icons.task_alt,
+                                const Color(0xFFDC2626),
+                              ),
                             ),
-                          ),
-                        ],
-                      );
-                    }),
+                            // Card 3: Produção Total
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: size.width * 0.05),
+                              child: _buildMetricCard(
+                                context,
+                                size,
+                                'Produção Total',
+                                '${dashboard.producao?.totalPlantasColhidas ?? 0}',
+                                _formatPeriodoProducao(dashboard.producao),
+                                Icons.eco,
+                                const Color(0xFF2563EB),
+                              ),
+                            ),
+                            // Card 4: Top Culturas
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: size.width * 0.05),
+                              child: _buildMetricCard(
+                                context,
+                                size,
+                                'Top Culturas',
+                                _formatCulturas(dashboard.culturas),
+                                'em produção',
+                                Icons.local_florist,
+                                const Color(0xFF8B5CF6),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                    );
+                  },
                 ),
               ),
 
@@ -940,7 +982,7 @@ class HomePageState extends State<HomePage> {
                     left: size.width * 0.05,
                     right: size.width * 0.05,
                     top: 10,
-                    bottom: 15,
+                    bottom: 8,
                   ),
                   child: const Text(
                     'Módulos',
@@ -952,69 +994,31 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                sliver: SliverGrid.count(
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  childAspectRatio: 10 / 8,
-                  crossAxisCount: 2,
-                  children: [
-                    modernGridItems(
+
+              // Grid de Módulos Responsivo com TODAS as funcionalidades
+              // Organizado em 2 sub-seções lado a lado para reduzir scroll vertical
+              SliverToBoxAdapter(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isMobile = ResponsiveBreakpoints.isMobile(context);
+                    final isTablet = ResponsiveBreakpoints.isTablet(context);
+                    
+                    final horizontalPadding = ResponsiveBreakpoints.responsivePadding(
                       context,
-                      size,
-                      "card5Home".i18n(),
-                      "assets/icons/cultivo_icon.svg",
-                      const Color(0xFF059669),
-                      path: "Setores",
-                      id: 0,
-                    ),
-                    modernGridItems(
-                      context,
-                      size,
-                      "card6Home".i18n(),
-                      "assets/icons/reservatorio_icon.svg",
-                      const Color(0xFF2563EB),
-                      path: "Reservatorios",
-                      id: 1,
-                    ),
-                    modernGridItems(
-                      context,
-                      size,
-                      "card7Home".i18n(),
-                      "assets/icons/caderno_campo_icon.svg",
-                      const Color(0xFFDC2626),
-                      path: "CadernoCampo",
-                      id: 2,
-                    ),
-                    modernGridItems(
-                      context,
-                      size,
-                      "card8Home".i18n(),
-                      "assets/icons/solucoes_nutritivas_icon.svg",
-                      const Color(0xFFEA580C),
-                      path: "Receitas",
-                      id: 3,
-                    ),
-                    modernGridItems(
-                      context,
-                      size,
-                      "cardRelatoriosHome".i18n(),
-                      "assets/icons/relatorio_icon.svg",
-                      const Color(0xFF0891B2),
-                      path: "Relatorios",
-                      id: 4,
-                    ),
-                    modernGridItems(
-                      context,
-                      size,
-                      "card9Home".i18n(),
-                      "assets/icons/ajustes_icon.svg",
-                      const Color(0xFF7C3AED),
-                      path: "Ajustes",
-                      id: 5,
-                    ),
-                  ],
+                      mobile: size.width * 0.05,
+                      tablet: size.width * 0.08,
+                      desktop: size.width * 0.12,
+                    );
+
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: isMobile
+                          ? _buildMobileModulesLayout(context, size)
+                          : isTablet
+                              ? _buildTabletModulesLayout(context, size)
+                              : _buildDesktopModulesLayout(context, size),
+                    );
+                  },
                 ),
               ),
               const SliverToBoxAdapter(
@@ -1023,128 +1027,317 @@ class HomePageState extends State<HomePage> {
             ],
           ),
         ),
+      ),
+          // Drawer Overlay para mobile/tablet
+          if (useDrawerOverlay && !store.isCollapsed)
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: () => store.setIsCollaped(),
+                child: Container(
+                  color: Colors.black.withValues(alpha: 0.3),
+                ),
+              ),
+            ),
+          if (useDrawerOverlay && !store.isCollapsed)
+            Positioned(
+              top: 0,
+              bottom: 0,
+              left: 0,
+              child: AnimatedContainer(
+                duration: duration,
+                width: size.width * 0.85,
+                child: _buildDrawerContent(context, size),
+              ),
+            ),
+        ],
       );
     });
+  }
+
+  /// Constrói o conteúdo do drawer (usado em mobile/tablet)
+  Widget _buildDrawerContent(BuildContext context, Size size) {
+    final menuWidth = size.width * 0.85;
+
+    return Container(
+      width: menuWidth,
+      height: size.height,
+      decoration: BoxDecoration(
+        color: Constants.kBackgroundColor,
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(4, 0),
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 20,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header com botão de fechar
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Menu',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black87,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => store.setIsCollaped(),
+                  icon: const Icon(Icons.close),
+                  iconSize: 22,
+                  color: Colors.black54,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(
+                    minWidth: 36,
+                    minHeight: 36,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // Seção do usuário com ícone genérico
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Constants.kPrimaryColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.person,
+                    color: Constants.kPrimaryColor,
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Observer(
+                        builder: (_) {
+                          final nome = store
+                                  .authController
+                                  .usuario
+                                  .selected_conta
+                                  ?.conta
+                                  ?.nome ??
+                              'Usuário';
+                          return Text(
+                            'Olá, $nome',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black87,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 2),
+                      Observer(
+                        builder: (_) {
+                          final cargo = store
+                                  .authController
+                                  .usuario
+                                  .selected_conta
+                                  ?.cargo
+                                  ?.cargo ??
+                              'Cargo';
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Constants.kPrimaryColor
+                                  .withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              cargo,
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: Constants.kPrimaryColor,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+          const Divider(height: 1, indent: 16, endIndent: 16),
+          const SizedBox(height: 8),
+
+          // Itens do menu
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              children: [
+                // Trocar Conta (apenas se multi-conta)
+                Observer(builder: (_) {
+                  if (store.authController.usuario.contas!.length < 2) {
+                    return const SizedBox.shrink();
+                  }
+                  return _buildModernMenuItem(
+                    icon: Icons.swap_horiz,
+                    title: 'Trocar Conta',
+                    onTap: () async {
+                      store.setIsCollaped();
+                      Get.to(
+                        () => MultiAccountsPage(
+                          isLoggedIn: true,
+                          user: store.authController.usuario,
+                        ),
+                      );
+                    },
+                    iconColor: const Color(0xFF6366F1),
+                  );
+                }),
+
+                _buildModernMenuItem(
+                  icon: Icons.info_outline,
+                  title: 'Sobre o App',
+                  onTap: () {
+                    store.setIsCollaped();
+                    // TODO: Implementar tela sobre
+                  },
+                  iconColor: const Color(0xFF06B6D4),
+                ),
+
+                const SizedBox(height: 8),
+                const Divider(height: 1),
+                const SizedBox(height: 8),
+
+                // Logout
+                _buildModernMenuItem(
+                  icon: Icons.logout,
+                  title: 'Sair',
+                  onTap: () async {
+                    store.setIsCollaped();
+                    await LocalStorage().deleteUser();
+                    Get.offAll(() => const SplashPage());
+                  },
+                  iconColor: const Color(0xFFDC2626),
+                  showTrailing: true,
+                ),
+              ],
+            ),
+          ),
+
+          // Versão do app
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              'versao'.i18n(),
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey[500],
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
   }
 
   SliverAppBar sliverAppBarWidget(Size size) {
     return SliverAppBar(
       backgroundColor: Constants.kBackgroundColor,
-      forceElevated: true,
-      elevation: 1,
-      pinned: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: const Radius.circular(30),
-          top: Radius.circular(store.isCollapsed ? 0 : 30),
-        ),
-      ),
-      expandedHeight: size.height * 0.28,
-      collapsedHeight: 65,
-      toolbarHeight: 50,
-      bottom: PreferredSize(
-        preferredSize: const Size(double.infinity, 3),
-        child: Divider(
-          color: Colors.black,
-          height: 21,
-          thickness: 1.5,
-          indent: size.width * 0.39,
-          endIndent: size.width * 0.39,
-        ),
-      ),
-      title: Image.asset(
-        "assets/images/osiris-logo.png",
-        height: 30,
-      ),
-      centerTitle: true,
+      floating: true,
+      pinned: false,
+      elevation: 0,
+      expandedHeight: 140,
+      collapsedHeight: 60,
+      toolbarHeight: 60,
       leading: IconButton(
         onPressed: () => store.setIsCollaped(),
-        icon: const Icon(Icons.grid_view_outlined),
-        color: Colors.black,
+        icon: const Icon(Icons.menu_rounded),
+        iconSize: 24,
+        color: Colors.black87,
+      ),
+      title: Observer(
+        builder: (_) {
+          final nome = store.authController.usuario.selected_conta?.conta?.nome ?? '';
+          return Text(
+            nome.isNotEmpty ? 'Olá, $nome' : 'Olá',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: Colors.black87,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          );
+        },
       ),
       actions: [
         Padding(
-          padding: const EdgeInsets.only(top: 15, right: 25),
+          padding: const EdgeInsets.only(right: 16),
           child: Observer(builder: (_) {
-            return InkWell(
-              onTap: () => store.toggleNotified(),
-              child: Stack(
-                children: [
-                  const Icon(
-                    Icons.notifications_outlined,
-                    color: Colors.black,
+            return Stack(
+              children: [
+                IconButton(
+                  onPressed: () => store.toggleNotified(),
+                  icon: Icon(
+                    store.isNotified
+                        ? Icons.notifications_rounded
+                        : Icons.notifications_none_rounded,
+                    color: Colors.black87,
                   ),
-                  store.isNotified
-                      ? Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                              color: Colors.red,
-                            ),
-                            height: 12,
-                            width: 12,
-                          ),
-                        )
-                      : Container()
-                ],
-              ),
+                ),
+                if (store.isNotified)
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFDC2626),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+              ],
             );
           }),
-        )
+        ),
       ],
-      flexibleSpace: Padding(
-        padding: const EdgeInsets.only(top: 50),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: size.height * 0.03),
-                child: const CircleAvatar(
-                  backgroundColor: Constants.kPrimaryColor,
-                  minRadius: 25,
-                  child: Icon(
-                    Icons.person,
-                    color: Constants.kBackgroundColor,
-                    size: 25,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: size.height * 0.014),
-                child: Observer(
-                  builder: (_) {
-                    return Text(
-                      store.authController.usuario.selected_conta?.conta
-                              ?.nome ??
-                          "...",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 28,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600),
-                    );
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: size.height * 0.003),
-                child: Observer(
-                  builder: (_) {
-                    return Text(
-                      store.authController.usuario.selected_conta?.cargo
-                              ?.cargo ??
-                          "...",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
-                      ),
-                    );
-                  },
-                ),
-              ),
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Constants.kPrimaryColor.withValues(alpha: 0.05),
+              Constants.kBackgroundColor,
             ],
           ),
         ),
@@ -1250,6 +1443,387 @@ class HomePageState extends State<HomePage> {
               overflow: TextOverflow.ellipsis,
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// Layout MOBILE: 2 colunas, módulos empilhados verticalmente (mais compactos)
+  Widget _buildMobileModulesLayout(BuildContext context, Size size) {
+    final allModules = _buildAllModuleGridItems(context, size, compact: true);
+    
+    // Divide em 2 grupos: principais e secundários
+    final mainModules = allModules.take(8).toList();
+
+    // Grid principal (8 módulos em 2 colunas - 4 linhas)
+    return GridView.count(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      crossAxisCount: 2,
+      mainAxisSpacing: 10,
+      crossAxisSpacing: 10,
+      childAspectRatio: 1.25,
+      children: mainModules,
+    );
+  }
+
+  /// Layout TABLET: 3 colunas, melhor distribuição visual
+  Widget _buildTabletModulesLayout(BuildContext context, Size size) {
+    final allModules = _buildAllModuleGridItems(context, size, compact: false);
+    
+    // Divide em 2 grupos de 5
+    final group1 = allModules.take(5).toList();
+    final group2 = allModules.skip(5).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Primeira linha (5 módulos em grid 3+2)
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 3,
+              child: GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 3,
+                mainAxisSpacing: 14,
+                crossAxisSpacing: 14,
+                childAspectRatio: 1.4, // Menos alto para evitar overflow
+                children: group1.take(3).toList(),
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              flex: 2,
+              child: GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                mainAxisSpacing: 14,
+                crossAxisSpacing: 14,
+                childAspectRatio: 1.4,
+                children: group1.skip(3).toList(),
+              ),
+            ),
+          ],
+        ),
+        
+        const SizedBox(height: 14),
+        
+        // Segunda linha (5 módulos em grid 3+2)
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 3,
+              child: GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 3,
+                mainAxisSpacing: 14,
+                crossAxisSpacing: 14,
+                childAspectRatio: 1.4,
+                children: group2.take(3).toList(),
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              flex: 2,
+              child: GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                mainAxisSpacing: 14,
+                crossAxisSpacing: 14,
+                childAspectRatio: 1.4,
+                children: group2.skip(3).toList(),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  /// Layout DESKTOP: 5 colunas em 2 linhas, todos visíveis sem scroll
+  Widget _buildDesktopModulesLayout(BuildContext context, Size size) {
+    final allModules = _buildAllModuleGridItems(context, size, compact: false);
+    
+    // Divide em 2 grupos de 5
+    final row1 = allModules.take(5).toList();
+    final row2 = allModules.skip(5).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Primeira linha (5 módulos)
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: row1
+              .map((m) => Expanded(child: m))
+              .toList()
+              .expand((e) => [e, const SizedBox(width: 16)])
+              .toList()
+              .sublist(0, 9),
+        ),
+        
+        const SizedBox(height: 16),
+        
+        // Segunda linha (5 módulos)
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: row2
+              .map((m) => Expanded(child: m))
+              .toList()
+              .expand((e) => [e, const SizedBox(width: 16)])
+              .toList()
+              .sublist(0, 9),
+        ),
+      ],
+    );
+  }
+
+  /// Constrói grid com TODOS os módulos do sistema (incluindo Agenda, Gestão de Equipe, Protocolos, Histórico)
+  List<Widget> _buildAllModuleGridItems(BuildContext context, Size size, {bool compact = false}) {
+    return [
+      // === MÓDULOS PRINCIPAIS ===
+      // 1. Área de Cultivo / Setores
+      _buildModernModuleCard(
+        context,
+        size,
+        "card5Home".i18n(),
+        "Áreas de cultivo e setores",
+        "assets/icons/cultivo_icon.svg",
+        const Color(0xFF059669),
+        moduleId: 0,
+        compact: compact,
+      ),
+      
+      // 2. Reservatórios
+      _buildModernModuleCard(
+        context,
+        size,
+        "card6Home".i18n(),
+        "Solução nutritiva e tanques",
+        "assets/icons/reservatorio_icon.svg",
+        const Color(0xFF2563EB),
+        moduleId: 1,
+        compact: compact,
+      ),
+      
+      // 3. Caderno de Campo
+      _buildModernModuleCard(
+        context,
+        size,
+        "card7Home".i18n(),
+        "Registro de atividades",
+        "assets/icons/caderno_campo_icon.svg",
+        const Color(0xFFDC2626),
+        moduleId: 2,
+        compact: compact,
+      ),
+      
+      // 4. Soluções Nutritivas
+      _buildModernModuleCard(
+        context,
+        size,
+        "card8Home".i18n(),
+        "Formulação de nutrientes",
+        "assets/icons/solucoes_nutritivas_icon.svg",
+        const Color(0xFFEA580C),
+        moduleId: 3,
+        compact: compact,
+      ),
+      
+      // 5. Protocolos
+      _buildModernModuleCard(
+        context,
+        size,
+        "Protocolos",
+        "Templates de cultivo",
+        "assets/icons/etapa.svg",
+        const Color(0xFF10B981),
+        onTap: () {
+          NavigationAnalytics.logNavigation(Routes.protocoloPage);
+          Get.toNamed(Routes.protocoloPage);
+        },
+        compact: compact,
+      ),
+      
+      // 6. Agenda
+      _buildModernModuleCard(
+        context,
+        size,
+        "Agenda",
+        "Tarefas e atividades",
+        "assets/icons/inventario_icon.svg",
+        const Color(0xFF06B6D4),
+        onTap: () {
+          NavigationAnalytics.logNavigation(Routes.agendaPage);
+          Get.toNamed(Routes.agendaPage);
+        },
+        compact: compact,
+      ),
+      
+      // 7. Relatórios
+      _buildModernModuleCard(
+        context,
+        size,
+        "cardRelatoriosHome".i18n(),
+        "Análises e métricas",
+        "assets/icons/relatorio_icon.svg",
+        const Color(0xFF0891B2),
+        moduleId: 4,
+        compact: compact,
+      ),
+      
+      // 8. Ajustes
+      _buildModernModuleCard(
+        context,
+        size,
+        "card9Home".i18n(),
+        "Parâmetros de cultivo",
+        "assets/icons/ajustes_icon.svg",
+        const Color(0xFF7C3AED),
+        moduleId: 5,
+        compact: compact,
+      ),
+      
+      // === MÓDULOS SECUNDÁRIOS ===
+      // 9. Gestão de Equipe
+      _buildModernModuleCard(
+        context,
+        size,
+        "Gestão de Equipe",
+        "Usuários e permissões",
+        "assets/icons/gerenciar_icon.svg",
+        const Color(0xFF6366F1),
+        onTap: () {
+          NavigationAnalytics.logNavigation(Routes.gerenciarEquipePage);
+          Get.toNamed(Routes.gerenciarEquipePage);
+        },
+        compact: compact,
+      ),
+      
+      // 10. Histórico
+      _buildModernModuleCard(
+        context,
+        size,
+        "Histórico",
+        "Lotes finalizados",
+        "assets/icons/relatorio_icon.svg",
+        const Color(0xFF8B5CF6),
+        onTap: () {
+          NavigationAnalytics.logNavigation(Routes.historicoPage);
+          Get.toNamed(Routes.historicoPage);
+        },
+        compact: compact,
+      ),
+    ];
+  }
+
+  /// Card moderno para módulo do sistema com título, subtítulo e ícone
+  Widget _buildModernModuleCard(
+    BuildContext context,
+    Size size,
+    String title,
+    String subtitle,
+    String icon,
+    Color color, {
+    int? moduleId,
+    VoidCallback? onTap,
+    bool compact = false,
+  }) {
+    final iconSize = compact ? 36.0 : 44.0;
+    final iconImageSize = compact ? 20.0 : 24.0;
+    final titleFontSize = compact ? 11.0 : 13.0;
+    final subtitleFontSize = compact ? 9.0 : 10.0;
+    final padding = compact ? 10.0 : 14.0;
+    final spacing = compact ? 4.0 : 6.0;
+
+    return InkWell(
+      onTap: onTap ?? () {
+        if (moduleId != null) {
+          modulosStore.setPageViewController(moduleId);
+          NavigationAnalytics.logNavigation(Routes.modulosPage);
+          Get.toNamed(Routes.modulosPage);
+        }
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 2),
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 12,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(padding),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.topLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Ícone com fundo colorido
+                Container(
+                  width: iconSize,
+                  height: iconSize,
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      icon,
+                      width: iconImageSize,
+                      height: iconImageSize,
+                      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+                    ),
+                  ),
+                ),
+                
+                SizedBox(height: spacing),
+                
+                // Título
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black87,
+                    height: 1.1,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                
+                SizedBox(height: 2),
+                
+                // Subtítulo
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: subtitleFontSize,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[600],
+                    height: 1.1,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -1483,8 +2057,44 @@ class HomePageState extends State<HomePage> {
     IconData icon,
     Color color,
   ) {
+    // Tamanhos responsivos
+    final iconSize = ResponsiveBreakpoints.responsiveWidth(
+      context,
+      mobile: size.width * 0.10,
+      tablet: 48,
+      desktop: 56,
+    );
+
+    final valueFontSize = ResponsiveBreakpoints.responsiveFontSize(
+      context,
+      mobile: size.width * 0.10,
+      tablet: 32,
+      desktop: 38,
+    );
+
+    final titleFontSize = ResponsiveBreakpoints.responsiveFontSize(
+      context,
+      mobile: 13,
+      tablet: 15,
+      desktop: 17,
+    );
+
+    final subtitleFontSize = ResponsiveBreakpoints.responsiveFontSize(
+      context,
+      mobile: 11,
+      tablet: 12,
+      desktop: 13,
+    );
+
+    final padding = ResponsiveBreakpoints.responsivePadding(
+      context,
+      mobile: 16,
+      tablet: 22,
+      desktop: 28,
+    );
+
     return Container(
-      padding: EdgeInsets.all(size.width * 0.06), // Padding responsivo
+      padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
@@ -1504,7 +2114,7 @@ class HomePageState extends State<HomePage> {
         children: [
           // Ícone maior e mais destacado
           Container(
-            padding: EdgeInsets.all(size.width * 0.04),
+            padding: EdgeInsets.all(padding * 0.5),
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
@@ -1512,53 +2122,61 @@ class HomePageState extends State<HomePage> {
             child: Icon(
               icon,
               color: color,
-              size: size.width * 0.12, // Ícone responsivo e maior
-            ),
-          ),
-          SizedBox(height: size.height * 0.03),
-          // Valor principal - muito maior
-          Flexible(
-            child: Text(
-              value,
-              style: TextStyle(
-                fontSize: size.width * 0.15, // Fonte responsiva e grande
-                fontWeight: FontWeight.w800,
-                color: Colors.black87,
-                height: 1.2,
-                letterSpacing: -1,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 4, // Permitir múltiplas linhas para culturas
-              overflow: TextOverflow.ellipsis,
+              size: iconSize,
             ),
           ),
           SizedBox(height: size.height * 0.015),
-          // Título
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: size.width * 0.045, // Fonte maior
-              fontWeight: FontWeight.w700,
-              color: Colors.grey[800],
-              letterSpacing: 0.3,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          if (subtitle.isNotEmpty) ...[
-            SizedBox(height: size.height * 0.01),
-            // Subtítulo
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
+          // Valor principal - muito maior
+          Flexible(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
               child: Text(
-                subtitle,
+                value,
                 style: TextStyle(
-                  fontSize: size.width * 0.035, // Fonte maior
-                  color: Colors.grey[600],
-                  fontWeight: FontWeight.w500,
+                  fontSize: valueFontSize,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.black87,
+                  height: 1.2,
+                  letterSpacing: -1,
                 ),
                 textAlign: TextAlign.center,
-                maxLines: 2,
+                maxLines: 3,
                 overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          SizedBox(height: size.height * 0.008),
+          // Título
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: titleFontSize,
+                fontWeight: FontWeight.w700,
+                color: Colors.grey[800],
+                letterSpacing: 0.3,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          if (subtitle.isNotEmpty) ...[
+            SizedBox(height: size.height * 0.006),
+            // Subtítulo
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: subtitleFontSize,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
           ],
@@ -1799,286 +2417,169 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
 
     return Container(
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color(0xFF134e5e),
-            Color(0xFF71b280),
+            Constants.kPrimaryColor.withValues(alpha: 0.08),
+            Constants.kBackgroundColor,
           ],
-          stops: [0.0, 1.0],
-        ),
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(32),
-          bottomRight: Radius.circular(32),
         ),
         boxShadow: [
           BoxShadow(
-            offset: const Offset(0, 8),
-            color: Colors.black.withValues(alpha: 0.12),
-            blurRadius: 24,
+            offset: const Offset(0, 2),
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
             spreadRadius: 0,
           ),
         ],
       ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(32),
-          bottomRight: Radius.circular(32),
-        ),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            // Glassmorphism overlay
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.white.withValues(alpha: 0.2),
-                    Colors.white.withValues(alpha: 0.05),
-                  ],
-                ),
-              ),
-            ),
-
-            // Top bar with icons
-            Positioned(
-              top: 16,
-              left: 16,
-              right: 16,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildModernIconButton(
-                    'assets/icons/grid.svg',
-                    onTap: () => store.setIsCollaped(),
-                  ),
-                  _buildNotificationButton(store),
-                ],
-              ),
-            ),
-
-            // User profile section
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              top: progress < 0.5 ? 60 : 20,
-              left: 24,
-              right: 24,
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 200),
-                opacity: opacity,
-                child: Column(
-                  children: [
-                    // Avatar with modern styling
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.white.withValues(alpha: 0.3),
-                            Colors.white.withValues(alpha: 0.1),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            offset: const Offset(0, 4),
-                            color: Colors.black.withValues(alpha: 0.1),
-                            blurRadius: 12,
-                            spreadRadius: 0,
-                          ),
-                        ],
-                      ),
-                      child: const CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'),
-                        radius: 32,
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // User name
-                    Observer(builder: (_) {
-                      return Text(
-                        store.authController.usuario.selected_conta?.conta
-                                ?.nome ??
-                            "...",
-                        style: const TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                          letterSpacing: 0.5,
-                          shadows: [
-                            Shadow(
-                              offset: Offset(0, 2),
-                              blurRadius: 4,
-                              color: Colors.black26,
-                            ),
-                          ],
-                        ),
-                        textAlign: TextAlign.center,
-                      );
-                    }),
-
-                    const SizedBox(height: 8),
-
-                    // User role with modern badge
-                    Observer(builder: (_) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.3),
-                            width: 1,
-                          ),
-                        ),
-                        child: Text(
-                          store.authController.usuario.selected_conta?.cargo
-                                  ?.cargo ??
-                              "...",
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            letterSpacing: 0.3,
-                          ),
-                        ),
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildModernIconButton(String iconPath,
-      {required VoidCallback onTap}) {
-    return GestureDetector(
-      onTap: onTap,
       child: Container(
-        width: 44,
-        height: 44,
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: Colors.white.withValues(alpha: 0.3),
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, 2),
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 8,
-              spreadRadius: 0,
-            ),
-          ],
-        ),
-        child: Center(
-          child: SvgPicture.asset(
-            iconPath,
-            width: 20,
-            height: 20,
-            colorFilter: ColorFilter.mode(
-              Colors.white,
-              BlendMode.srcIn,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNotificationButton(HomeStore store) {
-    return Observer(builder: (_) {
-      return GestureDetector(
-        onTap: () => store.toggleNotified(),
-        child: Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.3),
+          border: Border(
+            bottom: BorderSide(
+              color: Constants.kPrimaryColor.withValues(alpha: 0.1),
               width: 1,
             ),
-            boxShadow: [
-              BoxShadow(
-                offset: const Offset(0, 2),
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 8,
-                spreadRadius: 0,
-              ),
-            ],
-          ),
-          child: Stack(
-            children: [
-              Center(
-                child: SvgPicture.asset(
-                  "assets/icons/notification_off_icon.svg",
-                  width: 20,
-                  height: 20,
-                  colorFilter: ColorFilter.mode(
-                    Colors.white,
-                    BlendMode.srcIn,
-                  ),
-                ),
-              ),
-              if (store.isNotified)
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFF4757),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 2,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: const Offset(0, 2),
-                          color: Colors.black.withValues(alpha: 0.2),
-                          blurRadius: 4,
-                          spreadRadius: 0,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-            ],
           ),
         ),
-      );
-    });
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+          child: Row(
+            children: [
+            // Botão menu
+            GestureDetector(
+              onTap: () => store.setIsCollaped(),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Constants.kPrimaryColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  Icons.menu_rounded,
+                  color: Constants.kPrimaryColor,
+                  size: 22,
+                ),
+              ),
+            ),
+            
+            const SizedBox(width: 12),
+            
+            // Nome e cargo
+            Expanded(
+              child: Opacity(
+                opacity: opacity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Observer(
+                      builder: (_) {
+                        final nome = store
+                                .authController
+                                .usuario
+                                .selected_conta
+                                ?.conta
+                                ?.nome ??
+                            '';
+                        return Text(
+                          nome.isNotEmpty ? 'Olá, $nome' : 'Olá',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black87,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 2),
+                    Observer(
+                      builder: (_) {
+                        final cargo = store
+                                .authController
+                                .usuario
+                                .selected_conta
+                                ?.cargo
+                                ?.cargo ??
+                            '';
+                        if (cargo.isEmpty) return const SizedBox.shrink();
+                        return Text(
+                          cargo,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[600],
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            
+            const SizedBox(width: 12),
+            
+            // Notificação
+            Observer(builder: (_) {
+              return Stack(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      store.isNotified
+                          ? Icons.notifications_rounded
+                          : Icons.notifications_none_rounded,
+                      color: Colors.black87,
+                      size: 22,
+                    ),
+                  ),
+                  if (store.isNotified)
+                    Positioned(
+                      top: 6,
+                      right: 6,
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFDC2626),
+                          shape: BoxShape.circle,
+                          border: Border.fromBorderSide(
+                            BorderSide(
+                              color: Colors.white,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            }),
+          ],
+        ),
+        ),
+      ),
+    );
   }
 
   @override
-  double get maxExtent => 240;
+  double get maxExtent => 80;
 
   @override
-  double get minExtent => 80;
+  double get minExtent => 72;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      true;
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
 }

@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
+import 'package:osi_solucoes/core/utils/responsive_breakpoints.dart';
+import 'package:osi_solucoes/core/utils/spacing.dart';
 import '../../viewmodels/login_store.dart';
 import '../home/home_page.dart';
 import 'components/forgotPassword.dart';
@@ -37,8 +39,6 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Constants.kSecondBackgroundColor,
@@ -50,35 +50,47 @@ class LoginPageState extends State<LoginPage> {
           onPopInvokedWithResult: (_, __) async => false,
           child: Scaffold(
             backgroundColor: Constants.kSecondBackgroundColor,
-            body: GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              onVerticalDragCancel: () => FocusScope.of(context).unfocus(),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: SizedBox(
-                  height: size.height - MediaQuery.of(context).viewPadding.top,
-                  width: size.width,
-                  child: Form(
-                    key: formKey,
-                    child: Stack(children: [
-                      Column(
-                        children: [
-                          _expanded(flex: 3),
-                          _logo(size),
-                          _expanded(flex: 2),
-                          _formEmail(size),
-                          _formSenha(size),
-                          loginButton(size, formKey, store, context),
-                          forgotPassword(),
-                          _expanded(flex: 3),
-                          registrarButton(size),
-                          _expanded(flex: 2),
-                        ],
+            body: LayoutBuilder(
+              builder: (context, constraints) {
+                final isDesktop = ResponsiveBreakpoints.isDesktop(context);
+                final maxWidth = isDesktop ? 450.0 : double.infinity;
+                
+                return GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  onVerticalDragCancel: () => FocusScope.of(context).unfocus(),
+                  child: Center(
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxWidth),
+                        child: Padding(
+                          padding: Spacing.horizontal(context),
+                          child: Form(
+                            key: formKey,
+                            child: Column(
+                              children: [
+                                SizedBox(height: constraints.maxHeight * 0.08),
+                                _logo(context),
+                                SizedBox(height: constraints.maxHeight * 0.06),
+                                _formEmail(context),
+                                Spacing.v(Spacing.lg),
+                                _formSenha(context),
+                                Spacing.v(Spacing.lg),
+                                _buildLoginButton(context),
+                                Spacing.v(Spacing.md),
+                                forgotPassword(),
+                                SizedBox(height: constraints.maxHeight * 0.08),
+                                _buildRegistrarButton(context),
+                                Spacing.v(Spacing.xl),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                    ]),
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
         ),
@@ -86,15 +98,11 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  Observer _formSenha(Size size) {
+  Observer _formSenha(BuildContext context) {
     return Observer(
       builder: (_) {
         return Padding(
-          padding: EdgeInsets.only(
-            top: 20,
-            left: size.width * 0.06,
-            right: size.width * 0.06,
-          ),
+          padding: Spacing.symmetricV(size: Spacing.lg),
           child: formFieldLogin(
             controllerText: store.senha,
             labelText: 'senhaField'.i18n(),
@@ -107,41 +115,64 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  Observer _formEmail(Size size) {
+  Observer _formEmail(BuildContext context) {
     return Observer(
       builder: (_) {
-        return Padding(
-          padding: EdgeInsets.only(
-            // top: size.height * 0.09,
-            left: size.width * 0.06,
-            right: size.width * 0.06,
-          ),
-          child: formFieldLogin(
-            controllerText: store.email,
-            labelText: 'emailField'.i18n(),
-            isSenha: false,
-            function: () {},
-            isObscure: false,
+        return formFieldLogin(
+          controllerText: store.email,
+          labelText: 'emailField'.i18n(),
+          isSenha: false,
+          function: () {},
+          isObscure: false,
+        );
+      },
+    );
+  }
+
+  Widget _logo(BuildContext context) {
+    final logoWidth = ResponsiveBreakpoints.responsiveWidth(
+      context,
+      mobile: MediaQuery.of(context).size.width * 0.42,
+      tablet: 200,
+      desktop: 220,
+    );
+
+    return Image.asset(
+      "assets/images/logo_ufmt.png",
+      width: logoWidth,
+      // Garante carregamento correto no web
+      errorBuilder: (context, error, stackTrace) {
+        print('Erro ao carregar logo: $error');
+        return SizedBox(
+          width: logoWidth,
+          height: 100,
+          child: const Center(
+            child: Text(
+              'OSI Soluções',
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 38, 193, 100),
+              ),
+            ),
           ),
         );
       },
     );
   }
 
-  SizedBox _logo(Size size) {
-    return SizedBox(
-      child: Image.asset(
-        "assets/images/logo_ufmt.png",
-        width: size.width * 0.42,
-        // height: size.height * 0.082,
-      ),
+  Widget _buildLoginButton(BuildContext context) {
+    return loginButton(
+      MediaQuery.of(context).size,
+      formKey,
+      store,
+      context,
     );
   }
 
-  Expanded _expanded({required int flex}) {
-    return Expanded(
-      flex: flex,
-      child: Container(),
+  Widget _buildRegistrarButton(BuildContext context) {
+    return registrarButton(
+      MediaQuery.of(context).size,
     );
   }
 
@@ -158,12 +189,7 @@ class LoginPageState extends State<LoginPage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.only(
-              // top: kDefaultPadding * 0.5,
-              // bottom: kDefaultPadding * 0.5,
-              left: Constants.kDefaultPadding * 1.25,
-              right: Constants.kDefaultPadding * 1.25,
-            ),
+            padding: Spacing.symmetric(horizontal: Spacing.xl),
             child: SizedBox(
               height: 80,
               child: TextFormField(
@@ -179,6 +205,12 @@ class LoginPageState extends State<LoginPage> {
                 keyboardType:
                     isSenha ? TextInputType.text : TextInputType.emailAddress,
                 obscureText: isSenha ? store.isObscure : false,
+                // Correção para web - força repaint correto do campo
+                style: const TextStyle(
+                  color: Color(0xFF2A2A2A),
+                  fontSize: 16,
+                  fontFamily: 'Montserrat',
+                ),
                 onEditingComplete: () async {
                   if (!isSenha) {
                     emailNode.nextFocus();

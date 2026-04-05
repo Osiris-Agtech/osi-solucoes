@@ -1,7 +1,6 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/views/ajuste/ajustes_page.dart';
@@ -11,6 +10,7 @@ import 'package:osi_solucoes/features/presenter/views/relatorios/relatorios_page
 import 'package:osi_solucoes/features/presenter/views/reservatorio/reservatorios_page.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/solucao_page.dart';
 
+import '../../../../core/utils/responsive_breakpoints.dart';
 import '../../viewmodels/modulos_store.dart';
 
 class ModulosPage extends StatefulWidget {
@@ -94,164 +94,159 @@ class ModulosPageState extends State<ModulosPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = ResponsiveBreakpoints.isDesktop(context);
+    final isTablet = ResponsiveBreakpoints.isTablet(context);
+    
     return Scaffold(
-      body: _getBody(),
-      bottomNavigationBar: Observer(
-        builder: (_) {
-          return BottomNavigationBar(
-            selectedItemColor: Constants.kContentColorLightTheme,
-            unselectedItemColor: Constants.kContentColorLightTheme,
-            backgroundColor: Colors.white,
-            // fixedColor: Colors.white,
-            elevation: 8,
-            currentIndex: store.pageviewController,
-            onTap: (int index) => store.setPageViewController(index),
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/icons/cultivo_icon.svg",
-                  // color: store.pageviewController == 0
-                  //     ? null
-                  //     : const Color.fromRGBO(51, 51, 51, 0.8),
-                  height: 25,
-                  width: 25,
-                ),
-                label: 'Cultivos',
-              ),
-              BottomNavigationBarItem(
-                // "assets/icons/cultivo_icon.svg"
-                icon: SvgPicture.asset(
-                  "assets/icons/reservatorio_icon.svg",
-                  // color: store.pageviewController == 1
-                  //     ? null
-                  //     : const Color.fromRGBO(51, 51, 51, 0.8),
-                  height: 25,
-                  width: 25,
-                ),
-                label: 'Reservatórios',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/icons/caderno_campo_icon.svg",
-                  // color: store.pageviewController == 2
-                  //     ? null
-                  //     : const Color.fromRGBO(51, 51, 51, 0.8),
-                  height: 25,
-                  width: 25,
-                ),
-                label: 'Cadernos de\n     Campo',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/icons/solucoes_nutritivas_icon.svg",
-                  // color: store.pageviewController == 3
-                  //     ? null
-                  //     : const Color.fromRGBO(51, 51, 51, 0.8),
-                  height: 25,
-                  width: 25,
-                ),
-                label: 'Soluções',
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(
-                  Icons.bar_chart_outlined,
-                  size: 25,
-                ),
-                activeIcon: const Icon(
-                  Icons.bar_chart,
-                  size: 25,
-                ),
-                label: 'Relatórios',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/icons/ajustes_icon.svg",
-                  height: 25,
-                  width: 25,
-                ),
-                label: 'Ajustes',
-              ),
-            ],
-          );
-        },
-      ),
+      body: isDesktop || isTablet
+          ? _buildDesktopLayout(context)
+          : _getBody(),
+      bottomNavigationBar: ResponsiveBreakpoints.isMobile(context)
+          ? _buildBottomBar()
+          : null,
     );
   }
 
-  BottomNavigationBar bottomNavigatorBar2() {
-    return BottomNavigationBar(
-      selectedLabelStyle: const TextStyle(
-        color: Colors.black,
-        fontSize: 10,
-        overflow: TextOverflow.clip,
-        leadingDistribution: TextLeadingDistribution.even,
-      ),
-      unselectedLabelStyle: const TextStyle(
-        fontSize: 8,
-        overflow: TextOverflow.ellipsis,
-        leadingDistribution: TextLeadingDistribution.proportional,
-      ),
-      fixedColor: Colors.black,
-      type: BottomNavigationBarType.fixed,
-      showSelectedLabels: true,
-      onTap: (id) {
-        store.pageviewController = id;
-        if (id == 0) {
-          store.setPageViewController(id);
-          // Modular.to.navigate('/Tab/AreaCultivo/');
-        } else if (id == 1) {
-          store.setPageViewController(id);
-          // Modular.to.navigate('/Tab/Reservatorios/');
-        } else if (id == 2) {
-          store.setPageViewController(id);
-          // Modular.to.navigate('/Tab/CadernoCampo/');
-        } else if (id == 3) {
-          store.setPageViewController(id);
-          // Modular.to.navigate('/Tab/Receitas/');
-        } else if (id == 4) {
-          store.setPageViewController(id);
-          // Modular.to.navigate('/Tab/Ajustes/');
-        }
+  /// Layout para desktop/tablet com NavigationRail
+  Widget _buildDesktopLayout(BuildContext context) {
+    return Observer(
+      builder: (_) {
+        return Row(
+          children: [
+            NavigationRail(
+              selectedIndex: store.pageviewController,
+              onDestinationSelected: (index) => store.setPageViewController(index),
+              labelType: NavigationRailLabelType.all,
+              minWidth: 80,
+              minExtendedWidth: 200,
+              extended: ResponsiveBreakpoints.isDesktop(context),
+              elevation: 4,
+              destinations: _buildRailDestinations(),
+            ),
+            const VerticalDivider(thickness: 1, width: 1),
+            Expanded(
+              child: _getBody(),
+            ),
+          ],
+        );
       },
-      currentIndex: store.pageviewController,
-      items: [
-        BottomNavigationBarItem(
-          icon: const Icon(
-            Icons.layers_outlined,
-            color: Constants.kPrimaryColor,
-          ),
-          tooltip: "Área de Cultivo",
-          label: 'card5Home'.i18n(),
+    );
+  }
+
+  /// Constrói destinos do NavigationRail
+  List<NavigationRailDestination> _buildRailDestinations() {
+    return [
+      NavigationRailDestination(
+        icon: SvgPicture.asset(
+          "assets/icons/cultivo_icon.svg",
+          height: 24,
+          width: 24,
         ),
-        BottomNavigationBarItem(
-          icon: const Icon(
-            Icons.format_align_justify_outlined,
-            color: Constants.kPrimaryColor,
-          ),
-          label: 'card6Home'.i18n(),
+        label: Text('Cultivos'),
+      ),
+      NavigationRailDestination(
+        icon: SvgPicture.asset(
+          "assets/icons/reservatorio_icon.svg",
+          height: 24,
+          width: 24,
         ),
-        BottomNavigationBarItem(
-          icon: const Icon(
-            Icons.filter_none,
-            color: Constants.kPrimaryColor,
-          ),
-          label: 'card7Home'.i18n(),
+        label: Text('Reservatórios'),
+      ),
+      NavigationRailDestination(
+        icon: SvgPicture.asset(
+          "assets/icons/caderno_campo_icon.svg",
+          height: 24,
+          width: 24,
         ),
-        BottomNavigationBarItem(
-          icon: const Icon(
-            Icons.drive_file_rename_outline_sharp,
-            color: Constants.kPrimaryColor,
-          ),
-          label: 'card8Home'.i18n(),
+        label: Text('Caderno Campo'),
+      ),
+      NavigationRailDestination(
+        icon: SvgPicture.asset(
+          "assets/icons/solucoes_nutritivas_icon.svg",
+          height: 24,
+          width: 24,
         ),
-        BottomNavigationBarItem(
-          icon: const Icon(
-            Icons.history_edu_outlined,
-            color: Constants.kPrimaryColor,
-          ),
-          label: 'card9Home'.i18n(),
+        label: Text('Soluções'),
+      ),
+      NavigationRailDestination(
+        icon: const Icon(Icons.bar_chart_outlined, size: 24),
+        selectedIcon: const Icon(Icons.bar_chart, size: 24),
+        label: Text('Relatórios'),
+      ),
+      NavigationRailDestination(
+        icon: SvgPicture.asset(
+          "assets/icons/ajustes_icon.svg",
+          height: 24,
+          width: 24,
         ),
-      ],
+        label: Text('Ajustes'),
+      ),
+    ];
+  }
+
+  /// BottomNavigationBar para mobile (otimizado)
+  Widget _buildBottomBar() {
+    return Observer(
+      builder: (_) {
+        return BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Constants.kContentColorLightTheme,
+          unselectedItemColor: Constants.kGreyMedium,
+          backgroundColor: Colors.white,
+          elevation: 8,
+          selectedFontSize: 10,
+          unselectedFontSize: 9,
+          currentIndex: store.pageviewController,
+          onTap: (int index) => store.setPageViewController(index),
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                "assets/icons/cultivo_icon.svg",
+                height: 24,
+                width: 24,
+              ),
+              label: 'Cultivos',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                "assets/icons/reservatorio_icon.svg",
+                height: 24,
+                width: 24,
+              ),
+              label: 'Reservatórios',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                "assets/icons/caderno_campo_icon.svg",
+                height: 24,
+                width: 24,
+              ),
+              label: 'Caderno',  // Removido "de Campo" para evitar overflow
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                "assets/icons/solucoes_nutritivas_icon.svg",
+                height: 24,
+                width: 24,
+              ),
+              label: 'Soluções',
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.bar_chart_outlined, size: 24),
+              activeIcon: const Icon(Icons.bar_chart, size: 24),
+              label: 'Relatórios',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                "assets/icons/ajustes_icon.svg",
+                height: 24,
+                width: 24,
+              ),
+              label: 'Ajustes',
+            ),
+          ],
+        );
+      },
     );
   }
 }

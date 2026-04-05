@@ -1,1 +1,75 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"adaptative-user-interface","appId":"1:928279287020:android:121a7fcc0cd2ebf14ac1c9","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"adaptative-user-interface","configurations":{"android":"1:928279287020:android:121a7fcc0cd2ebf14ac1c9","ios":"1:928279287020:ios:f19eca3d26a8c75e4ac1c9","web":"1:928279287020:web:8be7e091332c8f2d4ac1c9","windows":"1:928279287020:web:3477ff973eb792ed4ac1c9"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "adaptative-user-interface",
+          "appId": "1:928279287020:android:121a7fcc0cd2ebf14ac1c9",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "adaptative-user-interface",
+          "configurations": {
+            "android": "1:928279287020:android:121a7fcc0cd2ebf14ac1c9",
+            "ios": "1:928279287020:ios:f19eca3d26a8c75e4ac1c9",
+            "web": "1:928279287020:web:8be7e091332c8f2d4ac1c9",
+            "windows": "1:928279287020:web:3477ff973eb792ed4ac1c9"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "source": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(js|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|ico)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=86400"
+          }
+        ]
+      },
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "key": "X-Frame-Options",
+            "value": "DENY"
+          },
+          {
+            "key": "X-XSS-Protection",
+            "value": "1; mode=block"
+          }
+        ]
+      }
+    ]
+  }
+}

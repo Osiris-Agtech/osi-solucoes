@@ -1,0 +1,175 @@
+name: Deploy Web - Firebase Hosting
+
+on:
+  push:
+    branches: [feat/new-home-layout]
+  pull_request:
+    branches: [feat/new-home-layout]
+    types: [opened, synchronize, reopened]
+
+  # Permite deploy manual via GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Ambiente para deploy'
+        required: true
+        default: 'preview'
+        type: choice
+        options:
+          - preview
+          - production
+
+# Garante que apenas um deploy rode por vez
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FLUTTER_VERSION: '3.35.0'
+
+jobs:
+  # ============================================================
+  # JOB 1: Build e Testes
+  # ============================================================
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup FVM
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+          cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
+
+      - name: 📦 Restaurar dependências
+        run: flutter pub get
+
+      - name: 🔧 Gerar código (MobX, etc)
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+        continue-on-error: true
+
+      - name: 📐 Analisar código (lint)
+        run: flutter analyze --no-fatal-infos
+
+      - name: 🧪 Rodar testes unitários
+        run: flutter test --coverage
+        continue-on-error: true
+
+      - name: 📊 Upload de coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+
+      - name: 🏗️ Build Web (WASM para performance)
+        run: |
+          flutter build web \
+            --release \
+            --wasm \
+            --base-href="/" \
+            --dart-define=FLUTTER_WEB_USE_SKIA=true
+
+      - name: 📁 Upload do build web
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: build/web/
+          retention-days: 7
+          overwrite: true
+
+  # ============================================================
+  # JOB 2: Deploy para Firebase Hosting (apenas em push para feat/new-home-layout)
+  # ============================================================
+  deploy-firebase:
+    name: Deploy Firebase Hosting
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    # Só executa em pushes para feat/new-home-layout ou workflow_dispatch
+    if: github.event_name == 'push' && github.ref == 'refs/heads/feat/new-home-layout' || github.event_name == 'workflow_dispatch'
+
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v4
+
+      - name: 📥 Download do build web
+        uses: actions/download-artifact@v4
+        with:
+          name: web-build
+          path: build/web/
+
+      - name: 🚀 Deploy para Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          projectId: adaptative-user-interface
+          channelId: live
+          entryPoint: ./
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
+
+      - name: ✅ Deploy concluído
+        run: echo "🎉 Deploy realizado com sucesso!"
+
+  # ============================================================
+  # JOB 3: Preview PR (comentário com URL de preview)
+  # ============================================================
+  preview-pr:
+    name: Preview PR
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    if: github.event_name == 'pull_request'
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v4
+
+      - name: 📥 Download do build web
+        uses: actions/download-artifact@v4
+        with:
+          name: web-build
+          path: build/web/
+
+      - name: 🔍 Criar preview channel no Firebase
+        id: firebase-preview
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          projectId: adaptative-user-interface
+          entryPoint: ./
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
+
+      - name: 💬 Comentário no PR com URL de preview
+        if: steps.firebase-preview.outputs.details_url != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🚀 **Preview deploy disponível!**\n\n🔗 Acesse: ${{ steps.firebase-preview.outputs.details_url }}'
+            })

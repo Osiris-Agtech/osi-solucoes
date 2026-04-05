@@ -5,8 +5,10 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/login_store.dart';
 import 'package:osi_solucoes/features/presenter/views/home/home_page.dart';
 import 'package:osi_solucoes/features/presenter/views/login/login_page.dart';
+import 'package:osi_solucoes/core/utils/spacing.dart';
 
 import '../../../../core/services/local_storage.dart';
+import '../../../../core/utils/responsive_breakpoints.dart';
 import '../../viewmodels/auth_controller.dart';
 import '../login/multi_account_page.dart';
 
@@ -68,14 +70,25 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Usa Sizer para tamanho responsivo da imagem
+    final imageWidth = ResponsiveBreakpoints.responsiveWidth(
+      context,
+      mobile: MediaQuery.of(context).size.width * 0.6,
+      tablet: 300,
+      desktop: 350,
+    );
+
     return Container(
       width: double.infinity,
       height: double.infinity,
       color: Constants.kBackgroundColor,
       child: Center(
-        child: Image.asset(
-          "assets/images/logo_ufmt.png",
-          width: MediaQuery.of(context).size.width * .6,
+        child: Padding(
+          padding: Spacing.horizontal(context),
+          child: Image.asset(
+            "assets/images/logo_ufmt.png",
+            width: imageWidth,
+          ),
         ),
       ),
     );
