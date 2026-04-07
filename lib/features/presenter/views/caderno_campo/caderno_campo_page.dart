@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/core/utils/responsive_breakpoints.dart';
+import 'package:osi_solucoes/core/utils/spacing.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
@@ -226,7 +228,7 @@ class _AppBarState extends State<AppBar> {
       child: SliverAppBar(
         pinned: true,
         backgroundColor: Colors.white,
-        toolbarHeight: 175,
+        toolbarHeight: ResponsiveBreakpoints.isDesktop(context) ? 140 : 175,
         floating: true,
         automaticallyImplyLeading: false,
         forceElevated: true,
@@ -284,9 +286,7 @@ class _AppBarState extends State<AppBar> {
             Container(
               height: 50,
               color: const Color(0xFFF8F8F6),
-              padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04,
-              ),
+              padding: Spacing.horizontal(context),
               child: SizedBox(
                 height: 50,
                 width: double.infinity,

@@ -109,6 +109,8 @@ class ModulosPageState extends State<ModulosPage> {
 
   /// Layout para desktop/tablet com NavigationRail
   Widget _buildDesktopLayout(BuildContext context) {
+    final isDesktop = ResponsiveBreakpoints.isDesktop(context);
+    
     return Observer(
       builder: (_) {
         return Row(
@@ -116,10 +118,12 @@ class ModulosPageState extends State<ModulosPage> {
             NavigationRail(
               selectedIndex: store.pageviewController,
               onDestinationSelected: (index) => store.setPageViewController(index),
-              labelType: NavigationRailLabelType.all,
+              // Quando extended=true, labelType deve ser null ou none
+              // Quando extended=false (tablet), usamos all para mostrar labels
+              labelType: isDesktop ? NavigationRailLabelType.none : NavigationRailLabelType.all,
               minWidth: 80,
               minExtendedWidth: 200,
-              extended: ResponsiveBreakpoints.isDesktop(context),
+              extended: isDesktop,
               elevation: 4,
               destinations: _buildRailDestinations(),
             ),

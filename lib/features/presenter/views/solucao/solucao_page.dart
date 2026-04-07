@@ -6,6 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/utils/responsive_breakpoints.dart';
+import 'package:osi_solucoes/core/utils/spacing.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
@@ -97,19 +99,29 @@ class _SolucaoPage extends State<SolucaoPage> {
                     );
                   }
 
-                  return SliverPadding(
-                    padding: const EdgeInsets.all(8.0),
-                    sliver: SliverGrid.count(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 2,
-                      mainAxisSpacing: 2,
-                      childAspectRatio: 1.32,
-                      children: List.generate(
-                        solucaoStore.searchSolucao.length,
-                        (index) => CardReceita(
-                          solucaoNutritiva: solucaoStore.searchSolucao[index],
-                        ),
-                      ),
+                  return SliverToBoxAdapter(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final columns = ResponsiveBreakpoints.gridColumns(context);
+                        final aspectRatio = constraints.maxWidth > 800 ? 1.5 : 1.32;
+                        return Padding(
+                          padding: Spacing.all(context),
+                          child: GridView.count(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            crossAxisCount: columns,
+                            crossAxisSpacing: Spacing.sm,
+                            mainAxisSpacing: Spacing.sm,
+                            childAspectRatio: aspectRatio,
+                            children: List.generate(
+                              solucaoStore.searchSolucao.length,
+                              (index) => CardReceita(
+                                solucaoNutritiva: solucaoStore.searchSolucao[index],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   );
                 }),
@@ -146,7 +158,7 @@ class _AppBarState extends State<AppBar> {
       child: SliverAppBar(
         pinned: true,
         backgroundColor: Colors.white,
-        toolbarHeight: 180,
+        toolbarHeight: ResponsiveBreakpoints.isDesktop(context) ? 140 : 180,
         floating: true,
         automaticallyImplyLeading: false,
         forceElevated: true,
@@ -163,9 +175,7 @@ class _AppBarState extends State<AppBar> {
             ),
             Container(
               color: const Color(0xFFF8F8F6),
-              padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04,
-              ),
+              padding: Spacing.horizontal(context),
               child: SizedBox(
                   width: double.infinity,
                   child: TextFormField(

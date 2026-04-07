@@ -357,7 +357,8 @@ class HomePageState extends State<HomePage> {
                     children: [
                       // Trocar Conta (apenas se multi-conta)
                       Observer(builder: (_) {
-                        if (store.authController.usuario.contas!.length < 2) {
+                        final contas = store.authController.usuario.contas;
+                        if (contas == null || contas.length < 2) {
                           return const SizedBox.shrink();
                         }
                         return _buildModernMenuItem(
@@ -1201,7 +1202,8 @@ class HomePageState extends State<HomePage> {
               children: [
                 // Trocar Conta (apenas se multi-conta)
                 Observer(builder: (_) {
-                  if (store.authController.usuario.contas!.length < 2) {
+                  final contas = store.authController.usuario.contas;
+                  if (contas == null || contas.length < 2) {
                     return const SizedBox.shrink();
                   }
                   return _buildModernMenuItem(

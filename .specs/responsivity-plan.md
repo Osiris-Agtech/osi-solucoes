@@ -777,6 +777,12 @@ Container(
 
 ---
 
-**Criado em**: 5 de abril de 2026  
-**Versão**: 1.0  
+## 📎 Documentos Relacionados
+
+- **[Análise de Responsividade das Telas](./analise-responsividade-telas.md)** — Análise detalhada comparando telas funcionais vs. problemáticas, diagnóstico do erro `navigation_rail.dart:120:15` e soluções específicas por tela.
+
+---
+
+**Criado em**: 5 de abril de 2026
+**Versão**: 1.0
 **Status**: Aguardando aprovação para implementação

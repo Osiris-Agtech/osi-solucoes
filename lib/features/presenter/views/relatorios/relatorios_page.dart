@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/utils/spacing.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 
 class RelatoriosPage extends StatelessWidget {
@@ -8,101 +9,57 @@ class RelatoriosPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Constants.kSecondBackgroundColor,
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            floating: true,
-            snap: true,
-            automaticallyImplyLeading: false,
-            title: const Text(
-              'Relatórios',
-              style: TextStyle(
-                color: Color(0xFF333333),
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+          const SliverToBoxAdapter(
+            child: _RelatoriosAppBar(),
           ),
           // Análise de Ciclo
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(
-                  size.width * 0.05, 20, size.width * 0.05, 8),
+                  Spacing.md, 12, Spacing.md, 8),
               child: const _SectionLabel(label: 'ANÁLISE DE CICLO'),
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+            padding: Spacing.horizontal(context),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                _RelatorioCard(
-                  titulo: 'Ciclo de Produção por Cultura',
-                  descricao:
-                      'Compare duração real vs. planejada dos ciclos e identifique culturas com desvios crônicos.',
-                  icon: Icons.loop_outlined,
-                  iconColor: Constants.kPrimaryColor,
-                  badge: 'Disponível',
-                  badgeColor: const Color(0xFF059669),
-                  onTap: () => Get.toNamed(
-                    Routes.relatorioCircoCulturaPage,
-                    arguments: {'mock': true},
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  child: _RelatorioCard(
+                    titulo: 'Ciclo de Produção por Cultura',
+                    descricao:
+                        'Compare duração real vs. planejada dos ciclos e identifique culturas com desvios crônicos.',
+                    icon: Icons.loop_outlined,
+                    iconColor: Constants.kPrimaryColor,
+                    badge: 'Disponível',
+                    badgeColor: const Color(0xFF059669),
+                    onTap: () => Get.toNamed(
+                      Routes.relatorioCircoCulturaPage,
+                      arguments: {'mock': true},
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),
-                _RelatorioCard(
-                  titulo: 'Produtividade por Setor/Área',
-                  descricao:
-                      'Taxas de conversão em cada etapa — semeadura, transplantio, colheita e embalagem por setor.',
-                  icon: Icons.area_chart_outlined,
-                  iconColor: const Color(0xFF0891B2),
-                  badge: 'Disponível',
-                  badgeColor: const Color(0xFF059669),
-                  onTap: () => Get.toNamed(
-                    Routes.relatorioProdutividadeSetorPage,
-                    arguments: {'mock': true},
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  child: _RelatorioCard(
+                    titulo: 'Produtividade por Setor/Área',
+                    descricao:
+                        'Taxas de conversão em cada etapa — semeadura, transplantio, colheita e embalagem por setor.',
+                    icon: Icons.area_chart_outlined,
+                    iconColor: const Color(0xFF0891B2),
+                    badge: 'Disponível',
+                    badgeColor: const Color(0xFF059669),
+                    onTap: () => Get.toNamed(
+                      Routes.relatorioProdutividadeSetorPage,
+                      arguments: {'mock': true},
+                    ),
                   ),
-                ),
-              ]),
-            ),
-          ),
-          // Visão Geral
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                  size.width * 0.05, 20, size.width * 0.05, 8),
-              child: const _SectionLabel(label: 'VISÃO GERAL'),
-            ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                _RelatorioCard(
-                  titulo: 'Produção por Cultura',
-                  descricao:
-                      'Quantidade produzida por cultura ao longo dos meses.',
-                  icon: Icons.agriculture_outlined,
-                  iconColor: const Color(0xFF8B5CF6),
-                  badge: 'Home',
-                  badgeColor: const Color(0xFF6B7280),
-                  onTap: () => Get.offAllNamed(Routes.homePage),
-                ),
-                const SizedBox(height: 10),
-                _RelatorioCard(
-                  titulo: 'Status de Lotes',
-                  descricao:
-                      'Distribuição dos lotes por status (ativo, finalizado, cancelado).',
-                  icon: Icons.pie_chart_outline,
-                  iconColor: const Color(0xFF3B82F6),
-                  badge: 'Home',
-                  badgeColor: const Color(0xFF6B7280),
-                  onTap: () => Get.offAllNamed(Routes.homePage),
                 ),
               ]),
             ),
@@ -111,84 +68,112 @@ class RelatoriosPage extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(
-                  size.width * 0.05, 20, size.width * 0.05, 8),
+                  Spacing.md, 20, Spacing.md, 8),
               child: const _SectionLabel(label: 'GESTÃO DE EQUIPE'),
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+            padding: Spacing.horizontal(context),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                _RelatorioCard(
-                  titulo: 'Desempenho da Equipe',
-                  descricao:
-                      'Atividades registradas, tarefas de agenda cumpridas no prazo e taxa de conclusão por membro.',
-                  icon: Icons.people_outlined,
-                  iconColor: const Color(0xFF7C3AED),
-                  badge: 'Disponível',
-                  badgeColor: const Color(0xFF059669),
-                  onTap: () => Get.toNamed(
-                    Routes.relatorioDesempenhoEquipePage,
-                    arguments: {'mock': true},
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  child: _RelatorioCard(
+                    titulo: 'Desempenho da Equipe',
+                    descricao:
+                        'Atividades registradas, tarefas de agenda cumpridas no prazo e taxa de conclusão por membro.',
+                    icon: Icons.people_outlined,
+                    iconColor: const Color(0xFF7C3AED),
+                    badge: 'Disponível',
+                    badgeColor: const Color(0xFF059669),
+                    onTap: () => Get.toNamed(
+                      Routes.relatorioDesempenhoEquipePage,
+                      arguments: {'mock': true},
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),
-                _RelatorioCard(
-                  titulo: 'Agenda e Tarefas Pendentes',
-                  descricao:
-                      'Tarefas vencidas, a vencer nos próximos N dias e taxa de conclusão por lote ativo.',
-                  icon: Icons.event_note_outlined,
-                  iconColor: const Color(0xFFEA580C),
-                  badge: 'Disponível',
-                  badgeColor: const Color(0xFF059669),
-                  onTap: () => Get.toNamed(
-                    Routes.relatorioAgendaTarefasPage,
-                    arguments: {'mock': true},
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  child: _RelatorioCard(
+                    titulo: 'Agenda e Tarefas Pendentes',
+                    descricao:
+                        'Tarefas vencidas, a vencer nos próximos N dias e taxa de conclusão por lote ativo.',
+                    icon: Icons.event_note_outlined,
+                    iconColor: const Color(0xFFEA580C),
+                    badge: 'Disponível',
+                    badgeColor: const Color(0xFF059669),
+                    onTap: () => Get.toNamed(
+                      Routes.relatorioAgendaTarefasPage,
+                      arguments: {'mock': true},
+                    ),
                   ),
-                ),
-              ]),
-            ),
-          ),
-          // Em breve
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                  size.width * 0.05, 20, size.width * 0.05, 8),
-              child: const _SectionLabel(label: 'EM BREVE'),
-            ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                _RelatorioCard(
-                  titulo: 'Qualidade / Nutrição',
-                  descricao:
-                      'Análise de soluções nutritivas e correlação com ciclos de produção.',
-                  icon: Icons.science_outlined,
-                  iconColor: const Color(0xFFEA580C),
-                  badge: 'Em breve',
-                  badgeColor: const Color(0xFFD9D9D9),
-                  disabled: true,
-                  onTap: () {},
-                ),
-                const SizedBox(height: 10),
-                _RelatorioCard(
-                  titulo: 'Comparação entre Períodos',
-                  descricao:
-                      'Compare produtividade e desvios entre dois períodos distintos.',
-                  icon: Icons.compare_arrows_outlined,
-                  iconColor: const Color(0xFF7C3AED),
-                  badge: 'Em breve',
-                  badgeColor: const Color(0xFFD9D9D9),
-                  disabled: true,
-                  onTap: () {},
                 ),
               ]),
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 40)),
         ],
+      ),
+    );
+  }
+}
+
+class _RelatoriosAppBar extends StatelessWidget {
+  const _RelatoriosAppBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, top: 8, bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              IconButton(
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                padding: EdgeInsets.zero,
+                alignment: Alignment.centerLeft,
+                onPressed: () => Get.close(1),
+                icon: const Icon(Icons.arrow_back),
+                color: Constants.kPrimaryColor,
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Relatórios',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 2),
+              const Text(
+                'Análises e métricas da produção',
+                style: TextStyle(
+                  color: Color(0xff707070),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

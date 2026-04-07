@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/utils/responsive_breakpoints.dart';
+import 'package:osi_solucoes/core/utils/spacing.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
@@ -83,7 +85,7 @@ class AjustesPageState extends State<AjustesPage> {
                   SliverAppBar(
                     pinned: true,
                     backgroundColor: Colors.white,
-                    toolbarHeight: 175,
+                    toolbarHeight: ResponsiveBreakpoints.isDesktop(context) ? 140 : 175,
                     floating: true,
                     automaticallyImplyLeading: false,
                     forceElevated: true,
@@ -106,10 +108,7 @@ class AjustesPageState extends State<AjustesPage> {
                         Container(
                           height: 50,
                           color: const Color(0xFFF8F8F6),
-                          padding: EdgeInsets.symmetric(
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.04,
-                          ),
+                          padding: Spacing.horizontal(context),
                           child: Observer(
                             builder: (_) {
                               final reservatorios = store.reservatorioList;
@@ -183,9 +182,9 @@ class AjustesPageState extends State<AjustesPage> {
                     delegate: SliverChildListDelegate([
                       Padding(
                         padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.023,
-                          right: MediaQuery.of(context).size.width * 0.058,
-                          left: MediaQuery.of(context).size.width * 0.058,
+                          top: Spacing.md,
+                          right: Spacing.lg,
+                          left: Spacing.lg,
                           bottom: 0,
                         ),
                         child: ListView(
@@ -194,8 +193,7 @@ class AjustesPageState extends State<AjustesPage> {
                           children: [
                             Padding(
                               padding: EdgeInsets.only(
-                                  left: MediaQuery.of(context).size.width *
-                                      0.015),
+                                  left: Spacing.xs),
                               child: const Text(
                                 'Obrigatório',
                                 style: TextStyle(
@@ -207,8 +205,7 @@ class AjustesPageState extends State<AjustesPage> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: MediaQuery.of(context).size.height *
-                                      0.01),
+                                  top: Spacing.sm),
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -216,12 +213,8 @@ class AjustesPageState extends State<AjustesPage> {
                                 color: Colors.white,
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          MediaQuery.of(context).size.width *
-                                              0.058,
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
-                                              0.025),
+                                      horizontal: Spacing.lg,
+                                      vertical: Spacing.lg),
                                   child: Column(children: [
                                     Row(
                                       crossAxisAlignment:
@@ -349,20 +342,14 @@ class AjustesPageState extends State<AjustesPage> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.025),
+                                          top: Spacing.lg),
                                       child: const MySeparator(
                                         color: Colors.grey,
                                       ),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.019),
+                                          top: Spacing.md),
                                       child: Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
@@ -494,10 +481,8 @@ class AjustesPageState extends State<AjustesPage> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top:
-                                      MediaQuery.of(context).size.height * 0.03,
-                                  left: MediaQuery.of(context).size.width *
-                                      0.015),
+                                  top: Spacing.xl,
+                                  left: Spacing.xs),
                               child: const Text(
                                 'Opcional',
                                 style: TextStyle(
@@ -509,8 +494,7 @@ class AjustesPageState extends State<AjustesPage> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: MediaQuery.of(context).size.height *
-                                      0.015),
+                                  top: Spacing.md),
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -518,12 +502,8 @@ class AjustesPageState extends State<AjustesPage> {
                                 color: Colors.white,
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          MediaQuery.of(context).size.width *
-                                              0.042,
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
-                                              0.015),
+                                      horizontal: Spacing.md,
+                                      vertical: Spacing.sm),
                                   child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
@@ -577,8 +557,7 @@ class AjustesPageState extends State<AjustesPage> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top:
-                                      MediaQuery.of(context).size.height * 0.01,
+                                  top: Spacing.sm,
                                   bottom: 75),
                               child: Card(
                                 shape: RoundedRectangleBorder(
@@ -587,12 +566,8 @@ class AjustesPageState extends State<AjustesPage> {
                                 color: Colors.white,
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          MediaQuery.of(context).size.width *
-                                              0.042,
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
-                                              0.015),
+                                      horizontal: Spacing.md,
+                                      vertical: Spacing.sm),
                                   child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
@@ -684,8 +659,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
       children: [
         Container(
           margin: EdgeInsets.only(
-              // top: MediaQuery.of(context).size.height * 0.025,
-              right: MediaQuery.of(context).size.width * 0.012),
+              right: Spacing.xs),
           width: 123,
           height: 40,
           child: ElevatedButton(
