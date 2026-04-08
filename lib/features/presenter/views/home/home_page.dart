@@ -482,6 +482,36 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  /// Botão de navegação do dashboard com estilo minimalista e sutil
+  Widget _buildDashboardNavButton({
+    required IconData icon,
+    required VoidCallback? onPressed,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: onPressed,
+        child: Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: onPressed != null ? Colors.grey[300]! : Colors.grey[200]!,
+              width: 1,
+            ),
+          ),
+          child: Icon(
+            icon,
+            color: onPressed != null ? Colors.black87 : Colors.grey[400],
+            size: 20,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget home(BuildContext context, Size size) {
     size = MediaQuery.of(context).size;
     final isMobile = ResponsiveBreakpoints.isMobile(context);
@@ -875,48 +905,84 @@ class HomePageState extends State<HomePage> {
                           );
                         }
 
-                        return SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // Indicador do card atual (nome do card)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 8),
-                                child: Observer(
-                                  builder: (_) {
-                                    final cardNames = {
-                                      'lotes': 'Lotes em Produção',
-                                      'tarefas': 'Tarefas Pendentes',
-                                      'producao': 'Produção Total',
-                                      'culturas': 'Top Culturas',
-                                      'saude': 'Saúde da Produção',
-                                    };
-                                    final currentCard = store.cardOrder.isNotEmpty
-                                        ? store.cardOrder[store.currentCardIndex]
-                                        : '';
-                                    return Text(
-                                      cardNames[currentCard] ?? '',
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black54,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              // PageView para navegação entre cards
-                              SizedBox(
-                                height: 280,
+                        return Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            // Header com nome do dashboard e botões de navegação
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                               child: Observer(
                                 builder: (_) {
-                                  // Recria o PageView quando o cardOrder muda
+                                  final cardNames = {
+                                    'lotes': 'Lotes em Produção',
+                                    'tarefas': 'Tarefas Pendentes',
+                                    'producao': 'Produção Total',
+                                    'culturas': 'Top Culturas',
+                                    'saude': 'Saúde da Produção',
+                                  };
+                                  final currentIndex = store.currentCardIndex;
+                                  final total = store.cardOrder.length;
+                                  final currentName = store.cardOrder.isNotEmpty && currentIndex < total
+                                      ? cardNames[store.cardOrder[currentIndex]] ?? ''
+                                      : '';
+
+                                  return Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // Nome do dashboard atual
+                                      Text(
+                                        currentName,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black87,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(width: 12),
+                                      // Botão anterior
+                                      _buildDashboardNavButton(
+                                        icon: Icons.chevron_left,
+                                        onPressed: currentIndex > 0
+                                            ? () {
+                                                store.previousCard();
+                                                _pageController?.previousPage(
+                                                  duration: const Duration(milliseconds: 300),
+                                                  curve: Curves.easeOut,
+                                                );
+                                              }
+                                            : null,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      // Botão próximo
+                                      _buildDashboardNavButton(
+                                        icon: Icons.chevron_right,
+                                        onPressed: currentIndex < total - 1
+                                            ? () {
+                                                store.nextCard();
+                                                _pageController?.nextPage(
+                                                  duration: const Duration(milliseconds: 300),
+                                                  curve: Curves.easeOut,
+                                                );
+                                              }
+                                            : null,
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                            // PageView ocupa todo espaço restante
+                            Expanded(
+                              child: Observer(
+                                builder: (_) {
                                   if (_pageController == null) {
                                     return const Center(
                                       child: CircularProgressIndicator(),
                                     );
                                   }
-                                  
+
                                   return PageView.builder(
                                     controller: _pageController,
                                     onPageChanged: (index) => store.goToCard(index),
@@ -934,60 +1000,62 @@ class HomePageState extends State<HomePage> {
                                 },
                               ),
                             ),
-                            // Indicadores (dots)
+                            // Indicadores (dots) clicáveis para navegação direta
                             Padding(
-                              padding: const EdgeInsets.only(top: 12),
+                              padding: const EdgeInsets.only(top: 8, bottom: 4),
                               child: Observer(
                                 builder: (_) => Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: List.generate(
                                     store.cardOrder.length,
-                                    (index) => Container(
-                                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                                      width: store.currentCardIndex == index ? 24 : 8,
-                                      height: 8,
-                                      decoration: BoxDecoration(
-                                        color: store.currentCardIndex == index
-                                            ? Constants.kPrimaryColor
-                                            : Colors.grey[300],
-                                        borderRadius: BorderRadius.circular(4),
+                                    (index) => GestureDetector(
+                                      onTap: () {
+                                        store.goToCard(index);
+                                        _pageController?.animateToPage(
+                                          index,
+                                          duration: const Duration(milliseconds: 300),
+                                          curve: Curves.easeOut,
+                                        );
+                                      },
+                                      child: AnimatedContainer(
+                                        duration: const Duration(milliseconds: 200),
+                                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                                        width: store.currentCardIndex == index ? 24 : 8,
+                                        height: 8,
+                                        decoration: BoxDecoration(
+                                          color: store.currentCardIndex == index
+                                              ? Constants.kPrimaryColor
+                                              : Colors.grey[300],
+                                          borderRadius: BorderRadius.circular(4),
+                                          border: store.currentCardIndex == index
+                                              ? null
+                                              : Border.all(color: Colors.grey[400]!, width: 1),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                            // Botões de navegação (opcionais)
+                            // Contador de posição
                             Padding(
-                              padding: const EdgeInsets.only(top: 8),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Observer(
-                                    builder: (_) => IconButton(
-                                      icon: const Icon(Icons.chevron_left),
-                                      onPressed: store.currentCardIndex > 0 
-                                          ? () => store.previousCard() 
-                                          : null,
-                                      iconSize: 28,
+                              padding: const EdgeInsets.only(bottom: 4),
+                              child: Observer(
+                                builder: (_) {
+                                  final currentIndex = store.currentCardIndex;
+                                  final total = store.cardOrder.length;
+                                  return Text(
+                                    '$currentIndex de $total • Deslize para navegar',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: Colors.grey[500],
                                     ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Observer(
-                                    builder: (_) => IconButton(
-                                      icon: const Icon(Icons.chevron_right),
-                                      onPressed: store.currentCardIndex < store.cardOrder.length - 1 
-                                          ? () => store.nextCard() 
-                                          : null,
-                                      iconSize: 28,
-                                    ),
-                                  ),
-                                ],
+                                  );
+                                },
                               ),
                             ),
                           ],
-                        ),
-                      );
+                        );
                       }),
                     );
                   },
