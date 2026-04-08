@@ -6,8 +6,6 @@ import 'package:osi_solucoes/features/data/datasources/relatorio_ciclo_cultura/r
 import 'package:osi_solucoes/features/presenter/models/relatorio_ciclo_cultura/relatorio_ciclo_cultura_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
-import '../../../core/utils/toast.dart';
-
 part 'relatorio_ciclo_cultura_store.g.dart';
 
 class RelatorioCicloCulturaStore = RelatorioCicloCulturaStoreBase
@@ -91,7 +89,6 @@ abstract class RelatorioCicloCulturaStoreBase with Store {
       result.fold(
         (failure) {
           setError(true, failure.message);
-          toastError(message: 'Erro ao carregar relatório: ${failure.message}');
         },
         (data) {
           setResultado(data);
@@ -100,7 +97,6 @@ abstract class RelatorioCicloCulturaStoreBase with Store {
       );
     } catch (e) {
       setError(true, 'Erro inesperado: ${e.toString()}');
-      toastError(message: 'Erro inesperado ao carregar relatório');
     } finally {
       setLoading(false);
     }

@@ -6,8 +6,6 @@ import 'package:osi_solucoes/features/data/datasources/relatorio_agenda_tarefas/
 import 'package:osi_solucoes/features/presenter/models/relatorio_agenda_tarefas/relatorio_agenda_tarefas_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
-import '../../../core/utils/toast.dart';
-
 part 'relatorio_agenda_tarefas_store.g.dart';
 
 class RelatorioAgendaTarefasStore = RelatorioAgendaTarefasStoreBase
@@ -94,8 +92,8 @@ abstract class RelatorioAgendaTarefasStoreBase with Store {
 
       result.fold(
         (failure) {
+          print('❌ Falha ao carregar relatório: ${failure.message}');
           setError(true, failure.message);
-          toastError(message: 'Erro ao carregar relatório: ${failure.message}');
         },
         (data) {
           setResultado(data);
@@ -106,8 +104,8 @@ abstract class RelatorioAgendaTarefasStoreBase with Store {
         },
       );
     } catch (e) {
+      print('❌ Erro inesperado ao carregar relatório: $e');
       setError(true, 'Erro inesperado: ${e.toString()}');
-      toastError(message: 'Erro inesperado ao carregar relatório');
     } finally {
       setLoading(false);
     }

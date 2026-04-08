@@ -76,7 +76,18 @@ class RelatorioAgendaTarefasDatasource
 
     try {
       print('🔍 Buscando relatório de agenda para conta: $contaId (${filtros.diasAVencer} dias à frente)');
+      print('📤 Variáveis da query: $variables');
       final QueryResult result = await client.query(options);
+
+      // Log completo do resultado para debug
+      print('📥 Resultado GraphQL - hasException: ${result.hasException}');
+      if (result.hasException) {
+        print('❌ Exception GraphQL: ${result.exception}');
+        print('❌ GraphQL Errors: ${result.exception?.graphqlErrors}');
+        print('❌ Link Exception: ${result.exception?.linkException}');
+      } else {
+        print('✅ Dados brutos recebidos: ${result.data}');
+      }
 
       if (!result.hasException) {
         final data = result.data?['relatorioAgendaTarefas'] as Map<String, dynamic>?;
@@ -90,18 +101,20 @@ class RelatorioAgendaTarefasDatasource
           );
           return Right(resultado);
         } else {
+          print('⚠️ Campo relatorioAgendaTarefas não encontrado ou nulo');
           return Left(ErrorRelatorioAgenda(message: 'Nenhum dado retornado pela API'));
         }
       } else {
         final errorMessage = result.exception?.graphqlErrors.isNotEmpty == true
-            ? result.exception!.graphqlErrors.first.message
+            ? result.exception!.graphqlErrors.map((e) => e.message).join('; ')
             : result.exception?.linkException?.toString() ?? 'Erro desconhecido';
 
         print('❌ Erro GraphQL ao buscar relatório de agenda: $errorMessage');
         return Left(ErrorRelatorioAgenda(message: errorMessage));
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       print('❌ Erro inesperado ao buscar relatório de agenda: $e');
+      print('📄 Stack trace: $stackTrace');
       return Left(ErrorRelatorioAgenda(message: e.toString()));
     }
   }

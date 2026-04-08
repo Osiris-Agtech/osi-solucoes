@@ -202,6 +202,22 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
+  late final _$adaptiveCardTypeAtom =
+      Atom(name: 'HomeStoreBase.adaptiveCardType', context: context);
+
+  @override
+  String? get adaptiveCardType {
+    _$adaptiveCardTypeAtom.reportRead();
+    return super.adaptiveCardType;
+  }
+
+  @override
+  set adaptiveCardType(String? value) {
+    _$adaptiveCardTypeAtom.reportWrite(value, super.adaptiveCardType, () {
+      super.adaptiveCardType = value;
+    });
+  }
+
   late final _$loadAdaptiveInterfaceAsyncAction =
       AsyncAction('HomeStoreBase.loadAdaptiveInterface', context: context);
 
@@ -291,7 +307,8 @@ isLoadingShortcuts: ${isLoadingShortcuts},
 adaptiveDashboard: ${adaptiveDashboard},
 dashboardConfidence: ${dashboardConfidence},
 currentCardIndex: ${currentCardIndex},
-cardOrder: ${cardOrder}
+cardOrder: ${cardOrder},
+adaptiveCardType: ${adaptiveCardType}
     ''';
   }
 }

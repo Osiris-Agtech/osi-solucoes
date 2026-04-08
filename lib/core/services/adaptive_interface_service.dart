@@ -68,6 +68,18 @@ class AdaptiveInterfaceService {
       print(
           '   └─ Shortcuts: ${(data['shortcuts'] as List?)?.length ?? 0} itens');
 
+// Extrai informações do dashboard (suporta campos novos e legados)
+      final dashboardName = data['dashboard'] as String?;
+      final dashboardId = data['dashboardId'] as String?;
+      final cardType = data['cardType'] as String?;
+      final confidence = ((data['confidence'] as num?) ?? 0).toDouble();
+
+      print('📊 [ADAPTIVE] Dashboard recebido:');
+      print(' └─ displayName: ${dashboardName ?? 'null'}');
+      print(' └─ dashboardId: ${dashboardId ?? 'null'}');
+      print(' └─ cardType: ${cardType ?? 'null'}');
+      print(' └─ confidence: ${(confidence * 100).toStringAsFixed(1)}%');
+
       // Parse dos atalhos
       final shortcutsList = data['shortcuts'] as List<dynamic>? ?? [];
       print('🔄 [ADAPTIVE] Processando ${shortcutsList.length} atalhos...');
@@ -82,7 +94,7 @@ class AdaptiveInterfaceService {
               final route = item['route'] as String? ??
                   item['predicted_target_screen'] as String? ??
                   '';
-              final confidence =
+              final itemConfidence =
                   (item['prob'] as num? ?? item['confidence'] as num? ?? 0.5)
                       .toDouble();
               final resourceId = item['resourceId'] as String?;
@@ -90,15 +102,15 @@ class AdaptiveInterfaceService {
               final resourceName = item['resourceName'] as String?;
 
               print(
-                  '   └─ Atalho: $route (confiança: ${(confidence * 100).toStringAsFixed(1)}%)');
+                  ' └─ Atalho: $route (confiança: ${(itemConfidence * 100).toStringAsFixed(1)}%)');
               if (resourceId != null && resourceName != null) {
                 print(
-                    '      └─ Recurso: $resourceType #$resourceId - "$resourceName"');
+                    ' └─ Recurso: $resourceType #$resourceId - "$resourceName"');
               }
 
               return _createShortcutFromRoute(
                 route,
-                confidence,
+                itemConfidence,
                 resourceId: resourceId,
                 resourceType: resourceType,
                 resourceName: resourceName,
@@ -113,29 +125,36 @@ class AdaptiveInterfaceService {
       if (shortcuts.isEmpty) {
         print('⚠️ [ADAPTIVE] Nenhum atalho válido, usando padrão');
         return Right(AdaptiveInterfaceResponse(
-          dashboard: data['dashboard'] as String?,
-          dashboardConfidence: ((data['confidence'] as num?) ?? 0).toDouble(),
+          dashboard: dashboardName,
+          dashboardId: dashboardId,
+          cardType: cardType,
+          dashboardConfidence: confidence,
           shortcuts: _getDefaultShortcuts(),
         ));
       }
 
       print('✅ [ADAPTIVE] Interface adaptativa carregada:');
       print(
-          '   └─ Dashboard: ${data['dashboard'] ?? 'null'} (confiança: ${((data['confidence'] as num?) ?? 0) * 100}%)');
-      print('   └─ Atalhos: ${shortcuts.length} recomendados');
+          ' └─ Dashboard: ${dashboardName ?? 'null'} (confiança: ${(confidence * 100).toStringAsFixed(1)}%)');
+      if (cardType != null) {
+        print(' └─ Card Type (novo): $cardType');
+      }
+      print(' └─ Atalhos: ${shortcuts.length} recomendados');
       for (var s in shortcuts) {
         if (s.resourceName != null) {
           print(
-              '      • ${s.displayTitle} (${s.route}) - ${(s.confidence * 100).toStringAsFixed(1)}%');
+              ' • ${s.displayTitle} (${s.route}) - ${(s.confidence * 100).toStringAsFixed(1)}%');
         } else {
           print(
-              '      • ${s.title} (${s.route}) - ${(s.confidence * 100).toStringAsFixed(1)}%');
+              ' • ${s.title} (${s.route}) - ${(s.confidence * 100).toStringAsFixed(1)}%');
         }
       }
 
       return Right(AdaptiveInterfaceResponse(
-        dashboard: data['dashboard'] as String?,
-        dashboardConfidence: ((data['confidence'] as num?) ?? 0).toDouble(),
+        dashboard: dashboardName,
+        dashboardId: dashboardId,
+        cardType: cardType,
+        dashboardConfidence: confidence,
         shortcuts: shortcuts,
       ));
     } catch (e, stackTrace) {
@@ -292,15 +311,64 @@ class AdaptiveInterfaceService {
 
 /// Resposta da Cloud Function
 class AdaptiveInterfaceResponse {
+  /// Nome legível do dashboard (legado)
   final String? dashboard;
+
+  /// ID técnico do dashboard
+  final String? dashboardId;
+
+  /// Tipo de card correspondente ao dashboard
+  final String? cardType;
+
+  /// Confiança da recomendação (0.0 - 1.0)
   final double dashboardConfidence;
+
+  /// Lista de atalhos recomendados
   final List<ShortcutModel> shortcuts;
 
   AdaptiveInterfaceResponse({
     this.dashboard,
+    this.dashboardId,
+    this.cardType,
     required this.dashboardConfidence,
     required this.shortcuts,
   });
+
+  /// Obtém o tipo de card preferencialmente do novo campo cardType,
+  /// fazendo fallback para o mapeamento por nome
+  String? get effectiveCardType {
+    // Prioridade 1: novo campo cardType
+    if (cardType != null && cardType!.isNotEmpty) {
+      return cardType;
+    }
+    // Prioridade 2: mapeamento por nome
+    return mapDashboardToCardType(dashboard);
+  }
+
+  /// Mapeamento estático de nomes de dashboard para tipos de cards
+  /// Mantido para backward compatibility
+  static const Map<String, String> _dashboardToCardTypeMap = {
+    'Lotes em Produção': 'lotes',
+    'Tarefas Pendentes': 'tarefas',
+    'Produção Total': 'producao',
+    'Top Culturas': 'culturas',
+    'Saúde das Equipes': 'saude',
+  };
+
+  /// Mapeia o nome do dashboard para o tipo de card
+  static String? mapDashboardToCardType(String? dashboardName) {
+    if (dashboardName == null || dashboardName.isEmpty) return null;
+
+    // Matching exato primeiro
+    final exactMatch = _dashboardToCardTypeMap[dashboardName];
+    if (exactMatch != null) {
+      return exactMatch;
+    }
+
+    // Log de aviso para dashboards não mapeados
+    print('⚠️ [ADAPTIVE] Dashboard não mapeado: "$dashboardName"');
+    return null;
+  }
 }
 
 /// Erro customizado

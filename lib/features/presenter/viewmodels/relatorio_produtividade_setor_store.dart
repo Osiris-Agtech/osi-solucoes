@@ -6,8 +6,6 @@ import 'package:osi_solucoes/features/data/datasources/relatorio_produtividade_s
 import 'package:osi_solucoes/features/presenter/models/relatorio_produtividade_setor/relatorio_produtividade_setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
-import '../../../core/utils/toast.dart';
-
 part 'relatorio_produtividade_setor_store.g.dart';
 
 class RelatorioProdutividadeSetorStore = RelatorioProdutividadeSetorStoreBase
@@ -102,7 +100,6 @@ abstract class RelatorioProdutividadeSetorStoreBase with Store {
       result.fold(
         (failure) {
           setError(true, failure.message);
-          toastError(message: 'Erro ao carregar relatório: ${failure.message}');
         },
         (data) {
           setResultado(data);
@@ -111,7 +108,6 @@ abstract class RelatorioProdutividadeSetorStoreBase with Store {
       );
     } catch (e) {
       setError(true, 'Erro inesperado: ${e.toString()}');
-      toastError(message: 'Erro inesperado ao carregar relatório');
     } finally {
       setLoading(false);
     }

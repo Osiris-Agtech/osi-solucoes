@@ -6,8 +6,6 @@ import 'package:osi_solucoes/features/presenter/models/relatorioStatusLotes/rela
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/lot_status_metrics_widget_clean.dart';
 
-import '../../../core/utils/toast.dart';
-
 part 'relatorio_status_lote_store.g.dart';
 
 class RelatorioStatusLoteStore = RelatorioStatusLoteStoreBase
@@ -83,7 +81,6 @@ abstract class RelatorioStatusLoteStoreBase with Store {
       result.fold(
         (failure) {
           setError(true, failure.message);
-          toastError(message: 'Erro ao carregar relatório: ${failure.message}');
         },
         (data) {
           setRelatorioData(data);
@@ -91,7 +88,6 @@ abstract class RelatorioStatusLoteStoreBase with Store {
       );
     } catch (e) {
       setError(true, 'Erro inesperado: ${e.toString()}');
-      toastError(message: 'Erro inesperado ao carregar relatório');
     } finally {
       setLoading(false);
     }

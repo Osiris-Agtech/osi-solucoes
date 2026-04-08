@@ -6,6 +6,7 @@ import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/features/data/repositories/area/area_repository.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:search_cep/search_cep.dart';
 
@@ -258,6 +259,7 @@ abstract class AreaCultivoStoreBase with Store {
       (data) async {
         toastSuccess(message: "Cadastrado com sucesso");
         buscarArea();
+        GetIt.I<HomeStore>().carregarHome();
         limparTudo();
         Get.close(1);
       },

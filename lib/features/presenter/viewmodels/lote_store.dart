@@ -9,6 +9,7 @@ import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dar
 import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
@@ -722,6 +723,7 @@ abstract class LoteStoreBase with Store {
         limparTudo();
         Get.close(1);
         setorStore.buscarSetores();
+        GetIt.I<HomeStore>().carregarHome();
         if (setorSelecionado.id != null) {
           buscarLotes();
         }

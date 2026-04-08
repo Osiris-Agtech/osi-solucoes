@@ -10,6 +10,7 @@ import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 
 part 'reservatorios_store.g.dart';
@@ -391,6 +392,7 @@ abstract class ReservatoriosStoreBase with Store {
         }
 
         Get.close(1);
+        GetIt.I<HomeStore>().carregarHome();
         toastSuccess(message: "Cadastrado com sucesso");
       },
     );

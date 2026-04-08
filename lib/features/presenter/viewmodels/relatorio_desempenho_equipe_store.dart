@@ -6,8 +6,6 @@ import 'package:osi_solucoes/features/data/datasources/relatorio_desempenho_equi
 import 'package:osi_solucoes/features/presenter/models/relatorio_desempenho_equipe/relatorio_desempenho_equipe_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
-import '../../../core/utils/toast.dart';
-
 part 'relatorio_desempenho_equipe_store.g.dart';
 
 class RelatorioDesempenhoEquipeStore = RelatorioDesempenhoEquipeStoreBase
@@ -97,8 +95,8 @@ abstract class RelatorioDesempenhoEquipeStoreBase with Store {
 
       result.fold(
         (failure) {
+          print('❌ Falha ao carregar relatório: ${failure.message}');
           setError(true, failure.message);
-          toastError(message: 'Erro ao carregar relatório: ${failure.message}');
         },
         (data) {
           setResultado(data);
@@ -107,8 +105,8 @@ abstract class RelatorioDesempenhoEquipeStoreBase with Store {
         },
       );
     } catch (e) {
+      print('❌ Erro inesperado ao carregar relatório: $e');
       setError(true, 'Erro inesperado: ${e.toString()}');
-      toastError(message: 'Erro inesperado ao carregar relatório');
     } finally {
       setLoading(false);
     }

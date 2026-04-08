@@ -73,7 +73,8 @@ abstract class HomeStoreBase with Store {
   @action
   void previousCard() {
     if (cardOrder.isEmpty) return;
-    currentCardIndex = (currentCardIndex - 1 + cardOrder.length) % cardOrder.length;
+    currentCardIndex =
+        (currentCardIndex - 1 + cardOrder.length) % cardOrder.length;
   }
 
   @action
@@ -83,42 +84,63 @@ abstract class HomeStoreBase with Store {
     }
   }
 
+  // Novos campos para suportar cardType direto da API
+  @observable
+  String? adaptiveCardType;
+
+  /// Mapeamento estático de nomes de dashboard para tipos de cards
+  /// Atualizado com os valores exatos que a API retorna
+  static const Map<String, String> _dashboardToCardTypeMap = {
+    'Lotes em Produção': 'lotes',
+    'Tarefas Pendentes': 'tarefas',
+    'Produção Total': 'producao',
+    'Top Culturas': 'culturas',
+    'Saúde das Equipes': 'saude',
+  };
+
   /// Inicializa a ordem dos cards com o recomendado em primeiro
   void initializeCardOrder() {
     const allCards = ['lotes', 'tarefas', 'producao', 'culturas', 'saude'];
 
-    // Se não há dashboard recomendado, usa ordem padrão
-    if (adaptiveDashboard == null || dashboardConfidence <= 0.5) {
+    // Determina o card recomendado
+    // Prioridade 1: cardType direto da API (novo contrato)
+    // Prioridade 2: mapeamento por nome exato (backward compatible)
+    String? recommendedCard = adaptiveCardType;
+
+    if (recommendedCard == null &&
+        adaptiveDashboard != null &&
+        dashboardConfidence > 0.5) {
+      recommendedCard = _mapDashboardToCardExact(adaptiveDashboard!);
+    }
+
+    // Se não há card recomendado ou confiança é baixa, usa ordem padrão
+    if (recommendedCard == null || !allCards.contains(recommendedCard)) {
       cardOrder = List.from(allCards);
       currentCardIndex = 0;
       print('📊 [HOME_STORE] Ordem padrão dos cards: $cardOrder');
       return;
     }
 
-    // Mapeia nome do dashboard para tipo de card
-    final recommendedCard = _mapDashboardToCard(adaptiveDashboard!);
-
-    if (recommendedCard != null && allCards.contains(recommendedCard)) {
-      // Coloca o recomendado primeiro
-      cardOrder = [recommendedCard];
-      cardOrder.addAll(allCards.where((card) => card != recommendedCard));
-      currentCardIndex = 0;
-      print('📊 [HOME_STORE] Card recomendado "$recommendedCard" em primeiro. Ordem: $cardOrder');
-    } else {
-      cardOrder = List.from(allCards);
-      currentCardIndex = 0;
-      print('📊 [HOME_STORE] Ordem padrão dos cards (não foi possível mapear recomendado): $cardOrder');
-    }
+    // Coloca o recomendado primeiro
+    cardOrder = [recommendedCard];
+    cardOrder.addAll(allCards.where((card) => card != recommendedCard));
+    currentCardIndex = 0;
+    print(
+        '📊 [HOME_STORE] Card recomendado "$recommendedCard" em primeiro. Ordem: $cardOrder');
   }
 
-  /// Mapeia o nome do dashboard adaptativo para o tipo de card correspondente
-  String? _mapDashboardToCard(String dashboardName) {
-    final lower = dashboardName.toLowerCase();
-    if (lower.contains('lote') || lower.contains('produção') || lower.contains('producao')) return 'lotes';
-    if (lower.contains('tarefa') || lower.contains('task')) return 'tarefas';
-    if (lower.contains('produção') || lower.contains('producao') || lower.contains('eco')) return 'producao';
-    if (lower.contains('cultura') || lower.contains('cultivar')) return 'culturas';
-    if (lower.contains('saúde') || lower.contains('saude') || lower.contains('health') || lower.contains('equipe')) return 'saude';
+  /// Mapeia o nome do dashboard adaptativo para o tipo de card usando matching exato
+  /// Fallback para heurística apenas se necessário
+  String? _mapDashboardToCardExact(String dashboardName) {
+    // Matching exato primeiro
+    final exactMatch = _dashboardToCardTypeMap[dashboardName];
+    if (exactMatch != null) {
+      return exactMatch;
+    }
+
+    // Log de aviso para dashboards não mapeados
+    print(
+        '⚠️ [HOME_STORE] Dashboard não mapeado: "$dashboardName". Verificar se a API foi atualizada.');
     return null;
   }
 
@@ -128,36 +150,47 @@ abstract class HomeStoreBase with Store {
     isLoadingShortcuts = true;
     try {
       final result = await _adaptiveService.getAdaptiveInterface();
-      
+
       result.fold(
         (failure) {
           // Em caso de erro, usa atalhos padrão
           print('❌ [HOME_STORE] Erro ao carregar: ${failure.message}');
           recommendedShortcuts = _getDefaultShortcuts();
           adaptiveDashboard = null;
+          adaptiveCardType = null;
           dashboardConfidence = 0.0;
-          print('   └─ Usando ${recommendedShortcuts.length} atalhos padrão');
+          print(' └─ Usando ${recommendedShortcuts.length} atalhos padrão');
         },
         (response) {
           // Garante que sempre haverá pelo menos 4 atalhos
           recommendedShortcuts = _ensureMinimumShortcuts(response.shortcuts);
           adaptiveDashboard = response.dashboard;
+          adaptiveCardType = response.cardType; // Novo campo da API
           dashboardConfidence = response.dashboardConfidence;
-          
+
           print('✅ [HOME_STORE] Interface adaptativa atualizada:');
-          print('   └─ Dashboard recomendado: ${adaptiveDashboard ?? 'null'}');
-          print('   └─ Confiança do dashboard: ${(dashboardConfidence * 100).toStringAsFixed(1)}%');
-          print('   └─ Atalhos recomendados: ${response.shortcuts.length}');
-          print('   └─ Atalhos finais (completados): ${recommendedShortcuts.length}');
-          
-          if (adaptiveDashboard != null && dashboardConfidence > 0.5) {
-            print('   └─ ✅ Dashboard será aplicado automaticamente');
+          print(' └─ Dashboard recomendado: ${adaptiveDashboard ?? 'null'}');
+          print(' └─ Card Type (novo): ${adaptiveCardType ?? 'null'}');
+          print(
+              ' └─ Confiança do dashboard: ${(dashboardConfidence * 100).toStringAsFixed(1)}%');
+          print(' └─ Atalhos recomendados: ${response.shortcuts.length}');
+          print(
+              ' └─ Atalhos finais (completados): ${recommendedShortcuts.length}');
+
+          // Determina se aplicará o dashboard
+          final hasRecommendation =
+              (adaptiveCardType != null || adaptiveDashboard != null) &&
+                  dashboardConfidence > 0.5;
+
+          if (hasRecommendation) {
+            print(' └─ ✅ Dashboard será aplicado automaticamente');
           } else {
-            print('   └─ ⚠️ Dashboard não será aplicado (confiança baixa ou null)');
+            print(
+                ' └─ ⚠️ Dashboard não será aplicado (confiança baixa ou sem recomendação)');
           }
         },
       );
-      
+
       // Inicializa a ordem dos cards após carregar interface adaptativa
       initializeCardOrder();
     } catch (e, stackTrace) {
@@ -176,32 +209,32 @@ abstract class HomeStoreBase with Store {
   /// Garante que a lista tenha pelo menos 4 atalhos, completando com padrões se necessário
   List<ShortcutModel> _ensureMinimumShortcuts(List<ShortcutModel> shortcuts) {
     const int minShortcuts = 4;
-    
+
     // Se já tem 4 ou mais, retorna como está
     if (shortcuts.length >= minShortcuts) {
       return shortcuts;
     }
-    
+
     // Obtém as rotas já presentes para evitar duplicatas
     final existingRoutes = shortcuts.map((s) => s.route).toSet();
-    
+
     // Obtém os atalhos padrão
     final defaultShortcuts = _getDefaultShortcuts();
-    
+
     // Cria uma cópia da lista de atalhos recomendados
     final result = List<ShortcutModel>.from(shortcuts);
-    
+
     // Completa com atalhos padrão que não estão na lista
     for (final defaultShortcut in defaultShortcuts) {
       if (result.length >= minShortcuts) break;
-      
+
       // Adiciona apenas se a rota não estiver presente
       if (!existingRoutes.contains(defaultShortcut.route)) {
         result.add(defaultShortcut);
         existingRoutes.add(defaultShortcut.route);
       }
     }
-    
+
     // Se ainda não tiver 4, completa com os primeiros padrões disponíveis
     if (result.length < minShortcuts) {
       for (final defaultShortcut in defaultShortcuts) {
@@ -212,7 +245,7 @@ abstract class HomeStoreBase with Store {
         }
       }
     }
-    
+
     return result;
   }
 
@@ -252,7 +285,7 @@ abstract class HomeStoreBase with Store {
   @action
   Future<void> carregarHome() async {
     if (homeDashboardRepository == null) return;
-    
+
     isLoading = true;
     hasError = false;
     errorMessage = '';
@@ -266,8 +299,9 @@ abstract class HomeStoreBase with Store {
         return;
       }
 
-      final result = await homeDashboardRepository!.buscarHomeDashboard(contaId);
-      
+      final result =
+          await homeDashboardRepository!.buscarHomeDashboard(contaId);
+
       result.fold(
         (failure) {
           hasError = true;

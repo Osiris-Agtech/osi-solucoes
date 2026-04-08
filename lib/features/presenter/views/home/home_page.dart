@@ -1405,39 +1405,6 @@ class HomePageState extends State<HomePage> {
           );
         },
       ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 16),
-          child: Observer(builder: (_) {
-            return Stack(
-              children: [
-                IconButton(
-                  onPressed: () => store.toggleNotified(),
-                  icon: Icon(
-                    store.isNotified
-                        ? Icons.notifications_rounded
-                        : Icons.notifications_none_rounded,
-                    color: Colors.black87,
-                  ),
-                ),
-                if (store.isNotified)
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFDC2626),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-              ],
-            );
-          }),
-        ),
-      ],
       flexibleSpace: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -3736,49 +3703,6 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
               ),
             ),
             
-            const SizedBox(width: 12),
-            
-            // Notificação
-            Observer(builder: (_) {
-              return Stack(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      store.isNotified
-                          ? Icons.notifications_rounded
-                          : Icons.notifications_none_rounded,
-                      color: Colors.black87,
-                      size: 22,
-                    ),
-                  ),
-                  if (store.isNotified)
-                    Positioned(
-                      top: 6,
-                      right: 6,
-                      child: Container(
-                        width: 10,
-                        height: 10,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFDC2626),
-                          shape: BoxShape.circle,
-                          border: Border.fromBorderSide(
-                            BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              );
-            }),
           ],
         ),
         ),

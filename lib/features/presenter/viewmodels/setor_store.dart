@@ -9,6 +9,7 @@ import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 
@@ -232,6 +233,7 @@ abstract class SetorStoreBase with Store {
         toastSuccess(message: "Cadastrado com sucesso");
         buscarSetores();
         areaCultivoStore.buscarArea();
+        GetIt.I<HomeStore>().carregarHome();
         limparTudo();
         Get.close(1);
       },

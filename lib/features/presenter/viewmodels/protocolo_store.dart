@@ -8,6 +8,7 @@ import 'package:osi_solucoes/features/presenter/models/cultura/cultura_model.dar
 import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
 
 import '../../data/repositories/lote/lote_repository.dart';
 import '../models/acao/acao_model.dart';
@@ -324,6 +325,7 @@ abstract class ProtocoloStoreBase with Store {
       (data) async {
         protocoloList = List.from([data, ...protocoloList]);
         Get.back();
+        GetIt.I<HomeStore>().carregarHome();
         toastSuccess(message: "Protocolo cadastrado com sucesso!");
       },
     );
