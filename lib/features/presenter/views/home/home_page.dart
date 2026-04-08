@@ -39,15 +39,9 @@ class HomePageState extends State<HomePage> {
   HomeStore store = GetIt.I<HomeStore>();
   final Duration duration = const Duration(milliseconds: 300);
 
-  // Variáveis para o carousel do dashboard
-  final PageController _dashboardPageController = PageController();
-  int _currentDashboardIndex = 0;
-  List<String> _dashboardTitles = [
-    'Lotes em Produção',
-    'Tarefas Pendentes',
-    'Produção Total',
-    'Top Culturas',
-  ];
+  // Variáveis para o dashboard (carousel removido em favor de cards expansivos)
+  String? _adaptiveDashboardName; // Mantido para compatibilidade com sistema adaptativo
+  PageController? _pageController;
 
   @override
   void initState() {
@@ -63,14 +57,35 @@ class HomePageState extends State<HomePage> {
             '🏠 [HOME_PAGE] Interface adaptativa carregada, aplicando dashboard...');
         // Ajustar dashboard quando a interface adaptativa for carregada
         _applyAdaptiveDashboard();
+        // Inicializa o PageController após carregar a ordem dos cards
+        _initializePageController();
       }).catchError((e) {
         print('❌ [HOME_PAGE] Erro ao carregar interface adaptativa: $e');
+        // Mesmo com erro, inicializa o controller
+        _initializePageController();
       });
     });
   }
 
-  /// Reordena _dashboardTitles colocando o dashboard recomendado na posição 0.
-  /// Chamado uma única vez após loadAdaptiveInterface() completar.
+  /// Inicializa o PageController para navegação dos cards
+  void _initializePageController() {
+    if (store.cardOrder.isEmpty) return;
+    
+    // Descarta o controller antigo se existir
+    _pageController?.dispose();
+    
+    // Cria um novo controller com o índice correto
+    _pageController = PageController(initialPage: store.currentCardIndex);
+    
+    print('📊 [HOME_PAGE] PageController inicializado na posição ${store.currentCardIndex}');
+    
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  /// Armazena o nome do dashboard recomendado para uso futuro (sistema adaptativo).
+  /// Os cards agora são expansivos e mostram todos os dados simultaneamente.
   void _applyAdaptiveDashboard() {
     print('📊 [HOME_PAGE] Verificando aplicação de dashboard adaptativo...');
 
@@ -86,39 +101,22 @@ class HomePageState extends State<HomePage> {
     }
 
     final dashboardName = store.adaptiveDashboard!;
-    const defaultOrder = [
-      'Lotes em Produção',
-      'Tarefas Pendentes',
-      'Produção Total',
-      'Top Culturas',
-    ];
-
-    if (!defaultOrder.contains(dashboardName)) {
-      print('   └─ ❌ Dashboard não encontrado na lista (_dashboardTitles)');
-      return;
-    }
-
     print('   └─ Dashboard recomendado: "$dashboardName"');
     print(
         '   └─ Confiança: ${(store.dashboardConfidence * 100).toStringAsFixed(1)}%');
-    print('   └─ ✅ Reordenando lista com "$dashboardName" na posição 0...');
-
-    final ordered = [
-      dashboardName,
-      ...defaultOrder.where((t) => t != dashboardName),
-    ];
+    print('   └─ ✅ Dashboard será usado para personalizar cards no futuro');
 
     setState(() {
-      _dashboardTitles = ordered;
-      _currentDashboardIndex = 0;
+      _adaptiveDashboardName = dashboardName;
     });
-
-    print('   └─ ✅ Lista reordenada: $_dashboardTitles');
+    
+    // Reinicializa o PageController com a nova ordem dos cards
+    _initializePageController();
   }
 
   @override
   void dispose() {
-    _dashboardPageController.dispose();
+    _pageController?.dispose();
     super.dispose();
   }
 
@@ -749,7 +747,7 @@ class HomePageState extends State<HomePage> {
                               children: [
                                 Flexible(
                                   child: Text(
-                                    _dashboardTitles[_currentDashboardIndex],
+                                    'Dashboard de Produção',
                                     style: TextStyle(
                                       fontSize: isNarrow ? 16 : 20,
                                       fontWeight: FontWeight.w700,
@@ -761,10 +759,7 @@ class HomePageState extends State<HomePage> {
                                 ),
                                 Observer(builder: (_) {
                                   if (store.adaptiveDashboard != null &&
-                                      store.dashboardConfidence > 0.5 &&
-                                      store.adaptiveDashboard ==
-                                          _dashboardTitles[
-                                              _currentDashboardIndex]) {
+                                      store.dashboardConfidence > 0.5) {
                                     return Padding(
                                       padding: const EdgeInsets.only(left: 6),
                                       child: Container(
@@ -786,7 +781,7 @@ class HomePageState extends State<HomePage> {
                                             const SizedBox(width: 3),
                                             Flexible(
                                               child: Text(
-                                                'Recomendado',
+                                                'Adaptativo',
                                                 style: TextStyle(
                                                   color: Constants.kPrimaryColor,
                                                   fontSize: isNarrow ? 9 : 11,
@@ -805,24 +800,6 @@ class HomePageState extends State<HomePage> {
                                 }),
                               ],
                             ),
-                          ),
-                          SizedBox(height: isNarrow ? 8 : 0, width: isNarrow ? 0 : 8),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              _buildCarouselButton(
-                                Icons.keyboard_arrow_left,
-                                () => _previousDashboard(),
-                                _currentDashboardIndex > 0,
-                              ),
-                              const SizedBox(width: 8),
-                              _buildCarouselButton(
-                                Icons.keyboard_arrow_right,
-                                () => _nextDashboard(),
-                                _currentDashboardIndex <
-                                    _dashboardTitles.length - 1,
-                              ),
-                            ],
                           ),
                         ],
                       );
@@ -880,98 +857,159 @@ class HomePageState extends State<HomePage> {
                           return const SizedBox.shrink();
                         }
 
-                        return PageView(
-                          controller: _dashboardPageController,
-                          onPageChanged: (index) {
-                            setState(() {
-                              _currentDashboardIndex = index;
-                            });
-                          },
-                          children: [
-                            // Card 1: Lotes em Produção
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: size.width * 0.05),
-                              child: _buildMetricCard(
-                                context,
-                                size,
-                                'Lotes em Produção',
-                                '${dashboard.resumo?.lotesAtivos ?? 0}',
-                                'de ${dashboard.resumo?.totalLotes ?? 0} lotes',
-                                Icons.agriculture,
-                                const Color(0xFF059669),
+                        // Garante que a ordem dos cards está inicializada
+                        if (store.cardOrder.isEmpty) {
+                          store.initializeCardOrder();
+                        }
+                        
+                        // Se ainda assim não há cards, mostra placeholder
+                        if (store.cardOrder.isEmpty) {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(40),
+                              child: Text(
+                                'Carregando dashboard...',
+                                style: TextStyle(fontSize: 14, color: Colors.black54),
                               ),
                             ),
-                            // Card 2: Tarefas Pendentes
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: size.width * 0.05),
-                              child: _buildMetricCard(
-                                context,
-                                size,
-                                'Tarefas Pendentes',
-                                '${dashboard.tarefas?.pendentesHoje ?? 0}',
-                                'hoje • ${dashboard.tarefas?.atrasadas ?? 0} atrasadas',
-                                Icons.task_alt,
-                                const Color(0xFFDC2626),
+                          );
+                        }
+
+                        return SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // Indicador do card atual (nome do card)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: Observer(
+                                  builder: (_) {
+                                    final cardNames = {
+                                      'lotes': 'Lotes em Produção',
+                                      'tarefas': 'Tarefas Pendentes',
+                                      'producao': 'Produção Total',
+                                      'culturas': 'Top Culturas',
+                                      'saude': 'Saúde da Produção',
+                                    };
+                                    final currentCard = store.cardOrder.isNotEmpty
+                                        ? store.cardOrder[store.currentCardIndex]
+                                        : '';
+                                    return Text(
+                                      cardNames[currentCard] ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black54,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              // PageView para navegação entre cards
+                              SizedBox(
+                                height: 280,
+                              child: Observer(
+                                builder: (_) {
+                                  // Recria o PageView quando o cardOrder muda
+                                  if (_pageController == null) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                  
+                                  return PageView.builder(
+                                    controller: _pageController,
+                                    onPageChanged: (index) => store.goToCard(index),
+                                    itemCount: store.cardOrder.length,
+                                    itemBuilder: (context, index) {
+                                      final cardType = store.cardOrder[index];
+                                      return Padding(
+                                        key: ValueKey('$cardType-$index'),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: size.width * 0.05, vertical: 6),
+                                        child: _buildCardByType(cardType, dashboard, size),
+                                      );
+                                    },
+                                  );
+                                },
                               ),
                             ),
-                            // Card 3: Produção Total
+                            // Indicadores (dots)
                             Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: size.width * 0.05),
-                              child: _buildMetricCard(
-                                context,
-                                size,
-                                'Produção Total',
-                                '${dashboard.producao?.totalPlantasColhidas ?? 0}',
-                                _formatPeriodoProducao(dashboard.producao),
-                                Icons.eco,
-                                const Color(0xFF2563EB),
+                              padding: const EdgeInsets.only(top: 12),
+                              child: Observer(
+                                builder: (_) => Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(
+                                    store.cardOrder.length,
+                                    (index) => Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                                      width: store.currentCardIndex == index ? 24 : 8,
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        color: store.currentCardIndex == index
+                                            ? Constants.kPrimaryColor
+                                            : Colors.grey[300],
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                            // Card 4: Top Culturas
+                            // Botões de navegação (opcionais)
                             Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: size.width * 0.05),
-                              child: _buildMetricCard(
-                                context,
-                                size,
-                                'Top Culturas',
-                                _formatCulturas(dashboard.culturas),
-                                'em produção',
-                                Icons.local_florist,
-                                const Color(0xFF8B5CF6),
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Observer(
+                                    builder: (_) => IconButton(
+                                      icon: const Icon(Icons.chevron_left),
+                                      onPressed: store.currentCardIndex > 0 
+                                          ? () => store.previousCard() 
+                                          : null,
+                                      iconSize: 28,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Observer(
+                                    builder: (_) => IconButton(
+                                      icon: const Icon(Icons.chevron_right),
+                                      onPressed: store.currentCardIndex < store.cardOrder.length - 1 
+                                          ? () => store.nextCard() 
+                                          : null,
+                                      iconSize: 28,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
-                        );
+                        ),
+                      );
                       }),
                     );
                   },
                 ),
               ),
 
-              // Indicadores do Carousel
+              // Espaçador entre dashboard e módulos
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      _dashboardTitles.length,
-                      (index) => Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: _currentDashboardIndex == index ? 24 : 8,
-                        height: 8,
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 4,
                         decoration: BoxDecoration(
-                          color: _currentDashboardIndex == index
-                              ? Constants.kPrimaryColor
-                              : Colors.grey[300],
-                          borderRadius: BorderRadius.circular(4),
+                          color: Constants.kPrimaryColor,
+                          borderRadius: BorderRadius.circular(2),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ),
@@ -1999,7 +2037,1020 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  // Métodos para controle do carousel do dashboard
+  // ============================================================
+  // NOVOS MÉTODOS DE BUILD DOS CARDS EXPANDIDOS
+  // ============================================================
+
+  /// Card 1: Lotes em Produção (expandido)
+  Widget _buildLotesCard(BuildContext context, Size size, HomeDashboard dashboard) {
+    final resumo = dashboard.resumo;
+    final bool semDados = resumo == null;
+
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: _cardDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF059669).withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  semDados ? Icons.warning_amber_rounded : Icons.agriculture,
+                  color: semDados ? Colors.orange[600] : const Color(0xFF059669),
+                  size: 26,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Lotes em Produção', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    Text(
+                      semDados ? 'Nenhum lote registrado' : '${resumo.lotesAtivos ?? 0} ativos',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: semDados ? Colors.orange[700] : Colors.grey[600],
+                        fontStyle: semDados ? FontStyle.italic : FontStyle.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Badge de colheita próxima
+              if (!semDados && (resumo.lotesComColheitaProxima ?? 0) > 0)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF59E0B).withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.schedule, size: 14, color: Color(0xFFF59E0B)),
+                      const SizedBox(width: 4),
+                      Text('${resumo.lotesComColheitaProxima}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFFF59E0B))),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 14),
+
+          // Estado vazio quando sem dados
+          if (semDados)
+            Expanded(
+              child: _buildEmptyState(
+                icon: Icons.agriculture_outlined,
+                iconColor: Colors.orange[600]!,
+                title: 'Nenhum lote cadastrado',
+                subtitle: 'Cadastre lotes para visualizar o acompanhamento da produção aqui',
+                buttonColor: const Color(0xFF059669),
+                buttonText: 'Cadastrar Lote',
+                onButtonPressed: () {
+                  // TODO: Navegar para tela de cadastro de lotes
+                },
+              ),
+            )
+          else ...[
+            // Barra de progresso por status
+            if (resumo.lotesPorStatus != null && resumo.lotesPorStatus!.isNotEmpty)
+              _buildSegmentedProgress(resumo.lotesPorStatus!),
+            if (resumo.taxaConclusao != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: LinearProgressIndicator(
+                        value: (resumo.taxaConclusao ?? 0) / 100,
+                        backgroundColor: Colors.grey[200],
+                        valueColor: const AlwaysStoppedAnimation(Color(0xFF059669)),
+                        minHeight: 6,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text('${resumo.taxaConclusao?.toStringAsFixed(0)}%', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                  ],
+                ),
+              ),
+            // Espécies em andamento
+            if (resumo.especiesEmAndamento != null && resumo.especiesEmAndamento!.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 6,
+                runSpacing: 4,
+                children: resumo.especiesEmAndamento!.take(4).map((esp) {
+                  return Chip(
+                    label: Text('${esp.nome} (${esp.percentual?.toStringAsFixed(0)}%)', style: const TextStyle(fontSize: 10)),
+                    padding: EdgeInsets.zero,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    backgroundColor: const Color(0xFF059669).withValues(alpha: 0.1),
+                    visualDensity: VisualDensity.compact,
+                  );
+                }).toList(),
+              ),
+            ],
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Card 2: Tarefas Pendentes (expandido)
+  Widget _buildTarefasCard(BuildContext context, Size size, HomeDashboard dashboard) {
+    final tarefas = dashboard.tarefas;
+    final bool semDados = tarefas == null;
+
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: _cardDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFDC2626).withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  semDados ? Icons.warning_amber_rounded : Icons.task_alt,
+                  color: semDados ? Colors.orange[600] : const Color(0xFFDC2626),
+                  size: 26,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Tarefas Pendentes', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    Text(
+                      semDados ? 'Nenhuma tarefa registrada' : '${tarefas.pendentesHoje ?? 0} hoje',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: semDados ? Colors.orange[700] : Colors.grey[600],
+                        fontStyle: semDados ? FontStyle.italic : FontStyle.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Badge de atrasadas
+              if (!semDados && (tarefas.atrasadas ?? 0) > 0)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFDC2626),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Text('${tarefas.atrasadas}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white)),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // Estado vazio quando sem dados
+          if (semDados)
+            Expanded(
+              child: _buildEmptyState(
+                icon: Icons.task_alt_outlined,
+                iconColor: Colors.orange[600]!,
+                title: 'Nenhuma tarefa cadastrada',
+                subtitle: 'Cadastre tarefas nos lotes para visualizar o acompanhamento aqui',
+                buttonColor: const Color(0xFFDC2626),
+                buttonText: 'Cadastrar Tarefa',
+                onButtonPressed: () {
+                  // TODO: Navegar para tela de cadastro de tarefas
+                },
+              ),
+            )
+          else ...[
+            // Breakdown por vencimento
+            if (tarefas.porVencimento != null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildTaskBreakdownItem('Hoje', tarefas.porVencimento!.hoje ?? 0, const Color(0xFFDC2626)),
+                  _buildTaskBreakdownItem('Semana', tarefas.porVencimento!.estaSemana ?? 0, const Color(0xFFF59E0B)),
+                  _buildTaskBreakdownItem('Próx.', tarefas.porVencimento!.proximaSemana ?? 0, const Color(0xFF059669)),
+                ],
+              ),
+            // Preview de tarefas
+            if (tarefas.ultimasTarefas != null && tarefas.ultimasTarefas!.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              const Divider(height: 1),
+              const SizedBox(height: 6),
+              ...tarefas.ultimasTarefas!.take(3).map((t) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Row(
+                    children: [
+                      Icon(t.vencida == true ? Icons.warning : Icons.circle_outlined, size: 12, color: t.vencida == true ? const Color(0xFFDC2626) : Colors.grey[400]),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(t.titulo ?? '', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500), maxLines: 1, overflow: TextOverflow.ellipsis),
+                      ),
+                      if (t.loteNome != null)
+                        Text(t.loteNome!, style: TextStyle(fontSize: 10, color: Colors.grey[500]), maxLines: 1, overflow: TextOverflow.ellipsis),
+                    ],
+                  ),
+                );
+              }),
+            ],
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Card 3: Produção Total (expandido)
+  Widget _buildProducaoCard(BuildContext context, Size size, HomeDashboard dashboard) {
+    final producao = dashboard.producao;
+    final bool semDados = producao == null;
+
+    // Verifica se está zerado (sem dados de produção)
+    final bool estaZerado = !semDados &&
+        (producao.totalPlantasColhidas ?? 0) == 0 &&
+        (producao.totalEmbalagensProduzidas ?? 0) == 0;
+
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: _cardDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2563EB).withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  semDados ? Icons.warning_amber_rounded : Icons.eco,
+                  color: semDados ? Colors.orange[600] : const Color(0xFF2563EB),
+                  size: 26,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Produção Total', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    Text(
+                      semDados
+                          ? 'Nenhuma produção registrada'
+                          : estaZerado
+                              ? 'Nenhuma colheita registrada'
+                              : '${producao.totalPlantasColhidas ?? 0} plantas',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: (semDados || estaZerado) ? Colors.orange[700] : Colors.grey[600],
+                        fontStyle: (semDados || estaZerado) ? FontStyle.italic : FontStyle.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Comparativo de variação
+              if (!semDados && !estaZerado && producao.comparativoPeriodo != null && producao.comparativoPeriodo!.variacaoPercentual != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: (producao.comparativoPeriodo!.variacaoPercentual ?? 0) >= 0
+                        ? const Color(0xFF059669).withValues(alpha: 0.12)
+                        : const Color(0xFFDC2626).withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        (producao.comparativoPeriodo!.variacaoPercentual ?? 0) >= 0 ? Icons.trending_up : Icons.trending_down,
+                        size: 14,
+                        color: (producao.comparativoPeriodo!.variacaoPercentual ?? 0) >= 0 ? const Color(0xFF059669) : const Color(0xFFDC2626),
+                      ),
+                      const SizedBox(width: 2),
+                      Text(
+                        '${(producao.comparativoPeriodo!.variacaoPercentual ?? 0) >= 0 ? '+' : ''}${producao.comparativoPeriodo!.variacaoPercentual?.toStringAsFixed(0)}%',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: (producao.comparativoPeriodo!.variacaoPercentual ?? 0) >= 0 ? const Color(0xFF059669) : const Color(0xFFDC2626),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // Estado vazio quando sem dados
+          if (semDados)
+            Expanded(
+              child: _buildEmptyState(
+                icon: Icons.eco_outlined,
+                iconColor: Colors.orange[600]!,
+                title: 'Nenhum dado de produção',
+                subtitle: 'Registre colheitas e produções nos lotes para visualizar as métricas aqui',
+                buttonColor: const Color(0xFF2563EB),
+                buttonText: 'Registrar Produção',
+                onButtonPressed: () {
+                  // TODO: Navegar para tela de registro de produção
+                },
+              ),
+            )
+          else if (estaZerado)
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      size: 48,
+                      color: Colors.orange[300],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Aguardando dados de produção',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Nenhuma colheita registrada no período',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[500],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else ...[
+            // Gráfico de barras verticais - Produção mensal
+            if (producao.producaoMensal != null && producao.producaoMensal!.isNotEmpty)
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: producao.producaoMensal!.map((producaoMes) {
+                      final maxProducao = producao.producaoMensal!
+                          .map((p) => p.quantidade ?? 0)
+                          .reduce((a, b) => a > b ? a : b);
+                      final percentual = maxProducao > 0
+                          ? ((producaoMes.quantidade ?? 0) / maxProducao).toDouble()
+                          : 0.0;
+                      return Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              _formatNumber(producaoMes.quantidade ?? 0),
+                              style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w600),
+                              maxLines: 1,
+                            ),
+                            const SizedBox(height: 2),
+                            Container(
+                              width: double.infinity,
+                              height: (80.0 * percentual).clamp(6.0, 80.0),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF2563EB),
+                                borderRadius: const BorderRadius.vertical(top: Radius.circular(3)),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              _getMonthAbbreviation(producaoMes.mes ?? ''),
+                              style: const TextStyle(fontSize: 9, color: Colors.grey),
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            // Taxas de produtividade
+            if (producao.taxasMedia != null && producao.taxasMedia!.taxaGlobal != null && producao.taxasMedia!.taxaGlobal! > 0)
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildRateIndicator('Germinação', producao.taxasMedia!.taxaGerminacao ?? 0, const Color(0xFF10B981)),
+                    _buildRateIndicator('Transplantio', producao.taxasMedia!.taxaTransplantio ?? 0, const Color(0xFF2563EB)),
+                    _buildRateIndicator('Embalagem', producao.taxasMedia!.taxaEmbalagem ?? 0, const Color(0xFFF59E0B)),
+                    _buildRateIndicator('Global', producao.taxasMedia!.taxaGlobal ?? 0, const Color(0xFF8B5CF6)),
+                  ],
+                ),
+              ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Card 4: Top Culturas (expandido)
+  Widget _buildCulturasCard(BuildContext context, Size size, HomeDashboard dashboard) {
+    final culturas = dashboard.culturas;
+    final bool semDados = culturas == null || culturas.isEmpty;
+
+    // Verifica se está zerado (todas as culturas com quantidade 0)
+    final bool estaZerado = !semDados && culturas.every((c) => (c.quantidade ?? 0) == 0);
+    final maxQtd = !estaZerado && !semDados
+        ? culturas.map((c) => c.quantidade ?? 0).reduce((a, b) => a > b ? a : b)
+        : 0;
+
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: _cardDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF8B5CF6).withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  semDados ? Icons.warning_amber_rounded : Icons.local_florist,
+                  color: semDados ? Colors.orange[600] : const Color(0xFF8B5CF6),
+                  size: 26,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Top Culturas', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    Text(
+                      semDados
+                          ? 'Nenhuma cultura registrada'
+                          : estaZerado
+                              ? 'Nenhuma produção registrada'
+                              : '${culturas.length} culturas em produção',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: semDados ? Colors.orange[700] : estaZerado ? Colors.orange[700] : Colors.grey[600],
+                        fontStyle: (semDados || estaZerado) ? FontStyle.italic : FontStyle.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+
+          // Estado vazio quando sem dados
+          if (semDados)
+            Expanded(
+              child: _buildEmptyState(
+                icon: Icons.local_florist_outlined,
+                iconColor: Colors.orange[600]!,
+                title: 'Nenhuma cultura cadastrada',
+                subtitle: 'Cadastre culturas nos lotes para visualizar o ranking de produção aqui',
+                buttonColor: const Color(0xFF8B5CF6),
+                buttonText: 'Cadastrar Cultura',
+                onButtonPressed: () {
+                  // TODO: Navegar para tela de cadastro de lotes/culturas
+                },
+              ),
+            )
+          else if (estaZerado)
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.local_florist_outlined,
+                      size: 48,
+                      color: Colors.purple[300],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Aguardando dados de culturas',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Nenhuma cultura registrada no período',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[500],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else ...[
+            // Gráfico de barras verticais
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: culturas.map((cultura) {
+                    final percentual = maxQtd > 0 ? ((cultura.quantidade ?? 0) / maxQtd).toDouble() : 0.0;
+                    final cor = _parseColor(cultura.cor ?? '', const Color(0xFF8B5CF6));
+                    return Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            '${cultura.quantidade}',
+                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+                            maxLines: 1,
+                          ),
+                          const SizedBox(height: 4),
+                          Container(
+                            width: double.infinity,
+                            height: (100 * percentual).clamp(8.0, 100.0),
+                            decoration: BoxDecoration(
+                              color: cor,
+                              borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            cultura.nome ?? '',
+                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Card 5: Saúde da Produção (NOVO)
+  Widget _buildSaudeCard(BuildContext context, Size size, HomeDashboard dashboard) {
+    final taxas = dashboard.producao?.taxasMedia;
+    final equipe = dashboard.equipe;
+    final alertas = dashboard.alertasCritico;
+    final bool semDados = taxas == null && equipe == null && (alertas == null || alertas.isEmpty);
+
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: _cardDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF06B6D4).withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  semDados ? Icons.warning_amber_rounded : Icons.monitor_heart,
+                  color: semDados ? Colors.orange[600] : const Color(0xFF06B6D4),
+                  size: 26,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Saúde da Produção', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    Text(
+                      semDados ? 'Dados insuficientes' : 'Eficiência e alertas',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: semDados ? Colors.orange[700] : Colors.grey[600],
+                        fontStyle: semDados ? FontStyle.italic : FontStyle.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+
+          // Estado vazio quando sem dados
+          if (semDados)
+            Expanded(
+              child: _buildEmptyState(
+                icon: Icons.monitor_heart_outlined,
+                iconColor: Colors.orange[600]!,
+                title: 'Dados insuficientes para análise',
+                subtitle: 'Registre taxas de produção e atividades da equipe para visualizar a saúde da produção aqui',
+                buttonColor: const Color(0xFF06B6D4),
+                buttonText: 'Registrar Dados',
+                onButtonPressed: () {
+                  // TODO: Navegar para tela de registro de taxas/atividade
+                },
+              ),
+            )
+          else ...[
+            // Gauges de taxas
+            if (taxas != null && taxas.taxaGlobal != null && taxas.taxaGlobal! > 0)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildRateGauge('Germinação', taxas.taxaGerminacao ?? 0, const Color(0xFF10B981)),
+                  _buildRateGauge('Transplantio', taxas.taxaTransplantio ?? 0, const Color(0xFF2563EB)),
+                  _buildRateGauge('Embalagem', taxas.taxaEmbalagem ?? 0, const Color(0xFFF59E0B)),
+                  _buildRateGauge('Global', taxas.taxaGlobal ?? 0, const Color(0xFF8B5CF6)),
+                ],
+              ),
+            // Resumo da equipe
+            if (equipe != null && equipe.membrosAtivos != null && equipe.membrosAtivos! > 0) ...[
+              const SizedBox(height: 12),
+              const Divider(height: 1),
+              const SizedBox(height: 6),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildTeamStat('Membros', '${equipe.membrosAtivos}', Icons.people, const Color(0xFF06B6D4)),
+                  _buildTeamStat('Conclusão', '${equipe.taxaConclusaoMedia?.toStringAsFixed(0)}%', Icons.check_circle, const Color(0xFF10B981)),
+                  _buildTeamStat('No prazo', '${equipe.atividadesNoPrazo ?? 0}', Icons.schedule, const Color(0xFF2563EB)),
+                  if ((equipe.atividadesVencidas ?? 0) > 0)
+                    _buildTeamStat('Vencidas', '${equipe.atividadesVencidas}', Icons.warning, const Color(0xFFDC2626)),
+                ],
+              ),
+            ],
+            // Alertas críticos
+            if (alertas != null && alertas.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              const Divider(height: 1),
+              const SizedBox(height: 6),
+              const Text('Alertas', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black54)),
+              const SizedBox(height: 6),
+              ...alertas.take(3).map((alerta) {
+                final gravidadeColor = alerta.gravidade == 'alta' ? const Color(0xFFDC2626) : alerta.gravidade == 'media' ? const Color(0xFFF59E0B) : const Color(0xFF10B981);
+                final gravidadeIcon = alerta.gravidade == 'alta' ? Icons.error : alerta.gravidade == 'media' ? Icons.warning_amber : Icons.info_outline;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(gravidadeIcon, size: 16, color: gravidadeColor),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(alerta.mensagem ?? '', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500), maxLines: 2, overflow: TextOverflow.ellipsis),
+                            if (alerta.loteNome != null)
+                              Text(alerta.loteNome!, style: TextStyle(fontSize: 10, color: Colors.grey[500])),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ],
+          ],
+        ],
+      ),
+    );
+  }
+
+  // ============================================================
+  // HELPERS PARA CARDS EXPANDIDOS
+  // ============================================================
+
+  /// Parse de cor hex string com fallback
+  Color _parseColor(String hex, Color fallback) {
+    try {
+      if (hex.isEmpty) return fallback;
+      String clean = hex.replaceAll('#', '');
+      if (clean.length == 6) clean = 'FF$clean';
+      return Color(int.parse(clean, radix: 16));
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  BoxDecoration _cardDecoration() {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(20),
+      boxShadow: [
+        BoxShadow(offset: const Offset(0, 2), color: Colors.black.withValues(alpha: 0.06), blurRadius: 16, spreadRadius: 0),
+      ],
+    );
+  }
+
+  /// Widget compacto para estado vazio com aviso (cabe em 280px)
+  Widget _buildEmptyState({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String subtitle,
+    required Color buttonColor,
+    String? buttonText,
+    VoidCallback? onButtonPressed,
+  }) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableHeight = constraints.maxHeight;
+        final isCompact = availableHeight < 200;
+
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: EdgeInsets.all(isCompact ? 10 : 14),
+                decoration: BoxDecoration(
+                  color: iconColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  icon,
+                  size: isCompact ? 32 : 38,
+                  color: iconColor,
+                ),
+              ),
+              SizedBox(height: isCompact ? 6 : 8),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: isCompact ? 12 : 13,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey[700],
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: isCompact ? 3 : 4),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  subtitle,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: isCompact ? 10 : 11,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ),
+              if (buttonText != null && onButtonPressed != null && !isCompact) ...[
+                SizedBox(height: 8),
+                SizedBox(
+                  height: 28,
+                  child: ElevatedButton.icon(
+                    onPressed: onButtonPressed,
+                    icon: const Icon(Icons.add, size: 14),
+                    label: Text(
+                      buttonText,
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: buttonColor,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  /// Constrói o card adequado baseado no tipo informado
+  Widget _buildCardByType(String cardType, HomeDashboard dashboard, Size size) {
+    switch (cardType) {
+      case 'lotes':
+        return _buildLotesCard(context, size, dashboard);
+      case 'tarefas':
+        return _buildTarefasCard(context, size, dashboard);
+      case 'producao':
+        return _buildProducaoCard(context, size, dashboard);
+      case 'culturas':
+        return _buildCulturasCard(context, size, dashboard);
+      case 'saude':
+        // Card de saúde só é exibido se houver dados de equipe ou taxas
+        if (dashboard.equipe != null || dashboard.producao?.taxasMedia != null) {
+          return _buildSaudeCard(context, size, dashboard);
+        }
+        // Fallback: exibe um card vazio ou outro card se não houver dados
+        return _buildPlaceholderCard('Sem dados de saúde da produção');
+      default:
+        return _buildPlaceholderCard('Card desconhecido');
+    }
+  }
+
+  /// Card placeholder para quando não há dados ou tipo inválido
+  Widget _buildPlaceholderCard(String message) {
+    return Container(
+      padding: const EdgeInsets.all(40),
+      decoration: _cardDecoration(),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.info_outline, size: 48, color: Colors.grey[400]),
+            const SizedBox(height: 16),
+            Text(
+              message,
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSegmentedProgress(List<HomeLoteStatus> statuses) {
+    final total = statuses.fold<int>(0, (sum, s) => sum + (s.quantidade ?? 0));
+    if (total == 0) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: SizedBox(
+            height: 10,
+            width: double.infinity,
+            child: Row(
+              children: statuses.map((status) {
+                final flex = status.quantidade ?? 0;
+                if (flex == 0) return const SizedBox.shrink();
+                return Flexible(
+                  flex: flex,
+                  child: Container(color: _parseColor(status.cor ?? '', Colors.grey)),
+                );
+              }).where((w) => w != const SizedBox.shrink()).toList(),
+            ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Wrap(
+          spacing: 10,
+          children: statuses.where((s) => (s.quantidade ?? 0) > 0).map((status) {
+            return Text(
+              '${status.status}: ${status.quantidade}',
+              style: const TextStyle(fontSize: 10, color: Colors.black54, fontWeight: FontWeight.w500),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTaskBreakdownItem(String label, int value, Color color) {
+    return Column(
+      children: [
+        Text('$value', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: color)),
+        Text(label, style: const TextStyle(fontSize: 10, color: Colors.black54)),
+      ],
+    );
+  }
+
+  Widget _buildRateIndicator(String label, double value, Color color) {
+    return Column(
+      children: [
+        Text('${value.toStringAsFixed(0)}%', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: color)),
+        Text(label, style: const TextStyle(fontSize: 9, color: Colors.black54)),
+      ],
+    );
+  }
+
+  Widget _buildRateGauge(String label, double value, Color color) {
+    return SizedBox(
+      width: 60,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 50,
+            height: 50,
+            child: CustomPaint(
+              painter: _GaugePainter(value: value, color: color, strokeWidth: 5),
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text('${value.toStringAsFixed(0)}%', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: color)),
+          Text(label, style: const TextStyle(fontSize: 8, color: Colors.black54), textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTeamStat(String label, String value, IconData icon, Color color) {
+    return Column(
+      children: [
+        Icon(icon, size: 18, color: color),
+        const SizedBox(height: 2),
+        Text(value, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: color)),
+        Text(label, style: const TextStyle(fontSize: 9, color: Colors.black54)),
+      ],
+    );
+  }
+
+  /// Formata número para exibição compacta (1.2k, 1.5M)
+  String _formatNumber(double value) {
+    final intValue = value.toInt();
+    if (intValue >= 1000000) {
+      return '${(value / 1000000).toStringAsFixed(1).replaceAll('.0', '')}M';
+    }
+    if (intValue >= 1000) {
+      return '${(value / 1000).toStringAsFixed(1).replaceAll('.0', '')}k';
+    }
+    return intValue.toString();
+  }
+
+  /// Obtém abreviação do mês para exibição compacta
+  String _getMonthAbbreviation(String month) {
+    if (month.isEmpty) return '';
+    const months = {
+      'jan': 'Jan', 'janeiro': 'Jan', 'january': 'Jan',
+      'fev': 'Fev', 'fevereiro': 'Fev', 'february': 'Fev',
+      'mar': 'Mar', 'março': 'Mar', 'march': 'Mar', 'marco': 'Mar',
+      'abr': 'Abr', 'abril': 'Abr', 'april': 'Abr',
+      'mai': 'Mai', 'maio': 'Mai', 'may': 'Mai',
+      'jun': 'Jun', 'junho': 'Jun', 'june': 'Jun',
+      'jul': 'Jul', 'julho': 'Jul', 'july': 'Jul',
+      'ago': 'Ago', 'agosto': 'Ago', 'august': 'Ago',
+      'set': 'Set', 'setembro': 'Set', 'september': 'Set',
+      'out': 'Out', 'outubro': 'Out', 'october': 'Out',
+      'nov': 'Nov', 'novembro': 'Nov', 'november': 'Nov',
+      'dez': 'Dez', 'dezembro': 'Dez', 'december': 'Dez', 'dec': 'Dez',
+    };
+    final lower = month.toLowerCase().trim();
+    return months[lower] ?? month.substring(0, month.length > 3 ? 3 : month.length);
+  }
+
+  Widget _buildMiniTrendChart(List<HomeProducaoMensal> data) {
+    final values = data.map((d) => d.quantidade ?? 0).toList();
+    final labels = data.map((d) => d.mes ?? '').toList();
+    if (values.isEmpty) return const SizedBox.shrink();
+
+    return SizedBox(
+      height: 50,
+      child: CustomPaint(
+        painter: _SparklinePainter(values: values.map((v) => v.toDouble()).toList(), labels: labels, lineColor: const Color(0xFF2563EB), fillColor: const Color(0xFF2563EB).withValues(alpha: 0.13)),
+        size: const Size(double.infinity, 50),
+      ),
+    );
+  }
+
   String _formatCulturas(List<HomeCultura>? culturas) {
     if (culturas == null || culturas.isEmpty) return 'Nenhuma';
     if (culturas.length == 1) {
@@ -2030,25 +3081,7 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  void _nextDashboard() {
-    if (_currentDashboardIndex < _dashboardTitles.length - 1) {
-      HapticFeedback.lightImpact();
-      _dashboardPageController.nextPage(
-        duration: const Duration(milliseconds: 350),
-        curve: Curves.easeInOutCubic,
-      );
-    }
-  }
-
-  void _previousDashboard() {
-    if (_currentDashboardIndex > 0) {
-      HapticFeedback.lightImpact();
-      _dashboardPageController.previousPage(
-        duration: const Duration(milliseconds: 350),
-        curve: Curves.easeInOutCubic,
-      );
-    }
-  }
+  // Métodos de navegação do carousel removidos - agora todos os cards são exibidos simultaneamente
 
   Widget _buildMetricCard(
     BuildContext context,
@@ -2374,33 +3407,142 @@ class HomePageState extends State<HomePage> {
     Get.toNamed(shortcut.route);
   }
 
-  Widget _buildCarouselButton(IconData icon, VoidCallback onTap, bool enabled) {
-    return GestureDetector(
-      onTap: enabled ? onTap : null,
-      child: Container(
-        width: 32,
-        height: 32,
-        decoration: BoxDecoration(
-          color: enabled ? Constants.kPrimaryColor : Colors.grey[300],
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: enabled
-              ? [
-                  BoxShadow(
-                    offset: const Offset(0, 2),
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 4,
-                    spreadRadius: 0,
-                  ),
-                ]
-              : [],
-        ),
-        child: Icon(
-          icon,
-          size: 20,
-          color: enabled ? Colors.white : Colors.grey[600],
-        ),
-      ),
+  // Método removido: botões de carousel não são mais necessários
+}
+
+// ============================================================
+// CUSTOM PAINTERS PARA GAUGES E SPARKLINES
+// ============================================================
+
+class _GaugePainter extends CustomPainter {
+  final double value;
+  final Color color;
+  final double strokeWidth;
+
+  _GaugePainter({
+    required this.value,
+    required this.color,
+    required this.strokeWidth,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = (size.width - strokeWidth) / 2;
+
+    // Fundo
+    final bgPaint = Paint()
+      ..color = Colors.grey[200]!
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
+
+    canvas.drawCircle(center, radius, bgPaint);
+
+    // Progresso
+    final progressPaint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    final sweepAngle = (value / 100) * 2 * 3.14159;
+    canvas.drawArc(
+      Rect.fromCircle(center: center, radius: radius),
+      -3.14159 / 2,
+      sweepAngle,
+      false,
+      progressPaint,
     );
+  }
+
+  @override
+  bool shouldRepaint(covariant _GaugePainter oldDelegate) {
+    return oldDelegate.value != value || oldDelegate.color != color;
+  }
+}
+
+class _SparklinePainter extends CustomPainter {
+  final List<double> values;
+  final List<String>? labels;
+  final Color lineColor;
+  final Color fillColor;
+
+  _SparklinePainter({
+    required this.values,
+    this.labels,
+    required this.lineColor,
+    required this.fillColor,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (values.isEmpty) return;
+
+    final paint = Paint()
+      ..color = lineColor
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke;
+
+    final fillPaint = Paint()
+      ..color = fillColor
+      ..style = PaintingStyle.fill;
+
+    final textPainter = TextPainter(
+      textAlign: TextAlign.center,
+      textDirection: TextDirection.ltr,
+    );
+
+    final maxVal = values.reduce((a, b) => a > b ? a : b);
+    if (maxVal == 0) return;
+
+    final padding = 16.0;
+    final chartWidth = size.width;
+    final chartHeight = size.height - padding;
+
+    // Criar pontos
+    final points = <Offset>[];
+    for (int i = 0; i < values.length; i++) {
+      final x = values.length > 1 ? (i / (values.length - 1)) * chartWidth : chartWidth / 2;
+      final y = chartHeight - (values[i] / maxVal) * chartHeight;
+      points.add(Offset(x, y));
+    }
+
+    // Desenhar área preenchida
+    final fillPath = Path()..moveTo(points[0].dx, chartHeight);
+    for (final point in points) {
+      fillPath.lineTo(point.dx, point.dy);
+    }
+    fillPath.lineTo(points.last.dx, chartHeight);
+    fillPath.close();
+    canvas.drawPath(fillPath, fillPaint);
+
+    // Desenhar linha
+    final linePath = Path()..moveTo(points[0].dx, points[0].dy);
+    for (int i = 1; i < points.length; i++) {
+      linePath.lineTo(points[i].dx, points[i].dy);
+    }
+    canvas.drawPath(linePath, paint);
+
+    // Desenhar labels
+    if (labels != null && labels!.length == values.length) {
+      for (int i = 0; i < labels!.length; i++) {
+        final x = values.length > 1 ? (i / (labels!.length - 1)) * chartWidth : chartWidth / 2;
+        textPainter.text = TextSpan(
+          text: labels![i],
+          style: const TextStyle(fontSize: 8, color: Colors.black54),
+        );
+        textPainter.layout();
+        textPainter.paint(
+          canvas,
+          Offset(x - textPainter.width / 2, chartHeight + 1),
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _SparklinePainter oldDelegate) {
+    return oldDelegate.values != values || oldDelegate.labels != labels;
   }
 }
 

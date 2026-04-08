@@ -25,11 +25,39 @@ class HomeDashboardDatasource implements IHomeDashboardDatasource {
             lotesAtivos
             lotesFinalizados
             taxaConclusao
+            lotesPorStatus {
+              status
+              quantidade
+              cor
+            }
+            lotesComColheitaProxima
+            especiesEmAndamento {
+              nome
+              percentual
+              status
+            }
           }
           tarefas {
             pendentesHoje
             pendentesSemana
             atrasadas
+            porVencimento {
+              hoje
+              estaSemana
+              proximaSemana
+            }
+            porPrioridade {
+              alta
+              media
+              baixa
+            }
+            ultimasTarefas {
+              id
+              titulo
+              loteNome
+              data
+              vencida
+            }
           }
           producao {
             totalPlantasColhidas
@@ -37,10 +65,44 @@ class HomeDashboardDatasource implements IHomeDashboardDatasource {
             lotesComColheitaProxima
             periodoInicio
             periodoFim
+            producaoMensal {
+              mes
+              quantidade
+            }
+            taxasMedia {
+              taxaGerminacao
+              taxaTransplantio
+              taxaEmbalagem
+              taxaGlobal
+            }
+            comparativoPeriodo {
+              plantasColhidas
+              variacaoPercentual
+            }
+            culturaMaisProducao {
+              nome
+              quantidade
+              percentualDoTotal
+            }
           }
           culturas {
             nome
             quantidade
+            cor
+          }
+          equipe {
+            membrosAtivos
+            taxaConclusaoMedia
+            atividadesNoPrazo
+            atividadesVencidas
+          }
+          alertasCritico {
+            tipo
+            mensagem
+            loteId
+            loteNome
+            gravidade
+            data
           }
         }
       }

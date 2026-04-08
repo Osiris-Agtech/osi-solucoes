@@ -55,7 +55,72 @@ abstract class HomeStoreBase with Store {
   @observable
   double dashboardConfidence = 0.0;
 
+  // Navegação do dashboard (um card por vez)
+  @observable
+  int currentCardIndex = 0;
+
+  @observable
+  List<String> cardOrder = [];
+
   final AdaptiveInterfaceService _adaptiveService = AdaptiveInterfaceService();
+
+  @action
+  void nextCard() {
+    if (cardOrder.isEmpty) return;
+    currentCardIndex = (currentCardIndex + 1) % cardOrder.length;
+  }
+
+  @action
+  void previousCard() {
+    if (cardOrder.isEmpty) return;
+    currentCardIndex = (currentCardIndex - 1 + cardOrder.length) % cardOrder.length;
+  }
+
+  @action
+  void goToCard(int index) {
+    if (index >= 0 && index < cardOrder.length) {
+      currentCardIndex = index;
+    }
+  }
+
+  /// Inicializa a ordem dos cards com o recomendado em primeiro
+  void initializeCardOrder() {
+    const allCards = ['lotes', 'tarefas', 'producao', 'culturas', 'saude'];
+
+    // Se não há dashboard recomendado, usa ordem padrão
+    if (adaptiveDashboard == null || dashboardConfidence <= 0.5) {
+      cardOrder = List.from(allCards);
+      currentCardIndex = 0;
+      print('📊 [HOME_STORE] Ordem padrão dos cards: $cardOrder');
+      return;
+    }
+
+    // Mapeia nome do dashboard para tipo de card
+    final recommendedCard = _mapDashboardToCard(adaptiveDashboard!);
+
+    if (recommendedCard != null && allCards.contains(recommendedCard)) {
+      // Coloca o recomendado primeiro
+      cardOrder = [recommendedCard];
+      cardOrder.addAll(allCards.where((card) => card != recommendedCard));
+      currentCardIndex = 0;
+      print('📊 [HOME_STORE] Card recomendado "$recommendedCard" em primeiro. Ordem: $cardOrder');
+    } else {
+      cardOrder = List.from(allCards);
+      currentCardIndex = 0;
+      print('📊 [HOME_STORE] Ordem padrão dos cards (não foi possível mapear recomendado): $cardOrder');
+    }
+  }
+
+  /// Mapeia o nome do dashboard adaptativo para o tipo de card correspondente
+  String? _mapDashboardToCard(String dashboardName) {
+    final lower = dashboardName.toLowerCase();
+    if (lower.contains('lote') || lower.contains('produção') || lower.contains('producao')) return 'lotes';
+    if (lower.contains('tarefa') || lower.contains('task')) return 'tarefas';
+    if (lower.contains('produção') || lower.contains('producao') || lower.contains('eco')) return 'producao';
+    if (lower.contains('cultura') || lower.contains('cultivar')) return 'culturas';
+    if (lower.contains('saúde') || lower.contains('saude') || lower.contains('health') || lower.contains('equipe')) return 'saude';
+    return null;
+  }
 
   @action
   Future<void> loadAdaptiveInterface() async {
@@ -92,11 +157,16 @@ abstract class HomeStoreBase with Store {
           }
         },
       );
+      
+      // Inicializa a ordem dos cards após carregar interface adaptativa
+      initializeCardOrder();
     } catch (e, stackTrace) {
       // Fallback para atalhos padrão
       print('❌ [HOME_STORE] Exceção ao carregar interface: $e');
       print('   StackTrace: $stackTrace');
       recommendedShortcuts = _getDefaultShortcuts();
+      // Garante que a ordem dos cards seja inicializada mesmo em caso de erro
+      initializeCardOrder();
     } finally {
       isLoadingShortcuts = false;
       print('🏠 [HOME_STORE] Carregamento finalizado');
@@ -206,6 +276,10 @@ abstract class HomeStoreBase with Store {
         (data) {
           dashboard = data;
           hasError = false;
+          // Inicializa a ordem dos cards quando o dashboard é carregado
+          if (cardOrder.isEmpty) {
+            initializeCardOrder();
+          }
         },
       );
     } catch (e) {

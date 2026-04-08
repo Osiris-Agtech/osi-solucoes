@@ -170,6 +170,38 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
+  late final _$currentCardIndexAtom =
+      Atom(name: 'HomeStoreBase.currentCardIndex', context: context);
+
+  @override
+  int get currentCardIndex {
+    _$currentCardIndexAtom.reportRead();
+    return super.currentCardIndex;
+  }
+
+  @override
+  set currentCardIndex(int value) {
+    _$currentCardIndexAtom.reportWrite(value, super.currentCardIndex, () {
+      super.currentCardIndex = value;
+    });
+  }
+
+  late final _$cardOrderAtom =
+      Atom(name: 'HomeStoreBase.cardOrder', context: context);
+
+  @override
+  List<String> get cardOrder {
+    _$cardOrderAtom.reportRead();
+    return super.cardOrder;
+  }
+
+  @override
+  set cardOrder(List<String> value) {
+    _$cardOrderAtom.reportWrite(value, super.cardOrder, () {
+      super.cardOrder = value;
+    });
+  }
+
   late final _$loadAdaptiveInterfaceAsyncAction =
       AsyncAction('HomeStoreBase.loadAdaptiveInterface', context: context);
 
@@ -213,6 +245,39 @@ mixin _$HomeStore on HomeStoreBase, Store {
   }
 
   @override
+  void nextCard() {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.nextCard');
+    try {
+      return super.nextCard();
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void previousCard() {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.previousCard');
+    try {
+      return super.previousCard();
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void goToCard(int index) {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.goToCard');
+    try {
+      return super.goToCard(index);
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isNotified: ${isNotified},
@@ -224,7 +289,9 @@ dashboard: ${dashboard},
 recommendedShortcuts: ${recommendedShortcuts},
 isLoadingShortcuts: ${isLoadingShortcuts},
 adaptiveDashboard: ${adaptiveDashboard},
-dashboardConfidence: ${dashboardConfidence}
+dashboardConfidence: ${dashboardConfidence},
+currentCardIndex: ${currentCardIndex},
+cardOrder: ${cardOrder}
     ''';
   }
 }
