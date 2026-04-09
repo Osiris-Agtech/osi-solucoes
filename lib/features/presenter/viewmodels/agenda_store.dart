@@ -8,6 +8,7 @@ import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/agenda/agenda_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
 
 import '../../data/repositories/cadernoCampo/cadeno_campo_repository.dart';
 import '../models/lote/lote_model.dart';
@@ -240,6 +241,8 @@ abstract class AgendaStoreBase with Store {
       (data) async {
         toastSuccess(message: 'Atividade marcada como feita!');
         await buscarAtividades();
+        // Atualiza o dashboard da home
+        GetIt.I<HomeStore>().carregarHome();
       },
     );
 
@@ -262,6 +265,8 @@ abstract class AgendaStoreBase with Store {
       (data) async {
         await buscarAtividades();
         toastSuccess(message: 'Atividade deletada com sucesso!');
+        // Atualiza o dashboard da home
+        GetIt.I<HomeStore>().carregarHome();
       },
     );
 
@@ -335,6 +340,8 @@ abstract class AgendaStoreBase with Store {
       (data) async {
         toastSuccess(message: 'Atividade atualizada com sucesso!');
         await buscarAtividades();
+        // Atualiza o dashboard da home
+        GetIt.I<HomeStore>().carregarHome();
       },
     );
 
@@ -366,6 +373,8 @@ abstract class AgendaStoreBase with Store {
       (data) async {
         toastSuccess(message: 'Atividade cadastrada com sucesso!');
         await buscarAtividades();
+        // Atualiza o dashboard da home
+        GetIt.I<HomeStore>().carregarHome();
       },
     );
 
