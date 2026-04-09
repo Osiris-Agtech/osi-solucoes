@@ -1045,7 +1045,7 @@ class HomePageState extends State<HomePage> {
                                   final currentIndex = store.currentCardIndex;
                                   final total = store.cardOrder.length;
                                   return Text(
-                                    '$currentIndex de $total • Deslize para navegar',
+                                    '${currentIndex + 1} de $total • Deslize para navegar',
                                     style: TextStyle(
                                       fontSize: 11,
                                       color: Colors.grey[500],
