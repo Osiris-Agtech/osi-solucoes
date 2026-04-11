@@ -1,20 +1,57 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/core/services/navigation_resource_args.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 
 class NavigationAnalytics {
   static FirebaseAnalytics? _analytics;
+  static String? _currentSessionId;
 
-  /// Obtém instância do Firebase Analytics de forma lazy
+  static void onGetRouting(Routing? routing) {
+    if (routing == null) {
+      return;
+    }
+    if (routing.isDialog == true || routing.isBottomSheet == true) {
+      return;
+    }
+    if (routing.current.isEmpty) {
+      return;
+    }
+    final args = routing.args;
+    NavigationResourceArgs? resource;
+    if (args is NavigationResourceArgs) {
+      resource = args;
+    }
+    
+    // Registra navegação no Firebase Analytics (sempre, para todos os modos)
+    logNavigation(
+      routing.current,
+      resourceId: resource?.resourceId,
+      resourceType: resource?.resourceType,
+      resourceName: resource?.resourceName,
+    );
+    
+    // Registra no Firestore APENAS se houver sessão ativa (modo INSTANT)
+    // GRADUAL e STATIC não salvam navegações no Firestore
+    if (_currentSessionId != null) {
+      _logToFirestore(
+        routing.current,
+        resourceId: resource?.resourceId,
+        resourceType: resource?.resourceType,
+        resourceName: resource?.resourceName,
+      );
+    }
+  }
+
   static FirebaseAnalytics? get _analyticsInstance {
     try {
-      // Verifica se Firebase está inicializado
       Firebase.app();
       _analytics ??= FirebaseAnalytics.instance;
       return _analytics;
     } catch (e) {
-      // Firebase não inicializado, retorna null
       return null;
     }
   }
@@ -29,8 +66,8 @@ class NavigationAnalytics {
     try {
       final analytics = _analyticsInstance;
       if (analytics == null) {
-        // Firebase não inicializado, apenas retorna sem erro
-        print('📊 [ANALYTICS] Firebase não disponível, navegação não registrada: $screenName');
+        print(
+            '📊 [ANALYTICS] Firebase não disponível, navegação não registrada: $screenName');
         return;
       }
 
@@ -39,12 +76,13 @@ class NavigationAnalytics {
       final userId = (usuario?.id)?.toString() ?? 'anonymous';
 
       print('📊 [ANALYTICS] Registrando navegação:');
-      print('   └─ Tela: $screenName');
-      print('   └─ Hora: ${now.hour}h');
-      print('   └─ Dia da semana: ${now.weekday}');
-      print('   └─ User ID: $userId');
+      print(' └─ Tela: $screenName');
+      print(' └─ Hora: ${now.hour}h');
+      print(' └─ Dia da semana: ${now.weekday}');
+      print(' └─ User ID: $userId');
       if (resourceId != null) {
-        print('   └─ Recurso: $resourceType #$resourceId${resourceName != null ? ' ($resourceName)' : ''}');
+        print(
+            ' └─ Recurso: $resourceType #$resourceId${resourceName != null ? ' ($resourceName)' : ''}');
       }
 
       final parameters = {
@@ -55,7 +93,6 @@ class NavigationAnalytics {
         'timestamp': now.toIso8601String(),
       };
 
-      // Adicionar parâmetros de recurso se disponíveis
       if (resourceId != null) {
         parameters['resource_id'] = resourceId;
       }
@@ -70,10 +107,21 @@ class NavigationAnalytics {
         name: 'navigation_click',
         parameters: parameters,
       );
-      
-      print('   └─ ✅ Navegação registrada no Firebase Analytics');
+
+      print(' └─ ✅ Navegação registrada no Firebase Analytics');
+
+      // Registra no Firestore APENAS se houver sessão ativa (modo INSTANT)
+      if (_currentSessionId != null) {
+        await _logToFirestore(
+          screenName,
+          resourceId: resourceId,
+          resourceType: resourceType,
+          resourceName: resourceName,
+        );
+      } else {
+        print('   └─ ℹ️ Sem sessão ativa (GRADUAL/STATIC), não salvo no Firestore');
+      }
     } catch (e) {
-      // Log erro mas não quebra o app
       print('❌ [ANALYTICS] Erro ao logar navegação: $e');
     }
   }
@@ -83,13 +131,14 @@ class NavigationAnalytics {
     try {
       final analytics = _analyticsInstance;
       if (analytics == null) {
-        print('📊 [ANALYTICS] Firebase não disponível, clique em atalho não registrado');
+        print(
+            '📊 [ANALYTICS] Firebase não disponível, clique em atalho não registrado');
         return;
       }
 
       print('📊 [ANALYTICS] Registrando clique em atalho inteligente:');
-      print('   └─ Rota: $route');
-      print('   └─ Confiança: ${(confidence * 100).toStringAsFixed(1)}%');
+      print(' └─ Rota: $route');
+      print(' └─ Confiança: ${(confidence * 100).toStringAsFixed(1)}%');
 
       await analytics.logEvent(
         name: 'smart_shortcut_click',
@@ -98,8 +147,8 @@ class NavigationAnalytics {
           'confidence': confidence,
         },
       );
-      
-      print('   └─ ✅ Clique registrado no Firebase Analytics');
+
+      print(' └─ ✅ Clique registrado no Firebase Analytics');
     } catch (e) {
       print('❌ [ANALYTICS] Erro ao logar clique em atalho: $e');
     }
@@ -110,13 +159,96 @@ class NavigationAnalytics {
     try {
       final analytics = _analyticsInstance;
       if (analytics == null) {
-        // Firebase não inicializado, apenas retorna sem erro
         return;
       }
 
       await analytics.setUserId(id: userId);
     } catch (e) {
       print('Erro ao definir userId: $e');
+    }
+  }
+
+  static Future<void> startTestSession(String sessionId) async {
+    try {
+      Firebase.app();
+      _currentSessionId = sessionId;
+
+      final usuario = GetIt.I<AuthController>().usuario;
+      final userId = (usuario?.id)?.toString() ?? 'anonymous';
+
+      await FirebaseFirestore.instance
+          .collection('sessionNavigations')
+          .doc(sessionId)
+          .set({
+        'sessionId': sessionId,
+        'userId': userId,
+        'startedAt': FieldValue.serverTimestamp(),
+        'status': 'active',
+      });
+
+      print('📊 [ANALYTICS] Sessão de teste iniciada: $sessionId');
+    } catch (e) {
+      print('📊 [ANALYTICS] Firebase não disponível, sessão não iniciada: $e');
+    }
+  }
+
+  static Future<void> endTestSession() async {
+    if (_currentSessionId == null) {
+      print('📊 [ANALYTICS] Nenhuma sessão ativa para finalizar');
+      return;
+    }
+
+    try {
+      Firebase.app();
+
+      await FirebaseFirestore.instance
+          .collection('sessionNavigations')
+          .doc(_currentSessionId)
+          .update({
+        'status': 'completed',
+        'endedAt': FieldValue.serverTimestamp(),
+      });
+
+      print('📊 [ANALYTICS] Sessão de teste finalizada: $_currentSessionId');
+      _currentSessionId = null;
+    } catch (e) {
+      print('📊 [ANALYTICS] Erro ao finalizar sessão: $e');
+      _currentSessionId = null;
+    }
+  }
+
+  static Future<void> _logToFirestore(
+    String screenName, {
+    String? resourceId,
+    String? resourceType,
+    String? resourceName,
+  }) async {
+    if (_currentSessionId == null) {
+      print('   └─ ℹ️ Sem sessão ativa, navegação NÃO salva no Firestore: $screenName');
+      return;
+    }
+
+    try {
+      Firebase.app();
+      final now = DateTime.now();
+
+      await FirebaseFirestore.instance
+          .collection('sessionNavigations')
+          .doc(_currentSessionId)
+          .collection('navigations')
+          .add({
+        'screen': screenName,
+        'hour': now.hour,
+        'dayOfWeek': now.weekday,
+        'timestamp': FieldValue.serverTimestamp(),
+        if (resourceId != null) 'resourceId': resourceId,
+        if (resourceType != null) 'resourceType': resourceType,
+        if (resourceName != null) 'resourceName': resourceName,
+      });
+
+      print('📊 [ANALYTICS] Navegação salva no Firestore (sessão INSTANT): $screenName');
+    } catch (e) {
+      print('📊 [ANALYTICS] Erro ao salvar navegação no Firestore: $e');
     }
   }
 }

@@ -41,6 +41,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
         child: Scaffold(
           backgroundColor: Constants.kCardColor,
           floatingActionButton: FloatingActionButton(
+            heroTag: 'fab_gerenciar_equipe',
             onPressed: () {
               Get.toNamed(Routes.cadastrarUsuarioPage);
             },

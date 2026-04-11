@@ -19,6 +19,7 @@ Scaffold editAtivPage(BuildContext context, ProtocoloStore store) {
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         FloatingActionButton(
+          heroTag: 'fab_edit_ativ_scroll',
           mini: true,
           onPressed: () {
             if (scrollController.hasClients) {
@@ -37,6 +38,7 @@ Scaffold editAtivPage(BuildContext context, ProtocoloStore store) {
         ),
         const SizedBox(width: 16),
         FloatingActionButton(
+          heroTag: 'fab_edit_ativ_add',
           onPressed: () {
             store.limparAtividadeBottomSheetDetalhes();
             store.limparFaseDetalhesBottomSheet();

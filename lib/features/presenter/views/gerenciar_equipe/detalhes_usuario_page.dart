@@ -42,6 +42,8 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
       child: SafeArea(
         child: Scaffold(
           floatingActionButton: FloatingActionButton.extended(
+            heroTag:
+                'fab_detalhes_usuario_${store.usuarioSelecionado.id ?? 'novo'}',
             backgroundColor: Constants.kPrimaryColor,
             label: const Text(
               'Salvar',

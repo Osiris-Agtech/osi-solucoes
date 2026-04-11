@@ -49,6 +49,7 @@ import '../views/relatorios/relatorios_page.dart';
 import '../views/relatorios/produtividade_setor/relatorio_produtividade_setor_page.dart';
 import '../views/relatorios/desempenho_equipe/relatorio_desempenho_equipe_page.dart';
 import '../views/relatorios/agenda_tarefas/relatorio_agenda_tarefas_page.dart';
+import '../views/adaptive_admin/adaptive_admin_page.dart';
 
 class AppPages {
   static final List<GetPage> routes = [
@@ -328,6 +329,11 @@ class AppPages {
     GetPage(
       name: Routes.relatorioAgendaTarefasPage,
       page: () => const RelatorioAgendaTarefasPage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.adaptiveAdminPage,
+      page: () => const AdaptiveAdminPage(),
       transition: Transition.rightToLeft,
     ),
   ];

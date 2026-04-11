@@ -46,6 +46,7 @@ class _NewFloatingActionButtonState extends State<NewFloatingActionButton> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 18.0),
       child: FloatingActionButton(
+        heroTag: 'fab_nivel_${widget.nivel}',
         onPressed: _navigateToCadastro,
         backgroundColor: Constants.kPrimaryColor,
         child: const Icon(

@@ -18,6 +18,7 @@ import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dar
 
 import '../../../../core/services/local_storage.dart';
 import '../../../../core/services/navigation_analytics.dart';
+import '../../../../core/services/navigation_resource_args.dart';
 import '../../viewmodels/auth_controller.dart';
 import '../../viewmodels/home_store.dart';
 import '../../viewmodels/lote_store.dart';
@@ -677,8 +678,6 @@ class HomePageState extends State<HomePage> {
                             "assets/icons/gerenciar_icon.svg",
                             const Color(0xFF6366F1),
                             onTap: () {
-                              NavigationAnalytics.logNavigation(
-                                  Routes.gerenciarEquipePage);
                               Get.toNamed(Routes.gerenciarEquipePage);
                             },
                           ),
@@ -690,8 +689,6 @@ class HomePageState extends State<HomePage> {
                             "assets/icons/gerenciar_icon.svg",
                             const Color(0xFF6366F1),
                             onTap: () {
-                              NavigationAnalytics.logNavigation(
-                                  Routes.gerenciarEquipePage);
                               Get.toNamed(Routes.gerenciarEquipePage);
                             },
                           ),
@@ -703,8 +700,6 @@ class HomePageState extends State<HomePage> {
                             "assets/icons/relatorio_icon.svg",
                             const Color(0xFF8B5CF6),
                             onTap: () {
-                              NavigationAnalytics.logNavigation(
-                                  Routes.historicoPage);
                               Get.toNamed(Routes.historicoPage);
                             },
                           ),
@@ -716,8 +711,6 @@ class HomePageState extends State<HomePage> {
                             "assets/icons/inventario_icon.svg",
                             const Color(0xFF06B6D4),
                             onTap: () {
-                              NavigationAnalytics.logNavigation(
-                                  Routes.agendaPage);
                               Get.toNamed(Routes.agendaPage);
                             },
                           ),
@@ -729,8 +722,6 @@ class HomePageState extends State<HomePage> {
                             "assets/icons/relatorio_icon.svg",
                             const Color(0xFF10B981),
                             onTap: () {
-                              NavigationAnalytics.logNavigation(
-                                  Routes.protocoloPage);
                               Get.toNamed(Routes.protocoloPage);
                             },
                           ),
@@ -742,8 +733,6 @@ class HomePageState extends State<HomePage> {
                             "assets/icons/relatorio_icon.svg",
                             const Color(0xFFE11D48),
                             onTap: () {
-                              NavigationAnalytics.logNavigation(
-                                  Routes.relatoriosPage);
                               Get.toNamed(Routes.relatoriosPage);
                             },
                           ),
@@ -917,7 +906,6 @@ class HomePageState extends State<HomePage> {
                                     'lotes': 'Lotes em Produção',
                                     'tarefas': 'Tarefas Pendentes',
                                     'producao': 'Produção Total',
-                                    'culturas': 'Top Culturas',
                                     'saude': 'Saúde da Produção',
                                   };
                                   final currentIndex = store.currentCardIndex;
@@ -1721,7 +1709,6 @@ class HomePageState extends State<HomePage> {
         "assets/icons/etapa.svg",
         const Color(0xFF10B981),
         onTap: () {
-          NavigationAnalytics.logNavigation(Routes.protocoloPage);
           Get.toNamed(Routes.protocoloPage);
         },
         compact: compact,
@@ -1736,7 +1723,6 @@ class HomePageState extends State<HomePage> {
         "assets/icons/inventario_icon.svg",
         const Color(0xFF06B6D4),
         onTap: () {
-          NavigationAnalytics.logNavigation(Routes.agendaPage);
           Get.toNamed(Routes.agendaPage);
         },
         compact: compact,
@@ -1776,7 +1762,6 @@ class HomePageState extends State<HomePage> {
         "assets/icons/gerenciar_icon.svg",
         const Color(0xFF6366F1),
         onTap: () {
-          NavigationAnalytics.logNavigation(Routes.gerenciarEquipePage);
           Get.toNamed(Routes.gerenciarEquipePage);
         },
         compact: compact,
@@ -1791,7 +1776,6 @@ class HomePageState extends State<HomePage> {
         "assets/icons/relatorio_icon.svg",
         const Color(0xFF8B5CF6),
         onTap: () {
-          NavigationAnalytics.logNavigation(Routes.historicoPage);
           Get.toNamed(Routes.historicoPage);
         },
         compact: compact,
@@ -1822,7 +1806,6 @@ class HomePageState extends State<HomePage> {
       onTap: onTap ?? () {
         if (moduleId != null) {
           modulosStore.setPageViewController(moduleId);
-          NavigationAnalytics.logNavigation(Routes.modulosPage);
           Get.toNamed(Routes.modulosPage);
         }
       },
@@ -2512,160 +2495,6 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  /// Card 4: Top Culturas (expandido)
-  Widget _buildCulturasCard(BuildContext context, Size size, HomeDashboard dashboard) {
-    final culturas = dashboard.culturas;
-    final bool semDados = culturas == null || culturas.isEmpty;
-
-    // Verifica se está zerado (todas as culturas com quantidade 0)
-    final bool estaZerado = !semDados && culturas.every((c) => (c.quantidade ?? 0) == 0);
-    final maxQtd = !estaZerado && !semDados
-        ? culturas.map((c) => c.quantidade ?? 0).reduce((a, b) => a > b ? a : b)
-        : 0;
-
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: _cardDecoration(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF8B5CF6).withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Icon(
-                  semDados ? Icons.warning_amber_rounded : Icons.local_florist,
-                  color: semDados ? Colors.orange[600] : const Color(0xFF8B5CF6),
-                  size: 26,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Top Culturas', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-                    Text(
-                      semDados
-                          ? 'Nenhuma cultura registrada'
-                          : estaZerado
-                              ? 'Nenhuma produção registrada'
-                              : '${culturas.length} culturas em produção',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: semDados ? Colors.orange[700] : estaZerado ? Colors.orange[700] : Colors.grey[600],
-                        fontStyle: (semDados || estaZerado) ? FontStyle.italic : FontStyle.normal,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-
-          // Estado vazio quando sem dados
-          if (semDados)
-            Expanded(
-              child: _buildEmptyState(
-                icon: Icons.local_florist_outlined,
-                iconColor: Colors.orange[600]!,
-                title: 'Nenhuma cultura cadastrada',
-                subtitle: 'Cadastre culturas nos lotes para visualizar o ranking de produção aqui',
-                buttonColor: const Color(0xFF8B5CF6),
-                buttonText: 'Cadastrar Cultura',
-                onButtonPressed: () {
-                  // TODO: Navegar para tela de cadastro de lotes/culturas
-                },
-              ),
-            )
-          else if (estaZerado)
-            Expanded(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.local_florist_outlined,
-                      size: 48,
-                      color: Colors.purple[300],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'Aguardando dados de culturas',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Nenhuma cultura registrada no período',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[500],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          else ...[
-            // Gráfico de barras verticais
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: culturas.map((cultura) {
-                    final percentual = maxQtd > 0 ? ((cultura.quantidade ?? 0) / maxQtd).toDouble() : 0.0;
-                    final cor = _parseColor(cultura.cor ?? '', const Color(0xFF8B5CF6));
-                    return Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            '${cultura.quantidade}',
-                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
-                            maxLines: 1,
-                          ),
-                          const SizedBox(height: 4),
-                          Container(
-                            width: double.infinity,
-                            height: (100 * percentual).clamp(8.0, 100.0),
-                            decoration: BoxDecoration(
-                              color: cor,
-                              borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            cultura.nome ?? '',
-                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
   /// Card 5: Saúde da Produção (NOVO)
   Widget _buildSaudeCard(BuildContext context, Size size, HomeDashboard dashboard) {
     final taxas = dashboard.producao?.taxasMedia;
@@ -2915,8 +2744,6 @@ class HomePageState extends State<HomePage> {
         return _buildTarefasCard(context, size, dashboard);
       case 'producao':
         return _buildProducaoCard(context, size, dashboard);
-      case 'culturas':
-        return _buildCulturasCard(context, size, dashboard);
       case 'saude':
         // Card de saúde só é exibido se houver dados de equipe ou taxas
         if (dashboard.equipe != null || dashboard.producao?.taxasMedia != null) {
@@ -3272,7 +3099,6 @@ class HomePageState extends State<HomePage> {
         if (shortcut.resourceId != null && shortcut.resourceType != null) {
           _navigateWithResource(shortcut);
         } else {
-          NavigationAnalytics.logNavigation(shortcut.route);
           Get.toNamed(shortcut.route);
         }
       },
@@ -3395,23 +3221,21 @@ class HomePageState extends State<HomePage> {
     if (shortcut.resourceType == 'lote' && shortcut.resourceId != null) {
       final id = int.tryParse(shortcut.resourceId!);
       if (id == null) {
-        // resourceId inválido — fallback para navegação normal
-        NavigationAnalytics.logNavigation(shortcut.route);
         Get.toNamed(shortcut.route);
         return;
       }
 
-      NavigationAnalytics.logNavigation(
-        Routes.detalhesLotePage,
-        resourceId: shortcut.resourceId,
-        resourceType: 'lote',
-        resourceName: shortcut.resourceName,
-      );
-
       final loteStore = GetIt.I<LoteStore>();
       final success = await loteStore.buscarLotePorId(id);
       if (success) {
-        Get.toNamed(Routes.detalhesLotePage);
+        Get.toNamed(
+          Routes.detalhesLotePage,
+          arguments: NavigationResourceArgs(
+            resourceId: shortcut.resourceId,
+            resourceType: 'lote',
+            resourceName: shortcut.resourceName,
+          ),
+        );
       }
       return;
     }
@@ -3419,26 +3243,23 @@ class HomePageState extends State<HomePage> {
     if (shortcut.resourceType == 'setor' && shortcut.resourceId != null) {
       final id = int.tryParse(shortcut.resourceId!);
       if (id == null) {
-        NavigationAnalytics.logNavigation(shortcut.route);
         Get.toNamed(shortcut.route);
         return;
       }
 
-      NavigationAnalytics.logNavigation(
-        Routes.lotePage,
-        resourceId: shortcut.resourceId,
-        resourceType: 'setor',
-        resourceName: shortcut.resourceName,
-      );
-
       GetIt.I<LoteStore>()
           .setSetorSelecionado(Setor(id: id, nome: shortcut.resourceName));
-      Get.toNamed(Routes.lotePage);
+      Get.toNamed(
+        Routes.lotePage,
+        arguments: NavigationResourceArgs(
+          resourceId: shortcut.resourceId,
+          resourceType: 'setor',
+          resourceName: shortcut.resourceName,
+        ),
+      );
       return;
     }
 
-    // Fallback: navegação normal para rotas sem recurso específico
-    NavigationAnalytics.logNavigation(shortcut.route);
     Get.toNamed(shortcut.route);
   }
 

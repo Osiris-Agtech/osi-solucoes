@@ -46,4 +46,5 @@ abstract class Routes {
   static const relatorioProdutividadeSetorPage = '/relatorioProdutividadeSetorPage';
   static const relatorioDesempenhoEquipePage = '/relatorioDesempenhoEquipePage';
   static const relatorioAgendaTarefasPage = '/relatorioAgendaTarefasPage';
+  static const adaptiveAdminPage = '/adaptiveAdminPage';
 }

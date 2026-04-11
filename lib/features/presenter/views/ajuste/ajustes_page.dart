@@ -101,6 +101,9 @@ class AjustesPageState extends State<AjustesPage> {
                             Get.offNamedUntil(
                                 Routes.homePage, (route) => false);
                           },
+                          onSecretTriggered: () {
+                            Get.toNamed(Routes.adaptiveAdminPage);
+                          },
                         ),
                         const SizedBox(
                           height: 30,

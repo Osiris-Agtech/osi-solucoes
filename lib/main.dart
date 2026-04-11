@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/services/navigation_analytics.dart';
 import 'package:get/get.dart';
 import 'package:osi_solucoes/core/services/auth_service.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
@@ -88,6 +89,7 @@ class AppWidget extends StatelessWidget {
           ),
           initialRoute: Routes.splashPage,
           getPages: AppPages.routes,
+          routingCallback: NavigationAnalytics.onGetRouting,
           builder: (context, child) {
             return ResponsiveBreakpoints.builder(
               child: child!,

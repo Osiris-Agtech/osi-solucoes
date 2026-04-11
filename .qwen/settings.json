@@ -8,7 +8,10 @@
       "Bash(git rm *)",
       "Bash(fvm *)",
       "Bash(dart *)",
-      "Bash(.fvm/flutter/bin/flutter *)"
+      "Bash(.fvm/flutter/bin/flutter *)",
+      "Bash(git show *)",
+      "Bash(git checkout *)",
+      "Bash(git stash)"
     ]
   },
   "$version": 3

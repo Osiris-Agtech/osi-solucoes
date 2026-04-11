@@ -17,7 +17,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/finalizar_page/bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/components/topAppBarArea.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
-import 'package:osi_solucoes/core/services/navigation_analytics.dart';
+import 'package:osi_solucoes/core/services/navigation_resource_args.dart';
 
 class LotePage extends StatefulWidget {
   const LotePage({super.key});
@@ -453,14 +453,14 @@ class _CardLoteState extends State<CardLote> {
       highlightColor: Colors.transparent,
       onTap: () {
         store.selecionarLote(widget.lote);
-        // Rastrear navegação com ID e nome do recurso
-        NavigationAnalytics.logNavigation(
+        Get.toNamed(
           Routes.detalhesLotePage,
-          resourceId: widget.lote.id?.toString(),
-          resourceType: 'lote',
-          resourceName: widget.lote.nome,
+          arguments: NavigationResourceArgs(
+            resourceId: widget.lote.id?.toString(),
+            resourceType: 'lote',
+            resourceName: widget.lote.nome,
+          ),
         );
-        Get.toNamed(Routes.detalhesLotePage);
       },
       child: Card(
         elevation: 2,

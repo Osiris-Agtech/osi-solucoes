@@ -56,6 +56,7 @@ class AgendaPageState extends State<AgendaPage> {
         child: Scaffold(
           backgroundColor: Constants.kBackgroundColor,
           floatingActionButton: FloatingActionButton(
+            heroTag: 'fab_agenda',
             onPressed: () {
               store.limparDadosDaAtividade();
               store.setShowEditPage(true);

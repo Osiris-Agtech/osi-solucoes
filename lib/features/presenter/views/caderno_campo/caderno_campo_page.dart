@@ -14,7 +14,7 @@ import 'package:osi_solucoes/features/presenter/views/home/components/top_app_ba
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/constants.dart';
-import '../../../../core/services/navigation_analytics.dart';
+import '../../../../core/services/navigation_resource_args.dart';
 import '../../viewmodels/caderno_campo_store.dart';
 
 class CadernoCampoPage extends StatefulWidget {
@@ -337,14 +337,14 @@ class _CardLoteState extends State<CardLote> {
       highlightColor: Colors.transparent,
       onTap: () {
         store.setLoteSelecionado(widget.lote);
-        // Rastrear navegação com ID e nome do recurso
-        NavigationAnalytics.logNavigation(
+        Get.toNamed(
           Routes.detalhesCadernoCampoPage,
-          resourceId: widget.lote.id?.toString(),
-          resourceType: 'caderno_campo',
-          resourceName: widget.lote.nome,
+          arguments: NavigationResourceArgs(
+            resourceId: widget.lote.id?.toString(),
+            resourceType: 'caderno_campo',
+            resourceName: widget.lote.nome,
+          ),
         );
-        Get.toNamed(Routes.detalhesCadernoCampoPage);
       },
       child: Card(
         elevation: 2,

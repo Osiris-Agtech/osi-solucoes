@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/core/services/navigation_analytics.dart';
+import 'package:osi_solucoes/core/services/navigation_resource_args.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/detalhes_reservatorio_page.dart';
 
 Padding reservatorioItem(int index, ReservatoriosStore store) {
   return Padding(
@@ -22,15 +21,14 @@ Padding reservatorioItem(int index, ReservatoriosStore store) {
       onTap: () {
         final reservatorio = store.searchReservatorio[index];
         store.setReservatorioDetalhes(reservatorio);
-        // Rastrear navegação com ID e nome do recurso
-        NavigationAnalytics.logNavigation(
+        Get.toNamed(
           Routes.detalhesReservatorio,
-          resourceId: reservatorio.id?.toString(),
-          resourceType: 'reservatorio',
-          resourceName: reservatorio.nome,
+          arguments: NavigationResourceArgs(
+            resourceId: reservatorio.id?.toString(),
+            resourceType: 'reservatorio',
+            resourceName: reservatorio.nome,
+          ),
         );
-        // Get.toNamed(Routes.detalhesReservatorio);
-        Get.to(() => const DetalhesReservatorio());
       },
       child: Card(
         shape: RoundedRectangleBorder(

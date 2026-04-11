@@ -94,13 +94,12 @@ abstract class HomeStoreBase with Store {
     'Lotes em Produção': 'lotes',
     'Tarefas Pendentes': 'tarefas',
     'Produção Total': 'producao',
-    'Top Culturas': 'culturas',
     'Saúde das Equipes': 'saude',
   };
 
   /// Inicializa a ordem dos cards com o recomendado em primeiro
   void initializeCardOrder() {
-    const allCards = ['lotes', 'tarefas', 'producao', 'culturas', 'saude'];
+    const allCards = ['lotes', 'tarefas', 'producao', 'saude'];
 
     // Determina o card recomendado
     // Prioridade 1: cardType direto da API (novo contrato)

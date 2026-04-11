@@ -2,13 +2,17 @@ import 'package:dio/dio.dart';
 import 'package:graphql/client.dart';
 
 import '../../core/constants/constants.dart';
+import '../../core/services/local_storage.dart';
 
 class GraphQLAPI {
-  final authLink = AuthLink(
-    getToken: () async => 'Bearer \$YOUR_PERSONAL_ACCESS_TOKEN',
-  ).concat(HttpLink(Constants.stagingUrl));
-
   GraphQLClient getGraphQLClient() {
+    final authLink = AuthLink(
+      getToken: () async {
+        final token = await LocalStorage().getToken();
+        return token != null ? 'Bearer $token' : null;
+      },
+    ).concat(HttpLink(Constants.stagingUrl));
+
     return GraphQLClient(
       cache: GraphQLCache(),
       link: authLink,

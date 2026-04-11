@@ -46,6 +46,7 @@ class _SolucaoPage extends State<SolucaoPage> {
       child: SafeArea(
         child: Scaffold(
           floatingActionButton: FloatingActionButton(
+            heroTag: 'fab_solucao',
             onPressed: () {
               Get.to(
                 () => const CadastrarSolucaoPage(),

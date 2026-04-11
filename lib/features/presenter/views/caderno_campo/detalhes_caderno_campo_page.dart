@@ -56,6 +56,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 18.0),
             child: FloatingActionButton(
+              heroTag: 'fab_detalhes_caderno_campo',
               onPressed: () {
                 Get.toNamed(Routes.cadastroCadernoCampoPage);
               },

@@ -24,8 +24,14 @@ class AdaptiveInterfaceService {
   }
 
   /// Busca interface adaptativa (Dashboard + Atalhos) do Cloud Function
-  Future<Either<Failure, AdaptiveInterfaceResponse>>
-      getAdaptiveInterface() async {
+  ///
+  /// Parâmetros opcionais:
+  /// - [mode]: Modo de adaptação ('STATIC', 'INSTANT', 'GRADUAL')
+  /// - [sessionId]: ID da sessão (obrigatório para modo INSTANT)
+  Future<Either<Failure, AdaptiveInterfaceResponse>> getAdaptiveInterface({
+    String? mode,
+    String? sessionId,
+  }) async {
     print('🔵 [ADAPTIVE] Iniciando busca de interface adaptativa...');
 
     try {
@@ -37,6 +43,7 @@ class AdaptiveInterfaceService {
           dashboard: null,
           dashboardConfidence: 0.0,
           shortcuts: _getDefaultShortcuts(),
+          mode: 'GRADUAL',
         ));
       }
 
@@ -45,8 +52,10 @@ class AdaptiveInterfaceService {
       final userId = _getUserId();
 
       print('📡 [ADAPTIVE] Chamando Cloud Function...');
-      print('   └─ Hora atual: $currentHour');
-      print('   └─ User ID: $userId');
+      print(' └─ Hora atual: $currentHour');
+      print(' └─ User ID: $userId');
+      if (mode != null) print(' └─ Mode: $mode');
+      if (sessionId != null) print(' └─ Session ID: $sessionId');
 
       // Chama a Cloud Function
       final callable = functions.httpsCallable('getAdaptiveInterface');
@@ -54,6 +63,8 @@ class AdaptiveInterfaceService {
       final result = await callable.call({
         'hour': currentHour,
         'userId': userId,
+        if (mode != null) 'mode': mode,
+        if (sessionId != null) 'sessionId': sessionId,
       });
       final duration = DateTime.now().difference(startTime);
 
@@ -63,16 +74,18 @@ class AdaptiveInterfaceService {
       final data = result.data as Map<String, dynamic>;
 
       print('📦 [ADAPTIVE] Dados recebidos:');
-      print('   └─ Dashboard: ${data['dashboard'] ?? 'null'}');
-      print('   └─ Confidence: ${data['confidence'] ?? 0.0}');
+      print(' └─ Dashboard: ${data['dashboard'] ?? 'null'}');
+      print(' └─ Confidence: ${data['confidence'] ?? 0.0}');
       print(
-          '   └─ Shortcuts: ${(data['shortcuts'] as List?)?.length ?? 0} itens');
+          ' └─ Shortcuts: ${(data['shortcuts'] as List?)?.length ?? 0} itens');
+      print(' └─ Mode: ${data['mode'] ?? 'GRADUAL'}');
 
-// Extrai informações do dashboard (suporta campos novos e legados)
+      // Extrai informações do dashboard (suporta campos novos e legados)
       final dashboardName = data['dashboard'] as String?;
       final dashboardId = data['dashboardId'] as String?;
       final cardType = data['cardType'] as String?;
       final confidence = ((data['confidence'] as num?) ?? 0).toDouble();
+      final responseMode = (data['mode'] as String?) ?? 'GRADUAL';
 
       print('📊 [ADAPTIVE] Dashboard recebido:');
       print(' └─ displayName: ${dashboardName ?? 'null'}');
@@ -130,6 +143,7 @@ class AdaptiveInterfaceService {
           cardType: cardType,
           dashboardConfidence: confidence,
           shortcuts: _getDefaultShortcuts(),
+          mode: responseMode,
         ));
       }
 
@@ -139,6 +153,7 @@ class AdaptiveInterfaceService {
       if (cardType != null) {
         print(' └─ Card Type (novo): $cardType');
       }
+      print(' └─ Mode: $responseMode');
       print(' └─ Atalhos: ${shortcuts.length} recomendados');
       for (var s in shortcuts) {
         if (s.resourceName != null) {
@@ -156,15 +171,17 @@ class AdaptiveInterfaceService {
         cardType: cardType,
         dashboardConfidence: confidence,
         shortcuts: shortcuts,
+        mode: responseMode,
       ));
     } catch (e, stackTrace) {
       // Em caso de erro, retorna atalhos padrão
       print('❌ [ADAPTIVE] Erro ao buscar interface adaptativa: $e');
-      print('   StackTrace: $stackTrace');
+      print(' StackTrace: $stackTrace');
       return Right(AdaptiveInterfaceResponse(
         dashboard: null,
         dashboardConfidence: 0.0,
         shortcuts: _getDefaultShortcuts(),
+        mode: 'GRADUAL',
       ));
     }
   }
@@ -266,8 +283,8 @@ class AdaptiveInterfaceService {
     try {
       // Tenta pegar o userId do AuthController
       final authController = GetIt.I<AuthController>();
-      print('   └─ AuthController.usuario: ${authController.usuario}');
-      print('   └─ AuthController.usuario?.id: ${authController.usuario.id}');
+      print(' └─ AuthController.usuario: ${authController.usuario}');
+      print(' └─ AuthController.usuario?.id: ${authController.usuario.id}');
       return (authController.usuario.id)?.toString();
     } catch (e) {
       return null;
@@ -326,12 +343,16 @@ class AdaptiveInterfaceResponse {
   /// Lista de atalhos recomendados
   final List<ShortcutModel> shortcuts;
 
+  /// Modo de adaptação usado ('STATIC', 'INSTANT', 'GRADUAL')
+  final String mode;
+
   AdaptiveInterfaceResponse({
     this.dashboard,
     this.dashboardId,
     this.cardType,
     required this.dashboardConfidence,
     required this.shortcuts,
+    this.mode = 'GRADUAL',
   });
 
   /// Obtém o tipo de card preferencialmente do novo campo cardType,
@@ -351,7 +372,6 @@ class AdaptiveInterfaceResponse {
     'Lotes em Produção': 'lotes',
     'Tarefas Pendentes': 'tarefas',
     'Produção Total': 'producao',
-    'Top Culturas': 'culturas',
     'Saúde das Equipes': 'saude',
   };
 

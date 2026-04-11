@@ -17,6 +17,7 @@ Scaffold registrarAtivPage(BuildContext context, ProtocoloStore store) {
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         FloatingActionButton(
+          heroTag: 'fab_registrar_ativ_scroll',
           mini: true,
           onPressed: () {
             if (scrollController.hasClients) {
@@ -35,6 +36,7 @@ Scaffold registrarAtivPage(BuildContext context, ProtocoloStore store) {
         ),
         const SizedBox(width: 16),
         FloatingActionButton(
+          heroTag: 'fab_registrar_ativ_add',
           onPressed: () {
             store.limparAtividadeBottomSheet();
             store.limparFaseBottomSheet();
