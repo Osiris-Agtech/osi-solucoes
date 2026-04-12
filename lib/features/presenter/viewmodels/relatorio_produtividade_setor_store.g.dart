@@ -19,26 +19,24 @@ mixin _$RelatorioProdutividadeSetorStore
   Computed<ProdutividadeSetorRanking?>? _$melhorSetorComputed;
 
   @override
-  ProdutividadeSetorRanking? get melhorSetor =>
-      (_$melhorSetorComputed ??= Computed<ProdutividadeSetorRanking?>(
-              () => super.melhorSetor,
+  ProdutividadeSetorRanking? get melhorSetor => (_$melhorSetorComputed ??=
+          Computed<ProdutividadeSetorRanking?>(() => super.melhorSetor,
               name: 'RelatorioProdutividadeSetorStoreBase.melhorSetor'))
-          .value;
+      .value;
   Computed<ProdutividadeSetorRanking?>? _$piorSetorComputed;
 
   @override
-  ProdutividadeSetorRanking? get piorSetor =>
-      (_$piorSetorComputed ??= Computed<ProdutividadeSetorRanking?>(
-              () => super.piorSetor,
+  ProdutividadeSetorRanking? get piorSetor => (_$piorSetorComputed ??=
+          Computed<ProdutividadeSetorRanking?>(() => super.piorSetor,
               name: 'RelatorioProdutividadeSetorStoreBase.piorSetor'))
-          .value;
+      .value;
   Computed<String?>? _$etapaGargaloComputed;
 
   @override
-  String? get etapaGargalo => (_$etapaGargaloComputed ??= Computed<String?>(
-          () => super.etapaGargalo,
-          name: 'RelatorioProdutividadeSetorStoreBase.etapaGargalo'))
-      .value;
+  String? get etapaGargalo =>
+      (_$etapaGargaloComputed ??= Computed<String?>(() => super.etapaGargalo,
+              name: 'RelatorioProdutividadeSetorStoreBase.etapaGargalo'))
+          .value;
 
   late final _$isLoadingAtom = Atom(
       name: 'RelatorioProdutividadeSetorStoreBase.isLoading', context: context);
@@ -127,8 +125,7 @@ mixin _$RelatorioProdutividadeSetorStore
 
   @override
   Future<void> carregarRelatorio() {
-    return _$carregarRelatorioAsyncAction
-        .run(() => super.carregarRelatorio());
+    return _$carregarRelatorioAsyncAction.run(() => super.carregarRelatorio());
   }
 
   late final _$atualizarFiltrosAsyncAction = AsyncAction(
@@ -147,9 +144,8 @@ mixin _$RelatorioProdutividadeSetorStore
 
   @override
   void setLoading(bool value) {
-    final _$actionInfo =
-        _$RelatorioProdutividadeSetorStoreBaseActionController.startAction(
-            name: 'RelatorioProdutividadeSetorStoreBase.setLoading');
+    final _$actionInfo = _$RelatorioProdutividadeSetorStoreBaseActionController
+        .startAction(name: 'RelatorioProdutividadeSetorStoreBase.setLoading');
     try {
       return super.setLoading(value);
     } finally {
@@ -160,9 +156,8 @@ mixin _$RelatorioProdutividadeSetorStore
 
   @override
   void setError(bool hasErr, String message) {
-    final _$actionInfo =
-        _$RelatorioProdutividadeSetorStoreBaseActionController.startAction(
-            name: 'RelatorioProdutividadeSetorStoreBase.setError');
+    final _$actionInfo = _$RelatorioProdutividadeSetorStoreBaseActionController
+        .startAction(name: 'RelatorioProdutividadeSetorStoreBase.setError');
     try {
       return super.setError(hasErr, message);
     } finally {
@@ -173,9 +168,8 @@ mixin _$RelatorioProdutividadeSetorStore
 
   @override
   void setResultado(RelatorioProdutividadeResult data) {
-    final _$actionInfo =
-        _$RelatorioProdutividadeSetorStoreBaseActionController.startAction(
-            name: 'RelatorioProdutividadeSetorStoreBase.setResultado');
+    final _$actionInfo = _$RelatorioProdutividadeSetorStoreBaseActionController
+        .startAction(name: 'RelatorioProdutividadeSetorStoreBase.setResultado');
     try {
       return super.setResultado(data);
     } finally {
@@ -186,9 +180,8 @@ mixin _$RelatorioProdutividadeSetorStore
 
   @override
   void limpar() {
-    final _$actionInfo =
-        _$RelatorioProdutividadeSetorStoreBaseActionController.startAction(
-            name: 'RelatorioProdutividadeSetorStoreBase.limpar');
+    final _$actionInfo = _$RelatorioProdutividadeSetorStoreBaseActionController
+        .startAction(name: 'RelatorioProdutividadeSetorStoreBase.limpar');
     try {
       return super.limpar();
     } finally {

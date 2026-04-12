@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:osi_solucoes/core/services/adaptive_admin_service.dart';
 import 'package:osi_solucoes/core/services/adaptive_user_service.dart';
 import 'package:osi_solucoes/core/services/navigation_analytics.dart';
+import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 
 /// Modelo interno que combina info do usuário com sua config de adaptação.
 class _UserWithConfig {
@@ -385,6 +387,11 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
       appBar: AppBar(
         title: const Text('🧪 Modos Adaptativos'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.bar_chart),
+            onPressed: () => Get.toNamed(Routes.metricsDashboardPage),
+            tooltip: 'Métricas de Adaptação',
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: Center(

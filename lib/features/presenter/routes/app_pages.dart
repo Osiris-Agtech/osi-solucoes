@@ -50,6 +50,7 @@ import '../views/relatorios/produtividade_setor/relatorio_produtividade_setor_pa
 import '../views/relatorios/desempenho_equipe/relatorio_desempenho_equipe_page.dart';
 import '../views/relatorios/agenda_tarefas/relatorio_agenda_tarefas_page.dart';
 import '../views/adaptive_admin/adaptive_admin_page.dart';
+import '../views/adaptive_admin/metrics_dashboard_page.dart';
 
 class AppPages {
   static final List<GetPage> routes = [
@@ -334,6 +335,11 @@ class AppPages {
     GetPage(
       name: Routes.adaptiveAdminPage,
       page: () => const AdaptiveAdminPage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.metricsDashboardPage,
+      page: () => const MetricsDashboardPage(),
       transition: Transition.rightToLeft,
     ),
   ];

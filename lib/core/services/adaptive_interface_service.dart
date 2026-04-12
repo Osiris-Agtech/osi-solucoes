@@ -4,6 +4,7 @@ import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/presenter/models/shortcut/shortcut_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:osi_solucoes/core/services/metrics_tracking_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dartz/dartz.dart';
 
@@ -165,6 +166,14 @@ class AdaptiveInterfaceService {
         }
       }
 
+      // Metrics tracking: registra exposição de shortcuts e dashboard
+      _trackAdaptiveExposure(
+        shortcuts: shortcuts,
+        dashboardId: dashboardId,
+        mode: responseMode,
+        sessionId: sessionId,
+      );
+
       return Right(AdaptiveInterfaceResponse(
         dashboard: dashboardName,
         dashboardId: dashboardId,
@@ -323,6 +332,38 @@ class AdaptiveInterfaceService {
         confidence: 0.5,
       ),
     ];
+  }
+
+  /// Registra exposição de shortcuts e dashboard para métricas de eficácia.
+  /// Fire-and-forget: erros são logados silenciosamente, sem impactar o fluxo.
+  void _trackAdaptiveExposure({
+    required List<ShortcutModel> shortcuts,
+    String? dashboardId,
+    String mode = 'GRADUAL',
+    String? sessionId,
+  }) {
+    try {
+      final metrics = MetricsTrackingService.instance;
+
+      if (shortcuts.isNotEmpty) {
+        metrics.trackShortcutsShown(
+          shortcutRoutes: shortcuts.map((s) => s.route).toList(),
+          mode: mode,
+          sessionId: sessionId,
+        );
+      }
+
+      if (dashboardId != null) {
+        metrics.trackDashboardShown(
+          dashboardId: dashboardId,
+          mode: mode,
+          sessionId: sessionId,
+        );
+      }
+    } catch (e) {
+      // Silencioso — tracking não pode quebrar o fluxo principal
+      print('⚠️ [ADAPTIVE] Erro ao registrar métricas de exposição: $e');
+    }
   }
 }
 

@@ -218,6 +218,38 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
+  late final _$adaptiveModeAtom =
+      Atom(name: 'HomeStoreBase.adaptiveMode', context: context);
+
+  @override
+  String get adaptiveMode {
+    _$adaptiveModeAtom.reportRead();
+    return super.adaptiveMode;
+  }
+
+  @override
+  set adaptiveMode(String value) {
+    _$adaptiveModeAtom.reportWrite(value, super.adaptiveMode, () {
+      super.adaptiveMode = value;
+    });
+  }
+
+  late final _$currentSessionIdAtom =
+      Atom(name: 'HomeStoreBase.currentSessionId', context: context);
+
+  @override
+  String? get currentSessionId {
+    _$currentSessionIdAtom.reportRead();
+    return super.currentSessionId;
+  }
+
+  @override
+  set currentSessionId(String? value) {
+    _$currentSessionIdAtom.reportWrite(value, super.currentSessionId, () {
+      super.currentSessionId = value;
+    });
+  }
+
   late final _$loadAdaptiveInterfaceAsyncAction =
       AsyncAction('HomeStoreBase.loadAdaptiveInterface', context: context);
 
@@ -308,7 +340,9 @@ adaptiveDashboard: ${adaptiveDashboard},
 dashboardConfidence: ${dashboardConfidence},
 currentCardIndex: ${currentCardIndex},
 cardOrder: ${cardOrder},
-adaptiveCardType: ${adaptiveCardType}
+adaptiveCardType: ${adaptiveCardType},
+adaptiveMode: ${adaptiveMode},
+currentSessionId: ${currentSessionId}
     ''';
   }
 }

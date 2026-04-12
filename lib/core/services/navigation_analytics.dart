@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/services/navigation_resource_args.dart';
+import 'package:osi_solucoes/core/services/metrics_tracking_service.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
 
 class NavigationAnalytics {
   static FirebaseAnalytics? _analytics;
@@ -25,7 +27,7 @@ class NavigationAnalytics {
     if (args is NavigationResourceArgs) {
       resource = args;
     }
-    
+
     // Registra navegação no Firebase Analytics (sempre, para todos os modos)
     logNavigation(
       routing.current,
@@ -33,7 +35,23 @@ class NavigationAnalytics {
       resourceType: resource?.resourceType,
       resourceName: resource?.resourceName,
     );
-    
+
+    // Metrics tracking: registra primeira navegação produtiva (time-to-task)
+    // Home page e telas não-produtivas são excluídas
+    final isNonProductive = _isNonProductiveScreen(routing.current);
+    if (!isNonProductive) {
+      try {
+        final homeStore = GetIt.I<HomeStore>();
+        MetricsTrackingService.instance.trackFirstProductiveNavigation(
+          screen: routing.current,
+          mode: homeStore.adaptiveMode,
+          sessionId: homeStore.currentSessionId,
+        );
+      } catch (e) {
+        // Silencioso — tracking não pode quebrar o fluxo
+      }
+    }
+
     // Registra no Firestore APENAS se houver sessão ativa (modo INSTANT)
     // GRADUAL e STATIC não salvam navegações no Firestore
     if (_currentSessionId != null) {
@@ -44,6 +62,21 @@ class NavigationAnalytics {
         resourceName: resource?.resourceName,
       );
     }
+  }
+
+  /// Telas que NÃO contam como navegação produtiva para time-to-task
+  static const _nonProductiveScreens = {
+    '/homePage',
+    '/splashPage',
+    '/loginPage',
+    '/cadastroPage',
+    '/confirmSegurancaPage',
+    '/onboardingPage',
+    '/multiAccountPage',
+  };
+
+  static bool _isNonProductiveScreen(String screen) {
+    return _nonProductiveScreens.any((s) => screen.contains(s));
   }
 
   static FirebaseAnalytics? get _analyticsInstance {

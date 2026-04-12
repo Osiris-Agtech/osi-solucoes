@@ -18,25 +18,24 @@ mixin _$RelatorioAgendaTarefasStore on RelatorioAgendaTarefasStoreBase, Store {
   Computed<int>? _$totalVencidasComputed;
 
   @override
-  int get totalVencidas => (_$totalVencidasComputed ??= Computed<int>(
-          () => super.totalVencidas,
-          name: 'RelatorioAgendaTarefasStoreBase.totalVencidas'))
-      .value;
+  int get totalVencidas =>
+      (_$totalVencidasComputed ??= Computed<int>(() => super.totalVencidas,
+              name: 'RelatorioAgendaTarefasStoreBase.totalVencidas'))
+          .value;
   Computed<bool>? _$temVencidasComputed;
 
   @override
-  bool get temVencidas => (_$temVencidasComputed ??= Computed<bool>(
-          () => super.temVencidas,
-          name: 'RelatorioAgendaTarefasStoreBase.temVencidas'))
-      .value;
+  bool get temVencidas =>
+      (_$temVencidasComputed ??= Computed<bool>(() => super.temVencidas,
+              name: 'RelatorioAgendaTarefasStoreBase.temVencidas'))
+          .value;
   Computed<AgendaLoteTaxaConclusao?>? _$loteMaisCriticoComputed;
 
   @override
-  AgendaLoteTaxaConclusao? get loteMaisCritico =>
-      (_$loteMaisCriticoComputed ??= Computed<AgendaLoteTaxaConclusao?>(
-              () => super.loteMaisCritico,
+  AgendaLoteTaxaConclusao? get loteMaisCritico => (_$loteMaisCriticoComputed ??=
+          Computed<AgendaLoteTaxaConclusao?>(() => super.loteMaisCritico,
               name: 'RelatorioAgendaTarefasStoreBase.loteMaisCritico'))
-          .value;
+      .value;
   Computed<String?>? _$membroComMaisVencidasComputed;
 
   @override
@@ -45,8 +44,8 @@ mixin _$RelatorioAgendaTarefasStore on RelatorioAgendaTarefasStoreBase, Store {
               name: 'RelatorioAgendaTarefasStoreBase.membroComMaisVencidas'))
       .value;
 
-  late final _$isLoadingAtom = Atom(
-      name: 'RelatorioAgendaTarefasStoreBase.isLoading', context: context);
+  late final _$isLoadingAtom =
+      Atom(name: 'RelatorioAgendaTarefasStoreBase.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -93,8 +92,8 @@ mixin _$RelatorioAgendaTarefasStore on RelatorioAgendaTarefasStoreBase, Store {
     });
   }
 
-  late final _$resultadoAtom = Atom(
-      name: 'RelatorioAgendaTarefasStoreBase.resultado', context: context);
+  late final _$resultadoAtom =
+      Atom(name: 'RelatorioAgendaTarefasStoreBase.resultado', context: context);
 
   @override
   RelatorioAgendaResult? get resultado {
@@ -131,8 +130,7 @@ mixin _$RelatorioAgendaTarefasStore on RelatorioAgendaTarefasStoreBase, Store {
 
   @override
   Future<void> carregarRelatorio() {
-    return _$carregarRelatorioAsyncAction
-        .run(() => super.carregarRelatorio());
+    return _$carregarRelatorioAsyncAction.run(() => super.carregarRelatorio());
   }
 
   late final _$atualizarFiltrosAsyncAction = AsyncAction(

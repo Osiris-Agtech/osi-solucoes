@@ -88,6 +88,14 @@ abstract class HomeStoreBase with Store {
   @observable
   String? adaptiveCardType;
 
+  // Modo de adaptação ativo (para métricas de eficácia)
+  @observable
+  String adaptiveMode = 'GRADUAL';
+
+  // Session ID (para métricas de sessão INSTANT)
+  @observable
+  String? currentSessionId;
+
   /// Mapeamento estático de nomes de dashboard para tipos de cards
   /// Atualizado com os valores exatos que a API retorna
   static const Map<String, String> _dashboardToCardTypeMap = {
@@ -166,6 +174,7 @@ abstract class HomeStoreBase with Store {
           adaptiveDashboard = response.dashboard;
           adaptiveCardType = response.cardType; // Novo campo da API
           dashboardConfidence = response.dashboardConfidence;
+          adaptiveMode = response.mode; // Mode para métricas
 
           print('✅ [HOME_STORE] Interface adaptativa atualizada:');
           print(' └─ Dashboard recomendado: ${adaptiveDashboard ?? 'null'}');

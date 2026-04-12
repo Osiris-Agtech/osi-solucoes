@@ -19,6 +19,7 @@ import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dar
 import '../../../../core/services/local_storage.dart';
 import '../../../../core/services/navigation_analytics.dart';
 import '../../../../core/services/navigation_resource_args.dart';
+import '../../../../core/services/metrics_tracking_service.dart';
 import '../../viewmodels/auth_controller.dart';
 import '../../viewmodels/home_store.dart';
 import '../../viewmodels/lote_store.dart';
@@ -60,10 +61,19 @@ class HomePageState extends State<HomePage> {
         _applyAdaptiveDashboard();
         // Inicializa o PageController após carregar a ordem dos cards
         _initializePageController();
+        // Metrics tracking: registra início de sessão após carregar modo
+        MetricsTrackingService.instance.trackSessionStart(
+          mode: store.adaptiveMode,
+          sessionId: store.currentSessionId,
+        );
       }).catchError((e) {
         print('❌ [HOME_PAGE] Erro ao carregar interface adaptativa: $e');
-        // Mesmo com erro, inicializa o controller
+        // Mesmo com erro, inicializa o controller e registra sessão
         _initializePageController();
+        MetricsTrackingService.instance.trackSessionStart(
+          mode: store.adaptiveMode,
+          sessionId: store.currentSessionId,
+        );
       });
     });
   }
@@ -110,7 +120,16 @@ class HomePageState extends State<HomePage> {
     setState(() {
       _adaptiveDashboardName = dashboardName;
     });
-    
+
+    // Metrics tracking: registra que dashboard foi exibido
+    if (store.adaptiveCardType != null) {
+      MetricsTrackingService.instance.trackDashboardShown(
+        dashboardId: store.adaptiveCardType,
+        mode: store.adaptiveMode,
+        sessionId: store.currentSessionId,
+      );
+    }
+
     // Reinicializa o PageController com a nova ordem dos cards
     _initializePageController();
   }
@@ -934,10 +953,19 @@ class HomePageState extends State<HomePage> {
                                         icon: Icons.chevron_left,
                                         onPressed: currentIndex > 0
                                             ? () {
+                                                final fromType = store.cardOrder[currentIndex];
                                                 store.previousCard();
+                                                final toType = store.cardOrder[store.currentCardIndex];
                                                 _pageController?.previousPage(
                                                   duration: const Duration(milliseconds: 300),
                                                   curve: Curves.easeOut,
+                                                );
+                                                // Metrics tracking: dashboard changed
+                                                MetricsTrackingService.instance.trackDashboardChanged(
+                                                  fromDashboardId: fromType,
+                                                  toDashboardId: toType,
+                                                  mode: store.adaptiveMode,
+                                                  sessionId: store.currentSessionId,
                                                 );
                                               }
                                             : null,
@@ -948,10 +976,19 @@ class HomePageState extends State<HomePage> {
                                         icon: Icons.chevron_right,
                                         onPressed: currentIndex < total - 1
                                             ? () {
+                                                final fromType = store.cardOrder[currentIndex];
                                                 store.nextCard();
+                                                final toType = store.cardOrder[store.currentCardIndex];
                                                 _pageController?.nextPage(
                                                   duration: const Duration(milliseconds: 300),
                                                   curve: Curves.easeOut,
+                                                );
+                                                // Metrics tracking: dashboard changed
+                                                MetricsTrackingService.instance.trackDashboardChanged(
+                                                  fromDashboardId: fromType,
+                                                  toDashboardId: toType,
+                                                  mode: store.adaptiveMode,
+                                                  sessionId: store.currentSessionId,
                                                 );
                                               }
                                             : null,
@@ -3094,6 +3131,13 @@ class HomePageState extends State<HomePage> {
 
         NavigationAnalytics.logShortcutClick(
             shortcut.route, shortcut.confidence);
+
+        // Metrics tracking: registra clique em shortcut adaptativo
+        MetricsTrackingService.instance.trackShortcutClicked(
+          route: shortcut.route,
+          mode: store.adaptiveMode,
+          sessionId: store.currentSessionId,
+        );
 
         // Se tiver resourceId, navegar com recurso específico
         if (shortcut.resourceId != null && shortcut.resourceType != null) {

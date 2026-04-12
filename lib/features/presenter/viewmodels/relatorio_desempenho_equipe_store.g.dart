@@ -36,30 +36,25 @@ mixin _$RelatorioDesempenhoEquipeStore
 
   @override
   List<DesempenhoUsuarioRanking> get membrosComAlerta =>
-      (_$membrosComAlertaComputed ??=
-              Computed<List<DesempenhoUsuarioRanking>>(
-                  () => super.membrosComAlerta,
-                  name:
-                      'RelatorioDesempenhoEquipeStoreBase.membrosComAlerta'))
+      (_$membrosComAlertaComputed ??= Computed<List<DesempenhoUsuarioRanking>>(
+              () => super.membrosComAlerta,
+              name: 'RelatorioDesempenhoEquipeStoreBase.membrosComAlerta'))
           .value;
   Computed<bool>? _$equipeComBaixaConclusaoComputed;
 
   @override
-  bool get equipeComBaixaConclusao =>
-      (_$equipeComBaixaConclusaoComputed ??= Computed<bool>(
-              () => super.equipeComBaixaConclusao,
+  bool get equipeComBaixaConclusao => (_$equipeComBaixaConclusaoComputed ??=
+          Computed<bool>(() => super.equipeComBaixaConclusao,
               name:
                   'RelatorioDesempenhoEquipeStoreBase.equipeComBaixaConclusao'))
-          .value;
+      .value;
   Computed<List<DesempenhoUsuarioRanking>>? _$membrosComAtrasosComputed;
 
   @override
   List<DesempenhoUsuarioRanking> get membrosComAtrasos =>
-      (_$membrosComAtrasosComputed ??=
-              Computed<List<DesempenhoUsuarioRanking>>(
-                  () => super.membrosComAtrasos,
-                  name:
-                      'RelatorioDesempenhoEquipeStoreBase.membrosComAtrasos'))
+      (_$membrosComAtrasosComputed ??= Computed<List<DesempenhoUsuarioRanking>>(
+              () => super.membrosComAtrasos,
+              name: 'RelatorioDesempenhoEquipeStoreBase.membrosComAtrasos'))
           .value;
 
   late final _$isLoadingAtom = Atom(
@@ -149,8 +144,7 @@ mixin _$RelatorioDesempenhoEquipeStore
 
   @override
   Future<void> carregarRelatorio() {
-    return _$carregarRelatorioAsyncAction
-        .run(() => super.carregarRelatorio());
+    return _$carregarRelatorioAsyncAction.run(() => super.carregarRelatorio());
   }
 
   late final _$atualizarFiltrosAsyncAction = AsyncAction(
@@ -169,9 +163,8 @@ mixin _$RelatorioDesempenhoEquipeStore
 
   @override
   void setLoading(bool value) {
-    final _$actionInfo =
-        _$RelatorioDesempenhoEquipeStoreBaseActionController.startAction(
-            name: 'RelatorioDesempenhoEquipeStoreBase.setLoading');
+    final _$actionInfo = _$RelatorioDesempenhoEquipeStoreBaseActionController
+        .startAction(name: 'RelatorioDesempenhoEquipeStoreBase.setLoading');
     try {
       return super.setLoading(value);
     } finally {
@@ -182,9 +175,8 @@ mixin _$RelatorioDesempenhoEquipeStore
 
   @override
   void setError(bool hasErr, String message) {
-    final _$actionInfo =
-        _$RelatorioDesempenhoEquipeStoreBaseActionController.startAction(
-            name: 'RelatorioDesempenhoEquipeStoreBase.setError');
+    final _$actionInfo = _$RelatorioDesempenhoEquipeStoreBaseActionController
+        .startAction(name: 'RelatorioDesempenhoEquipeStoreBase.setError');
     try {
       return super.setError(hasErr, message);
     } finally {
@@ -195,9 +187,8 @@ mixin _$RelatorioDesempenhoEquipeStore
 
   @override
   void setResultado(RelatorioDesempenhoResult data) {
-    final _$actionInfo =
-        _$RelatorioDesempenhoEquipeStoreBaseActionController.startAction(
-            name: 'RelatorioDesempenhoEquipeStoreBase.setResultado');
+    final _$actionInfo = _$RelatorioDesempenhoEquipeStoreBaseActionController
+        .startAction(name: 'RelatorioDesempenhoEquipeStoreBase.setResultado');
     try {
       return super.setResultado(data);
     } finally {
@@ -208,9 +199,8 @@ mixin _$RelatorioDesempenhoEquipeStore
 
   @override
   void limpar() {
-    final _$actionInfo =
-        _$RelatorioDesempenhoEquipeStoreBaseActionController.startAction(
-            name: 'RelatorioDesempenhoEquipeStoreBase.limpar');
+    final _$actionInfo = _$RelatorioDesempenhoEquipeStoreBaseActionController
+        .startAction(name: 'RelatorioDesempenhoEquipeStoreBase.limpar');
     try {
       return super.limpar();
     } finally {
