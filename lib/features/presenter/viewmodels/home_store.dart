@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:osi_solucoes/features/data/repositories/homeDashboard/home_dashboard_repository_interface.dart';
@@ -151,12 +153,87 @@ abstract class HomeStoreBase with Store {
     return null;
   }
 
+  /// Busca a configuração adaptativa do usuário no Firestore
+  /// Retorna um mapa com mode e sessionId, ou null se não houver config
+  Future<Map<String, dynamic>?> _fetchUserAdaptiveConfig() async {
+    try {
+      // Verifica se Firebase está inicializado
+      Firebase.app();
+      final userId = _getUserId();
+      if (userId == null) {
+        print('⚠️ [HOME_STORE] UserId não disponível para buscar config');
+        return null;
+      }
+
+      final doc = await FirebaseFirestore.instance
+          .collection('userAdaptiveConfig')
+          .doc(userId)
+          .get();
+
+      if (!doc.exists || doc.data() == null) {
+        print(
+            '📊 [HOME_STORE] Nenhuma config adaptativa encontrada para user $userId');
+        return null;
+      }
+
+      final data = doc.data()!;
+
+      // Verifica se a configuração expirou
+      if (data['expiresAt'] != null) {
+        final expiresAt = data['expiresAt'] as Timestamp?;
+        if (expiresAt != null && expiresAt.toDate().isBefore(DateTime.now())) {
+          print('📊 [HOME_STORE] Config expirada para user $userId');
+          return null;
+        }
+      }
+
+      final config = {
+        'mode': data['mode'] as String?,
+        'sessionId': data['sessionId'] as String?,
+      };
+
+      print(
+          '📊 [HOME_STORE] Config adaptativa encontrada: mode=${config['mode']}, sessionId=${config['sessionId'] != null ? '***' : 'null'}');
+      return config;
+    } catch (e) {
+      print('⚠️ [HOME_STORE] Erro ao buscar config adaptativa: $e');
+      return null;
+    }
+  }
+
+  /// Helper para obter userId do AuthController
+  String? _getUserId() {
+    try {
+      return (authController.usuario.id).toString();
+    } catch (e) {
+      return null;
+    }
+  }
+
   @action
   Future<void> loadAdaptiveInterface() async {
     print('🏠 [HOME_STORE] Carregando interface adaptativa...');
     isLoadingShortcuts = true;
     try {
-      final result = await _adaptiveService.getAdaptiveInterface();
+      // PASSO 1: Buscar configuração do usuário no Firestore
+      // Isso garante que teremos mode e sessionId para modo INSTANT
+      final userConfig = await _fetchUserAdaptiveConfig();
+      final mode = userConfig?['mode'];
+      final sessionId = userConfig?['sessionId'];
+
+      // Atualiza o sessionId no store para uso em métricas
+      if (sessionId != null) {
+        currentSessionId = sessionId;
+      }
+
+      print(
+          '🏠 [HOME_STORE] Config carregada: mode=$mode, sessionId=${sessionId != null ? 'presente' : 'null'}');
+
+      // PASSO 2: Chamar a API com mode e sessionId (se disponíveis)
+      final result = await _adaptiveService.getAdaptiveInterface(
+        mode: mode,
+        sessionId: sessionId,
+      );
 
       result.fold(
         (failure) {
@@ -184,6 +261,8 @@ abstract class HomeStoreBase with Store {
           print(' └─ Atalhos recomendados: ${response.shortcuts.length}');
           print(
               ' └─ Atalhos finais (completados): ${recommendedShortcuts.length}');
+          print(' └─ Mode: $adaptiveMode');
+          print(' └─ Session ID: ${currentSessionId ?? 'null'}');
 
           // Determina se aplicará o dashboard
           final hasRecommendation =

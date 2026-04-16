@@ -152,7 +152,8 @@ class NavigationAnalytics {
           resourceName: resourceName,
         );
       } else {
-        print('   └─ ℹ️ Sem sessão ativa (GRADUAL/STATIC), não salvo no Firestore');
+        print(
+            '   └─ ℹ️ Sem sessão ativa (GRADUAL/STATIC), não salvo no Firestore');
       }
     } catch (e) {
       print('❌ [ANALYTICS] Erro ao logar navegação: $e');
@@ -219,6 +220,16 @@ class NavigationAnalytics {
         'status': 'active',
       });
 
+      // Sincroniza com HomeStore para métricas e requisições de adaptive interface
+      try {
+        final homeStore = GetIt.I<HomeStore>();
+        homeStore.currentSessionId = sessionId;
+        print(
+            '📊 [ANALYTICS] SessionId sincronizado com HomeStore: $sessionId');
+      } catch (e) {
+        // HomeStore pode não estar disponível, ignora silenciosamente
+      }
+
       print('📊 [ANALYTICS] Sessão de teste iniciada: $sessionId');
     } catch (e) {
       print('📊 [ANALYTICS] Firebase não disponível, sessão não iniciada: $e');
@@ -257,7 +268,8 @@ class NavigationAnalytics {
     String? resourceName,
   }) async {
     if (_currentSessionId == null) {
-      print('   └─ ℹ️ Sem sessão ativa, navegação NÃO salva no Firestore: $screenName');
+      print(
+          '   └─ ℹ️ Sem sessão ativa, navegação NÃO salva no Firestore: $screenName');
       return;
     }
 
@@ -279,7 +291,8 @@ class NavigationAnalytics {
         if (resourceName != null) 'resourceName': resourceName,
       });
 
-      print('📊 [ANALYTICS] Navegação salva no Firestore (sessão INSTANT): $screenName');
+      print(
+          '📊 [ANALYTICS] Navegação salva no Firestore (sessão INSTANT): $screenName');
     } catch (e) {
       print('📊 [ANALYTICS] Erro ao salvar navegação no Firestore: $e');
     }
