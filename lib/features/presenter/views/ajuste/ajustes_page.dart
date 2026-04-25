@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/core/utils/responsive_breakpoints.dart';
 import 'package:osi_solucoes/core/utils/spacing.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
-import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 
@@ -85,7 +83,7 @@ class AjustesPageState extends State<AjustesPage> {
                   SliverAppBar(
                     pinned: true,
                     backgroundColor: Colors.white,
-                    toolbarHeight: ResponsiveBreakpoints.isDesktop(context) ? 140 : 175,
+                    toolbarHeight: 175,
                     floating: true,
                     automaticallyImplyLeading: false,
                     forceElevated: true,
@@ -115,16 +113,15 @@ class AjustesPageState extends State<AjustesPage> {
                           child: Observer(
                             builder: (_) {
                               final reservatorios = store.reservatorioList;
-                              final selectedId =
-                                  store.selectedReservatorio.id;
-                              final selected = selectedId != null &&
-                                      reservatorios
-                                          .any((r) => r.id == selectedId)
-                                  ? reservatorios
-                                      .firstWhere((r) => r.id == selectedId)
-                                  : null;
-                              return DropdownButtonFormField<Reservatorio>(
-                                initialValue: selected,
+                              final selectedId = store.selectedReservatorio.id;
+                              final hasSelected = selectedId != null &&
+                                  reservatorios.any((r) => r.id == selectedId);
+
+                              return DropdownButtonFormField<int>(
+                                key: ValueKey<String>(
+                                  '${hasSelected ? selectedId : 'none'}-${reservatorios.map((r) => r.id).join(',')}',
+                                ),
+                                initialValue: hasSelected ? selectedId : null,
                                 hint: const Text(
                                   'Selecione o Reservatório',
                                   style: TextStyle(
@@ -158,8 +155,8 @@ class AjustesPageState extends State<AjustesPage> {
                                 },
                                 items: reservatorios
                                     .map(
-                                      (r) => DropdownMenuItem<Reservatorio>(
-                                        value: r,
+                                      (r) => DropdownMenuItem<int>(
+                                        value: r.id,
                                         child: Text(
                                           r.nome ?? '-',
                                           style: const TextStyle(
@@ -170,9 +167,14 @@ class AjustesPageState extends State<AjustesPage> {
                                     )
                                     .toList(),
                                 onChanged: (value) {
-                                  if (value != null) {
-                                    store.selectReservatorio(value);
+                                  if (value == null) {
+                                    return;
                                   }
+
+                                  final selected = reservatorios.firstWhere(
+                                    (reservatorio) => reservatorio.id == value,
+                                  );
+                                  store.selectReservatorio(selected);
                                 },
                               );
                             },
