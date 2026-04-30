@@ -430,13 +430,23 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
       dense: true,
       minLeadingWidth: 0,
       minVerticalPadding: 0,
-      title: Text(
-        itemFertilizante.fertilizante.nome ?? 'Não informado',
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          color: Constants.kText2,
-        ),
+      title: Row(
+        children: [
+          Expanded(
+            child: Text(
+              itemFertilizante.fertilizante.nome ?? 'Não informado',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Constants.kText2,
+              ),
+            ),
+          ),
+          Visibility(
+            visible: store.isFertilizanteSistema(itemFertilizante.fertilizante),
+            child: _sistemaBadge(),
+          ),
+        ],
       ),
       subtitle: itemFertilizante.isExpanded
           ? null
@@ -448,6 +458,25 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
                 color: Constants.kGreyMedium,
               ),
             ),
+    );
+  }
+
+  Widget _sistemaBadge() {
+    return Container(
+      margin: const EdgeInsets.only(left: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+      decoration: BoxDecoration(
+        color: const Color(0xffE8EAF6),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: const Text(
+        'Sistema',
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+          color: Constants.kPrimaryColor,
+        ),
+      ),
     );
   }
 

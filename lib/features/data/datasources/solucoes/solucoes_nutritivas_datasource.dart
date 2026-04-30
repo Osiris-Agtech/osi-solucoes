@@ -3,6 +3,7 @@ import 'package:graphql/client.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/api_source.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
+import 'package:osi_solucoes/features/presenter/models/nutriente/nutriente_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoConcentrada/solucaoConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
@@ -17,7 +18,24 @@ abstract class ISolucaoDatasource {
     required int contaId,
     required bool hasConcentrada,
   });
-  Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes();
+  Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes(
+      {required int contaId});
+  Future<Either<Failure, Fertilizante>> criarFertilizanteCustom({
+    required int contaId,
+    required String nome,
+    required List<Map<String, dynamic>> nutrientes,
+  });
+  Future<Either<Failure, Fertilizante>> atualizarFertilizanteCustom({
+    required int contaId,
+    required int fertilizanteId,
+    required String nome,
+    required List<Map<String, dynamic>> nutrientes,
+  });
+  Future<Either<Failure, List<Nutriente>>> buscarNutrientes();
+  Future<Either<Failure, bool>> excluirFertilizanteCustom({
+    required int contaId,
+    required int fertilizanteId,
+  });
   Future<Either<Failure, SolucaoNutritiva>> detalhesSolucao(
       {required int solucaoId});
   Future<Either<Failure, SolucaoConcentrada>> cadastrarSolucaoConcentrada(
@@ -25,6 +43,35 @@ abstract class ISolucaoDatasource {
 }
 
 class SolucaoDatasource implements ISolucaoDatasource {
+  String _fertilizanteMutationErrorMessage(
+    QueryResult result, {
+    required String forbiddenMessage,
+    required String immutableMessage,
+    required String notFoundMessage,
+    required String fallbackMessage,
+  }) {
+    final graphQLErrors = result.exception?.graphqlErrors ?? [];
+    final firstCode = graphQLErrors.isNotEmpty
+        ? graphQLErrors.first.extensions != null
+            ? graphQLErrors.first.extensions!['code']?.toString()
+            : null
+        : null;
+
+    if (firstCode == 'TENANT_SCOPE_VIOLATION' || firstCode == 'FORBIDDEN') {
+      return forbiddenMessage;
+    }
+
+    if (firstCode == 'SYSTEM_FERTILIZER_IMMUTABLE') {
+      return immutableMessage;
+    }
+
+    if (firstCode == 'NOT_FOUND') {
+      return notFoundMessage;
+    }
+
+    return fallbackMessage;
+  }
+
   @override
   Future<Either<Failure, List<SolucaoNutritiva>>> buscarSolucoes(
       {required int contaId}) async {
@@ -168,6 +215,7 @@ class SolucaoDatasource implements ISolucaoDatasource {
               fertilizante {
                 id
                 nome
+                origin
                 compatibilidade
               }
             }
@@ -194,14 +242,17 @@ class SolucaoDatasource implements ISolucaoDatasource {
   }
 
   @override
-  Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes() async {
+  Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes(
+      {required int contaId}) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     const String readRepositories = r'''
-        query Fertilizantes{
-          fertilizantes {
+        query FertilizantesCatalogo($contaId: Int!) {
+          fertilizantesCatalogo(contaId: $contaId) {
             id
             nome
+            origin
+            deleted_at
             c_eletrica
             compatibilidade
             fertilizantes_nutrientes {
@@ -221,13 +272,15 @@ class SolucaoDatasource implements ISolucaoDatasource {
 
     options = QueryOptions(
       document: gql(readRepositories),
-      variables: const <String, dynamic>{},
+      variables: <String, dynamic>{
+        'contaId': contaId,
+      },
     );
 
     final QueryResult result = await client.query(options);
 
     if (!result.hasException) {
-      List? fertilizantes = result.data?['fertilizantes']
+      List? fertilizantes = result.data?['fertilizantesCatalogo']
           ?.map((item) => Fertilizante.fromJson(item))
           .toList();
       if (fertilizantes == null || fertilizantes.isEmpty) {
@@ -238,8 +291,230 @@ class SolucaoDatasource implements ISolucaoDatasource {
       List<Fertilizante> fertilizanteList = fertilizantes.cast<Fertilizante>();
       return Right(fertilizanteList);
     } else {
+      final graphQLErrors = result.exception?.graphqlErrors ?? [];
+      final firstCode = graphQLErrors.isNotEmpty
+          ? graphQLErrors.first.extensions != null
+              ? graphQLErrors.first.extensions!['code']?.toString()
+              : null
+          : null;
+
+      if (firstCode == 'TENANT_SCOPE_VIOLATION' || firstCode == 'FORBIDDEN') {
+        return Left(ErrorFertilizante(
+            message: 'Conta sem permissão para acessar este catálogo'));
+      }
+
       return Left(ErrorFertilizante(message: FailureMessage.emptyListMessage));
     }
+  }
+
+  @override
+  Future<Either<Failure, Fertilizante>> criarFertilizanteCustom({
+    required int contaId,
+    required String nome,
+    required List<Map<String, dynamic>> nutrientes,
+  }) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String query = r'''
+      mutation CreateFertilizante($contaId: Int!, $nome: String!, $nutrientes: [FertilizanteNutrienteInput!]!) {
+        createFertilizante(
+          contaId: $contaId,
+          input: { nome: $nome, nutrientes: $nutrientes }
+        ) {
+          id
+          nome
+          origin
+          c_eletrica
+          compatibilidade
+          fertilizantes_nutrientes {
+            id
+            teor_nutriente
+            nutriente {
+              id
+              nome
+              sigla
+            }
+          }
+        }
+      }
+    ''';
+
+    final MutationOptions options = MutationOptions(
+      document: gql(query),
+      variables: <String, dynamic>{
+        'contaId': contaId,
+        'nome': nome,
+        'nutrientes': nutrientes,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      final raw = result.data?['createFertilizante'];
+      if (raw is Map<String, dynamic>) {
+        return Right(Fertilizante.fromJson(raw));
+      }
+    }
+
+    return Left(
+      ErrorFertilizante(
+        message: _fertilizanteMutationErrorMessage(
+          result,
+          forbiddenMessage:
+              'Conta sem permissão para criar fertilizante nesta conta',
+          immutableMessage:
+              'Operação não permitida para fertilizantes de sistema',
+          notFoundMessage: 'Conta não encontrada para criar fertilizante',
+          fallbackMessage: 'Não foi possível criar o fertilizante',
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, Fertilizante>> atualizarFertilizanteCustom({
+    required int contaId,
+    required int fertilizanteId,
+    required String nome,
+    required List<Map<String, dynamic>> nutrientes,
+  }) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String query = r'''
+      mutation UpdateFertilizante($contaId: Int!, $fertilizanteId: Int!, $nome: String!, $nutrientes: [FertilizanteNutrienteInput!]) {
+        updateFertilizante(
+          contaId: $contaId,
+          fertilizanteId: $fertilizanteId,
+          input: { nome: $nome, nutrientes: $nutrientes }
+        ) {
+          id
+          nome
+          origin
+          c_eletrica
+          compatibilidade
+          fertilizantes_nutrientes {
+            id
+            teor_nutriente
+            nutriente {
+              id
+              nome
+              sigla
+            }
+          }
+        }
+      }
+    ''';
+
+    final MutationOptions options = MutationOptions(
+      document: gql(query),
+      variables: <String, dynamic>{
+        'contaId': contaId,
+        'fertilizanteId': fertilizanteId,
+        'nome': nome,
+        'nutrientes': nutrientes,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      final raw = result.data?['updateFertilizante'];
+      if (raw is Map<String, dynamic>) {
+        return Right(Fertilizante.fromJson(raw));
+      }
+    }
+
+    return Left(
+      ErrorFertilizante(
+        message: _fertilizanteMutationErrorMessage(
+          result,
+          forbiddenMessage: 'Conta sem permissão para editar este fertilizante',
+          immutableMessage: 'Fertilizantes de sistema não podem ser editados',
+          notFoundMessage: 'Fertilizante não encontrado para edição',
+          fallbackMessage: 'Não foi possível editar o fertilizante',
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<Nutriente>>> buscarNutrientes() async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      query Nutrientes {
+        nutrientes(orderBy: { nome: asc }) {
+          id
+          nome
+          sigla
+        }
+      }
+    ''';
+
+    final QueryOptions options = QueryOptions(
+      document: gql(readRepositories),
+    );
+
+    final QueryResult result = await client.query(options);
+
+    if (!result.hasException) {
+      List? nutrientes = result.data?['nutrientes']
+          ?.map((item) => Nutriente.fromJson(item))
+          .toList();
+
+      if (nutrientes == null || nutrientes.isEmpty) {
+        return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
+      }
+
+      List<Nutriente> nutrientesList = nutrientes.cast<Nutriente>();
+      return Right(nutrientesList);
+    }
+
+    return Left(ErrorReservatorio(message: FailureMessage.internalErrorMessage));
+  }
+
+  @override
+  Future<Either<Failure, bool>> excluirFertilizanteCustom({
+    required int contaId,
+    required int fertilizanteId,
+  }) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String query = r'''
+      mutation SoftDeleteFertilizante($contaId: Int!, $fertilizanteId: Int!) {
+        softDeleteFertilizante(contaId: $contaId, fertilizanteId: $fertilizanteId) {
+          id
+        }
+      }
+    ''';
+
+    final MutationOptions options = MutationOptions(
+      document: gql(query),
+      variables: <String, dynamic>{
+        'contaId': contaId,
+        'fertilizanteId': fertilizanteId,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      return const Right(true);
+    }
+
+    return Left(
+      ErrorFertilizante(
+        message: _fertilizanteMutationErrorMessage(
+          result,
+          forbiddenMessage:
+              'Conta sem permissão para excluir este fertilizante',
+          immutableMessage: 'Fertilizantes de sistema não podem ser excluídos',
+          notFoundMessage: 'Fertilizante não encontrado para exclusão',
+          fallbackMessage: 'Não foi possível excluir o fertilizante',
+        ),
+      ),
+    );
   }
 
   @override
@@ -264,6 +539,8 @@ class SolucaoDatasource implements ISolucaoDatasource {
               fertilizante {
                 id
                 nome
+                origin
+                deleted_at
                 compatibilidade
                 fertilizantes_nutrientes {
                   teor_nutriente
@@ -283,6 +560,8 @@ class SolucaoDatasource implements ISolucaoDatasource {
                   fertilizante {
                     id
                     nome
+                    origin
+                    deleted_at
                   }
                   quantidade
                 }

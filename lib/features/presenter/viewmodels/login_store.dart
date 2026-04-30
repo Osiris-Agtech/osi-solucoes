@@ -85,15 +85,20 @@ abstract class LoginStoreBase with Store {
       );
     }
 
-    // Extrai a lista de usuários do Right
-    final data = usersResult.fold(
+    final authentication = usersResult.fold(
       (_) => null,
-      (users) => users,
+      (auth) => auth,
     );
 
-    if (data == null) {
+    if (authentication == null ||
+        authentication.usuario == null ||
+        authentication.token == null ||
+        authentication.token!.isEmpty) {
       return "loginInvalido".i18n();
     }
+
+    final data = authentication.usuario!;
+    final token = authentication.token!;
 
     // A API já retorna a lista de usuários corretamente validada
     userList = List.from([data]);
@@ -113,6 +118,7 @@ abstract class LoginStoreBase with Store {
       authController.usuario.selected_conta = data.contas![0];
     }
 
+    await LocalStorage().storageToken(token);
     await LocalStorage().storageUser(data);
 
     return "sucesso";

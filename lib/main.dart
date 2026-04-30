@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/core/services/navigation_analytics.dart';
+import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:get/get.dart';
 import 'package:osi_solucoes/core/services/auth_service.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
@@ -50,7 +51,8 @@ Future<void> _initializeFirebase() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     print('✅ [FIREBASE] Firebase inicializado com sucesso');
-    print('   └─ Project ID: ${DefaultFirebaseOptions.currentPlatform.projectId}');
+    print(
+        '   └─ Project ID: ${DefaultFirebaseOptions.currentPlatform.projectId}');
   } catch (e, stackTrace) {
     // Firebase não disponível ou não configurado, app continua funcionando
     print('⚠️ [FIREBASE] Firebase não inicializado: $e');
@@ -65,7 +67,7 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     LocalJsonLocalization.delegate.directories = ['lib/core/constants/i18n'];
-    
+
     return Sizer(
       builder: (context, orientation, deviceType) {
         return GetMaterialApp(
@@ -91,14 +93,17 @@ class AppWidget extends StatelessWidget {
           getPages: AppPages.routes,
           routingCallback: NavigationAnalytics.onGetRouting,
           builder: (context, child) {
-            return ResponsiveBreakpoints.builder(
-              child: child!,
-              breakpoints: [
-                const Breakpoint(start: 0, end: 599, name: MOBILE),
-                const Breakpoint(start: 600, end: 1023, name: TABLET),
-                const Breakpoint(start: 1024, end: 1439, name: DESKTOP),
-                const Breakpoint(start: 1440, end: double.infinity, name: '4K'),
-              ],
+            return ToastListener(
+              child: ResponsiveBreakpoints.builder(
+                child: child!,
+                breakpoints: [
+                  const Breakpoint(start: 0, end: 599, name: MOBILE),
+                  const Breakpoint(start: 600, end: 1023, name: TABLET),
+                  const Breakpoint(start: 1024, end: 1439, name: DESKTOP),
+                  const Breakpoint(
+                      start: 1440, end: double.infinity, name: '4K'),
+                ],
+              ),
             );
           },
           // routeInformationParser: , //Modular.routeInformationParser,

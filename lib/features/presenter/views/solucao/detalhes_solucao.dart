@@ -87,6 +87,11 @@ class _DetalhesSolucaoState extends State<DetalhesSolucao> {
                           .solucoes_fertilizantes_concentradas?.length ??
                       0,
                   itemBuilder: (context, index) {
+                    final fertilizante = store
+                        .solucaoSelecionada
+                        .solucoes_fertilizantes_concentradas?[index]
+                        .fertilizante;
+                    final isRemoved = fertilizante?.deleted_at != null;
                     return Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 32, vertical: 4),
@@ -95,16 +100,65 @@ class _DetalhesSolucaoState extends State<DetalhesSolucao> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                store
-                                        .solucaoSelecionada
-                                        .solucoes_fertilizantes_concentradas?[
-                                            index]
-                                        .fertilizante
-                                        ?.nome ??
-                                    'Não informado',
-                                style:
-                                    const TextStyle(color: Constants.kGreyText),
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        isRemoved
+                                            ? '${fertilizante?.nome ?? 'Não informado'} (Removido)'
+                                            : (fertilizante?.nome ??
+                                                'Não informado'),
+                                        style: const TextStyle(
+                                            color: Constants.kGreyText),
+                                      ),
+                                    ),
+                                    Visibility(
+                                      visible: ((fertilizante?.origin ?? '')
+                                              .toUpperCase() ==
+                                          'SYSTEM'),
+                                      child: Container(
+                                        margin: const EdgeInsets.only(left: 8),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 2),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xffE8EAF6),
+                                          borderRadius:
+                                              BorderRadius.circular(999),
+                                        ),
+                                        child: const Text(
+                                          'Sistema',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700,
+                                            color: Constants.kPrimaryColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Visibility(
+                                      visible: isRemoved,
+                                      child: Container(
+                                        margin: const EdgeInsets.only(left: 8),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 2),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xffFFEBEE),
+                                          borderRadius:
+                                              BorderRadius.circular(999),
+                                        ),
+                                        child: const Text(
+                                          'Removido',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700,
+                                            color: Color(0xffC62828),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               Text(
                                 "${getCurrency(double.parse(store.solucaoSelecionada.solucoes_fertilizantes_concentradas?[index].quantidade ?? '0'))} ",
@@ -216,9 +270,15 @@ class _DetalhesSolucaoState extends State<DetalhesSolucao> {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              fertilizanteConcentrada
-                                                      ?.fertilizante?.nome ??
-                                                  'Não informado',
+                                              (fertilizanteConcentrada
+                                                          ?.fertilizante
+                                                          ?.deleted_at !=
+                                                      null)
+                                                  ? '${fertilizanteConcentrada?.fertilizante?.nome ?? 'Não informado'} (Removido)'
+                                                  : (fertilizanteConcentrada
+                                                          ?.fertilizante
+                                                          ?.nome ??
+                                                      'Não informado'),
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 color: Constants.kGreyMedium,

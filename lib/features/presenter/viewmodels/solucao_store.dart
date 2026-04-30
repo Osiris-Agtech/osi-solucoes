@@ -7,6 +7,7 @@ import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_reposi
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutrienteMap_model.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizanteNutriente/fertilizanteNutriente_model.dart';
+import 'package:osi_solucoes/features/presenter/models/nutriente/nutriente_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoConcentrada/solucaoConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
@@ -57,6 +58,9 @@ abstract class SolucaoStoreBase with Store {
 
   @observable
   List<FertilizanteNutrienteMap> nutrientesList = [];
+
+  @observable
+  List<Nutriente> nutrientesCatalogo = [];
 
   @observable
   List<SolucaoFertilizanteConcentrada> solucaoConcentradaListDetalhes = [];
@@ -178,13 +182,15 @@ abstract class SolucaoStoreBase with Store {
 
   @action
   Future<void> buscarFertilizantes() async {
+    AuthController authController = GetIt.I<AuthController>();
     SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
     isFertilizanteListLoading = true;
     fertilizanteList = [];
     expandedFertilizantes = [];
     quantidadeFertilizantes = [];
 
-    var fertilizantes = await solucaoRepository.buscarFertilizantes();
+    var fertilizantes = await solucaoRepository
+        .buscarFertilizantes(authController.usuario.selected_conta!.conta!.id!);
 
     fertilizantes.fold(
       (err) {
@@ -207,6 +213,239 @@ abstract class SolucaoStoreBase with Store {
     );
 
     isFertilizanteListLoading = false;
+  }
+
+  @action
+  bool isFertilizanteSistema(Fertilizante fertilizante) {
+    return (fertilizante.origin ?? '').toUpperCase() == 'SYSTEM';
+  }
+
+  @action
+  bool isFertilizanteCustom(Fertilizante fertilizante) {
+    return (fertilizante.origin ?? '').toUpperCase() == 'CUSTOM';
+  }
+
+  @action
+  bool canEditFertilizante(Fertilizante fertilizante) {
+    return isFertilizanteCustom(fertilizante);
+  }
+
+  @action
+  bool canDeleteFertilizante(Fertilizante fertilizante) {
+    return isFertilizanteCustom(fertilizante);
+  }
+
+  @action
+  Future<bool> carregarNutrientesCatalogo() async {
+    SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
+    final result = await solucaoRepository.buscarNutrientes();
+
+    return result.fold(
+      (err) {
+        toastError(message: err.message);
+        nutrientesCatalogo = [];
+        return false;
+      },
+      (data) {
+        nutrientesCatalogo = List.from(data);
+        return true;
+      },
+    );
+  }
+
+  @action
+  Future<bool> criarFertilizanteCustomComNutrientes({
+    required String nome,
+    required List<FertilizanteNutrienteFormItem> nutrientes,
+  }) async {
+    final sanitizedName = nome.trim();
+    if (sanitizedName.isEmpty) {
+      toastError(message: 'Preencha o nome do fertilizante');
+      return false;
+    }
+
+    final nutrientesPayload = _buildNutrientesPayload(nutrientes);
+    if (nutrientesPayload == null) {
+      return false;
+    }
+
+    AuthController authController = GetIt.I<AuthController>();
+    SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
+
+    final result = await solucaoRepository.criarFertilizanteCustom(
+      authController.usuario.selected_conta!.conta!.id!,
+      sanitizedName,
+      nutrientesPayload,
+    );
+
+    return result.fold(
+      (err) {
+        toastError(message: err.message);
+        return false;
+      },
+      (data) {
+        fertilizanteList.add(
+          SelecaoFertilizante(selected: false, fertilizante: data),
+        );
+        fertilizanteList = List.from(fertilizanteList);
+        return true;
+      },
+    );
+  }
+
+  @action
+  Future<bool> atualizarFertilizanteCustom({
+    required Fertilizante fertilizante,
+    required String nome,
+    required List<FertilizanteNutrienteFormItem> nutrientes,
+  }) async {
+    if (!canEditFertilizante(fertilizante)) {
+      toastError(
+          message: 'Apenas fertilizantes personalizados podem ser editados');
+      return false;
+    }
+
+    final fertilizanteId = fertilizante.id;
+    if (fertilizanteId == null) {
+      toastError(message: 'Fertilizante inválido para edição');
+      return false;
+    }
+
+    final nutrientesPayload = _buildNutrientesPayload(nutrientes);
+    if (nutrientesPayload == null) {
+      return false;
+    }
+
+    final sanitizedName = nome.trim();
+    if (sanitizedName.isEmpty) {
+      toastError(message: 'Preencha o nome do fertilizante');
+      return false;
+    }
+
+    AuthController authController = GetIt.I<AuthController>();
+    SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
+    final result = await solucaoRepository.atualizarFertilizanteCustom(
+      authController.usuario.selected_conta!.conta!.id!,
+      fertilizanteId,
+      sanitizedName,
+      nutrientesPayload,
+    );
+
+    return result.fold(
+      (err) {
+        toastError(message: err.message);
+        return false;
+      },
+      (data) {
+        final listIndex = fertilizanteList
+            .indexWhere((item) => item.fertilizante.id == data.id);
+        if (listIndex != -1) {
+          final selected = fertilizanteList[listIndex].selected;
+          fertilizanteList[listIndex] =
+              SelecaoFertilizante(selected: selected, fertilizante: data);
+        }
+
+        final expandedIndex = expandedFertilizantes
+            .indexWhere((item) => item.fertilizante.id == data.id);
+        if (expandedIndex != -1) {
+          expandedFertilizantes[expandedIndex].fertilizante = data;
+        }
+
+        final escolhidosIndex = fertilizantesEscolhidos
+            .indexWhere((item) => item.fertilizante.id == data.id);
+        if (escolhidosIndex != -1) {
+          final selected = fertilizantesEscolhidos[escolhidosIndex].selected;
+          fertilizantesEscolhidos[escolhidosIndex] =
+              SelecaoFertilizante(selected: selected, fertilizante: data);
+        }
+
+        fertilizanteList = List.from(fertilizanteList);
+        expandedFertilizantes = List.from(expandedFertilizantes);
+        fertilizantesEscolhidos = List.from(fertilizantesEscolhidos);
+        return true;
+      },
+    );
+  }
+
+  List<Map<String, dynamic>>? _buildNutrientesPayload(
+    List<FertilizanteNutrienteFormItem> nutrientes,
+  ) {
+    if (nutrientes.isEmpty) {
+      toastError(message: 'Adicione ao menos um nutriente');
+      return null;
+    }
+
+    final usedNutrientes = <int>{};
+    final payload = <Map<String, dynamic>>[];
+
+    for (final item in nutrientes) {
+      final nutrienteId = item.nutrienteId;
+      if (nutrienteId == null) {
+        toastError(message: 'Selecione o nutriente em todas as linhas');
+        return null;
+      }
+
+      if (usedNutrientes.contains(nutrienteId)) {
+        toastError(message: 'Não repita nutriente no mesmo fertilizante');
+        return null;
+      }
+
+      final teor = double.tryParse(item.teor.trim().replaceAll(',', '.'));
+      if (teor == null || teor <= 0) {
+        toastError(message: 'Informe teor maior que zero para todos os nutrientes');
+        return null;
+      }
+
+      usedNutrientes.add(nutrienteId);
+      payload.add({
+        'nutrienteId': nutrienteId,
+        'teorNutriente': teor,
+      });
+    }
+
+    return payload;
+  }
+
+  @action
+  Future<bool> excluirFertilizanteCustom(Fertilizante fertilizante) async {
+    if (!canDeleteFertilizante(fertilizante)) {
+      toastError(
+          message: 'Apenas fertilizantes personalizados podem ser excluídos');
+      return false;
+    }
+
+    final fertilizanteId = fertilizante.id;
+    if (fertilizanteId == null) {
+      toastError(message: 'Fertilizante inválido para exclusão');
+      return false;
+    }
+
+    AuthController authController = GetIt.I<AuthController>();
+    SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
+    final result = await solucaoRepository.excluirFertilizanteCustom(
+      authController.usuario.selected_conta!.conta!.id!,
+      fertilizanteId,
+    );
+
+    return result.fold(
+      (err) {
+        toastError(message: err.message);
+        return false;
+      },
+      (_) {
+        fertilizanteList
+            .removeWhere((item) => item.fertilizante.id == fertilizanteId);
+        expandedFertilizantes
+            .removeWhere((item) => item.fertilizante.id == fertilizanteId);
+        fertilizantesEscolhidos
+            .removeWhere((item) => item.fertilizante.id == fertilizanteId);
+
+        fertilizanteList = List.from(fertilizanteList);
+        expandedFertilizantes = List.from(expandedFertilizantes);
+        fertilizantesEscolhidos = List.from(fertilizantesEscolhidos);
+        return true;
+      },
+    );
   }
 
   @action
@@ -809,4 +1048,14 @@ abstract class SolucaoStoreBase with Store {
 
     return isCompatible;
   }
+}
+
+class FertilizanteNutrienteFormItem {
+  int? nutrienteId;
+  String teor;
+
+  FertilizanteNutrienteFormItem({
+    this.nutrienteId,
+    this.teor = '',
+  });
 }

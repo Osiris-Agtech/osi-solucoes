@@ -13,6 +13,10 @@ class Fertilizante {
   @JsonKey(required: false, disallowNullValue: false)
   String? nome;
   @JsonKey(required: false, disallowNullValue: false)
+  String? origin;
+  @JsonKey(required: false, disallowNullValue: false)
+  DateTime? deleted_at;
+  @JsonKey(required: false, disallowNullValue: false)
   String? c_eletrica;
   @JsonKey(required: false, disallowNullValue: false)
   int? compatibilidade;
@@ -28,6 +32,8 @@ class Fertilizante {
   Fertilizante({
     this.id,
     this.nome,
+    this.origin,
+    this.deleted_at,
     this.c_eletrica,
     this.compatibilidade,
     this.solubilidade,

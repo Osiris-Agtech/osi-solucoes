@@ -4,10 +4,10 @@ import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/api_source.dart';
 
 import '../../../../core/errors/errors.dart';
-import '../../../presenter/models/usuario/usuario_model.dart';
+import '../../../presenter/models/authentication/authentication_model.dart';
 
 abstract class ILoginDatasource {
-  Future<Either<Failure, Usuario>> login({
+  Future<Either<Failure, Authentication>> login({
     required String password,
     String? email,
     String? code,
@@ -16,7 +16,7 @@ abstract class ILoginDatasource {
 
 class LoginDatasource implements ILoginDatasource {
   @override
-  Future<Either<Failure, Usuario>> login({
+  Future<Either<Failure, Authentication>> login({
     required String password,
     String? email,
     String? code,
@@ -81,15 +81,19 @@ class LoginDatasource implements ILoginDatasource {
         return Left(ErrorLogin(message: FailureMessage.errorLoginMessage));
       }
 
-      final data = result.data?['login']['usuario'];
+      final data = result.data?['login'];
 
       if (data == null || data.isEmpty) {
         return Left(ErrorLogin(message: FailureMessage.userNotFoundMessage));
       }
 
-      final user = Usuario.fromJson(data);
+      final authentication = Authentication.fromJson(data);
 
-      return Right(user);
+      if (authentication.usuario == null || authentication.token == null) {
+        return Left(ErrorLogin(message: FailureMessage.errorLoginMessage));
+      }
+
+      return Right(authentication);
     } catch (e) {
       return Left(ErrorLogin(message: FailureMessage.errorLoginMessage));
     }

@@ -3,6 +3,7 @@ import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/datasources/solucoes/solucoes_nutritivas_datasource.dart';
 import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_repository_interface.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
+import 'package:osi_solucoes/features/presenter/models/nutriente/nutriente_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoConcentrada/solucaoConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
 
@@ -33,8 +34,53 @@ class SolucaoRepository implements ISolucaoRepository {
   }
 
   @override
-  Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes() async {
-    var result = await datasource.buscarFertilizantes();
+  Future<Either<Failure, List<Fertilizante>>> buscarFertilizantes(
+      int contaId) async {
+    var result = await datasource.buscarFertilizantes(contaId: contaId);
+
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, Fertilizante>> criarFertilizanteCustom(
+      int contaId, String nome, List<Map<String, dynamic>> nutrientes) async {
+    var result = await datasource.criarFertilizanteCustom(
+      contaId: contaId,
+      nome: nome,
+      nutrientes: nutrientes,
+    );
+
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, List<Nutriente>>> buscarNutrientes() async {
+    var result = await datasource.buscarNutrientes();
+
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, Fertilizante>> atualizarFertilizanteCustom(
+      int contaId, int fertilizanteId, String nome,
+      List<Map<String, dynamic>> nutrientes) async {
+    var result = await datasource.atualizarFertilizanteCustom(
+      contaId: contaId,
+      fertilizanteId: fertilizanteId,
+      nome: nome,
+      nutrientes: nutrientes,
+    );
+
+    return result;
+  }
+
+  @override
+  Future<Either<Failure, bool>> excluirFertilizanteCustom(
+      int contaId, int fertilizanteId) async {
+    var result = await datasource.excluirFertilizanteCustom(
+      contaId: contaId,
+      fertilizanteId: fertilizanteId,
+    );
 
     return result;
   }

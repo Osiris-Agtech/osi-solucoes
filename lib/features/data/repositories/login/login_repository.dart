@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/features/data/datasources/login/login_datasource.dart';
 
-import '../../../presenter/models/usuario/usuario_model.dart';
+import '../../../presenter/models/authentication/authentication_model.dart';
 import 'login_repository_interface.dart';
 
 class LoginRepository implements ILoginRepository {
@@ -12,7 +12,7 @@ class LoginRepository implements ILoginRepository {
   });
 
   @override
-  Future<Either<Failure, Usuario>> login({
+  Future<Either<Failure, Authentication>> login({
     required String senha,
     String? email,
     String? codigo,

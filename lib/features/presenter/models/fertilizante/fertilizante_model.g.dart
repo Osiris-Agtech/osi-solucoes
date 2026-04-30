@@ -9,6 +9,10 @@ part of 'fertilizante_model.dart';
 Fertilizante _$FertilizanteFromJson(Map<String, dynamic> json) => Fertilizante(
       id: (json['id'] as num?)?.toInt(),
       nome: json['nome'] as String?,
+      origin: json['origin'] as String?,
+      deleted_at: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
       c_eletrica: json['c_eletrica'] as String?,
       compatibilidade: (json['compatibilidade'] as num?)?.toInt(),
       solubilidade: (json['solubilidade'] as num?)?.toDouble(),
@@ -29,6 +33,8 @@ Map<String, dynamic> _$FertilizanteToJson(Fertilizante instance) =>
     <String, dynamic>{
       'id': instance.id,
       'nome': instance.nome,
+      'origin': instance.origin,
+      'deleted_at': instance.deleted_at?.toIso8601String(),
       'c_eletrica': instance.c_eletrica,
       'compatibilidade': instance.compatibilidade,
       'solubilidade': instance.solubilidade,

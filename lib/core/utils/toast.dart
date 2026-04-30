@@ -71,6 +71,35 @@ void clearToast() {
   _toastNotifier.value = null;
 }
 
+class ToastListener extends StatelessWidget {
+  final Widget child;
+
+  const ToastListener({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<ToastMessage?>(
+      valueListenable: toastNotifier,
+      builder: (context, toast, _) {
+        if (toast != null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!context.mounted) return;
+            showToast(
+              context: context,
+              message: toast.message,
+              type: toast.type,
+              duration: toast.duration,
+            );
+            clearToast();
+          });
+        }
+
+        return child;
+      },
+    );
+  }
+}
+
 /// Funções auxiliares para uso em stores sem BuildContext
 @Deprecated('Use notifyToast com ToastMessage ou showToast com BuildContext')
 void toastError({required String? message}) {
