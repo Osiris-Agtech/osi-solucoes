@@ -49,4 +49,15 @@ class GerenciarEquipeRepository implements IGerenciarEquipeRepository {
 
     return result;
   }
+
+  @override
+  Future<Either<Failure, String>> descadastrarUsuarioDaConta(
+      int contaId, int userId) async {
+    var result = await datasource.descadastrarUsuarioDaConta(
+      contaId: contaId,
+      userId: userId,
+    );
+
+    return result;
+  }
 }

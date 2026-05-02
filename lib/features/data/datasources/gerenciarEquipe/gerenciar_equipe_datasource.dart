@@ -18,6 +18,10 @@ abstract class IGerenciarEquipeDatasource {
     required int contaId,
     required int cargoId,
   });
+  Future<Either<Failure, String>> descadastrarUsuarioDaConta({
+    required int contaId,
+    required int userId,
+  });
 }
 
 class GerenciarEquipeDatasource implements IGerenciarEquipeDatasource {
@@ -252,7 +256,6 @@ class GerenciarEquipeDatasource implements IGerenciarEquipeDatasource {
           inviteContributor(nome: $nome, sobrenome: $sobrenome, email: $email, cargoId: $cargoId, contaId: $contaId) {
             id
             email
-            senha
             nome
             pessoa {
               nome
@@ -295,6 +298,59 @@ class GerenciarEquipeDatasource implements IGerenciarEquipeDatasource {
     } else {
       return Left(
         ErrorGerenciarEquipe(message: FailureMessage.errorRegisterMessage),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> descadastrarUsuarioDaConta(
+      {required int contaId, required int userId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String mutation = r'''
+      mutation DescadastrarUsuarioDaConta($userId: Int!, $contaId: Int!) {
+        descadastrarUsuarioDaConta(userId: $userId, contaId: $contaId) {
+          status
+          mensagem
+          usuarioId
+          contaId
+        }
+      }
+    ''';
+
+    final MutationOptions options = MutationOptions(
+      document: gql(mutation),
+      variables: <String, dynamic>{
+        'userId': userId,
+        'contaId': contaId,
+      },
+    );
+
+    try {
+      final QueryResult result = await client.mutate(options);
+
+      if (result.hasException) {
+        return Left(
+          ErrorGerenciarEquipe(
+              message: FailureMessage.errorDescadastrarUsuarioMessage),
+        );
+      }
+
+      final response = result.data?['descadastrarUsuarioDaConta'];
+      final status = response?['status'];
+
+      if (status is! String || status.isEmpty) {
+        return Left(
+          ErrorGerenciarEquipe(
+              message: FailureMessage.errorDescadastrarUsuarioMessage),
+        );
+      }
+
+      return Right(status);
+    } catch (_) {
+      return Left(
+        ErrorGerenciarEquipe(
+            message: FailureMessage.errorDescadastrarUsuarioMessage),
       );
     }
   }

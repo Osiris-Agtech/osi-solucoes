@@ -15,6 +15,7 @@ abstract class IProtocoloDatasource {
   Future<Either<Failure, List<Protocolo>>> buscarProtocolos(int contaId);
   Future<Either<Failure, List<Cultura>>> buscarCulturas(int contaId);
   Future<Either<Failure, List<Fase>>> buscarFases(int contaId);
+  Future<Either<Failure, bool>> deletarProtocolo(int protocoloId);
   Future<Either<Failure, Fase>> registrarFase({required Fase fase});
   Future<Either<Failure, Protocolo>> atualizarProtocolo(
       {required Protocolo alterarProtocolo});
@@ -217,6 +218,54 @@ class ProtocoloDatasource implements IProtocoloDatasource {
     } else {
       return Left(ErrorProtocolo(message: FailureMessage.errorBuscarFases));
     }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deletarProtocolo(int protocoloId) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      mutation SoftDeleteProtocoloCascade($protocoloId: Int!) {
+        softDeleteProtocoloCascade(protocoloId: $protocoloId) {
+          id
+          deleted_at
+        }
+      }
+    ''';
+
+    final MutationOptions options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'protocoloId': protocoloId,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        final response = result.data?['softDeleteProtocoloCascade'];
+        if (response is bool) {
+          return Right(response);
+        }
+        if (response is int) {
+          return Right(response > 0);
+        }
+        if (response is Map<String, dynamic>) {
+          final id = response['id'];
+          return Right(id is int && id > 0);
+        }
+        return const Right(true);
+      } catch (e) {
+        return Left(
+          ErrorProtocolo(message: FailureMessage.errorDeleteProtocolo),
+        );
+      }
+    }
+
+    return Left(
+      ErrorProtocolo(message: FailureMessage.errorDeleteProtocolo),
+    );
   }
 
   @override

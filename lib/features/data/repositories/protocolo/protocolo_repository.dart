@@ -34,6 +34,12 @@ class ProtocoloRepository implements IProtocoloRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> deletarProtocolo(int protocoloId) async {
+    var result = await datasource.deletarProtocolo(protocoloId);
+    return result;
+  }
+
+  @override
   Future<Either<Failure, Fase>> registrarFase(Fase fase) async {
     var result = await datasource.registrarFase(fase: fase);
     return result;

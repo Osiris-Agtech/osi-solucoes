@@ -224,6 +224,40 @@ abstract class ProtocoloStoreBase with Store {
   }
 
   @action
+  Future<bool> deletarProtocolo(Protocolo protocolo) async {
+    final protocoloId = protocolo.id;
+    if (protocoloId == null) {
+      toastError(message: 'Protocolo inválido para exclusão');
+      return false;
+    }
+
+    isProtocoloListLoading = true;
+    final result = await protocoloRepository.deletarProtocolo(protocoloId);
+
+    bool isDeleted = false;
+    result.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (deleted) {
+        if (deleted) {
+          protocoloList = protocoloList
+              .where((item) => item.id != protocoloId)
+              .toList(growable: false);
+          toastSuccess(message: 'Protocolo deletado com sucesso!');
+          isDeleted = true;
+          return;
+        }
+
+        toastError(message: 'Não foi possível deletar o protocolo');
+      },
+    );
+
+    isProtocoloListLoading = false;
+    return isDeleted;
+  }
+
+  @action
   void setSeachProtocoloPage(String value) {
     searchProtocoloPage = TextEditingController(text: value);
   }

@@ -13,6 +13,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart'
 import "package:collection/collection.dart";
 
 import '../../../core/utils/toast.dart';
+import '../../../core/errors/failure.dart';
 
 part 'gerenciar_equipe_store.g.dart';
 
@@ -234,6 +235,45 @@ abstract class GerenciarEquipeBase with Store {
     );
 
     isUserListLoading = false;
+  }
+
+  Future<void> descadastrarUsuarioDaConta() async {
+    GerenciarEquipeRepository gerenciarEquipeRepository =
+        GetIt.I<GerenciarEquipeRepository>();
+    AuthController authController = GetIt.I<AuthController>();
+
+    final contaId = authController.usuario.selected_conta?.conta?.id;
+    final usuarioId = usuarioSelecionado.id;
+
+    if (contaId == null || usuarioId == null) {
+      toastError(message: FailureMessage.errorDescadastrarUsuarioMessage);
+      return;
+    }
+
+    final result = await gerenciarEquipeRepository.descadastrarUsuarioDaConta(
+      contaId,
+      usuarioId,
+    );
+
+    result.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (status) async {
+        if (status == 'REMOVIDO') {
+          toastSuccess(message: 'Usuário descadastrado da conta com sucesso');
+        } else if (status == 'VINCULO_INEXISTENTE') {
+          toastSuccess(message: 'Usuário já não está vinculado a esta conta');
+        } else {
+          toastError(message: FailureMessage.errorDescadastrarUsuarioMessage);
+          return;
+        }
+
+        await buscarUsuarios();
+        clearDatalhes();
+        Get.back();
+      },
+    );
   }
   //####################### END DETALHES DO USUARIO  ##########################
   //####################### START CADASTRAR USUARIO  ##########################

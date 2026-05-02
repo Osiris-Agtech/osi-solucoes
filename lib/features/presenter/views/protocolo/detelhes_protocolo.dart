@@ -48,30 +48,49 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                     ),
                     flexibleSpace: TopAppBar(
                       path: "",
-                      namePage: store.protocoloSelecionado!.nome ?? "---",
+                      namePage: store.protocoloSelecionado?.nome ?? "---",
                     ),
                     actions: [
                       Align(
                         alignment: const Alignment(0.6, -0.9),
                         child: Padding(
                           padding: const EdgeInsets.only(right: 16.0, top: 8.0),
-                          child: Theme(
-                            data: Theme.of(context).copyWith(
-                              highlightColor: Colors.transparent,
-                              splashColor: Colors.transparent,
+                          child: PopupMenuButton<String>(
+                            icon: const Icon(
+                              Icons.more_vert,
+                              color: Constants.kPrimaryColor,
                             ),
-                            child: IconButton(
-                              hoverColor: Colors.transparent,
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onPressed: () {
+                            onSelected: (value) async {
+                              if (value == 'edit') {
                                 Get.toNamed(Routes.editarProtocoloPage);
-                              },
-                              icon: const Icon(
-                                Icons.edit,
-                                color: Constants.kPrimaryColor,
+                                return;
+                              }
+
+                              if (value == 'delete') {
+                                final protocolo = store.protocoloSelecionado;
+                                if (protocolo == null) return;
+
+                                final confirmed =
+                                    await _confirmarExclusao(context);
+                                if (confirmed != true) return;
+
+                                final deleted =
+                                    await store.deletarProtocolo(protocolo);
+                                if (deleted && context.mounted) {
+                                  Get.back();
+                                }
+                              }
+                            },
+                            itemBuilder: (context) => const [
+                              PopupMenuItem<String>(
+                                value: 'edit',
+                                child: Text('Editar'),
                               ),
-                            ),
+                              PopupMenuItem<String>(
+                                value: 'delete',
+                                child: Text('Excluir'),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -110,7 +129,7 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                                   child: Text('Cultura'),
                                 ),
                                 Text(
-                                  store.protocoloSelecionado!.cultura?.nome ??
+                                  store.protocoloSelecionado?.cultura?.nome ??
                                       '---',
                                   style: const TextStyle(
                                     color: Constants.kText2,
@@ -129,7 +148,7 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                                   child: Text('Tipo'),
                                 ),
                                 Text(
-                                  store.protocoloSelecionado!.tipo_cultura ??
+                                  store.protocoloSelecionado?.tipo_cultura ??
                                       "---",
                                   style: const TextStyle(
                                     color: Constants.kText2,
@@ -148,7 +167,7 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                                   child: Text('Sistema de Cultivo'),
                                 ),
                                 Text(
-                                  store.protocoloSelecionado!.sistema_cultivo ??
+                                  store.protocoloSelecionado?.sistema_cultivo ??
                                       "---",
                                   style: const TextStyle(
                                     color: Constants.kText2,
@@ -167,7 +186,7 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                                   child: Text('Forma de Implantação (Inicio)'),
                                 ),
                                 Text(
-                                  store.protocoloSelecionado!.implantacao ??
+                                  store.protocoloSelecionado?.implantacao ??
                                       "---",
                                   style: const TextStyle(
                                     color: Constants.kText2,
@@ -330,6 +349,30 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<bool?> _confirmarExclusao(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Excluir protocolo'),
+          content: const Text(
+            'Esta ação irá remover o protocolo e suas relações vinculadas. Deseja continuar?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: const Text('Excluir'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

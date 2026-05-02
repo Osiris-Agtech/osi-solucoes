@@ -43,6 +43,8 @@ class FailureMessage {
       'Falha ao cadastrar ajuste, verifique se os campos estão preenchido corretamente';
   static const errorUpdateUsuarioMessage =
       'Falha ao atualizar usuario, verifique se os campos estão preenchido corretamente';
+  static const errorDescadastrarUsuarioMessage =
+      'Falha ao descadastrar usuário da conta';
   static const errorBuscarAgendas = 'Ocorreu um erro ao buscar as atividades';
   static const errorAgendaMarcarComoFeito =
       'Ocorreu um erro ao marcar a atividade como feita';
@@ -59,6 +61,8 @@ class FailureMessage {
       'Ocorreu um erro ao cadastrar o protocolo';
   static const errorAtualizarProtocolo =
       'Ocorreu um erro ao atualizar o protocolo';
+  static const errorDeleteProtocolo =
+      'Ocorreu um erro ao deletar o protocolo';
   static const errorBuscarAgendasEmAberto =
       'Ocorreu um erro ao buscar as atividades em aberto';
   static const errorFinalizacaoAgenda =

@@ -11,4 +11,6 @@ abstract class IGerenciarEquipeRepository {
   Future<Either<Failure, Usuario>> buscarPessoa(String email);
   Future<Either<Failure, Usuario>> registrarUsuario(
       Usuario usuario, int contaId, int cargoId);
+  Future<Either<Failure, String>> descadastrarUsuarioDaConta(
+      int contaId, int userId);
 }

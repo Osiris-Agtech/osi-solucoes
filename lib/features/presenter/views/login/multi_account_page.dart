@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/services/local_storage.dart';
 import 'package:osi_solucoes/features/presenter/views/home/home_page.dart';
 import 'package:osi_solucoes/features/presenter/views/login/login_page.dart';
 
@@ -140,6 +141,9 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
                                         authController.usuario = widget.user;
                                         authController.usuario.selected_conta =
                                             conta;
+                                        await LocalStorage().storageUser(
+                                          authController.usuario,
+                                        );
                                         await Future.delayed(
                                             const Duration(seconds: 2));
                                         if (!context.mounted) return;

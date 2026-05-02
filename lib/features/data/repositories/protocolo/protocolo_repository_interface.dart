@@ -8,6 +8,7 @@ abstract class IProtocoloRepository {
   Future<Either<Failure, List<Protocolo>>> buscarProtocolos(int contaId);
   Future<Either<Failure, List<Cultura>>> buscarCulturas(int contaId);
   Future<Either<Failure, List<Fase>>> buscarFases(int contaId);
+  Future<Either<Failure, bool>> deletarProtocolo(int protocoloId);
   Future<Either<Failure, Fase>> registrarFase(Fase fase);
   Future<Either<Failure, Protocolo>> registrarProtocolo(Protocolo protocolo);
   Future<Either<Failure, Protocolo>> atualizarProtocolo(

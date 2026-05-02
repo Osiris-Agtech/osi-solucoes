@@ -75,6 +75,8 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
                 cargo(context),
                 const Divider(),
                 email(context, store),
+                const SizedBox(height: 24),
+                botaoDescadastrar(context),
               ],
             ),
           ),
@@ -269,6 +271,53 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
         ],
       ),
     );
+  }
+
+  Widget botaoDescadastrar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: SizedBox(
+        width: double.infinity,
+        child: OutlinedButton.icon(
+          onPressed: () => _confirmarDescadastro(context),
+          icon: const Icon(Icons.person_remove_alt_1),
+          label: const Text('Descadastrar da conta'),
+          style: OutlinedButton.styleFrom(
+            foregroundColor: Colors.red.shade700,
+            side: BorderSide(color: Colors.red.shade700),
+            padding: const EdgeInsets.symmetric(vertical: 14),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _confirmarDescadastro(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Descadastrar usuário'),
+          content: const Text(
+            'Este usuário será removido apenas da conta atual. Deseja continuar?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: const Text('Descadastrar'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true) {
+      await store.descadastrarUsuarioDaConta();
+    }
   }
 
   AppBar appBar() {

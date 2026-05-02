@@ -305,13 +305,9 @@ class HomePageState extends State<HomePage> {
                           children: [
                             Observer(
                               builder: (_) {
-                                final nome = store
-                                        .authController
-                                        .usuario
-                                        .selected_conta
-                                        ?.conta
-                                        ?.nome ??
-                                    'Usuário';
+                                final nome =
+                                    store.authController.usuario.nome ??
+                                        'Usuário';
                                 return Text(
                                   'Olá, $nome',
                                   style: const TextStyle(
@@ -1263,12 +1259,7 @@ class HomePageState extends State<HomePage> {
                     children: [
                       Observer(
                         builder: (_) {
-                          final nome = store
-                                  .authController
-                                  .usuario
-                                  .selected_conta
-                                  ?.conta
-                                  ?.nome ??
+                          final nome = store.authController.usuario.nome ??
                               'Usuário';
                           return Text(
                             'Olá, $nome',
@@ -1417,7 +1408,7 @@ class HomePageState extends State<HomePage> {
       ),
       title: Observer(
         builder: (_) {
-          final nome = store.authController.usuario.selected_conta?.conta?.nome ?? '';
+          final nome = store.authController.usuario.nome ?? '';
           return Text(
             nome.isNotEmpty ? 'Olá, $nome' : 'Olá',
             style: const TextStyle(
@@ -3521,13 +3512,7 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
                   children: [
                     Observer(
                       builder: (_) {
-                        final nome = store
-                                .authController
-                                .usuario
-                                .selected_conta
-                                ?.conta
-                                ?.nome ??
-                            '';
+                        final nome = store.authController.usuario.nome ?? '';
                         return Text(
                           nome.isNotEmpty ? 'Olá, $nome' : 'Olá',
                           style: const TextStyle(
