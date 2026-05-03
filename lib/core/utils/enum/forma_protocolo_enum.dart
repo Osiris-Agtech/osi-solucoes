@@ -7,7 +7,7 @@ extension FormaProtocoloEnumExt on FormaProtocoloEnum {
   String get nome {
     switch (this) {
       case FormaProtocoloEnum.semeadura:
-        return 'Semeadura';
+        return 'Sementes';
       case FormaProtocoloEnum.mudas:
         return 'Mudas';
       }

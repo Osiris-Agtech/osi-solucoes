@@ -46,6 +46,9 @@ abstract class ProtocoloStoreBase with Store {
   int? diaDaAtiv;
 
   @observable
+  List<int> diasDaAtiv = [];
+
+  @observable
   bool mostrarErroFormulario = false;
 
   @observable
@@ -124,6 +127,38 @@ abstract class ProtocoloStoreBase with Store {
   int setDiaDaAtiv(int value) => diaDaAtiv = value;
 
   @action
+  void toggleDiaAtividade(int value) {
+    if (diasDaAtiv.contains(value)) {
+      diasDaAtiv = List.from(diasDaAtiv)..remove(value);
+      return;
+    }
+    diasDaAtiv = List.from(diasDaAtiv)..add(value);
+  }
+
+  @action
+  void selecionarTodosDiasAtividade(int totalDias) {
+    if (totalDias <= 0) {
+      diasDaAtiv = [];
+      return;
+    }
+    diasDaAtiv = List.generate(totalDias, (index) => index + 1);
+  }
+
+  @action
+  void limparDiasAtividade() {
+    diasDaAtiv = [];
+  }
+
+  @action
+  void selecionarIntervaloDiasAtividade(int inicio, int fim) {
+    if (inicio <= 0 || fim <= 0 || inicio > fim) {
+      diasDaAtiv = [];
+      return;
+    }
+    diasDaAtiv = List.generate(fim - inicio + 1, (index) => inicio + index);
+  }
+
+  @action
   void alterarForma(String forma) {
     novoFormaProtocolo = forma;
   }
@@ -158,9 +193,94 @@ abstract class ProtocoloStoreBase with Store {
     novoDescricaoAtividade = name;
   }
 
+  List<int> normalizarDiasSelecionados(List<int> dias) {
+    final normalizados = dias.where((dia) => dia > 0).toSet().toList();
+    normalizados.sort();
+    return normalizados;
+  }
+
+  String formatarDiasSelecionados(List<int> dias) {
+    if (dias.isEmpty) return '';
+    return dias.join(', ');
+  }
+
+  List<int> obterDiasSelecionadosAtividade() {
+    if (diasDaAtiv.isNotEmpty) {
+      return normalizarDiasSelecionados(diasDaAtiv);
+    }
+    final parsed = int.tryParse(diaDaAtivController.text);
+    if (parsed == null || parsed <= 0) return [];
+    return [parsed];
+  }
+
+  List<int> obterDiasSelecionadosAtividadeDetalhes() {
+    if (diasDaAtivDetalhes.isNotEmpty) {
+      return normalizarDiasSelecionados(diasDaAtivDetalhes);
+    }
+    final parsed = int.tryParse(diaDetalhesAtivController.text);
+    if (parsed == null || parsed <= 0) return [];
+    return [parsed];
+  }
+
+  bool existeDuplicataAcaoNaFase(Fase fase, String? titulo, int dia,
+      {int? ignorarIndex}) {
+    final tituloNormalizado = (titulo ?? '').trim();
+    final acoes = fase.acao ?? [];
+    for (var i = 0; i < acoes.length; i++) {
+      if (ignorarIndex != null && i == ignorarIndex) continue;
+      final acao = acoes[i];
+      if ((acao.duracao_dias ?? -1) == dia &&
+          (acao.titulo ?? '').trim() == tituloNormalizado) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void ordenarAcoesDaFase(Fase fase) {
+    if (fase.acao == null || fase.acao!.length < 2) return;
+    fase.acao!.sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
+  }
+
+  void recalcularDuracaoDiasReal() {
+    int acumulado = 0;
+    for (final fase in faseList) {
+      final duracaoFase = fase.duracao_dias ?? 0;
+      ordenarAcoesDaFase(fase);
+      for (final acao in fase.acao ?? []) {
+        final dia = acao.duracao_dias;
+        if (dia == null || dia <= 0) continue;
+        acao.duracao_dias_real = dia + acumulado;
+      }
+      acumulado += duracaoFase;
+    }
+  }
+
+  void recalcularDuracaoDiasRealDetalhes() {
+    int acumulado = 0;
+    for (final fase in listaFaseDetalhes) {
+      final duracaoFase = fase.duracao_dias ?? 0;
+      ordenarAcoesDaFase(fase);
+      for (final acao in fase.acao ?? []) {
+        final dia = acao.duracao_dias;
+        if (dia == null || dia <= 0) continue;
+        acao.duracao_dias_real = dia + acumulado;
+      }
+      acumulado += duracaoFase;
+    }
+  }
+
   @action
   void alterarDropdownFase(Fase newFase) {
     selectedFase = newFase;
+  }
+
+  @action
+  void setarDiasSelecionadosAtividade(List<int> dias) {
+    diasDaAtiv = normalizarDiasSelecionados(dias);
+    diaDaAtiv = diasDaAtiv.isNotEmpty ? diasDaAtiv.first : null;
+    diaDaAtivController =
+        TextEditingController(text: formatarDiasSelecionados(diasDaAtiv));
   }
 
   @action
@@ -176,12 +296,19 @@ abstract class ProtocoloStoreBase with Store {
   @action
   void alterarDuracaoDiasFase(int value) {
     novoDuracaoDiasFase = value;
+    recalcularDuracaoDiasReal();
   }
 
   @action
   void setarDuracaoDiasFase(String value) {
     diaDaAtivController.clear();
     diaDaAtivController = TextEditingController(text: value);
+  }
+
+  @action
+  void setarDuracaoDiasFaseDetalhes(String value) {
+    diaDetalhesAtivController.clear();
+    diaDetalhesAtivController = TextEditingController(text: value);
   }
 
   @action
@@ -272,18 +399,7 @@ abstract class ProtocoloStoreBase with Store {
 
   @action
   Future<void> buscarFases() async {
-    AuthController authController = GetIt.I<AuthController>();
-    var fases = await protocoloRepository
-        .buscarFases(authController.usuario.selected_conta!.conta!.id!);
-
-    fases.fold(
-      (err) {
-        faseDropDownList = List.from([]);
-      },
-      (data) async {
-        faseDropDownList = List.from(data);
-      },
-    );
+    faseDropDownList = List.from(faseList);
   }
 
   @action
@@ -291,22 +407,13 @@ abstract class ProtocoloStoreBase with Store {
     isProtocoloListLoading = true;
 
     if (novoTituloFase != null && novoTituloFase != "") {
+      final faseIdTemporaria = -(DateTime.now().microsecondsSinceEpoch);
       Fase novaFase = Fase(
+        id: faseIdTemporaria,
         nome: novoTituloFase,
         duracao_dias: novoDuracaoDiasFase,
-        conta: GetIt.I<AuthController>().usuario.selected_conta!.conta!,
       );
-
-      var fase = await protocoloRepository.registrarFase(novaFase);
-
-      fase.fold(
-        (err) {
-          toastError(message: err.message);
-        },
-        (data) async {
-          faseDropDownList = List.from([data, ...faseDropDownList]);
-        },
-      );
+      faseDropDownList = List.from([novaFase, ...faseDropDownList]);
     }
     isProtocoloListLoading = false;
   }
@@ -427,38 +534,52 @@ abstract class ProtocoloStoreBase with Store {
 
   @action
   void addToFaseList() {
-    Acao acao = Acao(
-      titulo: novoTituloAtividade,
-      duracao_dias: int.parse(diaDaAtivController.text),
-      duracao_dias_real:
-          int.parse(diaDaAtivController.text) + calcularDuracaoDiasReal(),
-      descricao: novoDescricaoAtividade,
-      fase: selectedFase,
-      alerta: true,
-    );
-
     final index = faseList.indexWhere((item) => item.id == selectedFase!.id);
-    // Add Fase e acao
+    final diasSelecionados = obterDiasSelecionadosAtividade();
+    if (diasSelecionados.isEmpty) return;
+
     if (index == -1) {
-      selectedFase?.acao = (selectedFase?.acao ?? [])..add(acao);
-      // Ordena a lista caso maior que 1
-      if (selectedFase!.acao!.length > 1) {
-        selectedFase!.acao!
-            .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
+      selectedFase?.acao = (selectedFase?.acao ?? []);
+      for (final dia in diasSelecionados) {
+        if (existeDuplicataAcaoNaFase(selectedFase!, novoTituloAtividade, dia)) {
+          toastError(message: 'Atividade duplicada ignorada');
+          continue;
+        }
+        selectedFase!.acao!.add(Acao(
+          titulo: novoTituloAtividade,
+          duracao_dias: dia,
+          duracao_dias_real: dia + calcularDuracaoDiasReal(),
+          descricao: novoDescricaoAtividade,
+          fase: selectedFase,
+          alerta: true,
+        ));
       }
+      ordenarAcoesDaFase(selectedFase!);
       faseList.add(selectedFase!);
       faseList = List.from(faseList);
+      recalcularDuracaoDiasReal();
       return;
     }
-    // Add apenas acao quando a fase ja existe na lista
-    faseList[index].acao = (faseList[index].acao ?? [])..add(acao);
-    if (faseList[index].acao!.length > 1) {
-      // Ordena a lista caso maior que 1
-      faseList[index]
-          .acao!
-          .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
+
+    final fase = faseList[index];
+    fase.acao = (fase.acao ?? []);
+    for (final dia in diasSelecionados) {
+      if (existeDuplicataAcaoNaFase(fase, novoTituloAtividade, dia)) {
+        toastError(message: 'Atividade duplicada ignorada');
+        continue;
+      }
+      fase.acao!.add(Acao(
+        titulo: novoTituloAtividade,
+        duracao_dias: dia,
+        duracao_dias_real: dia + calcularDuracaoDiasReal(),
+        descricao: novoDescricaoAtividade,
+        fase: selectedFase,
+        alerta: true,
+      ));
     }
+    ordenarAcoesDaFase(fase);
     faseList = List.from(faseList);
+    recalcularDuracaoDiasReal();
   }
 
   @action
@@ -506,29 +627,23 @@ abstract class ProtocoloStoreBase with Store {
         faseList[indexFase].acao?[indexAcao].descricao ?? "";
     diaDaAtivController = TextEditingController(
         text: faseList[indexFase].acao![indexAcao].duracao_dias.toString());
+    diasDaAtiv = normalizarDiasSelecionados([
+      faseList[indexFase].acao![indexAcao].duracao_dias ?? 0
+    ]);
+    diaDaAtiv = diasDaAtiv.isNotEmpty ? diasDaAtiv.first : null;
   }
 
   @action
   void editarAcao(int indexFase, int indexAcao) {
-    if (selectedFase!.id != faseList[indexFase].id) {
-      faseList[indexFase].acao?.removeAt(indexAcao);
-      if (faseList[indexFase].acao!.isEmpty) {
-        faseList.removeAt(indexFase);
-      }
-      addToFaseList();
-      faseList = List.from(faseList);
-      return;
+    final diasSelecionados = obterDiasSelecionadosAtividade();
+    if (diasSelecionados.isEmpty) return;
+    faseList[indexFase].acao?.removeAt(indexAcao);
+    if (faseList[indexFase].acao!.isEmpty) {
+      faseList.removeAt(indexFase);
     }
-    faseList[indexFase].acao?[indexAcao].titulo = novoTituloAtividade;
-    faseList[indexFase].acao?[indexAcao].descricao = novoDescricaoAtividade;
-    faseList[indexFase].acao![indexAcao].duracao_dias =
-        int.parse(diaDaAtivController.text);
-    faseList[indexFase].acao![indexAcao].duracao_dias_real =
-        int.parse(diaDaAtivController.text) + calcularDuracaoDiasReal();
-    faseList[indexFase]
-        .acao!
-        .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
+    addToFaseList();
     faseList = List.from(faseList);
+    recalcularDuracaoDiasReal();
   }
 
   @action
@@ -538,6 +653,7 @@ abstract class ProtocoloStoreBase with Store {
       faseList.removeAt(indexFase);
     }
     faseList = List.from(faseList);
+    recalcularDuracaoDiasReal();
   }
 
   @action
@@ -545,6 +661,7 @@ abstract class ProtocoloStoreBase with Store {
     faseList[indexFase].acao?.clear();
     faseList.removeAt(indexFase);
     faseList = List.from(faseList);
+    recalcularDuracaoDiasReal();
   }
 
   @action
@@ -581,7 +698,7 @@ abstract class ProtocoloStoreBase with Store {
     if (novoTituloAtividade == null ||
         novoTituloAtividade == "" ||
         selectedFase == null ||
-        diaDaAtivController.text == "") {
+        obterDiasSelecionadosAtividade().isEmpty) {
       isValid = false;
       return;
     }
@@ -617,6 +734,8 @@ abstract class ProtocoloStoreBase with Store {
     selectedFase = null;
     novoDescricaoAtividade = null;
     diaDaAtivController.clear();
+    diasDaAtiv = [];
+    diaDaAtiv = null;
   }
 
   // ##################### START DETALHES ######################
@@ -648,6 +767,9 @@ abstract class ProtocoloStoreBase with Store {
 
   @observable
   int? diaDaAtivDetalhes;
+
+  @observable
+  List<int> diasDaAtivDetalhes = [];
 
   @observable
   List<Fase> faseDropDownListDetelhes = [];
@@ -705,9 +827,36 @@ abstract class ProtocoloStoreBase with Store {
   int alterarDiaDaAtiv(int value) => diaDaAtivDetalhes = value;
 
   @action
-  void setarDuracaoDiasFaseDetalhes(String value) {
-    diaDetalhesAtivController.clear();
-    diaDetalhesAtivController = TextEditingController(text: value);
+  void toggleDiaAtividadeDetalhes(int value) {
+    if (diasDaAtivDetalhes.contains(value)) {
+      diasDaAtivDetalhes = List.from(diasDaAtivDetalhes)..remove(value);
+      return;
+    }
+    diasDaAtivDetalhes = List.from(diasDaAtivDetalhes)..add(value);
+  }
+
+  @action
+  void selecionarTodosDiasAtividadeDetalhes(int totalDias) {
+    if (totalDias <= 0) {
+      diasDaAtivDetalhes = [];
+      return;
+    }
+    diasDaAtivDetalhes = List.generate(totalDias, (index) => index + 1);
+  }
+
+  @action
+  void limparDiasAtividadeDetalhes() {
+    diasDaAtivDetalhes = [];
+  }
+
+  @action
+  void selecionarIntervaloDiasAtividadeDetalhes(int inicio, int fim) {
+    if (inicio <= 0 || fim <= 0 || inicio > fim) {
+      diasDaAtivDetalhes = [];
+      return;
+    }
+    diasDaAtivDetalhes =
+        List.generate(fim - inicio + 1, (index) => inicio + index);
   }
 
   @action
@@ -727,6 +876,7 @@ abstract class ProtocoloStoreBase with Store {
     }
     listaFaseDetalhes = List.from(listaFaseDetalhes);
     alterarLoteFoiAlterado(true);
+    recalcularDuracaoDiasRealDetalhes();
   }
 
   @action
@@ -735,6 +885,7 @@ abstract class ProtocoloStoreBase with Store {
     listaFaseDetalhes.removeAt(indexFase);
     listaFaseDetalhes = List.from(listaFaseDetalhes);
     alterarLoteFoiAlterado(true);
+    recalcularDuracaoDiasRealDetalhes();
   }
 
   @action
@@ -758,23 +909,14 @@ abstract class ProtocoloStoreBase with Store {
     isProtocoloListLoading = true;
 
     if (novoTituloFaseDetalhes != null && novoTituloFaseDetalhes != "") {
+      final faseIdTemporaria = -(DateTime.now().microsecondsSinceEpoch);
       Fase novaFase = Fase(
+        id: faseIdTemporaria,
         nome: novoTituloFaseDetalhes,
         duracao_dias: novoDuracaoDiasFaseDetalhes,
-        conta: GetIt.I<AuthController>().usuario.selected_conta!.conta!,
       );
-
-      var fase = await protocoloRepository.registrarFase(novaFase);
-
-      fase.fold(
-        (err) {
-          toastError(message: err.message);
-        },
-        (data) async {
-          faseDropDownListDetelhes =
-              List.from([data, ...faseDropDownListDetelhes]);
-        },
-      );
+      faseDropDownListDetelhes =
+          List.from([novaFase, ...faseDropDownListDetelhes]);
     }
     isProtocoloListLoading = false;
   }
@@ -782,6 +924,7 @@ abstract class ProtocoloStoreBase with Store {
   @action
   void alterarDuracaoDiasFaseDetalhes(int value) {
     novoDuracaoDiasFaseDetalhes = value;
+    recalcularDuracaoDiasRealDetalhes();
   }
 
   @action
@@ -795,9 +938,21 @@ abstract class ProtocoloStoreBase with Store {
   }
 
   @action
+  void setarDiasSelecionadosAtividadeDetalhes(List<int> dias) {
+    diasDaAtivDetalhes = normalizarDiasSelecionados(dias);
+    diaDaAtivDetalhes =
+        diasDaAtivDetalhes.isNotEmpty ? diasDaAtivDetalhes.first : null;
+    diaDetalhesAtivController = TextEditingController(
+        text: formatarDiasSelecionados(diasDaAtivDetalhes));
+  }
+
+  @action
   void prepararEditDetalhesAtiv(int indexFase, int indexAcao) {
+    faseDropDownListDetelhes = List.from(listaFaseDetalhes);
+    final faseAtual = listaFaseDetalhes[indexFase];
     selectedDetalhesFase = faseDropDownListDetelhes.firstWhereOrNull(
-        (element) => element.id == listaFaseDetalhes[indexFase].id);
+            (element) => element.id == faseAtual.id) ??
+        faseAtual;
     novoTituloDetalhesAtividade = TextEditingController(
         text: listaFaseDetalhes[indexFase].acao?[indexAcao].titulo ?? "");
     novoDescricaoDetalhesAtividade = TextEditingController(
@@ -807,6 +962,11 @@ abstract class ProtocoloStoreBase with Store {
             .acao![indexAcao]
             .duracao_dias
             .toString());
+    diasDaAtivDetalhes = normalizarDiasSelecionados([
+      listaFaseDetalhes[indexFase].acao![indexAcao].duracao_dias ?? 0
+    ]);
+    diaDaAtivDetalhes =
+        diasDaAtivDetalhes.isNotEmpty ? diasDaAtivDetalhes.first : null;
   }
 
   @action
@@ -831,92 +991,84 @@ abstract class ProtocoloStoreBase with Store {
 
   @action
   void addToFaseListDetalhes() {
-    Acao acao = Acao(
-      titulo: novoTituloDetalhesAtividade.text,
-      duracao_dias: int.parse(diaDetalhesAtivController.text),
-      duracao_dias_real: int.parse(diaDetalhesAtivController.text) +
-          calcularDuracaoDiasRealDetalhes(),
-      descricao: novoDescricaoDetalhesAtividade.text,
-      fase: selectedDetalhesFase,
-      alerta: true,
-    );
-
     final index = listaFaseDetalhes
         .indexWhere((item) => item.id == selectedDetalhesFase!.id);
-    // Add Fase e acao
+    final diasSelecionados = obterDiasSelecionadosAtividadeDetalhes();
+    if (diasSelecionados.isEmpty) return;
+
     if (index == -1) {
-      selectedDetalhesFase?.acao = (selectedDetalhesFase?.acao ?? [])
-        ..add(acao);
-      // Ordena a lista caso maior que 1
-      if (selectedDetalhesFase!.acao!.length > 1) {
-        selectedDetalhesFase!.acao!
-            .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
+      selectedDetalhesFase?.acao = (selectedDetalhesFase?.acao ?? []);
+      for (final dia in diasSelecionados) {
+        if (existeDuplicataAcaoNaFase(
+            selectedDetalhesFase!, novoTituloDetalhesAtividade.text, dia)) {
+          toastError(message: 'Atividade duplicada ignorada');
+          continue;
+        }
+        selectedDetalhesFase!.acao!.add(Acao(
+          titulo: novoTituloDetalhesAtividade.text,
+          duracao_dias: dia,
+          duracao_dias_real: dia + calcularDuracaoDiasRealDetalhes(),
+          descricao: novoDescricaoDetalhesAtividade.text,
+          fase: selectedDetalhesFase,
+          alerta: true,
+        ));
       }
+      ordenarAcoesDaFase(selectedDetalhesFase!);
       listaFaseDetalhes.add(selectedDetalhesFase!);
       listaFaseDetalhes = List.from(listaFaseDetalhes);
       alterarLoteFoiAlterado(true);
+      recalcularDuracaoDiasRealDetalhes();
       return;
     }
-    // Add apenas acao quando a fase ja existe na lista
-    listaFaseDetalhes[index].acao = (listaFaseDetalhes[index].acao ?? [])
-      ..add(acao);
-    if (listaFaseDetalhes[index].acao!.length > 1) {
-      // Ordena a lista caso maior que 1
-      listaFaseDetalhes[index]
-          .acao!
-          .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
+
+    final fase = listaFaseDetalhes[index];
+    fase.acao = (fase.acao ?? []);
+    for (final dia in diasSelecionados) {
+      if (existeDuplicataAcaoNaFase(
+          fase, novoTituloDetalhesAtividade.text, dia)) {
+        toastError(message: 'Atividade duplicada ignorada');
+        continue;
+      }
+      fase.acao!.add(Acao(
+        titulo: novoTituloDetalhesAtividade.text,
+        duracao_dias: dia,
+        duracao_dias_real: dia + calcularDuracaoDiasRealDetalhes(),
+        descricao: novoDescricaoDetalhesAtividade.text,
+        fase: selectedDetalhesFase,
+        alerta: true,
+      ));
     }
+    ordenarAcoesDaFase(fase);
     listaFaseDetalhes = List.from(listaFaseDetalhes);
     alterarLoteFoiAlterado(true);
+    recalcularDuracaoDiasRealDetalhes();
   }
 
   @action
   void editarAcaoDetalhes(int indexFase, int indexAcao) {
-    if (selectedDetalhesFase!.id != listaFaseDetalhes[indexFase].id) {
-      listaFaseDetalhes[indexFase].acao?.removeAt(indexAcao);
-      if (listaFaseDetalhes[indexFase].acao!.isEmpty) {
-        listaFaseDetalhes.removeAt(indexFase);
-      }
-      addToFaseListDetalhes();
-      listaFaseDetalhes = List.from(listaFaseDetalhes);
-      return;
+    final diasSelecionados = obterDiasSelecionadosAtividadeDetalhes();
+    if (diasSelecionados.isEmpty) return;
+    listaFaseDetalhes[indexFase].acao?.removeAt(indexAcao);
+    if (listaFaseDetalhes[indexFase].acao!.isEmpty) {
+      listaFaseDetalhes.removeAt(indexFase);
     }
-    listaFaseDetalhes[indexFase].acao?[indexAcao].titulo =
-        novoTituloDetalhesAtividade.text;
-    listaFaseDetalhes[indexFase].acao?[indexAcao].descricao =
-        novoDescricaoDetalhesAtividade.text;
-    listaFaseDetalhes[indexFase].acao![indexAcao].duracao_dias =
-        int.parse(diaDetalhesAtivController.text);
-    listaFaseDetalhes[indexFase].acao![indexAcao].duracao_dias_real =
-        int.parse(diaDetalhesAtivController.text) +
-            calcularDuracaoDiasRealDetalhes();
-    listaFaseDetalhes[indexFase]
-        .acao!
-        .sort((a, b) => a.duracao_dias!.compareTo(b.duracao_dias!));
+    addToFaseListDetalhes();
     listaFaseDetalhes = List.from(listaFaseDetalhes);
     alterarLoteFoiAlterado(true);
+    recalcularDuracaoDiasRealDetalhes();
   }
 
   @action
   Future<void> buscarFasesDetalhes() async {
-    AuthController authController = GetIt.I<AuthController>();
-    var fases = await protocoloRepository
-        .buscarFases(authController.usuario.selected_conta!.conta!.id!);
-
-    fases.fold(
-      (err) {
-        faseDropDownListDetelhes = List.from([]);
-      },
-      (data) async {
-        faseDropDownListDetelhes = List.from(data);
-      },
-    );
+    faseDropDownListDetelhes = List.from(listaFaseDetalhes);
     return;
   }
 
   @action
   Future<void> atualizarProtocolo() async {
     isProtocoloListLoading = true;
+    protocoloSelecionado!.conta =
+        GetIt.I<AuthController>().usuario.selected_conta!.conta;
     protocoloSelecionado!.nome =
         novoNomeProtocoloDetalhes ?? protocoloSelecionado!.nome;
     protocoloSelecionado!.cultura =
@@ -950,7 +1102,7 @@ abstract class ProtocoloStoreBase with Store {
   void validarAtividadeDetalhes() {
     if (novoTituloDetalhesAtividade.text == "" ||
         selectedDetalhesFase == null ||
-        diaDetalhesAtivController.text == "") {
+        obterDiasSelecionadosAtividadeDetalhes().isEmpty) {
       isValid = false;
       return;
     }
@@ -978,6 +1130,8 @@ abstract class ProtocoloStoreBase with Store {
     selectedDetalhesFase = null;
     novoDescricaoDetalhesAtividade.clear();
     diaDetalhesAtivController.clear();
+    diasDaAtivDetalhes = [];
+    diaDaAtivDetalhes = null;
   }
 
   @action

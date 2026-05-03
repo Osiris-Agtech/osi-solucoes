@@ -147,6 +147,22 @@ mixin _$ProtocoloStore on ProtocoloStoreBase, Store {
     });
   }
 
+  late final _$diasDaAtivAtom =
+      Atom(name: 'ProtocoloStoreBase.diasDaAtiv', context: context);
+
+  @override
+  List<int> get diasDaAtiv {
+    _$diasDaAtivAtom.reportRead();
+    return super.diasDaAtiv;
+  }
+
+  @override
+  set diasDaAtiv(List<int> value) {
+    _$diasDaAtivAtom.reportWrite(value, super.diasDaAtiv, () {
+      super.diasDaAtiv = value;
+    });
+  }
+
   late final _$mostrarErroFormularioAtom =
       Atom(name: 'ProtocoloStoreBase.mostrarErroFormulario', context: context);
 
@@ -675,6 +691,22 @@ mixin _$ProtocoloStore on ProtocoloStoreBase, Store {
     });
   }
 
+  late final _$diasDaAtivDetalhesAtom =
+      Atom(name: 'ProtocoloStoreBase.diasDaAtivDetalhes', context: context);
+
+  @override
+  List<int> get diasDaAtivDetalhes {
+    _$diasDaAtivDetalhesAtom.reportRead();
+    return super.diasDaAtivDetalhes;
+  }
+
+  @override
+  set diasDaAtivDetalhes(List<int> value) {
+    _$diasDaAtivDetalhesAtom.reportWrite(value, super.diasDaAtivDetalhes, () {
+      super.diasDaAtivDetalhes = value;
+    });
+  }
+
   late final _$faseDropDownListDetelhesAtom = Atom(
       name: 'ProtocoloStoreBase.faseDropDownListDetelhes', context: context);
 
@@ -787,6 +819,15 @@ mixin _$ProtocoloStore on ProtocoloStoreBase, Store {
     return _$buscarProtocolosAsyncAction.run(() => super.buscarProtocolos());
   }
 
+  late final _$deletarProtocoloAsyncAction =
+      AsyncAction('ProtocoloStoreBase.deletarProtocolo', context: context);
+
+  @override
+  Future<bool> deletarProtocolo(Protocolo protocolo) {
+    return _$deletarProtocoloAsyncAction
+        .run(() => super.deletarProtocolo(protocolo));
+  }
+
   late final _$buscarFasesAsyncAction =
       AsyncAction('ProtocoloStoreBase.buscarFases', context: context);
 
@@ -892,6 +933,50 @@ mixin _$ProtocoloStore on ProtocoloStoreBase, Store {
   }
 
   @override
+  void toggleDiaAtividade(int value) {
+    final _$actionInfo = _$ProtocoloStoreBaseActionController.startAction(
+        name: 'ProtocoloStoreBase.toggleDiaAtividade');
+    try {
+      return super.toggleDiaAtividade(value);
+    } finally {
+      _$ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void selecionarTodosDiasAtividade(int totalDias) {
+    final _$actionInfo = _$ProtocoloStoreBaseActionController.startAction(
+        name: 'ProtocoloStoreBase.selecionarTodosDiasAtividade');
+    try {
+      return super.selecionarTodosDiasAtividade(totalDias);
+    } finally {
+      _$ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void limparDiasAtividade() {
+    final _$actionInfo = _$ProtocoloStoreBaseActionController.startAction(
+        name: 'ProtocoloStoreBase.limparDiasAtividade');
+    try {
+      return super.limparDiasAtividade();
+    } finally {
+      _$ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void selecionarIntervaloDiasAtividade(int inicio, int fim) {
+    final _$actionInfo = _$ProtocoloStoreBaseActionController.startAction(
+        name: 'ProtocoloStoreBase.selecionarIntervaloDiasAtividade');
+    try {
+      return super.selecionarIntervaloDiasAtividade(inicio, fim);
+    } finally {
+      _$ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void alterarForma(String forma) {
     final _$actionInfo = _$ProtocoloStoreBaseActionController.startAction(
         name: 'ProtocoloStoreBase.alterarForma');
@@ -980,6 +1065,17 @@ mixin _$ProtocoloStore on ProtocoloStoreBase, Store {
   }
 
   @override
+  void setarDiasSelecionadosAtividade(List<int> dias) {
+    final _$actionInfo = _$ProtocoloStoreBaseActionController.startAction(
+        name: 'ProtocoloStoreBase.setarDiasSelecionadosAtividade');
+    try {
+      return super.setarDiasSelecionadosAtividade(dias);
+    } finally {
+      _$ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void alterarProtocoloSelecionado(Protocolo novoProtocolo) {
     final _$actionInfo = _$ProtocoloStoreBaseActionController.startAction(
         name: 'ProtocoloStoreBase.alterarProtocoloSelecionado');
@@ -1018,6 +1114,17 @@ mixin _$ProtocoloStore on ProtocoloStoreBase, Store {
         name: 'ProtocoloStoreBase.setarDuracaoDiasFase');
     try {
       return super.setarDuracaoDiasFase(value);
+    } finally {
+      _$ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setarDuracaoDiasFaseDetalhes(String value) {
+    final _$actionInfo = _$ProtocoloStoreBaseActionController.startAction(
+        name: 'ProtocoloStoreBase.setarDuracaoDiasFaseDetalhes');
+    try {
+      return super.setarDuracaoDiasFaseDetalhes(value);
     } finally {
       _$ProtocoloStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -1310,11 +1417,44 @@ mixin _$ProtocoloStore on ProtocoloStoreBase, Store {
   }
 
   @override
-  void setarDuracaoDiasFaseDetalhes(String value) {
+  void toggleDiaAtividadeDetalhes(int value) {
     final _$actionInfo = _$ProtocoloStoreBaseActionController.startAction(
-        name: 'ProtocoloStoreBase.setarDuracaoDiasFaseDetalhes');
+        name: 'ProtocoloStoreBase.toggleDiaAtividadeDetalhes');
     try {
-      return super.setarDuracaoDiasFaseDetalhes(value);
+      return super.toggleDiaAtividadeDetalhes(value);
+    } finally {
+      _$ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void selecionarTodosDiasAtividadeDetalhes(int totalDias) {
+    final _$actionInfo = _$ProtocoloStoreBaseActionController.startAction(
+        name: 'ProtocoloStoreBase.selecionarTodosDiasAtividadeDetalhes');
+    try {
+      return super.selecionarTodosDiasAtividadeDetalhes(totalDias);
+    } finally {
+      _$ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void limparDiasAtividadeDetalhes() {
+    final _$actionInfo = _$ProtocoloStoreBaseActionController.startAction(
+        name: 'ProtocoloStoreBase.limparDiasAtividadeDetalhes');
+    try {
+      return super.limparDiasAtividadeDetalhes();
+    } finally {
+      _$ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void selecionarIntervaloDiasAtividadeDetalhes(int inicio, int fim) {
+    final _$actionInfo = _$ProtocoloStoreBaseActionController.startAction(
+        name: 'ProtocoloStoreBase.selecionarIntervaloDiasAtividadeDetalhes');
+    try {
+      return super.selecionarIntervaloDiasAtividadeDetalhes(inicio, fim);
     } finally {
       _$ProtocoloStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -1392,6 +1532,17 @@ mixin _$ProtocoloStore on ProtocoloStoreBase, Store {
         name: 'ProtocoloStoreBase.alterarDropdownFaseDetalhes');
     try {
       return super.alterarDropdownFaseDetalhes(newFase);
+    } finally {
+      _$ProtocoloStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setarDiasSelecionadosAtividadeDetalhes(List<int> dias) {
+    final _$actionInfo = _$ProtocoloStoreBaseActionController.startAction(
+        name: 'ProtocoloStoreBase.setarDiasSelecionadosAtividadeDetalhes');
+    try {
+      return super.setarDiasSelecionadosAtividadeDetalhes(dias);
     } finally {
       _$ProtocoloStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -1507,6 +1658,7 @@ isNovaFaseBottonSheet: ${isNovaFaseBottonSheet},
 isProtocoloListLoading: ${isProtocoloListLoading},
 isEditing: ${isEditing},
 diaDaAtiv: ${diaDaAtiv},
+diasDaAtiv: ${diasDaAtiv},
 mostrarErroFormulario: ${mostrarErroFormulario},
 isNovaCultura: ${isNovaCultura},
 novoTipoProtocolo: ${novoTipoProtocolo},
@@ -1539,6 +1691,7 @@ diaDetalhesAtivController: ${diaDetalhesAtivController},
 novoTituloFaseDetalhes: ${novoTituloFaseDetalhes},
 novoDuracaoDiasFaseDetalhes: ${novoDuracaoDiasFaseDetalhes},
 diaDaAtivDetalhes: ${diaDaAtivDetalhes},
+diasDaAtivDetalhes: ${diasDaAtivDetalhes},
 faseDropDownListDetelhes: ${faseDropDownListDetelhes},
 novoNomeProtocoloDetalhes: ${novoNomeProtocoloDetalhes},
 novoFormaProtocoloDetalhes: ${novoFormaProtocoloDetalhes},

@@ -121,11 +121,14 @@ class _EditAtivBottomSheetState extends State<EditAtivBottomSheet> {
               const SizedBox(height: 16),
               const Text('Selecione a Fase: '),
               Observer(builder: (_) {
+                final faseSelecionada = store.faseDropDownListDetelhes
+                    .firstWhereOrNull(
+                        (item) => item.id == store.selectedDetalhesFase?.id);
                 return Padding(
                   padding: const EdgeInsets.only(top: 5),
                   child: DropdownButton<Fase>(
                     isExpanded: true,
-                    value: store.selectedDetalhesFase,
+                    value: faseSelecionada,
                     alignment: Alignment.center,
                     hint: store.faseDropDownListDetelhes.isEmpty
                         ? const Text("Crie uma fase ...")
@@ -171,7 +174,7 @@ class _EditAtivBottomSheetState extends State<EditAtivBottomSheet> {
                 );
               }),
               const SizedBox(height: 16),
-              const Text('Dia da Atividade:'),
+              const Text('Dias da Atividade:'),
               Observer(builder: (_) {
                 return TextFormField(
                   readOnly: true,
@@ -197,7 +200,7 @@ class _EditAtivBottomSheetState extends State<EditAtivBottomSheet> {
                       Icons.calendar_month,
                       color: Constants.kPrimaryColor,
                     ),
-                    hintText: "Dia da Atividade ...",
+                    hintText: "Dias da Atividade ...",
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.normal,
                       fontStyle: FontStyle.italic,

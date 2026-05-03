@@ -27,8 +27,10 @@ class ProtocoloRepository implements IProtocoloRepository {
   }
 
   @override
-  Future<Either<Failure, List<Fase>>> buscarFases(int contaId) async {
-    var result = await datasource.buscarFases(contaId);
+  Future<Either<Failure, List<Fase>>> buscarFases(
+      {required int contaId, required int protocoloId}) async {
+    var result =
+        await datasource.buscarFases(contaId: contaId, protocoloId: protocoloId);
 
     return result;
   }

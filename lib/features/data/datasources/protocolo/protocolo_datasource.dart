@@ -14,7 +14,8 @@ import '../../../presenter/models/acao/acao_model.dart';
 abstract class IProtocoloDatasource {
   Future<Either<Failure, List<Protocolo>>> buscarProtocolos(int contaId);
   Future<Either<Failure, List<Cultura>>> buscarCulturas(int contaId);
-  Future<Either<Failure, List<Fase>>> buscarFases(int contaId);
+  Future<Either<Failure, List<Fase>>> buscarFases(
+      {required int contaId, required int protocoloId});
   Future<Either<Failure, bool>> deletarProtocolo(int protocoloId);
   Future<Either<Failure, Fase>> registrarFase({required Fase fase});
   Future<Either<Failure, Protocolo>> atualizarProtocolo(
@@ -24,6 +25,53 @@ abstract class IProtocoloDatasource {
 }
 
 class ProtocoloDatasource implements IProtocoloDatasource {
+  Map<String, dynamic> _buildStructuredPayload(Protocolo protocolo) {
+    final faseById = <int, Fase>{};
+    for (final acao in protocolo.acao ?? <Acao>[]) {
+      final fase = acao.fase;
+      if (fase?.id == null) {
+        continue;
+      }
+      faseById[fase!.id!] = fase;
+    }
+
+    final fases = faseById.values.toList();
+    final keyByFaseId = <int, String>{};
+    for (var i = 0; i < fases.length; i++) {
+      final id = fases[i].id!;
+      keyByFaseId[id] = 'phase-$id-$i';
+    }
+
+    return {
+      if (protocolo.id != null) 'id': protocolo.id,
+      'nome': protocolo.nome,
+      'descricao': protocolo.descricao,
+      'contaId': protocolo.conta?.id,
+      'culturaId': protocolo.cultura?.id,
+      'tipo_cultura': protocolo.tipo_cultura,
+      'sistema_cultivo': protocolo.sistema_cultivo,
+      'implantacao': protocolo.implantacao,
+      'fases': fases
+          .map((fase) => {
+                'key': keyByFaseId[fase.id!],
+                'nome': fase.nome,
+                'descricao': fase.descricao,
+                'duracao_dias': fase.duracao_dias,
+              })
+          .toList(),
+      'acoes': (protocolo.acao ?? <Acao>[])
+          .map((acao) => {
+                'titulo': acao.titulo,
+                'descricao': acao.descricao,
+                'alerta': acao.alerta ?? true,
+                'duracao_dias': acao.duracao_dias,
+                'duracao_dias_real': acao.duracao_dias_real,
+                'phaseKey': keyByFaseId[acao.fase?.id ?? -1],
+              })
+          .toList(),
+    };
+  }
+
   @override
   Future<Either<Failure, List<Protocolo>>> buscarProtocolos(int contaId) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
@@ -167,21 +215,13 @@ class ProtocoloDatasource implements IProtocoloDatasource {
   }
 
   @override
-  Future<Either<Failure, List<Fase>>> buscarFases(int contaId) async {
+  Future<Either<Failure, List<Fase>>> buscarFases(
+      {required int contaId, required int protocoloId}) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     const String readRepositories = r'''
-      query Fases($contaId: Int!) {
-        fases(where: {
-          conta: {
-            id: {
-              equals: $contaId
-            }
-          },
-          deleted_at: {
-            equals: null
-          }
-        }) {
+      query FasesPorProtocolo($contaId: Int!, $protocoloId: Int!) {
+        fasesPorProtocolo(contaId: $contaId, protocoloId: $protocoloId) {
           id
           nome
           descricao
@@ -196,6 +236,7 @@ class ProtocoloDatasource implements IProtocoloDatasource {
       document: gql(readRepositories),
       variables: <String, dynamic>{
         "contaId": contaId,
+        "protocoloId": protocoloId,
       },
     );
 
@@ -203,9 +244,9 @@ class ProtocoloDatasource implements IProtocoloDatasource {
 
     if (!result.hasException) {
       try {
-        if (result.data?['fases'] == []) return const Right([]);
+        if (result.data?['fasesPorProtocolo'] == []) return const Right([]);
 
-        List<Fase>? fases = (result.data?['fases'] as List?)
+        List<Fase>? fases = (result.data?['fasesPorProtocolo'] as List?)
             ?.map((item) => Fase.fromJson(item as Map<String, dynamic>))
             .toList();
         if (fases == null) {
@@ -270,50 +311,7 @@ class ProtocoloDatasource implements IProtocoloDatasource {
 
   @override
   Future<Either<Failure, Fase>> registrarFase({required Fase fase}) async {
-    GraphQLClient client = GraphQLAPI().getGraphQLClient();
-
-    const String readRepositories = r'''
-      mutation Mutation($nome: String!, $duracao_dias: Int!, $contaId: Int!) {
-        createOneFase(data: {
-          nome: $nome,
-          duracao_dias: $duracao_dias,
-          conta: {
-            connect: {
-              id: $contaId
-            }
-          }
-        }) {
-          id
-          nome
-          descricao
-          duracao_dias
-        }
-      }
-      ''';
-
-    final MutationOptions? options;
-
-    options = MutationOptions(
-      document: gql(readRepositories),
-      variables: <String, dynamic>{
-        'nome': fase.nome,
-        'duracao_dias': fase.duracao_dias,
-        'contaId': fase.conta!.id,
-      },
-    );
-
-    final QueryResult result = await client.mutate(options);
-
-    if (!result.hasException) {
-      try {
-        Fase fase = Fase.fromJson(result.data?['createOneFase']);
-        return Right(fase);
-      } catch (e) {
-        return Left(InternalError(message: FailureMessage.errorCadastrarFase));
-      }
-    } else {
-      return Left(InternalError(message: FailureMessage.errorCadastrarFase));
-    }
+    return Left(InternalError(message: FailureMessage.errorCadastrarFase));
   }
 
   @override
@@ -321,93 +319,9 @@ class ProtocoloDatasource implements IProtocoloDatasource {
       {required Protocolo protocolo}) async {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
-    String query = '';
-    protocolo.acao = (protocolo.acao ?? []).reversed.toList();
-    for (Acao element in protocolo.acao ?? []) {
-      if (element ==
-          (protocolo.acao ?? [])[(protocolo.acao ?? []).length - 1]) {
-        query += """{
-          titulo: "${element.titulo}",
-          duracao_dias: ${element.duracao_dias},
-          duracao_dias_real: ${element.duracao_dias_real},
-          descricao: "${element.descricao ?? ''}",
-          fase: {
-            connect: {
-              id: ${element.fase!.id}
-            }
-          },
-          alerta: ${element.alerta ?? true},
-        }""";
-      } else {
-        query += """{
-          titulo: "${element.titulo}",
-          duracao_dias: ${element.duracao_dias},
-          duracao_dias_real: ${element.duracao_dias_real},
-          descricao: "${element.descricao ?? ''}",
-          fase: {
-            connect: {
-              id: ${element.fase!.id}
-            }
-          },
-          alerta: ${element.alerta ?? true},
-        },""";
-      }
-    }
-
-    String cultura = '';
-    if (protocolo.cultura != null) {
-      cultura = """
-        cultura: {
-          connect: {
-            id: ${protocolo.cultura!.id}
-          }
-        },""";
-    }
-
-    String descricao = '';
-    if (protocolo.descricao != null) {
-      descricao = """
-        descricao: "${protocolo.descricao}", """;
-    }
-
-    String sistemaCultivo = '';
-    if (protocolo.sistema_cultivo != null) {
-      sistemaCultivo = """
-        sistema_cultivo: "${protocolo.sistema_cultivo}", """;
-    }
-
-    String tipoCultura = '';
-    if (protocolo.tipo_cultura != null) {
-      tipoCultura = """
-        tipo_cultura: "${protocolo.tipo_cultura}", """;
-    }
-
-    String implantacao = '';
-    if (protocolo.implantacao != null) {
-      implantacao = """
-        implantacao: "${protocolo.implantacao}", """;
-    }
-
-    String readRepositories = """
-      mutation CreateOneProtocolo {
-        createOneProtocolo(data: {
-          nome: "${protocolo.nome}",
-          $descricao
-          conta: {
-            connect: {
-              id: ${protocolo.conta!.id}
-            }
-          },
-          $cultura
-          $sistemaCultivo
-          $tipoCultura
-          $implantacao
-          acoes: {
-            create: [
-              $query
-            ]
-          }
-        }) {
+    const String readRepositories = r'''
+      mutation CreateProtocoloEstruturado($input: String!) {
+        createProtocoloEstruturado(input: $input) {
           id
           nome
           cultura {
@@ -440,12 +354,15 @@ class ProtocoloDatasource implements IProtocoloDatasource {
           }
         }
       }
-      """;
+      ''';
 
     final MutationOptions? options;
 
     options = MutationOptions(
       document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'input': json.encode(_buildStructuredPayload(protocolo)),
+      },
     );
 
     final QueryResult result = await client.mutate(options);
@@ -453,7 +370,7 @@ class ProtocoloDatasource implements IProtocoloDatasource {
     if (!result.hasException) {
       try {
         Protocolo protocolo =
-            Protocolo.fromJson(result.data?['createOneProtocolo']);
+            Protocolo.fromJson(result.data?['createProtocoloEstruturado']);
         return Right(protocolo);
       } catch (e) {
         return Left(
@@ -484,7 +401,7 @@ class ProtocoloDatasource implements IProtocoloDatasource {
     options = MutationOptions(
       document: gql(readRepositories),
       variables: <String, dynamic>{
-        'input': json.encode(alterarProtocolo.toMap()),
+        'input': json.encode(_buildStructuredPayload(alterarProtocolo)),
       },
     );
 

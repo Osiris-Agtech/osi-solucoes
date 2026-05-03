@@ -172,7 +172,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                 );
               }),
               const SizedBox(height: 16),
-              const Text('Dia da Atividade:'),
+              const Text('Dias da Atividade:'),
               TextFormField(
                 readOnly: true,
                 controller: store.diaDaAtivController,
@@ -197,7 +197,7 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
                     Icons.calendar_month,
                     color: Constants.kPrimaryColor,
                   ),
-                  hintText: "Dia da Atividade ...",
+                  hintText: "Dias da Atividade ...",
                   hintStyle: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontStyle: FontStyle.italic,

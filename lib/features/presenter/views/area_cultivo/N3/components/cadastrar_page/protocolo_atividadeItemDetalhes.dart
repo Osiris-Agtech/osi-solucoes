@@ -52,13 +52,25 @@ Padding protocoloatividadeItemDetalhes({
                       Padding(
                         padding: const EdgeInsets.only(left: 10),
                         child: Text(
-                          'Dia ${acao.duracao_dias}',
+                          'Na fase: ${acao.duracao_dias}º dia',
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                      )
+                      ),
+                      if (acao.duracao_dias_real != acao.duracao_dias &&
+                          acao.duracao_dias_real != null)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            'No cultivo: ${acao.duracao_dias_real}º dia',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        )
                     ],
                   ),
                 ),

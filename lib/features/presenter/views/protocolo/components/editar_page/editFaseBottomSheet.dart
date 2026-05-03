@@ -27,6 +27,7 @@ class _EditFaseBottomSheetFaseBottomSheet
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(Get.context!).size;
+    final totalDias = store.selectedDetalhesFase?.duracao_dias ?? 0;
 
     return SizedBox(
       height: size.height * 0.9,
@@ -72,25 +73,82 @@ class _EditFaseBottomSheetFaseBottomSheet
               ),
             ),
             const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Constants.kPrimaryColor,
+                      ),
+                      onPressed: totalDias <= 0
+                          ? null
+                          : () => store
+                              .selecionarTodosDiasAtividadeDetalhes(totalDias),
+                      child: const Text(
+                        'Selecionar todos',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Observer(builder: (_) {
+                      return OutlinedButton(
+                        onPressed: store.diasDaAtivDetalhes.isEmpty
+                            ? null
+                            : store.limparDiasAtividadeDetalhes,
+                        child: const Text(
+                          'Limpar',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            Observer(builder: (_) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                child: Text(
+                  store.diasDaAtivDetalhes.isEmpty
+                      ? 'Nenhum dia selecionado'
+                      : '${store.diasDaAtivDetalhes.length} dia(s) selecionado(s)',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Constants.kText2,
+                  ),
+                ),
+              );
+            }),
+            const SizedBox(height: 12),
             Observer(builder: (_) {
               return Expanded(
                 child: GridView.count(
                   crossAxisCount: 3,
-                  children: List.generate(
-                      store.selectedDetalhesFase!.duracao_dias!, (index) {
+                  children: List.generate(totalDias, (index) {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () => {store.alterarDiaDaAtiv(index + 1)},
+                          onTap: () =>
+                              store.toggleDiaAtividadeDetalhes(index + 1),
                           child: Icon(
-                            store.diaDaAtivDetalhes != null &&
-                                    (store.diaDaAtivDetalhes! - 1) == index
+                            store.diasDaAtivDetalhes.contains(index + 1)
                                 ? Icons.check_box
                                 : Icons.check_box_outline_blank,
                             size: 50,
-                            color: store.diaDaAtivDetalhes != null &&
-                                    (store.diaDaAtivDetalhes! - 1) == index
+                            color: store.diasDaAtivDetalhes.contains(index + 1)
                                 ? Constants.kPrimaryColor
                                 : Constants.kGreyMedium,
                           ),
@@ -128,8 +186,8 @@ class _EditFaseBottomSheetFaseBottomSheet
                           ),
                         ),
                         onPressed: () {
-                          store.setarDuracaoDiasFaseDetalhes(
-                              store.diaDaAtivDetalhes.toString());
+                          store.setarDiasSelecionadosAtividadeDetalhes(
+                              store.diasDaAtivDetalhes);
                           Get.back();
                         }),
                   ),

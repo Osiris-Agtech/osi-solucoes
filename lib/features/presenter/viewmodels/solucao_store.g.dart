@@ -266,6 +266,22 @@ mixin _$SolucaoStore on SolucaoStoreBase, Store {
     });
   }
 
+  late final _$nutrientesCatalogoAtom =
+      Atom(name: 'SolucaoStoreBase.nutrientesCatalogo', context: context);
+
+  @override
+  List<Nutriente> get nutrientesCatalogo {
+    _$nutrientesCatalogoAtom.reportRead();
+    return super.nutrientesCatalogo;
+  }
+
+  @override
+  set nutrientesCatalogo(List<Nutriente> value) {
+    _$nutrientesCatalogoAtom.reportWrite(value, super.nutrientesCatalogo, () {
+      super.nutrientesCatalogo = value;
+    });
+  }
+
   late final _$solucaoConcentradaListDetalhesAtom = Atom(
       name: 'SolucaoStoreBase.solucaoConcentradaListDetalhes',
       context: context);
@@ -433,6 +449,53 @@ mixin _$SolucaoStore on SolucaoStoreBase, Store {
         .run(() => super.buscarFertilizantes());
   }
 
+  late final _$carregarNutrientesCatalogoAsyncAction = AsyncAction(
+      'SolucaoStoreBase.carregarNutrientesCatalogo',
+      context: context);
+
+  @override
+  Future<bool> carregarNutrientesCatalogo() {
+    return _$carregarNutrientesCatalogoAsyncAction
+        .run(() => super.carregarNutrientesCatalogo());
+  }
+
+  late final _$criarFertilizanteCustomComNutrientesAsyncAction = AsyncAction(
+      'SolucaoStoreBase.criarFertilizanteCustomComNutrientes',
+      context: context);
+
+  @override
+  Future<bool> criarFertilizanteCustomComNutrientes(
+      {required String nome,
+      required List<FertilizanteNutrienteFormItem> nutrientes}) {
+    return _$criarFertilizanteCustomComNutrientesAsyncAction.run(() => super
+        .criarFertilizanteCustomComNutrientes(
+            nome: nome, nutrientes: nutrientes));
+  }
+
+  late final _$atualizarFertilizanteCustomAsyncAction = AsyncAction(
+      'SolucaoStoreBase.atualizarFertilizanteCustom',
+      context: context);
+
+  @override
+  Future<bool> atualizarFertilizanteCustom(
+      {required Fertilizante fertilizante,
+      required String nome,
+      required List<FertilizanteNutrienteFormItem> nutrientes}) {
+    return _$atualizarFertilizanteCustomAsyncAction.run(() => super
+        .atualizarFertilizanteCustom(
+            fertilizante: fertilizante, nome: nome, nutrientes: nutrientes));
+  }
+
+  late final _$excluirFertilizanteCustomAsyncAction = AsyncAction(
+      'SolucaoStoreBase.excluirFertilizanteCustom',
+      context: context);
+
+  @override
+  Future<bool> excluirFertilizanteCustom(Fertilizante fertilizante) {
+    return _$excluirFertilizanteCustomAsyncAction
+        .run(() => super.excluirFertilizanteCustom(fertilizante));
+  }
+
   late final _$buscarDetalhesSolucaoAsyncAction =
       AsyncAction('SolucaoStoreBase.buscarDetalhesSolucao', context: context);
 
@@ -558,6 +621,50 @@ mixin _$SolucaoStore on SolucaoStoreBase, Store {
         name: 'SolucaoStoreBase.setFertilizanteQuantidade');
     try {
       return super.setFertilizanteQuantidade(id, value);
+    } finally {
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool isFertilizanteSistema(Fertilizante fertilizante) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.isFertilizanteSistema');
+    try {
+      return super.isFertilizanteSistema(fertilizante);
+    } finally {
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool isFertilizanteCustom(Fertilizante fertilizante) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.isFertilizanteCustom');
+    try {
+      return super.isFertilizanteCustom(fertilizante);
+    } finally {
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool canEditFertilizante(Fertilizante fertilizante) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.canEditFertilizante');
+    try {
+      return super.canEditFertilizante(fertilizante);
+    } finally {
+      _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool canDeleteFertilizante(Fertilizante fertilizante) {
+    final _$actionInfo = _$SolucaoStoreBaseActionController.startAction(
+        name: 'SolucaoStoreBase.canDeleteFertilizante');
+    try {
+      return super.canDeleteFertilizante(fertilizante);
     } finally {
       _$SolucaoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -764,6 +871,7 @@ fertilizanteList: ${fertilizanteList},
 expandedFertilizantes: ${expandedFertilizantes},
 quantidadeFertilizantes: ${quantidadeFertilizantes},
 nutrientesList: ${nutrientesList},
+nutrientesCatalogo: ${nutrientesCatalogo},
 solucaoConcentradaListDetalhes: ${solucaoConcentradaListDetalhes},
 novaSolucaoName: ${novaSolucaoName},
 solucaoSelecionada: ${solucaoSelecionada},
