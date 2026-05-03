@@ -11,7 +11,6 @@ Protocolo _$ProtocoloFromJson(Map<String, dynamic> json) => Protocolo(
       nome: json['nome'] as String?,
       descricao: json['descricao'] as String?,
       implantacao: json['implantacao'] as String?,
-      tipo_cultura: json['tipo_cultura'] as String?,
       sistema_cultivo: json['sistema_cultivo'] as String?,
       created_at: json['created_at'] == null
           ? null
@@ -41,7 +40,6 @@ Map<String, dynamic> _$ProtocoloToJson(Protocolo instance) => <String, dynamic>{
       'id': instance.id,
       'nome': instance.nome,
       'descricao': instance.descricao,
-      'tipo_cultura': instance.tipo_cultura,
       'sistema_cultivo': instance.sistema_cultivo,
       'implantacao': instance.implantacao,
       'created_at': instance.created_at?.toIso8601String(),

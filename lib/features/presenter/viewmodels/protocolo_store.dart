@@ -318,14 +318,14 @@ abstract class ProtocoloStoreBase with Store {
 
   @action
   void setDotIndicator(int value) {
-    if (value >= 0 && value <= 5) {
+    if (value >= 0 && value <= 4) {
       dotIndicator = value;
     }
   }
 
   @action
   void setDotIndicatorEdit(int value) {
-    if (value >= 0 && value <= 5) {
+    if (value >= 0 && value <= 4) {
       dotIndicatorEdit = value;
     }
   }
@@ -450,7 +450,6 @@ abstract class ProtocoloStoreBase with Store {
     Protocolo novoProtocolo = Protocolo(
       nome: novoNomeProtocolo,
       implantacao: novoFormaProtocolo,
-      tipo_cultura: novoTipoProtocolo,
       sistema_cultivo: novoSistemaProtocolo,
       cultura: novaCulturaProtocolo,
       acao: List.from(novasAtividadesProtocolo),
@@ -670,8 +669,6 @@ abstract class ProtocoloStoreBase with Store {
         novoNomeProtocolo == "" ||
         novaCulturaProtocolo == null ||
         novasAtividadesProtocolo == [] ||
-        novoTipoProtocolo == null ||
-        novoTipoProtocolo == "" ||
         novoSistemaProtocolo == null ||
         novoSistemaProtocolo == "" ||
         novoFormaProtocolo == "" ||
@@ -1078,8 +1075,6 @@ abstract class ProtocoloStoreBase with Store {
         novoFormaProtocoloDetalhes ?? protocoloSelecionado!.implantacao;
     protocoloSelecionado!.sistema_cultivo =
         novoSistemaProtocoloDetalhes ?? protocoloSelecionado!.sistema_cultivo;
-    protocoloSelecionado!.tipo_cultura =
-        novoTipoProtocoloDetalhes ?? protocoloSelecionado!.tipo_cultura;
     protocoloSelecionado!.acao = List.from(novasAtividadesDetalhesProtocolo);
 
     var protocolo =

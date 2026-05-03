@@ -17,7 +17,6 @@ class Protocolo {
   @JsonKey(required: false, disallowNullValue: false)
   String? descricao;
   @JsonKey(required: false, disallowNullValue: false)
-  String? tipo_cultura;
   @JsonKey(required: false, disallowNullValue: false)
   String? sistema_cultivo;
   @JsonKey(required: false, disallowNullValue: false)
@@ -42,7 +41,6 @@ class Protocolo {
     this.nome,
     this.descricao,
     this.implantacao,
-    this.tipo_cultura,
     this.sistema_cultivo,
     this.created_at,
     this.updated_at,
@@ -63,7 +61,6 @@ class Protocolo {
       'id': id,
       'nome': nome,
       'descricao': descricao,
-      'tipo_cultura': tipo_cultura,
       'sistema_cultivo': sistema_cultivo,
       'implantacao': implantacao,
       'created_at': created_at?.toIso8601String(),

@@ -12,7 +12,6 @@ import 'package:osi_solucoes/features/presenter/views/protocolo/components/edita
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/editar_page/editFormaPage.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/editar_page/editNomePage.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/editar_page/editSistemaPage.dart';
-import 'package:osi_solucoes/features/presenter/views/protocolo/components/editar_page/editTipoPage.dart';
 
 SizedBox carouselEditarProtocolo(
     BuildContext context,
@@ -40,7 +39,7 @@ SizedBox carouselEditarProtocolo(
               ),
               Observer(builder: (_) {
                 return DotsIndicator(
-                  dotsCount: 6,
+                  dotsCount: 5,
                   position: store.dotIndicatorEdit * 1.0,
                   decorator: DotsDecorator(
                     size: const Size.square(9.0),
@@ -71,7 +70,6 @@ SizedBox carouselEditarProtocolo(
             items: [
               editNomePage(context, store),
               editCulturaPage(context, store),
-              editTipoPage(context, store),
               editSistemaPage(context, store),
               editFormaPage(context, store),
               editAtivPage(context, store)
@@ -163,7 +161,7 @@ class _NextStepButtonState extends State<NextStepButton> {
         ),
       ),
       onPressed: () {
-        if (store.dotIndicatorEdit == 5) {
+        if (store.dotIndicatorEdit == 4) {
           Navigator.pop(context);
         } else {
           store.setDotIndicatorEdit(store.dotIndicatorEdit + 1);

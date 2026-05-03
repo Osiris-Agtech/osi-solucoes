@@ -125,32 +125,6 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
                       thickness: 0.5,
                       color: Color(0xFFC4C4C4),
                     ),
-                    tipo(context),
-                    Observer(builder: (_) {
-                      return Visibility(
-                        visible: store.mostrarErroFormulario &&
-                            (store.novoTipoProtocolo ?? "").isEmpty,
-                        child: const Padding(
-                          padding: EdgeInsets.only(
-                            left: 16.0,
-                            bottom: 8.0,
-                          ),
-                          child: Text(
-                            'Tipo obrigatório',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Constants.kErrorColor,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                    const Divider(
-                      thickness: 0.5,
-                      color: Color(0xFFC4C4C4),
-                    ),
                     sistema(context),
                     Observer(builder: (_) {
                       return Visibility(
@@ -473,82 +447,6 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
     );
   }
 
-  InkWell tipo(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-            leading: const Icon(Icons.label),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: Text(
-                    'Tipo',
-                    maxLines: 1,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                  ),
-                ),
-                (store.novoTipoProtocoloDetalhes ?? "").isNotEmpty
-                    ? Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.novoTipoProtocoloDetalhes ?? "",
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ],
-                        ),
-                      )
-                    : Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.protocoloSelecionado!.tipo_cultura ??
-                                    "Preencher",
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ],
-                        ),
-                      )
-              ],
-            ),
-            onTap: () {
-              store.setDotIndicatorEdit(2);
-              editarBottomSheet(
-                  context, carouselController, controlerPages, store);
-            });
-      }),
-    );
-  }
-
   InkWell sistema(BuildContext context) {
     return InkWell(
       child: Observer(builder: (_) {
@@ -618,7 +516,7 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
               ],
             ),
             onTap: () {
-              store.setDotIndicatorEdit(3);
+              store.setDotIndicatorEdit(2);
               editarBottomSheet(
                   context, carouselController, controlerPages, store);
             });
@@ -694,7 +592,7 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
               ],
             ),
             onTap: () {
-              store.setDotIndicatorEdit(4);
+              store.setDotIndicatorEdit(3);
               editarBottomSheet(
                   context, carouselController, controlerPages, store);
             });
@@ -746,7 +644,7 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
               ],
             ),
             onTap: () {
-              store.setDotIndicatorEdit(5);
+              store.setDotIndicatorEdit(4);
               editarBottomSheet(
                   context, carouselController, controlerPages, store);
             });

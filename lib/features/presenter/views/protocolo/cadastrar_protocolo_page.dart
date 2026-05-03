@@ -126,32 +126,6 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
                       thickness: 0.5,
                       color: Color(0xFFC4C4C4),
                     ),
-                    tipo(context),
-                    Observer(builder: (_) {
-                      return Visibility(
-                        visible: store.mostrarErroFormulario &&
-                            (store.novoTipoProtocolo ?? "").isEmpty,
-                        child: const Padding(
-                          padding: EdgeInsets.only(
-                            left: 16.0,
-                            bottom: 8.0,
-                          ),
-                          child: Text(
-                            'Tipo obrigatório',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Constants.kErrorColor,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                    const Divider(
-                      thickness: 0.5,
-                      color: Color(0xFFC4C4C4),
-                    ),
                     sistema(context),
                     Observer(builder: (_) {
                       return Visibility(
@@ -467,74 +441,6 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
     );
   }
 
-  InkWell tipo(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-            leading: const Icon(Icons.label),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: Text(
-                    'Tipo',
-                    maxLines: 1,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                  ),
-                ),
-                (store.novoTipoProtocolo ?? "").isNotEmpty
-                    ? Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.novoTipoProtocolo ?? "",
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ],
-                        ),
-                      )
-                    : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Text(
-                            "Preencher",
-                            style: TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-              ],
-            ),
-            onTap: () {
-              store.setDotIndicator(2);
-              bottomSheet(context, carouselController, controlerPages, store);
-            });
-      }),
-    );
-  }
-
   InkWell sistema(BuildContext context) {
     return InkWell(
       child: Observer(builder: (_) {
@@ -596,7 +502,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
               ],
             ),
             onTap: () {
-              store.setDotIndicator(3);
+              store.setDotIndicator(2);
               bottomSheet(context, carouselController, controlerPages, store);
             });
       }),
@@ -664,7 +570,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
               ],
             ),
             onTap: () {
-              store.setDotIndicator(4);
+              store.setDotIndicator(3);
               bottomSheet(context, carouselController, controlerPages, store);
             });
       }),
@@ -733,7 +639,7 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
               ],
             ),
             onTap: () {
-              store.setDotIndicator(5);
+              store.setDotIndicator(4);
               bottomSheet(context, carouselController, controlerPages, store);
             });
       }),

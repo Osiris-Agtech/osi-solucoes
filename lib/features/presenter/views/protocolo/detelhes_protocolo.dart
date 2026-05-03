@@ -145,25 +145,6 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Expanded(
-                                  child: Text('Tipo'),
-                                ),
-                                Text(
-                                  store.protocoloSelecionado?.tipo_cultura ??
-                                      "---",
-                                  style: const TextStyle(
-                                    color: Constants.kText2,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Expanded(
                                   child: Text('Sistema de Cultivo'),
                                 ),
                                 Text(

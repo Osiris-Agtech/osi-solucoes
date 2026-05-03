@@ -68,24 +68,6 @@ ListView protocoloDetalhes(LoteStore store, ProtocoloStore protocoloStore) {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Expanded(
-                        child: Text('Tipo'),
-                      ),
-                      Text(
-                        store.protocoloDetalhes?.tipo_cultura ?? "...",
-                        style: const TextStyle(
-                          color: Constants.kText2,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Expanded(
                         child: Text('Sistema de Cultivo'),
                       ),
                       Text(

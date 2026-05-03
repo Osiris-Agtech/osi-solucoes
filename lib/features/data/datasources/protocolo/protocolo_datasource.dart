@@ -48,7 +48,6 @@ class ProtocoloDatasource implements IProtocoloDatasource {
       'descricao': protocolo.descricao,
       'contaId': protocolo.conta?.id,
       'culturaId': protocolo.cultura?.id,
-      'tipo_cultura': protocolo.tipo_cultura,
       'sistema_cultivo': protocolo.sistema_cultivo,
       'implantacao': protocolo.implantacao,
       'fases': fases
@@ -103,7 +102,6 @@ class ProtocoloDatasource implements IProtocoloDatasource {
             }
           }
           sistema_cultivo
-          tipo_cultura
           implantacao
           acoes {
             id
@@ -337,7 +335,6 @@ class ProtocoloDatasource implements IProtocoloDatasource {
             }
           }
           sistema_cultivo
-          tipo_cultura
           implantacao
           acoes {
             id
