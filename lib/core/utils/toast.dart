@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../errors/failure.dart';
 import '../constants/constants.dart';
 
 /// Tipo de notificação
@@ -103,6 +104,10 @@ class ToastListener extends StatelessWidget {
 /// Funções auxiliares para uso em stores sem BuildContext
 @Deprecated('Use notifyToast com ToastMessage ou showToast com BuildContext')
 void toastError({required String? message}) {
+  if (message == FailureMessage.emptyListMessage) {
+    return;
+  }
+
   notifyToast(
     ToastMessage(
       message: message ?? 'Não foi possível realizar essa requisição',
