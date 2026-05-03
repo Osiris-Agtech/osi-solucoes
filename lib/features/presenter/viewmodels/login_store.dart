@@ -110,6 +110,8 @@ abstract class LoginStoreBase with Store {
     final hasMultipleAccounts = data.contas != null && data.contas!.length > 1;
 
     if (hasMultipleAccounts) {
+      await LocalStorage().storageToken(token);
+      await LocalStorage().storageUser(data);
       return "multiple";
     }
 

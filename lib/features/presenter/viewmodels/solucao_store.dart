@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
+import 'package:osi_solucoes/core/errors/failure.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/solucoes/solucoes_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante_model.dart';
@@ -118,7 +119,9 @@ abstract class SolucaoStoreBase with Store {
     solucoes.fold(
       (err) {
         solucaoList = ObservableList.of([]);
-        // toastError(message: err.message);
+        if (err.message != FailureMessage.emptyListMessage) {
+          toastError(message: err.message);
+        }
       },
       (data) async {
         solucaoList = ObservableList.of(data);
@@ -195,7 +198,9 @@ abstract class SolucaoStoreBase with Store {
     fertilizantes.fold(
       (err) {
         fertilizanteList = ObservableList.of([]);
-        // toastError(message: err.message);
+        if (err.message != FailureMessage.emptyListMessage) {
+          toastError(message: err.message);
+        }
       },
       (data) async {
         for (var item in data) {

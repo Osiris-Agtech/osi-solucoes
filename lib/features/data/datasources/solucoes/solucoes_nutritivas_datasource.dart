@@ -43,6 +43,37 @@ abstract class ISolucaoDatasource {
 }
 
 class SolucaoDatasource implements ISolucaoDatasource {
+  String? _graphQlErrorCode(QueryResult result) {
+    final graphQLErrors = result.exception?.graphqlErrors ?? [];
+    if (graphQLErrors.isEmpty) {
+      return null;
+    }
+
+    final extensions = graphQLErrors.first.extensions;
+    return extensions == null ? null : extensions['code']?.toString();
+  }
+
+  bool _hasNetworkError(QueryResult result) {
+    return result.exception?.linkException != null;
+  }
+
+  String _solucaoScopeErrorMessage(QueryResult result, String fallbackMessage) {
+    if (_hasNetworkError(result)) {
+      return FailureMessage.connectionErrorMessage;
+    }
+
+    final code = _graphQlErrorCode(result);
+    if (code == 'UNAUTHENTICATED') {
+      return 'Sessão expirada. Faça login novamente';
+    }
+
+    if (code == 'TENANT_SCOPE_VIOLATION' || code == 'FORBIDDEN') {
+      return 'Conta sem permissão para acessar os dados desta solução';
+    }
+
+    return fallbackMessage;
+  }
+
   String _fertilizanteMutationErrorMessage(
     QueryResult result, {
     required String forbiddenMessage,
@@ -50,18 +81,22 @@ class SolucaoDatasource implements ISolucaoDatasource {
     required String notFoundMessage,
     required String fallbackMessage,
   }) {
-    final graphQLErrors = result.exception?.graphqlErrors ?? [];
-    final firstCode = graphQLErrors.isNotEmpty
-        ? graphQLErrors.first.extensions != null
-            ? graphQLErrors.first.extensions!['code']?.toString()
-            : null
-        : null;
+    if (_hasNetworkError(result)) {
+      return FailureMessage.connectionErrorMessage;
+    }
+
+    final firstCode = _graphQlErrorCode(result);
+
+    if (firstCode == 'UNAUTHENTICATED') {
+      return 'Sessão expirada. Faça login novamente';
+    }
 
     if (firstCode == 'TENANT_SCOPE_VIOLATION' || firstCode == 'FORBIDDEN') {
       return forbiddenMessage;
     }
 
-    if (firstCode == 'SYSTEM_FERTILIZER_IMMUTABLE') {
+    if (firstCode == 'SYSTEM_FERTILIZER_IMMUTABLE' ||
+        firstCode == 'SEED_IMMUTABLE') {
       return immutableMessage;
     }
 
@@ -125,9 +160,16 @@ class SolucaoDatasource implements ISolucaoDatasource {
 
       List<SolucaoNutritiva> solucoesList = solucoes.cast<SolucaoNutritiva>();
       return Right(solucoesList);
-    } else {
-      return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
     }
+
+    return Left(
+      ErrorReservatorio(
+        message: _solucaoScopeErrorMessage(
+          result,
+          FailureMessage.emptyListMessage,
+        ),
+      ),
+    );
   }
 
   @override
@@ -235,10 +277,16 @@ class SolucaoDatasource implements ISolucaoDatasource {
       SolucaoNutritiva novaSolucao =
           SolucaoNutritiva.fromJson(result.data?['createOneSNutritiva']);
       return Right(novaSolucao);
-    } else {
-      return Left(
-          ErrorReservatorio(message: FailureMessage.internalErrorMessage));
     }
+
+    return Left(
+      ErrorReservatorio(
+        message: _solucaoScopeErrorMessage(
+          result,
+          FailureMessage.internalErrorMessage,
+        ),
+      ),
+    );
   }
 
   @override
@@ -291,19 +339,28 @@ class SolucaoDatasource implements ISolucaoDatasource {
       List<Fertilizante> fertilizanteList = fertilizantes.cast<Fertilizante>();
       return Right(fertilizanteList);
     } else {
-      final graphQLErrors = result.exception?.graphqlErrors ?? [];
-      final firstCode = graphQLErrors.isNotEmpty
-          ? graphQLErrors.first.extensions != null
-              ? graphQLErrors.first.extensions!['code']?.toString()
-              : null
-          : null;
+      if (_hasNetworkError(result)) {
+        return Left(
+          ErrorFertilizante(message: FailureMessage.connectionErrorMessage),
+        );
+      }
+
+      final firstCode = _graphQlErrorCode(result);
+
+      if (firstCode == 'UNAUTHENTICATED') {
+        return Left(
+          ErrorFertilizante(message: 'Sessão expirada. Faça login novamente'),
+        );
+      }
 
       if (firstCode == 'TENANT_SCOPE_VIOLATION' || firstCode == 'FORBIDDEN') {
         return Left(ErrorFertilizante(
             message: 'Conta sem permissão para acessar este catálogo'));
       }
 
-      return Left(ErrorFertilizante(message: FailureMessage.emptyListMessage));
+      return Left(
+        ErrorFertilizante(message: FailureMessage.internalErrorMessage),
+      );
     }
   }
 
@@ -587,9 +644,16 @@ class SolucaoDatasource implements ISolucaoDatasource {
           SolucaoNutritiva.fromJson(result.data?['sNutritiva']);
 
       return Right(solucao);
-    } else {
-      return Left(ErrorReservatorio(message: FailureMessage.errorInfoMessage));
     }
+
+    return Left(
+      ErrorReservatorio(
+        message: _solucaoScopeErrorMessage(
+          result,
+          FailureMessage.errorInfoMessage,
+        ),
+      ),
+    );
   }
 
   @override
