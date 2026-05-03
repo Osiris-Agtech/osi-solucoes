@@ -176,6 +176,20 @@ class ListFases extends StatelessWidget {
                                 ),
                               ),
                               const Spacer(),
+                              InkWell(
+                                onTap: () {
+                                  store.prepararEditFaseDetalhes(index);
+                                  getBottomSheet(const EditAtivBottomSheet(
+                                    isNewRecord: false,
+                                    isFase: true,
+                                  ));
+                                },
+                                child: const Icon(
+                                  Icons.edit_outlined,
+                                  size: 20,
+                                  color: Constants.kPrimaryColor,
+                                ),
+                              ),
                               const SizedBox(
                                 width: 10,
                               ),

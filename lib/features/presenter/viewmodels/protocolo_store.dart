@@ -786,6 +786,8 @@ abstract class ProtocoloStoreBase with Store {
   @observable
   Cultura? novaCulturaProtocoloDetalhes;
 
+  int? faseDetalhesEditIndex;
+
   @action
   void alterarLoteFoiAlterado(bool value) {
     loteFoiAlterado = value;
@@ -916,6 +918,59 @@ abstract class ProtocoloStoreBase with Store {
           List.from([novaFase, ...faseDropDownListDetelhes]);
     }
     isProtocoloListLoading = false;
+  }
+
+  void prepararEditFaseDetalhes(int indexFase) {
+    if (indexFase < 0 || indexFase >= listaFaseDetalhes.length) {
+      return;
+    }
+
+    final fase = listaFaseDetalhes[indexFase];
+    faseDetalhesEditIndex = indexFase;
+    novoTituloFaseDetalhes = fase.nome;
+    novoDuracaoDiasFaseDetalhes = fase.duracao_dias;
+    selectedDetalhesFase = fase;
+    alterarLoteFoiAlterado(true);
+  }
+
+  bool editarFaseDetalhes() {
+    final indexFase = faseDetalhesEditIndex;
+    if (indexFase == null ||
+        indexFase < 0 ||
+        indexFase >= listaFaseDetalhes.length) {
+      return false;
+    }
+
+    final faseAtual = listaFaseDetalhes[indexFase];
+    final novoTitulo = (novoTituloFaseDetalhes ?? '').trim();
+    final novaDuracao = novoDuracaoDiasFaseDetalhes;
+    if (novoTitulo.isEmpty || novaDuracao == null || novaDuracao <= 0) {
+      return false;
+    }
+
+    final existeAtividadeForaDaDuracao =
+        (faseAtual.acao ?? []).any((acao) => (acao.duracao_dias ?? 0) > novaDuracao);
+    if (existeAtividadeForaDaDuracao) {
+      toastError(
+          message:
+              'Existem atividades além do novo período da fase. Ajuste os dias das atividades antes de salvar.');
+      return false;
+    }
+
+    faseAtual.nome = novoTitulo;
+    faseAtual.duracao_dias = novaDuracao;
+
+    if (selectedDetalhesFase?.id == faseAtual.id) {
+      selectedDetalhesFase = faseAtual;
+    }
+
+    listaFaseDetalhes = List.from(listaFaseDetalhes);
+    faseDropDownListDetelhes = List.from(listaFaseDetalhes);
+    recalcularDuracaoDiasRealDetalhes();
+    atualizarNovasAtividadesDetalhes();
+    alterarLoteFoiAlterado(true);
+    faseDetalhesEditIndex = null;
+    return true;
   }
 
   @action
@@ -1108,6 +1163,7 @@ abstract class ProtocoloStoreBase with Store {
   void limparFaseDetalhesBottomSheet() {
     novoTituloFaseDetalhes = null;
     novoDuracaoDiasFaseDetalhes = null;
+    faseDetalhesEditIndex = null;
   }
 
   @action

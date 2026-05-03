@@ -459,7 +459,14 @@ class _EditAtivBottomSheetState extends State<EditAtivBottomSheet> {
                                   "Preencha todos campos do formulario corretamente!");
                           return;
                         }
-                        store.registrarFaseDetalhes();
+                        if (!widget.isNewRecord && widget.isFase) {
+                          final faseEditada = store.editarFaseDetalhes();
+                          if (!faseEditada) {
+                            return;
+                          }
+                        } else {
+                          store.registrarFaseDetalhes();
+                        }
                         store.limparFaseDetalhesBottomSheet();
                         Get.back();
                       },
