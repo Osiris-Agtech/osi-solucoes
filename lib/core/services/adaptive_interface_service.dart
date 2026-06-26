@@ -87,6 +87,12 @@ class AdaptiveInterfaceService {
       final cardType = data['cardType'] as String?;
       final confidence = ((data['confidence'] as num?) ?? 0).toDouble();
       final responseMode = (data['mode'] as String?) ?? 'GRADUAL';
+      final dashboardSource = _resolveDashboardSource(
+        data,
+        confidence: confidence,
+        dashboardName: dashboardName,
+        cardType: cardType,
+      );
 
       print('📊 [ADAPTIVE] Dashboard recebido:');
       print(' └─ displayName: ${dashboardName ?? 'null'}');
@@ -111,9 +117,14 @@ class AdaptiveInterfaceService {
               final itemConfidence =
                   (item['prob'] as num? ?? item['confidence'] as num? ?? 0.5)
                       .toDouble();
-              final resourceId = item['resourceId'] as String?;
-              final resourceType = item['resourceType'] as String?;
-              final resourceName = item['resourceName'] as String?;
+              final resourceId = item['resourceId']?.toString();
+              final resourceType = item['resourceType']?.toString();
+              final resourceName = item['resourceName']?.toString();
+              final source = _resolveShortcutSource(
+                item,
+                confidence: itemConfidence,
+                resourceId: resourceId,
+              );
 
               print(
                   ' └─ Atalho: $route (confiança: ${(itemConfidence * 100).toStringAsFixed(1)}%)');
@@ -128,6 +139,7 @@ class AdaptiveInterfaceService {
                 resourceId: resourceId,
                 resourceType: resourceType,
                 resourceName: resourceName,
+                source: source,
               );
             }
             return null;
@@ -142,6 +154,7 @@ class AdaptiveInterfaceService {
           dashboard: dashboardName,
           dashboardId: dashboardId,
           cardType: cardType,
+          dashboardSource: dashboardSource,
           dashboardConfidence: confidence,
           shortcuts: _getDefaultShortcuts(),
           mode: responseMode,
@@ -178,6 +191,7 @@ class AdaptiveInterfaceService {
         dashboard: dashboardName,
         dashboardId: dashboardId,
         cardType: cardType,
+        dashboardSource: dashboardSource,
         dashboardConfidence: confidence,
         shortcuts: shortcuts,
         mode: responseMode,
@@ -202,6 +216,7 @@ class AdaptiveInterfaceService {
     String? resourceId,
     String? resourceType,
     String? resourceName,
+    String source = 'system',
   }) {
     final config = _getRouteConfig()[route];
 
@@ -216,6 +231,7 @@ class AdaptiveInterfaceService {
         resourceId: resourceId,
         resourceType: resourceType,
         resourceName: resourceName,
+        source: source,
       );
     }
 
@@ -229,7 +245,59 @@ class AdaptiveInterfaceService {
       resourceId: resourceId,
       resourceType: resourceType,
       resourceName: resourceName,
+      source: source,
     );
+  }
+
+  String _resolveShortcutSource(
+    Map<dynamic, dynamic> item, {
+    required double confidence,
+    String? resourceId,
+  }) {
+    final rawSource = item['source']?.toString().toLowerCase() ??
+        item['origin']?.toString().toLowerCase();
+
+    if (rawSource == 'system' ||
+        rawSource == 'static' ||
+        rawSource == 'default') {
+      return 'system';
+    }
+
+    if (rawSource == 'adaptive' || rawSource == 'smart' || rawSource == 'ml') {
+      return 'adaptive';
+    }
+
+    if (resourceId != null || confidence > 0.5) {
+      return 'adaptive';
+    }
+
+    return 'system';
+  }
+
+  String _resolveDashboardSource(
+    Map<String, dynamic> data, {
+    required double confidence,
+    String? dashboardName,
+    String? cardType,
+  }) {
+    final rawSource = data['dashboardSource']?.toString().toLowerCase() ??
+        data['dashboardOrigin']?.toString().toLowerCase();
+
+    if (rawSource == 'system' ||
+        rawSource == 'static' ||
+        rawSource == 'default') {
+      return 'system';
+    }
+
+    if (rawSource == 'adaptive' || rawSource == 'smart' || rawSource == 'ml') {
+      return 'adaptive';
+    }
+
+    if ((dashboardName != null || cardType != null) && confidence > 0.5) {
+      return 'adaptive';
+    }
+
+    return 'system';
   }
 
   /// Configuração de rotas para mapeamento
@@ -378,6 +446,9 @@ class AdaptiveInterfaceResponse {
   /// Tipo de card correspondente ao dashboard
   final String? cardType;
 
+  /// Origem da seleção do dashboard: system ou adaptive.
+  final String dashboardSource;
+
   /// Confiança da recomendação (0.0 - 1.0)
   final double dashboardConfidence;
 
@@ -391,6 +462,7 @@ class AdaptiveInterfaceResponse {
     this.dashboard,
     this.dashboardId,
     this.cardType,
+    this.dashboardSource = 'system',
     required this.dashboardConfidence,
     required this.shortcuts,
     this.mode = 'GRADUAL',

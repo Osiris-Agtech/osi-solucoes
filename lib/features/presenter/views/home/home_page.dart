@@ -105,9 +105,9 @@ class HomePageState extends State<HomePage> {
       return;
     }
 
-    if (store.dashboardConfidence <= 0.5) {
+    if (!store.hasAdaptiveDashboardRecommendation) {
       print(
-          '   └─ ⚠️ Confiança muito baixa (${(store.dashboardConfidence * 100).toStringAsFixed(1)}%), não aplicando');
+          '   └─ ⚠️ Dashboard de sistema/fallback ou confiança insuficiente, não aplicando');
       return;
     }
 
@@ -578,7 +578,7 @@ class HomePageState extends State<HomePage> {
                     bottom: 10,
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Flexible(
                         child: Text(
@@ -601,7 +601,7 @@ class HomePageState extends State<HomePage> {
                       Observer(builder: (_) {
                         if (store.recommendedShortcuts.isNotEmpty &&
                             store.recommendedShortcuts
-                                .any((s) => s.confidence > 0.5)) {
+                                .any((s) => s.isAdaptiveRecommendation)) {
                           return Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
@@ -792,8 +792,7 @@ class HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 Observer(builder: (_) {
-                                  if (store.adaptiveDashboard != null &&
-                                      store.dashboardConfidence > 0.5) {
+                                  if (store.hasAdaptiveDashboardRecommendation) {
                                     return Padding(
                                       padding: const EdgeInsets.only(left: 6),
                                       child: Container(
@@ -3144,7 +3143,7 @@ class HomePageState extends State<HomePage> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: shortcut.confidence > 0.7
+          border: shortcut.isAdaptiveRecommendation && shortcut.confidence > 0.7
               ? Border.all(
                   color: shortcut.color.withValues(alpha: 0.3),
                   width: 2,
@@ -3202,7 +3201,8 @@ class HomePageState extends State<HomePage> {
                       );
                     },
                   ),
-                  if (shortcut.confidence > 0.7)
+                  if (shortcut.isAdaptiveRecommendation &&
+                      shortcut.confidence > 0.7)
                     Positioned(
                       top: -1,
                       right: -1,

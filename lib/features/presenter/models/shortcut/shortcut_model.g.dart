@@ -17,6 +17,7 @@ ShortcutModel _$ShortcutModelFromJson(Map<String, dynamic> json) =>
       resourceId: json['resourceId'] as String?,
       resourceType: json['resourceType'] as String?,
       resourceName: json['resourceName'] as String?,
+      source: json['source'] as String? ?? 'system',
     );
 
 Map<String, dynamic> _$ShortcutModelToJson(ShortcutModel instance) =>
@@ -30,4 +31,5 @@ Map<String, dynamic> _$ShortcutModelToJson(ShortcutModel instance) =>
       'resourceId': instance.resourceId,
       'resourceType': instance.resourceType,
       'resourceName': instance.resourceName,
+      'source': instance.source,
     };

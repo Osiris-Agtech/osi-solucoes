@@ -57,6 +57,13 @@ abstract class HomeStoreBase with Store {
   @observable
   double dashboardConfidence = 0.0;
 
+  String adaptiveDashboardSource = 'system';
+
+  bool get hasAdaptiveDashboardRecommendation =>
+      adaptiveDashboardSource == 'adaptive' &&
+      adaptiveDashboard != null &&
+      dashboardConfidence > 0.5;
+
   // Navegação do dashboard (um card por vez)
   @observable
   int currentCardIndex = 0;
@@ -242,6 +249,7 @@ abstract class HomeStoreBase with Store {
           recommendedShortcuts = _getDefaultShortcuts();
           adaptiveDashboard = null;
           adaptiveCardType = null;
+          adaptiveDashboardSource = 'system';
           dashboardConfidence = 0.0;
           print(' └─ Usando ${recommendedShortcuts.length} atalhos padrão');
         },
@@ -250,6 +258,7 @@ abstract class HomeStoreBase with Store {
           recommendedShortcuts = _ensureMinimumShortcuts(response.shortcuts);
           adaptiveDashboard = response.dashboard;
           adaptiveCardType = response.cardType; // Novo campo da API
+          adaptiveDashboardSource = response.dashboardSource;
           dashboardConfidence = response.dashboardConfidence;
           adaptiveMode = response.mode; // Mode para métricas
 
@@ -267,6 +276,7 @@ abstract class HomeStoreBase with Store {
           // Determina se aplicará o dashboard
           final hasRecommendation =
               (adaptiveCardType != null || adaptiveDashboard != null) &&
+                  adaptiveDashboardSource == 'adaptive' &&
                   dashboardConfidence > 0.5;
 
           if (hasRecommendation) {
@@ -285,6 +295,7 @@ abstract class HomeStoreBase with Store {
       print('❌ [HOME_STORE] Exceção ao carregar interface: $e');
       print('   StackTrace: $stackTrace');
       recommendedShortcuts = _getDefaultShortcuts();
+      adaptiveDashboardSource = 'system';
       // Garante que a ordem dos cards seja inicializada mesmo em caso de erro
       initializeCardOrder();
     } finally {

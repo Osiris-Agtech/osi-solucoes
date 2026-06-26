@@ -14,6 +14,7 @@ class ShortcutModel {
   final String? resourceId;      // ID do recurso específico (lote, reservatório, etc.)
   final String? resourceType;    // Tipo do recurso ('lote', 'reservatorio', 'caderno_campo')
   final String? resourceName;    // Nome do recurso para exibir no atalho
+  final String source;
 
   ShortcutModel({
     required this.route,
@@ -25,11 +26,14 @@ class ShortcutModel {
     this.resourceId,
     this.resourceType,
     this.resourceName,
+    this.source = 'system',
   });
 
   Color get color {
     return Color(int.parse(colorHex.replaceFirst('#', '0xFF')));
   }
+
+  bool get isAdaptiveRecommendation => source == 'adaptive';
 
   /// Título a ser exibido no atalho
   /// Se tiver resourceName, mostra "Tipo: Nome do Recurso"
@@ -68,6 +72,7 @@ class ShortcutModel {
     String? resourceId,
     String? resourceType,
     String? resourceName,
+    String source = 'adaptive',
   }) {
     return ShortcutModel(
       route: route,
@@ -79,6 +84,7 @@ class ShortcutModel {
       resourceId: resourceId,
       resourceType: resourceType,
       resourceName: resourceName,
+      source: source,
     );
   }
 }
