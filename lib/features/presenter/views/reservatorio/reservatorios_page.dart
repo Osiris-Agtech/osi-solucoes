@@ -5,10 +5,12 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/reservatorioItem.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_search_bar.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/reservatorios_store.dart';
-import '../home/components/top_app_bar.dart';
 
 class ReservatoriosPage extends StatefulWidget {
   final String title;
@@ -51,6 +53,9 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
                     }
                     if (store.reservatorioList.isEmpty) {
                       return emptyList();
+                    }
+                    if (store.searchReservatorio.isEmpty) {
+                      return emptySearchList();
                     }
                     return showList();
                   }),
@@ -95,20 +100,24 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
     return SliverList(
       delegate: SliverChildListDelegate(
         [
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.only(top: 120.0),
-              child: Text(
-                'Não há reservatórios\ncadastrados em sua conta',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xff6F6464),
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w800,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
+          const AppStatePanel(
+            stateKind: AppStateKind.empty,
+            title: 'Não há reservatórios cadastrados',
+            message: 'Cadastre um reservatório para acompanhar seus cultivos.',
+          ),
+        ],
+      ),
+    );
+  }
+
+  SliverList emptySearchList() {
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        [
+          const AppStatePanel(
+            stateKind: AppStateKind.searchEmpty,
+            title: 'Nenhum reservatório encontrado',
+            message: 'Revise o termo buscado ou limpe a busca para ver todos.',
           ),
         ],
       ),
@@ -119,36 +128,25 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
     return SliverList(
       delegate: SliverChildListDelegate(
         [
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.only(top: 120.0),
-              child: CircularProgressIndicator(
-                strokeWidth: 1,
-              ),
-            ),
+          const AppStatePanel(
+            stateKind: AppStateKind.loading,
+            title: 'Carregando reservatórios',
+            message: 'Aguarde enquanto buscamos os dados cadastrados.',
           ),
         ],
       ),
     );
   }
 
-  SliverAppBar sliverAppBar(BuildContext context) {
-    return SliverAppBar(
-      backgroundColor: Colors.white,
-      toolbarHeight: 120, //MediaQuery.of(context).size.height * 0.17,
-      // collapsedHeight: 200, //MediaQuery.of(context).size.height * 0.17,
+  AppPageHeaderSliver sliverAppBar(BuildContext context) {
+    return AppPageHeaderSliver(
+      title: 'Meus Reservatórios',
+      subtitle: 'Lista de reservatórios cadastrados',
+      onBack: () {
+        Get.offNamedUntil(Routes.homePage, (route) => false);
+      },
       floating: true,
-      automaticallyImplyLeading: false,
-      forceElevated: true,
-      elevation: 1,
-      flexibleSpace: TopAppBar(
-        path: "/Home/",
-        namePage: "Meus Reservatórios",
-        subtitle: "Lista de reservatórios cadastrados",
-        onPressed: () {
-          Get.offNamedUntil(Routes.homePage, (route) => false);
-        },
-      ),
+      expandedHeight: 120,
       bottom: PreferredSize(
         preferredSize: const Size(
           double.infinity,
@@ -167,42 +165,25 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
         horizontal: MediaQuery.of(context).size.width * 0.04,
         vertical: 5, //MediaQuery.of(context).size.height * 0.007,
       ),
-      child: TextFormField(
-        onChanged: ((value) => {
-              store.setSearchReservatorioText(value),
-            }),
-        textAlignVertical: TextAlignVertical.top,
-        textAlign: TextAlign.start,
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.zero,
-          isDense: true,
-          border: InputBorder.none,
-          prefixIcon: const IconButton(
-            onPressed: null,
-            icon: Icon(
-              Icons.search,
-              size: 24,
+      child: AppSearchBar(
+        hintText: 'Buscar...',
+        onChanged: store.setSearchReservatorioText,
+        trailing: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6),
+            ),
+            backgroundColor: Constants.kPrimaryColor,
+          ),
+          child: const Text(
+            "nome",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.italic,
             ),
           ),
-          labelText: "Buscar...",
-          labelStyle: const TextStyle(fontSize: 18),
-          suffixIcon: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6),
-              ),
-              backgroundColor: Constants.kPrimaryColor,
-            ),
-            child: const Text(
-              "nome",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-            onPressed: () {},
-          ),
+          onPressed: () {},
         ),
       ),
     );

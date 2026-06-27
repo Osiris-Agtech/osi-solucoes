@@ -7,11 +7,13 @@ import 'package:localization/localization.dart';
 // import 'package:osi_solucoes/app//modules/cadastro/cadastro_store.dart';
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/login/components/auth/auth_widgets.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../viewmodels/cadastro_store.dart';
 import '../ajuste/resultadoajuste_page.dart';
 import '../home/home_page.dart';
+import 'components/cadastro_form_section.dart';
 
 class CadastroPage extends StatefulWidget {
   final String title;
@@ -25,343 +27,62 @@ class CadastroPageState extends State<CadastroPage> {
   CadastroStore store = GetIt.I<CadastroStore>();
   final FocusScopeNode focusNode = FocusScopeNode();
   final formKey = GlobalKey<FormState>();
+  bool _isSubmitting = false;
+  String? _feedbackMessage;
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Constants.kBackgroundColor,
+        statusBarColor: Constants.kSecondBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Constants.kSecondBackgroundColor,
       ),
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Constants.kBackgroundColor,
-          appBar: AppBar(
-            backgroundColor: Constants.kBackgroundColor,
-            leading: Builder(builder: (_) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 16), // size.width * 0.07
-                child: IconButton(
-                  splashColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onPressed: () => Get.back(), // Modular.to.pop(),
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    size: 30,
-                  ),
-                  color: Constants.kPrimaryColor,
-                ),
-              );
-            }),
-            elevation: 0,
+      child: AuthScaffold(
+        maxWidth: 680,
+        leading: Align(
+          alignment: Alignment.centerLeft,
+          child: IconButton(
+            splashColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onPressed: () => Get.back(),
+            icon: const Icon(Icons.arrow_back, size: 28),
+            color: Constants.kPrimaryColor,
           ),
-          body: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            onVerticalDragCancel: () => FocusScope.of(context).unfocus(),
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Form(
-                key: formKey,
-                child: FocusScope(
-                  node: focusNode,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: size.height * 0.01, left: size.width * 0.1),
-                        child: Text(
-                          "titlePageCadastro1".i18n(),
-                          style: const TextStyle(
-                              fontSize: 28, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: size.height * 0.01, left: size.width * 0.1),
-                        child: Text(
-                          "titlePageCadastro2".i18n(),
-                          style: const TextStyle(
-                              fontSize: 28, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: size.height * 0.02),
-                        child: Center(
-                          child: Stack(
-                            children: const [
-                              CircleAvatar(
-                                backgroundColor: Constants.kPrimaryColor,
-                                minRadius: 45,
-                                child: Icon(
-                                  Icons.person,
-                                  color: Constants.kBackgroundColor,
-                                  size: 50,
-                                ),
-                              ),
-                              // Positioned(
-                              //   bottom: 0,
-                              //   right: (size.width * 0.5 - 55),
-                              //   child: Material(
-                              //     borderRadius: BorderRadius.circular(50),
-                              //     elevation: 3,
-                              //     child: const CircleAvatar(
-                              //       backgroundColor:
-                              //           Constants.kSecondBackgroundColor,
-                              //       child: Icon(Icons.edit_outlined),
-                              //     ),
-                              //   ),
-                              // ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Observer(builder: (_) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              top: size.height * 0.016,
-                              left: size.width * 0.1,
-                              right: size.width * 0.1),
-                          child: formCadastro(
-                            controller: store.nome,
-                            labelText: "formNome".i18n(),
-                          ),
-                        );
-                      }),
-                      Observer(builder: (_) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              top: size.height * 0.02,
-                              left: size.width * 0.1,
-                              right: size.width * 0.1),
-                          child: formCadastro(
-                            controller: store.sobrenome,
-                            labelText: "formSobrenome".i18n(),
-                          ),
-                        );
-                      }),
-                      Observer(builder: (_) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              top: size.height * 0.02,
-                              left: size.width * 0.1,
-                              right: size.width * 0.1),
-                          child: formCadastro(
-                              controller: store.telefone,
-                              labelText: "Telefone"),
-                        );
-                      }),
-                      Observer(builder: (_) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                            top: size.height * 0.02,
-                            left: size.width * 0.1,
-                            right: size.width * 0.1,
-                          ),
-                          child: formCadastro(
-                            controller: store.cep,
-                            labelText: "formCEP".i18n(),
-                            opcional: true,
-                          ),
-                        );
-                      }),
-                      Observer(builder: (_) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              top: size.height * 0.02,
-                              left: size.width * 0.1,
-                              right: size.width * 0.1),
-                          child: formCadastro(
-                            controller: store.logradouro,
-                            labelText: "formLogradouro".i18n(),
-                            opcional: true,
-                          ),
-                        );
-                      }),
-                      Observer(builder: (_) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              top: size.height * 0.02,
-                              left: size.width * 0.1,
-                              right: size.width * 0.1),
-                          child: formCadastro(
-                            controller: store.complemento,
-                            labelText: "formComplemento".i18n(),
-                            opcional: true,
-                          ),
-                        );
-                      }),
-                      Observer(builder: (_) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              top: size.height * 0.02,
-                              left: size.width * 0.1,
-                              right: size.width * 0.1),
-                          child: formCadastro(
-                            controller: store.bairro,
-                            labelText: "formBairro".i18n(),
-                            opcional: true,
-                          ),
-                        );
-                      }),
-                      Observer(builder: (_) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              top: size.height * 0.02,
-                              left: size.width * 0.1,
-                              right: size.width * 0.1),
-                          child: formCadastro(
-                            controller: store.cidade,
-                            labelText: "formCidade".i18n(),
-                            opcional: true,
-                          ),
-                        );
-                      }),
-                      Observer(builder: (_) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              top: size.height * 0.02,
-                              left: size.width * 0.1,
-                              right: size.width * 0.1),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(
-                                width: size.width * 0.34,
-                                child: formCadastro(
-                                  controller: store.estado,
-                                  labelText: "formEstado".i18n(),
-                                  opcional: true,
-                                ),
-                              ),
-                              Expanded(
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                    left: size.height * 0.02,
-                                  ),
-                                  // width: size.width * 0.5,
-                                  child: formCadastro(
-                                    controller: store.pais,
-                                    labelText: "formPais".i18n(),
-                                    opcional: true,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: size.height * 0.02,
-                          left: size.width * 0.1,
-                          right: size.width * 0.1,
-                        ),
-                        child: formCadastro(
-                          controller: store.email,
-                          labelText: "formEmail".i18n(),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: size.height * 0.02,
-                          left: size.width * 0.1,
-                          right: size.width * 0.1,
-                        ),
-                        child: Observer(
-                          builder: (_) {
-                            return formCadastro(
-                              controller: store.senha,
-                              labelText: "formSenha".i18n(),
-                            );
-                          },
-                        ),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              top: size.height * .04, bottom: 30),
-                          child: Center(
-                            child: SizedBox(
-                              width: size.width * .7,
-                              height: 45,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Constants.kPrimaryColor),
-                                child: Text(
-                                  "TextButtonConfirmar".i18n(),
-                                  style: const TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                onPressed: () async {
-                                  if (formKey.currentState!.validate()) {
-                                    showCircularProgressIndicator(context);
-                                    String response =
-                                        await store.verificaEmail();
-                                    await Future.delayed(
-                                        const Duration(seconds: 2));
-                                    if (response ==
-                                        FailureMessage.userNotFoundMessage) {
-                                      /// #### FLUXO SEM VALIDAÇÃO DE E-MAIL ####
-                                      String res = await store.cadastraUser();
-                                      await Future.delayed(
-                                          const Duration(seconds: 2));
-                                      res == "sucesso"
-                                          ? {
-                                              if (context.mounted)
-                                                showDoneAnimation(context),
-                                              await Future.delayed(
-                                                  const Duration(
-                                                      milliseconds: 1400)),
-                                              Get.offAll(
-                                                  () => const HomePage()),
-                                            }
-                                          : {
-                                              if (context.mounted)
-                                                showErrorDialog(context, res),
-                                              await Future.delayed(
-                                                  const Duration(seconds: 2)),
-                                              if (context.mounted)
-                                                Navigator.pop(context),
-                                              if (context.mounted)
-                                                Navigator.pop(context),
-                                            };
-
-                                      /// ###### FLUXO COM VALIDAÇÃO DE E-MAIL #####
-                                      // store.gerarCodigo();
-                                      // var response2 =
-                                      //     await store.enviarCodigoEmail();
-                                      // if (response2 == "sucesso") {
-                                      //   Navigator.pop(context);
-                                      //   Get.toNamed(
-                                      //       Routes.confirmsegurancaPage);
-                                      // } else {
-                                      //   showErrorDialog(context, response2);
-                                      //   await Future.delayed(
-                                      //       const Duration(seconds: 2));
-                                      //   Navigator.pop(context);
-                                      //   Navigator.pop(context);
-                                      // }
-                                    } else {
-                                      if (!context.mounted) return;
-                                      showErrorDialog(context, response);
-                                      await Future.delayed(
-                                          const Duration(seconds: 2));
-                                      if (!context.mounted) return;
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                    }
-                                  }
-                                },
-                              ),
-                            ),
-                          )),
-                    ],
+        ),
+        child: AuthPanelCard(
+          child: Form(
+            key: formKey,
+            child: FocusScope(
+              node: focusNode,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AuthHeader(
+                    title:
+                        '${"titlePageCadastro1".i18n()} ${"titlePageCadastro2".i18n()}',
+                    subtitle: 'Informe seus dados para criar o acesso.',
+                    badgeText: 'Cadastro',
+                    icon: Icons.person_add_alt_1_outlined,
                   ),
-                ),
+                  const SizedBox(height: 22),
+                  _personalSection(),
+                  const SizedBox(height: 14),
+                  _addressSection(),
+                  const SizedBox(height: 14),
+                  _credentialsSection(),
+                  if (_feedbackMessage != null) ...[
+                    const SizedBox(height: 16),
+                    AuthFeedbackMessage(message: _feedbackMessage!),
+                  ],
+                  const SizedBox(height: 20),
+                  AuthPrimaryButton(
+                    label: 'TextButtonConfirmar'.i18n(),
+                    isLoading: _isSubmitting,
+                    onPressed: _submitCadastro,
+                  ),
+                ],
               ),
             ),
           ),
@@ -373,12 +94,148 @@ class CadastroPageState extends State<CadastroPage> {
   String pattern =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 
-  TextFormField formCadastro({
+  Widget _personalSection() {
+    return CadastroFormSection(
+      title: 'Dados pessoais',
+      icon: Icons.badge_outlined,
+      children: [
+        Observer(builder: (_) {
+          return formCadastro(
+            controller: store.nome,
+            labelText: 'formNome'.i18n(),
+          );
+        }),
+        Observer(builder: (_) {
+          return formCadastro(
+            controller: store.sobrenome,
+            labelText: 'formSobrenome'.i18n(),
+          );
+        }),
+        Observer(builder: (_) {
+          return formCadastro(
+            controller: store.telefone,
+            labelText: 'Telefone',
+            keyboardType: TextInputType.phone,
+          );
+        }),
+      ],
+    );
+  }
+
+  Widget _addressSection() {
+    return CadastroFormSection(
+      title: 'Contato e endereço',
+      icon: Icons.location_on_outlined,
+      children: [
+        Observer(builder: (_) {
+          return formCadastro(
+            controller: store.cep,
+            labelText: 'formCEP'.i18n(),
+            opcional: true,
+            isCep: true,
+          );
+        }),
+        Observer(builder: (_) {
+          return formCadastro(
+            controller: store.logradouro,
+            labelText: 'formLogradouro'.i18n(),
+            opcional: true,
+          );
+        }),
+        Observer(builder: (_) {
+          return formCadastro(
+            controller: store.complemento,
+            labelText: 'formComplemento'.i18n(),
+            opcional: true,
+          );
+        }),
+        Observer(builder: (_) {
+          return formCadastro(
+            controller: store.bairro,
+            labelText: 'formBairro'.i18n(),
+            opcional: true,
+          );
+        }),
+        Observer(builder: (_) {
+          return formCadastro(
+            controller: store.cidade,
+            labelText: 'formCidade'.i18n(),
+            opcional: true,
+          );
+        }),
+        Observer(builder: (_) {
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final fieldWidth = constraints.maxWidth < 520
+                  ? constraints.maxWidth
+                  : (constraints.maxWidth - 12) / 2;
+              return Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: [
+                  SizedBox(
+                    width: fieldWidth,
+                    child: formCadastro(
+                      controller: store.estado,
+                      labelText: 'formEstado'.i18n(),
+                      opcional: true,
+                    ),
+                  ),
+                  SizedBox(
+                    width: fieldWidth,
+                    child: formCadastro(
+                      controller: store.pais,
+                      labelText: 'formPais'.i18n(),
+                      opcional: true,
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        }),
+      ],
+    );
+  }
+
+  Widget _credentialsSection() {
+    return CadastroFormSection(
+      title: 'Credenciais',
+      icon: Icons.lock_outline,
+      children: [
+        formCadastro(
+          controller: store.email,
+          labelText: 'formEmail'.i18n(),
+          isEmail: true,
+          keyboardType: TextInputType.emailAddress,
+          textCapitalization: TextCapitalization.none,
+        ),
+        Observer(builder: (_) {
+          return formCadastro(
+            controller: store.senha,
+            labelText: 'formSenha'.i18n(),
+            isPassword: true,
+            textCapitalization: TextCapitalization.none,
+          );
+        }),
+      ],
+    );
+  }
+
+  AuthTextField formCadastro({
     required TextEditingController controller,
     required String labelText,
     bool? opcional,
+    bool isEmail = false,
+    bool isPassword = false,
+    bool isCep = false,
+    TextInputType? keyboardType,
+    TextCapitalization? textCapitalization,
   }) {
-    return TextFormField(
+    return AuthTextField(
+      controller: controller,
+      labelText: labelText,
+      optional: opcional != null,
       validator: (value) {
         if (opcional != null) {
           return null;
@@ -387,7 +244,7 @@ class CadastroPageState extends State<CadastroPage> {
         if (value!.isEmpty) {
           return "erroValidacaoCampoVazio".i18n();
         }
-        if (labelText == "labelTextConsult2".i18n()) {
+        if (isEmail) {
           RegExp regex = RegExp(pattern);
           if (!regex.hasMatch(value)) {
             return "ErroValidacaoEmailInvalido".i18n();
@@ -397,28 +254,24 @@ class CadastroPageState extends State<CadastroPage> {
         }
         return null;
       },
-      cursorColor: Colors.grey,
-      controller: controller,
-      textInputAction: labelText != "labelTextConsult1".i18n()
-          ? TextInputAction.next
-          : TextInputAction.done,
-      keyboardType: labelText == "labelTextConsult2".i18n()
-          ? TextInputType.emailAddress
-          : labelText == "labelTextConsult3".i18n()
-              ? TextInputType.number
-              : labelText == "Telefone"
-                  ? TextInputType.phone
-                  : TextInputType.text,
-      textCapitalization: labelText != "labelTextConsult2".i18n() ||
-              labelText != "labelTextConsult1".i18n() ||
-              labelText != "formEmail".i18n()
-          ? TextCapitalization.words
-          : TextCapitalization.none,
+      textInputAction: isPassword ? TextInputAction.done : TextInputAction.next,
+      keyboardType: keyboardType ??
+          (isEmail
+              ? TextInputType.emailAddress
+              : isCep
+                  ? TextInputType.number
+                  : TextInputType.text),
+      textCapitalization: textCapitalization ?? TextCapitalization.words,
+      obscureText: isPassword
+          ? store.isObscure
+              ? false
+              : true
+          : false,
       onEditingComplete: () async {
-        if (labelText == "labelTextConsult1".i18n()) {
+        if (isPassword) {
           focusNode.unfocus();
           formKey.currentState!.validate();
-        } else if (labelText == "labelTextConsult3".i18n()) {
+        } else if (isCep) {
           showCircularProgressIndicator(context);
           await store.buscaCEP();
           if (mounted) Navigator.pop(context);
@@ -428,59 +281,66 @@ class CadastroPageState extends State<CadastroPage> {
         }
       },
       onChanged: (String value) async {
-        if (labelText == "labelTextConsult3".i18n() && value.length == 10) {
+        if (isCep && value.length == 10) {
           showCircularProgressIndicator(context);
           await store.buscaCEP();
           if (mounted) Navigator.pop(context);
           focusNode.nextFocus();
         }
       },
-      inputFormatters: labelText == "labelTextConsult3".i18n()
+      inputFormatters: isCep
           ? [
               FilteringTextInputFormatter.digitsOnly,
               CepInputFormatter(),
             ]
           : null,
-      obscureText: labelText != "labelTextConsult1".i18n()
-          ? false
-          : store.isObscure
-              ? false
-              : true,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.only(top: 15),
-        alignLabelWithHint: false,
-        labelText: labelText,
-        labelStyle: const TextStyle(
-          fontSize: 16,
-        ),
-        suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
-        suffixIcon: labelText == "labelTextConsult1".i18n()
-            ? Observer(
-                builder: (_) {
-                  return IconButton(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    padding: const EdgeInsets.only(top: 20),
-                    onPressed: () {
-                      store.toggleObscure();
-                    },
-                    icon: store.isObscure
-                        ? const Icon(Icons.visibility_off)
-                        : const Icon(Icons.visibility),
-                  );
-                },
-              )
-            : opcional != null
-                ? const Text(
-                    "(Opcional)",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black26,
-                    ),
-                  )
-                : null,
-      ),
+      suffixIcon: isPassword
+          ? Observer(
+              builder: (_) {
+                return IconButton(
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  onPressed: store.toggleObscure,
+                  icon: store.isObscure
+                      ? const Icon(Icons.visibility_off)
+                      : const Icon(Icons.visibility),
+                );
+              },
+            )
+          : null,
     );
+  }
+
+  Future<void> _submitCadastro() async {
+    if (_isSubmitting || !(formKey.currentState?.validate() ?? false)) return;
+    setState(() {
+      _isSubmitting = true;
+      _feedbackMessage = null;
+    });
+    final response = await store.verificaEmail();
+    await Future.delayed(const Duration(seconds: 2));
+    if (!mounted) return;
+    if (response == FailureMessage.userNotFoundMessage) {
+      final res = await store.cadastraUser();
+      await Future.delayed(const Duration(seconds: 2));
+      if (!mounted) return;
+      if (res == 'sucesso') {
+        setState(() => _isSubmitting = false);
+        showDoneAnimation(context);
+        await Future.delayed(const Duration(milliseconds: 1400));
+        Get.offAll(() => const HomePage());
+      } else {
+        setState(() {
+          _isSubmitting = false;
+          _feedbackMessage = res;
+        });
+      }
+    } else {
+      setState(() {
+        _isSubmitting = false;
+        _feedbackMessage = response;
+      });
+    }
   }
 
   void showCircularProgressIndicator(BuildContext context) {
@@ -489,24 +349,6 @@ class CadastroPageState extends State<CadastroPage> {
       context: context,
       builder: (BuildContext context) {
         return const Center(child: CircularProgressIndicator());
-      },
-    );
-  }
-
-  void showErrorDialog(BuildContext context, String error) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return Center(
-          child: AlertDialog(
-            content: Text(
-              error,
-              maxLines: 3,
-              textAlign: TextAlign.center,
-            ),
-          ),
-        );
       },
     );
   }

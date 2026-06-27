@@ -5,6 +5,8 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/core/services/local_storage.dart';
 import 'package:osi_solucoes/features/presenter/views/home/home_page.dart';
+import 'package:osi_solucoes/features/presenter/views/login/components/auth/account_selection_card.dart';
+import 'package:osi_solucoes/features/presenter/views/login/components/auth/auth_widgets.dart';
 import 'package:osi_solucoes/features/presenter/views/login/login_page.dart';
 
 import '../../models/usuario/usuario_model.dart';
@@ -23,245 +25,112 @@ class MultiAccountsPage extends StatefulWidget {
 class _MultiAccountsPageState extends State<MultiAccountsPage> {
   // final appController = Modular.get<AppController>();
   AuthController authController = GetIt.I<AuthController>();
+  int? _loadingIndex;
 
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Constants.kBackgroundColor,
+        statusBarColor: Constants.kSecondBackgroundColor,
         statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Constants.kSecondBackgroundColor,
       ),
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Constants.kBackgroundColor,
-          appBar: AppBar(
-            backgroundColor: Constants.kBackgroundColor,
-            leading: Builder(builder: (_) {
-              return Padding(
-                padding: const EdgeInsets.only(
-                  left: 16,
-                  top: 16,
-                ), // size.width * 0.07
-                child: IconButton(
-                  splashColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onPressed: () {
-                    if (widget.isLoggedIn) {
-                      Get.back();
-                      Navigator.pop(context);
-                    } else {
-                      Get.to(() => const LoginPage());
-                      // Modular.to.pushReplacementNamed("/Login/");
-                    }
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    size: 30,
-                  ),
-                  color: Constants.kPrimaryColor,
-                ),
-              );
-            }),
-            title: const Padding(
-              padding: EdgeInsets.only(top: 20.0),
-              child: Text(
-                "Escolha a Conta",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87,
-                ),
-              ),
-            ),
-            elevation: 0,
+      child: AuthScaffold(
+        maxWidth: 760,
+        leading: Align(
+          alignment: Alignment.centerLeft,
+          child: IconButton(
+            splashColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onPressed: _goBack,
+            icon: const Icon(Icons.arrow_back, size: 28),
+            color: Constants.kPrimaryColor,
           ),
-          body: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * .15,
-                        right: MediaQuery.of(context).size.width * .15,
-                        top: 20,
-                      ),
-                      child: const Text(
-                        "Você possui vínculo com mais de uma conta. Em qual deseja entrar ?",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                // const Spacer(),
-                Expanded(
-                  flex: 2,
-                  child: Center(
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 500),
-                      decoration: BoxDecoration(
-                        color: Constants.kSecondBackgroundColor,
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      width: double.infinity,
-                      // padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Scrollbar(
-                        thickness: 8,
-                        radius: const Radius.circular(5),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          physics: const BouncingScrollPhysics(),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              Wrap(
-                                runSpacing: 12,
-                                spacing: 4,
-                                alignment: WrapAlignment.center,
-                                runAlignment: WrapAlignment.start,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  ...widget.user.contas!.map(
-                                    (conta) => InkWell(
-                                      borderRadius: BorderRadius.circular(10),
-                                      onTap: () async {
-                                        showCircularProgressIndicator(context);
-                                        authController.usuario = widget.user;
-                                        authController.usuario.selected_conta =
-                                            conta;
-                                        await LocalStorage().storageUser(
-                                          authController.usuario,
-                                        );
-                                        await Future.delayed(
-                                            const Duration(seconds: 2));
-                                        if (!context.mounted) return;
-                                        Navigator.pop(context);
-                                        Get.offAll(() => const HomePage());
-                                      },
-                                      child: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                .4,
-                                        child: Column(
-                                          children: [
-                                            Card(
-                                              elevation: 2,
-                                              shape:
-                                                  const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(24.0),
-                                                ),
-                                              ),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                  Radius.circular(24.0),
-                                                ),
-                                                child: Image.network(
-                                                  conta.conta?.imagem ??
-                                                      'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png',
-                                                  loadingBuilder: (context,
-                                                      child, loadingProgress) {
-                                                    if (loadingProgress ==
-                                                        null) {
-                                                      return child;
-                                                    }
-                                                    return const CircularProgressIndicator(
-                                                      strokeWidth: 2,
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                top: 5,
-                                              ),
-                                              child: Text(
-                                                conta.conta?.nome ?? "...",
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                top: 2,
-                                              ),
-                                              child: Text(
-                                                conta.cargo?.cargo ?? "...",
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.black54,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 15,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      bottom: 40,
-                      top: 25,
-                    ),
-                    child: Text(
-                      "Selecione para avançar",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.black38,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+        ),
+        child: AuthPanelCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const AuthHeader(
+                title: 'Escolha a conta',
+                subtitle:
+                    'Você possui vínculo com mais de uma conta. Selecione para avançar.',
+                badgeText: 'Conta ativa',
+                icon: Icons.account_tree_outlined,
+              ),
+              const SizedBox(height: 22),
+              _buildAccounts(context),
+            ],
           ),
         ),
       ),
     );
   }
 
-  void showCircularProgressIndicator(BuildContext context) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return const Center(child: CircularProgressIndicator());
+  Widget _buildAccounts(BuildContext context) {
+    final contas = widget.user.contas ?? [];
+    if (contas.isEmpty) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const AuthFeedbackMessage(
+            message:
+                'Nenhuma conta vinculada foi encontrada para este usuário.',
+            type: AuthFeedbackType.warning,
+          ),
+          const SizedBox(height: 14),
+          AuthPrimaryButton(
+            label: 'Voltar ao login',
+            onPressed: _goBack,
+          ),
+        ],
+      );
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cardWidth = constraints.maxWidth < 520
+            ? constraints.maxWidth
+            : (constraints.maxWidth - 12) / 2;
+        return Wrap(
+          runSpacing: 12,
+          spacing: 12,
+          children: [
+            for (var index = 0; index < contas.length; index++)
+              SizedBox(
+                width: cardWidth.clamp(0.0, 260.0).toDouble(),
+                child: AccountSelectionCard(
+                  name: contas[index].conta?.nome ?? 'Conta',
+                  role: contas[index].cargo?.cargo ?? 'Vínculo',
+                  imageUrl: contas[index].conta?.imagem,
+                  isLoading: _loadingIndex == index,
+                  onTap: () => _selectAccount(index),
+                ),
+              ),
+          ],
+        );
       },
     );
+  }
+
+  Future<void> _selectAccount(int index) async {
+    final contas = widget.user.contas ?? [];
+    if (_loadingIndex != null || index >= contas.length) return;
+    setState(() => _loadingIndex = index);
+    authController.usuario = widget.user;
+    authController.usuario.selected_conta = contas[index];
+    await LocalStorage().storageUser(authController.usuario);
+    await Future.delayed(const Duration(seconds: 2));
+    if (!mounted) return;
+    Get.offAll(() => const HomePage());
+  }
+
+  void _goBack() {
+    if (widget.isLoggedIn) {
+      Get.back();
+    } else {
+      Get.to(() => const LoginPage());
+    }
   }
 }

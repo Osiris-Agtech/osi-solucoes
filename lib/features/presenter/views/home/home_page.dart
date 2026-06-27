@@ -1,4 +1,4 @@
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unused_field
 
 import 'dart:io';
 
@@ -13,6 +13,9 @@ import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/core/utils/responsive_breakpoints.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:osi_solucoes/features/presenter/views/home/components/home_daily_panel_content.dart';
+import 'package:osi_solucoes/features/presenter/views/home/models/home_panel_mapper.dart';
+import 'package:osi_solucoes/features/presenter/views/home/models/home_panel_view_data.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
 
@@ -42,7 +45,8 @@ class HomePageState extends State<HomePage> {
   final Duration duration = const Duration(milliseconds: 300);
 
   // Variáveis para o dashboard (carousel removido em favor de cards expansivos)
-  String? _adaptiveDashboardName; // Mantido para compatibilidade com sistema adaptativo
+  String?
+      _adaptiveDashboardName; // Mantido para compatibilidade com sistema adaptativo
   PageController? _pageController;
 
   @override
@@ -81,15 +85,16 @@ class HomePageState extends State<HomePage> {
   /// Inicializa o PageController para navegação dos cards
   void _initializePageController() {
     if (store.cardOrder.isEmpty) return;
-    
+
     // Descarta o controller antigo se existir
     _pageController?.dispose();
-    
+
     // Cria um novo controller com o índice correto
     _pageController = PageController(initialPage: store.currentCardIndex);
-    
-    print('📊 [HOME_PAGE] PageController inicializado na posição ${store.currentCardIndex}');
-    
+
+    print(
+        '📊 [HOME_PAGE] PageController inicializado na posição ${store.currentCardIndex}');
+
     if (mounted) {
       setState(() {});
     }
@@ -323,12 +328,8 @@ class HomePageState extends State<HomePage> {
                             const SizedBox(height: 2),
                             Observer(
                               builder: (_) {
-                                final cargo = store
-                                        .authController
-                                        .usuario
-                                        .selected_conta
-                                        ?.cargo
-                                        ?.cargo ??
+                                final cargo = store.authController.usuario
+                                        .selected_conta?.cargo?.cargo ??
                                     'Cargo';
                                 return Container(
                                   padding: const EdgeInsets.symmetric(
@@ -537,15 +538,20 @@ class HomePageState extends State<HomePage> {
     return Observer(builder: (_) {
       // Em mobile/tablet, o conteúdo ocupa 100% da tela (menu é overlay)
       // Em desktop, o conteúdo é comprimido pelo menu lateral
-      final leftOffset = useDrawerOverlay ? 0.0 : (store.isCollapsed ? 0.0 : 320.0);
-      final rightOffset = useDrawerOverlay ? 0.0 : (store.isCollapsed ? 0.0 : 0.0);
-      final contentWidth = useDrawerOverlay ? size.width : (store.isCollapsed ? size.width : size.width - 320.0);
+      final leftOffset =
+          useDrawerOverlay ? 0.0 : (store.isCollapsed ? 0.0 : 320.0);
+      final rightOffset =
+          useDrawerOverlay ? 0.0 : (store.isCollapsed ? 0.0 : 0.0);
+      final contentWidth = useDrawerOverlay
+          ? size.width
+          : (store.isCollapsed ? size.width : size.width - 320.0);
 
       return Stack(
         children: [
           // Conteúdo principal
           AnimatedPositioned(
-            duration: useDrawerOverlay ? const Duration(milliseconds: 0) : duration,
+            duration:
+                useDrawerOverlay ? const Duration(milliseconds: 0) : duration,
             top: 0,
             bottom: 0,
             left: useDrawerOverlay ? 0 : leftOffset,
@@ -563,598 +569,15 @@ class HomePageState extends State<HomePage> {
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: [
-              // sliverAppBarWidget(size),
-              const SliverPersistentHeader(
-                pinned: true,
-                delegate: MyHeaderDelegate(),
-              ),
-              // Seção de Ações Rápidas Inteligentes
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: size.width * 0.05,
-                    right: size.width * 0.05,
-                    top: 20,
-                    bottom: 10,
+                  const SliverPersistentHeader(
+                    pinned: true,
+                    delegate: MyHeaderDelegate(),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          'Ações Rápidas',
-                          style: TextStyle(
-                            fontSize: ResponsiveBreakpoints.responsiveFontSize(
-                              context,
-                              mobile: 16,
-                              tablet: 18,
-                              desktop: 20,
-                            ),
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black87,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Observer(builder: (_) {
-                        if (store.recommendedShortcuts.isNotEmpty &&
-                            store.recommendedShortcuts
-                                .any((s) => s.isAdaptiveRecommendation)) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: Constants.kPrimaryColor
-                                  .withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.auto_awesome,
-                                  size: 14,
-                                  color: Constants.kPrimaryColor,
-                                ),
-                                const SizedBox(width: 4),
-                                Flexible(
-                                  child: Text(
-                                    'Inteligente',
-                                    style: TextStyle(
-                                      color: Constants.kPrimaryColor,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      }),
-                    ],
-                  ),
-                ),
+                  _buildDailyPanelSliver(),
+                ],
               ),
-              SliverToBoxAdapter(
-                child: Observer(builder: (_) {
-                  if (store.isLoadingShortcuts) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: size.width * 0.05, vertical: 20),
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
-
-                  // Se há atalhos recomendados, mostra eles
-                  if (store.recommendedShortcuts.isNotEmpty) {
-                    return Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                      child: SizedBox(
-                        height: 100,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: store.recommendedShortcuts.map((shortcut) {
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 12),
-                              child: _buildSmartShortcutCard(
-                                context,
-                                size,
-                                shortcut,
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    );
-                  }
-
-                  // Fallback: mostra atalhos padrão
-                  return Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                    child: SizedBox(
-                      height: 100,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          modernQuickActionCard(
-                            context,
-                            size,
-                            "card1Home".i18n(),
-                            "assets/icons/gerenciar_icon.svg",
-                            const Color(0xFF6366F1),
-                            onTap: () {
-                              Get.toNamed(Routes.gerenciarEquipePage);
-                            },
-                          ),
-                          const SizedBox(width: 12),
-                          modernQuickActionCard(
-                            context,
-                            size,
-                            "card1Home".i18n(),
-                            "assets/icons/gerenciar_icon.svg",
-                            const Color(0xFF6366F1),
-                            onTap: () {
-                              Get.toNamed(Routes.gerenciarEquipePage);
-                            },
-                          ),
-                          const SizedBox(width: 12),
-                          modernQuickActionCard(
-                            context,
-                            size,
-                            "card2Home".i18n(),
-                            "assets/icons/relatorio_icon.svg",
-                            const Color(0xFF8B5CF6),
-                            onTap: () {
-                              Get.toNamed(Routes.historicoPage);
-                            },
-                          ),
-                          const SizedBox(width: 12),
-                          modernQuickActionCard(
-                            context,
-                            size,
-                            "card3Home".i18n(),
-                            "assets/icons/inventario_icon.svg",
-                            const Color(0xFF06B6D4),
-                            onTap: () {
-                              Get.toNamed(Routes.agendaPage);
-                            },
-                          ),
-                          const SizedBox(width: 12),
-                          modernQuickActionCard(
-                            context,
-                            size,
-                            "card4Home".i18n(),
-                            "assets/icons/relatorio_icon.svg",
-                            const Color(0xFF10B981),
-                            onTap: () {
-                              Get.toNamed(Routes.protocoloPage);
-                            },
-                          ),
-                          const SizedBox(width: 12),
-                          modernQuickActionCard(
-                            context,
-                            size,
-                            'Relatórios',
-                            "assets/icons/relatorio_icon.svg",
-                            const Color(0xFFE11D48),
-                            onTap: () {
-                              Get.toNamed(Routes.relatoriosPage);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-              ),
-
-              // Seção do Dashboard
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: size.width * 0.05,
-                    right: size.width * 0.05,
-                    top: 30,
-                    bottom: 10,
-                  ),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final isNarrow = constraints.maxWidth < 300;
-                      return Flex(
-                        direction: isNarrow ? Axis.vertical : Axis.horizontal,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    'Dashboard de Produção',
-                                    style: TextStyle(
-                                      fontSize: isNarrow ? 16 : 20,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.black87,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                Observer(builder: (_) {
-                                  if (store.hasAdaptiveDashboardRecommendation) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(left: 6),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 6, vertical: 3),
-                                        decoration: BoxDecoration(
-                                          color: Constants.kPrimaryColor
-                                              .withValues(alpha: 0.1),
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Icon(
-                                              Icons.auto_awesome,
-                                              size: 12,
-                                              color: Constants.kPrimaryColor,
-                                            ),
-                                            const SizedBox(width: 3),
-                                            Flexible(
-                                              child: Text(
-                                                'Adaptativo',
-                                                style: TextStyle(
-                                                  color: Constants.kPrimaryColor,
-                                                  fontSize: isNarrow ? 9 : 11,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                  return const SizedBox.shrink();
-                                }),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ),
-
-              // Carousel de Cards de Métricas
-              SliverToBoxAdapter(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    // Altura responsiva para o carousel
-                    final carouselHeight = ResponsiveBreakpoints.responsiveHeight(
-                      context,
-                      mobile: size.height * 0.45,
-                      tablet: size.height * 0.40,
-                      desktop: size.height * 0.35,
-                    );
-
-                    return SizedBox(
-                      height: carouselHeight,
-                      child: Observer(builder: (_) {
-                        if (store.isLoading) {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(40.0),
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        }
-                        if (store.hasError) {
-                          return Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(40.0),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'Erro: ${store.errorMessage}',
-                                    style: const TextStyle(color: Colors.red),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  ElevatedButton(
-                                    onPressed: () => store.carregarHome(),
-                                    child: const Text('Tentar novamente'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }
-                        final dashboard = store.dashboard;
-                        if (dashboard == null) {
-                          return const SizedBox.shrink();
-                        }
-
-                        // Garante que a ordem dos cards está inicializada
-                        if (store.cardOrder.isEmpty) {
-                          store.initializeCardOrder();
-                        }
-                        
-                        // Se ainda assim não há cards, mostra placeholder
-                        if (store.cardOrder.isEmpty) {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(40),
-                              child: Text(
-                                'Carregando dashboard...',
-                                style: TextStyle(fontSize: 14, color: Colors.black54),
-                              ),
-                            ),
-                          );
-                        }
-
-                        return Column(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            // Header com nome do dashboard e botões de navegação
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                              child: Observer(
-                                builder: (_) {
-                                  final cardNames = {
-                                    'lotes': 'Lotes em Produção',
-                                    'tarefas': 'Tarefas Pendentes',
-                                    'producao': 'Produção Total',
-                                    'saude': 'Saúde da Produção',
-                                  };
-                                  final currentIndex = store.currentCardIndex;
-                                  final total = store.cardOrder.length;
-                                  final currentName = store.cardOrder.isNotEmpty && currentIndex < total
-                                      ? cardNames[store.cardOrder[currentIndex]] ?? ''
-                                      : '';
-
-                                  return Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      // Nome do dashboard atual
-                                      Text(
-                                        currentName,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.black87,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(width: 12),
-                                      // Botão anterior
-                                      _buildDashboardNavButton(
-                                        icon: Icons.chevron_left,
-                                        onPressed: currentIndex > 0
-                                            ? () {
-                                                final fromType = store.cardOrder[currentIndex];
-                                                store.previousCard();
-                                                final toType = store.cardOrder[store.currentCardIndex];
-                                                _pageController?.previousPage(
-                                                  duration: const Duration(milliseconds: 300),
-                                                  curve: Curves.easeOut,
-                                                );
-                                                // Metrics tracking: dashboard changed
-                                                MetricsTrackingService.instance.trackDashboardChanged(
-                                                  fromDashboardId: fromType,
-                                                  toDashboardId: toType,
-                                                  mode: store.adaptiveMode,
-                                                  sessionId: store.currentSessionId,
-                                                );
-                                              }
-                                            : null,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      // Botão próximo
-                                      _buildDashboardNavButton(
-                                        icon: Icons.chevron_right,
-                                        onPressed: currentIndex < total - 1
-                                            ? () {
-                                                final fromType = store.cardOrder[currentIndex];
-                                                store.nextCard();
-                                                final toType = store.cardOrder[store.currentCardIndex];
-                                                _pageController?.nextPage(
-                                                  duration: const Duration(milliseconds: 300),
-                                                  curve: Curves.easeOut,
-                                                );
-                                                // Metrics tracking: dashboard changed
-                                                MetricsTrackingService.instance.trackDashboardChanged(
-                                                  fromDashboardId: fromType,
-                                                  toDashboardId: toType,
-                                                  mode: store.adaptiveMode,
-                                                  sessionId: store.currentSessionId,
-                                                );
-                                              }
-                                            : null,
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            ),
-                            // PageView ocupa todo espaço restante
-                            Expanded(
-                              child: Observer(
-                                builder: (_) {
-                                  if (_pageController == null) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-
-                                  return PageView.builder(
-                                    controller: _pageController,
-                                    onPageChanged: (index) => store.goToCard(index),
-                                    itemCount: store.cardOrder.length,
-                                    itemBuilder: (context, index) {
-                                      final cardType = store.cardOrder[index];
-                                      return Padding(
-                                        key: ValueKey('$cardType-$index'),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: size.width * 0.05, vertical: 6),
-                                        child: _buildCardByType(cardType, dashboard, size),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                            // Indicadores (dots) clicáveis para navegação direta
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8, bottom: 4),
-                              child: Observer(
-                                builder: (_) => Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: List.generate(
-                                    store.cardOrder.length,
-                                    (index) => GestureDetector(
-                                      onTap: () {
-                                        store.goToCard(index);
-                                        _pageController?.animateToPage(
-                                          index,
-                                          duration: const Duration(milliseconds: 300),
-                                          curve: Curves.easeOut,
-                                        );
-                                      },
-                                      child: AnimatedContainer(
-                                        duration: const Duration(milliseconds: 200),
-                                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                                        width: store.currentCardIndex == index ? 24 : 8,
-                                        height: 8,
-                                        decoration: BoxDecoration(
-                                          color: store.currentCardIndex == index
-                                              ? Constants.kPrimaryColor
-                                              : Colors.grey[300],
-                                          borderRadius: BorderRadius.circular(4),
-                                          border: store.currentCardIndex == index
-                                              ? null
-                                              : Border.all(color: Colors.grey[400]!, width: 1),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // Contador de posição
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 4),
-                              child: Observer(
-                                builder: (_) {
-                                  final currentIndex = store.currentCardIndex;
-                                  final total = store.cardOrder.length;
-                                  return Text(
-                                    '${currentIndex + 1} de $total • Deslize para navegar',
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: Colors.grey[500],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        );
-                      }),
-                    );
-                  },
-                ),
-              ),
-
-              // Espaçador entre dashboard e módulos
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: Constants.kPrimaryColor,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              // Título da seção de módulos
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: size.width * 0.05,
-                    right: size.width * 0.05,
-                    top: 10,
-                    bottom: 8,
-                  ),
-                  child: const Text(
-                    'Módulos',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black87,
-                    ),
-                  ),
-                ),
-              ),
-
-              // Grid de Módulos Responsivo com TODAS as funcionalidades
-              // Organizado em 2 sub-seções lado a lado para reduzir scroll vertical
-              SliverToBoxAdapter(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final isMobile = ResponsiveBreakpoints.isMobile(context);
-                    final isTablet = ResponsiveBreakpoints.isTablet(context);
-                    
-                    final horizontalPadding = ResponsiveBreakpoints.responsivePadding(
-                      context,
-                      mobile: size.width * 0.05,
-                      tablet: size.width * 0.08,
-                      desktop: size.width * 0.12,
-                    );
-
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-                      child: isMobile
-                          ? _buildMobileModulesLayout(context, size)
-                          : isTablet
-                              ? _buildTabletModulesLayout(context, size)
-                              : _buildDesktopModulesLayout(context, size),
-                    );
-                  },
-                ),
-              ),
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 40),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
           // Drawer Overlay para mobile/tablet
           if (useDrawerOverlay && !store.isCollapsed)
             Positioned.fill(
@@ -1179,6 +602,94 @@ class HomePageState extends State<HomePage> {
         ],
       );
     });
+  }
+
+  Widget _buildDailyPanelSliver() {
+    final usuario = store.authController.usuario;
+    final selectedAccount = usuario.selected_conta;
+    final panelData = HomePanelMapper.map(
+      dashboard: store.dashboard,
+      recommendedShortcuts: store.recommendedShortcuts,
+      userName: usuario.nome,
+      accountName: selectedAccount?.conta?.nome,
+      roleName: selectedAccount?.cargo?.cargo,
+      hasAdaptiveDashboardRecommendation:
+          store.hasAdaptiveDashboardRecommendation,
+      adaptiveCardType: store.adaptiveCardType,
+      cardOrder: store.cardOrder,
+    );
+
+    final shouldShowSkeleton = (store.isLoading && store.dashboard == null) ||
+        (store.isLoadingShortcuts &&
+            store.recommendedShortcuts.isEmpty &&
+            store.dashboard == null);
+
+    final hasBlockingError = store.hasError && store.dashboard == null;
+
+    return HomeDailyPanelContent(
+      data: shouldShowSkeleton || hasBlockingError ? null : panelData,
+      isLoading: store.isLoading || store.isLoadingShortcuts,
+      hasError: store.hasError,
+      errorMessage: store.errorMessage,
+      onRetry: store.carregarHome,
+      onOpenTodayTasks: _openTodayTasks,
+      onRecommendedActionTap: _openRecommendedAction,
+      onOpenProductionReport: () => Get.toNamed(Routes.relatoriosPage),
+      onModuleTap: _openModuleShortcut,
+    );
+  }
+
+  void _openTodayTasks() {
+    Get.toNamed(Routes.agendaPage);
+  }
+
+  void _openModuleShortcut(HomeModuleShortcutViewData module) {
+    final moduleId = module.moduleId;
+    if (moduleId != null) {
+      modulosStore.setPageViewController(moduleId);
+      Get.toNamed(Routes.modulosPage);
+      return;
+    }
+
+    final route = module.route;
+    if (route != null) {
+      Get.toNamed(route);
+    }
+  }
+
+  void _openRecommendedAction(RecommendedActionViewData action) {
+    if (GetIt.I<LoteStore>().isLoadingLotePorId) return;
+
+    NavigationAnalytics.logShortcutClick(action.route, action.confidence);
+    MetricsTrackingService.instance.trackShortcutClicked(
+      route: action.route,
+      mode: store.adaptiveMode,
+      sessionId: store.currentSessionId,
+    );
+
+    if (action.resourceId != null && action.resourceType != null) {
+      _navigateWithResource(
+        ShortcutModel(
+          route: action.route,
+          title: action.label,
+          icon: action.iconAsset,
+          colorHex: _colorToHex(action.color),
+          confidence: action.confidence,
+          resourceId: action.resourceId,
+          resourceType: action.resourceType,
+          resourceName: action.resourceName,
+          source: action.isAdaptive ? 'adaptive' : 'system',
+        ),
+      );
+      return;
+    }
+
+    Get.toNamed(action.route);
+  }
+
+  String _colorToHex(Color color) {
+    final value = color.toARGB32() & 0x00FFFFFF;
+    return '#${value.toRadixString(16).padLeft(6, '0').toUpperCase()}';
   }
 
   /// Constrói o conteúdo do drawer (usado em mobile/tablet)
@@ -1258,8 +769,8 @@ class HomePageState extends State<HomePage> {
                     children: [
                       Observer(
                         builder: (_) {
-                          final nome = store.authController.usuario.nome ??
-                              'Usuário';
+                          final nome =
+                              store.authController.usuario.nome ?? 'Usuário';
                           return Text(
                             'Olá, $nome',
                             style: const TextStyle(
@@ -1275,12 +786,8 @@ class HomePageState extends State<HomePage> {
                       const SizedBox(height: 2),
                       Observer(
                         builder: (_) {
-                          final cargo = store
-                                  .authController
-                                  .usuario
-                                  .selected_conta
-                                  ?.cargo
-                                  ?.cargo ??
+                          final cargo = store.authController.usuario
+                                  .selected_conta?.cargo?.cargo ??
                               'Cargo';
                           return Container(
                             padding: const EdgeInsets.symmetric(
@@ -1541,7 +1048,7 @@ class HomePageState extends State<HomePage> {
   /// Layout MOBILE: 2 colunas, módulos empilhados verticalmente (mais compactos)
   Widget _buildMobileModulesLayout(BuildContext context, Size size) {
     final allModules = _buildAllModuleGridItems(context, size, compact: true);
-    
+
     // Divide em 2 grupos: principais e secundários
     final mainModules = allModules.take(8).toList();
 
@@ -1560,7 +1067,7 @@ class HomePageState extends State<HomePage> {
   /// Layout TABLET: 3 colunas, melhor distribuição visual
   Widget _buildTabletModulesLayout(BuildContext context, Size size) {
     final allModules = _buildAllModuleGridItems(context, size, compact: false);
-    
+
     // Divide em 2 grupos de 5
     final group1 = allModules.take(5).toList();
     final group2 = allModules.skip(5).toList();
@@ -1599,9 +1106,9 @@ class HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        
+
         const SizedBox(height: 14),
-        
+
         // Segunda linha (5 módulos em grid 3+2)
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1640,7 +1147,7 @@ class HomePageState extends State<HomePage> {
   /// Layout DESKTOP: 5 colunas em 2 linhas, todos visíveis sem scroll
   Widget _buildDesktopModulesLayout(BuildContext context, Size size) {
     final allModules = _buildAllModuleGridItems(context, size, compact: false);
-    
+
     // Divide em 2 grupos de 5
     final row1 = allModules.take(5).toList();
     final row2 = allModules.skip(5).toList();
@@ -1658,9 +1165,9 @@ class HomePageState extends State<HomePage> {
               .toList()
               .sublist(0, 9),
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         // Segunda linha (5 módulos)
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1676,7 +1183,8 @@ class HomePageState extends State<HomePage> {
   }
 
   /// Constrói grid com TODOS os módulos do sistema (incluindo Agenda, Gestão de Equipe, Protocolos, Histórico)
-  List<Widget> _buildAllModuleGridItems(BuildContext context, Size size, {bool compact = false}) {
+  List<Widget> _buildAllModuleGridItems(BuildContext context, Size size,
+      {bool compact = false}) {
     return [
       // === MÓDULOS PRINCIPAIS ===
       // 1. Área de Cultivo / Setores
@@ -1690,7 +1198,7 @@ class HomePageState extends State<HomePage> {
         moduleId: 0,
         compact: compact,
       ),
-      
+
       // 2. Reservatórios
       _buildModernModuleCard(
         context,
@@ -1702,7 +1210,7 @@ class HomePageState extends State<HomePage> {
         moduleId: 1,
         compact: compact,
       ),
-      
+
       // 3. Caderno de Campo
       _buildModernModuleCard(
         context,
@@ -1714,7 +1222,7 @@ class HomePageState extends State<HomePage> {
         moduleId: 2,
         compact: compact,
       ),
-      
+
       // 4. Soluções Nutritivas
       _buildModernModuleCard(
         context,
@@ -1726,7 +1234,7 @@ class HomePageState extends State<HomePage> {
         moduleId: 3,
         compact: compact,
       ),
-      
+
       // 5. Protocolos
       _buildModernModuleCard(
         context,
@@ -1740,7 +1248,7 @@ class HomePageState extends State<HomePage> {
         },
         compact: compact,
       ),
-      
+
       // 6. Agenda
       _buildModernModuleCard(
         context,
@@ -1754,7 +1262,7 @@ class HomePageState extends State<HomePage> {
         },
         compact: compact,
       ),
-      
+
       // 7. Relatórios
       _buildModernModuleCard(
         context,
@@ -1766,7 +1274,7 @@ class HomePageState extends State<HomePage> {
         moduleId: 4,
         compact: compact,
       ),
-      
+
       // 8. Ajustes
       _buildModernModuleCard(
         context,
@@ -1778,7 +1286,7 @@ class HomePageState extends State<HomePage> {
         moduleId: 5,
         compact: compact,
       ),
-      
+
       // === MÓDULOS SECUNDÁRIOS ===
       // 9. Gestão de Equipe
       _buildModernModuleCard(
@@ -1793,7 +1301,7 @@ class HomePageState extends State<HomePage> {
         },
         compact: compact,
       ),
-      
+
       // 10. Histórico
       _buildModernModuleCard(
         context,
@@ -1830,12 +1338,13 @@ class HomePageState extends State<HomePage> {
     final spacing = compact ? 4.0 : 6.0;
 
     return InkWell(
-      onTap: onTap ?? () {
-        if (moduleId != null) {
-          modulosStore.setPageViewController(moduleId);
-          Get.toNamed(Routes.modulosPage);
-        }
-      },
+      onTap: onTap ??
+          () {
+            if (moduleId != null) {
+              modulosStore.setPageViewController(moduleId);
+              Get.toNamed(Routes.modulosPage);
+            }
+          },
       borderRadius: BorderRadius.circular(16),
       child: Container(
         decoration: BoxDecoration(
@@ -1876,9 +1385,9 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: spacing),
-                
+
                 // Título
                 Text(
                   title,
@@ -1891,9 +1400,9 @@ class HomePageState extends State<HomePage> {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                
+
                 SizedBox(height: 2),
-                
+
                 // Subtítulo
                 Text(
                   subtitle,
@@ -2087,7 +1596,8 @@ class HomePageState extends State<HomePage> {
   // ============================================================
 
   /// Card 1: Lotes em Produção (expandido)
-  Widget _buildLotesCard(BuildContext context, Size size, HomeDashboard dashboard) {
+  Widget _buildLotesCard(
+      BuildContext context, Size size, HomeDashboard dashboard) {
     final resumo = dashboard.resumo;
     final bool semDados = resumo == null;
 
@@ -2108,7 +1618,8 @@ class HomePageState extends State<HomePage> {
                 ),
                 child: Icon(
                   semDados ? Icons.warning_amber_rounded : Icons.agriculture,
-                  color: semDados ? Colors.orange[600] : const Color(0xFF059669),
+                  color:
+                      semDados ? Colors.orange[600] : const Color(0xFF059669),
                   size: 26,
                 ),
               ),
@@ -2117,13 +1628,18 @@ class HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Lotes em Produção', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    const Text('Lotes em Produção',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w700)),
                     Text(
-                      semDados ? 'Nenhum lote registrado' : '${resumo.lotesAtivos ?? 0} ativos',
+                      semDados
+                          ? 'Nenhum lote registrado'
+                          : '${resumo.lotesAtivos ?? 0} ativos',
                       style: TextStyle(
                         fontSize: 12,
                         color: semDados ? Colors.orange[700] : Colors.grey[600],
-                        fontStyle: semDados ? FontStyle.italic : FontStyle.normal,
+                        fontStyle:
+                            semDados ? FontStyle.italic : FontStyle.normal,
                       ),
                     ),
                   ],
@@ -2132,7 +1648,8 @@ class HomePageState extends State<HomePage> {
               // Badge de colheita próxima
               if (!semDados && (resumo.lotesComColheitaProxima ?? 0) > 0)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: const Color(0xFFF59E0B).withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(12),
@@ -2140,9 +1657,14 @@ class HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.schedule, size: 14, color: Color(0xFFF59E0B)),
+                      const Icon(Icons.schedule,
+                          size: 14, color: Color(0xFFF59E0B)),
                       const SizedBox(width: 4),
-                      Text('${resumo.lotesComColheitaProxima}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFFF59E0B))),
+                      Text('${resumo.lotesComColheitaProxima}',
+                          style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFFF59E0B))),
                     ],
                   ),
                 ),
@@ -2157,7 +1679,8 @@ class HomePageState extends State<HomePage> {
                 icon: Icons.agriculture_outlined,
                 iconColor: Colors.orange[600]!,
                 title: 'Nenhum lote cadastrado',
-                subtitle: 'Cadastre lotes para visualizar o acompanhamento da produção aqui',
+                subtitle:
+                    'Cadastre lotes para visualizar o acompanhamento da produção aqui',
                 buttonColor: const Color(0xFF059669),
                 buttonText: 'Cadastrar Lote',
                 onButtonPressed: () {
@@ -2167,7 +1690,8 @@ class HomePageState extends State<HomePage> {
             )
           else ...[
             // Barra de progresso por status
-            if (resumo.lotesPorStatus != null && resumo.lotesPorStatus!.isNotEmpty)
+            if (resumo.lotesPorStatus != null &&
+                resumo.lotesPorStatus!.isNotEmpty)
               _buildSegmentedProgress(resumo.lotesPorStatus!),
             if (resumo.taxaConclusao != null)
               Padding(
@@ -2178,27 +1702,34 @@ class HomePageState extends State<HomePage> {
                       child: LinearProgressIndicator(
                         value: (resumo.taxaConclusao ?? 0) / 100,
                         backgroundColor: Colors.grey[200],
-                        valueColor: const AlwaysStoppedAnimation(Color(0xFF059669)),
+                        valueColor:
+                            const AlwaysStoppedAnimation(Color(0xFF059669)),
                         minHeight: 6,
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text('${resumo.taxaConclusao?.toStringAsFixed(0)}%', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                    Text('${resumo.taxaConclusao?.toStringAsFixed(0)}%',
+                        style: const TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),
             // Espécies em andamento
-            if (resumo.especiesEmAndamento != null && resumo.especiesEmAndamento!.isNotEmpty) ...[
+            if (resumo.especiesEmAndamento != null &&
+                resumo.especiesEmAndamento!.isNotEmpty) ...[
               const SizedBox(height: 10),
               Wrap(
                 spacing: 6,
                 runSpacing: 4,
                 children: resumo.especiesEmAndamento!.take(4).map((esp) {
                   return Chip(
-                    label: Text('${esp.nome} (${esp.percentual?.toStringAsFixed(0)}%)', style: const TextStyle(fontSize: 10)),
+                    label: Text(
+                        '${esp.nome} (${esp.percentual?.toStringAsFixed(0)}%)',
+                        style: const TextStyle(fontSize: 10)),
                     padding: EdgeInsets.zero,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    backgroundColor: const Color(0xFF059669).withValues(alpha: 0.1),
+                    backgroundColor:
+                        const Color(0xFF059669).withValues(alpha: 0.1),
                     visualDensity: VisualDensity.compact,
                   );
                 }).toList(),
@@ -2211,7 +1742,8 @@ class HomePageState extends State<HomePage> {
   }
 
   /// Card 2: Tarefas Pendentes (expandido)
-  Widget _buildTarefasCard(BuildContext context, Size size, HomeDashboard dashboard) {
+  Widget _buildTarefasCard(
+      BuildContext context, Size size, HomeDashboard dashboard) {
     final tarefas = dashboard.tarefas;
     final bool semDados = tarefas == null;
 
@@ -2232,7 +1764,8 @@ class HomePageState extends State<HomePage> {
                 ),
                 child: Icon(
                   semDados ? Icons.warning_amber_rounded : Icons.task_alt,
-                  color: semDados ? Colors.orange[600] : const Color(0xFFDC2626),
+                  color:
+                      semDados ? Colors.orange[600] : const Color(0xFFDC2626),
                   size: 26,
                 ),
               ),
@@ -2241,13 +1774,18 @@ class HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Tarefas Pendentes', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    const Text('Tarefas Pendentes',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w700)),
                     Text(
-                      semDados ? 'Nenhuma tarefa registrada' : '${tarefas.pendentesHoje ?? 0} hoje',
+                      semDados
+                          ? 'Nenhuma tarefa registrada'
+                          : '${tarefas.pendentesHoje ?? 0} hoje',
                       style: TextStyle(
                         fontSize: 12,
                         color: semDados ? Colors.orange[700] : Colors.grey[600],
-                        fontStyle: semDados ? FontStyle.italic : FontStyle.normal,
+                        fontStyle:
+                            semDados ? FontStyle.italic : FontStyle.normal,
                       ),
                     ),
                   ],
@@ -2256,12 +1794,17 @@ class HomePageState extends State<HomePage> {
               // Badge de atrasadas
               if (!semDados && (tarefas.atrasadas ?? 0) > 0)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: const Color(0xFFDC2626),
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Text('${tarefas.atrasadas}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white)),
+                  child: Text('${tarefas.atrasadas}',
+                      style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
                 ),
             ],
           ),
@@ -2274,7 +1817,8 @@ class HomePageState extends State<HomePage> {
                 icon: Icons.task_alt_outlined,
                 iconColor: Colors.orange[600]!,
                 title: 'Nenhuma tarefa cadastrada',
-                subtitle: 'Cadastre tarefas nos lotes para visualizar o acompanhamento aqui',
+                subtitle:
+                    'Cadastre tarefas nos lotes para visualizar o acompanhamento aqui',
                 buttonColor: const Color(0xFFDC2626),
                 buttonText: 'Cadastrar Tarefa',
                 onButtonPressed: () {
@@ -2288,13 +1832,23 @@ class HomePageState extends State<HomePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildTaskBreakdownItem('Hoje', tarefas.porVencimento!.hoje ?? 0, const Color(0xFFDC2626)),
-                  _buildTaskBreakdownItem('Semana', tarefas.porVencimento!.estaSemana ?? 0, const Color(0xFFF59E0B)),
-                  _buildTaskBreakdownItem('Próx.', tarefas.porVencimento!.proximaSemana ?? 0, const Color(0xFF059669)),
+                  _buildTaskBreakdownItem(
+                      'Hoje',
+                      tarefas.porVencimento!.hoje ?? 0,
+                      const Color(0xFFDC2626)),
+                  _buildTaskBreakdownItem(
+                      'Semana',
+                      tarefas.porVencimento!.estaSemana ?? 0,
+                      const Color(0xFFF59E0B)),
+                  _buildTaskBreakdownItem(
+                      'Próx.',
+                      tarefas.porVencimento!.proximaSemana ?? 0,
+                      const Color(0xFF059669)),
                 ],
               ),
             // Preview de tarefas
-            if (tarefas.ultimasTarefas != null && tarefas.ultimasTarefas!.isNotEmpty) ...[
+            if (tarefas.ultimasTarefas != null &&
+                tarefas.ultimasTarefas!.isNotEmpty) ...[
               const SizedBox(height: 10),
               const Divider(height: 1),
               const SizedBox(height: 6),
@@ -2303,13 +1857,28 @@ class HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(bottom: 6),
                   child: Row(
                     children: [
-                      Icon(t.vencida == true ? Icons.warning : Icons.circle_outlined, size: 12, color: t.vencida == true ? const Color(0xFFDC2626) : Colors.grey[400]),
+                      Icon(
+                          t.vencida == true
+                              ? Icons.warning
+                              : Icons.circle_outlined,
+                          size: 12,
+                          color: t.vencida == true
+                              ? const Color(0xFFDC2626)
+                              : Colors.grey[400]),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: Text(t.titulo ?? '', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500), maxLines: 1, overflow: TextOverflow.ellipsis),
+                        child: Text(t.titulo ?? '',
+                            style: const TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.w500),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis),
                       ),
                       if (t.loteNome != null)
-                        Text(t.loteNome!, style: TextStyle(fontSize: 10, color: Colors.grey[500]), maxLines: 1, overflow: TextOverflow.ellipsis),
+                        Text(t.loteNome!,
+                            style: TextStyle(
+                                fontSize: 10, color: Colors.grey[500]),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis),
                     ],
                   ),
                 );
@@ -2322,7 +1891,8 @@ class HomePageState extends State<HomePage> {
   }
 
   /// Card 3: Produção Total (expandido)
-  Widget _buildProducaoCard(BuildContext context, Size size, HomeDashboard dashboard) {
+  Widget _buildProducaoCard(
+      BuildContext context, Size size, HomeDashboard dashboard) {
     final producao = dashboard.producao;
     final bool semDados = producao == null;
 
@@ -2348,7 +1918,8 @@ class HomePageState extends State<HomePage> {
                 ),
                 child: Icon(
                   semDados ? Icons.warning_amber_rounded : Icons.eco,
-                  color: semDados ? Colors.orange[600] : const Color(0xFF2563EB),
+                  color:
+                      semDados ? Colors.orange[600] : const Color(0xFF2563EB),
                   size: 26,
                 ),
               ),
@@ -2357,7 +1928,9 @@ class HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Produção Total', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    const Text('Produção Total',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w700)),
                     Text(
                       semDados
                           ? 'Nenhuma produção registrada'
@@ -2366,19 +1939,29 @@ class HomePageState extends State<HomePage> {
                               : '${producao.totalPlantasColhidas ?? 0} plantas',
                       style: TextStyle(
                         fontSize: 12,
-                        color: (semDados || estaZerado) ? Colors.orange[700] : Colors.grey[600],
-                        fontStyle: (semDados || estaZerado) ? FontStyle.italic : FontStyle.normal,
+                        color: (semDados || estaZerado)
+                            ? Colors.orange[700]
+                            : Colors.grey[600],
+                        fontStyle: (semDados || estaZerado)
+                            ? FontStyle.italic
+                            : FontStyle.normal,
                       ),
                     ),
                   ],
                 ),
               ),
               // Comparativo de variação
-              if (!semDados && !estaZerado && producao.comparativoPeriodo != null && producao.comparativoPeriodo!.variacaoPercentual != null)
+              if (!semDados &&
+                  !estaZerado &&
+                  producao.comparativoPeriodo != null &&
+                  producao.comparativoPeriodo!.variacaoPercentual != null)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: (producao.comparativoPeriodo!.variacaoPercentual ?? 0) >= 0
+                    color: (producao.comparativoPeriodo!.variacaoPercentual ??
+                                0) >=
+                            0
                         ? const Color(0xFF059669).withValues(alpha: 0.12)
                         : const Color(0xFFDC2626).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
@@ -2387,9 +1970,18 @@ class HomePageState extends State<HomePage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
-                        (producao.comparativoPeriodo!.variacaoPercentual ?? 0) >= 0 ? Icons.trending_up : Icons.trending_down,
+                        (producao.comparativoPeriodo!.variacaoPercentual ??
+                                    0) >=
+                                0
+                            ? Icons.trending_up
+                            : Icons.trending_down,
                         size: 14,
-                        color: (producao.comparativoPeriodo!.variacaoPercentual ?? 0) >= 0 ? const Color(0xFF059669) : const Color(0xFFDC2626),
+                        color:
+                            (producao.comparativoPeriodo!.variacaoPercentual ??
+                                        0) >=
+                                    0
+                                ? const Color(0xFF059669)
+                                : const Color(0xFFDC2626),
                       ),
                       const SizedBox(width: 2),
                       Text(
@@ -2397,7 +1989,12 @@ class HomePageState extends State<HomePage> {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
-                          color: (producao.comparativoPeriodo!.variacaoPercentual ?? 0) >= 0 ? const Color(0xFF059669) : const Color(0xFFDC2626),
+                          color: (producao.comparativoPeriodo!
+                                          .variacaoPercentual ??
+                                      0) >=
+                                  0
+                              ? const Color(0xFF059669)
+                              : const Color(0xFFDC2626),
                         ),
                       ),
                     ],
@@ -2414,7 +2011,8 @@ class HomePageState extends State<HomePage> {
                 icon: Icons.eco_outlined,
                 iconColor: Colors.orange[600]!,
                 title: 'Nenhum dado de produção',
-                subtitle: 'Registre colheitas e produções nos lotes para visualizar as métricas aqui',
+                subtitle:
+                    'Registre colheitas e produções nos lotes para visualizar as métricas aqui',
                 buttonColor: const Color(0xFF2563EB),
                 buttonText: 'Registrar Produção',
                 onButtonPressed: () {
@@ -2456,7 +2054,8 @@ class HomePageState extends State<HomePage> {
             )
           else ...[
             // Gráfico de barras verticais - Produção mensal
-            if (producao.producaoMensal != null && producao.producaoMensal!.isNotEmpty)
+            if (producao.producaoMensal != null &&
+                producao.producaoMensal!.isNotEmpty)
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 4),
@@ -2468,7 +2067,8 @@ class HomePageState extends State<HomePage> {
                           .map((p) => p.quantidade ?? 0)
                           .reduce((a, b) => a > b ? a : b);
                       final percentual = maxProducao > 0
-                          ? ((producaoMes.quantidade ?? 0) / maxProducao).toDouble()
+                          ? ((producaoMes.quantidade ?? 0) / maxProducao)
+                              .toDouble()
                           : 0.0;
                       return Expanded(
                         child: Column(
@@ -2476,7 +2076,8 @@ class HomePageState extends State<HomePage> {
                           children: [
                             Text(
                               _formatNumber(producaoMes.quantidade ?? 0),
-                              style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w600),
+                              style: const TextStyle(
+                                  fontSize: 9, fontWeight: FontWeight.w600),
                               maxLines: 1,
                             ),
                             const SizedBox(height: 2),
@@ -2485,13 +2086,15 @@ class HomePageState extends State<HomePage> {
                               height: (80.0 * percentual).clamp(6.0, 80.0),
                               decoration: BoxDecoration(
                                 color: const Color(0xFF2563EB),
-                                borderRadius: const BorderRadius.vertical(top: Radius.circular(3)),
+                                borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(3)),
                               ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               _getMonthAbbreviation(producaoMes.mes ?? ''),
-                              style: const TextStyle(fontSize: 9, color: Colors.grey),
+                              style: const TextStyle(
+                                  fontSize: 9, color: Colors.grey),
                               textAlign: TextAlign.center,
                               maxLines: 1,
                             ),
@@ -2503,16 +2106,30 @@ class HomePageState extends State<HomePage> {
                 ),
               ),
             // Taxas de produtividade
-            if (producao.taxasMedia != null && producao.taxasMedia!.taxaGlobal != null && producao.taxasMedia!.taxaGlobal! > 0)
+            if (producao.taxasMedia != null &&
+                producao.taxasMedia!.taxaGlobal != null &&
+                producao.taxasMedia!.taxaGlobal! > 0)
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildRateIndicator('Germinação', producao.taxasMedia!.taxaGerminacao ?? 0, const Color(0xFF10B981)),
-                    _buildRateIndicator('Transplantio', producao.taxasMedia!.taxaTransplantio ?? 0, const Color(0xFF2563EB)),
-                    _buildRateIndicator('Embalagem', producao.taxasMedia!.taxaEmbalagem ?? 0, const Color(0xFFF59E0B)),
-                    _buildRateIndicator('Global', producao.taxasMedia!.taxaGlobal ?? 0, const Color(0xFF8B5CF6)),
+                    _buildRateIndicator(
+                        'Germinação',
+                        producao.taxasMedia!.taxaGerminacao ?? 0,
+                        const Color(0xFF10B981)),
+                    _buildRateIndicator(
+                        'Transplantio',
+                        producao.taxasMedia!.taxaTransplantio ?? 0,
+                        const Color(0xFF2563EB)),
+                    _buildRateIndicator(
+                        'Embalagem',
+                        producao.taxasMedia!.taxaEmbalagem ?? 0,
+                        const Color(0xFFF59E0B)),
+                    _buildRateIndicator(
+                        'Global',
+                        producao.taxasMedia!.taxaGlobal ?? 0,
+                        const Color(0xFF8B5CF6)),
                   ],
                 ),
               ),
@@ -2523,11 +2140,13 @@ class HomePageState extends State<HomePage> {
   }
 
   /// Card 5: Saúde da Produção (NOVO)
-  Widget _buildSaudeCard(BuildContext context, Size size, HomeDashboard dashboard) {
+  Widget _buildSaudeCard(
+      BuildContext context, Size size, HomeDashboard dashboard) {
     final taxas = dashboard.producao?.taxasMedia;
     final equipe = dashboard.equipe;
     final alertas = dashboard.alertasCritico;
-    final bool semDados = taxas == null && equipe == null && (alertas == null || alertas.isEmpty);
+    final bool semDados =
+        taxas == null && equipe == null && (alertas == null || alertas.isEmpty);
 
     return Container(
       padding: const EdgeInsets.all(18),
@@ -2546,7 +2165,8 @@ class HomePageState extends State<HomePage> {
                 ),
                 child: Icon(
                   semDados ? Icons.warning_amber_rounded : Icons.monitor_heart,
-                  color: semDados ? Colors.orange[600] : const Color(0xFF06B6D4),
+                  color:
+                      semDados ? Colors.orange[600] : const Color(0xFF06B6D4),
                   size: 26,
                 ),
               ),
@@ -2555,13 +2175,16 @@ class HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Saúde da Produção', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    const Text('Saúde da Produção',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w700)),
                     Text(
                       semDados ? 'Dados insuficientes' : 'Eficiência e alertas',
                       style: TextStyle(
                         fontSize: 12,
                         color: semDados ? Colors.orange[700] : Colors.grey[600],
-                        fontStyle: semDados ? FontStyle.italic : FontStyle.normal,
+                        fontStyle:
+                            semDados ? FontStyle.italic : FontStyle.normal,
                       ),
                     ),
                   ],
@@ -2578,7 +2201,8 @@ class HomePageState extends State<HomePage> {
                 icon: Icons.monitor_heart_outlined,
                 iconColor: Colors.orange[600]!,
                 title: 'Dados insuficientes para análise',
-                subtitle: 'Registre taxas de produção e atividades da equipe para visualizar a saúde da produção aqui',
+                subtitle:
+                    'Registre taxas de produção e atividades da equipe para visualizar a saúde da produção aqui',
                 buttonColor: const Color(0xFF06B6D4),
                 buttonText: 'Registrar Dados',
                 onButtonPressed: () {
@@ -2588,29 +2212,44 @@ class HomePageState extends State<HomePage> {
             )
           else ...[
             // Gauges de taxas
-            if (taxas != null && taxas.taxaGlobal != null && taxas.taxaGlobal! > 0)
+            if (taxas != null &&
+                taxas.taxaGlobal != null &&
+                taxas.taxaGlobal! > 0)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildRateGauge('Germinação', taxas.taxaGerminacao ?? 0, const Color(0xFF10B981)),
-                  _buildRateGauge('Transplantio', taxas.taxaTransplantio ?? 0, const Color(0xFF2563EB)),
-                  _buildRateGauge('Embalagem', taxas.taxaEmbalagem ?? 0, const Color(0xFFF59E0B)),
-                  _buildRateGauge('Global', taxas.taxaGlobal ?? 0, const Color(0xFF8B5CF6)),
+                  _buildRateGauge('Germinação', taxas.taxaGerminacao ?? 0,
+                      const Color(0xFF10B981)),
+                  _buildRateGauge('Transplantio', taxas.taxaTransplantio ?? 0,
+                      const Color(0xFF2563EB)),
+                  _buildRateGauge('Embalagem', taxas.taxaEmbalagem ?? 0,
+                      const Color(0xFFF59E0B)),
+                  _buildRateGauge(
+                      'Global', taxas.taxaGlobal ?? 0, const Color(0xFF8B5CF6)),
                 ],
               ),
             // Resumo da equipe
-            if (equipe != null && equipe.membrosAtivos != null && equipe.membrosAtivos! > 0) ...[
+            if (equipe != null &&
+                equipe.membrosAtivos != null &&
+                equipe.membrosAtivos! > 0) ...[
               const SizedBox(height: 12),
               const Divider(height: 1),
               const SizedBox(height: 6),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildTeamStat('Membros', '${equipe.membrosAtivos}', Icons.people, const Color(0xFF06B6D4)),
-                  _buildTeamStat('Conclusão', '${equipe.taxaConclusaoMedia?.toStringAsFixed(0)}%', Icons.check_circle, const Color(0xFF10B981)),
-                  _buildTeamStat('No prazo', '${equipe.atividadesNoPrazo ?? 0}', Icons.schedule, const Color(0xFF2563EB)),
+                  _buildTeamStat('Membros', '${equipe.membrosAtivos}',
+                      Icons.people, const Color(0xFF06B6D4)),
+                  _buildTeamStat(
+                      'Conclusão',
+                      '${equipe.taxaConclusaoMedia?.toStringAsFixed(0)}%',
+                      Icons.check_circle,
+                      const Color(0xFF10B981)),
+                  _buildTeamStat('No prazo', '${equipe.atividadesNoPrazo ?? 0}',
+                      Icons.schedule, const Color(0xFF2563EB)),
                   if ((equipe.atividadesVencidas ?? 0) > 0)
-                    _buildTeamStat('Vencidas', '${equipe.atividadesVencidas}', Icons.warning, const Color(0xFFDC2626)),
+                    _buildTeamStat('Vencidas', '${equipe.atividadesVencidas}',
+                        Icons.warning, const Color(0xFFDC2626)),
                 ],
               ),
             ],
@@ -2619,11 +2258,23 @@ class HomePageState extends State<HomePage> {
               const SizedBox(height: 10),
               const Divider(height: 1),
               const SizedBox(height: 6),
-              const Text('Alertas', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black54)),
+              const Text('Alertas',
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black54)),
               const SizedBox(height: 6),
               ...alertas.take(3).map((alerta) {
-                final gravidadeColor = alerta.gravidade == 'alta' ? const Color(0xFFDC2626) : alerta.gravidade == 'media' ? const Color(0xFFF59E0B) : const Color(0xFF10B981);
-                final gravidadeIcon = alerta.gravidade == 'alta' ? Icons.error : alerta.gravidade == 'media' ? Icons.warning_amber : Icons.info_outline;
+                final gravidadeColor = alerta.gravidade == 'alta'
+                    ? const Color(0xFFDC2626)
+                    : alerta.gravidade == 'media'
+                        ? const Color(0xFFF59E0B)
+                        : const Color(0xFF10B981);
+                final gravidadeIcon = alerta.gravidade == 'alta'
+                    ? Icons.error
+                    : alerta.gravidade == 'media'
+                        ? Icons.warning_amber
+                        : Icons.info_outline;
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 6),
                   child: Row(
@@ -2635,9 +2286,15 @@ class HomePageState extends State<HomePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(alerta.mensagem ?? '', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500), maxLines: 2, overflow: TextOverflow.ellipsis),
+                            Text(alerta.mensagem ?? '',
+                                style: const TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.w500),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis),
                             if (alerta.loteNome != null)
-                              Text(alerta.loteNome!, style: TextStyle(fontSize: 10, color: Colors.grey[500])),
+                              Text(alerta.loteNome!,
+                                  style: TextStyle(
+                                      fontSize: 10, color: Colors.grey[500])),
                           ],
                         ),
                       ),
@@ -2673,7 +2330,11 @@ class HomePageState extends State<HomePage> {
       color: Colors.white,
       borderRadius: BorderRadius.circular(20),
       boxShadow: [
-        BoxShadow(offset: const Offset(0, 2), color: Colors.black.withValues(alpha: 0.06), blurRadius: 16, spreadRadius: 0),
+        BoxShadow(
+            offset: const Offset(0, 2),
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 16,
+            spreadRadius: 0),
       ],
     );
   }
@@ -2732,7 +2393,9 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              if (buttonText != null && onButtonPressed != null && !isCompact) ...[
+              if (buttonText != null &&
+                  onButtonPressed != null &&
+                  !isCompact) ...[
                 SizedBox(height: 8),
                 SizedBox(
                   height: 28,
@@ -2741,12 +2404,14 @@ class HomePageState extends State<HomePage> {
                     icon: const Icon(Icons.add, size: 14),
                     label: Text(
                       buttonText,
-                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                          fontSize: 11, fontWeight: FontWeight.w600),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: buttonColor,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -2773,7 +2438,8 @@ class HomePageState extends State<HomePage> {
         return _buildProducaoCard(context, size, dashboard);
       case 'saude':
         // Card de saúde só é exibido se houver dados de equipe ou taxas
-        if (dashboard.equipe != null || dashboard.producao?.taxasMedia != null) {
+        if (dashboard.equipe != null ||
+            dashboard.producao?.taxasMedia != null) {
           return _buildSaudeCard(context, size, dashboard);
         }
         // Fallback: exibe um card vazio ou outro card se não houver dados
@@ -2818,24 +2484,32 @@ class HomePageState extends State<HomePage> {
             height: 10,
             width: double.infinity,
             child: Row(
-              children: statuses.map((status) {
-                final flex = status.quantidade ?? 0;
-                if (flex == 0) return const SizedBox.shrink();
-                return Flexible(
-                  flex: flex,
-                  child: Container(color: _parseColor(status.cor ?? '', Colors.grey)),
-                );
-              }).where((w) => w != const SizedBox.shrink()).toList(),
+              children: statuses
+                  .map((status) {
+                    final flex = status.quantidade ?? 0;
+                    if (flex == 0) return const SizedBox.shrink();
+                    return Flexible(
+                      flex: flex,
+                      child: Container(
+                          color: _parseColor(status.cor ?? '', Colors.grey)),
+                    );
+                  })
+                  .where((w) => w != const SizedBox.shrink())
+                  .toList(),
             ),
           ),
         ),
         const SizedBox(height: 4),
         Wrap(
           spacing: 10,
-          children: statuses.where((s) => (s.quantidade ?? 0) > 0).map((status) {
+          children:
+              statuses.where((s) => (s.quantidade ?? 0) > 0).map((status) {
             return Text(
               '${status.status}: ${status.quantidade}',
-              style: const TextStyle(fontSize: 10, color: Colors.black54, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                  fontSize: 10,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w500),
             );
           }).toList(),
         ),
@@ -2846,8 +2520,11 @@ class HomePageState extends State<HomePage> {
   Widget _buildTaskBreakdownItem(String label, int value, Color color) {
     return Column(
       children: [
-        Text('$value', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: color)),
-        Text(label, style: const TextStyle(fontSize: 10, color: Colors.black54)),
+        Text('$value',
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.w700, color: color)),
+        Text(label,
+            style: const TextStyle(fontSize: 10, color: Colors.black54)),
       ],
     );
   }
@@ -2855,7 +2532,9 @@ class HomePageState extends State<HomePage> {
   Widget _buildRateIndicator(String label, double value, Color color) {
     return Column(
       children: [
-        Text('${value.toStringAsFixed(0)}%', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: color)),
+        Text('${value.toStringAsFixed(0)}%',
+            style: TextStyle(
+                fontSize: 13, fontWeight: FontWeight.w700, color: color)),
         Text(label, style: const TextStyle(fontSize: 9, color: Colors.black54)),
       ],
     );
@@ -2871,23 +2550,33 @@ class HomePageState extends State<HomePage> {
             width: 50,
             height: 50,
             child: CustomPaint(
-              painter: _GaugePainter(value: value, color: color, strokeWidth: 5),
+              painter:
+                  _GaugePainter(value: value, color: color, strokeWidth: 5),
             ),
           ),
           const SizedBox(height: 2),
-          Text('${value.toStringAsFixed(0)}%', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: color)),
-          Text(label, style: const TextStyle(fontSize: 8, color: Colors.black54), textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis),
+          Text('${value.toStringAsFixed(0)}%',
+              style: TextStyle(
+                  fontSize: 11, fontWeight: FontWeight.bold, color: color)),
+          Text(label,
+              style: const TextStyle(fontSize: 8, color: Colors.black54),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis),
         ],
       ),
     );
   }
 
-  Widget _buildTeamStat(String label, String value, IconData icon, Color color) {
+  Widget _buildTeamStat(
+      String label, String value, IconData icon, Color color) {
     return Column(
       children: [
         Icon(icon, size: 18, color: color),
         const SizedBox(height: 2),
-        Text(value, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: color)),
+        Text(value,
+            style: TextStyle(
+                fontSize: 13, fontWeight: FontWeight.w700, color: color)),
         Text(label, style: const TextStyle(fontSize: 9, color: Colors.black54)),
       ],
     );
@@ -2909,21 +2598,48 @@ class HomePageState extends State<HomePage> {
   String _getMonthAbbreviation(String month) {
     if (month.isEmpty) return '';
     const months = {
-      'jan': 'Jan', 'janeiro': 'Jan', 'january': 'Jan',
-      'fev': 'Fev', 'fevereiro': 'Fev', 'february': 'Fev',
-      'mar': 'Mar', 'março': 'Mar', 'march': 'Mar', 'marco': 'Mar',
-      'abr': 'Abr', 'abril': 'Abr', 'april': 'Abr',
-      'mai': 'Mai', 'maio': 'Mai', 'may': 'Mai',
-      'jun': 'Jun', 'junho': 'Jun', 'june': 'Jun',
-      'jul': 'Jul', 'julho': 'Jul', 'july': 'Jul',
-      'ago': 'Ago', 'agosto': 'Ago', 'august': 'Ago',
-      'set': 'Set', 'setembro': 'Set', 'september': 'Set',
-      'out': 'Out', 'outubro': 'Out', 'october': 'Out',
-      'nov': 'Nov', 'novembro': 'Nov', 'november': 'Nov',
-      'dez': 'Dez', 'dezembro': 'Dez', 'december': 'Dez', 'dec': 'Dez',
+      'jan': 'Jan',
+      'janeiro': 'Jan',
+      'january': 'Jan',
+      'fev': 'Fev',
+      'fevereiro': 'Fev',
+      'february': 'Fev',
+      'mar': 'Mar',
+      'março': 'Mar',
+      'march': 'Mar',
+      'marco': 'Mar',
+      'abr': 'Abr',
+      'abril': 'Abr',
+      'april': 'Abr',
+      'mai': 'Mai',
+      'maio': 'Mai',
+      'may': 'Mai',
+      'jun': 'Jun',
+      'junho': 'Jun',
+      'june': 'Jun',
+      'jul': 'Jul',
+      'julho': 'Jul',
+      'july': 'Jul',
+      'ago': 'Ago',
+      'agosto': 'Ago',
+      'august': 'Ago',
+      'set': 'Set',
+      'setembro': 'Set',
+      'september': 'Set',
+      'out': 'Out',
+      'outubro': 'Out',
+      'october': 'Out',
+      'nov': 'Nov',
+      'novembro': 'Nov',
+      'november': 'Nov',
+      'dez': 'Dez',
+      'dezembro': 'Dez',
+      'december': 'Dez',
+      'dec': 'Dez',
     };
     final lower = month.toLowerCase().trim();
-    return months[lower] ?? month.substring(0, month.length > 3 ? 3 : month.length);
+    return months[lower] ??
+        month.substring(0, month.length > 3 ? 3 : month.length);
   }
 
   Widget _buildMiniTrendChart(List<HomeProducaoMensal> data) {
@@ -2934,7 +2650,11 @@ class HomePageState extends State<HomePage> {
     return SizedBox(
       height: 50,
       child: CustomPaint(
-        painter: _SparklinePainter(values: values.map((v) => v.toDouble()).toList(), labels: labels, lineColor: const Color(0xFF2563EB), fillColor: const Color(0xFF2563EB).withValues(alpha: 0.13)),
+        painter: _SparklinePainter(
+            values: values.map((v) => v.toDouble()).toList(),
+            labels: labels,
+            lineColor: const Color(0xFF2563EB),
+            fillColor: const Color(0xFF2563EB).withValues(alpha: 0.13)),
         size: const Size(double.infinity, 50),
       ),
     );
@@ -3393,7 +3113,9 @@ class _SparklinePainter extends CustomPainter {
     // Criar pontos
     final points = <Offset>[];
     for (int i = 0; i < values.length; i++) {
-      final x = values.length > 1 ? (i / (values.length - 1)) * chartWidth : chartWidth / 2;
+      final x = values.length > 1
+          ? (i / (values.length - 1)) * chartWidth
+          : chartWidth / 2;
       final y = chartHeight - (values[i] / maxVal) * chartHeight;
       points.add(Offset(x, y));
     }
@@ -3417,7 +3139,9 @@ class _SparklinePainter extends CustomPainter {
     // Desenhar labels
     if (labels != null && labels!.length == values.length) {
       for (int i = 0; i < labels!.length; i++) {
-        final x = values.length > 1 ? (i / (labels!.length - 1)) * chartWidth : chartWidth / 2;
+        final x = values.length > 1
+            ? (i / (labels!.length - 1)) * chartWidth
+            : chartWidth / 2;
         textPainter.text = TextSpan(
           text: labels![i],
           style: const TextStyle(fontSize: 8, color: Colors.black54),
@@ -3482,79 +3206,74 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
           child: Row(
             children: [
-            // Botão menu
-            GestureDetector(
-              onTap: () => store.setIsCollaped(),
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Constants.kPrimaryColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(
-                  Icons.menu_rounded,
-                  color: Constants.kPrimaryColor,
-                  size: 22,
-                ),
-              ),
-            ),
-            
-            const SizedBox(width: 12),
-            
-            // Nome e cargo
-            Expanded(
-              child: Opacity(
-                opacity: opacity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Observer(
-                      builder: (_) {
-                        final nome = store.authController.usuario.nome ?? '';
-                        return Text(
-                          nome.isNotEmpty ? 'Olá, $nome' : 'Olá',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black87,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 2),
-                    Observer(
-                      builder: (_) {
-                        final cargo = store
-                                .authController
-                                .usuario
-                                .selected_conta
-                                ?.cargo
-                                ?.cargo ??
-                            '';
-                        if (cargo.isEmpty) return const SizedBox.shrink();
-                        return Text(
-                          cargo,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w500,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        );
-                      },
-                    ),
-                  ],
+              // Botão menu
+              GestureDetector(
+                onTap: () => store.setIsCollaped(),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Constants.kPrimaryColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    Icons.menu_rounded,
+                    color: Constants.kPrimaryColor,
+                    size: 22,
+                  ),
                 ),
               ),
-            ),
-            
-          ],
-        ),
+
+              const SizedBox(width: 12),
+
+              // Nome e cargo
+              Expanded(
+                child: Opacity(
+                  opacity: opacity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Observer(
+                        builder: (_) {
+                          final nome = store.authController.usuario.nome ?? '';
+                          return Text(
+                            nome.isNotEmpty ? 'Olá, $nome' : 'Olá',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black87,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 2),
+                      Observer(
+                        builder: (_) {
+                          final cargo = store.authController.usuario
+                                  .selected_conta?.cargo?.cargo ??
+                              '';
+                          if (cargo.isEmpty) return const SizedBox.shrink();
+                          return Text(
+                            cargo,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -3567,5 +3286,6 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
   double get minExtent => 72;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      false;
 }

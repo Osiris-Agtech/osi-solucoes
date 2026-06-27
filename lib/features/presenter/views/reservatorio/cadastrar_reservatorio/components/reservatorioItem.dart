@@ -7,6 +7,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/core/services/navigation_resource_args.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.dart';
 
 Padding reservatorioItem(int index, ReservatoriosStore store) {
   return Padding(
@@ -15,9 +16,39 @@ Padding reservatorioItem(int index, ReservatoriosStore store) {
       left: 10,
       right: 10,
     ),
-    child: InkWell(
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
+    child: AppEntityCard(
+      title: store.searchReservatorio[index].nome ?? "---",
+      leading: SvgPicture.asset('assets/icons/reservatorio_icon.svg'),
+      metadata: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              "Cultivos:",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(width: 5),
+            Text(
+              "${store.searchReservatorio[index].lotes?.length ?? 0} Ativos",
+              style: const TextStyle(
+                color: Constants.kPrimaryColor,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ],
+      actions: const [
+        Icon(
+          Icons.arrow_forward_ios,
+          size: 20,
+          color: Constants.kPrimaryColor,
+        ),
+      ],
       onTap: () {
         final reservatorio = store.searchReservatorio[index];
         store.setReservatorioDetalhes(reservatorio);
@@ -30,81 +61,6 @@ Padding reservatorioItem(int index, ReservatoriosStore store) {
           ),
         );
       },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 15.0,
-            vertical: 15.0,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10.0,
-                        bottom: 5.0,
-                      ),
-                      child: SvgPicture.asset(
-                          'assets/icons/reservatorio_icon.svg'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10.0,
-                        bottom: 5.0,
-                      ),
-                      child: Text(
-                        store.searchReservatorio[index].nome ?? "---",
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Cultivos:",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: Text(
-                              "${store.searchReservatorio[index].lotes?.length ?? 0} Ativos",
-                              style: const TextStyle(
-                                color: Constants.kPrimaryColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const Icon(
-                Icons.arrow_forward_ios,
-                size: 20,
-                color: Constants.kPrimaryColor,
-              ),
-            ],
-          ),
-        ),
-      ),
     ),
   );
 }
