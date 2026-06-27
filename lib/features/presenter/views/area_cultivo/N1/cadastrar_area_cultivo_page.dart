@@ -5,6 +5,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components/bottomSheet.dart';
 
 class CadastrarAreaCultivo extends StatefulWidget {
@@ -175,176 +177,91 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
     );
   }
 
-  Padding saveButton(Size size) {
+  Widget saveButton(Size size) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
-      child: Center(
-        child: SizedBox(
-          width: size.width * .8,
-          height: 40,
-          child: Observer(builder: (_) {
-            return ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Constants.kPrimaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              child: store.isNovaAreaLoading
-                  ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                  : store.isEditing
-                      ? const Text(
-                          "Alterar",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      : const Text(
-                          "Salvar",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-              onPressed: () {
-                if (store.validarCadastro()) {
-                  if (store.isEditing) {
-                    store.alterarArea();
-                  } else {
-                    store.registrarArea();
-                  }
+      child: SizedBox(
+        width: size.width * .8,
+        child: Observer(builder: (_) {
+          return AppPrimaryButton(
+            label: store.isEditing ? 'Alterar' : 'Salvar',
+            isLoading: store.isNovaAreaLoading,
+            onPressed: () {
+              if (store.validarCadastro()) {
+                if (store.isEditing) {
+                  store.alterarArea();
+                } else {
+                  store.registrarArea();
                 }
-              }, //store.registrarReservatorio(),
-            );
-          }),
-        ),
+              }
+            },
+          );
+        }),
       ),
     );
   }
 
-  InkWell nome(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          leading: const Icon(Icons.label),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(right: 8),
-                child: Text(
-                  'Nome',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                ),
+  Widget nome(BuildContext context) {
+    return Observer(builder: (_) {
+      final hasName = store.novaAreaName.text.isNotEmpty;
+      return AppFormSelectionTile(
+        leading: const Icon(Icons.label),
+        title: 'Nome',
+        subtitle: hasName ? store.novaAreaName.text : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              hasName ? store.novaAreaName.text : 'Preencher',
+              style: const TextStyle(
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
               ),
-              store.novaAreaName.text.isNotEmpty
-                  ? Expanded(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              store.novaAreaName.text,
-                              textAlign: TextAlign.end,
-                              style: const TextStyle(
-                                color: Constants.kPrimaryColor,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-                    )
-                  : Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
-                        Text(
-                          "Preencher",
-                          style: TextStyle(
-                            color: Constants.kPrimaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Icon(
-                          Icons.chevron_right,
-                          color: Constants.kPrimaryColor,
-                        ),
-                      ],
-                    ),
-            ],
-          ),
-          onTap: () {
-            store.setDotIndicator(0);
-            bottomSheet(context, controlerPages, carouselController, store);
-          },
-        );
-      }),
-    );
+            ),
+            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
+          ],
+        ),
+        onTap: () {
+          store.setDotIndicator(0);
+          bottomSheet(context, controlerPages, carouselController, store);
+        },
+      );
+    });
   }
 
-  InkWell localizacao(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          leading: const Icon(Icons.location_on),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(right: 8),
-                child: Text(
-                  'Localização',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                ),
-              ),
-              store.localizacaoSelecionada.endereco != null &&
-                      store.localizacaoSelecionada.endereco!.isNotEmpty
-                  ? Expanded(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              store.localizacaoSelecionada.endereco!,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.end,
-                              style: const TextStyle(
-                                color: Constants.kPrimaryColor,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          const Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-                    )
-                  : const Icon(
-                      Icons.chevron_right,
+  Widget localizacao(BuildContext context) {
+    return Observer(builder: (_) {
+      final hasLoc = store.localizacaoSelecionada.endereco != null &&
+          store.localizacaoSelecionada.endereco!.isNotEmpty;
+      return AppFormSelectionTile(
+        leading: const Icon(Icons.location_on),
+        title: 'Localização',
+        subtitle: hasLoc ? store.localizacaoSelecionada.endereco : null,
+        trailing: hasLoc
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    store.localizacaoSelecionada.endereco!,
+                    style: const TextStyle(
                       color: Constants.kPrimaryColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
                     ),
-            ],
-          ),
-          onTap: () {
-            store.setDotIndicator(1);
-            bottomSheet(context, controlerPages, carouselController, store);
-          },
-        );
-      }),
-    );
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const Icon(Icons.chevron_right,
+                      color: Constants.kPrimaryColor),
+                ],
+              )
+            : const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
+        onTap: () {
+          store.setDotIndicator(1);
+          bottomSheet(context, controlerPages, carouselController, store);
+        },
+      );
+    });
   }
 
   InkWell descricao(BuildContext context) {

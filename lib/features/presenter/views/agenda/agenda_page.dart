@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:get/get.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/agenda_store.dart';
 import 'package:osi_solucoes/features/presenter/views/agenda/components/agenda_item.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -12,7 +13,8 @@ import '../../models/lote/lote_model.dart';
 import '../../models/usuario/usuario_model.dart';
 import '../../states/agenda_page_enum.dart';
 import '../../widgets/get_bottom_sheet.dart';
-import '../home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 import 'components/detalhes_bottomSheet.dart';
 
 class AgendaPage extends StatefulWidget {
@@ -205,40 +207,28 @@ class AgendaPageState extends State<AgendaPage> {
     );
   }
 
-  SliverAppBar sliverAppBar(BuildContext context) {
-    return SliverAppBar(
-      backgroundColor: Colors.white,
-      toolbarHeight: 100, //MediaQuery.of(context).size.height * 0.17,
-      // collapsedHeight: 200, //MediaQuery.of(context).size.height * 0.17,
-      floating: true,
-      automaticallyImplyLeading: false,
-      forceElevated: true,
-      elevation: 0,
-      flexibleSpace: const TopAppBar(
-        path: "/Home/",
-        namePage: "Agenda",
-        subtitle: "Acompanhamento de ações da produção",
-        // onPressed: () {
-        //   Get.offNamed(Routes.homePage, (route) => false);
-        // },
-      ),
-      actions: store.atividadeList.isNotEmpty
-          ? [
-              const Padding(
-                padding: EdgeInsets.only(top: 16.0, right: 24.0),
-                child: Tooltip(
-                  message: "Atividades já realizadas\npossuem o ícone de check",
-                  padding: EdgeInsets.all(8),
-                  triggerMode: TooltipTriggerMode.tap,
-                  child: Icon(
-                    Icons.info_outline,
-                    color: Constants.kPrimaryColor,
-                    size: 24,
-                  ),
-                ),
+  AppPageHeaderSliver sliverAppBar(BuildContext context) {
+    final infoAction = store.atividadeList.isNotEmpty
+        ? Padding(
+            padding: const EdgeInsets.only(top: 16.0, right: 24.0),
+            child: Tooltip(
+              message: "Atividades já realizadas\npossuem o ícone de check",
+              padding: const EdgeInsets.all(8),
+              triggerMode: TooltipTriggerMode.tap,
+              child: const Icon(
+                Icons.info_outline,
+                color: Constants.kPrimaryColor,
+                size: 24,
               ),
-            ]
-          : null,
+            ),
+          )
+        : null;
+    return AppPageHeaderSliver(
+      title: 'Agenda',
+      subtitle: 'Acompanhamento de ações da produção',
+      onBack: () => Get.back(),
+      expandedHeight: 120,
+      actions: infoAction != null ? [infoAction] : [],
     );
   }
 
@@ -391,19 +381,11 @@ class AgendaPageState extends State<AgendaPage> {
     );
   }
 
-  SliverList _loadingList() {
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        [
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.only(top: 120.0),
-              child: CircularProgressIndicator(
-                strokeWidth: 1,
-              ),
-            ),
-          ),
-        ],
+  SliverToBoxAdapter _loadingList() {
+    return const SliverToBoxAdapter(
+      child: AppStatePanel(
+        stateKind: AppStateKind.loading,
+        title: 'Carregando agenda...',
       ),
     );
   }

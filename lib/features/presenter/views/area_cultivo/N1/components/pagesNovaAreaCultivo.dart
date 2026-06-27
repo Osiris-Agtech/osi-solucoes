@@ -10,8 +10,11 @@ import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.da
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components/nomePage.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components/localizacaoPage.dart';
 
-SizedBox pagesNovaAreaCultivo(BuildContext context, AreaCultivoStore store,
-    CarouselSliderController carouselController, CarouselSliderController controlerPages) {
+SizedBox pagesNovaAreaCultivo(
+    BuildContext context,
+    AreaCultivoStore store,
+    CarouselSliderController carouselController,
+    CarouselSliderController controlerPages) {
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.9,
     child: Column(

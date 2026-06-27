@@ -2,10 +2,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/bottomSheet.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
 import '../../../../../core/constants/constants.dart';
 
 class CadastrarSetorPage extends StatefulWidget {
@@ -240,194 +241,87 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
     );
   }
 
-  Padding saveButton(Size size) {
+  Widget saveButton(Size size) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
-      child: Center(
-        child: SizedBox(
-          width: size.width * .8,
-          height: 40,
-          child: Observer(builder: (_) {
-            return ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Constants.kPrimaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              child: store.isNovoSetorLoading
-                  ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                  : store.isEditing
-                      ? const Text(
-                          "Alterar",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      : const Text(
-                          "Salvar",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-              onPressed: () {
-                if (store.validarCadastro()) {
-                  if (store.isEditing) {
-                    store.alterarSetor();
-                  } else {
-                    store.registrarSetor();
-                  }
+      child: SizedBox(
+        width: size.width * .8,
+        child: Observer(builder: (_) {
+          return AppPrimaryButton(
+            label: store.isEditing ? 'Alterar' : 'Salvar',
+            isLoading: store.isNovoSetorLoading,
+            onPressed: () {
+              if (store.validarCadastro()) {
+                if (store.isEditing) {
+                  store.alterarSetor();
+                } else {
+                  store.registrarSetor();
                 }
-              }, //store.registrarReservatorio(),
-            );
-          }),
-        ),
+              }
+            },
+          );
+        }),
       ),
     );
   }
 
-  InkWell nome(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-            leading: const Icon(Icons.label),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: Text(
-                    'Nome',
-                    maxLines: 1,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                  ),
-                ),
-                store.novoSetorName.text.isNotEmpty
-                    ? Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.novoSetorName.text,
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ],
-                        ),
-                      )
-                    : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Text(
-                            "Preencher",
-                            style: TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-              ],
+  Widget nome(BuildContext context) {
+    return Observer(builder: (_) {
+      final hasName = store.novoSetorName.text.isNotEmpty;
+      return AppFormSelectionTile(
+        leading: const Icon(Icons.label),
+        title: 'Nome',
+        subtitle: hasName ? store.novoSetorName.text : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              hasName ? store.novoSetorName.text : 'Preencher',
+              style: const TextStyle(
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
             ),
-            onTap: () {
-              store.setDotIndicator(0);
-              bottomSheet(context, carouselController, controlerPages, store);
-            });
-      }),
-    );
+            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
+          ],
+        ),
+        onTap: () {
+          store.setDotIndicator(0);
+          bottomSheet(context, carouselController, controlerPages, store);
+        },
+      );
+    });
   }
 
-  InkWell reservatorio(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          leading: SvgPicture.asset(
-            'assets/icons/reservatorio_icon.svg',
-            height: 25,
-            width: 25,
-          ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(right: 8),
-                child: Text(
-                  'Reservatório',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                ),
+  Widget reservatorio(BuildContext context) {
+    return Observer(builder: (_) {
+      final hasRes = store.novoSetorReservatorio.nome != null &&
+          store.novoSetorReservatorio.nome!.isNotEmpty;
+      return AppFormSelectionTile(
+        leading: const Icon(Icons.water_drop),
+        title: 'Reservatório',
+        subtitle: hasRes ? store.novoSetorReservatorio.nome : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              hasRes ? store.novoSetorReservatorio.nome! : 'Selecionar',
+              style: const TextStyle(
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
               ),
-              store.novoSetorReservatorio.nome != null &&
-                      store.novoSetorReservatorio.nome!.isNotEmpty
-                  ? Expanded(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              store.novoSetorReservatorio.nome!,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.end,
-                              style: const TextStyle(
-                                color: Constants.kPrimaryColor,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          const Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-                    )
-                  : Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
-                        Text(
-                          "Selecionar",
-                          style: TextStyle(
-                            color: Constants.kPrimaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Icon(
-                          Icons.chevron_right,
-                          color: Constants.kPrimaryColor,
-                        ),
-                      ],
-                    ),
-            ],
-          ),
-          onTap: () {
-            store.setDotIndicator(1);
-            bottomSheet(context, controlerPages, carouselController, store);
-          },
-        );
-      }),
-    );
+            ),
+            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
+          ],
+        ),
+        onTap: () {
+          store.setDotIndicator(1);
+          bottomSheet(context, controlerPages, carouselController, store);
+        },
+      );
+    });
   }
 
   InkWell descricao(BuildContext context) {

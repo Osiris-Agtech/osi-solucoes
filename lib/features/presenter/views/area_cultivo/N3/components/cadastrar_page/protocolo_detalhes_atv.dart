@@ -155,7 +155,6 @@ class ListFases extends StatelessWidget {
                                     indexAcao: entry.key,
                                     acao: entry.value,
                                   ))
-                              
                         ],
                       );
                     } else {

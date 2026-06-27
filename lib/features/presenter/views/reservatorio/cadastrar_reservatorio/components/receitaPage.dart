@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/cadastrar_solucao_page.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 
 import '../../../../../../core/constants/constants.dart';
 
@@ -85,24 +87,17 @@ Widget receitaPage(
               ),
               child: Observer(builder: (_) {
                 if (store.isSolucaoListLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 1,
-                    ),
+                  return const AppStatePanel(
+                    stateKind: AppStateKind.loading,
+                    title: 'Carregando soluções...',
+                    isCompact: true,
                   );
                 }
                 if (store.solucaoList.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      'Não há soluções\ncadastradas em sua conta',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xff6F6464),
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
+                  return const AppStatePanel(
+                    stateKind: AppStateKind.empty,
+                    title: 'Nenhuma solução cadastrada',
+                    isCompact: true,
                   );
                 }
                 return ListView.builder(
@@ -112,32 +107,15 @@ Widget receitaPage(
                     return Padding(
                       padding: EdgeInsets.only(
                           left: 10, right: 10, top: index == 0 ? 10 : 0),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        elevation: 5,
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 20),
-                          subtitle: Text(
-                              'C. elétrica: ${store.solucaoList[index].c_eletrica} S.m/mm2'),
-                          title: Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
-                            child: Text(
-                              store.solucaoList[index].nome ?? "---",
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          trailing: const Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                          onTap: () {
-                            store.setSolucaoDetalhes(store.solucaoList[index]);
-                            controlerPages.nextPage();
-                          },
-                        ),
+                      child: AppFormSelectionTile(
+                        title: store.solucaoList[index].nome ?? '---',
+                        subtitle:
+                            'C. elétrica: ${store.solucaoList[index].c_eletrica} S.m/mm2',
+                        leading: const Icon(Icons.invert_colors),
+                        onTap: () {
+                          store.setSolucaoDetalhes(store.solucaoList[index]);
+                          controlerPages.nextPage();
+                        },
                       ),
                     );
                   },

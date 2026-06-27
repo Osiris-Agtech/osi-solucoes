@@ -8,6 +8,8 @@ A exploração dos módulos principais em `lib/features/presenter/views/` indica
 
 Esta revisão habilita a primeira padronização estética implementável de imediato. A primeira onda deve priorizar Reservatórios e Relatórios por terem padrões visuais claros e risco menor: Reservatórios já concentra busca, loading, empty e lista; Relatórios já possui cards e badges locais, mas o arquivo tem 314 linhas e deve receber apenas substituições seguras e pequenas.
 
+A segunda onda deve avançar para Protocolos e Solução usando os componentes comuns já existentes. O diagnóstico de exploração indica que Protocolos é seguro para migração direta, enquanto Solução está perto de 300 linhas e deve receber decomposição mínima/local ou substituições cuidadosas. Esta onda também deve amadurecer `AppPageHeaderSliver` por usos reais, aceitando apenas melhorias pequenas quando necessárias, sem transformá-lo em shell global.
+
 Hoje há padrões visuais semelhantes repetidos ou divergentes entre telas: barras de busca locais, cards de entidade, estados vazios/loading com `CircularProgressIndicator`, app bars locais e componentes de formulário espalhados por subpastas de módulo. Algumas telas também já importam componentes da Home, como `top_app_bar.dart`, o que reforça a necessidade de uma boundary presenter compartilhada mais neutra.
 
 ## Resumo e problema
@@ -32,6 +34,7 @@ Problemas observados:
 - Preservar familiaridade das telas atuais durante a migração.
 - Melhorar clareza operacional com estados explícitos e hierarquia visual consistente.
 - Habilitar implementação imediata da primeira onda estética sem alterar regras de negócio, stores, navegação ou contratos.
+- Habilitar a segunda onda estética em Protocolos e Solução com uso real dos componentes comuns já criados.
 - Aplicar primeiro onde houver baixo risco, evitando expandir arquivos grandes de cadastro nesta rodada.
 
 ## Fora de escopo
@@ -46,6 +49,8 @@ Problemas observados:
 - Importar componentes específicos de Home/Auth diretamente em módulos operacionais.
 - Refatorar arquivos grandes de cadastro como parte da primeira onda estética.
 - Criar barrel export inicial para os componentes comuns.
+- Transformar `AppPageHeaderSliver` em shell global de navegação/layout.
+- Alterar cadastros grandes, stores, rotas, models, services, Home ou Auth/Login na segunda onda.
 
 ## Princípios de design
 
@@ -106,6 +111,8 @@ Alternativas descartadas inicialmente:
 - `AppSearchBar` deve aceitar `TextEditingController?` opcional e callbacks (`onChanged`, `onSubmitted`, `onClear`), sem criar ou exigir controller interno obrigatório.
 - `AppPageHeaderSliver` deve ser criado para estabilizar a API, mas aplicado apenas onde não houver risco de quebrar navegação, gesto de voltar, scroll existente ou composição de `CustomScrollView`.
 - A primeira onda deve evitar mudanças em arquivos grandes de cadastro; quando um arquivo grande for tocado, limitar a alteração a substituições visuais locais e verificáveis.
+- A segunda onda deve usar Protocolos como migração direta e tratar Solução com substituições cuidadosas ou decomposição mínima/local, sem ampliar responsabilidades do arquivo.
+- `AppPageHeaderSliver` pode receber melhorias pequenas guiadas por uso real, como `titleMaxLines`, `subtitleMaxLines`, padding configurável ou `safeArea` opcional, apenas se forem necessárias para Protocolos/Solução.
 
 ## Primeira padronização estética implementável
 
@@ -144,6 +151,38 @@ Aplicar na primeira onda apenas em telas com benefício direto e baixo risco:
 - `lib/features/presenter/views/gerenciar_equipe/gerenciar_equipe_page.dart` — alto potencial, mas arquivo grande; exige decomposição/plano próprio.
 - `lib/features/presenter/views/ajuste/ajustes_page.dart` — arquivo grande; fora da primeira onda.
 - Home e Auth/Login — permanecem referências visuais, não alvos de migração nesta spec.
+
+## Segunda padronização estética implementável
+
+### Escopo da segunda onda
+
+Aplicar os componentes comuns já existentes em Protocolos e Solução, preservando comportamento e evitando qualquer mudança de regra de negócio, store, rota, model ou service.
+
+1. **Protocolos — migração direta**
+   - Aplicar `AppPageHeaderSliver` no header da listagem/tela operacional quando a estrutura de scroll atual for compatível.
+   - Aplicar `AppSearchBar` na busca existente, preservando controller, callbacks e critérios de filtro atuais.
+   - Aplicar `AppStatePanel` para loading, vazio e busca sem resultado conforme estados já expostos pela tela.
+   - Aplicar `AppEntityCard` nos cards/lista de protocolos, com mapeamento de dados feito na tela e sem acoplar o componente comum a model de domínio.
+   - Preservar FAB, navegação e qualquer bottom sheet existente.
+
+2. **Solução — migração cuidadosa**
+   - Aplicar `AppPageHeaderSliver`, `AppSearchBar` e `AppStatePanel` apenas em substituições visuais controladas.
+   - Preservar o grid existente ao substituir cards locais por composição com `AppPanelCard` e `AppIconTile`.
+   - Como a tela está perto de 300 linhas, usar decomposição mínima/local quando necessário para evitar expansão de responsabilidade; se a substituição aumentar complexidade, adiar o trecho específico.
+   - Preservar FAB, navegação, bottom sheets, callbacks e lógica de busca atuais.
+
+### Telas-alvo da segunda onda
+
+- `lib/features/presenter/views/protocolo/...` — tela operacional/listagem de Protocolos a ser identificada antes da alteração; cadastros grandes seguem fora do escopo.
+- `lib/features/presenter/views/solucao/...` — tela operacional/listagem de Solução a ser identificada antes da alteração; cadastros grandes seguem fora do escopo.
+
+### Restrições da segunda onda
+
+- Não tocar arquivos grandes de cadastro, incluindo `cadastrar_protocolo_page.dart` e `cadastrar_solucao_page.dart`.
+- Não alterar stores, rotas, models, services, Home ou Auth/Login.
+- Não mover componentes comuns para `core/widgets`.
+- Não criar shell global, scaffold compartilhado ou abstração de navegação em torno de `AppPageHeaderSliver`.
+- Manter componentes comuns puros: entrada por props/callbacks/children e saída por callbacks.
 
 ## Interfaces e dados envolvidos
 
@@ -209,9 +248,10 @@ As interfaces abaixo são propostas conceituais para orientar implementação fu
 #### `AppPageHeaderSliver`
 
 - **Responsabilidade:** header sliver reutilizável com título, subtítulo, ação de voltar opcional, slot de busca/filtro e comportamento responsivo.
-- **Props/dados esperados:** `title`, `subtitle`, `leading`, `onBack`, `actions`, `bottom`, `backgroundColor`, `expandedHeight`, `pinned/floating`.
+- **Props/dados esperados:** `title`, `subtitle`, `leading`, `onBack`, `actions`, `bottom`, `backgroundColor`, `expandedHeight`, `pinned/floating`; melhorias pequenas por uso real podem incluir `titleMaxLines`, `subtitleMaxLines`, padding configurável e `safeArea` opcional.
 - **Boundaries:** não chama `Get.close`, `Get.offNamedUntil` ou rotas diretamente. A ação de voltar é callback da tela.
 - **Decisão de aplicação:** deve ser implementado na camada comum, mas a primeira onda só deve aplicá-lo se a tela já tiver estrutura sliver compatível e a substituição não alterar comportamento de navegação/scroll. Caso contrário, fica criado sem uso inicial.
+- **Decisão de maturação:** na segunda onda, pode ser amadurecido por necessidades reais de Protocolos/Solução, mantendo API pequena e sem assumir responsabilidade de shell global.
 - **Primeiras telas candidatas:** Reservatórios, Protocolos, Área Cultivo, Equipe, Caderno Campo, Solução; Relatórios com cautela porque já tem app bar local alinhada parcialmente.
 
 #### `AppEntityCard`
@@ -364,6 +404,18 @@ Critério recomendado: antes de aplicar componentes compartilhados nesses arquiv
 - Arquivos grandes de cadastro não são alterados nesta rodada.
 - `relatorios_page.dart` não recebe nova responsabilidade; se a alteração aumentar complexidade, deve ser limitada por extração local coesa ou adiada.
 - A implementação roda a validação estática/build/test já disponível no projeto, ou registra explicitamente a limitação se não houver comando identificável.
+
+### Critérios de aceite da implementação da segunda onda
+
+- Protocolos usa `AppPageHeaderSliver`, `AppSearchBar`, `AppStatePanel` e `AppEntityCard` na tela-alvo identificada.
+- Solução usa `AppPageHeaderSliver`, `AppSearchBar` e `AppStatePanel` na tela-alvo identificada.
+- Solução preserva o grid atual e usa card composto com `AppPanelCard` e `AppIconTile`, sem exigir `AppEntityCard` se isso reduzir compatibilidade visual ou aumentar acoplamento.
+- Comportamento de busca, estados, FAB, navegação e bottom sheets é preservado em Protocolos e Solução.
+- Cadastros grandes, stores, rotas, models, services, Home e Auth/Login não são alterados.
+- Componentes comuns permanecem puros e não importam `Get`, `GetIt`, stores, routes, services ou models de domínio.
+- `AppPageHeaderSliver` recebe somente melhorias pequenas necessárias aos usos reais, como `titleMaxLines`, `subtitleMaxLines`, padding configurável ou `safeArea` opcional; não vira shell global.
+- A tela de Solução não ultrapassa responsabilidade razoável: se estiver próxima ou acima de 300 linhas após a alteração, deve haver decomposição mínima/local ou adiamento do trecho que causaria expansão.
+- A análise estática dos arquivos-alvo da segunda onda fica limpa, usando o comando existente do projeto ou validação equivalente documentada.
 
 ## Validações recomendadas para implementação futura
 

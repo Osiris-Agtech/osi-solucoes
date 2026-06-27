@@ -31,8 +31,7 @@ class _DetalhesAtivPageState extends State<DetalhesAtivPage> {
         children: <Widget>[
           if ((store.protocoloSelecionado?.acao ?? []).isNotEmpty)
             FloatingActionButton(
-              heroTag:
-                  '${store.protocoloSelecionado!.id}floatingButton1',
+              heroTag: '${store.protocoloSelecionado!.id}floatingButton1',
               mini: true,
               onPressed: () {
                 _scrollController.animateTo(
@@ -116,7 +115,7 @@ class ListFases extends StatelessWidget {
   const ListFases({
     super.key,
     required ScrollController scrollController,
-  })  : _scrollController = scrollController;
+  }) : _scrollController = scrollController;
 
   final ScrollController _scrollController;
 
@@ -195,7 +194,6 @@ class ListFases extends StatelessWidget {
                                           indexAcao: entry.key,
                                           acao: entry.value,
                                         ))
-                                    
                               ],
                             );
                           } else {

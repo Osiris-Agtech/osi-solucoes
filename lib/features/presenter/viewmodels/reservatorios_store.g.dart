@@ -405,9 +405,9 @@ mixin _$ReservatoriosStore on ReservatoriosStoreBase, Store {
       context: context);
 
   @override
-  Future<void> buscarReservatorioDetalhes() {
-    return _$buscarReservatorioDetalhesAsyncAction
-        .run(() => super.buscarReservatorioDetalhes());
+  Future<void> buscarReservatorioDetalhes({int? reservatorioId}) {
+    return _$buscarReservatorioDetalhesAsyncAction.run(
+        () => super.buscarReservatorioDetalhes(reservatorioId: reservatorioId));
   }
 
   late final _$setSolucaoDetalhesAsyncAction = AsyncAction(

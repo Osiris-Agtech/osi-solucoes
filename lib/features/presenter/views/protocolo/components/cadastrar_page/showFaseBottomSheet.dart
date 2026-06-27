@@ -82,8 +82,7 @@ class _ShowFaseBottomSheet extends State<ShowFaseBottomSheet> {
                       ),
                       onPressed: totalDias <= 0
                           ? null
-                          : () =>
-                              store.selecionarTodosDiasAtividade(totalDias),
+                          : () => store.selecionarTodosDiasAtividade(totalDias),
                       child: const Text(
                         'Selecionar todos',
                         style: TextStyle(
@@ -134,14 +133,12 @@ class _ShowFaseBottomSheet extends State<ShowFaseBottomSheet> {
               return Expanded(
                 child: GridView.count(
                   crossAxisCount: 3,
-                  children:
-                      List.generate(totalDias, (index) {
+                  children: List.generate(totalDias, (index) {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () =>
-                              store.toggleDiaAtividade(index + 1),
+                          onTap: () => store.toggleDiaAtividade(index + 1),
                           child: Icon(
                             store.diasDaAtiv.contains(index + 1)
                                 ? Icons.check_box
@@ -185,7 +182,8 @@ class _ShowFaseBottomSheet extends State<ShowFaseBottomSheet> {
                           ),
                         ),
                         onPressed: () {
-                          store.setarDiasSelecionadosAtividade(store.diasDaAtiv);
+                          store
+                              .setarDiasSelecionadosAtividade(store.diasDaAtiv);
                           Get.back();
                         }),
                   ),

@@ -12,6 +12,8 @@ class AppPageHeaderSliver extends StatelessWidget {
   final double expandedHeight;
   final bool pinned;
   final bool floating;
+  final int titleMaxLines;
+  final int subtitleMaxLines;
 
   const AppPageHeaderSliver({
     super.key,
@@ -25,10 +27,14 @@ class AppPageHeaderSliver extends StatelessWidget {
     this.expandedHeight = 120,
     this.pinned = false,
     this.floating = true,
+    this.titleMaxLines = 1,
+    this.subtitleMaxLines = 1,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bottomHeight = bottom?.preferredSize.height ?? 0;
+
     return SliverAppBar(
       backgroundColor: backgroundColor,
       automaticallyImplyLeading: false,
@@ -43,7 +49,7 @@ class AppPageHeaderSliver extends StatelessWidget {
       flexibleSpace: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          padding: EdgeInsets.fromLTRB(16, 8, 16, 16 + bottomHeight),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -64,6 +70,8 @@ class AppPageHeaderSliver extends StatelessWidget {
               if (leading != null || onBack != null) const SizedBox(height: 4),
               Text(
                 title,
+                maxLines: titleMaxLines,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 22,
@@ -74,6 +82,8 @@ class AppPageHeaderSliver extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   subtitle!,
+                  maxLines: subtitleMaxLines,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     color: Constants.kGreyMedium,
                     fontSize: 14,

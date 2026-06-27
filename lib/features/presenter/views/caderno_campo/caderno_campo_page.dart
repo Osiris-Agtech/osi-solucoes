@@ -1,16 +1,16 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/utils/responsive_breakpoints.dart';
-import 'package:osi_solucoes/core/utils/spacing.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_search_bar.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/constants.dart';
@@ -73,7 +73,7 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                const AppBar(),
+                _CadernoCampoHeader(store: store),
                 SliverToBoxAdapter(
                   child: SizedBox(
                     height: 60,
@@ -153,33 +153,20 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
                 ),
                 Observer(builder: (_) {
                   if (store.isLoteListLoading) {
-                    return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                    return SliverToBoxAdapter(
+                      child: AppStatePanel(
+                        stateKind: AppStateKind.loading,
+                        title: 'Carregando lotes...',
                       ),
                     );
                   }
                   if (store.loteList.isEmpty) {
-                    return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                        child: Center(
-                          child: Text(
-                            "Não há lotes cadastrados no caderno de campo",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xff6F6464),
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w800,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                    return SliverToBoxAdapter(
+                      child: AppStatePanel(
+                        stateKind: AppStateKind.empty,
+                        title: 'Nenhum lote cadastrado',
+                        message:
+                            'Cadastre um lote no caderno de campo para começar.',
                       ),
                     );
                   }
@@ -210,109 +197,26 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
 }
 
 // ignore: camel_case_types
-class AppBar extends StatefulWidget {
-  const AppBar({
-    super.key,
-  });
+class _CadernoCampoHeader extends StatelessWidget {
+  final CadernoCampoStore store;
 
-  @override
-  State<AppBar> createState() => _AppBarState();
-}
+  const _CadernoCampoHeader({required this.store});
 
-class _AppBarState extends State<AppBar> {
-  CadernoCampoStore store = GetIt.I<CadernoCampoStore>();
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(seconds: 2),
-      child: SliverAppBar(
-        pinned: true,
-        backgroundColor: Colors.white,
-        toolbarHeight: ResponsiveBreakpoints.isDesktop(context) ? 140 : 175,
-        floating: true,
-        automaticallyImplyLeading: false,
-        forceElevated: true,
-        elevation: 1,
-        // actions: [
-        //   Align(
-        //     alignment: const Alignment(0.6, -0.9),
-        //     child: Padding(
-        //       padding: const EdgeInsets.only(right: 16.0),
-        //       child: Theme(
-        //         data: Theme.of(context).copyWith(
-        //           highlightColor: Colors.transparent,
-        //           splashColor: Colors.transparent,
-        //         ),
-        //         child: PopupMenuButton(
-        //           icon: SvgPicture.asset(
-        //             "assets/icons/settings_icon.svg",
-        //             color: Constants.kButtonGrey,
-        //             height: 20,
-        //           ),
-        //           itemBuilder: (context) => [
-        //             PopupMenuItem(
-        //               child: Row(
-        //                 children: const [
-        //                   Text('Editar'),
-        //                 ],
-        //               ),
-        //               onTap: () {
-        //               },
-        //             ),
-        //             PopupMenuItem(
-        //               child: Row(
-        //                 children: const [
-        //                   Text('Deletar'),
-        //                 ],
-        //               ),
-        //               onTap: () {},
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ],
-        flexibleSpace: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const TopAppBar(
-              namePage: "Caderno de Campo",
-              subtitle: "Lista de cadernos de campo",
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Container(
-              height: 50,
-              color: const Color(0xFFF8F8F6),
-              padding: Spacing.horizontal(context),
-              child: SizedBox(
-                height: 50,
-                width: double.infinity,
-                child: Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(right: 15.0, left: 10),
-                      child: Icon(Icons.search),
-                    ),
-                    Expanded(
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: "Buscar...",
-                          hintStyle: TextStyle(
-                            fontFamily: "Roboto",
-                          ),
-                          border: InputBorder.none,
-                        ),
-                        onChanged: store.setSearchLote,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+    return AppPageHeaderSliver(
+      title: 'Caderno de Campo',
+      subtitle: 'Lista de cadernos de campo',
+      onBack: () => Get.back(),
+      expandedHeight: 180,
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: AppSearchBar(
+            hintText: 'Buscar lote...',
+            onChanged: store.setSearchLote,
+          ),
         ),
       ),
     );

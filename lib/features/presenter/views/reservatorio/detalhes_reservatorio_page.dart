@@ -6,11 +6,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/services/navigation_resource_args.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/modulos_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 
 class DetalhesReservatorio extends StatefulWidget {
   const DetalhesReservatorio({super.key});
@@ -28,7 +29,14 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
   @override
   void initState() {
     super.initState();
-    store.buscarReservatorioDetalhes();
+
+    int? reservatorioId;
+    final args = Get.arguments;
+    if (args is NavigationResourceArgs && args.resourceId != null) {
+      reservatorioId = int.tryParse(args.resourceId!);
+    }
+
+    store.buscarReservatorioDetalhes(reservatorioId: reservatorioId);
   }
 
   @override
@@ -44,15 +52,11 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
               physics: const BouncingScrollPhysics(),
               slivers: [
                 Observer(builder: (_) {
-                  return SliverAppBar(
-                    backgroundColor: Colors.white,
-                    toolbarHeight:
-                        120, //MediaQuery.of(context).size.height * 0.17,
-                    // collapsedHeight: 200, //MediaQuery.of(context).size.height * 0.17,
-                    floating: false,
-                    automaticallyImplyLeading: false,
-                    forceElevated: true,
-                    elevation: 0,
+                  return AppPageHeaderSliver(
+                    title: store.reservatorioDetalhes.nome ?? "...",
+                    subtitle:
+                        "Volume: ${store.reservatorioDetalhes.volume ?? "..."} litros",
+                    onBack: () => Get.back(),
                     actions: [
                       Align(
                         alignment: const Alignment(0.6, -0.9),
@@ -98,12 +102,6 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                         ),
                       ),
                     ],
-                    flexibleSpace: TopAppBar(
-                      path: "",
-                      namePage: store.reservatorioDetalhes.nome ?? "...",
-                      subtitle:
-                          "Volume: ${store.reservatorioDetalhes.volume ?? "..."} litros",
-                    ),
                   );
                 }),
                 SliverList(

@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_detalhes_atv.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_detalhes_page.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_page.dart';
@@ -241,47 +242,15 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
     );
   }
 
-  Padding saveButton(Size size) {
+  Widget saveButton(Size size) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
-      child: Center(
-        child: SizedBox(
-          width: size.width * .8,
-          height: 40,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Constants.kPrimaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-            child: Observer(
-              builder: (_) {
-                return store.isNovoLoteLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
-                      )
-                    : store.isEditing
-                        ? const Text(
-                            "Alterar",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          )
-                        : const Text(
-                            "Salvar",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          );
-              },
-            ),
+      child: SizedBox(
+        width: size.width * .8,
+        child: Observer(builder: (_) {
+          return AppPrimaryButton(
+            label: store.isEditing ? 'Alterar' : 'Salvar',
+            isLoading: store.isNovoLoteLoading,
             onPressed: () {
               if (store.validarRegistro()) {
                 if (store.isEditing) {
@@ -291,8 +260,8 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
                 }
               }
             },
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
@@ -562,9 +531,10 @@ class _NextStepButtonState extends State<NextStepButton> {
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24)),
-                backgroundColor: store.isAlreadySelected && store.showProtocoloDetalhes
-                    ? Constants.kErrorColor
-                    : Constants.kPrimaryColor,
+                backgroundColor:
+                    store.isAlreadySelected && store.showProtocoloDetalhes
+                        ? Constants.kErrorColor
+                        : Constants.kPrimaryColor,
               ),
               child: Center(
                 child: store.isAlreadySelected && store.showProtocoloDetalhes

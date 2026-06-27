@@ -6,7 +6,11 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_badge.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_search_bar.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/gerenciar_equipe_store.dart';
@@ -23,11 +27,18 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
 
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
   final formKey = GlobalKey<FormState>();
+  final _searchController = TextEditingController();
 
   @override
   void initState() {
     gerenciarEquipeStore.buscarUsuarios();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -46,10 +57,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
               Get.toNamed(Routes.cadastrarUsuarioPage);
             },
             backgroundColor: Constants.kPrimaryColor,
-            child: const Icon(
-              Icons.add,
-              size: 32,
-            ),
+            child: const Icon(Icons.add, size: 32),
           ),
           body: Form(
             key: formKey,
@@ -58,36 +66,53 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                AppBar(store: gerenciarEquipeStore),
+                AppPageHeaderSliver(
+                  title: 'Gerenciar Equipe',
+                  subtitle: 'Lista de colaboradores',
+                  expandedHeight: 180,
+                  onBack: () => Get.back(),
+                  bottom: PreferredSize(
+                    preferredSize: const Size.fromHeight(56),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: AppSearchBar(
+                        controller: _searchController,
+                        onChanged: (value) =>
+                            gerenciarEquipeStore.setsearchUserText(value),
+                        onClear: () {
+                          _searchController.clear();
+                          gerenciarEquipeStore.setsearchUserText('');
+                        },
+                        hintText: 'Pesquisar',
+                      ),
+                    ),
+                  ),
+                ),
                 Observer(builder: (_) {
                   if (gerenciarEquipeStore.isUserListLoading) {
                     return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                      child: AppStatePanel(
+                        stateKind: AppStateKind.loading,
+                        title: 'Carregando usuários...',
                       ),
                     );
                   }
                   if (gerenciarEquipeStore.userList.isEmpty) {
                     return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                        child: Center(
-                          child: Text(
-                            "Não há usuários cadastrados",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xff6F6464),
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w800,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                      child: AppStatePanel(
+                        stateKind: AppStateKind.empty,
+                        title: 'Nenhum usuário cadastrado',
+                        message: 'Cadastre um usuário para começar',
+                      ),
+                    );
+                  }
+                  if (gerenciarEquipeStore.searchUserText.isNotEmpty &&
+                      gerenciarEquipeStore.searchUser.isEmpty) {
+                    return const SliverToBoxAdapter(
+                      child: AppStatePanel(
+                        stateKind: AppStateKind.searchEmpty,
+                        title: 'Nenhum resultado encontrado',
+                        message: 'Tente alterar o termo da busca',
                       ),
                     );
                   }
@@ -98,11 +123,10 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                         controller: ScrollController(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
+                          final section = gerenciarEquipeStore.userMap[index];
                           return Column(
                             children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
+                              const SizedBox(height: 10),
                               Row(
                                 children: <Widget>[
                                   Expanded(
@@ -116,7 +140,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                                     ),
                                   ),
                                   Text(
-                                    gerenciarEquipeStore.userMap[index].key,
+                                    section.key,
                                     style: const TextStyle(
                                       fontStyle: FontStyle.italic,
                                       fontSize: 10,
@@ -135,9 +159,7 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
+                              const SizedBox(height: 10),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0),
@@ -150,11 +172,9 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                                   crossAxisSpacing: 2,
                                   mainAxisSpacing: 2,
                                   children: List.generate(
-                                    gerenciarEquipeStore
-                                        .userMap[index].values.length,
-                                    (indexUser) => CardUsuario(
-                                      user: gerenciarEquipeStore
-                                          .userMap[index].values[indexUser],
+                                    section.values.length,
+                                    (indexUser) => _buildUserCard(
+                                      section.values[indexUser],
                                     ),
                                   ),
                                 ),
@@ -174,8 +194,8 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
                       mainAxisSpacing: 2,
                       children: List.generate(
                         gerenciarEquipeStore.searchUser.length,
-                        (index) => CardUsuario(
-                          user: gerenciarEquipeStore.searchUser[index],
+                        (index) => _buildUserCard(
+                          gerenciarEquipeStore.searchUser[index],
                         ),
                       ),
                     ),
@@ -188,172 +208,28 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
       ),
     );
   }
-}
 
-// ignore: camel_case_types
-class AppBar extends StatefulWidget {
-  const AppBar({
-    super.key,
-    required this.store,
-  });
-
-  final GerenciarEquipeStore store;
-
-  @override
-  State<AppBar> createState() => _AppBarState();
-}
-
-class _AppBarState extends State<AppBar> {
-  GerenciarEquipeStore gerenciarEquipeStore = GetIt.I<GerenciarEquipeStore>();
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(seconds: 2),
-      child: SliverAppBar(
-        pinned: true,
-        backgroundColor: Colors.white,
-        toolbarHeight: 180,
-        floating: true,
-        automaticallyImplyLeading: false,
-        forceElevated: true,
-        elevation: 0,
-        flexibleSpace: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const TopAppBar(
-              namePage: 'Gereciar Equipe',
-              subtitle: "Lista de colaboradores",
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-              child: TextFormField(
-                onChanged: (value) =>
-                    gerenciarEquipeStore.setsearchUserText(value),
-                textCapitalization: TextCapitalization.words,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.normal,
-                  fontStyle: FontStyle.italic,
-                ),
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  hintText: 'Pesquisar',
-                  hintStyle: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+  Widget _buildUserCard(Usuario user) {
+    return AppEntityCard(
+      leading: const Icon(
+        Icons.account_circle,
+        color: Constants.kButtonGrey,
+        size: 35,
       ),
-    );
-  }
-}
-
-class CardUsuario extends StatefulWidget {
-  final Usuario user;
-  const CardUsuario({super.key, required this.user});
-
-  @override
-  State<CardUsuario> createState() => _CardUsuarioState();
-}
-
-class _CardUsuarioState extends State<CardUsuario> {
-  GerenciarEquipeStore store = GetIt.I<GerenciarEquipeStore>();
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
+      title: user.nome ?? '',
+      subtitle: user.selected_conta?.cargo?.cargo ?? '',
+      badges: [
+        AppBadge(
+          label: user.ativo == true ? 'ATIVO' : 'INATIVO',
+          tone:
+              user.ativo == true ? AppBadgeTone.success : AppBadgeTone.neutral,
+          icon: Icons.circle,
+        ),
+      ],
       onTap: () {
-        store.setUsuarioSelecionado(widget.user);
+        gerenciarEquipeStore.setUsuarioSelecionado(user);
         Get.toNamed(Routes.detalhesUsuarioPage);
       },
-      child: Card(
-        elevation: 2,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.account_circle,
-                    color: Constants.kButtonGrey,
-                    size: 35,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Status',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Constants.kText2,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.circle,
-                            color:
-                                widget.user.ativo != null && widget.user.ativo!
-                                    ? Constants.kPrimaryColor
-                                    : Constants.kGreyText2,
-                            size: 10,
-                          ),
-                          Text(
-                            widget.user.ativo != null && widget.user.ativo!
-                                ? ' ATIVO'
-                                : ' INATIVO',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Constants.kText2,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Text(
-                widget.user.nome ?? '',
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    color: Constants.kGreyText),
-              ),
-              Text(
-                widget.user.selected_conta?.cargo?.cargo ?? '',
-                style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Constants.kPrimaryColor),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

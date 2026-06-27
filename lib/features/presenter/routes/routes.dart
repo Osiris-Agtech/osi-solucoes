@@ -28,7 +28,7 @@ abstract class Routes {
   static const cadastrarLotePage = '/cadastrarLotePage';
   static const cadastrarSetorPage = '/cadastrarSetorPage';
   static const detalhesLotePage = '/detalhesLotePage';
-  static const detalhesReservatorio = '/detalhesReservatório';
+  static const detalhesReservatorio = '/detalhesReservatorio';
   static const cadastroCadernoCampoPage = '/cadastroCadernoCampoPage';
   static const detalhesCadernoCampoPage = '/detalhesCadernoCampoPage';
   static const cadastrarUsuarioPage = '/cadastrarUsuarioPage';

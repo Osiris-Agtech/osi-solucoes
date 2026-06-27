@@ -1,8 +1,6 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
-    as dtp;
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -13,7 +11,8 @@ import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
-import '../../home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 
 class AreaCultivoPage extends StatefulWidget {
   const AreaCultivoPage({super.key});
@@ -54,7 +53,13 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                const AppBar(),
+                AppPageHeaderSliver(
+                  title: 'Áreas de Cultivo',
+                  subtitle: 'Lista de áreas cadastrados',
+                  onBack: () => Get.back(),
+                  expandedHeight: 180,
+                ),
+                _AreaCultivoHeader(store: store),
                 Observer(builder: (_) {
                   if (store.isAreaLoading) {
                     return const SliverToBoxAdapter(
@@ -67,21 +72,11 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
                     );
                   }
                   if (store.areaList.isEmpty) {
-                    return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 200, left: 60, right: 60),
-                        child: Center(
-                          child: Text(
-                            'Nenhuma fase cadastrada',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xff6F6464),
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w800,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                    return SliverToBoxAdapter(
+                      child: AppStatePanel(
+                        stateKind: AppStateKind.empty,
+                        title: 'Nenhuma área cadastrada',
+                        message: 'Cadastre uma área de cultivo para começar.',
                       ),
                     );
                   }
@@ -273,244 +268,53 @@ class _CardAreaState extends State<CardArea> {
   }
 }
 
-// ignore: camel_case_types
-class AppBar extends StatefulWidget {
-  const AppBar({
-    super.key,
-  });
+class _AreaCultivoHeader extends StatelessWidget {
+  final AreaCultivoStore store;
 
-  @override
-  State<AppBar> createState() => _AppBarState();
-}
-
-class _AppBarState extends State<AppBar> {
-  AreaCultivoStore store = GetIt.I<AreaCultivoStore>();
+  const _AreaCultivoHeader({required this.store});
 
   @override
   Widget build(BuildContext context) {
-    return Observer(builder: (_) {
-      return AnimatedContainer(
-        duration: const Duration(seconds: 2),
-        child: SliverAppBar(
-          pinned: true,
-          backgroundColor: Colors.white,
-          toolbarHeight: store.dropDownValue == "Data" ? 200 : 175,
-          floating: true,
-          automaticallyImplyLeading: false,
-          forceElevated: true,
-          elevation: 1,
-          flexibleSpace: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const TopAppBar(
-                path: "/Home/",
-                namePage: "Áreas de Cultivo",
-                subtitle: "Lista de áreas cadastrados",
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          children: [
+            Expanded(
+              child: DropdownButton<String>(
+                value: store.dropDownValue,
+                isExpanded: true,
+                underline: const SizedBox(),
+                onChanged: (String? newValue) async {
+                  if (newValue == store.dropDownValue) {
+                    store.changeOrder();
+                  } else {
+                    store.setSearchAreaText('');
+                  }
+                  store.setDropDown(newValue!);
+                  await store.buscarArea();
+                },
+                items: ['Nome', 'Data'].map((v) {
+                  return DropdownMenuItem(value: v, child: Text(v));
+                }).toList(),
               ),
-              const SizedBox(
-                height: 30,
+            ),
+            IconButton(
+              icon: Icon(
+                store.order == 'asc'
+                    ? Icons.arrow_upward_rounded
+                    : Icons.arrow_downward_rounded,
+                size: 20,
+                color: Constants.kPrimaryColor,
               ),
-              Container(
-                height: store.dropDownValue == "Data" ? 75 : 50,
-                color: const Color(0xFFF8F8F6),
-                padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.04,
-                ),
-                child: SizedBox(
-                  height: store.dropDownValue == "Data" ? 70 : 50,
-                  width: double.infinity,
-                  child: Row(
-                    children: [
-                      Observer(builder: (_) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 15.0, left: 10),
-                          child: store.dropDownValue == "Nome"
-                              ? const Icon(Icons.search)
-                              : const Icon(Icons.calendar_month_outlined),
-                        );
-                      }),
-                      store.dropDownValue == "Nome"
-                          ? Container()
-                          : const Spacer(),
-                      Observer(
-                        builder: (_) {
-                          return store.dropDownValue == "Nome"
-                              ? Expanded(
-                                  child: TextFormField(
-                                    decoration: const InputDecoration(
-                                      hintText: "Buscar...",
-                                      hintStyle: TextStyle(
-                                        fontFamily: "Roboto",
-                                      ),
-                                      border: InputBorder.none,
-                                    ),
-                                    onChanged: (newValue) {
-                                      store.setSearchAreaText(newValue);
-                                    },
-                                  ),
-                                )
-                              : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        const Text("De:"),
-                                        InkWell(
-                                          onTap: () {
-                                            dtp.DatePicker.showDatePicker(
-                                              context,
-                                              currentTime: store.data1,
-                                              locale: dtp.LocaleType.pt,
-                                              showTitleActions: true,
-                                              minTime: DateTime(2018, 3, 5),
-                                              maxTime: DateTime(2030, 12, 30),
-                                              onConfirm: (date) async {
-                                                store.setData1(date);
-                                                await store.buscarArea();
-                                              },
-                                              theme: const dtp.DatePickerTheme(
-                                                doneStyle: TextStyle(
-                                                  color:
-                                                      Constants.kPrimaryColor,
-                                                  fontSize: 16.0,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          child: Card(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 5,
-                                              ),
-                                              child: Text(
-                                                "${store.data1.day} / ${store.data1.month} / ${store.data1.year}",
-                                                style: const TextStyle(
-                                                  color:
-                                                      Constants.kPrimaryColor,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Text("Até"),
-                                        InkWell(
-                                          onTap: () {
-                                            dtp.DatePicker.showDatePicker(
-                                              context,
-                                              currentTime: store.data2,
-                                              locale: dtp.LocaleType.pt,
-                                              showTitleActions: true,
-                                              minTime: DateTime(2018, 3, 5),
-                                              maxTime: DateTime(2030, 12, 30),
-                                              onConfirm: (date) async {
-                                                store.setData2(date);
-                                                await store.buscarArea();
-                                              },
-                                              theme: const dtp.DatePickerTheme(
-                                                doneStyle: TextStyle(
-                                                  color:
-                                                      Constants.kPrimaryColor,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          child: Card(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 5,
-                                              ),
-                                              child: Text(
-                                                "${store.data2.day} / ${store.data2.month} / ${store.data2.year}",
-                                                style: const TextStyle(
-                                                  color:
-                                                      Constants.kPrimaryColor,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                );
-                        },
-                      ),
-                      const Spacer(),
-                      Observer(builder: (_) {
-                        return Container(
-                          height: 30,
-                          width: 80,
-                          decoration: const BoxDecoration(
-                            color: Constants.kPrimaryColor,
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              DropdownButton<String>(
-                                alignment: Alignment.center,
-                                value: store.dropDownValue,
-                                dropdownColor: Constants.kPrimaryColor,
-                                underline: DropdownButtonHideUnderline(
-                                    child: Container()),
-                                iconSize: 0,
-                                iconEnabledColor: Constants.kPrimaryColor,
-                                elevation: 16,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5)),
-                                style: const TextStyle(color: Colors.white),
-                                onChanged: (String? newValue) async {
-                                  if (newValue == store.dropDownValue) {
-                                    store.changeOrder();
-                                  } else {
-                                    store.setSearchAreaText('');
-                                  }
-                                  store.setDropDown(newValue!);
-                                  await store.buscarArea();
-                                },
-                                items: <String>[
-                                  'Nome',
-                                  'Data'
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                              Observer(builder: (_) {
-                                return Icon(
-                                  store.order == "asc"
-                                      ? Icons.arrow_upward_rounded
-                                      : Icons.arrow_downward_rounded,
-                                  size: 14,
-                                  color: Colors.white,
-                                );
-                              }),
-                            ],
-                          ),
-                        );
-                      }),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+              onPressed: () async {
+                store.changeOrder();
+                await store.buscarArea();
+              },
+            ),
+          ],
         ),
-      );
-    });
+      ),
+    );
   }
 }

@@ -10,7 +10,7 @@ import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 
 import '../../viewmodels/ajustes_store.dart';
-import '../home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 
 class AjustesPage extends StatefulWidget {
   final String title;
@@ -80,107 +80,89 @@ class AjustesPageState extends State<AjustesPage> {
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: [
-                  SliverAppBar(
-                    pinned: true,
-                    backgroundColor: Colors.white,
-                    toolbarHeight: 175,
-                    floating: true,
-                    automaticallyImplyLeading: false,
-                    forceElevated: true,
-                    elevation: 1,
-                    flexibleSpace: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TopAppBar(
-                          path: "/Home/",
-                          namePage: "Ajustes",
-                          subtitle: "Selecione e ajuste seu reservatório",
-                          onPressed: () {
-                            Get.offNamedUntil(
-                                Routes.homePage, (route) => false);
-                          },
-                          onSecretTriggered: () {
-                            Get.toNamed(Routes.adaptiveAdminPage);
-                          },
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Container(
-                          height: 50,
-                          color: const Color(0xFFF8F8F6),
-                          padding: Spacing.horizontal(context),
-                          child: Observer(
-                            builder: (_) {
-                              final reservatorios = store.reservatorioList;
-                              final selectedId = store.selectedReservatorio.id;
-                              final hasSelected = selectedId != null &&
-                                  reservatorios.any((r) => r.id == selectedId);
+                  AppPageHeaderSliver(
+                    title: 'Ajustes',
+                    subtitle: 'Selecione e ajuste seu reservatório',
+                    onBack: () {
+                      Get.offNamedUntil(Routes.homePage, (route) => false);
+                    },
+                    expandedHeight: 180,
+                    bottom: PreferredSize(
+                      preferredSize: const Size.fromHeight(56),
+                      child: Container(
+                        height: 50,
+                        color: const Color(0xFFF8F8F6),
+                        padding: Spacing.horizontal(context),
+                        child: Observer(
+                          builder: (_) {
+                            final reservatorios = store.reservatorioList;
+                            final selectedId = store.selectedReservatorio.id;
+                            final hasSelected = selectedId != null &&
+                                reservatorios.any((r) => r.id == selectedId);
 
-                              return DropdownButtonFormField<int>(
-                                key: ValueKey<String>(
-                                  '${hasSelected ? selectedId : 'none'}-${reservatorios.map((r) => r.id).join(',')}',
+                            return DropdownButtonFormField<int>(
+                              key: ValueKey<String>(
+                                '${hasSelected ? selectedId : 'none'}-${reservatorios.map((r) => r.id).join(',')}',
+                              ),
+                              initialValue: hasSelected ? selectedId : null,
+                              hint: const Text(
+                                'Selecione o Reservatório',
+                                style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: Constants.kGreyText2,
                                 ),
-                                initialValue: hasSelected ? selectedId : null,
-                                hint: const Text(
-                                  'Selecione o Reservatório',
-                                  style: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    color: Constants.kGreyText2,
-                                  ),
-                                ),
-                                isExpanded: true,
-                                iconEnabledColor: Constants.kPrimaryColor,
-                                borderRadius: BorderRadius.circular(5),
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  contentPadding:
-                                      EdgeInsets.symmetric(vertical: 14),
-                                ),
-                                selectedItemBuilder: (context) {
-                                  return reservatorios
-                                      .map(
-                                        (r) => Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            r.nome ?? '',
-                                            style: const TextStyle(
-                                              color: Constants.kPrimaryColor,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                      .toList();
-                                },
-                                items: reservatorios
+                              ),
+                              isExpanded: true,
+                              iconEnabledColor: Constants.kPrimaryColor,
+                              borderRadius: BorderRadius.circular(5),
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 14),
+                              ),
+                              selectedItemBuilder: (context) {
+                                return reservatorios
                                     .map(
-                                      (r) => DropdownMenuItem<int>(
-                                        value: r.id,
+                                      (r) => Align(
+                                        alignment: Alignment.centerLeft,
                                         child: Text(
-                                          r.nome ?? '-',
+                                          r.nome ?? '',
                                           style: const TextStyle(
-                                            color: Constants.kGreyText,
+                                            color: Constants.kPrimaryColor,
+                                            fontStyle: FontStyle.italic,
                                           ),
                                         ),
                                       ),
                                     )
-                                    .toList(),
-                                onChanged: (value) {
-                                  if (value == null) {
-                                    return;
-                                  }
+                                    .toList();
+                              },
+                              items: reservatorios
+                                  .map(
+                                    (r) => DropdownMenuItem<int>(
+                                      value: r.id,
+                                      child: Text(
+                                        r.nome ?? '-',
+                                        style: const TextStyle(
+                                          color: Constants.kGreyText,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) {
+                                if (value == null) {
+                                  return;
+                                }
 
-                                  final selected = reservatorios.firstWhere(
-                                    (reservatorio) => reservatorio.id == value,
-                                  );
-                                  store.selectReservatorio(selected);
-                                },
-                              );
-                            },
-                          ),
+                                final selected = reservatorios.firstWhere(
+                                  (reservatorio) => reservatorio.id == value,
+                                );
+                                store.selectReservatorio(selected);
+                              },
+                            );
+                          },
                         ),
-                      ],
+                      ),
                     ),
                   ),
                   SliverList(
@@ -197,8 +179,7 @@ class AjustesPageState extends State<AjustesPage> {
                           shrinkWrap: true,
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(
-                                  left: Spacing.xs),
+                              padding: EdgeInsets.only(left: Spacing.xs),
                               child: const Text(
                                 'Obrigatório',
                                 style: TextStyle(
@@ -209,8 +190,7 @@ class AjustesPageState extends State<AjustesPage> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
-                                  top: Spacing.sm),
+                              padding: EdgeInsets.only(top: Spacing.sm),
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -346,15 +326,13 @@ class AjustesPageState extends State<AjustesPage> {
                                       ],
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(
-                                          top: Spacing.lg),
+                                      padding: EdgeInsets.only(top: Spacing.lg),
                                       child: const MySeparator(
                                         color: Colors.grey,
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(
-                                          top: Spacing.md),
+                                      padding: EdgeInsets.only(top: Spacing.md),
                                       child: Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
@@ -486,8 +464,7 @@ class AjustesPageState extends State<AjustesPage> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: Spacing.xl,
-                                  left: Spacing.xs),
+                                  top: Spacing.xl, left: Spacing.xs),
                               child: const Text(
                                 'Opcional',
                                 style: TextStyle(
@@ -498,8 +475,7 @@ class AjustesPageState extends State<AjustesPage> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
-                                  top: Spacing.md),
+                              padding: EdgeInsets.only(top: Spacing.md),
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -561,9 +537,8 @@ class AjustesPageState extends State<AjustesPage> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
-                                  top: Spacing.sm,
-                                  bottom: 75),
+                              padding:
+                                  EdgeInsets.only(top: Spacing.sm, bottom: 75),
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -663,8 +638,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-          margin: EdgeInsets.only(
-              right: Spacing.xs),
+          margin: EdgeInsets.only(right: Spacing.xs),
           width: 123,
           height: 40,
           child: ElevatedButton(

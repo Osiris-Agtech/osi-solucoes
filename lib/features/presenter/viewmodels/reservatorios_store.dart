@@ -54,9 +54,16 @@ abstract class ReservatoriosStoreBase with Store {
   }
 
   @action
-  Future<void> buscarReservatorioDetalhes() async {
+  Future<void> buscarReservatorioDetalhes({int? reservatorioId}) async {
+    final id = reservatorioId ?? reservatorioDetalhes.id;
+
+    if (id == null) {
+      toastError(message: 'Reservatório inválido');
+      return;
+    }
+
     var reservatorios = await reservatorioRepository
-        .buscarReservatorioDetalhes(reservatorioDetalhes.id!);
+        .buscarReservatorioDetalhes(id);
 
     reservatorios.fold(
       (err) {
@@ -317,8 +324,14 @@ abstract class ReservatoriosStoreBase with Store {
   Future<void> buscarReservatorios() async {
     isReservatorioListLoading = true;
 
+    final contaId = authController.usuario.selected_conta?.conta?.id;
+    if (contaId == null) {
+      isReservatorioListLoading = false;
+      return;
+    }
+
     var reservatorios = await reservatorioRepository
-        .buscarReservatorios(authController.usuario.selected_conta!.conta!.id!);
+        .buscarReservatorios(contaId);
 
     reservatorios.fold(
       (err) {
@@ -337,8 +350,14 @@ abstract class ReservatoriosStoreBase with Store {
   Future<void> buscarSolucoes() async {
     isSolucaoListLoading = true;
 
+    final contaId = authController.usuario.selected_conta?.conta?.id;
+    if (contaId == null) {
+      isSolucaoListLoading = false;
+      return;
+    }
+
     var solucoes = await reservatorioRepository
-        .buscarSolucoes(authController.usuario.selected_conta!.conta!.id!);
+        .buscarSolucoes(contaId);
 
     solucoes.fold(
       (err) {

@@ -7,11 +7,10 @@ import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/pagesNovoSetor.dart';
 
 Future<void> bottomSheet(
-  BuildContext context,
-  CarouselSliderController carouselController,
-  CarouselSliderController controlerPages,
-  SetorStore store
-) {
+    BuildContext context,
+    CarouselSliderController carouselController,
+    CarouselSliderController controlerPages,
+    SetorStore store) {
   return showModalBottomSheet<void>(
     backgroundColor: Constants.kBackgroundColor,
     context: context,

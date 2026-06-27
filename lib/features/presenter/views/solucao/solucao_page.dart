@@ -2,19 +2,16 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/core/utils/responsive_breakpoints.dart';
 import 'package:osi_solucoes/core/utils/spacing.dart';
-import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoNutritiva_model.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/cadastrar_solucao_page.dart';
-import 'package:osi_solucoes/features/presenter/views/solucao/detalhes_solucao.dart';
-import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
+import 'package:osi_solucoes/features/presenter/views/solucao/components/solucao_page_header.dart';
+import 'package:osi_solucoes/features/presenter/views/solucao/components/solucao_receita_card.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 
 class SolucaoPage extends StatefulWidget {
   const SolucaoPage({super.key});
@@ -66,36 +63,32 @@ class _SolucaoPage extends State<SolucaoPage> {
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                AppBar(store: solucaoStore),
+                SolucaoPageHeader(store: solucaoStore),
                 Observer(builder: (_) {
                   if (solucaoStore.isSolucaoListLoading) {
                     return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                      child: AppStatePanel(
+                        stateKind: AppStateKind.loading,
+                        title: 'Carregando soluções',
+                        message: 'Aguarde enquanto a lista é atualizada.',
                       ),
                     );
                   }
                   if (solucaoStore.searchSolucao.isEmpty) {
-                    return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                        child: Center(
-                          child: Text(
-                            "Não há soluções cadastradas na sua conta",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xff6F6464),
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w800,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                    final hasOriginalData = solucaoStore.solucaoList.isNotEmpty;
+                    final hasSearch = solucaoStore.searchSolucaoText.isNotEmpty;
+
+                    return SliverToBoxAdapter(
+                      child: AppStatePanel(
+                        stateKind: hasOriginalData && hasSearch
+                            ? AppStateKind.searchEmpty
+                            : AppStateKind.empty,
+                        title: hasOriginalData && hasSearch
+                            ? 'Nenhuma solução encontrada'
+                            : 'Nenhuma solução cadastrada',
+                        message: hasOriginalData && hasSearch
+                            ? 'Ajuste a busca para localizar soluções cadastradas.'
+                            : 'Não há soluções cadastradas na sua conta.',
                       ),
                     );
                   }
@@ -103,8 +96,10 @@ class _SolucaoPage extends State<SolucaoPage> {
                   return SliverToBoxAdapter(
                     child: LayoutBuilder(
                       builder: (context, constraints) {
-                        final columns = ResponsiveBreakpoints.gridColumns(context);
-                        final aspectRatio = constraints.maxWidth > 800 ? 1.5 : 1.32;
+                        final columns =
+                            ResponsiveBreakpoints.gridColumns(context);
+                        final aspectRatio =
+                            constraints.maxWidth > 800 ? 1.5 : 1.32;
                         return Padding(
                           padding: Spacing.all(context),
                           child: GridView.count(
@@ -116,8 +111,9 @@ class _SolucaoPage extends State<SolucaoPage> {
                             childAspectRatio: aspectRatio,
                             children: List.generate(
                               solucaoStore.searchSolucao.length,
-                              (index) => CardReceita(
-                                solucaoNutritiva: solucaoStore.searchSolucao[index],
+                              (index) => SolucaoReceitaCard(
+                                solucaoNutritiva:
+                                    solucaoStore.searchSolucao[index],
                               ),
                             ),
                           ),
@@ -128,158 +124,6 @@ class _SolucaoPage extends State<SolucaoPage> {
                 }),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ignore: camel_case_types
-class AppBar extends StatefulWidget {
-  const AppBar({
-    super.key,
-    required this.store,
-  });
-
-  final SolucaoStore store;
-
-  @override
-  State<AppBar> createState() => _AppBarState();
-}
-
-class _AppBarState extends State<AppBar> {
-  SetorStore setorStore = GetIt.I<SetorStore>();
-  SolucaoStore solucaoStore = GetIt.I<SolucaoStore>();
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(seconds: 2),
-      child: SliverAppBar(
-        pinned: true,
-        backgroundColor: Colors.white,
-        toolbarHeight: ResponsiveBreakpoints.isDesktop(context) ? 140 : 180,
-        floating: true,
-        automaticallyImplyLeading: false,
-        forceElevated: true,
-        elevation: 1,
-        flexibleSpace: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const TopAppBar(
-              namePage: 'Minhas Soluções\nNutritivas',
-              subtitle: "Lista de receitas cadastrados",
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
-              color: const Color(0xFFF8F8F6),
-              padding: Spacing.horizontal(context),
-              child: SizedBox(
-                  width: double.infinity,
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: "Buscar...",
-                      hintStyle: TextStyle(
-                        fontFamily: "Roboto",
-                      ),
-                      border: InputBorder.none,
-                    ),
-                    onChanged: (newValue) {
-                      solucaoStore.setsearchSolucaoText(newValue);
-                    },
-                  )),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CardReceita extends StatefulWidget {
-  final SolucaoNutritiva solucaoNutritiva;
-  const CardReceita({super.key, required this.solucaoNutritiva});
-
-  @override
-  State<CardReceita> createState() => _CardReceitaState();
-}
-
-class _CardReceitaState extends State<CardReceita> {
-  SolucaoStore store = GetIt.I<SolucaoStore>();
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      onTap: () {
-        store.selecionarSolucao(widget.solucaoNutritiva);
-        store.buscarDetalhesSolucao();
-        getBottomSheet(const DetalhesSolucao());
-      },
-      child: Card(
-        elevation: 2,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SvgPicture.asset(
-                "assets/icons/solucoes_nutritivas_icon.svg",
-                // color: Constants.kButtonGrey,
-                height: 35,
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Text(
-                widget.solucaoNutritiva.nome ?? '',
-                maxLines: 2,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                  color: Constants.kGreyText,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              const Spacer(),
-              RichText(
-                text: TextSpan(
-                  children: <TextSpan>[
-                    const TextSpan(
-                      text: 'Reservatórios\nativos: ',
-                      style: TextStyle(
-                        color: Constants.kGreyMedium,
-                      ),
-                    ),
-                    TextSpan(
-                      text:
-                          '${widget.solucaoNutritiva.reservatorios?.length ?? 0}',
-                      style: const TextStyle(
-                        color: Constants.kPrimaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Text(
-              //   'Reservatórios\nativos: ${widget.solucaoNutritiva.reservatorios?.length ?? 0}',
-              //   style: const TextStyle(
-              //     color: Constants.kGreyMedium,
-              //   ),
-              // ),
-              const SizedBox(height: 8),
-            ],
           ),
         ),
       ),

@@ -8,8 +8,6 @@ import 'package:osi_solucoes/features/presenter/models/solucaoConcentrada/soluca
 import 'package:osi_solucoes/features/presenter/viewmodels/ajustes_store.dart';
 import 'package:rive/rive.dart';
 
-import '../home/components/top_app_bar.dart';
-
 class ResultadoajustePage extends StatefulWidget {
   final String title;
   const ResultadoajustePage({super.key, this.title = 'ResultadoajustePage'});
@@ -157,7 +155,7 @@ void showConfirmDialog(BuildContext context) {
                       ),
                       onPressed: () async {
                         await store.registrarAtividade();
-                        if(!context.mounted) return;
+                        if (!context.mounted) return;
                         showDoneAnimation(context);
                         await Future.delayed(
                             const Duration(milliseconds: 1500));
@@ -435,7 +433,8 @@ class ButtonCompleted extends StatelessWidget {
           width: MediaQuery.of(context).size.width * .69,
           height: 40,
           child: ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Constants.kPrimaryColor),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Constants.kPrimaryColor),
             child: const Text(
               "Concluir",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
@@ -469,9 +468,33 @@ class AppBarCustom extends StatelessWidget {
         pinned: true,
         forceElevated: true,
         elevation: 1,
-        flexibleSpace: const TopAppBar(
-          path: "/Tab/Ajustes/",
-          namePage: "Resultado\n Ajuste",
+        flexibleSpace: Padding(
+          padding: EdgeInsets.only(left: 16, top: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                padding: EdgeInsets.zero,
+                alignment: Alignment.centerLeft,
+                onPressed: () => Get.back(),
+                icon: const Icon(Icons.arrow_back),
+                color: Constants.kPrimaryColor,
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Resultado Ajuste',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
         ),
         bottom: TabBar(
           controller: tabController,

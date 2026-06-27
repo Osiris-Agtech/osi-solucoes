@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/editar_page/editarBottomSheet.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
 
 import '../../../../core/utils/toast.dart';
 
@@ -249,42 +250,27 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
     );
   }
 
-  Padding saveButton(Size size) {
+  Widget saveButton(Size size) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
-      child: Center(
-        child: SizedBox(
-          width: size.width * .8,
-          height: 40,
-          child: Observer(builder: (_) {
-            return ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Constants.kPrimaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              onPressed: store.loteFoiAlterado == true
-                  ? () {
-                      if (!store.loteFoiAlterado) {
-                        toastError(
-                            message:
-                                "Realize alguma alteração para atualizar o protocolo!");
-                        return;
-                      }
-                      store.atualizarProtocolo();
+      child: SizedBox(
+        width: size.width * .8,
+        child: Observer(builder: (_) {
+          return AppPrimaryButton(
+            label: 'Atualizar',
+            onPressed: store.loteFoiAlterado == true
+                ? () {
+                    if (!store.loteFoiAlterado) {
+                      toastError(
+                          message:
+                              "Realize alguma alteração para atualizar o protocolo!");
+                      return;
                     }
-                  : null,
-              child: const Text(
-                "Atualizar",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            );
-          }),
-        ),
+                    store.atualizarProtocolo();
+                  }
+                : null,
+          );
+        }),
       ),
     );
   }

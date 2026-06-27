@@ -67,8 +67,7 @@ Container atividadesAbertas(BuildContext context) {
                       color: Colors.black,
                     )),
                 Checkbox(
-                    fillColor:
-                        WidgetStateProperty.all(Constants.kPrimaryColor),
+                    fillColor: WidgetStateProperty.all(Constants.kPrimaryColor),
                     value: store.marcarTodasAtividades,
                     onChanged: (value) {
                       store.verificarMarcarTodos();

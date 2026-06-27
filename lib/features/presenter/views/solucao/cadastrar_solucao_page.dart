@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/utils/decimal_format.dart';
@@ -10,12 +9,15 @@ import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/customTextFormField.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 import '../../../../../core/constants/constants.dart';
 import '../../routes/routes.dart';
 
 class CadastrarSolucaoPage extends StatefulWidget {
   final bool isShortcut;
-  const    CadastrarSolucaoPage({
+  const CadastrarSolucaoPage({
     super.key,
     this.isShortcut = false,
   });
@@ -521,194 +523,89 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     );
   }
 
-  Padding _nome(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: InkWell(
-        child: Observer(builder: (_) {
-          return ListTile(
-            leading: const Icon(Icons.label),
-            dense: true,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Nome',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                ),
-                store.novaSolucaoName.text.isNotEmpty
-                    ? Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.novaSolucaoName.text,
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ],
-                        ),
-                      )
-                    : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Text(
-                            "Preencher",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Icon(
-                            Icons.chevron_right,
-                            size: 18,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-              ],
+  Widget _nome(BuildContext context) {
+    return Observer(builder: (_) {
+      final hasName = store.novaSolucaoName.text.isNotEmpty;
+      return AppFormSelectionTile(
+        leading: const Icon(Icons.label),
+        title: 'Nome',
+        subtitle: hasName ? store.novaSolucaoName.text : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              hasName ? store.novaSolucaoName.text : 'Preencher',
+              style: const TextStyle(
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
             ),
-            onTap: () {
-              store.setDotIndicator(0);
-              bottomSheet(context, carouselController, controlerPages, store);
-            },
-          );
-        }),
-      ),
-    );
+            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
+          ],
+        ),
+        onTap: () {
+          store.setDotIndicator(0);
+          bottomSheet(context, carouselController, controlerPages, store);
+        },
+      );
+    });
   }
 
-  Padding _fertilizantes(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: InkWell(
-        child: Observer(builder: (_) {
-          return ListTile(
-            dense: true,
-            leading: const Icon(Icons.invert_colors),
-            title: const Text(
-              'Fertilizantes',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+  Widget _fertilizantes(BuildContext context) {
+    return Observer(builder: (_) {
+      final count = store.selectedFertilizantes.length;
+      return AppFormSelectionTile(
+        leading: const Icon(Icons.invert_colors),
+        title: 'Fertilizantes',
+        subtitle: count > 0 ? '$count fertilizante(s) selecionado(s)' : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              count > 0 ? '$count unidades' : 'Selecionar',
+              style: const TextStyle(
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
             ),
-            trailing: store.selectedFertilizantes.isNotEmpty
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        '${store.selectedFertilizantes.length} unidades',
-                        textAlign: TextAlign.end,
-                        style: const TextStyle(
-                          color: Constants.kPrimaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const Icon(
-                        Icons.chevron_right,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ],
-                  )
-                : Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Text(
-                        "Selecionar",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Constants.kPrimaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Icon(
-                        Icons.chevron_right,
-                        size: 18,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ],
-                  ),
-            onTap: () {
-              store.setDotIndicator(1);
-              bottomSheet(context, carouselController, controlerPages, store);
-            },
-          );
-        }),
-      ),
+            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
+          ],
+        ),
+        onTap: () {
+          store.setDotIndicator(1);
+          bottomSheet(context, carouselController, controlerPages, store);
+        },
+      );
+    });
+  }
+
+  Widget avisoFertilizante() {
+    return const AppStatePanel(
+      stateKind: AppStateKind.empty,
+      title: 'Nenhum fertilizante selecionado',
+      isCompact: true,
     );
   }
 
-  Padding avisoFertilizante() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-            "assets/icons/alert-triangle.svg",
-            // color: Constants.kButtonGrey,
-            height: 32,
-          ),
-          const Text(
-            'Nenhum fertilizante\nselecionado',
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Padding _nextButton(Size size) {
+  Widget _nextButton(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       child: SizedBox(
         width: size.width * .8,
-        height: 40,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Constants.kPrimaryColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-          child: Observer(builder: (_) {
-            if (store.isNovaSolucaoLoading) {
-              return const CircularProgressIndicator(
-                color: Constants.kBackgroundColor,
-              );
-            }
-
-            return const Text(
-              "Avançar",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            );
-          }),
-          onPressed: () {
-            // Validate Page
-            if (store.validateNewSN()) {
-              store.setFertilizantesEscolhidos();
-              Get.toNamed(Routes.cadastrarSolucaoConcentradaPage);
-            }
-          },
-        ),
+        child: Observer(builder: (_) {
+          return AppPrimaryButton(
+            label: 'Avançar',
+            isLoading: store.isNovaSolucaoLoading,
+            onPressed: () {
+              if (store.validateNewSN()) {
+                store.setFertilizantesEscolhidos();
+                Get.toNamed(Routes.cadastrarSolucaoConcentradaPage);
+              }
+            },
+          );
+        }),
       ),
     );
   }

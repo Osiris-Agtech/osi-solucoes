@@ -9,6 +9,8 @@ import 'package:osi_solucoes/features/presenter/models/nutriente/nutriente_model
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 
 import '../../../../../../core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 
 Widget fertilizantePage(
     BuildContext context, CarouselSliderController controlerPages) {
@@ -114,24 +116,17 @@ Widget fertilizantePage(
               ),
               child: Observer(builder: (_) {
                 if (store.isFertilizanteListLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 1,
-                    ),
+                  return const AppStatePanel(
+                    stateKind: AppStateKind.loading,
+                    title: 'Carregando fertilizantes...',
+                    isCompact: true,
                   );
                 }
                 if (store.fertilizanteList.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      'Não há fertilizantes\ncadastrados em sua conta',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xff6F6464),
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
+                  return const AppStatePanel(
+                    stateKind: AppStateKind.empty,
+                    title: 'Nenhum fertilizante cadastrado',
+                    isCompact: true,
                   );
                 }
                 return ListView.builder(
@@ -141,112 +136,102 @@ Widget fertilizantePage(
                     return Padding(
                       padding: EdgeInsets.only(
                           left: 10, right: 10, top: index == 0 ? 10 : 0),
-                      child: ListTile(
-                        leading: Observer(builder: (_) {
-                          if (!store.fertilizanteList[index].selected) {
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            left: 10, right: 10, top: index == 0 ? 10 : 0),
+                        child: AppFormSelectionTile(
+                          leading: Observer(builder: (_) {
+                            if (!store.fertilizanteList[index].selected) {
+                              return const Icon(
+                                  Icons.check_box_outline_blank_rounded);
+                            }
                             return const Icon(
-                                Icons.check_box_outline_blank_rounded);
-                          }
-                          return const Icon(
-                            Icons.check_box,
-                            color: Constants.kPrimaryColor,
-                          );
-                        }),
-                        dense: true,
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 20),
-                        title: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.fertilizanteList[index].fertilizante
-                                        .nome ??
-                                    "---",
-                                style: const TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            _buildFertilizanteBadge(
-                              store.fertilizanteList[index].fertilizante,
-                              store,
-                            ),
-                          ],
+                              Icons.check_box,
+                              color: Constants.kPrimaryColor,
+                            );
+                          }),
+                          title:
+                              store.fertilizanteList[index].fertilizante.nome ??
+                                  '---',
+                          badge: _buildFertilizanteBadge(
+                            store.fertilizanteList[index].fertilizante,
+                            store,
+                          ),
+                          trailing: store.canEditFertilizante(
+                                  store.fertilizanteList[index].fertilizante)
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      tooltip: 'Editar',
+                                      onPressed: () async {
+                                        final loaded = await store
+                                            .carregarNutrientesCatalogo();
+                                        if (!loaded || !context.mounted) {
+                                          return;
+                                        }
+                                        _showFertilizanteDialog(
+                                          context,
+                                          store: store,
+                                          title: 'Editar fertilizante',
+                                          initialValue: store
+                                                  .fertilizanteList[index]
+                                                  .fertilizante
+                                                  .nome ??
+                                              '',
+                                          initialNutrientes: store
+                                                  .fertilizanteList[index]
+                                                  .fertilizante
+                                                  .fertilizantes_nutrientes
+                                                  ?.map(
+                                                    (item) =>
+                                                        FertilizanteNutrienteFormItem(
+                                                      nutrienteId:
+                                                          item.nutriente?.id,
+                                                      teor:
+                                                          item.teor_nutriente ??
+                                                              '',
+                                                    ),
+                                                  )
+                                                  .toList() ??
+                                              [],
+                                          confirmText: 'Salvar',
+                                          onConfirm: (nome, nutrientes) {
+                                            return store
+                                                .atualizarFertilizanteCustom(
+                                              fertilizante: store
+                                                  .fertilizanteList[index]
+                                                  .fertilizante,
+                                              nome: nome,
+                                              nutrientes: nutrientes,
+                                            );
+                                          },
+                                        );
+                                      },
+                                      icon: const Icon(Icons.edit_outlined),
+                                    ),
+                                    IconButton(
+                                      tooltip: 'Excluir',
+                                      onPressed: () {
+                                        _showDeleteConfirmationDialog(
+                                          context,
+                                          store,
+                                          store.fertilizanteList[index]
+                                              .fertilizante,
+                                        );
+                                      },
+                                      icon: const Icon(Icons.delete_outline),
+                                    ),
+                                  ],
+                                )
+                              : null,
+                          onTap: () {
+                            store.changeSelecaoFertilizante(
+                              index,
+                              !store.fertilizanteList[index].selected,
+                            );
+                          },
                         ),
-                        trailing: store.canEditFertilizante(
-                                store.fertilizanteList[index].fertilizante)
-                            ? Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    tooltip: 'Editar',
-                                    onPressed: () async {
-                                      final loaded =
-                                          await store.carregarNutrientesCatalogo();
-                                      if (!loaded || !context.mounted) {
-                                        return;
-                                      }
-
-                                      _showFertilizanteDialog(
-                                        context,
-                                        store: store,
-                                        title: 'Editar fertilizante',
-                                        initialValue: store
-                                                .fertilizanteList[index]
-                                                .fertilizante
-                                                .nome ??
-                                            '',
-                                        initialNutrientes: store
-                                                .fertilizanteList[index]
-                                                .fertilizante
-                                                .fertilizantes_nutrientes
-                                                ?.map(
-                                                  (item) =>
-                                                      FertilizanteNutrienteFormItem(
-                                                    nutrienteId:
-                                                        item.nutriente?.id,
-                                                    teor:
-                                                        item.teor_nutriente ??
-                                                            '',
-                                                  ),
-                                                )
-                                                .toList() ??
-                                            [],
-                                        confirmText: 'Salvar',
-                                        onConfirm: (nome, nutrientes) {
-                                          return store
-                                              .atualizarFertilizanteCustom(
-                                            fertilizante: store
-                                                .fertilizanteList[index]
-                                                .fertilizante,
-                                            nome: nome,
-                                            nutrientes: nutrientes,
-                                          );
-                                        },
-                                      );
-                                    },
-                                    icon: const Icon(Icons.edit_outlined),
-                                  ),
-                                  IconButton(
-                                    tooltip: 'Excluir',
-                                    onPressed: () {
-                                      _showDeleteConfirmationDialog(
-                                        context,
-                                        store,
-                                        store.fertilizanteList[index]
-                                            .fertilizante,
-                                      );
-                                    },
-                                    icon: const Icon(Icons.delete_outline),
-                                  ),
-                                ],
-                              )
-                            : null,
-                        onTap: () {
-                          store.changeSelecaoFertilizante(
-                            index,
-                            !store.fertilizanteList[index].selected,
-                          );
-                        },
                       ),
                     );
                   },
@@ -396,7 +381,8 @@ Future<void> _showFertilizanteDialog(
                               flex: 5,
                               child: DropdownButtonFormField<int>(
                                 initialValue: store.nutrientesCatalogo.any(
-                                  (nutriente) => nutriente.id == item.nutrienteId,
+                                  (nutriente) =>
+                                      nutriente.id == item.nutrienteId,
                                 )
                                     ? item.nutrienteId
                                     : null,
@@ -428,7 +414,8 @@ Future<void> _showFertilizanteDialog(
                               flex: 3,
                               child: TextFormField(
                                 initialValue: item.teor,
-                                keyboardType: const TextInputType.numberWithOptions(
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
                                   decimal: true,
                                 ),
                                 decoration: const InputDecoration(
@@ -462,7 +449,8 @@ Future<void> _showFertilizanteDialog(
                             ? null
                             : () {
                                 setState(() {
-                                  nutrientes.add(FertilizanteNutrienteFormItem());
+                                  nutrientes
+                                      .add(FertilizanteNutrienteFormItem());
                                 });
                               },
                         icon: const Icon(Icons.add_circle_outline),

@@ -5,6 +5,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/bottomSheet.dart';
 
 import '../../../../core/utils/toast.dart';
@@ -250,399 +252,180 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
     );
   }
 
-  Padding saveButton(Size size) {
+  Widget saveButton(Size size) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
-      child: Center(
-        child: SizedBox(
-          width: size.width * .8,
-          height: 40,
-          child: Observer(builder: (_) {
-            return ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Constants.kPrimaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              child:
-                  // store.isProtocoloListLoading
-                  // ? const CircularProgressIndicator(
-                  //     color: Colors.white,
-                  //   )
-                  // :
-                  store.isEditing
-                      ? const Text(
-                          "Alterar",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      : const Text(
-                          "Salvar",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-              onPressed: () {
-                store.validarNovoProtocolo();
-                if (!store.isValid) {
-                  toastError(
-                      message:
-                          "Preencha todos campos do formulario corretamente!");
-                  return;
-                }
-                store.registrarProtocolo();
-              }, //store.registrarReservatorio(),
-            );
-          }),
-        ),
+      child: SizedBox(
+        width: size.width * .8,
+        child: Observer(builder: (_) {
+          return AppPrimaryButton(
+            label: store.isEditing ? 'Alterar' : 'Salvar',
+            onPressed: () {
+              store.validarNovoProtocolo();
+              if (!store.isValid) {
+                toastError(
+                    message:
+                        "Preencha todos campos do formulario corretamente!");
+                return;
+              }
+              store.registrarProtocolo();
+            },
+          );
+        }),
       ),
     );
   }
 
-  InkWell nome(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-            leading: const Icon(Icons.label),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: Text(
-                    'Nome',
-                    maxLines: 1,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                  ),
-                ),
-                (store.novoNomeProtocolo ?? "").isNotEmpty
-                    ? Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Observer(builder: (_) {
-                                return Text(
-                                  store.novoNomeProtocolo ?? "",
-                                  textAlign: TextAlign.end,
-                                  style: const TextStyle(
-                                    color: Constants.kPrimaryColor,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                );
-                              }),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ],
-                        ),
-                      )
-                    : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Text(
-                            "Preencher",
-                            style: TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-              ],
+  Widget nome(BuildContext context) {
+    return Observer(builder: (_) {
+      return AppFormSelectionTile(
+        leading: const Icon(Icons.label),
+        title: 'Nome',
+        subtitle: store.novoNomeProtocolo?.isNotEmpty == true
+            ? store.novoNomeProtocolo
+            : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              store.novoNomeProtocolo?.isNotEmpty == true
+                  ? store.novoNomeProtocolo!
+                  : 'Preencher',
+              style: const TextStyle(
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
             ),
-            onTap: () {
-              store.setDotIndicator(0);
-              bottomSheet(context, carouselController, controlerPages, store);
-            });
-      }),
-    );
+            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
+          ],
+        ),
+        onTap: () {
+          store.setDotIndicator(0);
+          bottomSheet(context, carouselController, controlerPages, store);
+        },
+      );
+    });
   }
 
-  InkWell cultura(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-            leading: const Icon(Icons.label),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: Text(
-                    'Cultura',
-                    maxLines: 1,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                  ),
-                ),
-                store.novaCulturaProtocolo != null
-                    ? Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.novaCulturaProtocolo?.nome ?? 'Preencher',
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ],
-                        ),
-                      )
-                    : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Text(
-                            "Preencher",
-                            style: TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-              ],
+  Widget cultura(BuildContext context) {
+    return Observer(builder: (_) {
+      return AppFormSelectionTile(
+        leading: const Icon(Icons.park),
+        title: 'Cultura',
+        subtitle: store.novaCulturaProtocolo?.nome,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              store.novaCulturaProtocolo?.nome ?? 'Preencher',
+              style: const TextStyle(
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
             ),
-            onTap: () {
-              store.setDotIndicator(1);
-              bottomSheet(context, carouselController, controlerPages, store);
-            });
-      }),
-    );
+            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
+          ],
+        ),
+        onTap: () {
+          store.setDotIndicator(1);
+          bottomSheet(context, carouselController, controlerPages, store);
+        },
+      );
+    });
   }
 
-  InkWell sistema(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-            leading: const Icon(Icons.label),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: Text(
-                    'Sistema de \ncultivo',
-                    maxLines: 2,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                  ),
-                ),
-                (store.novoSistemaProtocolo ?? "").isNotEmpty
-                    ? Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.novoSistemaProtocolo ?? "",
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ],
-                        ),
-                      )
-                    : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Text(
-                            "Preencher",
-                            style: TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-              ],
+  Widget sistema(BuildContext context) {
+    return Observer(builder: (_) {
+      return AppFormSelectionTile(
+        leading: const Icon(Icons.grid_view),
+        title: 'Sistema de cultivo',
+        subtitle: store.novoSistemaProtocolo?.isNotEmpty == true
+            ? store.novoSistemaProtocolo
+            : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              store.novoSistemaProtocolo?.isNotEmpty == true
+                  ? store.novoSistemaProtocolo!
+                  : 'Preencher',
+              style: const TextStyle(
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
             ),
-            onTap: () {
-              store.setDotIndicator(2);
-              bottomSheet(context, carouselController, controlerPages, store);
-            });
-      }),
-    );
+            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
+          ],
+        ),
+        onTap: () {
+          store.setDotIndicator(2);
+          bottomSheet(context, carouselController, controlerPages, store);
+        },
+      );
+    });
   }
 
-  InkWell forma(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-            leading: const Icon(Icons.label),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: Text(
-                    'Forma de \nimplantação',
-                    maxLines: 2,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                  ),
-                ),
-                (store.novoFormaProtocolo ?? "").isNotEmpty
-                    ? Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.novoFormaProtocolo ?? "",
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ],
-                        ),
-                      )
-                    : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Text(
-                            "Preencher",
-                            style: TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-              ],
+  Widget forma(BuildContext context) {
+    return Observer(builder: (_) {
+      return AppFormSelectionTile(
+        leading: const Icon(Icons.build_outlined),
+        title: 'Forma de implantação',
+        subtitle: store.novoFormaProtocolo?.isNotEmpty == true
+            ? store.novoFormaProtocolo
+            : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              store.novoFormaProtocolo?.isNotEmpty == true
+                  ? store.novoFormaProtocolo!
+                  : 'Preencher',
+              style: const TextStyle(
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
             ),
-            onTap: () {
-              store.setDotIndicator(3);
-              bottomSheet(context, carouselController, controlerPages, store);
-            });
-      }),
-    );
+            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
+          ],
+        ),
+        onTap: () {
+          store.setDotIndicator(3);
+          bottomSheet(context, carouselController, controlerPages, store);
+        },
+      );
+    });
   }
 
-  InkWell atividades(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-            leading: const Icon(Icons.label),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: Text(
-                    'Atividades',
-                    maxLines: 2,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                  ),
-                ),
-                store.novasAtividadesProtocolo.isNotEmpty
-                    ? Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.novasAtividadesProtocolo.length
-                                    .toString(),
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ],
-                        ),
-                      )
-                    : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Text(
-                            "Preencher",
-                            style: TextStyle(
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-              ],
+  Widget atividades(BuildContext context) {
+    return Observer(builder: (_) {
+      final count = store.novasAtividadesProtocolo.length;
+      return AppFormSelectionTile(
+        leading: const Icon(Icons.checklist),
+        title: 'Atividades',
+        subtitle: count > 0 ? '$count atividade(s) selecionada(s)' : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              count > 0 ? '$count' : 'Preencher',
+              style: const TextStyle(
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
             ),
-            onTap: () {
-              store.setDotIndicator(4);
-              bottomSheet(context, carouselController, controlerPages, store);
-            });
-      }),
-    );
+            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
+          ],
+        ),
+        onTap: () {
+          store.setDotIndicator(4);
+          bottomSheet(context, carouselController, controlerPages, store);
+        },
+      );
+    });
   }
 }

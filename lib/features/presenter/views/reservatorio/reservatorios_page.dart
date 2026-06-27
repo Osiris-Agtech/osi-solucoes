@@ -146,7 +146,7 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
         Get.offNamedUntil(Routes.homePage, (route) => false);
       },
       floating: true,
-      expandedHeight: 120,
+      expandedHeight: 180,
       bottom: PreferredSize(
         preferredSize: const Size(
           double.infinity,

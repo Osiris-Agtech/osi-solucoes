@@ -6,7 +6,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/modulos_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/top_app_bar.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 
 class DetalhesProtocolo extends StatefulWidget {
   const DetalhesProtocolo({super.key});
@@ -34,22 +34,10 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
               physics: const BouncingScrollPhysics(),
               slivers: [
                 Observer(builder: (_) {
-                  return SliverAppBar(
-                    toolbarHeight: 88,
-                    backgroundColor: Colors.white,
-                    floating: false,
-                    automaticallyImplyLeading: false,
-                    forceElevated: true,
-                    elevation: 0,
-                    titleTextStyle: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    flexibleSpace: TopAppBar(
-                      path: "",
-                      namePage: store.protocoloSelecionado?.nome ?? "---",
-                    ),
+                  return AppPageHeaderSliver(
+                    title: store.protocoloSelecionado?.nome ?? "Detalhes",
+                    titleMaxLines: 2,
+                    onBack: () => Get.back(),
                     actions: [
                       Align(
                         alignment: const Alignment(0.6, -0.9),

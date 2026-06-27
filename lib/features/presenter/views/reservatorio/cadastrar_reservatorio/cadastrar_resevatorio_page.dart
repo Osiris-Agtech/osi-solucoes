@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/bottomSheet.dart';
 
 import '../../../../../core/constants/constants.dart';
@@ -151,246 +153,121 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
     );
   }
 
-  Padding saveButton(Size size) {
+  Widget saveButton(Size size) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
-      child: Center(
-        child: SizedBox(
-          width: size.width * .8,
-          height: 40,
-          child: Observer(builder: (_) {
-            return ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Constants.kPrimaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              child: store.isNovoReservatorioLoading
-                  ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                  : Text(
-                      store.isEditing ? "Alterar" : "Salvar",
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-              onPressed: () {
-                if (store.validarReservatorio()) {
-                  if (!store.isEditing || widget.isShortcut) {
-                    store.registrarReservatorio(isShortcut: widget.isShortcut);
-                  } else {
-                    store.updateReservatorio();
-                  }
+      child: SizedBox(
+        width: size.width * .8,
+        child: Observer(builder: (_) {
+          return AppPrimaryButton(
+            label: store.isEditing ? 'Alterar' : 'Salvar',
+            isLoading: store.isNovoReservatorioLoading,
+            onPressed: () {
+              if (store.validarReservatorio()) {
+                if (!store.isEditing || widget.isShortcut) {
+                  store.registrarReservatorio(isShortcut: widget.isShortcut);
+                } else {
+                  store.updateReservatorio();
                 }
-              },
-            );
-          }),
-        ),
+              }
+            },
+          );
+        }),
       ),
     );
   }
 
-  InkWell nome(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          leading: const Icon(Icons.label),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(right: 8),
-                child: Text(
-                  'Nome',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                ),
-              ),
+  Widget nome(BuildContext context) {
+    return Observer(builder: (_) {
+      return AppFormSelectionTile(
+        leading: const Icon(Icons.label),
+        title: 'Nome',
+        subtitle: store.novoReservatorioName.text.isNotEmpty
+            ? store.novoReservatorioName.text
+            : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
               store.novoReservatorioName.text.isNotEmpty
-                  ? Expanded(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              store.novoReservatorioName.text,
-                              textAlign: TextAlign.end,
-                              style: const TextStyle(
-                                color: Constants.kPrimaryColor,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-                    )
-                  : Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
-                        Text(
-                          "Preencher",
-                          style: TextStyle(
-                            color: Constants.kPrimaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Icon(
-                          Icons.chevron_right,
-                          color: Constants.kPrimaryColor,
-                        ),
-                      ],
-                    ),
-            ],
-          ),
-          onTap: () {
-            store.setDotIndicator(0);
-            bottomSheet(context, controlerPages, carouselController, store);
-            // showConfirmDialog(context);
-          },
-        );
-      }),
-    );
+                  ? store.novoReservatorioName.text
+                  : 'Preencher',
+              style: TextStyle(
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
+          ],
+        ),
+        onTap: () {
+          store.setDotIndicator(0);
+          bottomSheet(context, controlerPages, carouselController, store);
+        },
+      );
+    });
   }
 
-  InkWell volume(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          leading: const Icon(Icons.waves),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(right: 8),
-                child: Text(
-                  'Volume',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                ),
+  Widget volume(BuildContext context) {
+    return Observer(builder: (_) {
+      final volText = store.novoReservatorioVolume.text;
+      return AppFormSelectionTile(
+        leading: const Icon(Icons.waves),
+        title: 'Volume',
+        subtitle: volText.isNotEmpty ? '$volText Litros' : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              volText.isNotEmpty ? '$volText Litros' : 'Preencher',
+              style: const TextStyle(
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
               ),
-              store.novoReservatorioVolume.text.isNotEmpty
-                  ? Expanded(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "${store.novoReservatorioVolume.text} Litros",
-                              textAlign: TextAlign.end,
-                              style: const TextStyle(
-                                  color: Constants.kPrimaryColor,
-                                  fontWeight: FontWeight.w600),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          )
-                        ],
-                      ),
-                    )
-                  : Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
-                        Text(
-                          "Preencher",
-                          style: TextStyle(
-                            color: Constants.kPrimaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Icon(
-                          Icons.chevron_right,
-                          color: Constants.kPrimaryColor,
-                        ),
-                      ],
-                    ),
-            ],
-          ),
-          onTap: () {
-            store.setDotIndicator(1);
-            bottomSheet(context, controlerPages, carouselController, store);
-          },
-        );
-      }),
-    );
+            ),
+            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
+          ],
+        ),
+        onTap: () {
+          store.setDotIndicator(1);
+          bottomSheet(context, controlerPages, carouselController, store);
+        },
+      );
+    });
   }
 
-  InkWell solucaoNutritiva(BuildContext context) {
-    return InkWell(
-      child: Observer(builder: (_) {
-        return ListTile(
-          leading: const Icon(Icons.invert_colors),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(right: 8),
-                child: Text(
-                  'Solução\nNutritiva',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                ),
-              ),
+  Widget solucaoNutritiva(BuildContext context) {
+    return Observer(builder: (_) {
+      return AppFormSelectionTile(
+        leading: const Icon(Icons.invert_colors),
+        title: 'Solução Nutritiva',
+        subtitle: store.isSolucaoNutritivaValid
+            ? store.solucaoNutritiva.nome ?? ''
+            : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
               store.isSolucaoNutritivaValid
-                  ? Expanded(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              store.solucaoNutritiva.nome ?? "",
-                              textAlign: TextAlign.end,
-                              style: const TextStyle(
-                                color: Constants.kPrimaryColor,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const Icon(
-                            Icons.chevron_right,
-                            color: Constants.kPrimaryColor,
-                          ),
-                        ],
-                      ),
-                    )
-                  : Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
-                        Text(
-                          "Selecionar",
-                          style: TextStyle(
-                            color: Constants.kPrimaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Icon(
-                          Icons.chevron_right,
-                          color: Constants.kPrimaryColor,
-                        ),
-                      ],
-                    ),
-            ],
-          ),
-          onTap: () {
-            store.buscarSolucoes();
-            store.setDotIndicator(2);
-            bottomSheet(context, controlerPages, carouselController, store);
-          },
-        );
-      }),
-    );
+                  ? store.solucaoNutritiva.nome ?? ''
+                  : 'Selecionar',
+              style: const TextStyle(
+                color: Constants.kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
+          ],
+        ),
+        onTap: () {
+          store.buscarSolucoes();
+          store.setDotIndicator(2);
+          bottomSheet(context, controlerPages, carouselController, store);
+        },
+      );
+    });
   }
 }
