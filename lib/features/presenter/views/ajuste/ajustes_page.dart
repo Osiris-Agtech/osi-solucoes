@@ -620,48 +620,6 @@ class AjustesPageState extends State<AjustesPage> {
   }
 }
 
-class ButtonWidget extends StatefulWidget {
-  const ButtonWidget({
-    super.key,
-  });
-
-  @override
-  State<ButtonWidget> createState() => _ButtonWidgetState();
-}
-
-class _ButtonWidgetState extends State<ButtonWidget> {
-  AjustesStore store = GetIt.I<AjustesStore>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Container(
-          margin: EdgeInsets.only(right: Spacing.xs),
-          width: 123,
-          height: 40,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24)),
-              backgroundColor: Constants.kPrimaryColor,
-            ),
-            child: const Text(
-              'Calcular',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
-            onPressed: () async {
-              Get.toNamed(Routes.resultadoajustePage);
-              // Modular.to.pushReplacementNamed("/resultadoAjuste/");
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class MySeparator extends StatelessWidget {
   final double height;
   final Color color;

@@ -9,13 +9,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/finalizar_page/bottomSheet.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/components/topAppBarArea.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 import 'package:osi_solucoes/core/services/navigation_resource_args.dart';
 
@@ -69,47 +69,45 @@ class _LotePageState extends State<LotePage> {
                 Observer(builder: (_) {
                   if (loteStore.isLoteListLoading) {
                     return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                      child: AppStatePanel(
+                        stateKind: AppStateKind.loading,
+                        title: 'Carregando lotes',
+                        message: 'Aguarde enquanto buscamos os lotes cadastrados.',
                       ),
                     );
                   }
                   if (loteStore.loteList.isEmpty) {
                     return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                        child: Center(
-                          child: Text(
-                            "Não há lotes cadastrados neste setor",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xff6F6464),
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w800,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                      child: AppStatePanel(
+                        stateKind: AppStateKind.empty,
+                        title: 'Nenhum lote cadastrado',
+                        message: 'Cadastre um lote neste setor para começar.',
                       ),
                     );
                   }
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        return Observer(builder: (_) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                left: 16.0, right: 16, top: 10),
-                            child: CardLote(
-                              lote: loteStore.searchLote[index],
-                            ),
-                          );
-                        });
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 10.0),
+                          child: AppEntityCard(
+                            leading: const Icon(Icons.eco, color: Color(0xFF26C165), size: 26),
+                            title: loteStore.searchLote[index].nome ?? '',
+                            subtitle: '# ${loteStore.searchLote[index].id}',
+                            description: 'Cultura: ${loteStore.searchLote[index].cultura?.nome ?? ""}',
+                            onTap: () {
+                              loteStore.selecionarLote(loteStore.searchLote[index]);
+                              Get.toNamed(
+                                Routes.detalhesLotePage,
+                                arguments: NavigationResourceArgs(
+                                  resourceId: loteStore.searchLote[index].id?.toString(),
+                                  resourceType: 'lote',
+                                  resourceName: loteStore.searchLote[index].nome,
+                                ),
+                              );
+                            },
+                          ),
+                        );
                       },
                       childCount: loteStore.searchLote.length,
                     ),
@@ -214,14 +212,43 @@ class _AppBarState extends State<AppBar> {
           flexibleSpace: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TopAppBarArea(
-                namePage1: "Setor: ",
-                namePage2: widget.setorN2.nome ?? '',
-                subtitle: "Lista de lotes cadastrados",
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                child: IconButton(
+                  hoverColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  padding: EdgeInsets.zero,
+                  alignment: Alignment.centerLeft,
+                  onPressed: () => Get.back(),
+                  icon: const Icon(Icons.arrow_back),
+                  color: Constants.kPrimaryColor,
+                ),
               ),
-              const SizedBox(
-                height: 30,
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: Text(
+                  widget.setorN2.nome ?? '',
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
+                child: Text(
+                  'Lista de lotes cadastrados',
+                  style: const TextStyle(
+                    color: Constants.kGreyMedium,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
               Container(
                 height: widget.store.dropDownValue == "Data" ? 75 : 50,
                 color: const Color(0xFFF8F8F6),
@@ -435,122 +462,3 @@ class _AppBarState extends State<AppBar> {
   }
 }
 
-class CardLote extends StatefulWidget {
-  final Lote lote;
-  const CardLote({super.key, required this.lote});
-
-  @override
-  State<CardLote> createState() => _CardLoteState();
-}
-
-class _CardLoteState extends State<CardLote> {
-  LoteStore store = GetIt.I<LoteStore>();
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      onTap: () {
-        store.selecionarLote(widget.lote);
-        Get.toNamed(
-          Routes.detalhesLotePage,
-          arguments: NavigationResourceArgs(
-            resourceId: widget.lote.id?.toString(),
-            resourceType: 'lote',
-            resourceName: widget.lote.nome,
-          ),
-        );
-      },
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.eco,
-                            size: 26,
-                            color: Color(0xFF26C165),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            "# ${widget.lote.id}",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                          const Spacer(),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 8.0,
-                        bottom: 2.0,
-                        top: 8.0,
-                      ),
-                      child: Text(
-                        widget.lote.nome ?? '',
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                          color: Constants.kGreyText,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            "Cultura: ",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Text(
-                            "${widget.lote.cultura?.nome}",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(right: 8.0),
-                child: Icon(
-                  Icons.chevron_right_rounded,
-                  color: Constants.kPrimaryColor,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

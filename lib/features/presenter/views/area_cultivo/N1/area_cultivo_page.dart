@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
@@ -11,7 +10,10 @@ import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_icon_tile.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_search_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 
 class AreaCultivoPage extends StatefulWidget {
@@ -55,19 +57,28 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
               slivers: [
                 AppPageHeaderSliver(
                   title: 'Áreas de Cultivo',
-                  subtitle: 'Lista de áreas cadastrados',
+                  subtitle: 'Lista de áreas cadastradas',
                   onBack: () => Get.back(),
                   expandedHeight: 180,
+                  bottom: PreferredSize(
+                    preferredSize: const Size(double.infinity, 60),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: AppSearchBar(
+                        hintText: 'Buscar área...',
+                        onChanged: store.setSearchAreaText,
+                      ),
+                    ),
+                  ),
                 ),
                 _AreaCultivoHeader(store: store),
                 Observer(builder: (_) {
                   if (store.isAreaLoading) {
                     return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 200, left: 60, right: 60),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                      child: AppStatePanel(
+                        stateKind: AppStateKind.loading,
+                        title: 'Carregando áreas',
+                        message: 'Aguarde enquanto buscamos as áreas cadastradas.',
                       ),
                     );
                   }
@@ -109,161 +120,40 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
   }
 }
 
-class CardArea extends StatefulWidget {
+class CardArea extends StatelessWidget {
   const CardArea({super.key, required this.area});
   final Area area;
 
   @override
-  State<CardArea> createState() => _CardAreaState();
-}
-
-class _CardAreaState extends State<CardArea> {
-  SetorStore setorStore = GetIt.I<SetorStore>();
-  AreaCultivoStore store = GetIt.I<AreaCultivoStore>();
-
-  @override
   Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      onTap: () {
-        setorStore.setAreaSelecionada(widget.area);
-        Get.toNamed(Routes.setorPage);
-      },
-      child: SizedBox(
-        height: 185,
-        child: Card(
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 5),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                opacity: 0.8,
-                alignment: Alignment.bottomRight,
-                image: AssetImage("assets/images/greenhouse_background.png"),
-              ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20.0),
-                              child: IconButton(
-                                icon: SvgPicture.asset(
-                                  "assets/icons/cultivo_icon.svg",
-                                  height: 25,
-                                ),
-                                onPressed: null,
-                              ),
-                            ),
-                            Text(
-                              "# ${widget.area.id}",
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: Constants.kGreyText,
-                              ),
-                            ),
-                            const Spacer(),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25.0, bottom: 10),
-                        child: Text(
-                          widget.area.nome!,
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                            color: Constants.kText2.withValues(alpha: .9),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 15.0,
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 8.0,
-                                top: 3.0,
-                                right: 8.0,
-                              ),
-                              child: Opacity(
-                                opacity: 0.8,
-                                child: SvgPicture.asset(
-                                  "assets/icons/location_icon.svg",
-                                  height: 18,
-                                  colorFilter: ColorFilter.mode(
-                                    Constants.kGreyText,
-                                    BlendMode.srcIn,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 190,
-                              child: Text(
-                                widget.area.localizacao?.endereco != null
-                                    ? '${widget.area.localizacao?.endereco}, ${widget.area.localizacao?.bairro}, ${widget.area.localizacao?.cidade} - ${widget.area.localizacao?.estado}'
-                                    : 'Endereço não informado',
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: Constants.kGreyText,
-                                ),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-                            const Spacer(),
-                          ],
-                        ),
-                      ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 55),
-                        child: Text(
-                          "${widget.area.setores?.length ?? 0} Setores",
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Constants.kGreyText,
-                          ),
-                        ),
-                      ),
-                      const Spacer(
-                        flex: 2,
-                      ),
-                    ],
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: Icon(
-                    Icons.chevron_right_rounded,
-                    color: Constants.kPrimaryColor,
-                  ),
-                ),
-              ],
-            ),
+    final setorStore = GetIt.I<SetorStore>();
+
+    return AppEntityCard(
+      leading: AppIconTile(
+        asset: 'assets/icons/cultivo_icon.svg',
+        color: Constants.kPrimaryColor,
+        size: 44,
+        iconSize: 24,
+      ),
+      title: area.nome ?? '',
+      subtitle: '# ${area.id}',
+      description: area.localizacao?.endereco != null
+          ? '${area.localizacao?.endereco}, ${area.localizacao?.bairro}, ${area.localizacao?.cidade} - ${area.localizacao?.estado}'
+          : 'Endereço não informado',
+      metadata: [
+        Text(
+          '${area.setores?.length ?? 0} Setores',
+          style: const TextStyle(
+            fontSize: 14,
+            color: Constants.kPrimaryColor,
+            fontWeight: FontWeight.w600,
           ),
         ),
-      ),
+      ],
+      onTap: () {
+        setorStore.setAreaSelecionada(area);
+        Get.toNamed(Routes.setorPage);
+      },
     );
   }
 }

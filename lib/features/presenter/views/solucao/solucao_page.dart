@@ -9,8 +9,9 @@ import 'package:osi_solucoes/core/utils/responsive_breakpoints.dart';
 import 'package:osi_solucoes/core/utils/spacing.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/cadastrar_solucao_page.dart';
-import 'package:osi_solucoes/features/presenter/views/solucao/components/solucao_page_header.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/solucao_receita_card.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_search_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 
 class SolucaoPage extends StatefulWidget {
@@ -63,7 +64,23 @@ class _SolucaoPage extends State<SolucaoPage> {
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                SolucaoPageHeader(store: solucaoStore),
+                AppPageHeaderSliver(
+                  title: 'Minhas Soluções Nutritivas',
+                  subtitle: 'Lista de receitas cadastradas',
+                  onBack: () => Get.back(),
+                  expandedHeight: 180,
+                  titleMaxLines: 2,
+                  bottom: PreferredSize(
+                    preferredSize: const Size(double.infinity, 60),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+                      child: AppSearchBar(
+                        hintText: 'Buscar solução...',
+                        onChanged: solucaoStore.setsearchSolucaoText,
+                      ),
+                    ),
+                  ),
+                ),
                 Observer(builder: (_) {
                   if (solucaoStore.isSolucaoListLoading) {
                     return const SliverToBoxAdapter(

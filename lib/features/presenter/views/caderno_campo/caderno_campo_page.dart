@@ -5,10 +5,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
-import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_search_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 import 'package:intl/intl.dart';
@@ -173,15 +173,54 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        return Observer(builder: (_) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                left: 16.0, right: 16, top: 10),
-                            child: CardLote(
-                              lote: store.getLotesFilter[index],
-                            ),
-                          );
-                        });
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16.0, right: 16.0, top: 10.0),
+                          child: AppEntityCard(
+                            leading: const Icon(Icons.eco,
+                                color: Color(0xFF26C165), size: 26),
+                            title: store.getLotesFilter[index].nome ?? '',
+                            subtitle:
+                                '# ${store.getLotesFilter[index].id}',
+                            description:
+                                'Cultura: ${store.getLotesFilter[index].cultura?.nome ?? ""}',
+                            metadata: [
+                              if (store.getLotesFilter[index]
+                                      .registro_data !=
+                                  null)
+                                Text(
+                                  'Registro: ${DateFormat("dd/MM/y", "pt_br").format(store.getLotesFilter[index].registro_data!)}',
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Constants.kGreyText2),
+                                ),
+                              if (store.getLotesFilter[index]
+                                      .colheita_data !=
+                                  null)
+                                Text(
+                                  'Colheita: ${DateFormat("dd/MM/y", "pt_br").format(store.getLotesFilter[index].colheita_data!)}',
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Constants.kGreyText2),
+                                ),
+                            ],
+                            onTap: () {
+                              store.setLoteSelecionado(
+                                  store.getLotesFilter[index]);
+                              Get.toNamed(
+                                Routes.detalhesCadernoCampoPage,
+                                arguments: NavigationResourceArgs(
+                                  resourceId: store
+                                      .getLotesFilter[index].id
+                                      ?.toString(),
+                                  resourceType: 'caderno_campo',
+                                  resourceName: store
+                                      .getLotesFilter[index].nome,
+                                ),
+                              );
+                            },
+                          ),
+                        );
                       },
                       childCount: store.getLotesFilter.length,
                     ),
@@ -223,178 +262,4 @@ class _CadernoCampoHeader extends StatelessWidget {
   }
 }
 
-class CardLote extends StatefulWidget {
-  final Lote lote;
-  const CardLote({super.key, required this.lote});
 
-  @override
-  State<CardLote> createState() => _CardLoteState();
-}
-
-class _CardLoteState extends State<CardLote> {
-  CadernoCampoStore store = GetIt.I<CadernoCampoStore>();
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      onTap: () {
-        store.setLoteSelecionado(widget.lote);
-        Get.toNamed(
-          Routes.detalhesCadernoCampoPage,
-          arguments: NavigationResourceArgs(
-            resourceId: widget.lote.id?.toString(),
-            resourceType: 'caderno_campo',
-            resourceName: widget.lote.nome,
-          ),
-        );
-      },
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.eco,
-                            size: 26,
-                            color: Color(0xFF26C165),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            "# ${widget.lote.id}",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                          const Spacer(),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 8.0,
-                        bottom: 2.0,
-                        top: 8.0,
-                      ),
-                      child: Text(
-                        widget.lote.nome ?? '',
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                          color: Constants.kGreyText,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            "Cultura: ",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Text(
-                            "${widget.lote.cultura?.nome}",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const Icon(
-                    Icons.calendar_month_rounded,
-                    color: Constants.kText2,
-                    size: 16,
-                  ),
-                  const Text(
-                    'Registro',
-                    style: TextStyle(
-                      color: Constants.kGreyText,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                    ),
-                  ),
-                  Text(
-                    widget.lote.registro_data != null
-                        ? DateFormat("dd/MM/y", 'pt_br')
-                                .format(
-                                  widget.lote.registro_data!,
-                                )
-                                .capitalize ??
-                            '--/--/--'
-                        : '--/--/--',
-                    style: const TextStyle(
-                      fontSize: 12,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  const Text(
-                    'Colheita',
-                    style: TextStyle(
-                      color: Constants.kGreyText,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                    ),
-                  ),
-                  Text(
-                    widget.lote.colheita_data != null
-                        ? DateFormat("dd/MM/y", 'pt_br')
-                                .format(
-                                  widget.lote.colheita_data!,
-                                )
-                                .capitalize ??
-                            '--/--/--'
-                        : '--/--/--',
-                    style: const TextStyle(
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-              const Padding(
-                padding: EdgeInsets.only(right: 8.0),
-                child: Icon(
-                  Icons.chevron_right_rounded,
-                  color: Constants.kPrimaryColor,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

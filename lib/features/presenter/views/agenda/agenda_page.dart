@@ -56,7 +56,7 @@ class AgendaPageState extends State<AgendaPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Constants.kBackgroundColor,
+          backgroundColor: Constants.kSecondBackgroundColor,
           floatingActionButton: FloatingActionButton(
             heroTag: 'fab_agenda',
             onPressed: () {
@@ -188,13 +188,19 @@ class AgendaPageState extends State<AgendaPage> {
 
                     if (store.filter == AgendaFilter.lote) {
                       if (store.filtrarPorLote.isEmpty) {
-                        return _emptyList();
+                        return _emptyList(
+                          'Nenhuma atividade encontrada',
+                          'Não há atividades para este lote.',
+                        );
                       }
                       return _showList();
                     }
 
                     if (store.atividadeList.isEmpty) {
-                      return _emptyList();
+                      return _emptyList(
+                        'Nenhuma atividade encontrada',
+                        'Não há atividades cadastradas em sua conta.',
+                      );
                     }
                     return _showList();
                   }),
@@ -208,27 +214,11 @@ class AgendaPageState extends State<AgendaPage> {
   }
 
   AppPageHeaderSliver sliverAppBar(BuildContext context) {
-    final infoAction = store.atividadeList.isNotEmpty
-        ? Padding(
-            padding: const EdgeInsets.only(top: 16.0, right: 24.0),
-            child: Tooltip(
-              message: "Atividades já realizadas\npossuem o ícone de check",
-              padding: const EdgeInsets.all(8),
-              triggerMode: TooltipTriggerMode.tap,
-              child: const Icon(
-                Icons.info_outline,
-                color: Constants.kPrimaryColor,
-                size: 24,
-              ),
-            ),
-          )
-        : null;
     return AppPageHeaderSliver(
       title: 'Agenda',
       subtitle: 'Acompanhamento de ações da produção',
       onBack: () => Get.back(),
       expandedHeight: 120,
-      actions: infoAction != null ? [infoAction] : [],
     );
   }
 
@@ -319,15 +309,12 @@ class AgendaPageState extends State<AgendaPage> {
             ? Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 100.0),
-                  child: Text(
-                    'Não há atividades\ncadastradas${store.selectedDay != null ? ' para esta data' : ''}',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Constants.kText2,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w800,
-                    ),
-                    textAlign: TextAlign.center,
+                  child: AppStatePanel(
+                    stateKind: AppStateKind.empty,
+                    title: 'Nenhuma atividade para esta data',
+                    message:
+                        'Não há atividades cadastradas para o dia selecionado.',
+                    isCompact: true,
                   ),
                 ),
               )
@@ -348,35 +335,21 @@ class AgendaPageState extends State<AgendaPage> {
     );
   }
 
-  SliverList _emptyList() {
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        [
-          Container(
-            decoration: const BoxDecoration(
-              color: Constants.kCardColor,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
-            ),
-            child: const Center(
-              child: Padding(
-                padding: EdgeInsets.only(top: 120.0, bottom: 120.0),
-                child: Text(
-                  'Não há atividades\ncadastradas em sua conta',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Color(0xff6F6464),
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w800,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
+  SliverToBoxAdapter _emptyList(String title, String message) {
+    return SliverToBoxAdapter(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Constants.kCardColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
           ),
-        ],
+        ),
+        child: AppStatePanel(
+          stateKind: AppStateKind.empty,
+          title: title,
+          message: message,
+        ),
       ),
     );
   }

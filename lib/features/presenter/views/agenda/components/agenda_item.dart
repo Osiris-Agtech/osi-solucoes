@@ -4,6 +4,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/agenda_store.dart';
 import 'package:osi_solucoes/features/presenter/views/agenda/components/detalhes_bottomSheet.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_panel_card.dart';
 import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
 
 import 'package:intl/intl.dart';
@@ -30,16 +31,12 @@ Padding agendaItem({
             store.setShowEditPage(false);
             getBottomSheet(DetalhesBottomSheet(agenda: agenda));
           },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
+      child: AppPanelCard(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24.0,
+          vertical: 16.0,
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24.0,
-            vertical: 16.0,
-          ),
-          child: Row(
+        child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
@@ -166,6 +163,5 @@ Padding agendaItem({
           ),
         ),
       ),
-    ),
   );
 }

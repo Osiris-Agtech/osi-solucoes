@@ -9,12 +9,12 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
-import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/components/topAppBarArea.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
 class SetorPage extends StatefulWidget {
@@ -61,47 +61,55 @@ class SetorPageState extends State<SetorPage> {
                 Observer(builder: (_) {
                   if (store.isSetorListLoading) {
                     return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                      child: AppStatePanel(
+                        stateKind: AppStateKind.loading,
+                        title: 'Carregando setores',
+                        message:
+                            'Aguarde enquanto buscamos os setores cadastrados.',
                       ),
                     );
                   }
                   if (store.setorList.isEmpty) {
                     return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(top: 200.0, left: 60, right: 60),
-                        child: Center(
-                          child: Text(
-                            "Não há setores cadastrados nesta área de cultivo",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xff6F6464),
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w800,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                      child: AppStatePanel(
+                        stateKind: AppStateKind.empty,
+                        title: 'Nenhum setor cadastrado',
+                        message:
+                            'Cadastre um setor nesta área de cultivo para começar.',
                       ),
                     );
                   }
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        return Observer(builder: (_) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                left: 16.0, right: 16, top: 10),
-                            child: CardSetor(
-                              setor: store.searchSetor[index],
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16.0, right: 16.0, top: 10.0),
+                          child: AppEntityCard(
+                            leading: Image.asset(
+                              "assets/icons/hydroponic1_icon.png",
+                              height: 26,
                             ),
-                          );
-                        });
+                            title: store.searchSetor[index].nome ?? '',
+                            subtitle: '# ${store.searchSetor[index].id}',
+                            metadata: [
+                              Text(
+                                'Lotes: ${store.searchSetor[index].lotes?.length ?? 0}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Constants.kPrimaryColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                            onTap: () {
+                              final loteStore = GetIt.I<LoteStore>();
+                              loteStore.setSetorSelecionado(
+                                  store.searchSetor[index]);
+                              Get.toNamed(Routes.lotePage);
+                            },
+                          ),
+                        );
                       },
                       childCount: store.searchSetor.length,
                     ),
@@ -190,14 +198,43 @@ class _AppBarState extends State<AppBar> {
           flexibleSpace: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TopAppBarArea(
-                namePage1: "Área: ",
-                namePage2: widget.areaN1.nome ?? '',
-                subtitle: "Lista de setores cadastrados",
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                child: IconButton(
+                  hoverColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  padding: EdgeInsets.zero,
+                  alignment: Alignment.centerLeft,
+                  onPressed: () => Get.back(),
+                  icon: const Icon(Icons.arrow_back),
+                  color: Constants.kPrimaryColor,
+                ),
               ),
-              const SizedBox(
-                height: 30,
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: Text(
+                  widget.areaN1.nome ?? '',
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
+                child: Text(
+                  'Lista de setores cadastrados',
+                  style: const TextStyle(
+                    color: Constants.kGreyMedium,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
               Container(
                 height: store.dropDownValue == "Data" ? 75 : 50,
                 color: const Color(0xFFF8F8F6),
@@ -403,109 +440,3 @@ class _AppBarState extends State<AppBar> {
   }
 }
 
-class CardSetor extends StatefulWidget {
-  final Setor setor;
-  const CardSetor({super.key, required this.setor});
-
-  @override
-  State<CardSetor> createState() => _CardSetorState();
-}
-
-class _CardSetorState extends State<CardSetor> {
-  LoteStore loteStore = GetIt.I<LoteStore>();
-  SetorStore setorStore = GetIt.I<SetorStore>();
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      onTap: () {
-        loteStore.setSetorSelecionado(widget.setor);
-        Get.toNamed(Routes.lotePage);
-      },
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 8.0,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: Image.asset(
-                            "assets/icons/hydroponic1_icon.png",
-                            height: 25,
-                          ),
-                          onPressed: null,
-                        ),
-                        Text(
-                          "# ${widget.setor.id}",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        widget.setor.nome ?? '',
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                          color: Constants.kGreyText,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            "Lotes: ",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Text(
-                            "${widget.setor.lotes?.length ?? 0}",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Constants.kPrimaryColor,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(right: 8.0),
-                child: Icon(
-                  Icons.chevron_right_rounded,
-                  color: Constants.kPrimaryColor,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

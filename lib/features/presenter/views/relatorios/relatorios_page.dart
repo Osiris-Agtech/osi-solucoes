@@ -6,6 +6,7 @@ import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_badge.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_icon_tile.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 
 class RelatoriosPage extends StatelessWidget {
   const RelatoriosPage({super.key});
@@ -16,8 +17,11 @@ class RelatoriosPage extends StatelessWidget {
       backgroundColor: Constants.kSecondBackgroundColor,
       body: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(
-            child: _RelatoriosAppBar(),
+          AppPageHeaderSliver(
+            title: 'Relatórios',
+            subtitle: 'Análises e métricas da produção',
+            onBack: () => Get.close(1),
+            expandedHeight: 120,
           ),
           // Análise de Ciclo
           SliverToBoxAdapter(
@@ -38,8 +42,7 @@ class RelatoriosPage extends StatelessWidget {
                         'Compare duração real vs. planejada dos ciclos e identifique culturas com desvios crônicos.',
                     icon: Icons.loop_outlined,
                     iconColor: Constants.kPrimaryColor,
-                    badge: 'Disponível',
-                    badgeColor: const Color(0xFF059669),
+                    badgeTone: AppBadgeTone.success,
                     onTap: () => Get.toNamed(
                       Routes.relatorioCircoCulturaPage,
                       arguments: {'mock': true},
@@ -55,8 +58,7 @@ class RelatoriosPage extends StatelessWidget {
                         'Taxas de conversão em cada etapa: semeadura, transplantio, colheita e embalagem por setor.',
                     icon: Icons.area_chart_outlined,
                     iconColor: const Color(0xFF0891B2),
-                    badge: 'Disponível',
-                    badgeColor: const Color(0xFF059669),
+                    badgeTone: AppBadgeTone.success,
                     onTap: () => Get.toNamed(
                       Routes.relatorioProdutividadeSetorPage,
                       arguments: {'mock': true},
@@ -85,8 +87,7 @@ class RelatoriosPage extends StatelessWidget {
                         'Atividades registradas, tarefas de agenda cumpridas no prazo e taxa de conclusão por membro.',
                     icon: Icons.people_outlined,
                     iconColor: const Color(0xFF7C3AED),
-                    badge: 'Disponível',
-                    badgeColor: const Color(0xFF059669),
+                    badgeTone: AppBadgeTone.success,
                     onTap: () => Get.toNamed(
                       Routes.relatorioDesempenhoEquipePage,
                       arguments: {'mock': true},
@@ -102,8 +103,7 @@ class RelatoriosPage extends StatelessWidget {
                         'Tarefas vencidas, a vencer nos próximos N dias e taxa de conclusão por lote ativo.',
                     icon: Icons.event_note_outlined,
                     iconColor: const Color(0xFFEA580C),
-                    badge: 'Disponível',
-                    badgeColor: const Color(0xFF059669),
+                    badgeTone: AppBadgeTone.success,
                     onTap: () => Get.toNamed(
                       Routes.relatorioAgendaTarefasPage,
                       arguments: {'mock': true},
@@ -115,66 +115,6 @@ class RelatoriosPage extends StatelessWidget {
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 40)),
         ],
-      ),
-    );
-  }
-}
-
-class _RelatoriosAppBar extends StatelessWidget {
-  const _RelatoriosAppBar();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16, top: 8, bottom: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              IconButton(
-                hoverColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                padding: EdgeInsets.zero,
-                alignment: Alignment.centerLeft,
-                onPressed: () => Get.close(1),
-                icon: const Icon(Icons.arrow_back),
-                color: Constants.kPrimaryColor,
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'Relatórios',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 2),
-              const Text(
-                'Análises e métricas da produção',
-                style: TextStyle(
-                  color: Color(0xff707070),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -204,8 +144,7 @@ class _RelatorioCard extends StatelessWidget {
   final String descricao;
   final IconData icon;
   final Color iconColor;
-  final String badge;
-  final Color badgeColor;
+  final AppBadgeTone badgeTone;
   final VoidCallback onTap;
 
   const _RelatorioCard({
@@ -213,8 +152,7 @@ class _RelatorioCard extends StatelessWidget {
     required this.descricao,
     required this.icon,
     required this.iconColor,
-    required this.badge,
-    required this.badgeColor,
+    required this.badgeTone,
     required this.onTap,
   });
 
@@ -226,8 +164,8 @@ class _RelatorioCard extends StatelessWidget {
       leading: AppIconTile(icon: icon, color: iconColor),
       badges: [
         AppBadge(
-          label: badge,
-          color: badgeColor,
+          label: 'Disponível',
+          tone: badgeTone,
         ),
       ],
       onTap: onTap,

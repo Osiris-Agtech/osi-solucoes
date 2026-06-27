@@ -159,32 +159,12 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
 
   Container filterWidget(BuildContext context) {
     return Container(
-      height: 50,
+      height: 60,
       color: const Color(0xFFF8F8F6),
-      padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width * 0.04,
-        vertical: 5, //MediaQuery.of(context).size.height * 0.007,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
       child: AppSearchBar(
-        hintText: 'Buscar...',
+        hintText: 'Buscar reservatório...',
         onChanged: store.setSearchReservatorioText,
-        trailing: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(6),
-            ),
-            backgroundColor: Constants.kPrimaryColor,
-          ),
-          child: const Text(
-            "nome",
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-          onPressed: () {},
-        ),
       ),
     );
   }
