@@ -8,6 +8,7 @@ import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_res
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_search_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_floating_action_button.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/reservatorios_store.dart';
@@ -25,8 +26,9 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
 
   @override
   void initState() {
-    store.setSearchReservatorioText('');
     super.initState();
+    store.setSearchReservatorioText('');
+    store.buscarReservatorios();
   }
 
   @override
@@ -69,19 +71,13 @@ class ReservatoriosPageState extends State<ReservatoriosPage> {
     );
   }
 
-  FloatingActionButton floatingButton() {
-    return FloatingActionButton(
-      heroTag: "NovoReservatório",
+  AppFloatingActionButton floatingButton() {
+    return AppFloatingActionButton.add(
+      heroTag: 'novo_reservatorio',
       onPressed: () {
         store.setIsEditing(false);
         Get.toNamed(Routes.cadastrarReservatoriosPage);
       },
-      backgroundColor: Constants.kPrimaryColor,
-      child: const Icon(
-        Icons.add,
-        size: 30,
-        color: Colors.white,
-      ),
     );
   }
 

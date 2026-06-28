@@ -61,7 +61,6 @@ import '../../features/presenter/viewmodels/cadastro_store.dart';
 import '../../features/presenter/viewmodels/caderno_campo_store.dart';
 import '../../features/presenter/viewmodels/home_store.dart';
 import '../../features/presenter/viewmodels/login_store.dart';
-import '../../features/presenter/viewmodels/modulos_store.dart';
 import '../../features/presenter/viewmodels/reservatorios_store.dart';
 import '../../features/presenter/viewmodels/resultadoajuste_store.dart';
 import '../../features/presenter/viewmodels/solucao_store.dart';
@@ -173,7 +172,6 @@ Future<void> initInject() async {
     homeDashboardRepository: sl<IHomeDashboardRepository>(),
   ));
   sl.registerLazySingleton<LoginStore>(() => LoginStore());
-  sl.registerLazySingleton<ModulosStore>(() => ModulosStore());
   sl.registerLazySingleton<ReservatoriosStore>(() => ReservatoriosStore());
   sl.registerLazySingleton<ResultadoajusteStore>(() => ResultadoajusteStore());
   sl.registerLazySingleton<SolucaoStore>(() => SolucaoStore());

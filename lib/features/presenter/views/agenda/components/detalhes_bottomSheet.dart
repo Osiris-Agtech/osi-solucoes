@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 
 import '../../../models/usuario/usuario_model.dart';
 import '../../../widgets/date_picker.dart';
+import '../../../widgets/common/app_dropdown.dart';
 
 class DetalhesBottomSheet extends StatefulWidget {
   const DetalhesBottomSheet({super.key, this.agenda});
@@ -612,14 +613,12 @@ class _DetalhesBottomSheetState extends State<DetalhesBottomSheet> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Observer(builder: (_) {
-                return DropdownButtonFormField<Usuario>(
-                  initialValue: store.usuarioAtividade,
+                return AppDropdown<Usuario>(
+                  value: store.usuarioAtividade,
                   hint: const Text(
                     'Selecionar Responsável',
                     style: TextStyle(fontStyle: FontStyle.italic),
                   ),
-                  isExpanded: true,
-                  iconEnabledColor: Constants.kPrimaryColor,
                   items: store.usuariosConta.map((Usuario usuario) {
                     return DropdownMenuItem<Usuario>(
                       value: usuario,

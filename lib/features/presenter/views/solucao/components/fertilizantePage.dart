@@ -9,6 +9,7 @@ import 'package:osi_solucoes/features/presenter/models/nutriente/nutriente_model
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 
 import '../../../../../../core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_dropdown.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 
@@ -379,16 +380,14 @@ Future<void> _showFertilizanteDialog(
                           children: [
                             Expanded(
                               flex: 5,
-                              child: DropdownButtonFormField<int>(
-                                initialValue: store.nutrientesCatalogo.any(
+                              child: AppDropdown<int>(
+                                value: store.nutrientesCatalogo.any(
                                   (nutriente) =>
                                       nutriente.id == item.nutrienteId,
                                 )
                                     ? item.nutrienteId
                                     : null,
-                                decoration: const InputDecoration(
-                                  labelText: 'Nutriente',
-                                ),
+                                labelText: 'Nutriente',
                                 items: store.nutrientesCatalogo
                                     .map(
                                       (Nutriente nutriente) =>

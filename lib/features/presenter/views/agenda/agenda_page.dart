@@ -9,10 +9,12 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/constants.dart';
+import '../../widgets/common/app_floating_action_button.dart';
 import '../../models/lote/lote_model.dart';
 import '../../models/usuario/usuario_model.dart';
 import '../../states/agenda_page_enum.dart';
 import '../../widgets/get_bottom_sheet.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_dropdown.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 import 'components/detalhes_bottomSheet.dart';
@@ -57,14 +59,13 @@ class AgendaPageState extends State<AgendaPage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Constants.kSecondBackgroundColor,
-          floatingActionButton: FloatingActionButton(
-            heroTag: 'fab_agenda',
+          floatingActionButton: AppFloatingActionButton.add(
+            heroTag: 'nova_atividade',
             onPressed: () {
               store.limparDadosDaAtividade();
               store.setShowEditPage(true);
               getBottomSheet(const DetalhesBottomSheet());
             },
-            child: const Icon(Icons.add),
           ),
           body: PrimaryScrollController(
             controller: _scrollController,
@@ -100,30 +101,24 @@ class AgendaPageState extends State<AgendaPage> {
                               ),
                               SizedBox(
                                 width: 150,
-                                child: Observer(builder: (_) {
-                                  return DropdownButtonFormField<AgendaFilter>(
-                                    initialValue: store.filter,
-                                    hint: const Text(
-                                      'Filtro',
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                    icon: const Icon(Icons.filter_list_rounded),
-                                    iconEnabledColor: Constants.kPrimaryColor,
-                                    items: AgendaFilter.values
-                                        .map((AgendaFilter filtro) {
-                                      return DropdownMenuItem<AgendaFilter>(
-                                        value: filtro,
-                                        child: Text(
-                                            (filtro == AgendaFilter.todos
-                                                    ? 'Exibir '
-                                                    : '') +
-                                                filtro.name),
-                                      );
-                                    }).toList(),
-                                    onChanged: store.setFiltro,
-                                  );
-                                }),
+                                  child: Observer(builder: (_) {
+                                    return AppDropdown<AgendaFilter>(
+                                      value: store.filter,
+                                      hintText: 'Filtro',
+                                      items: AgendaFilter.values
+                                          .map((AgendaFilter filtro) {
+                                        return DropdownMenuItem<AgendaFilter>(
+                                          value: filtro,
+                                          child: Text(
+                                              (filtro == AgendaFilter.todos
+                                                      ? 'Exibir '
+                                                      : '') +
+                                                  filtro.name),
+                                        );
+                                      }).toList(),
+                                      onChanged: store.setFiltro,
+                                    );
+                                  }),
                               ),
                             ],
                           ),
@@ -135,15 +130,9 @@ class AgendaPageState extends State<AgendaPage> {
                             if (store.filter == AgendaFilter.lote) {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 8.0),
-                                child: DropdownButtonFormField<Lote>(
-                                  initialValue: store.filtroLote,
-                                  hint: const Text(
-                                    'Selecionar Lote',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
-                                  ),
-                                  isExpanded: true,
-                                  iconEnabledColor: Constants.kPrimaryColor,
+                                child: AppDropdown<Lote>(
+                                  value: store.filtroLote,
+                                  hintText: 'Selecionar Lote',
                                   items: store.lotesConta.map((Lote lote) {
                                     return DropdownMenuItem<Lote>(
                                       value: lote,
@@ -157,14 +146,9 @@ class AgendaPageState extends State<AgendaPage> {
                             }
                             return Padding(
                               padding: const EdgeInsets.only(top: 8.0),
-                              child: DropdownButtonFormField<Usuario>(
-                                initialValue: store.filtroResponsavel,
-                                hint: const Text(
-                                  'Selecionar Responsável',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
-                                ),
-                                isExpanded: true,
-                                iconEnabledColor: Constants.kPrimaryColor,
+                              child: AppDropdown<Usuario>(
+                                value: store.filtroResponsavel,
+                                hintText: 'Selecionar Responsável',
                                 items:
                                     store.usuariosConta.map((Usuario usuario) {
                                   return DropdownMenuItem<Usuario>(

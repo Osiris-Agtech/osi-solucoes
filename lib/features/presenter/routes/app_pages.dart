@@ -37,7 +37,6 @@ import '../views/cadastro/cadastro_page.dart';
 import '../views/cadastro/confirmseguranca_page.dart';
 import '../views/caderno_campo/caderno_campo_page.dart';
 import '../views/home/home_page.dart';
-import '../views/modulos/modulos_page.dart';
 import '../views/login/login_page.dart';
 import '../views/login/multi_account_page.dart';
 import '../views/onboarding/splash_page.dart';
@@ -157,11 +156,6 @@ class AppPages {
     GetPage(
       name: Routes.homePage,
       page: () => const HomePage(),
-      transition: Transition.rightToLeft,
-    ),
-    GetPage(
-      name: Routes.modulosPage,
-      page: () => const ModulosPage(),
       transition: Transition.rightToLeft,
     ),
     GetPage(

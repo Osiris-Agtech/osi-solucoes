@@ -8,7 +8,6 @@ abstract class Routes {
   static const confirmsegurancaPage = "/confirmsegurancaPage";
   static const cadernoCampoPage = "/cadernoCampoPage";
   static const homePage = "/homePage";
-  static const modulosPage = "/modulosPage";
   static const loginPage = "/loginPage";
   static const multiAccountsPage = "/multiAccountsPage";
   static const splashPage = "/splashPage";

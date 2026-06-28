@@ -7,6 +7,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/cadastrar_resevatorio_page.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_dropdown.dart';
 
 Widget reservatorioPage(BuildContext context, SetorStore store) {
   return Container(
@@ -115,14 +116,12 @@ Widget reservatorioPage(BuildContext context, SetorStore store) {
         Padding(
           padding: const EdgeInsets.only(top: 45, left: 10, right: 10),
           child: Observer(builder: (_) {
-            return DropdownButtonFormField<Reservatorio>(
-              initialValue: store.novoSetorReservatorio.id != null
+            return AppDropdown<Reservatorio>(
+              value: store.novoSetorReservatorio.id != null
                   ? store.reservatorioList.firstWhere(
                       (element) => element.id == store.novoSetorReservatorio.id)
                   : null,
-              isExpanded: true,
               hint: const Text('Selecionar'),
-              iconEnabledColor: Constants.kPrimaryColor,
               items: store.reservatorioList.map((Reservatorio item) {
                 return DropdownMenuItem<Reservatorio>(
                   value: item,

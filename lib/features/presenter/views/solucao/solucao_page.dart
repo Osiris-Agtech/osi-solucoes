@@ -13,6 +13,7 @@ import 'package:osi_solucoes/features/presenter/views/solucao/components/solucao
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_search_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_floating_action_button.dart';
 
 class SolucaoPage extends StatefulWidget {
   const SolucaoPage({super.key});
@@ -43,19 +44,14 @@ class _SolucaoPage extends State<SolucaoPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          floatingActionButton: FloatingActionButton(
-            heroTag: 'fab_solucao',
+          floatingActionButton: AppFloatingActionButton.add(
+            heroTag: 'nova_solucao',
             onPressed: () {
               Get.to(
                 () => const CadastrarSolucaoPage(),
                 transition: Transition.rightToLeft,
               );
             },
-            backgroundColor: Constants.kPrimaryColor,
-            child: const Icon(
-              Icons.add,
-              size: 32,
-            ),
           ),
           backgroundColor: Constants.kSecondBackgroundColor,
           body: Form(

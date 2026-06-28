@@ -26,7 +26,6 @@ import '../../../../core/services/metrics_tracking_service.dart';
 import '../../viewmodels/auth_controller.dart';
 import '../../viewmodels/home_store.dart';
 import '../../viewmodels/lote_store.dart';
-import '../../viewmodels/modulos_store.dart';
 import '../../models/shortcut/shortcut_model.dart';
 import '../../models/setor/setor_model.dart';
 
@@ -40,7 +39,6 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   final AuthController authController = GetIt.I<AuthController>();
-  ModulosStore modulosStore = GetIt.I<ModulosStore>();
   HomeStore store = GetIt.I<HomeStore>();
   final Duration duration = const Duration(milliseconds: 300);
 
@@ -613,6 +611,7 @@ class HomePageState extends State<HomePage> {
       userName: usuario.nome,
       accountName: selectedAccount?.conta?.nome,
       roleName: selectedAccount?.cargo?.cargo,
+      accountCount: usuario.contas?.length ?? 0,
       hasAdaptiveDashboardRecommendation:
           store.hasAdaptiveDashboardRecommendation,
       adaptiveCardType: store.adaptiveCardType,
@@ -633,6 +632,8 @@ class HomePageState extends State<HomePage> {
       errorMessage: store.errorMessage,
       onRetry: store.carregarHome,
       onOpenTodayTasks: _openTodayTasks,
+      onSwitchAccount: _openAccountSwitcher,
+      onLogout: _confirmLogout,
       onRecommendedActionTap: _openRecommendedAction,
       onOpenProductionReport: () => Get.toNamed(Routes.relatoriosPage),
       onModuleTap: _openModuleShortcut,
@@ -643,14 +644,40 @@ class HomePageState extends State<HomePage> {
     Get.toNamed(Routes.agendaPage);
   }
 
-  void _openModuleShortcut(HomeModuleShortcutViewData module) {
-    final moduleId = module.moduleId;
-    if (moduleId != null) {
-      modulosStore.setPageViewController(moduleId);
-      Get.toNamed(Routes.modulosPage);
-      return;
-    }
+  void _openAccountSwitcher() {
+    Get.to(
+      () => MultiAccountsPage(
+        isLoggedIn: true,
+        user: store.authController.usuario,
+      ),
+    );
+  }
 
+  Future<void> _confirmLogout() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Sair da conta'),
+        content: const Text('Tem certeza que deseja sair da sua conta?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Sair'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+    await LocalStorage().deleteUser();
+    Get.offAll(() => const SplashPage());
+  }
+
+  void _openModuleShortcut(HomeModuleShortcutViewData module) {
     final route = module.route;
     if (route != null) {
       Get.toNamed(route);
@@ -1195,7 +1222,7 @@ class HomePageState extends State<HomePage> {
         "Áreas de cultivo e setores",
         "assets/icons/cultivo_icon.svg",
         const Color(0xFF059669),
-        moduleId: 0,
+        onTap: () => Get.toNamed(Routes.areaCultivoPage),
         compact: compact,
       ),
 
@@ -1207,7 +1234,7 @@ class HomePageState extends State<HomePage> {
         "Solução nutritiva e tanques",
         "assets/icons/reservatorio_icon.svg",
         const Color(0xFF2563EB),
-        moduleId: 1,
+        onTap: () => Get.toNamed(Routes.reservatoriosPage),
         compact: compact,
       ),
 
@@ -1219,7 +1246,7 @@ class HomePageState extends State<HomePage> {
         "Registro de atividades",
         "assets/icons/caderno_campo_icon.svg",
         const Color(0xFFDC2626),
-        moduleId: 2,
+        onTap: () => Get.toNamed(Routes.cadernoCampoPage),
         compact: compact,
       ),
 
@@ -1231,7 +1258,7 @@ class HomePageState extends State<HomePage> {
         "Formulação de nutrientes",
         "assets/icons/solucoes_nutritivas_icon.svg",
         const Color(0xFFEA580C),
-        moduleId: 3,
+        onTap: () => Get.toNamed(Routes.solucaoPage),
         compact: compact,
       ),
 
@@ -1271,7 +1298,7 @@ class HomePageState extends State<HomePage> {
         "Análises e métricas",
         "assets/icons/relatorio_icon.svg",
         const Color(0xFF0891B2),
-        moduleId: 4,
+        onTap: () => Get.toNamed(Routes.relatoriosPage),
         compact: compact,
       ),
 
@@ -1283,7 +1310,7 @@ class HomePageState extends State<HomePage> {
         "Parâmetros de cultivo",
         "assets/icons/ajustes_icon.svg",
         const Color(0xFF7C3AED),
-        moduleId: 5,
+        onTap: () => Get.toNamed(Routes.ajustesPage),
         compact: compact,
       ),
 
@@ -1326,7 +1353,6 @@ class HomePageState extends State<HomePage> {
     String subtitle,
     String icon,
     Color color, {
-    int? moduleId,
     VoidCallback? onTap,
     bool compact = false,
   }) {
@@ -1338,13 +1364,7 @@ class HomePageState extends State<HomePage> {
     final spacing = compact ? 4.0 : 6.0;
 
     return InkWell(
-      onTap: onTap ??
-          () {
-            if (moduleId != null) {
-              modulosStore.setPageViewController(moduleId);
-              Get.toNamed(Routes.modulosPage);
-            }
-          },
+      onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
         decoration: BoxDecoration(
@@ -1425,7 +1445,7 @@ class HomePageState extends State<HomePage> {
 
   Widget gridItems(
       BuildContext context, Size size, String title, String icon, bool isLeft,
-      {String? path, required int id}) {
+      {String? path, required String route}) {
     return Padding(
       padding: isLeft
           ? EdgeInsets.only(left: size.width * 0.07)
@@ -1443,13 +1463,7 @@ class HomePageState extends State<HomePage> {
         ),
         child: InkWell(
           onTap: () async {
-            modulosStore.setPageViewController(id);
-            // modulosPage é apenas container de navegação, não deve ser rastreado
-            Get.toNamed(
-              Routes.modulosPage,
-              // () => const ModulosPage(),
-              // transition: Transition.rightToLeft,
-            );
+            Get.toNamed(route);
           },
           child: Card(
             shape: RoundedRectangleBorder(
@@ -1512,13 +1526,11 @@ class HomePageState extends State<HomePage> {
     String icon,
     Color color, {
     String? path,
-    required int id,
+    required String route,
   }) {
     return InkWell(
       onTap: () async {
-        modulosStore.setPageViewController(id);
-        // modulosPage é apenas container de navegação, não deve ser rastreado
-        Get.toNamed(Routes.modulosPage);
+        Get.toNamed(route);
       },
       borderRadius: BorderRadius.circular(20),
       child: Container(
@@ -3164,6 +3176,8 @@ class _SparklinePainter extends CustomPainter {
 class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
   const MyHeaderDelegate();
 
+  static const double _headerExtent = 72;
+
   @override
   Widget build(
     BuildContext context,
@@ -3171,108 +3185,28 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     HomeStore store = GetIt.I<HomeStore>();
-    final progress = shrinkOffset / maxExtent;
-    final opacity = (1 - progress).clamp(0.0, 1.0);
-
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Constants.kPrimaryColor.withValues(alpha: 0.08),
-            Constants.kBackgroundColor,
-          ],
-        ),
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(0, 2),
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 12,
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: Constants.kPrimaryColor.withValues(alpha: 0.1),
-              width: 1,
+      color: Constants.kSecondBackgroundColor,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: IconButton(
+            onPressed: () => store.setIsCollaped(),
+            tooltip: 'Abrir menu',
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints.tightFor(width: 40, height: 40),
+            style: IconButton.styleFrom(
+              backgroundColor: Constants.kBackgroundColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-          child: Row(
-            children: [
-              // Botão menu
-              GestureDetector(
-                onTap: () => store.setIsCollaped(),
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Constants.kPrimaryColor.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(
-                    Icons.menu_rounded,
-                    color: Constants.kPrimaryColor,
-                    size: 22,
-                  ),
-                ),
-              ),
-
-              const SizedBox(width: 12),
-
-              // Nome e cargo
-              Expanded(
-                child: Opacity(
-                  opacity: opacity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Observer(
-                        builder: (_) {
-                          final nome = store.authController.usuario.nome ?? '';
-                          return Text(
-                            nome.isNotEmpty ? 'Olá, $nome' : 'Olá',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.black87,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 2),
-                      Observer(
-                        builder: (_) {
-                          final cargo = store.authController.usuario
-                                  .selected_conta?.cargo?.cargo ??
-                              '';
-                          if (cargo.isEmpty) return const SizedBox.shrink();
-                          return Text(
-                            cargo,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                              fontWeight: FontWeight.w500,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+            icon: const Icon(
+              Icons.menu_rounded,
+              color: Colors.black87,
+              size: 22,
+            ),
           ),
         ),
       ),
@@ -3280,10 +3214,10 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 80;
+  double get maxExtent => _headerExtent;
 
   @override
-  double get minExtent => 72;
+  double get minExtent => _headerExtent;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>

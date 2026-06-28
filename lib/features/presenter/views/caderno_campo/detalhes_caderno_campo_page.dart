@@ -15,6 +15,7 @@ import 'package:osi_solucoes/features/presenter/widgets/common/app_search_bar.da
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 
 import '../../../../core/constants/constants.dart';
+import '../../widgets/common/app_floating_action_button.dart';
 import '../../routes/routes.dart';
 import '../../viewmodels/caderno_campo_store.dart';
 
@@ -55,16 +56,12 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Constants.kSecondBackgroundColor,
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 18.0),
-            child: FloatingActionButton(
-              heroTag: 'fab_detalhes_caderno_campo',
-              onPressed: () {
-                Get.toNamed(Routes.cadastroCadernoCampoPage);
-              },
-              backgroundColor: Constants.kPrimaryColor,
-              child: const Icon(Icons.add),
-            ),
+          floatingActionButton: AppFloatingActionButton.add(
+            heroTag: 'nova_atividade_lote',
+            onPressed: () {
+              Get.toNamed(Routes.cadastroCadernoCampoPage);
+            },
+            bottom: 18,
           ),
           body: CustomScrollView(
             controller: scrollController,

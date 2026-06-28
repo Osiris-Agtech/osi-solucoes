@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/modulos_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 
@@ -19,7 +18,6 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
   ProtocoloStore store = GetIt.I<ProtocoloStore>();
   final ScrollController _scrollController = ScrollController();
   CarouselController carouselController = CarouselController();
-  ModulosStore modulosStore = GetIt.I<ModulosStore>();
 
   @override
   Widget build(BuildContext context) {

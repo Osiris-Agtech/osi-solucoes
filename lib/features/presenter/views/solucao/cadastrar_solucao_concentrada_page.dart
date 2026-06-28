@@ -205,15 +205,16 @@ class _CadastrarSolucaoConcentradaPageState
 
   Future<void> _fatorTextField(BuildContext context) {
     return showModalBottomSheet<void>(
-      backgroundColor: Constants.kBackgroundColor,
+      backgroundColor: Constants.kSecondBackgroundColor,
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
         ),
       ),
       isScrollControlled: true,
+      barrierColor: Colors.black.withValues(alpha: 0.3),
       builder: (BuildContext context) {
         return Container(
           height: MediaQuery.of(context).size.height * 0.9,
@@ -362,15 +363,16 @@ class _CadastrarSolucaoConcentradaPageState
 
   Future<void> _volumeTextField(BuildContext context) {
     return showModalBottomSheet<void>(
-      backgroundColor: Constants.kBackgroundColor,
+      backgroundColor: Constants.kSecondBackgroundColor,
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
         ),
       ),
       isScrollControlled: true,
+      barrierColor: Colors.black.withValues(alpha: 0.3),
       builder: (BuildContext context) {
         return Container(
           height: MediaQuery.of(context).size.height * 0.9,
@@ -723,15 +725,16 @@ class _CadastrarSolucaoConcentradaPageState
     return showModalBottomSheet<void>(
       constraints:
           BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.6),
-      backgroundColor: Constants.kBackgroundColor,
+      backgroundColor: Constants.kSecondBackgroundColor,
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
         ),
       ),
       isScrollControlled: true,
+      barrierColor: Colors.black.withValues(alpha: 0.3),
       builder: (BuildContext context) {
         return Container(
           padding: const EdgeInsets.only(top: 15, left: 15, right: 15),

@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_dropdown.dart';
 
 Container autorPage(BuildContext context, CadernoCampoStore store) {
   return Container(
@@ -51,14 +52,12 @@ Container autorPage(BuildContext context, CadernoCampoStore store) {
         Expanded(
           //MOCK PARA DROPDOWN
           child: Observer(builder: (_) {
-            return DropdownButtonFormField<Usuario>(
-              initialValue: store.selectedUsuario,
+            return AppDropdown<Usuario>(
+              value: store.selectedUsuario,
               hint: const Text(
                 'Selecionar autor',
                 style: TextStyle(fontStyle: FontStyle.italic),
               ),
-              isExpanded: true,
-              iconEnabledColor: Constants.kPrimaryColor,
               items: store.usuariosConta.map((Usuario usuario) {
                 return DropdownMenuItem<Usuario>(
                   value: usuario,

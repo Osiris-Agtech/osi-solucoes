@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_floating_action_button.dart';
 
 class NewFloatingActionButton extends StatefulWidget {
   final int nivel;
@@ -43,18 +43,10 @@ class _NewFloatingActionButtonState extends State<NewFloatingActionButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 18.0),
-      child: FloatingActionButton(
-        heroTag: 'fab_nivel_${widget.nivel}',
-        onPressed: _navigateToCadastro,
-        backgroundColor: Constants.kPrimaryColor,
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 35,
-        ),
-      ),
+    return AppFloatingActionButton.add(
+      heroTag: 'fab_nivel_${widget.nivel}',
+      onPressed: _navigateToCadastro,
+      bottom: 18,
     );
   }
 }

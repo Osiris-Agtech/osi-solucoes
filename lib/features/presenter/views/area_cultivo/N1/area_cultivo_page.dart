@@ -171,22 +171,29 @@ class _AreaCultivoHeader extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: DropdownButton<String>(
-                value: store.dropDownValue,
-                isExpanded: true,
-                underline: const SizedBox(),
-                onChanged: (String? newValue) async {
-                  if (newValue == store.dropDownValue) {
-                    store.changeOrder();
-                  } else {
-                    store.setSearchAreaText('');
-                  }
-                  store.setDropDown(newValue!);
-                  await store.buscarArea();
-                },
-                items: ['Nome', 'Data'].map((v) {
-                  return DropdownMenuItem(value: v, child: Text(v));
-                }).toList(),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: store.dropDownValue,
+                  isExpanded: true,
+                  icon: const Icon(Icons.expand_more, color: Constants.kPrimaryColor),
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Constants.kText2,
+                  ),
+                  onChanged: (String? newValue) async {
+                    if (newValue == store.dropDownValue) {
+                      store.changeOrder();
+                    } else {
+                      store.setSearchAreaText('');
+                    }
+                    store.setDropDown(newValue!);
+                    await store.buscarArea();
+                  },
+                  items: ['Nome', 'Data'].map((v) {
+                    return DropdownMenuItem(value: v, child: Text(v));
+                  }).toList(),
+                ),
               ),
             ),
             IconButton(

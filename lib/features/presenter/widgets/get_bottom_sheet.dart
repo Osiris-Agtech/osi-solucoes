@@ -6,12 +6,14 @@ void getBottomSheet(Widget child) {
   Get.bottomSheet(
     child,
     isScrollControlled: true,
-    backgroundColor: Constants.kBackgroundColor,
+    backgroundColor: Constants.kSecondBackgroundColor,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(32),
-        topRight: Radius.circular(32),
+        topLeft: Radius.circular(24),
+        topRight: Radius.circular(24),
       ),
     ),
+    barrierColor: Colors.black.withValues(alpha: 0.3),
+    settings: const RouteSettings(name: 'bottomSheet'),
   );
 }

@@ -11,6 +11,7 @@ import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.d
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_search_bar.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_floating_action_button.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/gerenciar_equipe_store.dart';
@@ -51,13 +52,11 @@ class _GerenciarEquipePage extends State<GerenciarEquipePage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Constants.kCardColor,
-          floatingActionButton: FloatingActionButton(
-            heroTag: 'fab_gerenciar_equipe',
+          floatingActionButton: AppFloatingActionButton.add(
+            heroTag: 'novo_usuario',
             onPressed: () {
               Get.toNamed(Routes.cadastrarUsuarioPage);
             },
-            backgroundColor: Constants.kPrimaryColor,
-            child: const Icon(Icons.add, size: 32),
           ),
           body: Form(
             key: formKey,

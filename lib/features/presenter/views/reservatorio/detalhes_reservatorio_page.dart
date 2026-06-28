@@ -9,9 +9,9 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/core/services/navigation_resource_args.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/modulos_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_section_header.dart';
 
 class DetalhesReservatorio extends StatefulWidget {
   const DetalhesReservatorio({super.key});
@@ -24,7 +24,6 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
   ReservatoriosStore store = GetIt.I<ReservatoriosStore>();
   final ScrollController _scrollController = ScrollController();
   CarouselSliderController carouselController = CarouselSliderController();
-  ModulosStore modulosStore = GetIt.I<ModulosStore>();
 
   @override
   void initState() {
@@ -121,10 +120,7 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                               splashColor: Colors.transparent,
                               hoverColor: Colors.transparent,
                               onTap: () async {
-                                modulosStore.setPageViewController(4);
-                                Get.toNamed(
-                                  Routes.modulosPage,
-                                );
+                                Get.toNamed(Routes.ajustesPage);
                               },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -233,17 +229,13 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                                     shrinkWrap: true,
                                     physics: const BouncingScrollPhysics(),
                                     children: [
-                                      const Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                            16.0, 16.0, 16.0, 16.0),
-                                        child: Text(
-                                          'Solução Nutritiva',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: Constants
-                                                .kContentColorLightTheme,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8, top: 8),
+                                        child: AppSectionHeader(
+                                          title: 'Solução Nutritiva',
+                                          icon: Icons.science_outlined,
+                                          padding: EdgeInsets.zero,
                                         ),
                                       ),
                                       Padding(
@@ -327,17 +319,13 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                                     shrinkWrap: true,
                                     physics: const BouncingScrollPhysics(),
                                     children: [
-                                      const Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                            16.0, 16.0, 16.0, 16.0),
-                                        child: Text(
-                                          'Solução Concentrada',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: Constants
-                                                .kContentColorLightTheme,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8, top: 8),
+                                        child: AppSectionHeader(
+                                          title: 'Solução Concentrada',
+                                          icon: Icons.science,
+                                          padding: EdgeInsets.zero,
                                         ),
                                       ),
                                       Padding(
@@ -402,16 +390,9 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          'Cultivos Vinculados',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Constants.kContentColorLightTheme,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      AppSectionHeader(
+                        title: 'Cultivos Vinculados',
+                        icon: Icons.eco_outlined,
                       ),
                       const SizedBox(
                         height: 10,

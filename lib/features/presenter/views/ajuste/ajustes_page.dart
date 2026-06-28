@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
-import 'package:osi_solucoes/core/utils/spacing.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 
 import '../../viewmodels/ajustes_store.dart';
-import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_dropdown.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_floating_action_button.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_panel_card.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_section_header.dart';
 
 class AjustesPage extends StatefulWidget {
   final String title;
@@ -48,567 +50,62 @@ class AjustesPageState extends State<AjustesPage> {
         },
         child: SafeArea(
           child: Scaffold(
-            // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
             backgroundColor: Constants.kSecondBackgroundColor,
-            floatingActionButton: Padding(
-              padding: const EdgeInsets.only(bottom: 18.0),
-              child: Observer(builder: (_) {
-                return FloatingActionButton.extended(
-                  heroTag: 'CalcularAJuste',
-                  onPressed: store.selectedReservatorio.nome != null &&
-                          store.selectedReservatorio.nome!.isNotEmpty
-                      ? () async {
-                          if (store.validarCampos()) {
-                            store.calculoAjusteReposicao();
-                            store.montandoDescricao();
-                            Get.toNamed(Routes.resultadoajustePage);
-                          }
+            floatingActionButton: Observer(builder: (_) {
+              return AppFloatingActionButton(
+                heroTag: 'calcular_ajuste',
+                label: 'Calcular',
+                icon: Icons.calculate_outlined,
+                onPressed: store.selectedReservatorio.nome != null &&
+                        store.selectedReservatorio.nome!.isNotEmpty
+                    ? () async {
+                        if (store.validarCampos()) {
+                          store.calculoAjusteReposicao();
+                          store.montandoDescricao();
+                          Get.toNamed(Routes.resultadoajustePage);
                         }
-                      : () => toastError(
-                          message: 'Selecione um reservatório para o ajuste'),
-                  //ScaffoldMessenger.of(context).showSnackBar(snackBar),
-                  backgroundColor: Constants.kPrimaryColor,
-                  label: const Text(
-                    'Calcular',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                  ),
-                );
-              }),
-            ),
+                      }
+                    : () => toastError(
+                        message: 'Selecione um reservatório para o ajuste'),
+              );
+            }),
             body: Form(
               key: formKey,
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: [
-                  AppPageHeaderSliver(
-                    title: 'Ajustes',
-                    subtitle: 'Selecione e ajuste seu reservatório',
-                    onBack: () {
-                      Get.offNamedUntil(Routes.homePage, (route) => false);
-                    },
-                    expandedHeight: 180,
-                    bottom: PreferredSize(
-                      preferredSize: const Size.fromHeight(56),
-                      child: Container(
-                        height: 50,
-                        color: const Color(0xFFF8F8F6),
-                        padding: Spacing.horizontal(context),
-                        child: Observer(
-                          builder: (_) {
-                            final reservatorios = store.reservatorioList;
-                            final selectedId = store.selectedReservatorio.id;
-                            final hasSelected = selectedId != null &&
-                                reservatorios.any((r) => r.id == selectedId);
-
-                            return DropdownButtonFormField<int>(
-                              key: ValueKey<String>(
-                                '${hasSelected ? selectedId : 'none'}-${reservatorios.map((r) => r.id).join(',')}',
-                              ),
-                              initialValue: hasSelected ? selectedId : null,
-                              hint: const Text(
-                                'Selecione o Reservatório',
-                                style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  color: Constants.kGreyText2,
-                                ),
-                              ),
-                              isExpanded: true,
-                              iconEnabledColor: Constants.kPrimaryColor,
-                              borderRadius: BorderRadius.circular(5),
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                contentPadding:
-                                    EdgeInsets.symmetric(vertical: 14),
-                              ),
-                              selectedItemBuilder: (context) {
-                                return reservatorios
-                                    .map(
-                                      (r) => Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          r.nome ?? '',
-                                          style: const TextStyle(
-                                            color: Constants.kPrimaryColor,
-                                            fontStyle: FontStyle.italic,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                    .toList();
-                              },
-                              items: reservatorios
-                                  .map(
-                                    (r) => DropdownMenuItem<int>(
-                                      value: r.id,
-                                      child: Text(
-                                        r.nome ?? '-',
-                                        style: const TextStyle(
-                                          color: Constants.kGreyText,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (value) {
-                                if (value == null) {
-                                  return;
-                                }
-
-                                final selected = reservatorios.firstWhere(
-                                  (reservatorio) => reservatorio.id == value,
-                                );
-                                store.selectReservatorio(selected);
-                              },
-                            );
-                          },
-                        ),
+                  _header(),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const AppSectionHeader(
+                            icon: Icons.checklist_rounded,
+                            title: 'Obrigatório',
+                            subtitle: 'Campos necessários para o cálculo',
+                          ),
+                          const SizedBox(height: 12),
+                          _adjustmentFieldCard(),
+                          const SizedBox(height: 24),
+                          const AppSectionHeader(
+                            icon: Icons.tune_rounded,
+                            title: 'Opcional',
+                            subtitle: 'Registre dados complementares',
+                          ),
+                          const SizedBox(height: 12),
+                          _optionalFieldCard(
+                            label: 'pH',
+                            hint: '8,4',
+                            controller: store.pH,
+                          ),
+                          const SizedBox(height: 12),
+                          _temperatureFieldCard(),
+                          const SizedBox(height: 100),
+                        ],
                       ),
                     ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: Spacing.md,
-                          right: Spacing.lg,
-                          left: Spacing.lg,
-                          bottom: 0,
-                        ),
-                        child: ListView(
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: Spacing.xs),
-                              child: const Text(
-                                'Obrigatório',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontStyle: FontStyle.italic,
-                                    color: Color(0xB2333333),
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: Spacing.sm),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: Spacing.lg,
-                                      vertical: Spacing.lg),
-                                  child: Column(children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: const [
-                                                Text(
-                                                  "C. Elétrico ",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontStyle: FontStyle.italic,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "Atual",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontStyle: FontStyle.italic,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 30,
-                                              width: 100,
-                                              child: TextFormField(
-                                                controller:
-                                                    store.cEletricoAtual,
-                                                keyboardType:
-                                                    TextInputType.number,
-                                                inputFormatters: [
-                                                  FilteringTextInputFormatter
-                                                      .digitsOnly,
-                                                  CentavosInputFormatter(),
-                                                ],
-                                                decoration:
-                                                    const InputDecoration(
-                                                  contentPadding:
-                                                      EdgeInsets.only(
-                                                    bottom: 10,
-                                                  ),
-                                                  hintText: "µS/cm",
-                                                  hintStyle: TextStyle(
-                                                    fontWeight: FontWeight.w100,
-                                                    color: Colors.black38,
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        const Center(
-                                          child: Padding(
-                                            padding: EdgeInsets.all(10.0),
-                                            child: Icon(
-                                              Icons.arrow_forward_ios,
-                                              size: 20,
-                                              color: Constants.kPrimaryColor,
-                                            ),
-                                          ),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: const [
-                                                Text(
-                                                  "C. Elétrico ",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontStyle: FontStyle.italic,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "Desejado",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontStyle: FontStyle.italic,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 30,
-                                              width: 90,
-                                              child: TextFormField(
-                                                controller:
-                                                    store.cEletricoDesejado,
-                                                keyboardType:
-                                                    TextInputType.number,
-                                                inputFormatters: [
-                                                  FilteringTextInputFormatter
-                                                      .digitsOnly,
-                                                  CentavosInputFormatter(),
-                                                ],
-                                                decoration:
-                                                    const InputDecoration(
-                                                  contentPadding:
-                                                      EdgeInsets.only(
-                                                    bottom: 10,
-                                                  ),
-                                                  hintText: "µS/cm",
-                                                  hintStyle: TextStyle(
-                                                    fontWeight: FontWeight.w100,
-                                                    color: Colors.black38,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(top: Spacing.lg),
-                                      child: const MySeparator(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(top: Spacing.md),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: const [
-                                                  Text(
-                                                    "Volume ",
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                    ),
-                                                  ),
-                                                  Text("Atual",
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontStyle:
-                                                              FontStyle.italic,
-                                                          fontWeight:
-                                                              FontWeight.bold))
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 30,
-                                                width: 100,
-                                                child: TextFormField(
-                                                  controller: store.volumeAtual,
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  inputFormatters: [
-                                                    FilteringTextInputFormatter
-                                                        .digitsOnly,
-                                                    CentavosInputFormatter(),
-                                                  ],
-                                                  decoration:
-                                                      const InputDecoration(
-                                                          contentPadding:
-                                                              EdgeInsets.only(
-                                                                  bottom: 10),
-                                                          hintText: "Litros",
-                                                          hintStyle: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w100,
-                                                            color:
-                                                                Colors.black38,
-                                                          )),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          const Center(
-                                              child: Padding(
-                                            padding: EdgeInsets.all(10.0),
-                                            child: Icon(
-                                              Icons.arrow_forward_ios,
-                                              size: 20,
-                                              color: Constants.kPrimaryColor,
-                                            ),
-                                          )),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: const [
-                                                  Text(
-                                                    "Volume ",
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                    ),
-                                                  ),
-                                                  Text("Desejado",
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontStyle:
-                                                              FontStyle.italic,
-                                                          fontWeight:
-                                                              FontWeight.bold))
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 30,
-                                                width: 90,
-                                                child: TextFormField(
-                                                  controller:
-                                                      store.volumeDesejado,
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  inputFormatters: [
-                                                    FilteringTextInputFormatter
-                                                        .digitsOnly,
-                                                    CentavosInputFormatter(),
-                                                  ],
-                                                  decoration:
-                                                      const InputDecoration(
-                                                          contentPadding:
-                                                              EdgeInsets.only(
-                                                                  bottom: 10),
-                                                          hintText: "Litros",
-                                                          hintStyle: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w100,
-                                                            color:
-                                                                Colors.black38,
-                                                          )),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ]),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: Spacing.xl, left: Spacing.xs),
-                              child: const Text(
-                                'Opcional',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontStyle: FontStyle.italic,
-                                    color: Color(0xB2333333),
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: Spacing.md),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: Spacing.md,
-                                      vertical: Spacing.sm),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: const [
-                                          Text("Registrar ",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontStyle: FontStyle.italic,
-                                              )),
-                                          Text("pH",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontStyle: FontStyle.italic,
-                                                  fontWeight: FontWeight.bold)),
-                                        ],
-                                      ),
-                                      Container(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 5),
-                                        height: 30,
-                                        width: 88,
-                                        child: TextFormField(
-                                          controller: store.pH,
-                                          keyboardType: TextInputType.number,
-                                          inputFormatters: [
-                                            FilteringTextInputFormatter
-                                                .digitsOnly,
-                                            CentavosInputFormatter(),
-                                          ],
-                                          textAlign: TextAlign.center,
-                                          decoration: const InputDecoration(
-                                              alignLabelWithHint: true,
-                                              contentPadding:
-                                                  EdgeInsets.only(bottom: 10),
-                                              hintText: "8,4",
-                                              hintStyle: TextStyle(
-                                                fontWeight: FontWeight.w100,
-                                                fontStyle: FontStyle.italic,
-                                                color: Colors.black38,
-                                              )),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(top: Spacing.sm, bottom: 75),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: Spacing.md,
-                                      vertical: Spacing.sm),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: const [
-                                          Text("Registrar ",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontStyle: FontStyle.italic,
-                                              )),
-                                          Text("Temperatura",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontStyle: FontStyle.italic,
-                                                  fontWeight: FontWeight.bold)),
-                                        ],
-                                      ),
-                                      Container(
-                                        margin: const EdgeInsets.only(top: 5),
-                                        height: 30,
-                                        width: 88,
-                                        child: Observer(builder: (_) {
-                                          return DropdownButton<int>(
-                                            isExpanded: true,
-                                            iconEnabledColor:
-                                                Constants.kPrimaryColor,
-                                            value: store.selectedItem,
-                                            items: store.quantityList
-                                                .map((int e) =>
-                                                    DropdownMenuItem<int>(
-                                                      alignment:
-                                                          AlignmentDirectional
-                                                              .center,
-                                                      value: e,
-                                                      child: Text(
-                                                        "$e ºC",
-                                                        style: const TextStyle(
-                                                          fontStyle:
-                                                              FontStyle.italic,
-                                                        ),
-                                                      ),
-                                                    ))
-                                                .toList(),
-                                            onChanged: (int? newValue) {
-                                              store.newValueItem(newValue!);
-                                            },
-                                          );
-                                        }),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]),
                   ),
                 ],
               ),
@@ -618,37 +115,401 @@ class AjustesPageState extends State<AjustesPage> {
       ),
     );
   }
-}
 
-class MySeparator extends StatelessWidget {
-  final double height;
-  final Color color;
-
-  // ignore: use_key_in_widget_constructors
-  const MySeparator({this.height = 1, this.color = Colors.black});
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final boxWidth = constraints.constrainWidth();
-        const dashWidth = 3.0;
-        final dashHeight = height;
-        final dashCount = (boxWidth / (2 * dashWidth)).floor();
-        return Flex(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          direction: Axis.horizontal,
-          children: List.generate(dashCount, (_) {
-            return SizedBox(
-              width: dashWidth,
-              height: dashHeight,
-              child: DecoratedBox(
-                decoration: BoxDecoration(color: color),
+  SliverToBoxAdapter _header() {
+    return SliverToBoxAdapter(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 8,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    hoverColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    padding: EdgeInsets.zero,
+                    alignment: Alignment.centerLeft,
+                    onPressed: () {
+                      Get.offNamedUntil(Routes.homePage, (route) => false);
+                    },
+                    icon: const Icon(Icons.arrow_back),
+                    color: Constants.kPrimaryColor,
+                  ),
+                  const Spacer(),
+                ],
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  'Ajustes',
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
+                child: Text(
+                  'Selecione e ajuste seu reservatório',
+                  style: const TextStyle(
+                    color: Constants.kGreyMedium,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                child: Observer(
+                  builder: (_) {
+                    final reservatorios = store.reservatorioList;
+                    final selectedId = store.selectedReservatorio.id;
+                    final hasSelected = selectedId != null &&
+                        reservatorios.any((r) => r.id == selectedId);
+
+                    return Container(
+                      width: double.infinity,
+                      height: 48,
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      decoration: BoxDecoration(
+                        color: Constants.kSecondBackgroundColor,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Constants.kGreyLight.withValues(alpha: 0.5),
+                        ),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<int>(
+                          value: hasSelected ? selectedId : null,
+                          hint: Text(
+                            'Selecione o Reservatório',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Constants.kGreyText2,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          isExpanded: true,
+                          icon: const Icon(
+                            Icons.expand_more,
+                            color: Constants.kPrimaryColor,
+                          ),
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Constants.kText2,
+                          ),
+                          items: reservatorios
+                              .map(
+                                (r) => DropdownMenuItem<int>(
+                                  value: r.id,
+                                  child: Text(
+                                    r.nome ?? '-',
+                                    style: const TextStyle(
+                                      color: Constants.kGreyText,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (value) {
+                            if (value == null) return;
+                            final selected = reservatorios.firstWhere(
+                              (reservatorio) => reservatorio.id == value,
+                            );
+                            store.selectReservatorio(selected);
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _adjustmentFieldCard() {
+    return AppPanelCard(
+      child: Column(
+        children: [
+          _fieldPair(
+            label: 'C. Elétrico',
+            valueLabel1: 'Atual',
+            valueLabel2: 'Desejado',
+            controller1: store.cEletricoAtual,
+            controller2: store.cEletricoDesejado,
+            hint1: 'µS/cm',
+            hint2: 'µS/cm',
+          ),
+          const Divider(height: 1, indent: 16, endIndent: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: _fieldPair(
+              label: 'Volume',
+              valueLabel1: 'Atual',
+              valueLabel2: 'Desejado',
+              controller1: store.volumeAtual,
+              controller2: store.volumeDesejado,
+              hint1: 'Litros',
+              hint2: 'Litros',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _fieldPair({
+    required String label,
+    required String valueLabel1,
+    required String valueLabel2,
+    required TextEditingController controller1,
+    required TextEditingController controller2,
+    required String hint1,
+    required String hint2,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 72,
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Constants.kText2,
+              ),
+            ),
+          ),
+          const Spacer(),
+          _inputGroup(
+            label: valueLabel1,
+            controller: controller1,
+            hint: hint1,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Icon(
+              Icons.arrow_forward,
+              size: 18,
+              color: Constants.kPrimaryColor.withValues(alpha: 0.6),
+            ),
+          ),
+          _inputGroup(
+            label: valueLabel2,
+            controller: controller2,
+            hint: hint2,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _inputGroup({
+    required String label,
+    required TextEditingController controller,
+    required String hint,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Constants.kGreyMedium,
+          ),
+        ),
+        const SizedBox(height: 6),
+        SizedBox(
+          width: 90,
+          child: TextFormField(
+            controller: controller,
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              CentavosInputFormatter(),
+            ],
+            textAlign: TextAlign.center,
+            decoration: InputDecoration(
+              isDense: true,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 10,
+              ),
+              hintText: hint,
+              hintStyle: TextStyle(
+                fontSize: 13,
+                color: Constants.kGreyText2.withValues(alpha: 0.6),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: Constants.kGreyLight.withValues(alpha: 0.5),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: Constants.kGreyLight.withValues(alpha: 0.5),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(
+                  color: Constants.kPrimaryColor,
+                  width: 1.5,
+                ),
+              ),
+            ),
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: Constants.kPrimaryColor,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _optionalFieldCard({
+    required String label,
+    required String hint,
+    required TextEditingController controller,
+  }) {
+    return AppPanelCard(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      child: Row(
+        children: [
+          Text(
+            'Registrar ',
+            style: const TextStyle(
+              fontSize: 14,
+              color: Constants.kGreyMedium,
+            ),
+          ),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: Constants.kText2,
+            ),
+          ),
+          const Spacer(),
+          SizedBox(
+            width: 88,
+            child: TextFormField(
+              controller: controller,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                CentavosInputFormatter(),
+              ],
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 10,
+                ),
+                hintText: hint,
+                hintStyle: TextStyle(
+                  fontSize: 13,
+                  color: Constants.kGreyText2.withValues(alpha: 0.6),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    color: Constants.kGreyLight.withValues(alpha: 0.5),
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    color: Constants.kGreyLight.withValues(alpha: 0.5),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(
+                    color: Constants.kPrimaryColor,
+                    width: 1.5,
+                  ),
+                ),
+              ),
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: Constants.kPrimaryColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _temperatureFieldCard() {
+    return AppPanelCard(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      child: Row(
+        children: [
+          Text(
+            'Registrar ',
+            style: const TextStyle(
+              fontSize: 14,
+              color: Constants.kGreyMedium,
+            ),
+          ),
+          const Text(
+            'Temperatura',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: Constants.kText2,
+            ),
+          ),
+          const Spacer(),
+          Observer(builder: (_) {
+            return AppInlineDropdown<int>(
+              value: store.selectedItem,
+              items: store.quantityList.map((int e) {
+                return DropdownMenuItem<int>(
+                  value: e,
+                  child: Text("$e ºC"),
+                );
+              }).toList(),
+              onChanged: (int? newValue) {
+                if (newValue != null) store.newValueItem(newValue);
+              },
             );
           }),
-        );
-      },
+        ],
+      ),
     );
   }
 }

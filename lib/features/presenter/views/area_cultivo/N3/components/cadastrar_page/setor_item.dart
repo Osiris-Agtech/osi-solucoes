@@ -9,6 +9,7 @@ import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/cadastrar_lote_page.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_dropdown.dart';
 
 InkWell setor(
   BuildContext context,
@@ -158,16 +159,14 @@ SizedBox setorPage(
                       SizedBox(
                         width: 200,
                         child: Observer(builder: (_) {
-                          return DropdownButtonFormField<Area>(
-                            initialValue: store.novoLoteArea.id != null
+                          return AppDropdown<Area>(
+                            value: store.novoLoteArea.id != null
                                 ? store.novoLoteArea
                                 : null,
                             hint: const Text(
                               'Selecionar',
                               style: TextStyle(fontStyle: FontStyle.italic),
                             ),
-                            isExpanded: true,
-                            iconEnabledColor: Constants.kPrimaryColor,
                             items: store.areaList.map((Area area) {
                               return DropdownMenuItem<Area>(
                                 value: area,
@@ -206,17 +205,15 @@ SizedBox setorPage(
                         child: SizedBox(
                           width: 200,
                           child: Observer(builder: (_) {
-                            return DropdownButtonFormField<Setor>(
-                              key: key,
-                              initialValue: store.novoLoteSetor.id != null
+                            return AppDropdown<Setor>(
+                              fieldKey: key,
+                              value: store.novoLoteSetor.id != null
                                   ? store.novoLoteSetor
                                   : null,
                               hint: const Text(
                                 'Selecionar',
                                 style: TextStyle(fontStyle: FontStyle.italic),
                               ),
-                              isExpanded: true,
-                              iconEnabledColor: Constants.kPrimaryColor,
                               items: (store.novoLoteArea.setores ?? [])
                                   .map((Setor setor) {
                                 return DropdownMenuItem<Setor>(

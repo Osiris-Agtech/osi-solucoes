@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/modulos_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 
 import 'custom_dialog.dart';
@@ -15,7 +13,6 @@ SingleChildScrollView horizontalList(
   ReservatoriosStore reservatorioStore,
   LoteStore store,
 ) {
-  ModulosStore modulosStore = GetIt.I<ModulosStore>();
   return SingleChildScrollView(
     scrollDirection: Axis.horizontal,
     physics: const BouncingScrollPhysics(),
@@ -36,12 +33,7 @@ SingleChildScrollView horizontalList(
                 onTap: () async {
                   reservatorioStore.setReservatorioDetalhes(
                       store.loteSelecionado.reservatorio!);
-                  modulosStore.setPageViewController(1);
-                  Get.toNamed(
-                    Routes.modulosPage,
-                    // () => const ModulosPage(),
-                    // transition: Transition.rightToLeft,
-                  );
+                  Get.toNamed(Routes.reservatoriosPage);
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

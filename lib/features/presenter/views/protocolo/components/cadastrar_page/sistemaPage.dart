@@ -15,24 +15,30 @@ Container sistemaPage(BuildContext context, ProtocoloStore store) {
       description: 'Selecione o sistema de cultivo do protocolo.',
       child: Padding(
         padding: const EdgeInsets.only(top: 16),
-        child: DropdownButton<String>(
-          isExpanded: true,
-          hint: const Text("Selecione o Sistema de Cultivo..."),
-          value: store.novoSistemaProtocolo,
-          focusColor: Colors.transparent,
-          iconEnabledColor: Constants.kPrimaryColor,
-          elevation: 16,
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
-          onChanged: (String? newValue) async {
-            store.alterarSistema(newValue!);
-          },
-          items: sistemaProtocoloList
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            isExpanded: true,
+            hint: const Text("Selecione o Sistema de Cultivo..."),
+            value: store.novoSistemaProtocolo,
+            icon: const Icon(Icons.expand_more, color: Constants.kPrimaryColor),
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: Constants.kText2,
+            ),
+            elevation: 16,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+            onChanged: (String? newValue) async {
+              store.alterarSistema(newValue!);
+            },
+            items: sistemaProtocoloList
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
         ),
       ),
     ),

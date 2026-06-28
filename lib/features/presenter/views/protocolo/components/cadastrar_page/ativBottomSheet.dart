@@ -123,31 +123,37 @@ class _AtivBottomSheetState extends State<AtivBottomSheet> {
               Observer(builder: (_) {
                 return Padding(
                   padding: const EdgeInsets.only(top: 5),
-                  child: DropdownButton<Fase>(
-                    isExpanded: true,
-                    value: store.selectedFase,
-                    alignment: Alignment.center,
-                    hint: store.faseDropDownList.isEmpty
-                        ? const Text("Crie uma fase ...")
-                        : const Text("Selecione uma fase ..."),
-                    focusColor: Colors.transparent,
-                    iconEnabledColor: Constants.kPrimaryColor,
-                    elevation: 16,
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    onChanged: (Fase? newValue) {
-                      if (newValue != null) {
-                        store.alterarDropdownFase(newValue);
-                      }
-                    },
-                    items: store.faseDropDownList
-                        .map<DropdownMenuItem<Fase>>((Fase value) {
-                      return DropdownMenuItem<Fase>(
-                        value: value,
-                        child: Text(
-                          "${value.nome} - ${value.duracao_dias} Dia(s) ",
-                        ),
-                      );
-                    }).toList(),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<Fase>(
+                      isExpanded: true,
+                      value: store.selectedFase,
+                      alignment: Alignment.center,
+                      hint: store.faseDropDownList.isEmpty
+                          ? const Text("Crie uma fase ...")
+                          : const Text("Selecione uma fase ..."),
+                      icon: const Icon(Icons.expand_more, color: Constants.kPrimaryColor),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: Constants.kText2,
+                      ),
+                      elevation: 16,
+                      borderRadius: const BorderRadius.all(Radius.circular(12)),
+                      onChanged: (Fase? newValue) {
+                        if (newValue != null) {
+                          store.alterarDropdownFase(newValue);
+                        }
+                      },
+                      items: store.faseDropDownList
+                          .map<DropdownMenuItem<Fase>>((Fase value) {
+                        return DropdownMenuItem<Fase>(
+                          value: value,
+                          child: Text(
+                            "${value.nome} - ${value.duracao_dias} Dia(s) ",
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 );
               }),

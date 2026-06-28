@@ -12,15 +12,16 @@ Future<void> bottomSheet(
     CarouselSliderController carouselController,
     SolucaoStore store) {
   return showModalBottomSheet<void>(
-    backgroundColor: Constants.kBackgroundColor,
+    backgroundColor: Constants.kSecondBackgroundColor,
     context: context,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(10),
-        topRight: Radius.circular(10),
+        topLeft: Radius.circular(24),
+        topRight: Radius.circular(24),
       ),
     ),
     isScrollControlled: true,
+    barrierColor: Colors.black.withValues(alpha: 0.3),
     builder: (BuildContext context) {
       return CarouselSlider(
         carouselController: controlerPages,

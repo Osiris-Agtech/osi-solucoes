@@ -44,29 +44,35 @@ Container editSistemaPage(BuildContext context, ProtocoloStore store) {
           ),
           Container(
             padding: const EdgeInsets.only(top: 30),
-            child: DropdownButton<String>(
-              isExpanded: true,
-              alignment: Alignment.center,
-              hint: const Text("Selecione o Sistema de Cultivo..."),
-              value: store.novoSistemaProtocoloDetalhes == null
-                  ? store.protocoloSelecionado!.sistema_cultivo
-                  : store.novoSistemaProtocoloDetalhes!,
-              focusColor: Colors.transparent,
-              iconEnabledColor: Constants.kPrimaryColor,
-              elevation: 16,
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
-              onChanged: (String? newValue) async {
-                store.editarSistema(newValue!);
-              },
-              items: sistemaProtocoloList
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                  ),
-                );
-              }).toList(),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                isExpanded: true,
+                alignment: Alignment.center,
+                hint: const Text("Selecione o Sistema de Cultivo..."),
+                value: store.novoSistemaProtocoloDetalhes == null
+                    ? store.protocoloSelecionado!.sistema_cultivo
+                    : store.novoSistemaProtocoloDetalhes!,
+                icon: const Icon(Icons.expand_more, color: Constants.kPrimaryColor),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Constants.kText2,
+                ),
+                elevation: 16,
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                onChanged: (String? newValue) async {
+                  store.editarSistema(newValue!);
+                },
+                items: sistemaProtocoloList
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
           ),
         ],

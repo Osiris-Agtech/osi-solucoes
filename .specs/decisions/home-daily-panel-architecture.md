@@ -38,3 +38,4 @@ Essa abordagem também atende ao objetivo de produto confirmado em `PRODUCT.md`:
 ## Decisões relacionadas
 
 - `.specs/decisions/home-modules-inline-expansion.md`: define que o botão “Ver todos” do card “Módulos principais” expande inline, sem navegação para `Routes.modulosPage`, e que Setores/Lotes ficam fora apenas dessa seção.
+- `.specs/decisions/home-account-actions-header-option-a.md`: define que saudação e ações de conta ficam em `HomeDayHeader`, enquanto o header fixo da Home preserva apenas o botão de menu acessível, sem título e com baixo ruído visual.

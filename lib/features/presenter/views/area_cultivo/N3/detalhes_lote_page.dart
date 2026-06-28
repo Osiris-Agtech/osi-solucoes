@@ -8,8 +8,9 @@ import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 import 'package:osi_solucoes/features/presenter/views/agenda/agenda_page.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_panel_card.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_section_header.dart';
 
-import 'components/detalhes_page/dados_cultivo.dart';
 import 'components/detalhes_page/horizontal_lista.dart';
 
 class DetalhesLotePage extends StatefulWidget {
@@ -41,248 +42,208 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Constants.kBackgroundColor,
-        appBar: appBar(),
-        body: SingleChildScrollView(
+        backgroundColor: Constants.kSecondBackgroundColor,
+        body: CustomScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Observer(builder: (_) {
-            return Column(
+          slivers: [
+            _header(),
+            SliverToBoxAdapter(
+              child: Observer(builder: (_) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _infoCard(),
+                    if (widget.enableEditing) ...[
+                      const SizedBox(height: 8),
+                      _navigateTile(
+                        icon: Icons.event,
+                        title: 'Agenda de Atividades',
+                        subtitle: 'Atividades planejadas para o lote',
+                        onTap: () {
+                          Get.to(() => AgendaPage(
+                                loteId: store.loteSelecionado.id,
+                              ));
+                        },
+                      ),
+                      _navigateTile(
+                        icon: Icons.article_outlined,
+                        title: 'Protocolo Base',
+                        subtitle: store.loteSelecionado.protocolo?.nome ??
+                            'Nenhum Protocolo Selecionado',
+                        onTap: () {},
+                      ),
+                      const SizedBox(height: 8),
+                      horizontalList(context, reservatorioStore, store),
+                    ],
+                    const SizedBox(height: 16),
+                    const AppSectionHeader(
+                      icon: Icons.timeline,
+                      title: 'Produção',
+                      subtitle: 'Registros de produção do lote',
+                    ),
+                    const SizedBox(height: 8),
+                    _productionField(
+                      label: 'Bandejas semeadas',
+                      value: store.loteSelecionado.bandeijas_semeadas?.toString(),
+                    ),
+                    _productionField(
+                      label: 'Mudas transplantadas',
+                      value: store.loteSelecionado.mudas_transplantadas?.toString(),
+                    ),
+                    _productionField(
+                      label: 'Plantas colhidas',
+                      value: store.loteSelecionado.plantas_colhidas?.toString(),
+                    ),
+                    _productionField(
+                      label: 'Embalagens produzidas',
+                      value: store.loteSelecionado.embalagens_produzidas?.toString(),
+                    ),
+                    const SizedBox(height: 32),
+                  ],
+                );
+              }),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  SliverToBoxAdapter _header() {
+    return SliverToBoxAdapter(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 8,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(4, 8, 4, 16),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                infoLote(),
-                Visibility(
-                  visible: widget.enableEditing,
-                  child: horizontalList(
-                    context,
-                    reservatorioStore,
-                    store,
-                  ),
-                ),
-                Visibility(
-                  visible: widget.enableEditing,
-                  child: const SizedBox(
-                    height: 16,
-                  ),
-                ),
-                Divider(
-                  color: const Color(0xFF9F9F9F).withValues(alpha: .6),
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                ListTile(
-                  leading: Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: SvgPicture.asset(
-                      "assets/icons/relatorio_icon.svg",
-                      colorFilter: ColorFilter.mode(
-                        Constants.kPrimaryColor,
-                        BlendMode.srcIn,
-                      ),
-                      width: 24,
-                      height: 24,
-                    ),
-                  ),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.only(right: 8),
-                        child: Text(
-                          'Protocolo Base',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.normal),
-                        ),
-                      ),
-                    ],
-                  ),
-                  subtitle: Text(
-                    store.loteSelecionado.protocolo?.nome ??
-                        'Nenhum Protocolo Selecionado',
-                    style: const TextStyle(color: Constants.kPrimaryColor),
-                  ),
-                ),
-                Divider(
-                  color: const Color(0xFF9F9F9F).withValues(alpha: .6),
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                InkWell(
-                  child: ListTile(
-                    leading: const Padding(
-                      padding: EdgeInsets.only(left: 8),
-                      child: Icon(
-                        Icons.event,
-                        color: Constants.kPrimaryColor,
-                      ),
-                    ),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.only(right: 8),
-                          child: Text(
-                            'Agenda de Atividades',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.normal),
-                          ),
-                        ),
-                      ],
-                    ),
-                    subtitle: const Text("Atividades planejadas para o lote"),
-                    trailing: const Icon(
-                      Icons.chevron_right_rounded,
+                Row(
+                  children: [
+                    IconButton(
+                      hoverColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      padding: EdgeInsets.zero,
+                      alignment: Alignment.centerLeft,
+                      onPressed: () => Get.back(),
+                      icon: const Icon(Icons.arrow_back),
                       color: Constants.kPrimaryColor,
                     ),
-                    onTap: () {
-                      Get.to(() => AgendaPage(
-                            loteId: store.loteSelecionado.id,
-                          ));
-                    },
-                  ),
-                ),
-                // const SizedBox(height: 16),
-                // dateTitle(),
-                // const SizedBox(
-                //   height: 10,
-                // ),
-                // registro(context, store),
-                // semeadura(context, store),
-                // transplantio(context, store),
-                // colheita(context, store),
-                // const SizedBox(height: 16),
-                Divider(
-                  color: const Color(0xFF9F9F9F).withValues(alpha: .6),
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                const SizedBox(height: 16),
-                producaoTitle(),
-                const SizedBox(height: 20),
-                bandeijasSemeadas(store, enableEditing: widget.enableEditing),
-                mudasTransplantadas(store, enableEditing: widget.enableEditing),
-                plantasColhidas(store, enableEditing: widget.enableEditing),
-                embalagensProduzidas(store,
-                    enableEditing: widget.enableEditing),
-                const SizedBox(
-                  height: 16,
-                ),
-                // Divider(
-                //   color: const Color(0xFF9F9F9F).withValues(alpha: .6),
-                //   indent: 20,
-                //   endIndent: 20,
-                // ),
-                // const SizedBox(height: 8),
-                // configuracaoButton(),
-              ],
-            );
-          }),
-        ),
-      ),
-    );
-  }
-
-  AppBar appBar() {
-    return AppBar(
-      elevation: 0,
-      backgroundColor: Constants.kBackgroundColor,
-      iconTheme: const IconThemeData(
-        color: Constants.kPrimaryColor, //change your color here
-      ),
-      actions: widget.enableEditing
-          ? [
-              Align(
-                alignment: const Alignment(0.6, -0.9),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16.0, top: 8.0),
-                  child: Theme(
-                    data: Theme.of(context).copyWith(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                    ),
-                    child: PopupMenuButton(
-                      icon: SvgPicture.asset(
-                        "assets/icons/settings_icon.svg",
-                        colorFilter: ColorFilter.mode(
-                          Constants.kButtonGrey,
-                          BlendMode.srcIn,
-                        ),
-                        height: 20,
-                      ),
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          child: Row(
-                            children: const [
-                              Text('Editar'),
-                            ],
+                    const Spacer(),
+                    if (widget.enableEditing)
+                      PopupMenuButton(
+                        icon: SvgPicture.asset(
+                          "assets/icons/settings_icon.svg",
+                          colorFilter: ColorFilter.mode(
+                            Constants.kButtonGrey,
+                            BlendMode.srcIn,
                           ),
-                          onTap: () async {
-                            store.setLoteEditing(store.loteSelecionado);
-                            Get.toNamed(Routes.cadastrarLotePage);
-                          },
+                          height: 20,
                         ),
-                      ],
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            child: Row(
+                              children: const [
+                                Icon(Icons.edit_outlined, size: 18),
+                                SizedBox(width: 8),
+                                Text('Editar lote'),
+                              ],
+                            ),
+                            onTap: () async {
+                              store.setLoteEditing(store.loteSelecionado);
+                              Get.toNamed(Routes.cadastrarLotePage);
+                            },
+                          ),
+                        ],
+                      ),
+                    const SizedBox(width: 8),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    store.loteSelecionado.nome ?? 'Detalhes do Lote',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    '${store.loteSelecionado.setor?.area?.nome ?? '-'} / ${store.loteSelecionado.setor?.nome ?? '-'}',
+                    style: TextStyle(
+                      color: Constants.kGreyMedium,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _infoCard() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      child: AppPanelCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _infoRow('Cultura', store.loteSelecionado.cultura?.nome ?? '-'),
+            const Divider(height: 1),
+            _infoRow(
+              'Área/Setor',
+              '${store.loteSelecionado.setor?.area?.nome ?? "-"} / ${store.loteSelecionado.setor?.nome ?? "-"}',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding _infoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 100,
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Constants.kGreyMedium,
+                fontWeight: FontWeight.w500,
               ),
-            ]
-          : null,
-    );
-  }
-
-  Padding configuracaoButton() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: ListTile(
-        dense: true,
-        minLeadingWidth: 10,
-        title: const Text(
-          'Configurações',
-          textAlign: TextAlign.start,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 22,
-            fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-        subtitle: const Text(
-          'Alterar informações sobre o lote',
-          style: TextStyle(
-            color: Constants.kGreyText,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        leading: const Icon(
-          Icons.settings,
-          color: Constants.kPrimaryColor,
-        ),
-        onTap: () async {
-          store.setLoteEditing(store.loteSelecionado);
-          Get.toNamed(Routes.cadastrarLotePage);
-        },
-      ),
-    );
-  }
-
-  Padding producaoTitle() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Row(
-        children: const [
-          Icon(
-            Icons.timeline,
-            color: Constants.kPrimaryColor,
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Text(
-            'Produção',
-            style: TextStyle(
-              color: Constants.kGreyText,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: Constants.kText2,
+              ),
             ),
           ),
         ],
@@ -290,105 +251,87 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
     );
   }
 
-  Padding dateTitle() {
+  Widget _navigateTile({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Row(
-        children: const [
-          Icon(
-            Icons.watch_later,
-            color: Constants.kPrimaryColor,
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Text(
-            'Data',
-            style: TextStyle(
-              color: Constants.kGreyText,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: AppPanelCard(
+        onTap: onTap,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: Row(
+          children: [
+            Icon(icon, color: Constants.kPrimaryColor, size: 24),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Constants.kText2,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Constants.kGreyMedium,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            const Icon(
+              Icons.chevron_right,
+              color: Constants.kGreyLight,
+              size: 20,
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Column infoLote() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: Text(
-            'Detalhes do Lote',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Text(
-            store.loteSelecionado.nome ?? '---',
-            style: const TextStyle(
-              color: Constants.kText2,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Text(
-            '${store.loteSelecionado.setor?.area?.nome ?? '-'} / ${store.loteSelecionado.setor?.nome ?? '-'}',
-            style: TextStyle(
-              color: Constants.kText2.withValues(alpha: .8),
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Row(
-            children: [
-              Text(
-                'Cultura: ',
-                style: TextStyle(
-                  color: Constants.kText2.withValues(alpha: .8),
-                  fontSize: 18,
+  Widget _productionField({
+    required String label,
+    String? value,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: AppPanelCard(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Constants.kText2,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              Text(
-                store.loteSelecionado.cultura?.nome ?? '-',
-                style: const TextStyle(
-                  color: Constants.kPrimaryColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              value ?? '-',
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: Constants.kPrimaryColor,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-        const SizedBox(
-          height: 24,
-        ),
-      ],
+      ),
     );
   }
 }

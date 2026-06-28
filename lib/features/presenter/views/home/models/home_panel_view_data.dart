@@ -28,12 +28,14 @@ class HomeHeaderViewData {
   final String accountContext;
   final String roleLabel;
   final bool canOpenTasks;
+  final bool canSwitchAccount;
 
   const HomeHeaderViewData({
     required this.greeting,
     required this.accountContext,
     required this.roleLabel,
     required this.canOpenTasks,
+    required this.canSwitchAccount,
   });
 }
 
@@ -127,7 +129,6 @@ class HomeModuleShortcutViewData {
   final String iconAsset;
   final Color color;
   final String? route;
-  final int? moduleId;
 
   const HomeModuleShortcutViewData({
     required this.label,
@@ -135,6 +136,5 @@ class HomeModuleShortcutViewData {
     required this.iconAsset,
     required this.color,
     this.route,
-    this.moduleId,
   });
 }

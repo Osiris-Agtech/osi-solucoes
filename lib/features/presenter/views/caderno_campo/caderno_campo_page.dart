@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_dropdown.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_search_bar.dart';
@@ -14,6 +15,7 @@ import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.d
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/constants.dart';
+import '../../widgets/common/app_floating_action_button.dart';
 import '../../../../core/services/navigation_resource_args.dart';
 import '../../viewmodels/caderno_campo_store.dart';
 
@@ -56,16 +58,12 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Constants.kSecondBackgroundColor,
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 18.0),
-            child: FloatingActionButton(
-              heroTag: 'NovaNota',
-              onPressed: () {
-                Get.toNamed(Routes.cadastroCadernoCampoPage);
-              },
-              backgroundColor: Constants.kPrimaryColor,
-              child: const Icon(Icons.add),
-            ),
+          floatingActionButton: AppFloatingActionButton.add(
+            heroTag: 'nova_nota',
+            onPressed: () {
+              Get.toNamed(Routes.cadastroCadernoCampoPage);
+            },
+            bottom: 18,
           ),
           body: Form(
             key: formKey,
@@ -84,16 +82,11 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
                         ),
                         Expanded(
                           child: Observer(builder: (_) {
-                            return DropdownButtonFormField<Area>(
-                              initialValue: store.dropButtonArea.id != null
+                            return AppDropdown<Area>(
+                              value: store.dropButtonArea.id != null
                                   ? store.dropButtonArea
                                   : null,
-                              hint: const Text(
-                                'Por Área',
-                                style: TextStyle(fontStyle: FontStyle.italic),
-                              ),
-                              isExpanded: true,
-                              iconEnabledColor: Constants.kPrimaryColor,
+                              hintText: 'Por Área',
                               items: store.areaList.map((Area area) {
                                 return DropdownMenuItem<Area>(
                                   value: area,
@@ -117,17 +110,11 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
                         ),
                         Expanded(
                           child: Observer(builder: (_) {
-                            return DropdownButtonFormField<Setor>(
-                              key: key,
-                              initialValue: store.dropButtonSetor.id != null
+                            return AppDropdown<Setor>(
+                              value: store.dropButtonSetor.id != null
                                   ? store.dropButtonSetor
                                   : null,
-                              hint: const Text(
-                                'No Setor',
-                                style: TextStyle(fontStyle: FontStyle.italic),
-                              ),
-                              isExpanded: true,
-                              iconEnabledColor: Constants.kPrimaryColor,
+                              hintText: 'No Setor',
                               items: (store.dropButtonArea.setores ?? [])
                                   .map((Setor setor) {
                                 return DropdownMenuItem<Setor>(

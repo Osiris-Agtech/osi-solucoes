@@ -189,62 +189,61 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
             ),
           ),
           Observer(builder: (_) {
-            return DropdownButton<Cargo>(
-              focusColor: Colors.transparent,
-              value: store.cargoSelecionado,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                overflow: TextOverflow.visible,
-              ),
-              hint: const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 10,
+            return DropdownButtonHideUnderline(
+              child: DropdownButton<Cargo>(
+                focusColor: Colors.transparent,
+                value: store.cargoSelecionado,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  overflow: TextOverflow.visible,
                 ),
-                child: Text(
-                  'Selecione o cargo',
-                  style: TextStyle(
-                    fontFamily: "Montserrat",
-                    overflow: TextOverflow.visible,
-                    color: Constants.kGreyText2,
-                    fontSize: 18,
+                hint: const Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 10,
+                  ),
+                  child: Text(
+                    'Selecione o cargo',
+                    style: TextStyle(
+                      fontFamily: "Montserrat",
+                      overflow: TextOverflow.visible,
+                      color: Constants.kGreyText2,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
-              ),
-              isExpanded: true,
-              underline: DropdownButtonHideUnderline(child: Container()),
-              icon: const Icon(
-                Icons.arrow_drop_down,
-                color: Constants.kPrimaryColor,
-              ),
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
-              selectedItemBuilder: (BuildContext context) {
-                return store.cargosList.map((Cargo value) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                    ),
+                isExpanded: true,
+                icon: const Icon(
+                  Icons.expand_more,
+                  color: Constants.kPrimaryColor,
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(5)),
+                selectedItemBuilder: (BuildContext context) {
+                  return store.cargosList.map((Cargo value) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                      ),
+                      child: Text(
+                        store.cargoSelecionado?.cargo ?? '',
+                        style: const TextStyle(color: Constants.kPrimaryColor),
+                      ),
+                    );
+                  }).toList();
+                },
+                items: store.cargosList.map((Cargo cargo) {
+                  return DropdownMenuItem<Cargo>(
+                    value: cargo,
                     child: Text(
-                      store.cargoSelecionado?.cargo ?? '',
-                      style: const TextStyle(color: Constants.kPrimaryColor),
+                      cargo.cargo ?? '-',
+                      style: const TextStyle(color: Constants.kGreyText),
                     ),
                   );
-                }).toList();
-              },
-              items: store.cargosList.map((Cargo cargo) {
-                return DropdownMenuItem<Cargo>(
-                  value: cargo,
-                  child: Text(
-                    cargo.cargo ?? '-',
-                    style: const TextStyle(color: Constants.kGreyText),
-                  ),
-                );
-              }).toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  store.setCargo(value);
-                }
-              },
+                }).toList(),
+                onChanged: (Cargo? value) {
+                  if (value != null) store.setCargo(value);
+                },
+              ),
             );
           }),
         ],

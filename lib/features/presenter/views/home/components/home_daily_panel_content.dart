@@ -12,6 +12,8 @@ class HomeDailyPanelContent extends StatelessWidget {
   final String errorMessage;
   final VoidCallback onRetry;
   final VoidCallback? onOpenTodayTasks;
+  final VoidCallback? onSwitchAccount;
+  final VoidCallback? onLogout;
   final ValueChanged<RecommendedActionViewData> onRecommendedActionTap;
   final VoidCallback? onOpenProductionReport;
   final ValueChanged<HomeModuleShortcutViewData> onModuleTap;
@@ -24,6 +26,8 @@ class HomeDailyPanelContent extends StatelessWidget {
     required this.errorMessage,
     required this.onRetry,
     required this.onOpenTodayTasks,
+    required this.onSwitchAccount,
+    required this.onLogout,
     required this.onRecommendedActionTap,
     required this.onOpenProductionReport,
     required this.onModuleTap,
@@ -79,7 +83,11 @@ class HomeDailyPanelContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         HomeDayHeader(
-            data: viewData.header, onOpenTodayTasks: onOpenTodayTasks),
+          data: viewData.header,
+          onOpenTodayTasks: onOpenTodayTasks,
+          onSwitchAccount: onSwitchAccount,
+          onLogout: onLogout,
+        ),
         const SizedBox(height: 14),
         if (isWide)
           Row(

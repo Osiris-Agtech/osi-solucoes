@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_floating_action_button.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/protocolo_store.dart';
@@ -70,18 +71,12 @@ class ProtocoloPageState extends State<ProtocoloPage> {
     );
   }
 
-  FloatingActionButton floatingButton() {
-    return FloatingActionButton(
-      heroTag: "NovoProtocolo",
+  AppFloatingActionButton floatingButton() {
+    return AppFloatingActionButton.add(
+      heroTag: 'novo_protocolo',
       onPressed: () {
         Get.toNamed(Routes.cadastrarProtocoloPage);
       },
-      backgroundColor: Constants.kPrimaryColor,
-      child: const Icon(
-        Icons.add,
-        size: 30,
-        color: Colors.white,
-      ),
     );
   }
 

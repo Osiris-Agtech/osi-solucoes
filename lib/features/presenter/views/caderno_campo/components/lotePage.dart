@@ -72,44 +72,42 @@ Container lotePage(BuildContext context, CadernoCampoStore store) {
               margin: const EdgeInsets.only(right: 24.0),
               decoration: const BoxDecoration(
                 color: Constants.kPrimaryColor,
-                borderRadius: BorderRadius.all(Radius.circular(5)),
+                borderRadius: BorderRadius.all(Radius.circular(12)),
               ),
               child: Center(
-                child: DropdownButton<String>(
-                  alignment: Alignment.center,
-                  value: store.selectedGroup,
-                  dropdownColor: Constants.kPrimaryColor,
-                  underline: DropdownButtonHideUnderline(
-                    child: Container(),
-                  ),
-                  iconSize: 0,
-                  iconEnabledColor: Constants.kPrimaryColor,
-                  elevation: 16,
-                  borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      if (store.selectedGroup != newValue) {
-                        store.setSelectedGroup(newValue);
-                        store.groupLotesBy();
-                      } else {
-                        store.setSelectedGroup(newValue);
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    alignment: Alignment.center,
+                    value: store.selectedGroup,
+                    dropdownColor: Constants.kPrimaryColor,
+                    icon: const Icon(Icons.expand_more, color: Colors.white),
+                    elevation: 16,
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        if (store.selectedGroup != newValue) {
+                          store.setSelectedGroup(newValue);
+                          store.groupLotesBy();
+                        } else {
+                          store.setSelectedGroup(newValue);
+                        }
                       }
-                    }
-                  },
-                  items: <String>['Cultura', 'Setor']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                      ),
-                    );
-                  }).toList(),
+                    },
+                    items: <String>['Cultura', 'Setor']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
             ),
