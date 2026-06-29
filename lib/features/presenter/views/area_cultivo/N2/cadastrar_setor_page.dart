@@ -2,8 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
@@ -231,13 +233,9 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
     );
   }
 
-  AppBar appBar() {
-    return AppBar(
-      backgroundColor: Constants.kBackgroundColor,
-      elevation: 0,
-      leading: const BackButton(
-        color: Constants.kPrimaryColor,
-      ),
+  AppFormHeader appBar() {
+    return AppFormHeader(
+      onBack: () => Get.back(),
     );
   }
 

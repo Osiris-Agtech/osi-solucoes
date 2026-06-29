@@ -106,13 +106,6 @@ class _HeaderText extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 4),
-          Text(
-            data.accountContext,
-            style: homeBodyStyle(Colors.black87),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
           const SizedBox(height: 6),
           HomeBadge(icon: Icons.badge_outlined, label: data.roleLabel),
         ],

@@ -8,8 +8,10 @@ import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 
+import '../../models/reservatorio/reservatorio_model.dart';
 import '../../viewmodels/ajustes_store.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_dropdown.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_floating_action_button.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_panel_card.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_section_header.dart';
@@ -74,7 +76,7 @@ class AjustesPageState extends State<AjustesPage> {
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: [
-                  _header(),
+                  sliverHeader(),
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
@@ -116,132 +118,41 @@ class AjustesPageState extends State<AjustesPage> {
     );
   }
 
-  SliverToBoxAdapter _header() {
-    return SliverToBoxAdapter(
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 8,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: SafeArea(
-          bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    hoverColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    padding: EdgeInsets.zero,
-                    alignment: Alignment.centerLeft,
-                    onPressed: () {
-                      Get.offNamedUntil(Routes.homePage, (route) => false);
-                    },
-                    icon: const Icon(Icons.arrow_back),
-                    color: Constants.kPrimaryColor,
+  AppPageHeaderSliver sliverHeader() {
+    return AppPageHeaderSliver(
+      title: 'Ajustes',
+      subtitle: 'Selecione e ajuste seu reservatório',
+      onBack: () => Get.offNamedUntil(Routes.homePage, (route) => false),
+      bottom: PreferredSize(
+        // 48 (AppDropdown height) + 12 (bottom padding) = 60
+        preferredSize: const Size.fromHeight(60),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          child: Observer(builder: (_) {
+            return AppDropdown<Reservatorio>(
+              value: store.selectedReservatorio.nome != null &&
+                      store.selectedReservatorio.nome!.isNotEmpty
+                  ? store.selectedReservatorio
+                  : null,
+              hintText: store.reservatorioList.isNotEmpty
+                  ? 'Selecione um reservatório'
+                  : 'Nenhum reservatório disponível',
+              items: store.reservatorioList.map((reservatorio) {
+                return DropdownMenuItem<Reservatorio>(
+                  value: reservatorio,
+                  child: Text(
+                    '${reservatorio.nome ?? ''} - ${reservatorio.volume ?? ''}',
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  const Spacer(),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Ajustes',
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
-                child: Text(
-                  'Selecione e ajuste seu reservatório',
-                  style: const TextStyle(
-                    color: Constants.kGreyMedium,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                child: Observer(
-                  builder: (_) {
-                    final reservatorios = store.reservatorioList;
-                    final selectedId = store.selectedReservatorio.id;
-                    final hasSelected = selectedId != null &&
-                        reservatorios.any((r) => r.id == selectedId);
-
-                    return Container(
-                      width: double.infinity,
-                      height: 48,
-                      padding: const EdgeInsets.symmetric(horizontal: 14),
-                      decoration: BoxDecoration(
-                        color: Constants.kSecondBackgroundColor,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Constants.kGreyLight.withValues(alpha: 0.5),
-                        ),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<int>(
-                          value: hasSelected ? selectedId : null,
-                          hint: Text(
-                            'Selecione o Reservatório',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Constants.kGreyText2,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          isExpanded: true,
-                          icon: const Icon(
-                            Icons.expand_more,
-                            color: Constants.kPrimaryColor,
-                          ),
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Constants.kText2,
-                          ),
-                          items: reservatorios
-                              .map(
-                                (r) => DropdownMenuItem<int>(
-                                  value: r.id,
-                                  child: Text(
-                                    r.nome ?? '-',
-                                    style: const TextStyle(
-                                      color: Constants.kGreyText,
-                                    ),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) {
-                            if (value == null) return;
-                            final selected = reservatorios.firstWhere(
-                              (reservatorio) => reservatorio.id == value,
-                            );
-                            store.selectReservatorio(selected);
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  store.selectReservatorio(value);
+                }
+              },
+            );
+          }),
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/recuperar_senha_store.dart';
 
 class RecuperarSenhaPage extends StatefulWidget {
@@ -203,13 +204,9 @@ class _RecuperarSenhaPageState extends State<RecuperarSenhaPage> {
     );
   }
 
-  AppBar _appBar() {
-    return AppBar(
-      backgroundColor: Constants.kBackgroundColor,
-      elevation: 0,
-      leading: const BackButton(
-        color: Constants.kPrimaryColor,
-      ),
+  AppFormHeader _appBar() {
+    return AppFormHeader(
+      onBack: () => Get.back(),
     );
   }
 }

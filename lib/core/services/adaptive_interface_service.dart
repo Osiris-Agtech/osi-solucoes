@@ -45,6 +45,8 @@ class AdaptiveInterfaceService {
           dashboardConfidence: 0.0,
           shortcuts: _getDefaultShortcuts(),
           mode: 'GRADUAL',
+          source: 'fallback',
+          visualPriority: 'none',
         ));
       }
 
@@ -72,27 +74,35 @@ class AdaptiveInterfaceService {
       print(
           '✅ [ADAPTIVE] Cloud Function respondeu em ${duration.inMilliseconds}ms');
 
-      final data = result.data as Map<String, dynamic>;
+      final data = _normalizeCallableData(result.data);
 
       print('📦 [ADAPTIVE] Dados recebidos:');
       print(' └─ Dashboard: ${data['dashboard'] ?? 'null'}');
       print(' └─ Confidence: ${data['confidence'] ?? 0.0}');
-      print(
-          ' └─ Shortcuts: ${(data['shortcuts'] as List?)?.length ?? 0} itens');
+      print(' └─ Shortcuts: ${_asList(data['shortcuts']).length} itens');
       print(' └─ Mode: ${data['mode'] ?? 'GRADUAL'}');
 
       // Extrai informações do dashboard (suporta campos novos e legados)
-      final dashboardName = data['dashboard'] as String?;
-      final dashboardId = data['dashboardId'] as String?;
-      final cardType = data['cardType'] as String?;
-      final confidence = ((data['confidence'] as num?) ?? 0).toDouble();
-      final responseMode = (data['mode'] as String?) ?? 'GRADUAL';
+      final dashboardName = _asString(data['dashboard']);
+      final dashboardId = _asString(data['dashboardId']);
+      final cardType = _asString(data['cardType']);
+      final confidence = _asConfidence(data['confidence']);
+      final responseMode = _asString(data['mode']) ?? 'GRADUAL';
       final dashboardSource = _resolveDashboardSource(
         data,
         confidence: confidence,
         dashboardName: dashboardName,
         cardType: cardType,
       );
+      final source = _normalizeSource(
+        _asString(data['source']),
+        fallback: dashboardSource,
+      );
+      final visualPriority = _normalizeVisualPriority(
+        _asString(data['visualPriority']),
+        fallback: data.containsKey('visualPriority') ? 'none' : '',
+      );
+      final reason = _normalizeReason(_asString(data['reason']));
 
       print('📊 [ADAPTIVE] Dashboard recebido:');
       print(' └─ displayName: ${dashboardName ?? 'null'}');
@@ -101,7 +111,7 @@ class AdaptiveInterfaceService {
       print(' └─ confidence: ${(confidence * 100).toStringAsFixed(1)}%');
 
       // Parse dos atalhos
-      final shortcutsList = data['shortcuts'] as List<dynamic>? ?? [];
+      final shortcutsList = _asList(data['shortcuts']);
       print('🔄 [ADAPTIVE] Processando ${shortcutsList.length} atalhos...');
 
       final shortcuts = shortcutsList
@@ -111,15 +121,16 @@ class AdaptiveInterfaceService {
               return _createShortcutFromRoute(item, 0.5);
             } else if (item is Map) {
               // Se retornar objeto completo
-              final route = item['route'] as String? ??
-                  item['predicted_target_screen'] as String? ??
+              final route = _asString(item['route']) ??
+                  _asString(item['predicted_target_screen']) ??
                   '';
-              final itemConfidence =
-                  (item['prob'] as num? ?? item['confidence'] as num? ?? 0.5)
-                      .toDouble();
-              final resourceId = item['resourceId']?.toString();
-              final resourceType = item['resourceType']?.toString();
-              final resourceName = item['resourceName']?.toString();
+              final itemConfidence = _asConfidence(
+                item['prob'] ?? item['confidence'],
+                fallback: 0.5,
+              );
+              final resourceId = _asString(item['resourceId']);
+              final resourceType = _asString(item['resourceType']);
+              final resourceName = _asString(item['resourceName']);
               final source = _resolveShortcutSource(
                 item,
                 confidence: itemConfidence,
@@ -158,6 +169,9 @@ class AdaptiveInterfaceService {
           dashboardConfidence: confidence,
           shortcuts: _getDefaultShortcuts(),
           mode: responseMode,
+          source: source,
+          visualPriority: visualPriority,
+          reason: reason,
         ));
       }
 
@@ -195,6 +209,9 @@ class AdaptiveInterfaceService {
         dashboardConfidence: confidence,
         shortcuts: shortcuts,
         mode: responseMode,
+        source: source,
+        visualPriority: visualPriority,
+        reason: reason,
       ));
     } catch (e, stackTrace) {
       // Em caso de erro, retorna atalhos padrão
@@ -205,6 +222,8 @@ class AdaptiveInterfaceService {
         dashboardConfidence: 0.0,
         shortcuts: _getDefaultShortcuts(),
         mode: 'GRADUAL',
+        source: 'fallback',
+        visualPriority: 'none',
       ));
     }
   }
@@ -275,7 +294,7 @@ class AdaptiveInterfaceService {
   }
 
   String _resolveDashboardSource(
-    Map<String, dynamic> data, {
+    Map<String, Object?> data, {
     required double confidence,
     String? dashboardName,
     String? cardType,
@@ -298,6 +317,73 @@ class AdaptiveInterfaceService {
     }
 
     return 'system';
+  }
+
+  Map<String, Object?> _normalizeCallableData(Object? value) {
+    if (value is Map) {
+      return value.map((key, mapValue) => MapEntry(key.toString(), mapValue));
+    }
+
+    return const <String, Object?>{};
+  }
+
+  List<Object?> _asList(Object? value) {
+    if (value is List) return value.cast<Object?>();
+    return const <Object?>[];
+  }
+
+  String? _asString(Object? value) {
+    if (value == null) return null;
+    if (value is String) {
+      final trimmed = value.trim();
+      return trimmed.isEmpty ? null : trimmed;
+    }
+
+    final stringValue = value.toString().trim();
+    return stringValue.isEmpty || stringValue == 'null' ? null : stringValue;
+  }
+
+  double _asDouble(Object? value, {double fallback = 0}) {
+    if (value is num) return value.toDouble();
+    if (value is String) return double.tryParse(value) ?? fallback;
+    return fallback;
+  }
+
+  double _asConfidence(Object? value, {double fallback = 0}) {
+    final confidence = _asDouble(value, fallback: fallback);
+    if (confidence < 0) return 0;
+    if (confidence > 1) return 1;
+    return confidence;
+  }
+
+  String _normalizeSource(String? value, {required String fallback}) {
+    final rawSource = value?.toLowerCase().trim();
+    if (rawSource == 'adaptive' ||
+        rawSource == 'system' ||
+        rawSource == 'fallback' ||
+        rawSource == 'insufficient_data') {
+      return rawSource!;
+    }
+
+    return fallback;
+  }
+
+  String _normalizeVisualPriority(String? value, {String fallback = 'none'}) {
+    final rawPriority = value?.toLowerCase().trim();
+    if (rawPriority == 'none' ||
+        rawPriority == 'weak' ||
+        rawPriority == 'moderate' ||
+        rawPriority == 'strong') {
+      return rawPriority!;
+    }
+
+    return fallback;
+  }
+
+  String? _normalizeReason(String? value) {
+    final reason = value?.trim();
+    if (reason == null || reason.isEmpty) return null;
+    return reason.length > 80 ? reason.substring(0, 80) : reason;
   }
 
   /// Configuração de rotas para mapeamento
@@ -458,6 +544,12 @@ class AdaptiveInterfaceResponse {
   /// Modo de adaptação usado ('STATIC', 'INSTANT', 'GRADUAL')
   final String mode;
 
+  final String source;
+
+  final String visualPriority;
+
+  final String? reason;
+
   AdaptiveInterfaceResponse({
     this.dashboard,
     this.dashboardId,
@@ -466,6 +558,9 @@ class AdaptiveInterfaceResponse {
     required this.dashboardConfidence,
     required this.shortcuts,
     this.mode = 'GRADUAL',
+    this.source = 'system',
+    this.visualPriority = 'none',
+    this.reason,
   });
 
   /// Obtém o tipo de card preferencialmente do novo campo cardType,

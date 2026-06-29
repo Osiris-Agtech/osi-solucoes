@@ -615,7 +615,11 @@ class HomePageState extends State<HomePage> {
       hasAdaptiveDashboardRecommendation:
           store.hasAdaptiveDashboardRecommendation,
       adaptiveCardType: store.adaptiveCardType,
-      cardOrder: store.cardOrder,
+      adaptiveMode: store.adaptiveMode,
+      adaptiveSource: store.adaptiveSource,
+      adaptiveVisualPriority: store.adaptiveVisualPriority,
+      adaptiveReason: store.adaptiveReason,
+      adaptiveConfidence: store.dashboardConfidence,
     );
 
     final shouldShowSkeleton = (store.isLoading && store.dashboard == null) ||
@@ -3188,14 +3192,14 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
     return Container(
       color: Constants.kSecondBackgroundColor,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
         child: Align(
           alignment: Alignment.centerLeft,
           child: IconButton(
             onPressed: () => store.setIsCollaped(),
             tooltip: 'Abrir menu',
             padding: EdgeInsets.zero,
-            constraints: const BoxConstraints.tightFor(width: 40, height: 40),
+            constraints: const BoxConstraints.tightFor(width: 48, height: 48),
             style: IconButton.styleFrom(
               backgroundColor: Constants.kBackgroundColor,
               shape: RoundedRectangleBorder(

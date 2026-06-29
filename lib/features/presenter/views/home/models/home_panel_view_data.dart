@@ -2,6 +2,50 @@ import 'package:flutter/material.dart';
 
 enum HomePanelTone { neutral, primary, success, warning, danger }
 
+enum HomeAdaptationMode { static, instant, gradual }
+
+enum HomeAdaptationSource { adaptive, system, fallback, insufficientData }
+
+enum HomeAdaptationStrength { none, weak, moderate, strong }
+
+enum HomeAdaptationFocus { tarefas, lotes, producao, saude }
+
+class HomeAdaptationViewData {
+  final HomeAdaptationMode mode;
+  final double confidence;
+  final HomeAdaptationStrength strength;
+  final HomeAdaptationSource source;
+  final String? reason;
+  final bool isTemporary;
+  final HomeAdaptationFocus? highlightedFocus;
+  final String? label;
+
+  const HomeAdaptationViewData({
+    required this.mode,
+    required this.confidence,
+    required this.strength,
+    required this.source,
+    required this.reason,
+    required this.isTemporary,
+    required this.highlightedFocus,
+    required this.label,
+  });
+
+  static const none = HomeAdaptationViewData(
+    mode: HomeAdaptationMode.gradual,
+    confidence: 0,
+    strength: HomeAdaptationStrength.none,
+    source: HomeAdaptationSource.system,
+    reason: null,
+    isTemporary: false,
+    highlightedFocus: null,
+    label: null,
+  );
+
+  bool get hasHighlight =>
+      highlightedFocus != null && strength != HomeAdaptationStrength.none;
+}
+
 class HomePanelViewData {
   final HomeHeaderViewData header;
   final TodayCultivationViewData today;
@@ -9,6 +53,7 @@ class HomePanelViewData {
   final ProductionSummaryViewData production;
   final List<HomeModuleShortcutViewData> modules;
   final bool hasDashboardSupport;
+  final HomeAdaptationViewData adaptation;
 
   const HomePanelViewData({
     required this.header,
@@ -17,6 +62,7 @@ class HomePanelViewData {
     required this.production,
     required this.modules,
     required this.hasDashboardSupport,
+    required this.adaptation,
   });
 
   bool get isEmpty =>
@@ -46,6 +92,8 @@ class TodayCultivationViewData {
   final int upcomingHarvests;
   final List<HomePanelListItemViewData> tasks;
   final List<HomePanelListItemViewData> criticalAlerts;
+  final HomeAdaptationViewData adaptation;
+  final HomeAdaptationFocus? highlightedMetric;
 
   const TodayCultivationViewData({
     required this.tasksToday,
@@ -54,6 +102,8 @@ class TodayCultivationViewData {
     required this.upcomingHarvests,
     required this.tasks,
     required this.criticalAlerts,
+    required this.adaptation,
+    required this.highlightedMetric,
   });
 
   bool get isEmpty =>
@@ -111,6 +161,7 @@ class ProductionSummaryViewData {
   final String trendLabel;
   final String periodLabel;
   final String? reportRoute;
+  final HomeAdaptationViewData adaptation;
 
   const ProductionSummaryViewData({
     required this.metricLabel,
@@ -118,6 +169,7 @@ class ProductionSummaryViewData {
     required this.trendLabel,
     required this.periodLabel,
     required this.reportRoute,
+    required this.adaptation,
   });
 
   bool get isEmpty => metricValue == '0' && trendLabel.isEmpty;

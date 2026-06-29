@@ -9,6 +9,7 @@ import 'package:osi_solucoes/features/presenter/models/fertilizante/fertilizante
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/views/solucao/components/customTextFormField.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
@@ -513,13 +514,9 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     );
   }
 
-  AppBar appBar() {
-    return AppBar(
-      backgroundColor: Constants.kBackgroundColor,
-      elevation: 0,
-      leading: const BackButton(
-        color: Constants.kPrimaryColor,
-      ),
+  AppFormHeader appBar() {
+    return AppFormHeader(
+      onBack: () => Get.back(),
     );
   }
 

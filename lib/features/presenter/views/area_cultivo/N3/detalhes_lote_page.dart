@@ -10,6 +10,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.d
 import 'package:osi_solucoes/features/presenter/views/agenda/agenda_page.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_panel_card.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_section_header.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 
 import 'components/detalhes_page/horizontal_lista.dart';
 
@@ -46,7 +47,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
         body: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
-            _header(),
+            sliverHeader(),
             SliverToBoxAdapter(
               child: Observer(builder: (_) {
                 return Column(
@@ -84,11 +85,13 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     const SizedBox(height: 8),
                     _productionField(
                       label: 'Bandejas semeadas',
-                      value: store.loteSelecionado.bandeijas_semeadas?.toString(),
+                      value:
+                          store.loteSelecionado.bandeijas_semeadas?.toString(),
                     ),
                     _productionField(
                       label: 'Mudas transplantadas',
-                      value: store.loteSelecionado.mudas_transplantadas?.toString(),
+                      value: store.loteSelecionado.mudas_transplantadas
+                          ?.toString(),
                     ),
                     _productionField(
                       label: 'Plantas colhidas',
@@ -96,7 +99,8 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                     ),
                     _productionField(
                       label: 'Embalagens produzidas',
-                      value: store.loteSelecionado.embalagens_produzidas?.toString(),
+                      value: store.loteSelecionado.embalagens_produzidas
+                          ?.toString(),
                     ),
                     const SizedBox(height: 32),
                   ],
@@ -109,95 +113,42 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
     );
   }
 
-  SliverToBoxAdapter _header() {
-    return SliverToBoxAdapter(
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 8,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: SafeArea(
-          bottom: false,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(4, 8, 4, 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      hoverColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      padding: EdgeInsets.zero,
-                      alignment: Alignment.centerLeft,
-                      onPressed: () => Get.back(),
-                      icon: const Icon(Icons.arrow_back),
-                      color: Constants.kPrimaryColor,
-                    ),
-                    const Spacer(),
-                    if (widget.enableEditing)
-                      PopupMenuButton(
-                        icon: SvgPicture.asset(
-                          "assets/icons/settings_icon.svg",
-                          colorFilter: ColorFilter.mode(
-                            Constants.kButtonGrey,
-                            BlendMode.srcIn,
-                          ),
-                          height: 20,
-                        ),
-                        itemBuilder: (context) => [
-                          PopupMenuItem(
-                            child: Row(
-                              children: const [
-                                Icon(Icons.edit_outlined, size: 18),
-                                SizedBox(width: 8),
-                                Text('Editar lote'),
-                              ],
-                            ),
-                            onTap: () async {
-                              store.setLoteEditing(store.loteSelecionado);
-                              Get.toNamed(Routes.cadastrarLotePage);
-                            },
-                          ),
-                        ],
-                      ),
-                    const SizedBox(width: 8),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    store.loteSelecionado.nome ?? 'Detalhes do Lote',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                    ),
+  AppPageHeaderSliver sliverHeader() {
+    return AppPageHeaderSliver(
+      title: store.loteSelecionado.nome ?? 'Detalhes do Lote',
+      subtitle:
+          '${store.loteSelecionado.setor?.area?.nome ?? '-'} / ${store.loteSelecionado.setor?.nome ?? '-'}',
+      onBack: () => Get.back(),
+      actions: widget.enableEditing
+          ? [
+              PopupMenuButton(
+                icon: SvgPicture.asset(
+                  "assets/icons/settings_icon.svg",
+                  colorFilter: ColorFilter.mode(
+                    Constants.kButtonGrey,
+                    BlendMode.srcIn,
                   ),
+                  height: 20,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    '${store.loteSelecionado.setor?.area?.nome ?? '-'} / ${store.loteSelecionado.setor?.nome ?? '-'}',
-                    style: TextStyle(
-                      color: Constants.kGreyMedium,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: Row(
+                      children: const [
+                        Icon(Icons.edit_outlined, size: 18),
+                        SizedBox(width: 8),
+                        Text('Editar lote'),
+                      ],
                     ),
+                    onTap: () async {
+                      store.setLoteEditing(store.loteSelecionado);
+                      Get.toNamed(Routes.cadastrarLotePage);
+                    },
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+                ],
+              ),
+              const SizedBox(width: 8),
+            ]
+          : [],
     );
   }
 

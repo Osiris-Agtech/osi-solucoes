@@ -2,10 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/editar_page/editarBottomSheet.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
 
 import '../../../../core/utils/toast.dart';
@@ -240,13 +242,9 @@ class _EditarProtocoloPageState extends State<EditarProtocoloPage> {
     );
   }
 
-  AppBar appBar() {
-    return AppBar(
-      backgroundColor: Constants.kBackgroundColor,
-      elevation: 0,
-      leading: const BackButton(
-        color: Constants.kPrimaryColor,
-      ),
+  AppFormHeader appBar() {
+    return AppFormHeader(
+      onBack: () => Get.back(),
     );
   }
 

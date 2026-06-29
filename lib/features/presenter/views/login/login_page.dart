@@ -45,10 +45,9 @@ class LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const AuthHeader(
-                  title: 'OSI Soluções',
+                  title: 'Gerenciador de Cultivos',
                   subtitle: 'Acesse sua conta para continuar o trabalho.',
                   badgeText: 'Acesso seguro',
-                  showLogo: true,
                 ),
                 const SizedBox(height: 24),
                 _formEmail(context),

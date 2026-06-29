@@ -2,12 +2,13 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get/get_utils/src/extensions/string_extensions.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
 import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/views/caderno_campo/components/lotes_bottomsheet.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.dart';
 import 'package:osi_solucoes/features/presenter/widgets/get_bottom_sheet.dart';
 import '../../../../../core/constants/constants.dart';
 import 'package:intl/intl.dart';
@@ -238,13 +239,9 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
     );
   }
 
-  AppBar appBar() {
-    return AppBar(
-      backgroundColor: Constants.kBackgroundColor,
-      elevation: 0,
-      leading: const BackButton(
-        color: Constants.kPrimaryColor,
-      ),
+  AppFormHeader appBar() {
+    return AppFormHeader(
+      onBack: () => Get.back(),
     );
   }
 

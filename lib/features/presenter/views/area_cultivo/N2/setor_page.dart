@@ -14,6 +14,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.da
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
@@ -57,7 +58,7 @@ class SetorPageState extends State<SetorPage> {
               primary: false,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                AppBar(areaN1: store.areaSelecionada, store: store),
+                _N2PageHeader(areaN1: store.areaSelecionada, store: store),
                 Observer(builder: (_) {
                   if (store.isSetorListLoading) {
                     return const SliverToBoxAdapter(
@@ -124,10 +125,9 @@ class SetorPageState extends State<SetorPage> {
   }
 }
 
-// ignore: camel_case_types
-class AppBar extends StatefulWidget {
+class _N2PageHeader extends StatefulWidget {
   final Area areaN1;
-  const AppBar({
+  const _N2PageHeader({
     super.key,
     required this.areaN1,
     required this.store,
@@ -136,307 +136,245 @@ class AppBar extends StatefulWidget {
   final SetorStore store;
 
   @override
-  State<AppBar> createState() => _AppBarState();
+  State<_N2PageHeader> createState() => _N2PageHeaderState();
 }
 
-class _AppBarState extends State<AppBar> {
+class _N2PageHeaderState extends State<_N2PageHeader> {
   AreaCultivoStore areaStore = GetIt.I<AreaCultivoStore>();
-  SetorStore store = GetIt.I<SetorStore>();
+
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (_) {
-      return AnimatedContainer(
-        duration: const Duration(seconds: 2),
-        child: SliverAppBar(
-          pinned: true,
-          backgroundColor: Colors.white,
-          toolbarHeight: store.dropDownValue == "Data" ? 200 : 175,
-          floating: true,
-          automaticallyImplyLeading: false,
-          forceElevated: true,
-          elevation: 1,
-          actions: [
-            Align(
-              alignment: const Alignment(0.6, -0.9),
-              child: Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: PopupMenuButton(
-                      icon: SvgPicture.asset(
-                        "assets/icons/settings_icon.svg",
-                        colorFilter: ColorFilter.mode(
-                          Constants.kButtonGrey,
-                          BlendMode.srcIn,
-                        ),
-                        height: 20,
-                      ),
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          child: Row(
-                            children: const [
-                              Text('Editar'),
-                            ],
-                          ),
-                          onTap: () async {
-                            areaStore.setAreaEditing(widget.areaN1);
-                            Get.toNamed(Routes.cadastrarAreaCultivoPage);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+      return AppPageHeaderSliver(
+        title: widget.areaN1.nome ?? '',
+        subtitle: 'Lista de setores cadastrados',
+        onBack: () => Get.back(),
+        pinned: true,
+        actions: [
+          PopupMenuButton(
+            icon: SvgPicture.asset(
+              "assets/icons/settings_icon.svg",
+              colorFilter: ColorFilter.mode(
+                Constants.kButtonGrey,
+                BlendMode.srcIn,
               ),
+              height: 20,
             ),
-          ],
-          flexibleSpace: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0, top: 8.0),
-                child: IconButton(
-                  hoverColor: Colors.transparent,
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  padding: EdgeInsets.zero,
-                  alignment: Alignment.centerLeft,
-                  onPressed: () => Get.back(),
-                  icon: const Icon(Icons.arrow_back),
-                  color: Constants.kPrimaryColor,
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: const Row(
+                  children: [
+                    Text('Editar'),
+                  ],
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: Text(
-                  widget.areaN1.nome ?? '',
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
-                child: Text(
-                  'Lista de setores cadastrados',
-                  style: const TextStyle(
-                    color: Constants.kGreyMedium,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                height: store.dropDownValue == "Data" ? 75 : 50,
-                color: const Color(0xFFF8F8F6),
-                padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.04,
-                ),
-                child: SizedBox(
-                  height: store.dropDownValue == "Data" ? 70 : 50,
-                  width: double.infinity,
-                  child: Row(
-                    children: [
-                      Observer(builder: (_) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 15.0, left: 10),
-                          child: store.dropDownValue == "Nome"
-                              ? const Icon(Icons.search)
-                              : const Icon(Icons.calendar_month_outlined),
-                        );
-                      }),
-                      store.dropDownValue == "Nome"
-                          ? Container()
-                          : const Spacer(),
-                      Observer(
-                        builder: (_) {
-                          return store.dropDownValue == "Nome"
-                              ? Expanded(
-                                  child: TextFormField(
-                                    decoration: const InputDecoration(
-                                      hintText: "Buscar...",
-                                      hintStyle: TextStyle(
-                                        fontFamily: "Roboto",
-                                      ),
-                                      border: InputBorder.none,
-                                    ),
-                                    onChanged: (newValue) {
-                                      store.setSearchSetorText(newValue);
-                                    },
-                                  ),
-                                )
-                              : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        const Text("De:"),
-                                        InkWell(
-                                          onTap: () {
-                                            dtp.DatePicker.showDatePicker(
-                                              context,
-                                              currentTime: store.data1,
-                                              locale: dtp.LocaleType.pt,
-                                              showTitleActions: true,
-                                              minTime: DateTime(2018, 3, 5),
-                                              maxTime: DateTime(2030, 12, 30),
-                                              onConfirm: (date) async {
-                                                store.setData1(date);
-                                                await store.buscarSetores();
-                                              },
-                                              theme: const dtp.DatePickerTheme(
-                                                doneStyle: TextStyle(
-                                                  color:
-                                                      Constants.kPrimaryColor,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          child: Card(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 5,
-                                              ),
-                                              child: Text(
-                                                "${store.data1.day} / ${store.data1.month} / ${store.data1.year}",
-                                                style: const TextStyle(
-                                                  color:
-                                                      Constants.kPrimaryColor,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Text("Até"),
-                                        InkWell(
-                                          onTap: () {
-                                            dtp.DatePicker.showDatePicker(
-                                              context,
-                                              currentTime: store.data2,
-                                              locale: dtp.LocaleType.pt,
-                                              showTitleActions: true,
-                                              minTime: DateTime(2018, 3, 5),
-                                              maxTime: DateTime(2030, 12, 30),
-                                              onConfirm: (date) async {
-                                                store.setData2(date);
-                                                await store.buscarSetores();
-                                              },
-                                              theme: const dtp.DatePickerTheme(
-                                                doneStyle: TextStyle(
-                                                  color:
-                                                      Constants.kPrimaryColor,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          child: Card(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 5,
-                                              ),
-                                              child: Text(
-                                                "${store.data2.day} / ${store.data2.month} / ${store.data2.year}",
-                                                style: const TextStyle(
-                                                  color:
-                                                      Constants.kPrimaryColor,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                );
-                        },
-                      ),
-                      const Spacer(),
-                      Observer(builder: (_) {
-                        return Container(
-                          height: 30,
-                          width: 80,
-                          decoration: const BoxDecoration(
-                            color: Constants.kPrimaryColor,
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              DropdownButton<String>(
-                                alignment: Alignment.center,
-                                value: store.dropDownValue,
-                                dropdownColor: Constants.kPrimaryColor,
-                                underline: DropdownButtonHideUnderline(
-                                    child: Container()),
-                                iconSize: 0,
-                                iconEnabledColor: Constants.kPrimaryColor,
-                                elevation: 16,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5)),
-                                style: const TextStyle(color: Colors.white),
-                                onChanged: (String? newValue) async {
-                                  if (newValue == store.dropDownValue) {
-                                    store.changeOrder();
-                                  } else {
-                                    store.setSearchSetorText('');
-                                  }
-                                  store.setDropDown(newValue!);
-                                  await store.buscarSetores();
-                                },
-                                items: <String>[
-                                  'Nome',
-                                  'Data'
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                              Observer(builder: (_) {
-                                return Icon(
-                                  store.order == "asc"
-                                      ? Icons.arrow_upward_rounded
-                                      : Icons.arrow_downward_rounded,
-                                  size: 14,
-                                  color: Colors.white,
-                                );
-                              }),
-                            ],
-                          ),
-                        );
-                      }),
-                    ],
-                  ),
-                ),
+                onTap: () async {
+                  areaStore.setAreaEditing(widget.areaN1);
+                  Get.toNamed(Routes.cadastrarAreaCultivoPage);
+                },
               ),
             ],
           ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(
+            widget.store.dropDownValue == "Data" ? 75 : 50,
+          ),
+          child: _N2FilterArea(store: widget.store),
         ),
       );
     });
   }
 }
 
+class _N2FilterArea extends StatelessWidget {
+  final SetorStore store;
+  const _N2FilterArea({required this.store});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: store.dropDownValue == "Data" ? 75 : 50,
+      color: const Color(0xFFF8F8F6),
+      padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width * 0.04,
+      ),
+      child: SizedBox(
+        height: store.dropDownValue == "Data" ? 70 : 50,
+        width: double.infinity,
+        child: Row(
+          children: [
+            Observer(builder: (_) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 15.0, left: 10),
+                child: store.dropDownValue == "Nome"
+                    ? const Icon(Icons.search)
+                    : const Icon(Icons.calendar_month_outlined),
+              );
+            }),
+            store.dropDownValue == "Nome" ? Container() : const Spacer(),
+            Observer(
+              builder: (_) {
+                return store.dropDownValue == "Nome"
+                    ? Expanded(
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            hintText: "Buscar...",
+                            hintStyle: TextStyle(
+                              fontFamily: "Roboto",
+                            ),
+                            border: InputBorder.none,
+                          ),
+                          onChanged: (newValue) {
+                            store.setSearchSetorText(newValue);
+                          },
+                        ),
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              const Text("De:"),
+                              InkWell(
+                                onTap: () {
+                                  dtp.DatePicker.showDatePicker(
+                                    context,
+                                    currentTime: store.data1,
+                                    locale: dtp.LocaleType.pt,
+                                    showTitleActions: true,
+                                    minTime: DateTime(2018, 3, 5),
+                                    maxTime: DateTime(2030, 12, 30),
+                                    onConfirm: (date) async {
+                                      store.setData1(date);
+                                      await store.buscarSetores();
+                                    },
+                                    theme: const dtp.DatePickerTheme(
+                                      doneStyle: TextStyle(
+                                        color: Constants.kPrimaryColor,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0,
+                                      vertical: 5,
+                                    ),
+                                    child: Text(
+                                      "${store.data1.day} / ${store.data1.month} / ${store.data1.year}",
+                                      style: const TextStyle(
+                                        color: Constants.kPrimaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Text("Até"),
+                              InkWell(
+                                onTap: () {
+                                  dtp.DatePicker.showDatePicker(
+                                    context,
+                                    currentTime: store.data2,
+                                    locale: dtp.LocaleType.pt,
+                                    showTitleActions: true,
+                                    minTime: DateTime(2018, 3, 5),
+                                    maxTime: DateTime(2030, 12, 30),
+                                    onConfirm: (date) async {
+                                      store.setData2(date);
+                                      await store.buscarSetores();
+                                    },
+                                    theme: const dtp.DatePickerTheme(
+                                      doneStyle: TextStyle(
+                                        color: Constants.kPrimaryColor,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0,
+                                      vertical: 5,
+                                    ),
+                                    child: Text(
+                                      "${store.data2.day} / ${store.data2.month} / ${store.data2.year}",
+                                      style: const TextStyle(
+                                        color: Constants.kPrimaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+              },
+            ),
+            const Spacer(),
+            Observer(builder: (_) {
+              return Container(
+                height: 30,
+                width: 80,
+                decoration: const BoxDecoration(
+                  color: Constants.kPrimaryColor,
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    DropdownButton<String>(
+                      alignment: Alignment.center,
+                      value: store.dropDownValue,
+                      dropdownColor: Constants.kPrimaryColor,
+                      underline:
+                          DropdownButtonHideUnderline(child: Container()),
+                      iconSize: 0,
+                      iconEnabledColor: Constants.kPrimaryColor,
+                      elevation: 16,
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      style: const TextStyle(color: Colors.white),
+                      onChanged: (String? newValue) async {
+                        if (newValue == store.dropDownValue) {
+                          store.changeOrder();
+                        } else {
+                          store.setSearchSetorText('');
+                        }
+                        store.setDropDown(newValue!);
+                        await store.buscarSetores();
+                      },
+                      items: <String>['Nome', 'Data']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Observer(builder: (_) {
+                      return Icon(
+                        store.order == "asc"
+                            ? Icons.arrow_upward_rounded
+                            : Icons.arrow_downward_rounded,
+                        size: 14,
+                        color: Colors.white,
+                      );
+                    }),
+                  ],
+                ),
+              );
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+}

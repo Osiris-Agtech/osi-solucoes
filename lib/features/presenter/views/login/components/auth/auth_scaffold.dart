@@ -30,23 +30,35 @@ class AuthScaffold extends StatelessWidget {
             onVerticalDragCancel: () => FocusScope.of(context).unfocus(),
             child: LayoutBuilder(
               builder: (context, constraints) {
+                final horizontalPadding =
+                    constraints.maxWidth >= 720 ? 32.0 : 20.0;
+                final topPadding = leading == null ? 24.0 : 12.0;
+                final bottomPadding =
+                    28.0 + MediaQuery.viewInsetsOf(context).bottom;
+
                 return SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   padding: EdgeInsets.fromLTRB(
-                    constraints.maxWidth >= 720 ? 32 : 20,
-                    leading == null ? 24 : 12,
-                    constraints.maxWidth >= 720 ? 32 : 20,
-                    28 + MediaQuery.viewInsetsOf(context).bottom,
+                    horizontalPadding,
+                    topPadding,
+                    horizontalPadding,
+                    bottomPadding,
                   ),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: maxWidth),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          if (leading != null) leading!,
-                          child,
-                        ],
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight:
+                          constraints.maxHeight - topPadding - bottomPadding,
+                    ),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxWidth),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (leading != null) leading!,
+                            child,
+                          ],
+                        ),
                       ),
                     ),
                   ),

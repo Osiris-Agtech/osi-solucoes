@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/views/onboarding/splash_page.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.dart';
 import 'package:rive/rive.dart' as rive;
 import 'package:flutter/material.dart';
 
@@ -34,26 +35,7 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Constants.kBackgroundColor,
-          appBar: AppBar(
-            backgroundColor: Constants.kBackgroundColor,
-            leading: Builder(builder: (_) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: IconButton(
-                  splashColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onPressed: () => Get.back(), // Modular.to.pop(),
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    size: 30,
-                  ),
-                  color: Constants.kPrimaryColor,
-                ),
-              );
-            }),
-            elevation: 0,
-          ),
+          appBar: appBar(),
           body: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
@@ -271,6 +253,12 @@ class ConfirmaSegurancaPageState extends State<ConfirmaSegurancaPage> {
           ),
         ),
       ),
+    );
+  }
+
+  AppFormHeader appBar() {
+    return AppFormHeader(
+      onBack: () => Get.back(),
     );
   }
 

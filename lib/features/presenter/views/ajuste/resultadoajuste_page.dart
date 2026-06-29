@@ -6,6 +6,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/core/utils/decimal_format.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoConcentrada/solucaoConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/ajustes_store.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 import 'package:rive/rive.dart';
 
 class ResultadoajustePage extends StatefulWidget {
@@ -461,58 +462,27 @@ class AppBarCustom extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverOverlapAbsorber(
       handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-      sliver: SliverAppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-        toolbarHeight: 120,
+      sliver: AppPageHeaderSliver(
+        title: 'Resultado Ajuste',
+        onBack: () => Get.back(),
         pinned: true,
-        forceElevated: true,
-        elevation: 1,
-        flexibleSpace: Padding(
-          padding: EdgeInsets.only(left: 16, top: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              IconButton(
-                hoverColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                padding: EdgeInsets.zero,
-                alignment: Alignment.centerLeft,
-                onPressed: () => Get.back(),
-                icon: const Icon(Icons.arrow_back),
-                color: Constants.kPrimaryColor,
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'Resultado Ajuste',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
+        floating: false,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(48),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: TabBar(
+              controller: tabController,
+              isScrollable: true,
+              labelColor: Constants.kPrimaryColor,
+              unselectedLabelColor: Constants.kGreyMedium,
+              indicatorColor: Constants.kPrimaryColor,
+              tabs: const [
+                Tab(text: 'Fertilizantes'),
+                Tab(text: 'Solução Concentrada'),
+              ],
+            ),
           ),
-        ),
-        bottom: TabBar(
-          controller: tabController,
-          unselectedLabelColor: const Color(0xFF929292),
-          unselectedLabelStyle:
-              const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-          labelStyle:
-              const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          labelColor: Constants.kPrimaryColor,
-          tabs: const [
-            Tab(text: "Fertilizantes"),
-            Tab(
-              child: Text(
-                "Solução \n Concentrada",
-                textAlign: TextAlign.center,
-              ),
-            )
-          ],
         ),
       ),
     );

@@ -17,13 +17,25 @@ class TodayCultivationPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HomePanelCard(
+      adaptation: data.adaptation.hasHighlight ? data.adaptation : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const HomeSectionTitle(
-            icon: Icons.eco_rounded,
-            title: 'Hoje no cultivo',
-            subtitle: 'Pendências, lotes e alertas fora do carousel',
+          Row(
+            children: [
+              const Expanded(
+                child: HomeSectionTitle(
+                  icon: Icons.eco_rounded,
+                  title: 'Hoje no cultivo',
+                  subtitle: 'Pendências, lotes e alertas fora do carousel',
+                ),
+              ),
+              if (data.adaptation.hasHighlight && data.adaptation.label != null)
+                HomeBadge(
+                  icon: Icons.auto_awesome,
+                  label: data.adaptation.label!,
+                ),
+            ],
           ),
           const SizedBox(height: 14),
           Wrap(
@@ -34,21 +46,27 @@ class TodayCultivationPanel extends StatelessWidget {
                 label: 'Tarefas hoje',
                 value: data.tasksToday,
                 tone: HomePanelTone.primary,
+                isHighlighted:
+                    data.highlightedMetric == HomeAdaptationFocus.tarefas,
               ),
               _MetricPill(
                 label: 'Atrasadas',
                 value: data.overdueTasks,
                 tone: HomePanelTone.danger,
+                isHighlighted:
+                    data.highlightedMetric == HomeAdaptationFocus.saude,
               ),
               _MetricPill(
                 label: 'Lotes ativos',
                 value: data.activeLots,
                 tone: HomePanelTone.success,
+                isHighlighted: data.highlightedMetric == HomeAdaptationFocus.lotes,
               ),
               _MetricPill(
                 label: 'Colheitas próximas',
                 value: data.upcomingHarvests,
                 tone: HomePanelTone.warning,
+                isHighlighted: data.highlightedMetric == HomeAdaptationFocus.lotes,
               ),
             ],
           ),
@@ -118,11 +136,13 @@ class _MetricPill extends StatelessWidget {
   final String label;
   final int value;
   final HomePanelTone tone;
+  final bool isHighlighted;
 
   const _MetricPill({
     required this.label,
     required this.value,
     required this.tone,
+    this.isHighlighted = false,
   });
 
   @override
@@ -133,6 +153,9 @@ class _MetricPill extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(14),
+        border: isHighlighted
+            ? Border.all(color: color.withValues(alpha: 0.45))
+            : null,
       ),
       child: Text(
         '$value $label',

@@ -64,7 +64,6 @@ class CadastroPageState extends State<CadastroPage> {
                         '${"titlePageCadastro1".i18n()} ${"titlePageCadastro2".i18n()}',
                     subtitle: 'Informe seus dados para criar o acesso.',
                     badgeText: 'Cadastro',
-                    icon: Icons.person_add_alt_1_outlined,
                   ),
                   const SizedBox(height: 22),
                   _personalSection(),

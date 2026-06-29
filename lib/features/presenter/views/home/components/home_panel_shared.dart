@@ -6,26 +6,35 @@ import '../models/home_panel_view_data.dart';
 
 class HomePanelCard extends StatelessWidget {
   final Widget child;
+  final HomeAdaptationViewData? adaptation;
 
-  const HomePanelCard({super.key, required this.child});
+  const HomePanelCard({super.key, required this.child, this.adaptation});
 
   @override
-  Widget build(BuildContext context) => Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, 3),
-              blurRadius: 16,
-              color: Colors.black.withValues(alpha: 0.06),
-            ),
-          ],
-        ),
-        child: child,
-      );
+  Widget build(BuildContext context) {
+    final shouldHighlight = adaptation?.hasHighlight == true;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: shouldHighlight
+            ? Border.all(
+                color: Constants.kPrimaryColor.withValues(alpha: 0.28),
+              )
+            : null,
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 3),
+            blurRadius: 16,
+            color: Colors.black.withValues(alpha: 0.06),
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
 }
 
 class HomeSectionTitle extends StatelessWidget {

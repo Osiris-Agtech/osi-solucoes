@@ -37,17 +37,6 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
       ),
       child: AuthScaffold(
         maxWidth: 760,
-        leading: Align(
-          alignment: Alignment.centerLeft,
-          child: IconButton(
-            splashColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onPressed: _goBack,
-            icon: const Icon(Icons.arrow_back, size: 28),
-            color: Constants.kPrimaryColor,
-          ),
-        ),
         child: AuthPanelCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -57,10 +46,27 @@ class _MultiAccountsPageState extends State<MultiAccountsPage> {
                 subtitle:
                     'Você possui vínculo com mais de uma conta. Selecione para avançar.',
                 badgeText: 'Conta ativa',
-                icon: Icons.account_tree_outlined,
               ),
               const SizedBox(height: 22),
               _buildAccounts(context),
+              if ((widget.user.contas ?? []).length > 1) ...[
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Constants.kPrimaryColor,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      textStyle: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    onPressed: _goBack,
+                    child: const Text('Voltar'),
+                  ),
+                ),
+              ],
             ],
           ),
         ),

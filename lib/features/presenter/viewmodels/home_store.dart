@@ -59,10 +59,15 @@ abstract class HomeStoreBase with Store {
 
   String adaptiveDashboardSource = 'system';
 
+  String adaptiveSource = 'system';
+
+  String adaptiveVisualPriority = 'none';
+
+  String? adaptiveReason;
+
   bool get hasAdaptiveDashboardRecommendation =>
-      adaptiveDashboardSource == 'adaptive' &&
-      adaptiveDashboard != null &&
-      dashboardConfidence > 0.5;
+      adaptiveSource == 'adaptive' &&
+      (adaptiveDashboard != null || adaptiveCardType != null);
 
   // Navegação do dashboard (um card por vez)
   @observable
@@ -105,59 +110,12 @@ abstract class HomeStoreBase with Store {
   @observable
   String? currentSessionId;
 
-  /// Mapeamento estático de nomes de dashboard para tipos de cards
-  /// Atualizado com os valores exatos que a API retorna
-  static const Map<String, String> _dashboardToCardTypeMap = {
-    'Lotes em Produção': 'lotes',
-    'Tarefas Pendentes': 'tarefas',
-    'Produção Total': 'producao',
-    'Saúde das Equipes': 'saude',
-  };
-
   /// Inicializa a ordem dos cards com o recomendado em primeiro
   void initializeCardOrder() {
     const allCards = ['lotes', 'tarefas', 'producao', 'saude'];
-
-    // Determina o card recomendado
-    // Prioridade 1: cardType direto da API (novo contrato)
-    // Prioridade 2: mapeamento por nome exato (backward compatible)
-    String? recommendedCard = adaptiveCardType;
-
-    if (recommendedCard == null &&
-        adaptiveDashboard != null &&
-        dashboardConfidence > 0.5) {
-      recommendedCard = _mapDashboardToCardExact(adaptiveDashboard!);
-    }
-
-    // Se não há card recomendado ou confiança é baixa, usa ordem padrão
-    if (recommendedCard == null || !allCards.contains(recommendedCard)) {
-      cardOrder = List.from(allCards);
-      currentCardIndex = 0;
-      print('📊 [HOME_STORE] Ordem padrão dos cards: $cardOrder');
-      return;
-    }
-
-    // Coloca o recomendado primeiro
-    cardOrder = [recommendedCard];
-    cardOrder.addAll(allCards.where((card) => card != recommendedCard));
+    cardOrder = List.from(allCards);
     currentCardIndex = 0;
-    print(
-        '📊 [HOME_STORE] Card recomendado "$recommendedCard" em primeiro. Ordem: $cardOrder');
-  }
-
-  /// Mapeia o nome do dashboard adaptativo para o tipo de card usando matching exato
-  /// Fallback para heurística apenas se necessário
-  String? _mapDashboardToCardExact(String dashboardName) {
-    // Matching exato primeiro
-    final exactMatch = _dashboardToCardTypeMap[dashboardName];
-    if (exactMatch != null) {
-      return exactMatch;
-    }
-
-    // Log de aviso para dashboards não mapeados
-    print(
-        '⚠️ [HOME_STORE] Dashboard não mapeado: "$dashboardName". Verificar se a API foi atualizada.');
-    return null;
+    print('📊 [HOME_STORE] Ordem estrutural padrão dos cards: $cardOrder');
   }
 
   /// Busca a configuração adaptativa do usuário no Firestore
@@ -250,6 +208,9 @@ abstract class HomeStoreBase with Store {
           adaptiveDashboard = null;
           adaptiveCardType = null;
           adaptiveDashboardSource = 'system';
+          adaptiveSource = 'fallback';
+          adaptiveVisualPriority = 'none';
+          adaptiveReason = null;
           dashboardConfidence = 0.0;
           print(' └─ Usando ${recommendedShortcuts.length} atalhos padrão');
         },
@@ -258,7 +219,10 @@ abstract class HomeStoreBase with Store {
           recommendedShortcuts = _ensureMinimumShortcuts(response.shortcuts);
           adaptiveDashboard = response.dashboard;
           adaptiveCardType = response.cardType; // Novo campo da API
-          adaptiveDashboardSource = response.dashboardSource;
+          adaptiveDashboardSource = response.source;
+          adaptiveSource = response.source;
+          adaptiveVisualPriority = response.visualPriority;
+          adaptiveReason = response.reason;
           dashboardConfidence = response.dashboardConfidence;
           adaptiveMode = response.mode; // Mode para métricas
 
@@ -273,11 +237,9 @@ abstract class HomeStoreBase with Store {
           print(' └─ Mode: $adaptiveMode');
           print(' └─ Session ID: ${currentSessionId ?? 'null'}');
 
-          // Determina se aplicará o dashboard
           final hasRecommendation =
               (adaptiveCardType != null || adaptiveDashboard != null) &&
-                  adaptiveDashboardSource == 'adaptive' &&
-                  dashboardConfidence > 0.5;
+                  adaptiveSource == 'adaptive';
 
           if (hasRecommendation) {
             print(' └─ ✅ Dashboard será aplicado automaticamente');
@@ -294,8 +256,11 @@ abstract class HomeStoreBase with Store {
       // Fallback para atalhos padrão
       print('❌ [HOME_STORE] Exceção ao carregar interface: $e');
       print('   StackTrace: $stackTrace');
-      recommendedShortcuts = _getDefaultShortcuts();
-      adaptiveDashboardSource = 'system';
+          recommendedShortcuts = _getDefaultShortcuts();
+          adaptiveDashboardSource = 'system';
+          adaptiveSource = 'fallback';
+          adaptiveVisualPriority = 'none';
+          adaptiveReason = null;
       // Garante que a ordem dos cards seja inicializada mesmo em caso de erro
       initializeCardOrder();
     } finally {
