@@ -9,6 +9,8 @@ import 'package:osi_solucoes/features/data/repositories/agenda/agenda_repository
 import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequence_interaction_reporter.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequence_signals_store.dart';
 
 import '../../data/repositories/cadernoCampo/cadeno_campo_repository.dart';
 import '../models/lote/lote_model.dart';
@@ -77,11 +79,40 @@ abstract class AgendaStoreBase with Store {
           }
         }
         atividadeList = List.from(data);
+        if (atividadeList.isNotEmpty &&
+            _hasScopedLotWithProtocolCreated() &&
+            GetIt.I.isRegistered<InstantSequenceInteractionReporter>()) {
+          GetIt.I<InstantSequenceInteractionReporter>()
+              .reportGeneratedAgendaActivitiesChecked();
+        }
       },
     );
 
     state = AgendaState.loaded;
     return;
+  }
+
+  bool _hasScopedLotWithProtocolCreated() {
+    final getIt = GetIt.I;
+    if (!getIt.isRegistered<InstantSequenceSignalsStore>() ||
+        !getIt.isRegistered<HomeStore>()) {
+      return false;
+    }
+
+    final store = getIt<InstantSequenceSignalsStore>();
+    final homeStore = getIt<HomeStore>();
+    store.syncScope(_resolveScopeKey(homeStore));
+    return store.snapshot.lotWithProtocolCreated;
+  }
+
+  String _resolveScopeKey(HomeStore homeStore) {
+    final userId = homeStore.authController.usuario.id?.toString() ?? 'unknown';
+    final accountId = homeStore.authController.usuario.selected_conta?.conta?.id
+            ?.toString() ??
+        'unknown';
+    final sessionId = homeStore.currentSessionId ?? 'unknown';
+    final adaptiveMode = homeStore.adaptiveMode;
+    return '$userId|$accountId|$sessionId|$adaptiveMode';
   }
 
   @action
@@ -241,8 +272,13 @@ abstract class AgendaStoreBase with Store {
       (data) async {
         toastSuccess(message: 'Atividade marcada como feita!');
         await buscarAtividades();
-        // Atualiza o dashboard da home
-        GetIt.I<HomeStore>().carregarHome();
+        final changed =
+            GetIt.I.isRegistered<InstantSequenceInteractionReporter>() &&
+                GetIt.I<InstantSequenceInteractionReporter>()
+                    .reportAgendaActivitiesCompleted();
+        if (!changed) {
+          await GetIt.I<HomeStore>().refreshHomeAfterAgendaMutation();
+        }
       },
     );
 
@@ -265,8 +301,7 @@ abstract class AgendaStoreBase with Store {
       (data) async {
         await buscarAtividades();
         toastSuccess(message: 'Atividade deletada com sucesso!');
-        // Atualiza o dashboard da home
-        GetIt.I<HomeStore>().carregarHome();
+        await GetIt.I<HomeStore>().refreshHomeAfterAgendaMutation();
       },
     );
 
@@ -340,8 +375,7 @@ abstract class AgendaStoreBase with Store {
       (data) async {
         toastSuccess(message: 'Atividade atualizada com sucesso!');
         await buscarAtividades();
-        // Atualiza o dashboard da home
-        GetIt.I<HomeStore>().carregarHome();
+        await GetIt.I<HomeStore>().refreshHomeAfterAgendaMutation();
       },
     );
 
@@ -373,8 +407,7 @@ abstract class AgendaStoreBase with Store {
       (data) async {
         toastSuccess(message: 'Atividade cadastrada com sucesso!');
         await buscarAtividades();
-        // Atualiza o dashboard da home
-        GetIt.I<HomeStore>().carregarHome();
+        await GetIt.I<HomeStore>().refreshHomeAfterAgendaMutation();
       },
     );
 

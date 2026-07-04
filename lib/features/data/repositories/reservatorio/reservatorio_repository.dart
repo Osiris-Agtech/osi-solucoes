@@ -54,6 +54,13 @@ class ReservatorioRepository implements IReservatorioRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> deletarReservatorio(int reservatorioId) async {
+    var result = await datasource.deletarReservatorio(
+        reservatorioId: reservatorioId);
+    return result;
+  }
+
+  @override
   Future<Either<Failure, Reservatorio>> updateReservatorio(
       {required Reservatorio novoReservatorio}) async {
     var result =

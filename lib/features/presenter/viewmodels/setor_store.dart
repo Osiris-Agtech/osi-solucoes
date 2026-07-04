@@ -135,6 +135,9 @@ abstract class SetorStoreBase with Store {
   bool isNovoSetorLoading = false;
 
   @observable
+  bool isDeletingSetorCascade = false;
+
+  @observable
   int dotIndicator = 1;
 
   @observable
@@ -207,6 +210,27 @@ abstract class SetorStoreBase with Store {
 
     mostrarErroFormulario = !validate;
     return validate;
+  }
+
+  @action
+  Future<void> deletarSetorCascade(int setorId) async {
+    isDeletingSetorCascade = true;
+
+    var result = await setorRepository.deletarSetorCascade(setorId);
+
+    result.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (_) {
+        toastSuccess(message: 'Setor deletado com sucesso');
+        buscarSetores();
+        limparTudo();
+        Get.close(1);
+      },
+    );
+
+    isDeletingSetorCascade = false;
   }
 
   @action

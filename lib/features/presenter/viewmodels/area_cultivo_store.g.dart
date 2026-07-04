@@ -178,6 +178,23 @@ mixin _$AreaCultivoStore on AreaCultivoStoreBase, Store {
     });
   }
 
+  late final _$isDeletingAreaCascadeAtom = Atom(
+      name: 'AreaCultivoStoreBase.isDeletingAreaCascade', context: context);
+
+  @override
+  bool get isDeletingAreaCascade {
+    _$isDeletingAreaCascadeAtom.reportRead();
+    return super.isDeletingAreaCascade;
+  }
+
+  @override
+  set isDeletingAreaCascade(bool value) {
+    _$isDeletingAreaCascadeAtom.reportWrite(value, super.isDeletingAreaCascade,
+        () {
+      super.isDeletingAreaCascade = value;
+    });
+  }
+
   late final _$showTextFormFieldAtom =
       Atom(name: 'AreaCultivoStoreBase.showTextFormField', context: context);
 
@@ -478,6 +495,15 @@ mixin _$AreaCultivoStore on AreaCultivoStoreBase, Store {
         .run(() => super.buscarLocalizacoes());
   }
 
+  late final _$deletarAreaCascadeAsyncAction =
+      AsyncAction('AreaCultivoStoreBase.deletarAreaCascade', context: context);
+
+  @override
+  Future<void> deletarAreaCascade(int areaId) {
+    return _$deletarAreaCascadeAsyncAction
+        .run(() => super.deletarAreaCascade(areaId));
+  }
+
   late final _$registrarAreaAsyncAction =
       AsyncAction('AreaCultivoStoreBase.registrarArea', context: context);
 
@@ -694,6 +720,7 @@ areaList: ${areaList},
 searchAreaText: ${searchAreaText},
 mostrarErroFormulario: ${mostrarErroFormulario},
 isNovaAreaLoading: ${isNovaAreaLoading},
+isDeletingAreaCascade: ${isDeletingAreaCascade},
 showTextFormField: ${showTextFormField},
 isEditing: ${isEditing},
 dotIndicator: ${dotIndicator},

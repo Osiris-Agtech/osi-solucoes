@@ -40,6 +40,9 @@ abstract class SolucaoStoreBase with Store {
   bool isSolucaoDetalhesLoading = false;
 
   @observable
+  bool isDeletingSolucaoNutritiva = false;
+
+  @observable
   int dotIndicator = 1;
 
   @observable
@@ -92,6 +95,27 @@ abstract class SolucaoStoreBase with Store {
 
   @action
   bool setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
+
+  @action
+  Future<void> deletarSolucaoNutritiva(int snutritivaId) async {
+    isDeletingSolucaoNutritiva = true;
+    SolucaoRepository solucaoRepository = GetIt.I<SolucaoRepository>();
+
+    var result = await solucaoRepository.deletarSolucaoNutritiva(snutritivaId);
+
+    result.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (_) async {
+        toastSuccess(message: 'Solução deletada com sucesso');
+        await buscarSolucoes();
+        Get.close(1);
+      },
+    );
+
+    isDeletingSolucaoNutritiva = false;
+  }
 
   @action
   void setExpandedCard(int index) {

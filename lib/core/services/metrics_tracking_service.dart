@@ -217,4 +217,245 @@ class MetricsTrackingService {
     _firstProductiveNavTracked = false;
     _sessionStartTimestamp = null;
   }
+
+  /// M4: Instant adaptation applied
+  Future<void> trackInstantAdaptationApplied({
+    required String mode,
+    required String sessionId,
+    required List<String> renderedComponents,
+    required bool usedFallback,
+  }) async {
+    final analytics = _analyticsInstance;
+    if (analytics == null) return;
+
+    try {
+      await analytics.logEvent(
+        name: 'instant_adaptation_applied',
+        parameters: {
+          'mode': mode,
+          'session_id': sessionId,
+          'rendered_components': renderedComponents.join(','),
+          'component_count': renderedComponents.length,
+          'used_fallback': usedFallback.toString(),
+          'timestamp': DateTime.now().toIso8601String(),
+        },
+      );
+      print('📊 [METRICS] instant_adaptation_applied: ${renderedComponents.length} componentes');
+    } catch (e) {
+      print('❌ [METRICS] Erro ao registrar instant_adaptation_applied: $e');
+    }
+  }
+
+  /// M4: Next step shown
+  Future<void> trackNextStepShown({
+    required String nextStepId,
+    required String mode,
+    String? sessionId,
+  }) async {
+    final analytics = _analyticsInstance;
+    if (analytics == null) return;
+
+    try {
+      await analytics.logEvent(
+        name: 'next_step_shown',
+        parameters: {
+          'next_step_id': nextStepId,
+          'mode': mode,
+          if (sessionId != null) 'session_id': sessionId,
+        },
+      );
+    } catch (e) {
+      print('❌ [METRICS] Erro ao registrar next_step_shown: $e');
+    }
+  }
+
+  /// M4: Next step clicked
+  Future<void> trackNextStepClicked({
+    required String targetRoute,
+    required String mode,
+    String? sessionId,
+  }) async {
+    final analytics = _analyticsInstance;
+    if (analytics == null) return;
+
+    try {
+      await analytics.logEvent(
+        name: 'next_step_clicked',
+        parameters: {
+          'target_route': targetRoute,
+          'mode': mode,
+          if (sessionId != null) 'session_id': sessionId,
+        },
+      );
+    } catch (e) {
+      print('❌ [METRICS] Erro ao registrar next_step_clicked: $e');
+    }
+  }
+
+  /// M4: Section highlight shown
+  Future<void> trackSectionHighlightShown({
+    required String sectionId,
+    required String mode,
+    String? sessionId,
+  }) async {
+    final analytics = _analyticsInstance;
+    if (analytics == null) return;
+
+    try {
+      await analytics.logEvent(
+        name: 'section_highlight_shown',
+        parameters: {
+          'section_id': sectionId,
+          'mode': mode,
+          if (sessionId != null) 'session_id': sessionId,
+        },
+      );
+    } catch (e) {
+      print('❌ [METRICS] Erro ao registrar section_highlight_shown: $e');
+    }
+  }
+
+  /// M4: Section highlight clicked
+  Future<void> trackSectionHighlightClicked({
+    required String sectionId,
+    required String mode,
+    String? sessionId,
+  }) async {
+    final analytics = _analyticsInstance;
+    if (analytics == null) return;
+
+    try {
+      await analytics.logEvent(
+        name: 'section_highlight_clicked',
+        parameters: {
+          'section_id': sectionId,
+          'mode': mode,
+          if (sessionId != null) 'session_id': sessionId,
+        },
+      );
+    } catch (e) {
+      print('❌ [METRICS] Erro ao registrar section_highlight_clicked: $e');
+    }
+  }
+
+  /// M4: Info icon opened
+  Future<void> trackInfoIconOpened({
+    required String componentId,
+    required String mode,
+    String? sessionId,
+  }) async {
+    final analytics = _analyticsInstance;
+    if (analytics == null) return;
+
+    try {
+      await analytics.logEvent(
+        name: 'info_icon_opened',
+        parameters: {
+          'component_id': componentId,
+          'mode': mode,
+          if (sessionId != null) 'session_id': sessionId,
+        },
+      );
+    } catch (e) {
+      print('❌ [METRICS] Erro ao registrar info_icon_opened: $e');
+    }
+  }
+
+  /// M4: Contextual onboarding shown
+  Future<void> trackContextualOnboardingShown({
+    required String mode,
+    String? sessionId,
+  }) async {
+    final analytics = _analyticsInstance;
+    if (analytics == null) return;
+
+    try {
+      await analytics.logEvent(
+        name: 'contextual_onboarding_shown',
+        parameters: {
+          'mode': mode,
+          if (sessionId != null) 'session_id': sessionId,
+        },
+      );
+    } catch (e) {
+      print('❌ [METRICS] Erro ao registrar contextual_onboarding_shown: $e');
+    }
+  }
+
+  /// M4: Contextual onboarding clicked
+  Future<void> trackContextualOnboardingClicked({
+    required String targetRoute,
+    required String mode,
+    String? sessionId,
+  }) async {
+    final analytics = _analyticsInstance;
+    if (analytics == null) return;
+
+    try {
+      await analytics.logEvent(
+        name: 'contextual_onboarding_clicked',
+        parameters: {
+          'target_route': targetRoute,
+          'mode': mode,
+          if (sessionId != null) 'session_id': sessionId,
+        },
+      );
+    } catch (e) {
+      print('❌ [METRICS] Erro ao registrar contextual_onboarding_clicked: $e');
+    }
+  }
+
+  /// Info Card: shown
+  Future<void> trackInfoCardShown({
+    required String infoType,
+    required String source,
+    required String mode,
+    String? sessionId,
+  }) async {
+    final analytics = _analyticsInstance;
+    if (analytics == null) return;
+
+    try {
+      await analytics.logEvent(
+        name: 'info_card_shown',
+        parameters: {
+          'info_type': infoType,
+          'source': source,
+          'mode': mode,
+          if (sessionId != null) 'session_id': sessionId,
+        },
+      );
+      print(
+          '📊 [METRICS] info_card_shown: $infoType (source: $source, mode: $mode)');
+    } catch (e) {
+      print('❌ [METRICS] Erro ao registrar info_card_shown: $e');
+    }
+  }
+
+  /// Info Card: clicked
+  Future<void> trackInfoCardClicked({
+    required String infoType,
+    required String targetRoute,
+    required String mode,
+    String? sessionId,
+  }) async {
+    final analytics = _analyticsInstance;
+    if (analytics == null) return;
+
+    try {
+      await analytics.logEvent(
+        name: 'info_card_clicked',
+        parameters: {
+          'info_type': infoType,
+          'target_route': targetRoute,
+          'mode': mode,
+          if (sessionId != null) 'session_id': sessionId,
+        },
+      );
+      print(
+          '📊 [METRICS] info_card_clicked: $infoType → $targetRoute (mode: $mode)');
+    } catch (e) {
+      print('❌ [METRICS] Erro ao registrar info_card_clicked: $e');
+    }
+  }
 }

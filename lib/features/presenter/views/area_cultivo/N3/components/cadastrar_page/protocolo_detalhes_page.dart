@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_modal_sheet.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
 
 ListView protocoloDetalhes(LoteStore store, ProtocoloStore protocoloStore) {
   return ListView(
@@ -239,5 +242,37 @@ ListView protocoloDetalhes(LoteStore store, ProtocoloStore protocoloStore) {
         ),
       )
     ],
+  );
+}
+
+void showProtocoloDetalhesSheet(
+    BuildContext context, LoteStore store, ProtocoloStore protocoloStore) {
+  AppModalSheet.show(
+    title: 'Detalhes do Protocolo',
+    body: protocoloDetalhes(store, protocoloStore),
+    maxHeightFactor: 0.75,
+    bottomWidget: Padding(
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+      child: Observer(builder: (_) {
+        final isSelected =
+            store.protocoloVinculado?.id == store.protocoloDetalhes?.id;
+        return AppPrimaryButton(
+          label: isSelected ? 'Desvincular' : 'Vincular ao lote',
+          tone: isSelected ? AppButtonTone.danger : AppButtonTone.primary,
+          onPressed: () {
+            if (isSelected) {
+              store.protocoloVinculado = null;
+              toastSuccess(message: 'Protocolo desvinculado');
+            } else if (store.protocoloDetalhes != null) {
+              store.setProtocolo(store.protocoloDetalhes!);
+              toastSuccess(message: 'Protocolo vinculado com sucesso');
+            }
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
+          },
+        );
+      }),
+    ),
   );
 }

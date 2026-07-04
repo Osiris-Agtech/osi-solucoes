@@ -152,6 +152,23 @@ mixin _$SolucaoStore on SolucaoStoreBase, Store {
     });
   }
 
+  late final _$isDeletingSolucaoNutritivaAtom = Atom(
+      name: 'SolucaoStoreBase.isDeletingSolucaoNutritiva', context: context);
+
+  @override
+  bool get isDeletingSolucaoNutritiva {
+    _$isDeletingSolucaoNutritivaAtom.reportRead();
+    return super.isDeletingSolucaoNutritiva;
+  }
+
+  @override
+  set isDeletingSolucaoNutritiva(bool value) {
+    _$isDeletingSolucaoNutritivaAtom
+        .reportWrite(value, super.isDeletingSolucaoNutritiva, () {
+      super.isDeletingSolucaoNutritiva = value;
+    });
+  }
+
   late final _$dotIndicatorAtom =
       Atom(name: 'SolucaoStoreBase.dotIndicator', context: context);
 
@@ -430,6 +447,15 @@ mixin _$SolucaoStore on SolucaoStoreBase, Store {
         .reportWrite(value, super.solucaoConcentradaList, () {
       super.solucaoConcentradaList = value;
     });
+  }
+
+  late final _$deletarSolucaoNutritivaAsyncAction =
+      AsyncAction('SolucaoStoreBase.deletarSolucaoNutritiva', context: context);
+
+  @override
+  Future<void> deletarSolucaoNutritiva(int snutritivaId) {
+    return _$deletarSolucaoNutritivaAsyncAction
+        .run(() => super.deletarSolucaoNutritiva(snutritivaId));
   }
 
   late final _$buscarSolucoesAsyncAction =
@@ -864,6 +890,7 @@ isSolucaoListLoading: ${isSolucaoListLoading},
 isNovaSolucaoLoading: ${isNovaSolucaoLoading},
 isFertilizanteListLoading: ${isFertilizanteListLoading},
 isSolucaoDetalhesLoading: ${isSolucaoDetalhesLoading},
+isDeletingSolucaoNutritiva: ${isDeletingSolucaoNutritiva},
 dotIndicator: ${dotIndicator},
 novaSolucao: ${novaSolucao},
 solucaoList: ${solucaoList},

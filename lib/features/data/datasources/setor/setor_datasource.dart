@@ -19,6 +19,7 @@ abstract class ISetorDatasource {
   Future<Either<Failure, List<Reservatorio>>> buscarReservatorios(
       {required int contaId});
   Future<Either<Failure, Setor>> alterarSetor({required Setor alterarSetor});
+  Future<Either<Failure, bool>> deletarSetorCascade({required int setorId});
 }
 
 class SetorDatasource implements ISetorDatasource {
@@ -74,6 +75,7 @@ class SetorDatasource implements ISetorDatasource {
             lotes {
               id
               nome
+              ativo
             }
           }
         }
@@ -107,6 +109,7 @@ class SetorDatasource implements ISetorDatasource {
             lotes {
               id
               nome
+              ativo
             }
           }
         }
@@ -377,5 +380,45 @@ class SetorDatasource implements ISetorDatasource {
     } else {
       return Left(ErrorReservatorio(message: FailureMessage.emptyListMessage));
     }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deletarSetorCascade(
+      {required int setorId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      mutation SoftDeleteSetorCascade($setorId: Int!) {
+        softDeleteSetorCascade(setorId: $setorId) {
+          id
+          deleted_at
+        }
+      }
+    ''';
+
+    final MutationOptions options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'setorId': setorId,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        final response = result.data?['softDeleteSetorCascade'];
+        if (response is bool) return Right(response);
+        if (response is Map<String, dynamic>) {
+          final id = response['id'];
+          return Right(id is int && id > 0);
+        }
+        return const Right(true);
+      } catch (e) {
+        return Left(ErrorSetor(message: FailureMessage.errorDeleteSetor));
+      }
+    }
+
+    return Left(ErrorSetor(message: FailureMessage.errorDeleteSetor));
   }
 }

@@ -7,6 +7,8 @@ import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart'
 import 'package:osi_solucoes/core/services/metrics_tracking_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dartz/dartz.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_adaptive_home_mapper.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_adaptive_home_view_data.dart';
 
 class AdaptiveInterfaceService {
   FirebaseFunctions? _functions;
@@ -224,6 +226,100 @@ class AdaptiveInterfaceService {
         mode: 'GRADUAL',
         source: 'fallback',
         visualPriority: 'none',
+      ));
+    }
+  }
+
+  /// Busca interface adaptativa ENRIQUECIDA para modo INSTANT.
+  /// Envia operationalContext e clientCapabilities para a Cloud Function.
+  Future<Either<Failure, AdaptiveInterfaceResponse>> getInstantAdaptiveInterface({
+    required String mode,
+    required String sessionId,
+    required Map<String, dynamic> operationalContext,
+    required Map<String, dynamic> clientCapabilities,
+  }) async {
+    print(
+        '🔵 [ADAPTIVE-INSTANT] Iniciando busca de interface adaptativa enriquecida...');
+
+    try {
+      final functions = _functionsInstance;
+      if (functions == null) {
+        return Right(AdaptiveInterfaceResponse(
+          dashboard: null,
+          dashboardConfidence: 0.0,
+          shortcuts: _getDefaultShortcuts(),
+          mode: mode,
+          source: 'fallback',
+          visualPriority: 'none',
+          instantViewData:
+              const InstantAdaptiveHomeViewData(fallbackUsed: true),
+        ));
+      }
+
+      final now = DateTime.now();
+      final currentHour = now.hour;
+      final userId = _getUserId();
+
+      final callable = functions.httpsCallable('getAdaptiveInterface');
+      final result = await callable.call({
+        'hour': currentHour,
+        'userId': userId,
+        'mode': mode,
+        'sessionId': sessionId,
+        'operationalContext': operationalContext,
+        'clientCapabilities': clientCapabilities,
+      });
+
+      final data = _normalizeCallableData(result.data);
+
+      // Parse base response (reuse existing parsing logic)
+      final dashboardName = _asString(data['dashboard']);
+      final dashboardId = _asString(data['dashboardId']);
+      final cardType = _asString(data['cardType']);
+      final confidence = _asConfidence(data['confidence']);
+      final responseMode = _asString(data['mode']) ?? mode;
+      final source = _normalizeSource(
+        _asString(data['source']),
+        fallback: 'adaptive',
+      );
+      final visualPriority = _normalizeVisualPriority(
+        _asString(data['visualPriority']),
+        fallback: 'none',
+      );
+      final reason = _normalizeReason(_asString(data['reason']));
+
+      // Parse shortcuts (using shared helper)
+      final shortcuts = _parseShortcuts(data);
+
+      // Parse instant view data
+      final instantViewData = InstantAdaptiveHomeMapper.parse(
+        Map<String, dynamic>.from(data),
+      );
+
+      return Right(AdaptiveInterfaceResponse(
+        dashboard: dashboardName,
+        dashboardId: dashboardId,
+        cardType: cardType,
+        dashboardConfidence: confidence,
+        shortcuts: shortcuts,
+        mode: responseMode,
+        source: source,
+        visualPriority: visualPriority,
+        reason: reason,
+        instantViewData: instantViewData,
+      ));
+    } catch (e, stackTrace) {
+      print('❌ [ADAPTIVE-INSTANT] Erro: $e');
+      print(' StackTrace: $stackTrace');
+      return Right(AdaptiveInterfaceResponse(
+        dashboard: null,
+        dashboardConfidence: 0.0,
+        shortcuts: _getDefaultShortcuts(),
+        mode: mode,
+        source: 'fallback',
+        visualPriority: 'none',
+        instantViewData:
+            const InstantAdaptiveHomeViewData(fallbackUsed: true),
       ));
     }
   }
@@ -519,6 +615,63 @@ class AdaptiveInterfaceService {
       print('⚠️ [ADAPTIVE] Erro ao registrar métricas de exposição: $e');
     }
   }
+
+  /// Parseia atalhos do mapa de dados retornado pela Cloud Function.
+  /// Retorna atalhos padrão se a lista estiver vazia ou não houver atalhos válidos.
+  List<ShortcutModel> _parseShortcuts(Map<String, Object?> data) {
+    final shortcutsList = _asList(data['shortcuts']);
+
+    if (shortcutsList.isEmpty) {
+      return _getDefaultShortcuts();
+    }
+
+    final shortcuts = shortcutsList
+        .map((item) {
+          if (item is String) {
+            return _createShortcutFromRoute(item, 0.5);
+          } else if (item is Map) {
+            final route = _asString(item['route']) ??
+                _asString(item['predicted_target_screen']) ??
+                '';
+            final itemConfidence = _asConfidence(
+              item['prob'] ?? item['confidence'],
+              fallback: 0.5,
+            );
+            final resourceId = _asString(item['resourceId']);
+            final resourceType = _asString(item['resourceType']);
+            final resourceName = _asString(item['resourceName']);
+            final source = _resolveShortcutSource(
+              item,
+              confidence: itemConfidence,
+              resourceId: resourceId,
+            );
+
+            print(
+                ' └─ Atalho: $route (confiança: ${(itemConfidence * 100).toStringAsFixed(1)}%)');
+            if (resourceId != null && resourceName != null) {
+              print(
+                  ' └─ Recurso: $resourceType #$resourceId - "$resourceName"');
+            }
+
+            return _createShortcutFromRoute(
+              route,
+              itemConfidence,
+              resourceId: resourceId,
+              resourceType: resourceType,
+              resourceName: resourceName,
+              source: source,
+            );
+          }
+          return null;
+        })
+        .whereType<ShortcutModel>()
+        .toList();
+
+    if (shortcuts.isEmpty) {
+      return _getDefaultShortcuts();
+    }
+    return shortcuts;
+  }
 }
 
 /// Resposta da Cloud Function
@@ -550,6 +703,9 @@ class AdaptiveInterfaceResponse {
 
   final String? reason;
 
+  /// Dados enriquecidos para modo INSTANT.
+  final InstantAdaptiveHomeViewData? instantViewData;
+
   AdaptiveInterfaceResponse({
     this.dashboard,
     this.dashboardId,
@@ -561,6 +717,7 @@ class AdaptiveInterfaceResponse {
     this.source = 'system',
     this.visualPriority = 'none',
     this.reason,
+    this.instantViewData,
   });
 
   /// Obtém o tipo de card preferencialmente do novo campo cardType,

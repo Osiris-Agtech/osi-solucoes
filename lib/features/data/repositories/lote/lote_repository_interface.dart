@@ -36,4 +36,5 @@ abstract class ILoteRepository {
   Future<Either<Failure, List<int>>> buscarTodosSetoresId(
       {required List<int> areasId});
   Future<Either<Failure, List<int>>> buscarTodasAreasId({required int contaId});
+  Future<Either<Failure, bool>> deletarLoteCascade(int loteId);
 }

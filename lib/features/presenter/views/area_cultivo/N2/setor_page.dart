@@ -95,7 +95,7 @@ class SetorPageState extends State<SetorPage> {
                             subtitle: '# ${store.searchSetor[index].id}',
                             metadata: [
                               Text(
-                                'Lotes: ${store.searchSetor[index].lotes?.length ?? 0}',
+                                'Lotes: ${store.searchSetor[index].lotes?.where((l) => l.ativo == true).length ?? 0}',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: Constants.kPrimaryColor,
@@ -151,7 +151,7 @@ class _N2PageHeaderState extends State<_N2PageHeader> {
         onBack: () => Get.back(),
         pinned: true,
         actions: [
-          PopupMenuButton(
+          PopupMenuButton<void>(
             icon: SvgPicture.asset(
               "assets/icons/settings_icon.svg",
               colorFilter: ColorFilter.mode(
@@ -160,8 +160,8 @@ class _N2PageHeaderState extends State<_N2PageHeader> {
               ),
               height: 20,
             ),
-            itemBuilder: (context) => [
-              PopupMenuItem(
+            itemBuilder: (context) => <PopupMenuEntry<void>>[
+              PopupMenuItem<void>(
                 child: const Row(
                   children: [
                     Text('Editar'),
@@ -171,6 +171,21 @@ class _N2PageHeaderState extends State<_N2PageHeader> {
                   areaStore.setAreaEditing(widget.areaN1);
                   Get.toNamed(Routes.cadastrarAreaCultivoPage);
                 },
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem<void>(
+                child: const Row(
+                  children: [
+                    Icon(Icons.delete_outline,
+                        size: 18, color: Constants.kErrorColor),
+                    SizedBox(width: 8),
+                    Text(
+                      'Deletar área',
+                      style: TextStyle(color: Constants.kErrorColor),
+                    ),
+                  ],
+                ),
+                onTap: () => _confirmarDelecaoArea(context),
               ),
             ],
           ),
@@ -183,6 +198,82 @@ class _N2PageHeaderState extends State<_N2PageHeader> {
         ),
       );
     });
+  }
+
+  Future<void> _confirmarDelecaoArea(BuildContext context) async {
+    final nomeArea = widget.areaN1.nome ?? 'área';
+
+    final confirmou = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.warning_rounded, color: Constants.kErrorColor, size: 24),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Deletar área?',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'A área "$nomeArea", todos os setores, lotes e agendas vinculados serão desativados permanentemente.',
+              style: const TextStyle(fontSize: 15, height: 1.4),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Constants.kErrorColor.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.info_outline,
+                      size: 18, color: Constants.kErrorColor),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Setores, lotes e agendas desta área também serão removidos em cascata.',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Constants.kErrorColor,
+                        height: 1.3,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: FilledButton.styleFrom(
+              backgroundColor: Constants.kErrorColor,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Deletar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmou == true && context.mounted) {
+      await areaStore.deletarAreaCascade(widget.areaN1.id!);
+    }
   }
 }
 

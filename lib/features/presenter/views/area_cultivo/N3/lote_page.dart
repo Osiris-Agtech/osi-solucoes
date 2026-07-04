@@ -172,7 +172,7 @@ class _N3PageHeaderState extends State<_N3PageHeader> {
               color: Constants.kPrimaryColor,
             ),
           ),
-          PopupMenuButton(
+          PopupMenuButton<void>(
             icon: SvgPicture.asset(
               "assets/icons/settings_icon.svg",
               colorFilter: ColorFilter.mode(
@@ -181,8 +181,8 @@ class _N3PageHeaderState extends State<_N3PageHeader> {
               ),
               height: 20,
             ),
-            itemBuilder: (context) => [
-              PopupMenuItem(
+            itemBuilder: (context) => <PopupMenuEntry<void>>[
+              PopupMenuItem<void>(
                 child: const Row(
                   children: [
                     Text('Editar'),
@@ -192,6 +192,21 @@ class _N3PageHeaderState extends State<_N3PageHeader> {
                   setorStore.setSetorEditing(widget.setorN2);
                   Get.toNamed(Routes.cadastrarSetorPage);
                 },
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem<void>(
+                child: const Row(
+                  children: [
+                    Icon(Icons.delete_outline,
+                        size: 18, color: Constants.kErrorColor),
+                    SizedBox(width: 8),
+                    Text(
+                      'Deletar setor',
+                      style: TextStyle(color: Constants.kErrorColor),
+                    ),
+                  ],
+                ),
+                onTap: () => _confirmarDelecaoSetor(context),
               ),
             ],
           ),
@@ -204,6 +219,82 @@ class _N3PageHeaderState extends State<_N3PageHeader> {
         ),
       );
     });
+  }
+
+  Future<void> _confirmarDelecaoSetor(BuildContext context) async {
+    final nomeSetor = widget.setorN2.nome ?? 'setor';
+
+    final confirmou = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.warning_rounded, color: Constants.kErrorColor, size: 24),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Deletar setor?',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'O setor "$nomeSetor", todos os lotes e agendas vinculados serão desativados permanentemente.',
+              style: const TextStyle(fontSize: 15, height: 1.4),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Constants.kErrorColor.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.info_outline,
+                      size: 18, color: Constants.kErrorColor),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Lotes e agendas deste setor também serão removidos em cascata.',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Constants.kErrorColor,
+                        height: 1.3,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: FilledButton.styleFrom(
+              backgroundColor: Constants.kErrorColor,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Deletar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmou == true && context.mounted) {
+      await setorStore.deletarSetorCascade(widget.setorN2.id!);
+    }
   }
 }
 

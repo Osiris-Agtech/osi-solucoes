@@ -250,6 +250,55 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
+  late final _$isLoadingInstantAdaptationAtom =
+      Atom(name: 'HomeStoreBase.isLoadingInstantAdaptation', context: context);
+
+  @override
+  bool get isLoadingInstantAdaptation {
+    _$isLoadingInstantAdaptationAtom.reportRead();
+    return super.isLoadingInstantAdaptation;
+  }
+
+  @override
+  set isLoadingInstantAdaptation(bool value) {
+    _$isLoadingInstantAdaptationAtom
+        .reportWrite(value, super.isLoadingInstantAdaptation, () {
+      super.isLoadingInstantAdaptation = value;
+    });
+  }
+
+  late final _$instantViewDataAtom =
+      Atom(name: 'HomeStoreBase.instantViewData', context: context);
+
+  @override
+  InstantAdaptiveHomeViewData? get instantViewData {
+    _$instantViewDataAtom.reportRead();
+    return super.instantViewData;
+  }
+
+  @override
+  set instantViewData(InstantAdaptiveHomeViewData? value) {
+    _$instantViewDataAtom.reportWrite(value, super.instantViewData, () {
+      super.instantViewData = value;
+    });
+  }
+
+  late final _$hasInstantErrorAtom =
+      Atom(name: 'HomeStoreBase.hasInstantError', context: context);
+
+  @override
+  bool get hasInstantError {
+    _$hasInstantErrorAtom.reportRead();
+    return super.hasInstantError;
+  }
+
+  @override
+  set hasInstantError(bool value) {
+    _$hasInstantErrorAtom.reportWrite(value, super.hasInstantError, () {
+      super.hasInstantError = value;
+    });
+  }
+
   late final _$loadAdaptiveInterfaceAsyncAction =
       AsyncAction('HomeStoreBase.loadAdaptiveInterface', context: context);
 
@@ -257,6 +306,16 @@ mixin _$HomeStore on HomeStoreBase, Store {
   Future<void> loadAdaptiveInterface() {
     return _$loadAdaptiveInterfaceAsyncAction
         .run(() => super.loadAdaptiveInterface());
+  }
+
+  late final _$loadInstantAdaptiveInterfaceAsyncAction = AsyncAction(
+      'HomeStoreBase.loadInstantAdaptiveInterface',
+      context: context);
+
+  @override
+  Future<void> loadInstantAdaptiveInterface() {
+    return _$loadInstantAdaptiveInterfaceAsyncAction
+        .run(() => super.loadInstantAdaptiveInterface());
   }
 
   late final _$carregarHomeAsyncAction =
@@ -342,7 +401,10 @@ currentCardIndex: ${currentCardIndex},
 cardOrder: ${cardOrder},
 adaptiveCardType: ${adaptiveCardType},
 adaptiveMode: ${adaptiveMode},
-currentSessionId: ${currentSessionId}
+currentSessionId: ${currentSessionId},
+isLoadingInstantAdaptation: ${isLoadingInstantAdaptation},
+instantViewData: ${instantViewData},
+hasInstantError: ${hasInstantError}
     ''';
   }
 }

@@ -20,6 +20,8 @@ abstract class IReservatorioDatasource {
       {required Reservatorio novoReservatorio});
   Future<Either<Failure, Reservatorio>> updateReservatorio(
       {required Reservatorio novoReservatorio});
+  Future<Either<Failure, bool>> deletarReservatorio(
+      {required int reservatorioId});
 }
 
 class ReservatorioDatasource implements IReservatorioDatasource {
@@ -442,5 +444,47 @@ class ReservatorioDatasource implements IReservatorioDatasource {
       return Left(ErrorReservatorio(
           message: FailureMessage.errorNovoReservatorioMessage));
     }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deletarReservatorio(
+      {required int reservatorioId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      mutation SoftDeleteReservatorio($reservatorioId: Int!) {
+        softDeleteReservatorio(reservatorioId: $reservatorioId) {
+          id
+          deleted_at
+        }
+      }
+    ''';
+
+    final MutationOptions options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'reservatorioId': reservatorioId,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        final response = result.data?['softDeleteReservatorio'];
+        if (response is bool) return Right(response);
+        if (response is Map<String, dynamic>) {
+          final id = response['id'];
+          return Right(id is int && id > 0);
+        }
+        return const Right(true);
+      } catch (e) {
+        return Left(
+            ErrorReservatorio(message: FailureMessage.errorDeleteReservatorio));
+      }
+    }
+
+    return Left(
+        ErrorReservatorio(message: FailureMessage.errorDeleteReservatorio));
   }
 }

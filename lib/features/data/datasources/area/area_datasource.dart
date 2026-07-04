@@ -20,6 +20,7 @@ abstract class IAreaDatasource {
       DateTime? endDate});
   Future<Either<Failure, Area>> registrarArea({required Area novaArea});
   Future<Either<Failure, Area>> alterarArea({required Area alterarArea});
+  Future<Either<Failure, bool>> deletarAreaCascade({required int areaId});
 }
 
 class AreaDatasource implements IAreaDatasource {
@@ -404,5 +405,45 @@ class AreaDatasource implements IAreaDatasource {
     } else {
       return Left(ErrorArea(message: FailureMessage.emptyListMessage));
     }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deletarAreaCascade(
+      {required int areaId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      mutation SoftDeleteAreaCascade($areaId: Int!) {
+        softDeleteAreaCascade(areaId: $areaId) {
+          id
+          deleted_at
+        }
+      }
+    ''';
+
+    final MutationOptions options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'areaId': areaId,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        final response = result.data?['softDeleteAreaCascade'];
+        if (response is bool) return Right(response);
+        if (response is Map<String, dynamic>) {
+          final id = response['id'];
+          return Right(id is int && id > 0);
+        }
+        return const Right(true);
+      } catch (e) {
+        return Left(ErrorArea(message: FailureMessage.errorDeleteArea));
+      }
+    }
+
+    return Left(ErrorArea(message: FailureMessage.errorDeleteArea));
   }
 }

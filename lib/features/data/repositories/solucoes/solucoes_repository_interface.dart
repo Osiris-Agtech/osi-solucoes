@@ -22,4 +22,5 @@ abstract class ISolucaoRepository {
   Future<Either<Failure, SolucaoNutritiva>> detalhesSolucao(int solucaoId);
   Future<Either<Failure, SolucaoConcentrada>> cadastrarSolucaoConcentrada(
       {required SolucaoConcentrada novaSolucaoConcentrada});
+  Future<Either<Failure, bool>> deletarSolucaoNutritiva(int snutritivaId);
 }

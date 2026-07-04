@@ -14,4 +14,5 @@ abstract class IReservatorioRepository {
       Reservatorio novoReservatorio);
   Future<Either<Failure, Reservatorio>> updateReservatorio(
       {required Reservatorio novoReservatorio});
+  Future<Either<Failure, bool>> deletarReservatorio(int reservatorioId);
 }

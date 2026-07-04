@@ -108,6 +108,9 @@ abstract class ReservatoriosStoreBase with Store {
   bool isNovoReservatorioLoading = false;
 
   @observable
+  bool isDeletingReservatorio = false;
+
+  @observable
   bool isDetalhesSolucaoLoading = false;
 
   @observable
@@ -380,6 +383,26 @@ abstract class ReservatoriosStoreBase with Store {
 
     mostrarErroFormulario = !validate;
     return validate;
+  }
+
+  @action
+  Future<void> deletarReservatorio(int reservatorioId) async {
+    isDeletingReservatorio = true;
+
+    var result = await reservatorioRepository.deletarReservatorio(reservatorioId);
+
+    result.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (_) async {
+        toastSuccess(message: 'Reservatório deletado com sucesso');
+        await buscarReservatorios();
+        Get.close(1);
+      },
+    );
+
+    isDeletingReservatorio = false;
   }
 
   @action

@@ -1,5 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -7,18 +5,16 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
-import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
-import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_detalhes_atv.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_detalhes_page.dart';
-import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/cadastrar_page/protocolo_page.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.dart';
 
-import 'components/cadastrar_page/cultura_item.dart';
-import 'components/cadastrar_page/lote_item.dart';
-import 'components/cadastrar_page/reservatorio_detalhes_page.dart';
-import 'components/cadastrar_page/reservatorio_item.dart';
-import 'components/cadastrar_page/setor_item.dart';
+import 'components/cadastrar_page/step_progress_bar.dart';
+import 'components/cadastrar_page/step_navigation_footer.dart';
+import 'components/cadastrar_page/setor_step.dart';
+import 'components/cadastrar_page/lote_step.dart';
+import 'components/cadastrar_page/cultura_step.dart';
+import 'components/cadastrar_page/reservatorio_step.dart';
+import 'components/cadastrar_page/protocolo_step.dart';
 
 class CadastrarLotePage extends StatefulWidget {
   const CadastrarLotePage({super.key});
@@ -28,35 +24,38 @@ class CadastrarLotePage extends StatefulWidget {
 }
 
 class _CadastrarLotePageState extends State<CadastrarLotePage> {
-  LoteStore store = GetIt.I<LoteStore>();
-  ProtocoloStore protocoloStore = GetIt.I<ProtocoloStore>();
-  CarouselSliderController carouselController = CarouselSliderController();
-  final GlobalKey<FormFieldState> key = GlobalKey<FormFieldState>();
+  final LoteStore store = GetIt.I<LoteStore>();
+  final ProtocoloStore protocoloStore = GetIt.I<ProtocoloStore>();
+  final GlobalKey<FormFieldState> formKey = GlobalKey<FormFieldState>();
+
+  int currentStep = 0;
+  final Set<int> completedSteps = {};
+  static const int totalSteps = 5;
+  static const List<String> stepLabels = [
+    'Setor',
+    'Lote',
+    'Cultura',
+    'Reservatório',
+    'Protocolo',
+  ];
 
   @override
   void initState() {
     super.initState();
-    store.buscarAreasList().then(
-          (value) => store.carregarAreaSetor(),
-        );
+    store.buscarAreasList().then((_) => store.carregarAreaSetor());
     store.buscarCulturas();
     store.buscarReservatorios();
     protocoloStore.buscarProtocolos();
-    store.setIsNovaCultura(false);
-    store.setMostrarErroFormulario(false);
   }
 
   @override
   void dispose() {
-    key.currentState?.reset();
     store.limparTudo();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Constants.kBackgroundColor,
@@ -64,533 +63,121 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
       ),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: appBar(),
+        appBar: AppFormHeader(
+          onBack: () {
+            Get.close(1);
+            store.limparTudo();
+          },
+        ),
         backgroundColor: Constants.kBackgroundColor,
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                titulo(),
-                subtitulo(),
-                const SizedBox(height: 20),
-                setor(context, carouselController, store, protocoloStore, key),
-                Observer(builder: (_) {
-                  return Visibility(
-                    visible: store.mostrarErroFormulario &&
-                        store.novoLoteSetor.id == null,
-                    child: const Padding(
-                      padding: EdgeInsets.only(
-                        left: 16.0,
-                        bottom: 8.0,
-                      ),
-                      child: Text(
-                        'Setor obrigatório',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Constants.kErrorColor,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Observer(
+                  builder: (_) => Text(
+                    store.isEditing ? 'Alterando Lote' : 'Criando Novo Lote',
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
                     ),
-                  );
-                }),
-                const Divider(
-                  thickness: 0.5,
-                  color: Color(0xFFC4C4C4),
-                ),
-                lote(context, carouselController, store, protocoloStore, key),
-                Observer(builder: (_) {
-                  return Visibility(
-                    visible: store.mostrarErroFormulario &&
-                        store.novoLoteName.text.isEmpty,
-                    child: const Padding(
-                      padding: EdgeInsets.only(
-                        left: 16.0,
-                        bottom: 8.0,
-                      ),
-                      child: Text(
-                        'Nome obrigatório',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Constants.kErrorColor,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-                const Divider(
-                  thickness: 0.5,
-                  color: Color(0xFFC4C4C4),
-                ),
-                cultura(
-                    context, carouselController, store, protocoloStore, key),
-                Observer(builder: (_) {
-                  return Visibility(
-                    visible: store.mostrarErroFormulario &&
-                        store.novoLoteCultura.id == null,
-                    child: const Padding(
-                      padding: EdgeInsets.only(
-                        left: 16.0,
-                        bottom: 8.0,
-                      ),
-                      child: Text(
-                        'Cultura obrigatória',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Constants.kErrorColor,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-                const Divider(
-                  thickness: 0.5,
-                  color: Color(0xFFC4C4C4),
-                ),
-                reservatorio(
-                    context, carouselController, store, protocoloStore, key),
-                // fase(context),
-                const Divider(
-                  thickness: 0.5,
-                  color: Color(0xFFC4C4C4),
-                ),
-                !store.isEditing
-                    ? protocolo(
-                        context, carouselController, store, protocoloStore, key)
-                    : IgnorePointer(
-                        child: ColorFiltered(
-                          colorFilter: const ColorFilter.mode(
-                              Colors.white, BlendMode.color),
-                          child: protocolo(context, carouselController, store,
-                              protocoloStore, key),
-                        ),
-                      ),
-                const SizedBox(height: 20),
-                saveButton(size),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget subtitulo() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 20),
-      child: store.isEditing
-          ? const Text(
-              'Alterando Informações',
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xff6F6464),
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w600,
-              ),
-            )
-          : const Text(
-              'Cadastrar Informações',
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xff6F6464),
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-    );
-  }
-
-  Widget titulo() {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 20,
-        right: 10,
-      ),
-      child: store.isEditing
-          ? const Text(
-              'Alterando Lote',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w600,
-              ),
-            )
-          : const Text(
-              'Criando Novo Lote',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-            ),
-    );
-  }
-
-  AppFormHeader appBar() {
-    return AppFormHeader(
-      onBack: () {
-        Get.close(1);
-        store.limparTudo();
-      },
-    );
-  }
-
-  Widget saveButton(Size size) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 30),
-      child: SizedBox(
-        width: size.width * .8,
-        child: Observer(builder: (_) {
-          return AppPrimaryButton(
-            label: store.isEditing ? 'Alterar' : 'Salvar',
-            isLoading: store.isNovoLoteLoading,
-            onPressed: () {
-              if (store.validarRegistro()) {
-                if (store.isEditing) {
-                  store.alterarLote();
-                } else {
-                  store.registrarLote();
-                }
-              }
-            },
-          );
-        }),
-      ),
-    );
-  }
-}
-
-Future<void> bottomSheetN3(
-  BuildContext context,
-  CarouselSliderController carouselController,
-  LoteStore store,
-  ProtocoloStore protocoloStore,
-  GlobalKey<FormFieldState> key,
-) {
-  return showModalBottomSheet<void>(
-    context: context,
-    backgroundColor: Constants.kBackgroundColor,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(10),
-        topRight: Radius.circular(10),
-      ),
-    ),
-    isScrollControlled: true,
-    builder: (BuildContext context) {
-      return Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: SingleChildScrollView(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 15, left: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Observer(
-                        builder: (_) {
-                          return (store.dotIndicator == 3 &&
-                                      store.showReservatorioDetalhes) ||
-                                  (store.dotIndicator == 4 &&
-                                      store.showProtocoloDetalhes)
-                              ? IconButton(
-                                  onPressed: () {
-                                    if (store.abrirProtocoloDetalhesAtv) {
-                                      store.toggleAbrirProtocoloDetalhesAtv();
-                                    } else {
-                                      store.setShowReservatorioDetalhes(false);
-                                      store.setShowProtocoloDetalhes(false);
-                                    }
-                                  },
-                                  icon: const Icon(
-                                    Icons.arrow_back_ios_new_rounded,
-                                    size: 26,
-                                  ),
-                                  color: Constants.kPrimaryColor,
-                                )
-                              : IconButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  icon: const Icon(
-                                    Icons.close,
-                                    size: 32,
-                                  ),
-                                  color: Constants.kPrimaryColor,
-                                );
-                        },
-                      ),
-                      Observer(builder: (_) {
-                        return DotsIndicator(
-                          dotsCount: 5,
-                          position: store.dotIndicator * 1.0,
-                          decorator: DotsDecorator(
-                            size: const Size.square(9.0),
-                            activeSize: const Size(18.0, 9.0),
-                            activeShape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                        );
-                      }),
-                      const SizedBox(
-                        width: 70,
-                      ),
-                    ],
                   ),
                 ),
-                Observer(builder: (_) {
-                  return CarouselSlider(
-                    carouselController: carouselController,
-                    options: CarouselOptions(
-                      initialPage: store.dotIndicator,
-                      enableInfiniteScroll: false,
-                      height: MediaQuery.of(context).size.height * 0.9 - 140,
-                      viewportFraction: 1.0,
-                      enlargeCenterPage: false,
-                      scrollPhysics: const NeverScrollableScrollPhysics(),
-                      onPageChanged: (page, reason) {
-                        store.setIsNovaCultura(false);
-                      },
-                    ),
-                    items: [
-                      setorPage(context, store, key),
-                      lotePage(context, store),
-                      culturaPage(context, store),
-                      AnimatedCrossFade(
-                        duration: const Duration(milliseconds: 200),
-                        firstChild: reservatorioPage(context, store),
-                        secondChild: reservatorioDetalhesPage(store),
-                        crossFadeState: !store.showReservatorioDetalhes
-                            ? CrossFadeState.showFirst
-                            : CrossFadeState.showSecond,
-                      ),
-                      AnimatedCrossFade(
-                        duration: const Duration(milliseconds: 200),
-                        firstChild:
-                            protocoloPage(context, store, protocoloStore),
-                        secondChild: store.abrirProtocoloDetalhesAtv
-                            ? protocoloAtividadeDetalhes(store)
-                            : protocoloDetalhes(store, protocoloStore),
-                        crossFadeState: !store.showProtocoloDetalhes
-                            ? CrossFadeState.showFirst
-                            : CrossFadeState.showSecond,
-                      ),
-                    ],
-                  );
-                }),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      BackStepButton(
-                        carouselController: carouselController,
-                      ),
-                      NextStepButton(
-                        carouselController: carouselController,
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+              StepProgressBar(
+                currentStep: currentStep,
+                stepLabels: stepLabels,
+                completedSteps: completedSteps,
+                totalSteps: totalSteps,
+              ),
+              const SizedBox(height: 24),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                child: _buildStepContent(),
+              ),
+              const SizedBox(height: 24),
+              Observer(
+                builder: (_) => StepNavigationFooter(
+                  currentStep: currentStep,
+                  totalSteps: totalSteps,
+                  canGoBack: currentStep > 0,
+                  canGoForward: _canGoForward(),
+                  isLastStep: currentStep == totalSteps - 1,
+                  isLoading: store.isNovoLoteLoading,
+                  onBack: _onBack,
+                  onNext: _onNext,
+                  onSubmit: _onSubmit,
+                ),
+              ),
+              const SizedBox(height: 30),
+            ],
           ),
         ),
-      );
-    },
-  );
-}
-
-Future<void> bottomSheetProtocol(
-  BuildContext context,
-  CarouselSliderController carouselController,
-  LoteStore store,
-  GlobalKey<FormFieldState> key,
-) {
-  return showModalBottomSheet<void>(
-    context: context,
-    backgroundColor: Constants.kBackgroundColor,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(10),
-        topRight: Radius.circular(10),
       ),
-    ),
-    isScrollControlled: true,
-    builder: (BuildContext context) {
-      return Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: SingleChildScrollView(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [],
-            ),
-          ),
-        ),
-      );
-    },
-  );
-}
-
-class BackStepButton extends StatefulWidget {
-  final CarouselSliderController carouselController;
-  const BackStepButton({
-    super.key,
-    required this.carouselController,
-  });
-
-  @override
-  State<BackStepButton> createState() => _BackStepButtonState();
-}
-
-class _BackStepButtonState extends State<BackStepButton> {
-  LoteStore store = GetIt.I<LoteStore>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Observer(
-      builder: (_) {
-        return (store.dotIndicator == 3 && store.showReservatorioDetalhes) ||
-                (store.dotIndicator == 4 && store.showProtocoloDetalhes)
-            ? const SizedBox.shrink()
-            : TextButton(
-                onPressed: () {
-                  store.setDotIndicator(store.dotIndicator - 1);
-                  widget.carouselController.previousPage(
-                    duration: const Duration(milliseconds: 400),
-                    curve: Curves.easeIn,
-                  );
-                },
-                child: Observer(builder: (_) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.chevron_left,
-                        color: store.dotIndicator == 0
-                            ? Colors.grey
-                            : Constants.kPrimaryColor,
-                      ),
-                      Text(
-                        'Voltar',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontStyle: FontStyle.italic,
-                          color: store.dotIndicator == 0
-                              ? Colors.grey
-                              : Constants.kPrimaryColor,
-                        ),
-                      ),
-                    ],
-                  );
-                }),
-              );
-      },
     );
   }
-}
 
-class NextStepButton extends StatefulWidget {
-  final CarouselSliderController carouselController;
-  const NextStepButton({
-    super.key,
-    required this.carouselController,
-  });
+  Widget _buildStepContent() {
+    final stepKey = ValueKey<int>(currentStep);
+    switch (currentStep) {
+      case 0:
+        return SetorStep(key: stepKey, store: store, formKey: formKey);
+      case 1:
+        return LoteStep(key: stepKey, store: store);
+      case 2:
+        return CulturaStep(key: stepKey, store: store);
+      case 3:
+        return ReservatorioStep(key: stepKey, store: store);
+      case 4:
+        return ProtocoloStep(
+            key: stepKey, store: store, protocoloStore: protocoloStore);
+      default:
+        return const SizedBox.shrink();
+    }
+  }
 
-  @override
-  State<NextStepButton> createState() => _NextStepButtonState();
-}
+  bool _canGoForward() {
+    switch (currentStep) {
+      case 0:
+        return store.validarEtapaSetor();
+      case 1:
+        return store.validarEtapaLote();
+      case 2:
+        return store.validarEtapaCultura();
+      case 3:
+        return true;
+      case 4:
+        return true;
+      default:
+        return false;
+    }
+  }
 
-class _NextStepButtonState extends State<NextStepButton> {
-  LoteStore store = GetIt.I<LoteStore>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Observer(builder: (_) {
-      return store.abrirProtocoloDetalhesAtv
-          ? const SizedBox.shrink()
-          : ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24)),
-                backgroundColor:
-                    store.isAlreadySelected && store.showProtocoloDetalhes
-                        ? Constants.kErrorColor
-                        : Constants.kPrimaryColor,
-              ),
-              child: Center(
-                child: store.isAlreadySelected && store.showProtocoloDetalhes
-                    ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Text(
-                            'Desvincular',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w600),
-                          ),
-                          Icon(Icons.close),
-                        ],
-                      )
-                    : (store.showProtocoloDetalhes ||
-                            store.showReservatorioDetalhes)
-                        ? const Text(
-                            'Vincular',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w600),
-                          )
-                        : Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: const [
-                              Text(
-                                'Avançar',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w600),
-                              ),
-                              Icon(Icons.chevron_right),
-                            ],
-                          ),
-              ),
-              onPressed: () {
-                if (store.isAlreadySelected) {
-                  store.desvincularProtocolo();
-                } else if (store.showProtocoloDetalhes &&
-                    store.protocoloDetalhes != null) {
-                  store.setProtocolo(store.protocoloDetalhes!);
-                }
-
-                if (store.dotIndicator == 3) {
-                  if (store.showReservatorioDetalhes) {
-                    store.selecionarNovoLoteReservatorio();
-                  }
-                  if (store.isEditing) {
-                    Get.back();
-                  }
-                }
-
-                if (store.dotIndicator < 4) {
-                  store.setDotIndicator(store.dotIndicator + 1);
-                  widget.carouselController.nextPage();
-                } else {
-                  Navigator.pop(context);
-                  store.setShowProtocoloDetalhes(false);
-                  store.removeProtocoloDetalhes();
-                }
-              },
-            );
+  void _onNext() {
+    setState(() {
+      completedSteps.add(currentStep);
+      currentStep++;
     });
+  }
+
+  void _onBack() {
+    setState(() {
+      currentStep--;
+    });
+  }
+
+  void _onSubmit() {
+    if (store.validarRegistro()) {
+      if (store.isEditing) {
+        store.alterarLote();
+      } else {
+        store.registrarLote();
+      }
+    }
   }
 }

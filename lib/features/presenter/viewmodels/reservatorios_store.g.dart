@@ -154,6 +154,23 @@ mixin _$ReservatoriosStore on ReservatoriosStoreBase, Store {
     });
   }
 
+  late final _$isDeletingReservatorioAtom = Atom(
+      name: 'ReservatoriosStoreBase.isDeletingReservatorio', context: context);
+
+  @override
+  bool get isDeletingReservatorio {
+    _$isDeletingReservatorioAtom.reportRead();
+    return super.isDeletingReservatorio;
+  }
+
+  @override
+  set isDeletingReservatorio(bool value) {
+    _$isDeletingReservatorioAtom
+        .reportWrite(value, super.isDeletingReservatorio, () {
+      super.isDeletingReservatorio = value;
+    });
+  }
+
   late final _$isDetalhesSolucaoLoadingAtom = Atom(
       name: 'ReservatoriosStoreBase.isDetalhesSolucaoLoading',
       context: context);
@@ -438,6 +455,16 @@ mixin _$ReservatoriosStore on ReservatoriosStoreBase, Store {
     return _$buscarSolucoesAsyncAction.run(() => super.buscarSolucoes());
   }
 
+  late final _$deletarReservatorioAsyncAction = AsyncAction(
+      'ReservatoriosStoreBase.deletarReservatorio',
+      context: context);
+
+  @override
+  Future<void> deletarReservatorio(int reservatorioId) {
+    return _$deletarReservatorioAsyncAction
+        .run(() => super.deletarReservatorio(reservatorioId));
+  }
+
   late final _$registrarReservatorioAsyncAction = AsyncAction(
       'ReservatoriosStoreBase.registrarReservatorio',
       context: context);
@@ -611,6 +638,7 @@ mostrarErroFormulario: ${mostrarErroFormulario},
 isSolucaoListLoading: ${isSolucaoListLoading},
 isReservatorioListLoading: ${isReservatorioListLoading},
 isNovoReservatorioLoading: ${isNovoReservatorioLoading},
+isDeletingReservatorio: ${isDeletingReservatorio},
 isDetalhesSolucaoLoading: ${isDetalhesSolucaoLoading},
 isEditing: ${isEditing},
 solucaoDetalhes: ${solucaoDetalhes},

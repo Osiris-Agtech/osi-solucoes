@@ -17,4 +17,5 @@ abstract class IAreaRepository {
     DateTime? startDate,
     DateTime? endDate,
   );
+  Future<Either<Failure, bool>> deletarAreaCascade(int areaId);
 }

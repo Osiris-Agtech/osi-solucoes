@@ -139,4 +139,10 @@ class LoteRepository implements ILoteRepository {
     var result = await datasource.buscarTodosSetoresId(areasId: areasId);
     return result;
   }
+
+  @override
+  Future<Either<Failure, bool>> deletarLoteCascade(int loteId) async {
+    var result = await datasource.deletarLoteCascade(loteId: loteId);
+    return result;
+  }
 }

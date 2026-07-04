@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/utils/toast.dart';
+import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_modal_sheet.dart';
 
 ListView reservatorioDetalhesPage(LoteStore store) {
   return ListView(
@@ -34,7 +38,7 @@ ListView reservatorioDetalhesPage(LoteStore store) {
               child: Text(
                 "Volume: ${store.reservatorioDetalhes.volume ?? "..."} litros",
                 style: const TextStyle(
-                  color: Color(0xff707070),
+                  color: Constants.kGreyMedium,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
@@ -121,12 +125,11 @@ ListView reservatorioDetalhesPage(LoteStore store) {
       const SizedBox(
         height: 15,
       ),
-      const Divider(
-        // height: 15,
+      Divider(
         indent: 20,
         endIndent: 20,
         thickness: 0.5,
-        color: Color(0xFFC4C4C4),
+        color: Constants.kGreyLight,
       ),
       const SizedBox(
         height: 15,
@@ -205,5 +208,36 @@ ListView reservatorioDetalhesPage(LoteStore store) {
         );
       }),
     ],
+  );
+}
+
+void showReservatorioDetalhesSheet(BuildContext context, LoteStore store) {
+  AppModalSheet.show(
+    title: 'Detalhes do Reservatório',
+    body: reservatorioDetalhesPage(store),
+    maxHeightFactor: 0.7,
+    bottomWidget: Padding(
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+      child: Observer(builder: (_) {
+        final isSelected = store.novoLoteReservatorio.id != null &&
+            store.novoLoteReservatorio.id == store.reservatorioDetalhes.id;
+        return AppPrimaryButton(
+          label: isSelected ? 'Desvincular' : 'Vincular ao lote',
+          tone: isSelected ? AppButtonTone.danger : AppButtonTone.primary,
+          onPressed: () {
+            if (isSelected) {
+              store.novoLoteReservatorio = Reservatorio();
+              toastSuccess(message: 'Reservatório desvinculado');
+            } else {
+              store.selecionarNovoLoteReservatorio();
+              toastSuccess(message: 'Reservatório vinculado com sucesso');
+            }
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
+          },
+        );
+      }),
+    ),
   );
 }

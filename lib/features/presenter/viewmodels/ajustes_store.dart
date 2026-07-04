@@ -11,6 +11,7 @@ import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model
 import 'package:osi_solucoes/features/presenter/models/reposicaoFert/reposicaoFert_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequence_interaction_reporter.dart';
 
 import '../models/reservatorio/reservatorio_model.dart';
 
@@ -298,6 +299,10 @@ abstract class AjustesStoreBase with Store {
       },
       (data) async {
         toastSuccess(message: "Cadastrado com sucesso");
+        if (GetIt.I.isRegistered<InstantSequenceInteractionReporter>()) {
+          GetIt.I<InstantSequenceInteractionReporter>()
+              .reportNutritionalAdjustmentExecuted();
+        }
         clearAll();
       },
     );

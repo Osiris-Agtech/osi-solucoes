@@ -2,6 +2,8 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
+import 'home_dashboard_info_context_model.dart';
+
 part 'home_dashboard_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -24,6 +26,9 @@ class HomeDashboard {
   @JsonKey(required: false, disallowNullValue: false)
   List<HomeAlertaCritico>? alertasCritico;
 
+  @JsonKey(required: false, disallowNullValue: false)
+  HomeInfoContext? infoContext;
+
   HomeDashboard({
     this.resumo,
     this.tarefas,
@@ -31,6 +36,7 @@ class HomeDashboard {
     this.culturas,
     this.equipe,
     this.alertasCritico,
+    this.infoContext,
   });
 
   factory HomeDashboard.fromJson(Map<String, dynamic> json) =>

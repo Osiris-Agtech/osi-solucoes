@@ -46,6 +46,12 @@ class SetorRepository implements ISetorRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> deletarSetorCascade(int setorId) async {
+    var result = await datasource.deletarSetorCascade(setorId: setorId);
+    return result;
+  }
+
+  @override
   Future<Either<Failure, Setor>> alterarSetor(Setor alterarSetor) async {
     var result = await datasource.alterarSetor(alterarSetor: alterarSetor);
 

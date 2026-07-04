@@ -300,6 +300,23 @@ mixin _$LoteStore on LoteStoreBase, Store {
     });
   }
 
+  late final _$isDeletingLoteCascadeAtom =
+      Atom(name: 'LoteStoreBase.isDeletingLoteCascade', context: context);
+
+  @override
+  bool get isDeletingLoteCascade {
+    _$isDeletingLoteCascadeAtom.reportRead();
+    return super.isDeletingLoteCascade;
+  }
+
+  @override
+  set isDeletingLoteCascade(bool value) {
+    _$isDeletingLoteCascadeAtom.reportWrite(value, super.isDeletingLoteCascade,
+        () {
+      super.isDeletingLoteCascade = value;
+    });
+  }
+
   late final _$loteSelecionadoAtom =
       Atom(name: 'LoteStoreBase.loteSelecionado', context: context);
 
@@ -1165,6 +1182,15 @@ mixin _$LoteStore on LoteStoreBase, Store {
         .run(() => super.migrarLote(migrarReservatorio));
   }
 
+  late final _$deletarLoteCascadeAsyncAction =
+      AsyncAction('LoteStoreBase.deletarLoteCascade', context: context);
+
+  @override
+  Future<void> deletarLoteCascade(int loteId) {
+    return _$deletarLoteCascadeAsyncAction
+        .run(() => super.deletarLoteCascade(loteId));
+  }
+
   late final _$buscarLotePorIdAsyncAction =
       AsyncAction('LoteStoreBase.buscarLotePorId', context: context);
 
@@ -1886,6 +1912,7 @@ areaList: ${areaList},
 isAreaLoading: ${isAreaLoading},
 isDetalhesLoteLoading: ${isDetalhesLoteLoading},
 isMigrateLoteLoading: ${isMigrateLoteLoading},
+isDeletingLoteCascade: ${isDeletingLoteCascade},
 loteSelecionado: ${loteSelecionado},
 areaSelecionada: ${areaSelecionada},
 setorSelecionadoMigrar: ${setorSelecionadoMigrar},

@@ -68,4 +68,14 @@ class FailureMessage {
   static const errorFinalizacaoAgenda =
       'Ocorreu um erro ao finalizar as atividades em aberto';
   static const errorFinalizacaoLote = 'Ocorreu um erro ao finalizar o lote';
+  static const errorDeleteLote =
+      'Ocorreu um erro ao deletar o lote';
+  static const errorDeleteArea =
+      'Ocorreu um erro ao deletar a área';
+  static const errorDeleteSetor =
+      'Ocorreu um erro ao deletar o setor';
+  static const errorDeleteReservatorio =
+      'Ocorreu um erro ao deletar o reservatório';
+  static const errorDeleteSolucaoNutritiva =
+      'Ocorreu um erro ao deletar a solução nutritiva';
 }

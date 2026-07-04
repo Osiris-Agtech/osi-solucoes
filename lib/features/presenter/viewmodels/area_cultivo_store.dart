@@ -111,6 +111,9 @@ abstract class AreaCultivoStoreBase with Store {
   bool isNovaAreaLoading = false;
 
   @observable
+  bool isDeletingAreaCascade = false;
+
+  @observable
   bool showTextFormField = false;
 
   @observable
@@ -234,6 +237,28 @@ abstract class AreaCultivoStoreBase with Store {
 
     mostrarErroFormulario = !validate;
     return validate;
+  }
+
+  @action
+  Future<void> deletarAreaCascade(int areaId) async {
+    isDeletingAreaCascade = true;
+    AreaRepository areaRepository = GetIt.I<AreaRepository>();
+
+    var result = await areaRepository.deletarAreaCascade(areaId);
+
+    result.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (_) {
+        toastSuccess(message: 'Área deletada com sucesso');
+        buscarArea();
+        GetIt.I<HomeStore>().carregarHome();
+        Get.close(1);
+      },
+    );
+
+    isDeletingAreaCascade = false;
   }
 
   @action

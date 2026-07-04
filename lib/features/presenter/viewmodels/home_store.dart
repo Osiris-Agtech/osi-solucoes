@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
@@ -6,6 +8,10 @@ import 'package:osi_solucoes/features/data/repositories/homeDashboard/home_dashb
 import 'package:osi_solucoes/features/presenter/models/homeDashboard/home_dashboard_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:osi_solucoes/core/services/adaptive_interface_service.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_adaptive_home_view_data.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_operational_context_mapper.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/client_capabilities_mapper.dart';
+import 'package:osi_solucoes/core/services/metrics_tracking_service.dart';
 import 'package:osi_solucoes/features/presenter/models/shortcut/shortcut_model.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 
@@ -69,6 +75,9 @@ abstract class HomeStoreBase with Store {
       adaptiveSource == 'adaptive' &&
       (adaptiveDashboard != null || adaptiveCardType != null);
 
+  /// Whether the current mode is INSTANT
+  bool get isInstantMode => adaptiveMode == 'INSTANT';
+
   // Navegação do dashboard (um card por vez)
   @observable
   int currentCardIndex = 0;
@@ -109,6 +118,16 @@ abstract class HomeStoreBase with Store {
   // Session ID (para métricas de sessão INSTANT)
   @observable
   String? currentSessionId;
+
+  // Instant adaptive interface state
+  @observable
+  bool isLoadingInstantAdaptation = false;
+
+  @observable
+  InstantAdaptiveHomeViewData? instantViewData;
+
+  @observable
+  bool hasInstantError = false;
 
   /// Inicializa a ordem dos cards com o recomendado em primeiro
   void initializeCardOrder() {
@@ -256,16 +275,95 @@ abstract class HomeStoreBase with Store {
       // Fallback para atalhos padrão
       print('❌ [HOME_STORE] Exceção ao carregar interface: $e');
       print('   StackTrace: $stackTrace');
-          recommendedShortcuts = _getDefaultShortcuts();
-          adaptiveDashboardSource = 'system';
-          adaptiveSource = 'fallback';
-          adaptiveVisualPriority = 'none';
-          adaptiveReason = null;
+      recommendedShortcuts = _getDefaultShortcuts();
+      adaptiveDashboardSource = 'system';
+      adaptiveSource = 'fallback';
+      adaptiveVisualPriority = 'none';
+      adaptiveReason = null;
       // Garante que a ordem dos cards seja inicializada mesmo em caso de erro
       initializeCardOrder();
     } finally {
       isLoadingShortcuts = false;
       print('🏠 [HOME_STORE] Carregamento finalizado');
+    }
+  }
+
+  @action
+  Future<void> loadInstantAdaptiveInterface() async {
+    print('🏠 [HOME_STORE] Carregando interface adaptativa INSTANT...');
+
+    // Only run in INSTANT mode
+    if (!isInstantMode) {
+      print(' └─ ⏭ Modo não é INSTANT, pulando');
+      return;
+    }
+
+    if (currentSessionId == null) {
+      print(' └─ ⏭ Sem sessionId, pulando');
+      return;
+    }
+
+    isLoadingInstantAdaptation = true;
+    hasInstantError = false;
+
+    try {
+      // 1. Build operational context from stores
+      final context = InstantOperationalContextMapper.map();
+      final capabilities = ClientCapabilitiesMapper.map();
+
+      print('📊 [HOME_STORE] Contexto operacional montado');
+      print(' └─ Lotes ativos: ${context.dashboardState.activeLotsCount}');
+      print(
+          ' └─ Tarefas pendentes: ${context.agendaState.pendingActivitiesTodayCount}');
+
+      // 2. Call service with context
+      final result = await _adaptiveService.getInstantAdaptiveInterface(
+        mode: adaptiveMode,
+        sessionId: currentSessionId!,
+        operationalContext: context.toJson(),
+        clientCapabilities: capabilities.toJson(),
+      );
+
+      result.fold(
+        (failure) {
+          print('❌ [HOME_STORE] Erro INSTANT: ${failure.message}');
+          instantViewData = null;
+          hasInstantError = true;
+        },
+        (response) {
+          // 3. Store the parsed view data
+          instantViewData = response.instantViewData;
+
+          // 4. Track adaptation applied
+          final viewData = response.instantViewData;
+          MetricsTrackingService.instance.trackInstantAdaptationApplied(
+            mode: adaptiveMode,
+            sessionId: currentSessionId ?? '',
+            renderedComponents: _getRenderedComponents(viewData),
+            usedFallback: viewData?.fallbackUsed ?? true,
+          );
+
+          print('✅ [HOME_STORE] Interface INSTANT carregada:');
+          print(
+              ' └─ NextStep: ${viewData?.nextStep != null ? "presente" : "ausente"}');
+          print(
+              ' └─ FocusBanner: ${viewData?.focusBanner != null ? "presente" : "ausente"}');
+          print(
+              ' └─ SectionAdaptations: ${viewData?.sectionAdaptations.length ?? 0}');
+          print(
+              ' └─ RecommendedActions: ${viewData?.recommendedActions.length ?? 0}');
+          print(' └─ ActivityFeed: ${viewData?.activityFeedItems.length ?? 0}');
+          print(' └─ Fallback: ${viewData?.fallbackUsed == true}');
+        },
+      );
+    } catch (e, stackTrace) {
+      print('❌ [HOME_STORE] Exceção INSTANT: $e');
+      print('   StackTrace: $stackTrace');
+      instantViewData = null;
+      hasInstantError = true;
+    } finally {
+      isLoadingInstantAdaptation = false;
+      print('🏠 [HOME_STORE] Carregamento INSTANT finalizado');
     }
   }
 
@@ -345,6 +443,29 @@ abstract class HomeStoreBase with Store {
     ];
   }
 
+  List<String> _getRenderedComponents(InstantAdaptiveHomeViewData? viewData) {
+    if (viewData == null || viewData.fallbackUsed) {
+      return ['fallback'];
+    }
+    final components = <String>[];
+    if (viewData.nextStep != null) {
+      components.add('NextStepCard');
+    }
+    if (viewData.focusBanner != null) {
+      components.add('AdaptiveFocusBanner');
+    }
+    if (viewData.sectionAdaptations.isNotEmpty) {
+      components.add('AdaptiveHighlightFrame');
+    }
+    if (viewData.recommendedActions.isNotEmpty) {
+      components.add('AdaptiveRecommendedActionTile');
+    }
+    if (viewData.activityFeedItems.isNotEmpty) {
+      components.add('ActivityFeedCard');
+    }
+    return components;
+  }
+
   @action
   Future<void> carregarHome() async {
     if (homeDashboardRepository == null) return;
@@ -384,6 +505,23 @@ abstract class HomeStoreBase with Store {
       errorMessage = 'Erro ao carregar dashboard: ${e.toString()}';
     } finally {
       isLoading = false;
+    }
+  }
+
+  Future<void> refreshHomeAfterAgendaMutation() async {
+    await carregarHome();
+
+    if (!isInstantMode) return;
+
+    try {
+      await loadInstantAdaptiveInterface();
+    } catch (e, stackTrace) {
+      developer.log(
+        'Erro ao atualizar INSTANT após Agenda',
+        name: 'HOME_STORE',
+        error: e,
+        stackTrace: stackTrace,
+      );
     }
   }
 }

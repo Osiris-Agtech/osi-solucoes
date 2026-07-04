@@ -104,6 +104,74 @@ class HomeDashboardDatasource implements IHomeDashboardDatasource {
             gravidade
             data
           }
+          infoContext {
+            todayCultivation {
+              tasksToday
+              overdueTasks
+              activeLots
+              upcomingHarvests
+              alerts {
+                type
+                message
+                lotId
+                lotName
+                severity
+                date
+              }
+              nextTasks {
+                id
+                title
+                description
+                lotId
+                lotName
+                date
+                overdue
+              }
+            }
+            reservoirReport {
+              totalReservoirs
+              totalVolume
+              reservoirsWithSolution
+              reservoirsWithoutSolution
+              activeLotsLinked
+              highlightedReservoirs {
+                id
+                name
+                volume
+                solutionName
+                electricalConductivity
+                linkedLotsCount
+              }
+            }
+            dayProgress {
+              totalTasksToday
+              completedTasksToday
+              pendingTasksToday
+              overdueTasks
+              completionLabel
+              nextTask {
+                id
+                title
+                description
+                lotId
+                lotName
+                date
+                overdue
+              }
+            }
+            fieldNotesSummary {
+              totalRecentNotes
+              latestNotes {
+                id
+                title
+                description
+                lotId
+                lotName
+                userName
+                createdAt
+              }
+            }
+          }
         }
       }
     ''';

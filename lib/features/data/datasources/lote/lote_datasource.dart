@@ -50,6 +50,7 @@ abstract class ILoteDatasource {
   Future<Either<Failure, List<int>>> buscarTodosSetoresId(
       {required List<int> areasId});
   Future<Either<Failure, List<int>>> buscarTodasAreasId({required int contaId});
+  Future<Either<Failure, bool>> deletarLoteCascade({required int loteId});
 }
 
 class LoteDatasource implements ILoteDatasource {
@@ -1073,5 +1074,47 @@ class LoteDatasource implements ILoteDatasource {
     } else {
       return Left(ErrorAgenda(message: FailureMessage.internalErrorMessage));
     }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deletarLoteCascade(
+      {required int loteId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      mutation SoftDeleteLoteCascade($loteId: Int!) {
+        softDeleteLoteCascade(loteId: $loteId) {
+          id
+          deleted_at
+        }
+      }
+    ''';
+
+    final MutationOptions options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'loteId': loteId,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        final response = result.data?['softDeleteLoteCascade'];
+        if (response is bool) {
+          return Right(response);
+        }
+        if (response is Map<String, dynamic>) {
+          final id = response['id'];
+          return Right(id is int && id > 0);
+        }
+        return const Right(true);
+      } catch (e) {
+        return Left(ErrorLote(message: FailureMessage.errorDeleteLote));
+      }
+    }
+
+    return Left(ErrorLote(message: FailureMessage.errorDeleteLote));
   }
 }

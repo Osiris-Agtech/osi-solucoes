@@ -273,6 +273,23 @@ mixin _$SetorStore on SetorStoreBase, Store {
     });
   }
 
+  late final _$isDeletingSetorCascadeAtom =
+      Atom(name: 'SetorStoreBase.isDeletingSetorCascade', context: context);
+
+  @override
+  bool get isDeletingSetorCascade {
+    _$isDeletingSetorCascadeAtom.reportRead();
+    return super.isDeletingSetorCascade;
+  }
+
+  @override
+  set isDeletingSetorCascade(bool value) {
+    _$isDeletingSetorCascadeAtom
+        .reportWrite(value, super.isDeletingSetorCascade, () {
+      super.isDeletingSetorCascade = value;
+    });
+  }
+
   late final _$dotIndicatorAtom =
       Atom(name: 'SetorStoreBase.dotIndicator', context: context);
 
@@ -320,6 +337,15 @@ mixin _$SetorStore on SetorStoreBase, Store {
   Future<void> buscarReservatorios() {
     return _$buscarReservatoriosAsyncAction
         .run(() => super.buscarReservatorios());
+  }
+
+  late final _$deletarSetorCascadeAsyncAction =
+      AsyncAction('SetorStoreBase.deletarSetorCascade', context: context);
+
+  @override
+  Future<void> deletarSetorCascade(int setorId) {
+    return _$deletarSetorCascadeAsyncAction
+        .run(() => super.deletarSetorCascade(setorId));
   }
 
   late final _$registrarSetorAsyncAction =
@@ -525,6 +551,7 @@ novoSetorDescription: ${novoSetorDescription},
 novoSetorReservatorio: ${novoSetorReservatorio},
 showTextFormField: ${showTextFormField},
 isNovoSetorLoading: ${isNovoSetorLoading},
+isDeletingSetorCascade: ${isDeletingSetorCascade},
 dotIndicator: ${dotIndicator},
 novoSetor: ${novoSetor},
 searchSetor: ${searchSetor}

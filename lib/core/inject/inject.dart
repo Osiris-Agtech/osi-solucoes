@@ -47,6 +47,9 @@ import 'package:osi_solucoes/features/presenter/viewmodels/relatorio_produtivida
 import 'package:osi_solucoes/features/presenter/viewmodels/relatorio_desempenho_equipe_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/relatorio_agenda_tarefas_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/home_adaptive_refresh_coordinator.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequence_interaction_reporter.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequence_signals_store.dart';
 
 import '../../features/data/datasources/area/area_datasource.dart';
 import '../../features/data/datasources/cadastro/cadastro_datasource.dart';
@@ -169,8 +172,8 @@ Future<void> initInject() async {
   sl.registerLazySingleton<RecuperarSenhaStore>(() => RecuperarSenhaStore());
   sl.registerLazySingleton<CadernoCampoStore>(() => CadernoCampoStore());
   sl.registerLazySingleton<HomeStore>(() => HomeStore(
-    homeDashboardRepository: sl<IHomeDashboardRepository>(),
-  ));
+        homeDashboardRepository: sl<IHomeDashboardRepository>(),
+      ));
   sl.registerLazySingleton<LoginStore>(() => LoginStore());
   sl.registerLazySingleton<ReservatoriosStore>(() => ReservatoriosStore());
   sl.registerLazySingleton<ResultadoajusteStore>(() => ResultadoajusteStore());
@@ -195,6 +198,15 @@ Future<void> initInject() async {
     () => RelatorioAgendaTarefasStore(),
   );
   sl.registerLazySingleton<ExportService>(() => ExportService());
+  sl.registerLazySingleton<InstantSequenceSignalsStore>(
+    () => InstantSequenceSignalsStore(),
+  );
+  sl.registerLazySingleton<HomeAdaptiveRefreshCoordinator>(
+    () => HomeAdaptiveRefreshCoordinator(),
+  );
+  sl.registerLazySingleton<InstantSequenceInteractionReporter>(
+    () => InstantSequenceInteractionReporter(),
+  );
 
   sl.registerFactoryParam<MultiAccountsPage, Usuario, bool>(
     (param1, param2) => MultiAccountsPage(

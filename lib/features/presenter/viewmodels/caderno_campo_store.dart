@@ -13,6 +13,9 @@ import 'package:osi_solucoes/features/presenter/models/lotesAtividades/lotes_ati
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequence_interaction_reporter.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequence_signals_store.dart';
 import "package:collection/collection.dart";
 
 part 'caderno_campo_store.g.dart';
@@ -139,10 +142,44 @@ abstract class CadernoCampoStoreBase with Store {
         loteSelecionado.lotes_atividades =
             List.from(loteSelecionado.lotes_atividades!.reversed);
         expandedCard = List.from(expandedCard.reversed);
+        _reportAutomaticAdjustmentRecordCheckedIfNeeded();
       },
     );
 
     isLoteListLoading = false;
+  }
+
+  void _reportAutomaticAdjustmentRecordCheckedIfNeeded() {
+    final getIt = GetIt.I;
+    if (!getIt.isRegistered<InstantSequenceSignalsStore>() ||
+        !getIt.isRegistered<HomeStore>() ||
+        !getIt.isRegistered<InstantSequenceInteractionReporter>()) {
+      return;
+    }
+
+    final store = getIt<InstantSequenceSignalsStore>();
+    store.syncScope(_resolveScopeKey(getIt<HomeStore>()));
+    final snapshot = store.snapshot;
+    final hasLoadedRecords =
+        (loteSelecionado.lotes_atividades?.isNotEmpty ?? false);
+    if (!snapshot.nutritionalAdjustmentExecuted ||
+        !hasLoadedRecords ||
+        snapshot.automaticAdjustmentRecordChecked) {
+      return;
+    }
+
+    getIt<InstantSequenceInteractionReporter>()
+        .reportAutomaticAdjustmentRecordChecked();
+  }
+
+  String _resolveScopeKey(HomeStore homeStore) {
+    final userId = homeStore.authController.usuario.id?.toString() ?? 'unknown';
+    final accountId = homeStore.authController.usuario.selected_conta?.conta?.id
+            ?.toString() ??
+        'unknown';
+    final sessionId = homeStore.currentSessionId ?? 'unknown';
+    final adaptiveMode = homeStore.adaptiveMode;
+    return '$userId|$accountId|$sessionId|$adaptiveMode';
   }
 
   @action

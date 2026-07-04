@@ -26,6 +26,10 @@ HomeDashboard _$HomeDashboardFromJson(Map<String, dynamic> json) =>
       alertasCritico: (json['alertasCritico'] as List<dynamic>?)
           ?.map((e) => HomeAlertaCritico.fromJson(e as Map<String, dynamic>))
           .toList(),
+      infoContext: json['infoContext'] == null
+          ? null
+          : HomeInfoContext.fromJson(
+              json['infoContext'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$HomeDashboardToJson(HomeDashboard instance) =>
@@ -37,6 +41,7 @@ Map<String, dynamic> _$HomeDashboardToJson(HomeDashboard instance) =>
       'equipe': instance.equipe?.toJson(),
       'alertasCritico':
           instance.alertasCritico?.map((e) => e.toJson()).toList(),
+      'infoContext': instance.infoContext?.toJson(),
     };
 
 HomeResumo _$HomeResumoFromJson(Map<String, dynamic> json) => HomeResumo(

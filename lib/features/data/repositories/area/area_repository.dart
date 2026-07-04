@@ -44,6 +44,12 @@ class AreaRepository implements IAreaRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> deletarAreaCascade(int areaId) async {
+    var result = await datasource.deletarAreaCascade(areaId: areaId);
+    return result;
+  }
+
+  @override
   Future<Either<Failure, List<Area>>> buscarArea(
     int contaId,
     String orderBy,

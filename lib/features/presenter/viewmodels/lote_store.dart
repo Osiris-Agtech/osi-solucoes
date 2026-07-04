@@ -10,6 +10,7 @@ import 'package:osi_solucoes/features/presenter/models/fase/fase_model.dart';
 import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/models/protocolo/protocolo_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequence_interaction_reporter.dart';
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
@@ -133,6 +134,9 @@ abstract class LoteStoreBase with Store {
   bool isMigrateLoteLoading = false;
 
   @observable
+  bool isDeletingLoteCascade = false;
+
+  @observable
   Lote loteSelecionado = Lote();
 
   @observable
@@ -189,6 +193,31 @@ abstract class LoteStoreBase with Store {
     );
 
     isMigrateLoteLoading = false;
+  }
+
+  @action
+  Future<void> deletarLoteCascade(int loteId) async {
+    isDeletingLoteCascade = true;
+    SetorStore setorStore = GetIt.I<SetorStore>();
+
+    var result = await loteRepository.deletarLoteCascade(loteId);
+
+    result.fold(
+      (err) {
+        toastError(message: err.message);
+      },
+      (_) {
+        toastSuccess(message: 'Lote deletado com sucesso');
+        limparTudo();
+        Get.close(1);
+        setorStore.buscarSetores();
+        if (setorSelecionado.id != null) {
+          buscarLotes();
+        }
+      },
+    );
+
+    isDeletingLoteCascade = false;
   }
 
   @action
@@ -431,10 +460,17 @@ abstract class LoteStoreBase with Store {
       if (index != -1) {
         selecionarNovoLoteArea(areaList[index]);
 
-        int indexSetor = (novoLoteArea.setores ?? [])
+        final setores = novoLoteArea.setores ?? [];
+        int indexSetor = setores
             .indexWhere((element) => element.id == setorSelecionado.id);
+        // Se o setor salvo em setorSelecionado não for encontrado nos setores
+        // da área (ex: navegação por edição onde setorSelecionado não foi
+        // atualizado), seleciona o primeiro setor disponível como fallback.
+        if (indexSetor == -1 && setores.isNotEmpty) {
+          indexSetor = 0;
+        }
         if (indexSetor != -1) {
-          selecionarNovoLoteSetor(novoLoteArea.setores![indexSetor]);
+          selecionarNovoLoteSetor(setores[indexSetor]);
         }
       }
     }
@@ -720,10 +756,21 @@ abstract class LoteStoreBase with Store {
         toastError(message: err.message);
       },
       (data) async {
+        final hasAssociatedProtocol = data.protocolo?.id != null ||
+            novoLote.protocolo?.id != null ||
+            protocoloVinculado?.id != null;
         limparTudo();
         Get.close(1);
         setorStore.buscarSetores();
-        GetIt.I<HomeStore>().carregarHome();
+        var reported = false;
+        if (hasAssociatedProtocol &&
+            GetIt.I.isRegistered<InstantSequenceInteractionReporter>()) {
+          reported = GetIt.I<InstantSequenceInteractionReporter>()
+              .reportLotWithProtocolCreated();
+        }
+        if (!reported) {
+          await GetIt.I<HomeStore>().carregarHome();
+        }
         if (setorSelecionado.id != null) {
           buscarLotes();
         }
@@ -772,6 +819,18 @@ abstract class LoteStoreBase with Store {
     return false;
   }
 
+  bool validarEtapaSetor() {
+    return novoLoteArea.id != null && novoLoteSetor.id != null;
+  }
+
+  bool validarEtapaLote() {
+    return novoLoteName.text.trim().isNotEmpty;
+  }
+
+  bool validarEtapaCultura() {
+    return novoLoteCultura.id != null;
+  }
+
   @action
   Future<void> alterarLote() async {
     LoteRepository loteRepository = GetIt.I<LoteRepository>();
@@ -796,6 +855,14 @@ abstract class LoteStoreBase with Store {
       },
       (data) async {
         toastSuccess(message: "Alterado com sucesso");
+        final hasAssociatedProtocol = data.protocolo?.id != null ||
+            novoLote.protocolo?.id != null ||
+            protocoloVinculado?.id != null;
+        if (hasAssociatedProtocol &&
+            GetIt.I.isRegistered<InstantSequenceInteractionReporter>()) {
+          GetIt.I<InstantSequenceInteractionReporter>()
+              .reportLotWithProtocolCreated();
+        }
         buscarDetalhesLote();
         buscarLotes();
         limparTudo();

@@ -94,6 +94,14 @@ class SolucaoRepository implements ISolucaoRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> deletarSolucaoNutritiva(
+      int snutritivaId) async {
+    var result = await datasource.deletarSolucaoNutritiva(
+        snutritivaId: snutritivaId);
+    return result;
+  }
+
+  @override
   Future<Either<Failure, SolucaoConcentrada>> cadastrarSolucaoConcentrada(
       {required SolucaoConcentrada novaSolucaoConcentrada}) async {
     var result = await datasource.cadastrarSolucaoConcentrada(

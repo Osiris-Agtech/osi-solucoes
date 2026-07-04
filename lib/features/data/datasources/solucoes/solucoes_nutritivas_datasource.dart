@@ -40,6 +40,8 @@ abstract class ISolucaoDatasource {
       {required int solucaoId});
   Future<Either<Failure, SolucaoConcentrada>> cadastrarSolucaoConcentrada(
       {required SolucaoConcentrada novaSolucaoConcentrada});
+  Future<Either<Failure, bool>> deletarSolucaoNutritiva(
+      {required int snutritivaId});
 }
 
 class SolucaoDatasource implements ISolucaoDatasource {
@@ -693,5 +695,47 @@ class SolucaoDatasource implements ISolucaoDatasource {
     } else {
       return Left(ErrorReservatorio(message: FailureMessage.errorInfoMessage));
     }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deletarSolucaoNutritiva(
+      {required int snutritivaId}) async {
+    GraphQLClient client = GraphQLAPI().getGraphQLClient();
+
+    const String readRepositories = r'''
+      mutation SoftDeleteSNutritiva($snutritivaId: Int!) {
+        softDeleteSNutritiva(snutritivaId: $snutritivaId) {
+          id
+          deleted_at
+        }
+      }
+    ''';
+
+    final MutationOptions options = MutationOptions(
+      document: gql(readRepositories),
+      variables: <String, dynamic>{
+        'snutritivaId': snutritivaId,
+      },
+    );
+
+    final QueryResult result = await client.mutate(options);
+
+    if (!result.hasException) {
+      try {
+        final response = result.data?['softDeleteSNutritiva'];
+        if (response is bool) return Right(response);
+        if (response is Map<String, dynamic>) {
+          final id = response['id'];
+          return Right(id is int && id > 0);
+        }
+        return const Right(true);
+      } catch (e) {
+        return Left(ErrorReservatorio(
+            message: FailureMessage.errorDeleteSolucaoNutritiva));
+      }
+    }
+
+    return Left(ErrorReservatorio(
+        message: FailureMessage.errorDeleteSolucaoNutritiva));
   }
 }

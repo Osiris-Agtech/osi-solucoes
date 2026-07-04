@@ -14,6 +14,8 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/core/utils/responsive_breakpoints.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/home_daily_panel_content.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequence_interaction_reporter.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequence_signals_store.dart';
 import 'package:osi_solucoes/features/presenter/views/home/models/home_panel_mapper.dart';
 import 'package:osi_solucoes/features/presenter/views/home/models/home_panel_view_data.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
@@ -53,14 +55,20 @@ class HomePageState extends State<HomePage> {
     print('🏠 [HOME_PAGE] Inicializando HomePage...');
 
     // Carregar dados do dashboard quando a página é aberta
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       print('🏠 [HOME_PAGE] Carregando dados...');
-      store.carregarHome();
-      store.loadAdaptiveInterface().then((_) {
+      try {
+        await store.carregarHome();
+        await store.loadAdaptiveInterface();
         print(
             '🏠 [HOME_PAGE] Interface adaptativa carregada, aplicando dashboard...');
         // Ajustar dashboard quando a interface adaptativa for carregada
         _applyAdaptiveDashboard();
+        // Carrega interface adaptativa enriquecida para modo INSTANT
+        if (store.isInstantMode) {
+          await store.loadInstantAdaptiveInterface();
+          _reportFinalHomeStateCheckedIfNeeded();
+        }
         // Inicializa o PageController após carregar a ordem dos cards
         _initializePageController();
         // Metrics tracking: registra início de sessão após carregar modo
@@ -68,7 +76,7 @@ class HomePageState extends State<HomePage> {
           mode: store.adaptiveMode,
           sessionId: store.currentSessionId,
         );
-      }).catchError((e) {
+      } catch (e) {
         print('❌ [HOME_PAGE] Erro ao carregar interface adaptativa: $e');
         // Mesmo com erro, inicializa o controller e registra sessão
         _initializePageController();
@@ -76,8 +84,26 @@ class HomePageState extends State<HomePage> {
           mode: store.adaptiveMode,
           sessionId: store.currentSessionId,
         );
-      });
+      }
     });
+  }
+
+  void _reportFinalHomeStateCheckedIfNeeded() {
+    if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
+
+    final getIt = GetIt.I;
+    if (!getIt.isRegistered<InstantSequenceSignalsStore>() ||
+        !getIt.isRegistered<InstantSequenceInteractionReporter>()) {
+      return;
+    }
+
+    final snapshot = getIt<InstantSequenceSignalsStore>().snapshot;
+    if (!snapshot.hasAllPreviousSignalsForFinalHomeCheck ||
+        snapshot.finalHomeStateChecked) {
+      return;
+    }
+
+    getIt<InstantSequenceInteractionReporter>().reportFinalHomeStateChecked();
   }
 
   /// Inicializa o PageController para navegação dos cards
@@ -191,6 +217,9 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _reportFinalHomeStateCheckedIfNeeded(),
+    );
     final size = MediaQuery.of(context).size;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -632,6 +661,7 @@ class HomePageState extends State<HomePage> {
     return HomeDailyPanelContent(
       data: shouldShowSkeleton || hasBlockingError ? null : panelData,
       isLoading: store.isLoading || store.isLoadingShortcuts,
+      isLoadingInstantAdaptation: store.isLoadingInstantAdaptation,
       hasError: store.hasError,
       errorMessage: store.errorMessage,
       onRetry: store.carregarHome,
@@ -639,8 +669,11 @@ class HomePageState extends State<HomePage> {
       onSwitchAccount: _openAccountSwitcher,
       onLogout: _confirmLogout,
       onRecommendedActionTap: _openRecommendedAction,
-      onOpenProductionReport: () => Get.toNamed(Routes.relatoriosPage),
       onModuleTap: _openModuleShortcut,
+      instantViewData: store.instantViewData,
+      adaptiveMode: store.adaptiveMode,
+      currentSessionId: store.currentSessionId,
+      infoContext: store.dashboard?.infoContext,
     );
   }
 
