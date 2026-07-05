@@ -6,8 +6,8 @@ import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 // import 'package:osi_solucoes/app//modules/cadastro/cadastro_store.dart';
 import 'package:flutter/material.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/views/login/components/auth/auth_widgets.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_page.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../viewmodels/cadastro_store.dart';
@@ -32,58 +32,40 @@ class CadastroPageState extends State<CadastroPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Constants.kSecondBackgroundColor,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: Constants.kSecondBackgroundColor,
-      ),
-      child: AuthScaffold(
-        maxWidth: 680,
-        leading: Align(
-          alignment: Alignment.centerLeft,
-          child: IconButton(
-            splashColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onPressed: () => Get.back(),
-            icon: const Icon(Icons.arrow_back, size: 28),
-            color: Constants.kPrimaryColor,
-          ),
-        ),
-        child: AuthPanelCard(
-          child: Form(
-            key: formKey,
-            child: FocusScope(
-              node: focusNode,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  AuthHeader(
-                    title:
-                        '${"titlePageCadastro1".i18n()} ${"titlePageCadastro2".i18n()}',
-                    subtitle: 'Informe seus dados para criar o acesso.',
-                    badgeText: 'Cadastro',
-                  ),
-                  const SizedBox(height: 22),
-                  _personalSection(),
-                  const SizedBox(height: 14),
-                  _addressSection(),
-                  const SizedBox(height: 14),
-                  _credentialsSection(),
-                  if (_feedbackMessage != null) ...[
-                    const SizedBox(height: 16),
-                    AuthFeedbackMessage(message: _feedbackMessage!),
-                  ],
-                  const SizedBox(height: 20),
-                  AuthPrimaryButton(
-                    label: 'TextButtonConfirmar'.i18n(),
-                    isLoading: _isSubmitting,
-                    onPressed: _submitCadastro,
-                  ),
-                ],
+    return AppFormPage(
+      title: '${"titlePageCadastro1".i18n()} ${"titlePageCadastro2".i18n()}',
+      onBack: () => Get.back(),
+      maxWidth: 680,
+      child: Form(
+        key: formKey,
+        child: FocusScope(
+          node: focusNode,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AuthHeader(
+                title:
+                    '${"titlePageCadastro1".i18n()} ${"titlePageCadastro2".i18n()}',
+                subtitle: 'Informe seus dados para criar o acesso.',
+                badgeText: 'Cadastro',
               ),
-            ),
+              const SizedBox(height: 22),
+              _personalSection(),
+              const SizedBox(height: 14),
+              _addressSection(),
+              const SizedBox(height: 14),
+              _credentialsSection(),
+              if (_feedbackMessage != null) ...[
+                const SizedBox(height: 16),
+                AuthFeedbackMessage(message: _feedbackMessage!),
+              ],
+              const SizedBox(height: 20),
+              AuthPrimaryButton(
+                label: 'TextButtonConfirmar'.i18n(),
+                isLoading: _isSubmitting,
+                onPressed: _submitCadastro,
+              ),
+            ],
           ),
         ),
       ),

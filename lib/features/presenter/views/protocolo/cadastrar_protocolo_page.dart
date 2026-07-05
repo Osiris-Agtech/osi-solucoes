@@ -1,12 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
-import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_page.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
 import 'package:osi_solucoes/features/presenter/views/protocolo/components/cadastrar_page/bottomSheet.dart';
@@ -49,168 +48,146 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Constants.kBackgroundColor,
-        statusBarIconBrightness: Brightness.dark,
-      ),
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: SafeArea(
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: appBar(),
-            backgroundColor: Constants.kBackgroundColor,
-            body: Padding(
-              padding: EdgeInsets.only(
-                left: 10,
-                right: 10,
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    titulo(),
-                    subtitulo(),
-                    const SizedBox(height: 10),
-                    nome(context),
-                    Observer(builder: (_) {
-                      return Visibility(
-                        visible: store.mostrarErroFormulario &&
-                            store.novaCulturaProtocolo?.nome == null,
-                        child: const Padding(
-                          padding: EdgeInsets.only(
-                            left: 16.0,
-                            bottom: 8.0,
-                          ),
-                          child: Text(
-                            'Nome obrigatório',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Constants.kErrorColor,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                    const Divider(
-                      thickness: 0.5,
-                      color: Color(0xFFC4C4C4),
+    return AppFormPage(
+      title: 'Criando novo Protocolo',
+      onBack: () => Get.back(),
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            subtitulo(),
+            const SizedBox(height: 10),
+            nome(context),
+            Observer(builder: (_) {
+              return Visibility(
+                visible: store.mostrarErroFormulario &&
+                    store.novaCulturaProtocolo?.nome == null,
+                child: const Padding(
+                  padding: EdgeInsets.only(
+                    left: 16.0,
+                    bottom: 8.0,
+                  ),
+                  child: Text(
+                    'Nome obrigatório',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Constants.kErrorColor,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w600,
                     ),
-                    cultura(context),
-                    Observer(builder: (_) {
-                      return Visibility(
-                        visible: store.mostrarErroFormulario &&
-                            store.novaCulturaProtocolo?.nome == null,
-                        child: const Padding(
-                          padding: EdgeInsets.only(
-                            left: 16.0,
-                            bottom: 8.0,
-                          ),
-                          child: Text(
-                            'Cultura obrigatório',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Constants.kErrorColor,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                    const Divider(
-                      thickness: 0.5,
-                      color: Color(0xFFC4C4C4),
-                    ),
-                    sistema(context),
-                    Observer(builder: (_) {
-                      return Visibility(
-                        visible: store.mostrarErroFormulario &&
-                            (store.novoSistemaProtocolo ?? "").isEmpty,
-                        child: const Padding(
-                          padding: EdgeInsets.only(
-                            left: 16.0,
-                            bottom: 8.0,
-                          ),
-                          child: Text(
-                            'Sistema de Cultivo obrigatório',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Constants.kErrorColor,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                    const Divider(
-                      thickness: 0.5,
-                      color: Color(0xFFC4C4C4),
-                    ),
-                    forma(context),
-                    Observer(builder: (_) {
-                      return Visibility(
-                        visible: store.mostrarErroFormulario &&
-                            (store.novoFormaProtocolo ?? "").isEmpty,
-                        child: const Padding(
-                          padding: EdgeInsets.only(
-                            left: 16.0,
-                            bottom: 8.0,
-                          ),
-                          child: Text(
-                            'Forma de implantação obrigatório',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Constants.kErrorColor,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                    const Divider(
-                      thickness: 0.5,
-                      color: Color(0xFFC4C4C4),
-                    ),
-                    atividades(context),
-                    Observer(builder: (_) {
-                      return Visibility(
-                        visible: store.mostrarErroFormulario &&
-                            store.novasAtividadesProtocolo.isEmpty,
-                        child: const Padding(
-                          padding: EdgeInsets.only(
-                            left: 16.0,
-                            bottom: 8.0,
-                          ),
-                          child: Text(
-                            'Atividades são obrigatórias',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Constants.kErrorColor,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                    const SizedBox(height: 30),
-                    saveButton(size),
-                  ],
+                  ),
                 ),
-              ),
+              );
+            }),
+            const Divider(
+              thickness: 0.5,
+              color: Color(0xFFC4C4C4),
             ),
-          ),
+            cultura(context),
+            Observer(builder: (_) {
+              return Visibility(
+                visible: store.mostrarErroFormulario &&
+                    store.novaCulturaProtocolo?.nome == null,
+                child: const Padding(
+                  padding: EdgeInsets.only(
+                    left: 16.0,
+                    bottom: 8.0,
+                  ),
+                  child: Text(
+                    'Cultura obrigatório',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Constants.kErrorColor,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              );
+            }),
+            const Divider(
+              thickness: 0.5,
+              color: Color(0xFFC4C4C4),
+            ),
+            sistema(context),
+            Observer(builder: (_) {
+              return Visibility(
+                visible: store.mostrarErroFormulario &&
+                    (store.novoSistemaProtocolo ?? "").isEmpty,
+                child: const Padding(
+                  padding: EdgeInsets.only(
+                    left: 16.0,
+                    bottom: 8.0,
+                  ),
+                  child: Text(
+                    'Sistema de Cultivo obrigatório',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Constants.kErrorColor,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              );
+            }),
+            const Divider(
+              thickness: 0.5,
+              color: Color(0xFFC4C4C4),
+            ),
+            forma(context),
+            Observer(builder: (_) {
+              return Visibility(
+                visible: store.mostrarErroFormulario &&
+                    (store.novoFormaProtocolo ?? "").isEmpty,
+                child: const Padding(
+                  padding: EdgeInsets.only(
+                    left: 16.0,
+                    bottom: 8.0,
+                  ),
+                  child: Text(
+                    'Forma de implantação obrigatório',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Constants.kErrorColor,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              );
+            }),
+            const Divider(
+              thickness: 0.5,
+              color: Color(0xFFC4C4C4),
+            ),
+            atividades(context),
+            Observer(builder: (_) {
+              return Visibility(
+                visible: store.mostrarErroFormulario &&
+                    store.novasAtividadesProtocolo.isEmpty,
+                child: const Padding(
+                  padding: EdgeInsets.only(
+                    left: 16.0,
+                    bottom: 8.0,
+                  ),
+                  child: Text(
+                    'Atividades são obrigatórias',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Constants.kErrorColor,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              );
+            }),
+            const SizedBox(height: 30),
+            saveButton(size),
+          ],
         ),
       ),
     );
@@ -228,25 +205,6 @@ class _CadastrarProtocoloPageState extends State<CadastrarProtocoloPage> {
           fontWeight: FontWeight.w600,
         ),
       ),
-    );
-  }
-
-  Widget titulo() {
-    return const Padding(
-      padding: EdgeInsets.only(
-        left: 20,
-        right: 10,
-      ),
-      child: Text(
-        'Criando novo \nProtocolo',
-        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-
-  AppFormHeader appBar() {
-    return AppFormHeader(
-      onBack: () => Get.back(),
     );
   }
 

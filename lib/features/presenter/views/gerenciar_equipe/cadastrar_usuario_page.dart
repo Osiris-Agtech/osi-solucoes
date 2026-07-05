@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/models/cargo/cargo_model.dart';
-import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_page.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../viewmodels/gerenciar_equipe_store.dart';
@@ -36,69 +35,31 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Constants.kBackgroundColor,
-        statusBarIconBrightness: Brightness.dark,
-      ),
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: SafeArea(
-          child: Scaffold(
-            resizeToAvoidBottomInset: true,
-            appBar: appBar(),
-            backgroundColor: Constants.kBackgroundColor,
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: ScrollConfiguration(
-                behavior:
-                    ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      titulo(),
-                      subtitulo(),
-                      const SizedBox(height: 20),
-                      image(context),
-                      email(context, store),
-                      nome(context, store),
-                      sobrenome(context, store),
-                      cargo(context),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 10),
-                        child: Divider(
-                          color: Constants.kGreyText2.withValues(alpha: .3),
-                        ),
-                      ),
-                      info(context),
-                      saveButton(size),
-                    ],
-                  ),
-                ),
+    return AppFormPage(
+      title: 'Cadastrar Colaborador',
+      onBack: () => Get.back(),
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            subtitulo(),
+            const SizedBox(height: 20),
+            image(context),
+            email(context, store),
+            nome(context, store),
+            sobrenome(context, store),
+            cargo(context),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 10),
+              child: Divider(
+                color: Constants.kGreyText2.withValues(alpha: .3),
               ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget titulo() {
-    return const Padding(
-      padding: EdgeInsets.only(
-        left: 20,
-        right: 10,
-      ),
-      child: Text(
-        'Cadastrar Colaborador',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.w600,
+            info(context),
+            saveButton(size),
+          ],
         ),
       ),
     );
@@ -588,9 +549,4 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
     );
   }
 
-  AppFormHeader appBar() {
-    return AppFormHeader(
-      onBack: () => Get.back(),
-    );
-  }
 }

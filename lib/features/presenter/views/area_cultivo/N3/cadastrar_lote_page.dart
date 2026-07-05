@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
-import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_page.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_step_wizard.dart';
 
 import 'components/cadastrar_page/setor_step.dart';
@@ -43,55 +41,36 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Constants.kBackgroundColor,
-        statusBarIconBrightness: Brightness.dark,
-      ),
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: AppFormHeader(
-          onBack: () {
-            Get.close(1);
-            store.limparTudo();
-          },
-          title: store.isEditing ? 'Alterando Lote' : 'Criando Novo Lote',
-        ),
-        backgroundColor: Constants.kBackgroundColor,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 12),
-            Expanded(
-              child: AppStepWizard(
-                steps: [
-                  SetorStep(store: store, formKey: formKey),
-                  ReservatorioStep(store: store),
-                  LoteStep(store: store),
-                  CulturaStep(store: store),
-                  ProtocoloStep(store: store, protocoloStore: protocoloStore),
-                ],
-                onSubmit: () {
-                  if (store.validarRegistro()) {
-                    if (store.isEditing) {
-                      store.alterarLote();
-                    } else {
-                      store.registrarLote();
-                    }
-                  }
-                },
-                stepLabels: const [
-                  'Setor',
-                  'Reservatório',
-                  'Lote',
-                  'Cultura',
-                  'Protocolo',
-                ],
-              ),
-            ),
-            const SizedBox(height: 30),
-          ],
-        ),
+    return AppFormPage(
+      title: store.isEditing ? 'Alterando Lote' : 'Criando Novo Lote',
+      onBack: () {
+        Get.close(1);
+        store.limparTudo();
+      },
+      child: AppStepWizard(
+        steps: [
+          SetorStep(store: store, formKey: formKey),
+          ReservatorioStep(store: store),
+          LoteStep(store: store),
+          CulturaStep(store: store),
+          ProtocoloStep(store: store, protocoloStore: protocoloStore),
+        ],
+        onSubmit: () {
+          if (store.validarRegistro()) {
+            if (store.isEditing) {
+              store.alterarLote();
+            } else {
+              store.registrarLote();
+            }
+          }
+        },
+        stepLabels: const [
+          'Setor',
+          'Reservatório',
+          'Lote',
+          'Cultura',
+          'Protocolo',
+        ],
       ),
     );
   }

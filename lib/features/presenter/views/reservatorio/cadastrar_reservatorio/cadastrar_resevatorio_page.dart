@@ -1,17 +1,12 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
-import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.dart';
-import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
-import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
-import 'package:osi_solucoes/features/presenter/widgets/common/app_validation_message.dart';
-import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/bottomSheet.dart';
-
-import '../../../../../core/constants/constants.dart';
+import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/reservatorio_nome_step.dart';
+import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/reservatorio_volume_step.dart';
+import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/reservatorio_receita_step.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_form_page.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_step_wizard.dart';
 
 class CadastrarReservatorioPage extends StatefulWidget {
   final String title;
@@ -28,7 +23,12 @@ class CadastrarReservatorioPage extends StatefulWidget {
 
 class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
   ReservatoriosStore store = GetIt.I<ReservatoriosStore>();
-  CarouselSliderController controlerPages = CarouselSliderController();
+
+  @override
+  void initState() {
+    super.initState();
+    store.buscarSolucoes();
+  }
 
   @override
   void dispose() {
@@ -38,187 +38,26 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Constants.kBackgroundColor,
-        statusBarIconBrightness: Brightness.dark,
-      ),
-      child: SafeArea(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppFormHeader(
-            onBack: () => Get.back(),
-            title: 'Novo Reservatório',
-          ),
-          backgroundColor: Constants.kBackgroundColor,
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                subtitulo(),
-                const SizedBox(height: 20),
-                nome(context),
-                AppValidationMessage(
-                  message: store.mostrarErroFormulario &&
-                          store.novoReservatorioName.text.isEmpty
-                      ? 'Nome obrigatório'
-                      : null,
-                ),
-                const Divider(),
-                volume(context),
-                AppValidationMessage(
-                  message: store.mostrarErroFormulario &&
-                          store.novoReservatorioVolume.text.isEmpty
-                      ? 'Volume obrigatório'
-                      : null,
-                ),
-                const Divider(),
-                solucaoNutritiva(context),
-                const Divider(),
-                Expanded(child: Container()),
-                saveButton(size),
-              ],
-            ),
-          ),
-        ),
+    return AppFormPage(
+      title: store.isEditing ? 'Alterar Reservatório' : 'Novo Reservatório',
+      onBack: () => Get.back(),
+      child: AppStepWizard(
+        steps: [
+          ReservatorioNomeStep(store: store),
+          ReservatorioVolumeStep(store: store),
+          ReservatorioReceitaStep(store: store),
+        ],
+        onSubmit: () {
+          if (store.validarReservatorio()) {
+            if (!store.isEditing || widget.isShortcut) {
+              store.registrarReservatorio(isShortcut: widget.isShortcut);
+            } else {
+              store.updateReservatorio();
+            }
+          }
+        },
+        stepLabels: const ['Nome', 'Volume', 'Solução'],
       ),
     );
-  }
-
-  Padding subtitulo() {
-    return const Padding(
-      padding: EdgeInsets.only(top: 10, left: 20),
-      child: Text(
-        'Cadastrar Informações',
-        style: TextStyle(
-          fontSize: 14,
-          color: Color(0xff6F6464),
-          fontStyle: FontStyle.italic,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
-
-  Widget saveButton(Size size) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 30),
-      child: SizedBox(
-        width: size.width * .8,
-        child: Observer(builder: (_) {
-          return AppPrimaryButton(
-            label: store.isEditing ? 'Alterar' : 'Salvar',
-            isLoading: store.isNovoReservatorioLoading,
-            onPressed: () {
-              if (store.validarReservatorio()) {
-                if (!store.isEditing || widget.isShortcut) {
-                  store.registrarReservatorio(isShortcut: widget.isShortcut);
-                } else {
-                  store.updateReservatorio();
-                }
-              }
-            },
-          );
-        }),
-      ),
-    );
-  }
-
-  Widget nome(BuildContext context) {
-    return Observer(builder: (_) {
-      return AppFormSelectionTile(
-        leading: const Icon(Icons.label),
-        title: 'Nome',
-        subtitle: store.novoReservatorioName.text.isNotEmpty
-            ? store.novoReservatorioName.text
-            : null,
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              store.novoReservatorioName.text.isNotEmpty
-                  ? store.novoReservatorioName.text
-                  : 'Preencher',
-              style: TextStyle(
-                color: Constants.kPrimaryColor,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-              ),
-            ),
-            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
-          ],
-        ),
-        onTap: () {
-          store.setDotIndicator(0);
-          bottomSheet(context, controlerPages, store);
-        },
-      );
-    });
-  }
-
-  Widget volume(BuildContext context) {
-    return Observer(builder: (_) {
-      final volText = store.novoReservatorioVolume.text;
-      return AppFormSelectionTile(
-        leading: const Icon(Icons.waves),
-        title: 'Volume',
-        subtitle: volText.isNotEmpty ? '$volText Litros' : null,
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              volText.isNotEmpty ? '$volText Litros' : 'Preencher',
-              style: const TextStyle(
-                color: Constants.kPrimaryColor,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-              ),
-            ),
-            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
-          ],
-        ),
-        onTap: () {
-          store.setDotIndicator(1);
-          bottomSheet(context, controlerPages, store);
-        },
-      );
-    });
-  }
-
-  Widget solucaoNutritiva(BuildContext context) {
-    return Observer(builder: (_) {
-      return AppFormSelectionTile(
-        leading: const Icon(Icons.invert_colors),
-        title: 'Solução Nutritiva',
-        subtitle: store.isSolucaoNutritivaValid
-            ? store.solucaoNutritiva.nome ?? ''
-            : null,
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              store.isSolucaoNutritivaValid
-                  ? store.solucaoNutritiva.nome ?? ''
-                  : 'Selecionar',
-              style: const TextStyle(
-                color: Constants.kPrimaryColor,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-              ),
-            ),
-            const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
-          ],
-        ),
-        onTap: () {
-          store.buscarSolucoes();
-          store.setDotIndicator(2);
-          bottomSheet(context, controlerPages, store);
-        },
-      );
-    });
   }
 }
