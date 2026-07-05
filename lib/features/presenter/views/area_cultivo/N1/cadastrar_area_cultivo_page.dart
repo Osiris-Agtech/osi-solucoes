@@ -9,6 +9,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.da
 import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_validation_message.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N1/components/bottomSheet.dart';
 
 class CadastrarAreaCultivo extends StatefulWidget {
@@ -20,7 +21,6 @@ class CadastrarAreaCultivo extends StatefulWidget {
 
 class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
   AreaCultivoStore store = GetIt.I<AreaCultivoStore>();
-  CarouselSliderController carouselController = CarouselSliderController();
   CarouselSliderController controlerPages = CarouselSliderController();
 
   @override
@@ -56,7 +56,10 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
         child: SafeArea(
           child: Scaffold(
             resizeToAvoidBottomInset: true,
-            appBar: appBar(),
+            appBar: AppFormHeader(
+              onBack: () => Get.back(),
+              title: 'Nova Área de Cultivo',
+            ),
             backgroundColor: Constants.kBackgroundColor,
             body: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -66,31 +69,15 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    titulo(),
                     subtitulo(),
                     const SizedBox(height: 20),
                     nome(context),
-                    Observer(builder: (_) {
-                      return Visibility(
-                        visible: store.mostrarErroFormulario &&
-                            store.novaAreaName.text.isEmpty,
-                        child: const Padding(
-                          padding: EdgeInsets.only(
-                            left: 16.0,
-                            bottom: 8.0,
-                          ),
-                          child: Text(
-                            'Nome obrigatório',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Constants.kErrorColor,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
+                    AppValidationMessage(
+                      message: store.mostrarErroFormulario &&
+                              store.novaAreaName.text.isEmpty
+                          ? 'Nome obrigatório'
+                          : null,
+                    ),
                     const Divider(),
                     localizacao(context),
                     const Divider(),
@@ -156,25 +143,6 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
     );
   }
 
-  Widget titulo() {
-    return const Padding(
-      padding: EdgeInsets.only(
-        left: 20,
-        right: 10,
-      ),
-      child: Text(
-        'Criando Nova Área de Cultivo',
-        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-
-  AppFormHeader appBar() {
-    return AppFormHeader(
-      onBack: () => Get.back(),
-    );
-  }
-
   Widget saveButton(Size size) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
@@ -222,7 +190,7 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
         ),
         onTap: () {
           store.setDotIndicator(0);
-          bottomSheet(context, controlerPages, carouselController, store);
+          bottomSheet(context, controlerPages, store);
         },
       );
     });
@@ -256,7 +224,7 @@ class _CadastrarAreaCultivoState extends State<CadastrarAreaCultivo> {
             : const Icon(Icons.chevron_right, color: Constants.kPrimaryColor),
         onTap: () {
           store.setDotIndicator(1);
-          bottomSheet(context, controlerPages, carouselController, store);
+          bottomSheet(context, controlerPages, store);
         },
       );
     });

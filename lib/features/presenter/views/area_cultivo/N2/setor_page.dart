@@ -15,6 +15,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_delete_dialog.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 
@@ -202,76 +203,13 @@ class _N2PageHeaderState extends State<_N2PageHeader> {
 
   Future<void> _confirmarDelecaoArea(BuildContext context) async {
     final nomeArea = widget.areaN1.nome ?? 'área';
-
-    final confirmou = await showDialog<bool>(
+    final confirmou = await AppDeleteDialog.show(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Row(
-          children: [
-            Icon(Icons.warning_rounded, color: Constants.kErrorColor, size: 24),
-            SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'Deletar área?',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-              ),
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'A área "$nomeArea", todos os setores, lotes e agendas vinculados serão desativados permanentemente.',
-              style: const TextStyle(fontSize: 15, height: 1.4),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Constants.kErrorColor.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.info_outline,
-                      size: 18, color: Constants.kErrorColor),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Setores, lotes e agendas desta área também serão removidos em cascata.',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Constants.kErrorColor,
-                        height: 1.3,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancelar'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            style: FilledButton.styleFrom(
-              backgroundColor: Constants.kErrorColor,
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Deletar'),
-          ),
-        ],
-      ),
+      title: 'Deletar área?',
+      message: 'A área "$nomeArea", todos os setores, lotes e agendas vinculados serão desativados permanentemente.',
+      infoText: 'Setores, lotes e agendas desta área também serão removidos em cascata.',
     );
-
-    if (confirmou == true && context.mounted) {
+    if (confirmou && context.mounted) {
       await areaStore.deletarAreaCascade(widget.areaN1.id!);
     }
   }

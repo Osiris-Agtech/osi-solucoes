@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -22,8 +21,6 @@ class CadastroCadernoCampoPage extends StatefulWidget {
 }
 
 class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
-  CarouselSliderController carouselController = CarouselSliderController();
-  CarouselSliderController controlerPages = CarouselSliderController();
   CadernoCampoStore store = GetIt.I<CadernoCampoStore>();
 
   @override
@@ -356,7 +353,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                 ),
           onTap: () {
             store.setDotIndicator(0);
-            bottomSheet(context, carouselController, controlerPages, store);
+            bottomSheet(context, store);
           },
         );
       }),
@@ -413,7 +410,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                   ),
             onTap: () {
               store.setDotIndicator(1);
-              bottomSheet(context, carouselController, controlerPages, store);
+              bottomSheet(context, store);
             });
       }),
     );
@@ -569,7 +566,7 @@ class _CadastroCadernoCampoPageState extends State<CadastroCadernoCampoPage> {
                 ),
           onTap: () {
             store.setDotIndicator(2);
-            bottomSheet(context, carouselController, controlerPages, store);
+            bottomSheet(context, store);
           },
         );
       }),

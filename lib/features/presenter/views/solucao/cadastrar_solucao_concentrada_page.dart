@@ -51,7 +51,10 @@ class _CadastrarSolucaoConcentradaPageState
         child: SafeArea(
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            appBar: appBar(),
+            appBar: AppFormHeader(
+              onBack: () => Get.back(),
+              title: 'Nova Solução Concentrada',
+            ),
             backgroundColor: Constants.kBackgroundColor,
             body: Padding(
               padding: EdgeInsets.only(
@@ -61,7 +64,6 @@ class _CadastrarSolucaoConcentradaPageState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  titulo(),
                   const SizedBox(height: 20),
                   subtitulo(),
                   const SizedBox(height: 10),
@@ -107,25 +109,6 @@ class _CadastrarSolucaoConcentradaPageState
           fontWeight: FontWeight.w600,
         ),
       ),
-    );
-  }
-
-  Widget titulo() {
-    return const Padding(
-      padding: EdgeInsets.only(
-        left: 30,
-        right: 30,
-      ),
-      child: Text(
-        'Nova Solução Nutritiva',
-        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-
-  AppFormHeader appBar() {
-    return AppFormHeader(
-      onBack: () => Get.back(),
     );
   }
 

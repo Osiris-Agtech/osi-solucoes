@@ -448,6 +448,20 @@ abstract class LoteStoreBase with Store {
   Setor selecionarNovoLoteSetor(Setor setor) => novoLoteSetor = setor;
 
   @action
+  void autoPreencherReservatorioDoSetor() {
+    if (novoLoteSetor.reservatorio != null) {
+      novoLoteReservatorio = novoLoteSetor.reservatorio!;
+    } else {
+      novoLoteReservatorio = Reservatorio();
+    }
+  }
+
+  @action
+  void resetarReservatorio() {
+    novoLoteReservatorio = Reservatorio();
+  }
+
+  @action
   bool setMostrarErroFormulario(bool value) => mostrarErroFormulario = value;
 
   @action
@@ -461,8 +475,8 @@ abstract class LoteStoreBase with Store {
         selecionarNovoLoteArea(areaList[index]);
 
         final setores = novoLoteArea.setores ?? [];
-        int indexSetor = setores
-            .indexWhere((element) => element.id == setorSelecionado.id);
+        int indexSetor =
+            setores.indexWhere((element) => element.id == setorSelecionado.id);
         // Se o setor salvo em setorSelecionado não for encontrado nos setores
         // da área (ex: navegação por edição onde setorSelecionado não foi
         // atualizado), seleciona o primeiro setor disponível como fallback.
@@ -471,6 +485,7 @@ abstract class LoteStoreBase with Store {
         }
         if (indexSetor != -1) {
           selecionarNovoLoteSetor(setores[indexSetor]);
+          autoPreencherReservatorioDoSetor();
         }
       }
     }

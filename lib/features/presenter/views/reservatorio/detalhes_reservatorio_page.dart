@@ -11,6 +11,7 @@ import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcen
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_delete_dialog.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_section_header.dart';
 
 class DetalhesReservatorio extends StatefulWidget {
@@ -39,78 +40,14 @@ class _DetalhesReservatorioState extends State<DetalhesReservatorio> {
   }
 
   Future<void> _confirmarDelecao(BuildContext context) async {
-    final nomeReservatorio =
-        store.reservatorioDetalhes.nome ?? 'reservatório';
-
-    final confirmou = await showDialog<bool>(
+    final nomeReservatorio = store.reservatorioDetalhes.nome ?? 'reservatório';
+    final confirmou = await AppDeleteDialog.show(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Row(
-          children: [
-            Icon(Icons.warning_rounded, color: Constants.kErrorColor, size: 24),
-            SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'Deletar reservatório?',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-              ),
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'O reservatório "$nomeReservatorio" será desativado permanentemente.',
-              style: const TextStyle(fontSize: 15, height: 1.4),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Constants.kErrorColor.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.info_outline,
-                      size: 18, color: Constants.kErrorColor),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Lotes e setores vinculados não serão afetados. Apenas o reservatório será removido.',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Constants.kErrorColor,
-                        height: 1.3,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancelar'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            style: FilledButton.styleFrom(
-              backgroundColor: Constants.kErrorColor,
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Deletar'),
-          ),
-        ],
-      ),
+      title: 'Deletar reservatório?',
+      message: 'O reservatório "$nomeReservatorio" será desativado permanentemente.',
+      infoText: 'Lotes e setores vinculados não serão afetados. Apenas o reservatório será removido.',
     );
-
-    if (confirmou == true && context.mounted) {
+    if (confirmou && context.mounted) {
       await store.deletarReservatorio(store.reservatorioDetalhes.id!);
     }
   }

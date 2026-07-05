@@ -5,6 +5,7 @@ import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/core/utils/decimal_format.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/solucao_store.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_delete_dialog.dart';
 
 class DetalhesSolucao extends StatefulWidget {
   const DetalhesSolucao({super.key});
@@ -18,76 +19,13 @@ class _DetalhesSolucaoState extends State<DetalhesSolucao> {
 
   Future<void> _confirmarDelecao(BuildContext context) async {
     final nomeSolucao = store.solucaoSelecionada.nome ?? 'solução';
-
-    final confirmou = await showDialog<bool>(
+    final confirmou = await AppDeleteDialog.show(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Row(
-          children: [
-            Icon(Icons.warning_rounded, color: Constants.kErrorColor, size: 24),
-            SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'Deletar solução?',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-              ),
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'A solução nutritiva "$nomeSolucao" será desativada permanentemente.',
-              style: const TextStyle(fontSize: 15, height: 1.4),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Constants.kErrorColor.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.info_outline,
-                      size: 18, color: Constants.kErrorColor),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Reservatórios vinculados não serão afetados. Apenas a solução será removida.',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Constants.kErrorColor,
-                        height: 1.3,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancelar'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            style: FilledButton.styleFrom(
-              backgroundColor: Constants.kErrorColor,
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Deletar'),
-          ),
-        ],
-      ),
+      title: 'Deletar solução?',
+      message: 'A solução nutritiva "$nomeSolucao" será desativada permanentemente.',
+      infoText: 'Reservatórios vinculados não serão afetados. Apenas a solução será removida.',
     );
-
-    if (confirmou == true && context.mounted) {
+    if (confirmou && context.mounted) {
       Navigator.pop(context);
       await store.deletarSolucaoNutritiva(store.solucaoSelecionada.id!);
     }

@@ -8,6 +8,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.d
 import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_validation_message.dart';
 import 'package:osi_solucoes/features/presenter/views/reservatorio/cadastrar_reservatorio/components/bottomSheet.dart';
 
 import '../../../../../core/constants/constants.dart';
@@ -27,7 +28,6 @@ class CadastrarReservatorioPage extends StatefulWidget {
 
 class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
   ReservatoriosStore store = GetIt.I<ReservatoriosStore>();
-  CarouselSliderController carouselController = CarouselSliderController();
   CarouselSliderController controlerPages = CarouselSliderController();
 
   @override
@@ -48,7 +48,10 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
       child: SafeArea(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          appBar: appBar(),
+          appBar: AppFormHeader(
+            onBack: () => Get.back(),
+            title: 'Novo Reservatório',
+          ),
           backgroundColor: Constants.kBackgroundColor,
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -56,54 +59,23 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                titulo(),
                 subtitulo(),
                 const SizedBox(height: 20),
                 nome(context),
-                Observer(builder: (_) {
-                  return Visibility(
-                    visible: store.mostrarErroFormulario &&
-                        store.novoReservatorioName.text.isEmpty,
-                    child: const Padding(
-                      padding: EdgeInsets.only(
-                        left: 16.0,
-                        bottom: 8.0,
-                      ),
-                      child: Text(
-                        'Nome obrigatório',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Constants.kErrorColor,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
+                AppValidationMessage(
+                  message: store.mostrarErroFormulario &&
+                          store.novoReservatorioName.text.isEmpty
+                      ? 'Nome obrigatório'
+                      : null,
+                ),
                 const Divider(),
                 volume(context),
-                Observer(builder: (_) {
-                  return Visibility(
-                    visible: store.mostrarErroFormulario &&
-                        store.novoReservatorioVolume.text.isEmpty,
-                    child: const Padding(
-                      padding: EdgeInsets.only(
-                        left: 16.0,
-                        bottom: 8.0,
-                      ),
-                      child: Text(
-                        'Volume obrigatório',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Constants.kErrorColor,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
+                AppValidationMessage(
+                  message: store.mostrarErroFormulario &&
+                          store.novoReservatorioVolume.text.isEmpty
+                      ? 'Volume obrigatório'
+                      : null,
+                ),
                 const Divider(),
                 solucaoNutritiva(context),
                 const Divider(),
@@ -129,25 +101,6 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
           fontWeight: FontWeight.w600,
         ),
       ),
-    );
-  }
-
-  Padding titulo() {
-    return const Padding(
-      padding: EdgeInsets.only(
-        left: 20,
-        right: 10,
-      ),
-      child: Text(
-        'Novo Reservatório',
-        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-
-  AppFormHeader appBar() {
-    return AppFormHeader(
-      onBack: () => Get.back(),
     );
   }
 
@@ -201,7 +154,7 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
         ),
         onTap: () {
           store.setDotIndicator(0);
-          bottomSheet(context, controlerPages, carouselController, store);
+          bottomSheet(context, controlerPages, store);
         },
       );
     });
@@ -230,7 +183,7 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
         ),
         onTap: () {
           store.setDotIndicator(1);
-          bottomSheet(context, controlerPages, carouselController, store);
+          bottomSheet(context, controlerPages, store);
         },
       );
     });
@@ -263,7 +216,7 @@ class CadastrarReservatorioPageState extends State<CadastrarReservatorioPage> {
         onTap: () {
           store.buscarSolucoes();
           store.setDotIndicator(2);
-          bottomSheet(context, controlerPages, carouselController, store);
+          bottomSheet(context, controlerPages, store);
         },
       );
     });

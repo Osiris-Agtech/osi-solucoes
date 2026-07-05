@@ -36,6 +36,7 @@ class SetorStep extends StatelessWidget {
                 if (value != null) {
                   formKey.currentState?.reset();
                   store.selecionarNovoLoteSetor(Setor());
+                  store.resetarReservatorio();
                   store.selecionarNovoLoteArea(value);
                 }
               },
@@ -56,6 +57,7 @@ class SetorStep extends StatelessWidget {
               onChanged: (value) {
                 if (value != null) {
                   store.selecionarNovoLoteSetor(value);
+                  store.autoPreencherReservatorioDoSetor();
                 }
               },
             ),

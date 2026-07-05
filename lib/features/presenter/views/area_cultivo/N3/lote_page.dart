@@ -16,6 +16,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/finalizar_page/bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_delete_dialog.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
 import 'package:osi_solucoes/core/services/navigation_resource_args.dart';
@@ -223,76 +224,15 @@ class _N3PageHeaderState extends State<_N3PageHeader> {
 
   Future<void> _confirmarDelecaoSetor(BuildContext context) async {
     final nomeSetor = widget.setorN2.nome ?? 'setor';
-
-    final confirmou = await showDialog<bool>(
+    final confirmou = await AppDeleteDialog.show(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Row(
-          children: [
-            Icon(Icons.warning_rounded, color: Constants.kErrorColor, size: 24),
-            SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'Deletar setor?',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-              ),
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'O setor "$nomeSetor", todos os lotes e agendas vinculados serão desativados permanentemente.',
-              style: const TextStyle(fontSize: 15, height: 1.4),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Constants.kErrorColor.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.info_outline,
-                      size: 18, color: Constants.kErrorColor),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Lotes e agendas deste setor também serão removidos em cascata.',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Constants.kErrorColor,
-                        height: 1.3,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancelar'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            style: FilledButton.styleFrom(
-              backgroundColor: Constants.kErrorColor,
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Deletar'),
-          ),
-        ],
-      ),
+      title: 'Deletar setor?',
+      message:
+          'O setor "$nomeSetor", todos os lotes e agendas vinculados serão desativados permanentemente.',
+      infoText:
+          'Lotes e agendas deste setor também serão removidos em cascata.',
     );
-
-    if (confirmou == true && context.mounted) {
+    if (confirmou && context.mounted) {
       await setorStore.deletarSetorCascade(widget.setorN2.id!);
     }
   }

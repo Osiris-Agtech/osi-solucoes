@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -29,8 +28,6 @@ class CadastrarSolucaoPage extends StatefulWidget {
 
 class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     with TickerProviderStateMixin {
-  CarouselSliderController carouselController = CarouselSliderController();
-  CarouselSliderController controlerPages = CarouselSliderController();
   SolucaoStore store = GetIt.I<SolucaoStore>();
   late TabController tabController;
 
@@ -65,7 +62,10 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
             length: tabController.length,
             child: Scaffold(
               resizeToAvoidBottomInset: false,
-              appBar: appBar(),
+              appBar: AppFormHeader(
+                onBack: () => Get.back(),
+                title: 'Nova Solução Nutritiva',
+              ),
               backgroundColor: Constants.kBackgroundColor,
               body: Padding(
                 padding: EdgeInsets.only(
@@ -77,7 +77,6 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        titulo(),
                         const SizedBox(height: 20),
                         subtitulo(),
                         const SizedBox(height: 10),
@@ -501,25 +500,6 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
     );
   }
 
-  Widget titulo() {
-    return const Padding(
-      padding: EdgeInsets.only(
-        left: 30,
-        right: 30,
-      ),
-      child: Text(
-        'Nova Solução Nutritiva',
-        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-
-  AppFormHeader appBar() {
-    return AppFormHeader(
-      onBack: () => Get.back(),
-    );
-  }
-
   Widget _nome(BuildContext context) {
     return Observer(builder: (_) {
       final hasName = store.novaSolucaoName.text.isNotEmpty;
@@ -543,7 +523,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
         ),
         onTap: () {
           store.setDotIndicator(0);
-          bottomSheet(context, carouselController, controlerPages, store);
+          bottomSheet(context, store);
         },
       );
     });
@@ -572,7 +552,7 @@ class _CadastrarSolucaoPageState extends State<CadastrarSolucaoPage>
         ),
         onTap: () {
           store.setDotIndicator(1);
-          bottomSheet(context, carouselController, controlerPages, store);
+          bottomSheet(context, store);
         },
       );
     });

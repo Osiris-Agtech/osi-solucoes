@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -9,6 +8,7 @@ import 'package:osi_solucoes/features/presenter/widgets/common/app_form_header.d
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N2/components/bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_form_selection_tile.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_validation_message.dart';
 import '../../../../../core/constants/constants.dart';
 
 class CadastrarSetorPage extends StatefulWidget {
@@ -19,8 +19,6 @@ class CadastrarSetorPage extends StatefulWidget {
 }
 
 class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
-  CarouselSliderController carouselController = CarouselSliderController();
-  CarouselSliderController controlerPages = CarouselSliderController();
   SetorStore store = GetIt.I<SetorStore>();
 
   @override
@@ -56,7 +54,10 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
         child: SafeArea(
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            appBar: appBar(),
+            appBar: AppFormHeader(
+              onBack: () => Get.back(),
+              title: 'Novo Setor',
+            ),
             backgroundColor: Constants.kBackgroundColor,
             body: Padding(
               padding: EdgeInsets.only(
@@ -70,33 +71,17 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    titulo(),
                     const SizedBox(height: 20),
                     local(),
                     subtitulo(),
                     const SizedBox(height: 10),
                     nome(context),
-                    Observer(builder: (_) {
-                      return Visibility(
-                        visible: store.mostrarErroFormulario &&
-                            store.novoSetorName.text.isEmpty,
-                        child: const Padding(
-                          padding: EdgeInsets.only(
-                            left: 16.0,
-                            bottom: 8.0,
-                          ),
-                          child: Text(
-                            'Nome obrigatório',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Constants.kErrorColor,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
+                    AppValidationMessage(
+                      message: store.mostrarErroFormulario &&
+                              store.novoSetorName.text.isEmpty
+                          ? 'Nome obrigatório'
+                          : null,
+                    ),
                     const Divider(),
                     warning(),
                     reservatorio(context),
@@ -220,25 +205,6 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
     );
   }
 
-  Widget titulo() {
-    return const Padding(
-      padding: EdgeInsets.only(
-        left: 20,
-        right: 10,
-      ),
-      child: Text(
-        'Criando Novo Setor',
-        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-
-  AppFormHeader appBar() {
-    return AppFormHeader(
-      onBack: () => Get.back(),
-    );
-  }
-
   Widget saveButton(Size size) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
@@ -286,7 +252,7 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
         ),
         onTap: () {
           store.setDotIndicator(0);
-          bottomSheet(context, carouselController, controlerPages, store);
+          bottomSheet(context, store);
         },
       );
     });
@@ -316,7 +282,7 @@ class _CadastrarSetorPageState extends State<CadastrarSetorPage> {
         ),
         onTap: () {
           store.setDotIndicator(1);
-          bottomSheet(context, controlerPages, carouselController, store);
+          bottomSheet(context, store);
         },
       );
     });
