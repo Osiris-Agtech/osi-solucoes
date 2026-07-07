@@ -689,17 +689,19 @@ class HomePageState extends State<HomePage> with RouteAware {
       adaptiveConfidence: store.dashboardConfidence,
     );
 
-    final shouldShowSkeleton = (store.isLoading && store.dashboard == null) ||
-        (store.isLoadingShortcuts &&
-            store.recommendedShortcuts.isEmpty &&
-            store.dashboard == null);
+    final hasBaseDashboard = store.dashboard != null;
+    final shouldShowSkeleton =
+        !hasBaseDashboard || !store.hasResolvedAdaptiveInterface;
 
     final hasBlockingError = store.hasError && store.dashboard == null;
+    final isPanelLoading = !hasBlockingError &&
+        (shouldShowSkeleton || store.isLoading || store.isLoadingShortcuts);
 
     return HomeDailyPanelContent(
       data: shouldShowSkeleton || hasBlockingError ? null : panelData,
-      isLoading: store.isLoading || store.isLoadingShortcuts,
+      isLoading: isPanelLoading,
       isLoadingInstantAdaptation: store.isLoadingInstantAdaptation,
+      hasInstantError: store.hasInstantError,
       hasError: store.hasError,
       errorMessage: store.errorMessage,
       onRetry: store.carregarHome,

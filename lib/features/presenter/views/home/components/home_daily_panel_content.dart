@@ -18,6 +18,7 @@ class HomeDailyPanelContent extends StatelessWidget {
   final HomePanelViewData? data;
   final bool isLoading;
   final bool isLoadingInstantAdaptation;
+  final bool hasInstantError;
   final bool hasError;
   final String errorMessage;
   final VoidCallback onRetry;
@@ -40,6 +41,7 @@ class HomeDailyPanelContent extends StatelessWidget {
     required this.data,
     required this.isLoading,
     this.isLoadingInstantAdaptation = false,
+    this.hasInstantError = false,
     required this.hasError,
     required this.errorMessage,
     required this.onRetry,
@@ -104,7 +106,7 @@ class HomeDailyPanelContent extends StatelessWidget {
     final instant = instantViewData;
     final hasInstantData = instant != null;
     final showInstantSkeleton =
-        isLoadingInstantAdaptation && !hasInstantData;
+        adaptiveMode == 'INSTANT' && !hasInstantData && !hasInstantError;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,11 +130,11 @@ class HomeDailyPanelContent extends StatelessWidget {
               child: AdaptiveFocusBanner(
                 data: instant.focusBanner!,
                 onCtaTap: instant.focusBanner!.targetRoute != null
-                    ? () => _handleAdaptiveNavigation(instant.focusBanner!.targetRoute!)
+                    ? () => _handleAdaptiveNavigation(
+                        instant.focusBanner!.targetRoute!)
                     : null,
               ),
             ),
-
           if (instant.activityFeedItems.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
@@ -154,49 +156,60 @@ class HomeDailyPanelContent extends StatelessWidget {
             reasonSummary: instant.reasonSummary,
             onActionTap: (route) => _handleAdaptiveNavigation(route),
           )
-        else if (!hasInstantData && viewData.actions.isNotEmpty && !showInstantSkeleton && !isLoading && adaptiveMode != 'INSTANT')
+        else if (!hasInstantData &&
+            viewData.actions.isNotEmpty &&
+            !showInstantSkeleton &&
+            !isLoading &&
+            adaptiveMode != 'INSTANT')
           RecommendedActionsSection(
             actions: viewData.actions,
             hasAdaptiveSupport: viewData.hasDashboardSupport,
             onActionTap: onRecommendedActionTap,
           ),
 
-        if (hasInstantData &&
-                (instant.nextStep != null || instant.recommendedActions.isNotEmpty) ||
-            !hasInstantData && viewData.actions.isNotEmpty && !showInstantSkeleton && !isLoading && adaptiveMode != 'INSTANT')
+        if (showInstantSkeleton ||
+            hasInstantData &&
+                (instant.nextStep != null ||
+                    instant.recommendedActions.isNotEmpty) ||
+            !hasInstantData &&
+                viewData.actions.isNotEmpty &&
+                !showInstantSkeleton &&
+                !isLoading &&
+                adaptiveMode != 'INSTANT')
           const SizedBox(height: 14),
 
         // ── INFO CONTEXT CARD ──
-        Builder(
-          builder: (context) {
-            final infoData = HomeInfoMapper.resolve(
-              infoContext: infoContext,
-              infoRecommendation: instant?.infoRecommendation,
-              adaptiveMode: adaptiveMode,
-            );
-
-            // Track shown (once per build — acceptable for this use case)
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              MetricsTrackingService.instance.trackInfoCardShown(
-                infoType: infoData.type.name,
-                source: infoContext != null ? 'isis' : 'local',
-                mode: adaptiveMode,
-                sessionId: currentSessionId,
+        if (!showInstantSkeleton)
+          Builder(
+            builder: (context) {
+              final infoData = HomeInfoMapper.resolve(
+                infoContext: infoContext,
+                infoRecommendation: instant?.infoRecommendation,
+                adaptiveMode: adaptiveMode,
               );
-            });
 
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 14),
-              child: HomeInfoCard(
-                data: infoData,
-                onCtaTap: infoData.ctaRoute != null
-                    ? () => _handleInfoCardCta(infoData)
-                    : null,
-                isLoading: isLoading,
-              ),
-            );
-          },
-        ),
+              // Track shown (once per build — acceptable for this use case)
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                MetricsTrackingService.instance.trackInfoCardShown(
+                  infoType: infoData.type.name,
+                  source: infoContext != null ? 'isis' : 'local',
+                  mode: adaptiveMode,
+                  sessionId: currentSessionId,
+                );
+              });
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 14),
+                child: HomeInfoCard(
+                  data: infoData,
+                  onCtaTap: infoData.ctaRoute != null
+                      ? () => _handleInfoCardCta(infoData)
+                      : null,
+                  isLoading: false,
+                ),
+              );
+            },
+          ),
 
         // ── FIXO: Módulos principais ──
         HomeModulesSection(
@@ -229,5 +242,4 @@ class HomeDailyPanelContent extends StatelessWidget {
     );
     Get.toNamed(infoData.ctaRoute!);
   }
-
 }

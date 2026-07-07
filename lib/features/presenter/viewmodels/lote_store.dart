@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
+import 'package:osi_solucoes/core/utils/atividade_descricao_codec.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/lote/lote_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
@@ -953,13 +954,15 @@ abstract class LoteStoreBase with Store {
         ? '${fieldNames[alteracoes.first['campo']]}: ${alteracoes.first['de']} \u2192 ${alteracoes.first['para']}'
         : 'Produção: ${alteracoes.length} campos atualizados';
 
+    final descricao = jsonEncode({
+      'tipo': 'atualizacao_producao',
+      'versao': 1,
+      'alteracoes': alteracoes,
+    });
+
     final atividade = Atividade(
       nome: nome,
-      descricao: jsonEncode({
-        'tipo': 'atualizacao_producao',
-        'versao': 1,
-        'alteracoes': alteracoes,
-      }),
+      descricao: encodeAtividadeDescricao(descricao),
       privado: true,
       created_at: DateTime.now(),
       conta: authController.usuario.selected_conta!.conta,

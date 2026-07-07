@@ -138,6 +138,23 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
+  late final _$hasResolvedAdaptiveInterfaceAtom = Atom(
+      name: 'HomeStoreBase.hasResolvedAdaptiveInterface', context: context);
+
+  @override
+  bool get hasResolvedAdaptiveInterface {
+    _$hasResolvedAdaptiveInterfaceAtom.reportRead();
+    return super.hasResolvedAdaptiveInterface;
+  }
+
+  @override
+  set hasResolvedAdaptiveInterface(bool value) {
+    _$hasResolvedAdaptiveInterfaceAtom
+        .reportWrite(value, super.hasResolvedAdaptiveInterface, () {
+      super.hasResolvedAdaptiveInterface = value;
+    });
+  }
+
   late final _$adaptiveDashboardAtom =
       Atom(name: 'HomeStoreBase.adaptiveDashboard', context: context);
 
@@ -457,6 +474,7 @@ errorMessage: ${errorMessage},
 dashboard: ${dashboard},
 recommendedShortcuts: ${recommendedShortcuts},
 isLoadingShortcuts: ${isLoadingShortcuts},
+hasResolvedAdaptiveInterface: ${hasResolvedAdaptiveInterface},
 adaptiveDashboard: ${adaptiveDashboard},
 dashboardConfidence: ${dashboardConfidence},
 currentCardIndex: ${currentCardIndex},

@@ -3,11 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/core/utils/atividade_descricao_codec.dart';
 import 'package:osi_solucoes/features/presenter/models/lotesAtividades/lotes_atividades_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:intl/intl.dart';
-import 'dart:convert' show jsonDecode, utf8;
-
 import 'package:osi_solucoes/features/presenter/widgets/common/app_panel_card.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_search_bar.dart';
@@ -89,8 +88,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                   );
                 }
 
-                final atividadesFiltradas =
-                    store.getLotesAtividadesFilter;
+                final atividadesFiltradas = store.getLotesAtividadesFilter;
 
                 if (atividadesFiltradas.isEmpty) {
                   if (store.loteSelecionado.lotes_atividades == null ||
@@ -99,8 +97,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                       child: AppStatePanel(
                         stateKind: AppStateKind.empty,
                         title: 'Nenhuma atividade encontrada',
-                        message:
-                            'Não há atividades cadastradas neste lote.',
+                        message: 'Não há atividades cadastradas neste lote.',
                       ),
                     );
                   }
@@ -108,8 +105,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                     child: AppStatePanel(
                       stateKind: AppStateKind.empty,
                       title: 'Nenhum resultado',
-                      message:
-                          'Nenhuma atividade corresponde à sua busca.',
+                      message: 'Nenhuma atividade corresponde à sua busca.',
                     ),
                   );
                 }
@@ -118,8 +114,7 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       final item = atividadesFiltradas[index];
-                      final isExpanded =
-                          _expandedIndices.contains(index);
+                      final isExpanded = _expandedIndices.contains(index);
                       return _ActivityCard(
                         item: item,
                         isExpanded: isExpanded,
@@ -184,8 +179,7 @@ class _ActivityCard extends StatelessWidget {
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 18,
-                                    color:
-                                        Constants.kContentColorLightTheme,
+                                    color: Constants.kContentColorLightTheme,
                                     fontStyle: FontStyle.italic,
                                   ),
                                 ),
@@ -251,8 +245,7 @@ class _ActivityCard extends StatelessWidget {
                                   color: Constants.kGreyText,
                                 ),
                               ),
-                              if (usuario?.selected_conta?.cargo
-                                      ?.cargo !=
+                              if (usuario?.selected_conta?.cargo?.cargo !=
                                   null) ...[
                                 const SizedBox(width: 4),
                                 Text(
@@ -270,9 +263,7 @@ class _ActivityCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Icon(
-                      isExpanded
-                          ? Icons.expand_less
-                          : Icons.expand_more,
+                      isExpanded ? Icons.expand_less : Icons.expand_more,
                       color: Constants.kPrimaryColor,
                       size: 24,
                     ),
@@ -285,9 +276,7 @@ class _ActivityCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
                 child: Text(
-                  utf8.decode(
-                    jsonDecode(atividade!.descricao!).cast<int>(),
-                  ),
+                  normalizeAtividadeDescricao(atividade!.descricao),
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -349,8 +338,7 @@ class _DetalhesCadernoHeader extends StatelessWidget {
                       height: 24,
                       child: Switch.adaptive(
                         value: store.mostrarRegistrosSistema,
-                        onChanged: (_) =>
-                            store.toggleMostrarRegistrosSistema(),
+                        onChanged: (_) => store.toggleMostrarRegistrosSistema(),
                         activeTrackColor: Constants.kPrimaryColor,
                       ),
                     ),

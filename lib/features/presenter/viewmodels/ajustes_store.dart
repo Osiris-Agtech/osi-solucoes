@@ -1,10 +1,9 @@
-import 'dart:convert';
 import 'dart:core';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
+import 'package:osi_solucoes/core/utils/atividade_descricao_codec.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/ajuste/ajuste_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/atividade/atividade_model.dart';
@@ -280,7 +279,7 @@ abstract class AjustesStoreBase with Store {
     var descricao = montandoDescricao();
     Atividade novaAtividade = Atividade(
       nome: 'Ajuste de Solução Nutritiva',
-      descricao: descricao.toString(),
+      descricao: encodeAtividadeDescricao(descricao),
       conta: authController.usuario.selected_conta!.conta,
       created_at: DateTime.now(),
     );
@@ -310,7 +309,7 @@ abstract class AjustesStoreBase with Store {
   }
 
   @action
-  Uint8List montandoDescricao() {
+  String montandoDescricao() {
     // Construindo strings para descrição
     var volumeAjuste = (double.parse(
                 volumeDesejado.text.replaceAll('.', '').replaceAll(',', '.')) -
@@ -332,8 +331,7 @@ abstract class AjustesStoreBase with Store {
       ph = "pH: ${pH.text}";
     }
 
-    //Criando encoded da descrição
-    var encoded = utf8.encode("##Ajuste Solução Nutritiva##\n\n"
+    return "##Ajuste Solução Nutritiva##\n\n"
         "Reservatório: ${selectedReservatorio.nome ?? 'Não informado'} \n"
         "$volumeAjuste L Água \n\n"
         "Condutividade Elétrica: ${cEletricoAtual.text} S.m/mm2 -> ${cEletricoDesejado.text} S.m/mm2 \n"
@@ -343,10 +341,7 @@ abstract class AjustesStoreBase with Store {
         "Reposição por Fertilizante: \n"
         "$fertDescrition \n\n"
         "Reposição por Solução Concentrada: \n"
-        "$volumeConcentrado ml por solução");
-
-    // var decoded = utf8.decode(encoded);
-    return encoded;
+        "$volumeConcentrado ml por solução";
   }
   // #################### FIM REGISTRO DE ATIVIDADE ##################################
 }

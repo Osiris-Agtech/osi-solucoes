@@ -372,7 +372,7 @@ mixin _$AjustesStore on AjustesStoreBase, Store {
   }
 
   @override
-  Uint8List montandoDescricao() {
+  String montandoDescricao() {
     final _$actionInfo = _$AjustesStoreBaseActionController.startAction(
         name: 'AjustesStoreBase.montandoDescricao');
     try {

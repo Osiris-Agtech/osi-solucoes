@@ -58,6 +58,9 @@ abstract class HomeStoreBase with Store {
   bool isLoadingShortcuts = false;
 
   @observable
+  bool hasResolvedAdaptiveInterface = false;
+
+  @observable
   String? adaptiveDashboard;
 
   @observable
@@ -214,6 +217,7 @@ abstract class HomeStoreBase with Store {
   @action
   Future<void> loadAdaptiveInterface() async {
     print('🏠 [HOME_STORE] Carregando interface adaptativa...');
+    hasResolvedAdaptiveInterface = false;
     isLoadingShortcuts = true;
     // Limpa dados INSTANT de sessões anteriores para evitar que
     // componentes como NextStepCard apareçam quando o modo mudou
@@ -306,6 +310,7 @@ abstract class HomeStoreBase with Store {
       // Garante que a ordem dos cards seja inicializada mesmo em caso de erro
       initializeCardOrder();
     } finally {
+      hasResolvedAdaptiveInterface = true;
       isLoadingShortcuts = false;
       print('🏠 [HOME_STORE] Carregamento finalizado');
     }

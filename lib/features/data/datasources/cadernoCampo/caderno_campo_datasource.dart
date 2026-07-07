@@ -472,7 +472,6 @@ class CadernoCampoDatasource implements ICadernoCampoDatasource {
       }
     }
 
-    // Erro esta no usuario - id 38
     String readRepositories = """
         mutation CreateOneAtividade{
           createOneAtividade(

@@ -1,3 +1,4 @@
+import 'package:osi_solucoes/core/utils/atividade_descricao_codec.dart';
 import 'package:osi_solucoes/features/presenter/models/homeDashboard/home_dashboard_info_context_model.dart';
 import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_adaptive_home_view_data.dart';
 import 'home_info_view_data.dart';
@@ -11,7 +12,8 @@ class HomeInfoMapper {
   }) {
     // INSTANT mode: follow recommendation
     if (adaptiveMode == 'INSTANT' && infoRecommendation != null) {
-      final result = _resolveFromRecommendation(infoContext, infoRecommendation);
+      final result =
+          _resolveFromRecommendation(infoContext, infoRecommendation);
       if (result != null) return result;
 
       // Fallback chain
@@ -138,7 +140,9 @@ class HomeInfoMapper {
           subtitle: task.description,
           lotName: task.lotName,
           date: task.date,
-          tone: task.overdue == true ? HomeInfoItemTone.danger : HomeInfoItemTone.neutral,
+          tone: task.overdue == true
+              ? HomeInfoItemTone.danger
+              : HomeInfoItemTone.neutral,
         ));
       }
     }
@@ -201,9 +205,8 @@ class HomeInfoMapper {
           subtitle: r.solutionName != null
               ? '${r.solutionName}${r.electricalConductivity != null ? ' — ${r.electricalConductivity} mS/cm' : ''}'
               : null,
-          lotName: r.linkedLotsCount != null
-              ? '${r.linkedLotsCount} lote(s)'
-              : null,
+          lotName:
+              r.linkedLotsCount != null ? '${r.linkedLotsCount} lote(s)' : null,
         ));
       }
     }
@@ -211,7 +214,8 @@ class HomeInfoMapper {
     return HomeInfoViewData(
       type: HomeInfoType.reservoirReport,
       title: rec?.title ?? 'Reservatórios',
-      subtitle: 'Volume total: ${reservoir.totalVolume?.toStringAsFixed(1) ?? '—'} L',
+      subtitle:
+          'Volume total: ${reservoir.totalVolume?.toStringAsFixed(1) ?? '—'} L',
       metrics: metrics,
       items: items,
       ctaLabel: 'Ver reservatórios',
@@ -226,7 +230,8 @@ class HomeInfoMapper {
     final metrics = <HomeInfoMetric>[
       HomeInfoMetric(
         label: progress.completionLabel ?? 'Tarefas hoje',
-        value: '${progress.completedTasksToday ?? 0}/${progress.totalTasksToday ?? 0}',
+        value:
+            '${progress.completedTasksToday ?? 0}/${progress.totalTasksToday ?? 0}',
         tone: HomeInfoMetricTone.positive,
       ),
       if ((progress.pendingTasksToday ?? 0) > 0)
@@ -250,7 +255,9 @@ class HomeInfoMapper {
         subtitle: progress.nextTask!.description,
         lotName: progress.nextTask!.lotName,
         date: progress.nextTask!.date,
-        tone: progress.nextTask!.overdue == true ? HomeInfoItemTone.danger : HomeInfoItemTone.neutral,
+        tone: progress.nextTask!.overdue == true
+            ? HomeInfoItemTone.danger
+            : HomeInfoItemTone.neutral,
       ));
     }
 
@@ -273,7 +280,7 @@ class HomeInfoMapper {
       for (final note in notes.latestNotes!.take(2)) {
         items.add(HomeInfoListItem(
           title: note.title ?? 'Anotação',
-          subtitle: note.description,
+          subtitle: normalizeAtividadeDescricao(note.description),
           lotName: note.lotName,
           date: note.createdAt,
           userName: note.userName,
@@ -325,10 +332,14 @@ class HomeInfoMapper {
 
   static HomeInfoItemTone _alertTone(String? severity) {
     final value = severity?.toLowerCase().trim() ?? '';
-    if (value.contains('crit') || value.contains('alta') || value.contains('erro')) {
+    if (value.contains('crit') ||
+        value.contains('alta') ||
+        value.contains('erro')) {
       return HomeInfoItemTone.danger;
     }
-    if (value.contains('media') || value.contains('média') || value.contains('aten')) {
+    if (value.contains('media') ||
+        value.contains('média') ||
+        value.contains('aten')) {
       return HomeInfoItemTone.warning;
     }
     return HomeInfoItemTone.neutral;

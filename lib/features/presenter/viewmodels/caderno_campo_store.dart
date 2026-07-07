@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
+import 'package:osi_solucoes/core/utils/atividade_descricao_codec.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/cadernoCampo/cadeno_campo_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/area/area_model.dart';
@@ -451,7 +450,7 @@ abstract class CadernoCampoStoreBase with Store {
 
     Atividade novaAtividade = Atividade(
       nome: novoAtividadeName.text,
-      descricao: utf8.encode(novaDescricao.text).toString(),
+      descricao: encodeAtividadeDescricao(novaDescricao.text),
       privado: true,
       conta: authController.usuario.selected_conta!.conta,
       created_at: dateRegistro,
