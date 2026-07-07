@@ -299,6 +299,57 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
+  late final _$pendingActivityTitleAtom =
+      Atom(name: 'HomeStoreBase.pendingActivityTitle', context: context);
+
+  @override
+  String? get pendingActivityTitle {
+    _$pendingActivityTitleAtom.reportRead();
+    return super.pendingActivityTitle;
+  }
+
+  @override
+  set pendingActivityTitle(String? value) {
+    _$pendingActivityTitleAtom.reportWrite(value, super.pendingActivityTitle,
+        () {
+      super.pendingActivityTitle = value;
+    });
+  }
+
+  late final _$pendingActivityDescriptionAtom =
+      Atom(name: 'HomeStoreBase.pendingActivityDescription', context: context);
+
+  @override
+  String? get pendingActivityDescription {
+    _$pendingActivityDescriptionAtom.reportRead();
+    return super.pendingActivityDescription;
+  }
+
+  @override
+  set pendingActivityDescription(String? value) {
+    _$pendingActivityDescriptionAtom
+        .reportWrite(value, super.pendingActivityDescription, () {
+      super.pendingActivityDescription = value;
+    });
+  }
+
+  late final _$pendingActivityInteractionTypeAtom = Atom(
+      name: 'HomeStoreBase.pendingActivityInteractionType', context: context);
+
+  @override
+  String? get pendingActivityInteractionType {
+    _$pendingActivityInteractionTypeAtom.reportRead();
+    return super.pendingActivityInteractionType;
+  }
+
+  @override
+  set pendingActivityInteractionType(String? value) {
+    _$pendingActivityInteractionTypeAtom
+        .reportWrite(value, super.pendingActivityInteractionType, () {
+      super.pendingActivityInteractionType = value;
+    });
+  }
+
   late final _$loadAdaptiveInterfaceAsyncAction =
       AsyncAction('HomeStoreBase.loadAdaptiveInterface', context: context);
 
@@ -385,6 +436,17 @@ mixin _$HomeStore on HomeStoreBase, Store {
   }
 
   @override
+  void consumePendingActivityContext() {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.consumePendingActivityContext');
+    try {
+      return super.consumePendingActivityContext();
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isNotified: ${isNotified},
@@ -404,7 +466,10 @@ adaptiveMode: ${adaptiveMode},
 currentSessionId: ${currentSessionId},
 isLoadingInstantAdaptation: ${isLoadingInstantAdaptation},
 instantViewData: ${instantViewData},
-hasInstantError: ${hasInstantError}
+hasInstantError: ${hasInstantError},
+pendingActivityTitle: ${pendingActivityTitle},
+pendingActivityDescription: ${pendingActivityDescription},
+pendingActivityInteractionType: ${pendingActivityInteractionType}
     ''';
   }
 }

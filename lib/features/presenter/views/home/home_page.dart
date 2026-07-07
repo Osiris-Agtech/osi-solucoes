@@ -25,6 +25,7 @@ import '../../../../core/services/local_storage.dart';
 import '../../../../core/services/navigation_analytics.dart';
 import '../../../../core/services/navigation_resource_args.dart';
 import '../../../../core/services/metrics_tracking_service.dart';
+import '../../../../core/utils/route_observer.dart';
 import '../../viewmodels/auth_controller.dart';
 import '../../viewmodels/home_store.dart';
 import '../../viewmodels/lote_store.dart';
@@ -39,10 +40,15 @@ class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> with RouteAware {
   final AuthController authController = GetIt.I<AuthController>();
   HomeStore store = GetIt.I<HomeStore>();
   final Duration duration = const Duration(milliseconds: 300);
+
+  /// Flag que indica se o usuário navegou para outra rota (ex: Agenda).
+  /// Usada em didPopNext para disparar refresh INSTANT apenas quando
+  /// houve navegação de saída, evitando refreshes em rebuilds internos.
+  bool _wasAwayFromHome = false;
 
   // Variáveis para o dashboard (carousel removido em favor de cards expansivos)
   String?
@@ -56,6 +62,8 @@ class HomePageState extends State<HomePage> {
 
     // Carregar dados do dashboard quando a página é aberta
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Inscreve no RouteObserver para detectar quando voltar de outra rota
+      routeObserver.subscribe(this, ModalRoute.of(context)!);
       print('🏠 [HOME_PAGE] Carregando dados...');
       try {
         await store.carregarHome();
@@ -165,8 +173,38 @@ class HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    routeObserver.unsubscribe(this);
     _pageController?.dispose();
     super.dispose();
+  }
+
+  /// Chamado quando uma nova rota é empilhada sobre esta (navegou para outra tela).
+  @override
+  void didPushNext() {
+    _wasAwayFromHome = true;
+  }
+
+  /// Chamado quando esta rota se torna a atual após pop de outra rota.
+  /// Dispara refresh INSTANT para garantir layout atualizado ao retornar.
+  @override
+  void didPopNext() {
+    if (_wasAwayFromHome && store.isInstantMode) {
+      _wasAwayFromHome = false;
+      _refreshInstantOnReturn();
+    }
+  }
+
+  Future<void> _refreshInstantOnReturn() async {
+    print('🏠 [HOME_PAGE] Refresh INSTANT ao retornar para Home');
+    try {
+      await store.carregarHome();
+      if (store.isInstantMode) {
+        await store.loadInstantAdaptiveInterface();
+        _reportFinalHomeStateCheckedIfNeeded();
+      }
+    } catch (e) {
+      print('❌ [HOME_PAGE] Erro no refresh ao retornar: $e');
+    }
   }
 
   Future<bool> exitApp() async {
@@ -665,9 +703,9 @@ class HomePageState extends State<HomePage> {
       hasError: store.hasError,
       errorMessage: store.errorMessage,
       onRetry: store.carregarHome,
-      onOpenTodayTasks: _openTodayTasks,
       onSwitchAccount: _openAccountSwitcher,
       onLogout: _confirmLogout,
+      onSecretTriggered: _openAdaptiveAdmin,
       onRecommendedActionTap: _openRecommendedAction,
       onModuleTap: _openModuleShortcut,
       instantViewData: store.instantViewData,
@@ -675,10 +713,6 @@ class HomePageState extends State<HomePage> {
       currentSessionId: store.currentSessionId,
       infoContext: store.dashboard?.infoContext,
     );
-  }
-
-  void _openTodayTasks() {
-    Get.toNamed(Routes.agendaPage);
   }
 
   void _openAccountSwitcher() {
@@ -712,6 +746,10 @@ class HomePageState extends State<HomePage> {
     if (confirmed != true) return;
     await LocalStorage().deleteUser();
     Get.offAll(() => const SplashPage());
+  }
+
+  void _openAdaptiveAdmin() {
+    Get.toNamed(Routes.adaptiveAdminPage);
   }
 
   void _openModuleShortcut(HomeModuleShortcutViewData module) {

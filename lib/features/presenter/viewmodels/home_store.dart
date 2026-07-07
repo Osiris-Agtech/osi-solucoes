@@ -129,6 +129,23 @@ abstract class HomeStoreBase with Store {
   @observable
   bool hasInstantError = false;
 
+  // Transient holders for activity context enrichment
+  @observable
+  String? pendingActivityTitle;
+
+  @observable
+  String? pendingActivityDescription;
+
+  @observable
+  String? pendingActivityInteractionType;
+
+  @action
+  void consumePendingActivityContext() {
+    pendingActivityTitle = null;
+    pendingActivityDescription = null;
+    pendingActivityInteractionType = null;
+  }
+
   /// Inicializa a ordem dos cards com o recomendado em primeiro
   void initializeCardOrder() {
     const allCards = ['lotes', 'tarefas', 'producao', 'saude'];
@@ -198,6 +215,12 @@ abstract class HomeStoreBase with Store {
   Future<void> loadAdaptiveInterface() async {
     print('🏠 [HOME_STORE] Carregando interface adaptativa...');
     isLoadingShortcuts = true;
+    // Limpa dados INSTANT de sessões anteriores para evitar que
+    // componentes como NextStepCard apareçam quando o modo mudou
+    // de INSTANT para GRADUAL/STATIC (o instantViewData era mantido
+    // mesmo após a transição de modo).
+    instantViewData = null;
+    hasInstantError = false;
     try {
       // PASSO 1: Buscar configuração do usuário no Firestore
       // Isso garante que teremos mode e sessionId para modo INSTANT
@@ -295,16 +318,25 @@ abstract class HomeStoreBase with Store {
     // Only run in INSTANT mode
     if (!isInstantMode) {
       print(' └─ ⏭ Modo não é INSTANT, pulando');
+      // Garantia dupla: limpa dados de sessão INSTANT anterior
+      // (a limpeza principal ocorre em loadAdaptiveInterface)
+      instantViewData = null;
+      hasInstantError = false;
       return;
     }
 
     if (currentSessionId == null) {
       print(' └─ ⏭ Sem sessionId, pulando');
+      instantViewData = null;
+      hasInstantError = false;
       return;
     }
 
     isLoadingInstantAdaptation = true;
     hasInstantError = false;
+    // Limpa dados INSTANT anteriores para que o skeleton apareça
+    // enquanto a nova resposta da Cloud Function não chega.
+    instantViewData = null;
 
     try {
       // 1. Build operational context from stores

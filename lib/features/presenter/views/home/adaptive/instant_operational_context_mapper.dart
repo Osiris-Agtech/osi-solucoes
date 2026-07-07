@@ -85,6 +85,9 @@ class AgendaOperationalState {
   final bool hasGeneratedActivities;
   final int completedActivitiesTodayCount;
   final NextActivity nextActivity;
+  final String? lastInteractionType;
+  final String? lastActivityTitle;
+  final String? lastActivityDescription;
 
   const AgendaOperationalState({
     required this.pendingActivitiesTodayCount,
@@ -92,6 +95,9 @@ class AgendaOperationalState {
     required this.hasGeneratedActivities,
     required this.completedActivitiesTodayCount,
     required this.nextActivity,
+    this.lastInteractionType,
+    this.lastActivityTitle,
+    this.lastActivityDescription,
   });
 
   Map<String, dynamic> toJson() => {
@@ -100,6 +106,11 @@ class AgendaOperationalState {
         'hasGeneratedActivities': hasGeneratedActivities,
         'completedActivitiesTodayCount': completedActivitiesTodayCount,
         'nextActivity': nextActivity.toJson(),
+        if (lastInteractionType != null)
+          'lastInteractionType': lastInteractionType,
+        if (lastActivityTitle != null) 'lastActivityTitle': lastActivityTitle,
+        if (lastActivityDescription != null)
+          'lastActivityDescription': lastActivityDescription,
       };
 }
 
@@ -212,8 +223,7 @@ class AlertOperationalState {
 class TestSequenceSignals {
   final bool lotWithProtocolCreated;
   final bool generatedAgendaActivitiesChecked;
-  final bool nutritionalAdjustmentExecuted;
-  final bool automaticAdjustmentRecordChecked;
+  final bool adjustmentRecorded;
   final bool agendaActivitiesCompleted;
   final bool finalHomeStateChecked;
   final InstantSequenceEventType? lastRelevantEvent;
@@ -222,8 +232,7 @@ class TestSequenceSignals {
   const TestSequenceSignals({
     required this.lotWithProtocolCreated,
     required this.generatedAgendaActivitiesChecked,
-    required this.nutritionalAdjustmentExecuted,
-    required this.automaticAdjustmentRecordChecked,
+    required this.adjustmentRecorded,
     required this.agendaActivitiesCompleted,
     required this.finalHomeStateChecked,
     this.lastRelevantEvent,
@@ -237,9 +246,7 @@ class TestSequenceSignals {
       lotWithProtocolCreated: snapshot.lotWithProtocolCreated,
       generatedAgendaActivitiesChecked:
           snapshot.generatedAgendaActivitiesChecked,
-      nutritionalAdjustmentExecuted: snapshot.nutritionalAdjustmentExecuted,
-      automaticAdjustmentRecordChecked:
-          snapshot.automaticAdjustmentRecordChecked,
+      adjustmentRecorded: snapshot.adjustmentRecorded,
       agendaActivitiesCompleted: snapshot.agendaActivitiesCompleted,
       finalHomeStateChecked: snapshot.finalHomeStateChecked,
       lastRelevantEvent: snapshot.lastRelevantEvent,
@@ -250,8 +257,7 @@ class TestSequenceSignals {
   const TestSequenceSignals.empty()
       : lotWithProtocolCreated = false,
         generatedAgendaActivitiesChecked = false,
-        nutritionalAdjustmentExecuted = false,
-        automaticAdjustmentRecordChecked = false,
+        adjustmentRecorded = false,
         agendaActivitiesCompleted = false,
         finalHomeStateChecked = false,
         lastRelevantEvent = null,
@@ -260,8 +266,7 @@ class TestSequenceSignals {
   Map<String, dynamic> toJson() => {
         'lotWithProtocolCreated': lotWithProtocolCreated,
         'generatedActivitiesSeen': generatedAgendaActivitiesChecked,
-        'nutritionAdjustmentExecuted': nutritionalAdjustmentExecuted,
-        'fieldNotebookChecked': automaticAdjustmentRecordChecked,
+        'adjustmentRecorded': adjustmentRecorded,
         'agendaActivitiesCompleted': agendaActivitiesCompleted,
         'finalHomeChecked': finalHomeStateChecked,
         if (lastRelevantEvent != null)
@@ -371,6 +376,12 @@ class InstantOperationalContextMapper {
       }
     }
 
+    // Consume pending activity context from HomeStore
+    final pendingInteractionType = homeStore.pendingActivityInteractionType;
+    final pendingTitle = homeStore.pendingActivityTitle;
+    final pendingDescription = homeStore.pendingActivityDescription;
+    homeStore.consumePendingActivityContext();
+
     return OperationalContext(
       generatedAt: DateTime.now(),
       dashboardState: DashboardOperationalState(
@@ -390,6 +401,9 @@ class InstantOperationalContextMapper {
           status: nextActivityStatus,
           dueLabel: nextActivityDueLabel,
         ),
+        lastInteractionType: pendingInteractionType,
+        lastActivityTitle: pendingTitle,
+        lastActivityDescription: pendingDescription,
       ),
       fieldNotebookState: FieldNotebookOperationalState(
         hasRecentNutritionAdjustmentRecord: hasRecentNutritionAdjustment,
@@ -412,10 +426,7 @@ class InstantOperationalContextMapper {
         lotWithProtocolCreated: sequenceSignals.lotWithProtocolCreated,
         generatedAgendaActivitiesChecked:
             sequenceSignals.generatedAgendaActivitiesChecked,
-        nutritionalAdjustmentExecuted:
-            sequenceSignals.nutritionalAdjustmentExecuted,
-        automaticAdjustmentRecordChecked:
-            sequenceSignals.automaticAdjustmentRecordChecked,
+        adjustmentRecorded: sequenceSignals.adjustmentRecorded,
         agendaActivitiesCompleted: sequenceSignals.agendaActivitiesCompleted,
         finalHomeStateChecked: sequenceSignals.finalHomeStateChecked,
         lastRelevantEvent: sequenceSignals.lastRelevantEvent,

@@ -9,11 +9,11 @@ import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 import 'package:osi_solucoes/features/presenter/views/agenda/agenda_page.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_panel_card.dart';
-import 'package:osi_solucoes/features/presenter/widgets/common/app_section_header.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_delete_dialog.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 
 import 'components/detalhes_page/horizontal_lista.dart';
+import 'components/detalhes_page/producao_section.dart';
 
 class DetalhesLotePage extends StatefulWidget {
   final bool enableEditing;
@@ -92,33 +92,7 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
                       const SizedBox(height: 8),
                       horizontalList(context, reservatorioStore, store),
                     ],
-                    const SizedBox(height: 16),
-                    const AppSectionHeader(
-                      icon: Icons.timeline,
-                      title: 'Produção',
-                      subtitle: 'Registros de produção do lote',
-                    ),
-                    const SizedBox(height: 8),
-                    _productionField(
-                      label: 'Bandejas semeadas',
-                      value:
-                          store.loteSelecionado.bandeijas_semeadas?.toString(),
-                    ),
-                    _productionField(
-                      label: 'Mudas transplantadas',
-                      value: store.loteSelecionado.mudas_transplantadas
-                          ?.toString(),
-                    ),
-                    _productionField(
-                      label: 'Plantas colhidas',
-                      value: store.loteSelecionado.plantas_colhidas?.toString(),
-                    ),
-                    _productionField(
-                      label: 'Embalagens produzidas',
-                      value: store.loteSelecionado.embalagens_produzidas
-                          ?.toString(),
-                    ),
-                    const SizedBox(height: 32),
+                    const ProducaoSection(),
                   ],
                 );
               }),
@@ -282,38 +256,4 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
     );
   }
 
-  Widget _productionField({
-    required String label,
-    String? value,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: AppPanelCard(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Constants.kText2,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Text(
-              value ?? '-',
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                color: Constants.kPrimaryColor,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

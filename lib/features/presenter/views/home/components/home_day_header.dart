@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
 
 import '../models/home_panel_view_data.dart';
 import 'home_panel_shared.dart';
 
 class HomeDayHeader extends StatelessWidget {
   final HomeHeaderViewData data;
-  final VoidCallback? onOpenTodayTasks;
   final VoidCallback? onSwitchAccount;
   final VoidCallback? onLogout;
+
+  /// 5 taps no saudação → abre AdaptiveAdminPage (apenas desenvolvedor).
+  final VoidCallback? onSecretTriggered;
 
   const HomeDayHeader({
     super.key,
     required this.data,
-    this.onOpenTodayTasks,
     this.onSwitchAccount,
     this.onLogout,
+    this.onSecretTriggered,
   });
 
   @override
   Widget build(BuildContext context) {
-    final button = _TodayTasksButton(onPressed: onOpenTodayTasks);
     final headerContent = _HeaderContent(
       data: data,
       onSwitchAccount: onSwitchAccount,
       onLogout: onLogout,
+      onSecretTriggered: onSecretTriggered,
     );
 
     return HomePanelCard(
@@ -35,21 +36,13 @@ class HomeDayHeader extends StatelessWidget {
           if (isNarrow) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                headerContent,
-                if (data.canOpenTasks && onOpenTodayTasks != null) ...[
-                  const SizedBox(height: 12),
-                  SizedBox(width: double.infinity, child: button),
-                ],
-              ],
+              children: [headerContent],
             );
           }
 
           return Row(
             children: [
               Expanded(child: headerContent),
-              const SizedBox(width: 12),
-              if (data.canOpenTasks && onOpenTodayTasks != null) button,
             ],
           );
         },
@@ -64,18 +57,23 @@ class _HeaderContent extends StatelessWidget {
   final HomeHeaderViewData data;
   final VoidCallback? onSwitchAccount;
   final VoidCallback? onLogout;
+  final VoidCallback? onSecretTriggered;
 
   const _HeaderContent({
     required this.data,
     required this.onSwitchAccount,
     required this.onLogout,
+    required this.onSecretTriggered,
   });
 
   @override
   Widget build(BuildContext context) => Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(child: _HeaderText(data: data)),
+          Expanded(child: _HeaderText(
+            data: data,
+            onSecretTriggered: onSecretTriggered,
+          )),
           if (_hasActions) ...[
             const SizedBox(width: 8),
             _AccountActionsMenu(
@@ -91,23 +89,46 @@ class _HeaderContent extends StatelessWidget {
       (data.canSwitchAccount && onSwitchAccount != null) || onLogout != null;
 }
 
-class _HeaderText extends StatelessWidget {
+class _HeaderText extends StatefulWidget {
   final HomeHeaderViewData data;
+  final VoidCallback? onSecretTriggered;
 
-  const _HeaderText({required this.data});
+  const _HeaderText({
+    required this.data,
+    required this.onSecretTriggered,
+  });
+
+  @override
+  State<_HeaderText> createState() => _HeaderTextState();
+}
+
+class _HeaderTextState extends State<_HeaderText> {
+  int _secretTapCount = 0;
+
+  void _handleGreetingTap() {
+    if (widget.onSecretTriggered == null) return;
+    _secretTapCount++;
+    if (_secretTapCount >= 5) {
+      _secretTapCount = 0;
+      widget.onSecretTriggered!.call();
+    }
+  }
 
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            data.greeting,
-            style: homeTitleStyle(20),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          GestureDetector(
+            onTap: _handleGreetingTap,
+            child: Text(
+              widget.data.greeting,
+              style: homeTitleStyle(20),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
           const SizedBox(height: 6),
-          HomeBadge(icon: Icons.badge_outlined, label: data.roleLabel),
+          HomeBadge(icon: Icons.badge_outlined, label: widget.data.roleLabel),
         ],
       );
 }
@@ -182,21 +203,4 @@ class _AccountActionItem extends StatelessWidget {
       ],
     );
   }
-}
-
-class _TodayTasksButton extends StatelessWidget {
-  final VoidCallback? onPressed;
-
-  const _TodayTasksButton({required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) => FilledButton.icon(
-        onPressed: onPressed,
-        icon: const Icon(Icons.today_rounded, size: 18),
-        label: const Text('Ver tarefas de hoje'),
-        style: FilledButton.styleFrom(
-          backgroundColor: Constants.kPrimaryColor,
-          foregroundColor: Colors.white,
-        ),
-      );
 }

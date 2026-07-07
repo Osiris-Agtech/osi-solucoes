@@ -301,7 +301,7 @@ abstract class AjustesStoreBase with Store {
         toastSuccess(message: "Cadastrado com sucesso");
         if (GetIt.I.isRegistered<InstantSequenceInteractionReporter>()) {
           GetIt.I<InstantSequenceInteractionReporter>()
-              .reportNutritionalAdjustmentExecuted();
+              .reportAdjustmentRecorded();
         }
         clearAll();
       },

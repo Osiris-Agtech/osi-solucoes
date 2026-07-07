@@ -13,9 +13,7 @@ import 'package:osi_solucoes/features/presenter/models/lotesAtividades/lotes_ati
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
-import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
 import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequence_interaction_reporter.dart';
-import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequence_signals_store.dart';
 import "package:collection/collection.dart";
 
 part 'caderno_campo_store.g.dart';
@@ -34,6 +32,9 @@ abstract class CadernoCampoStoreBase with Store {
 
   @observable
   bool isAreaLoading = false;
+
+  @observable
+  bool mostrarRegistrosSistema = true;
 
   @observable
   Setor setorSelecionado = Setor();
@@ -78,6 +79,10 @@ abstract class CadernoCampoStoreBase with Store {
     expandedCard[index] = !expandedCard[index];
     expandedCard = List.from(expandedCard);
   }
+
+  @action
+  void toggleMostrarRegistrosSistema() =>
+      mostrarRegistrosSistema = !mostrarRegistrosSistema;
 
   @action
   Future<void> buscarLotesByConta() async {
@@ -142,44 +147,14 @@ abstract class CadernoCampoStoreBase with Store {
         loteSelecionado.lotes_atividades =
             List.from(loteSelecionado.lotes_atividades!.reversed);
         expandedCard = List.from(expandedCard.reversed);
-        _reportAutomaticAdjustmentRecordCheckedIfNeeded();
+        if (GetIt.I.isRegistered<InstantSequenceInteractionReporter>()) {
+          GetIt.I<InstantSequenceInteractionReporter>()
+              .reportAdjustmentRecorded();
+        }
       },
     );
 
     isLoteListLoading = false;
-  }
-
-  void _reportAutomaticAdjustmentRecordCheckedIfNeeded() {
-    final getIt = GetIt.I;
-    if (!getIt.isRegistered<InstantSequenceSignalsStore>() ||
-        !getIt.isRegistered<HomeStore>() ||
-        !getIt.isRegistered<InstantSequenceInteractionReporter>()) {
-      return;
-    }
-
-    final store = getIt<InstantSequenceSignalsStore>();
-    store.syncScope(_resolveScopeKey(getIt<HomeStore>()));
-    final snapshot = store.snapshot;
-    final hasLoadedRecords =
-        (loteSelecionado.lotes_atividades?.isNotEmpty ?? false);
-    if (!snapshot.nutritionalAdjustmentExecuted ||
-        !hasLoadedRecords ||
-        snapshot.automaticAdjustmentRecordChecked) {
-      return;
-    }
-
-    getIt<InstantSequenceInteractionReporter>()
-        .reportAutomaticAdjustmentRecordChecked();
-  }
-
-  String _resolveScopeKey(HomeStore homeStore) {
-    final userId = homeStore.authController.usuario.id?.toString() ?? 'unknown';
-    final accountId = homeStore.authController.usuario.selected_conta?.conta?.id
-            ?.toString() ??
-        'unknown';
-    final sessionId = homeStore.currentSessionId ?? 'unknown';
-    final adaptiveMode = homeStore.adaptiveMode;
-    return '$userId|$accountId|$sessionId|$adaptiveMode';
   }
 
   @action
@@ -272,6 +247,9 @@ abstract class CadernoCampoStoreBase with Store {
   List<LotesAtividades> get getLotesAtividadesFilter {
     List<LotesAtividades> list =
         (loteSelecionado.lotes_atividades ?? []).where((element) {
+      if (!mostrarRegistrosSistema && (element.atividade?.privado == true)) {
+        return false;
+      }
       if (searchAtividade.text.isEmpty) return true;
       return (element.atividade?.nome ?? '')
           .toLowerCase()

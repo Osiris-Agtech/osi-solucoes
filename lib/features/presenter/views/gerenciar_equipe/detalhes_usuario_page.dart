@@ -74,8 +74,8 @@ class _DetalhesUsuarioPageState extends State<DetalhesUsuarioPage> {
                         ),
                         const Divider(height: 1),
                         if (store.usuarioSelecionado.selected_conta?.cargo
-                                ?.cargo ==
-                            "Dono")
+                                ?.cargo?.toLowerCase() ==
+                            "dono")
                           _infoTile(
                             label: 'Cargo',
                             value: 'Dono',

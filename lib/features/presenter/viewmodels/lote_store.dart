@@ -17,7 +17,11 @@ import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcen
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 
+import 'dart:convert';
+
+import '../../data/repositories/cadernoCampo/cadeno_campo_repository.dart';
 import '../models/area/area_model.dart';
+import '../models/atividade/atividade_model.dart';
 
 part 'lote_store.g.dart';
 
@@ -915,6 +919,61 @@ abstract class LoteStoreBase with Store {
     );
 
     isNovoLoteLoading = false;
+  }
+
+  @action
+  Future<void> registrarAtividadeProducao({
+    required Map<String, int> oldValues,
+    required Map<String, int> newValues,
+  }) async {
+    final fieldNames = {
+      'bandejas_semeadas': 'Bandejas semeadas',
+      'mudas_transplantadas': 'Mudas transplantadas',
+      'plantas_colhidas': 'Plantas colhidas',
+      'embalagens_produzidas': 'Embalagens produzidas',
+    };
+
+    final alteracoes = <Map<String, dynamic>>[];
+    for (final entry in newValues.entries) {
+      final campo = entry.key;
+      final oldVal = oldValues[campo];
+      final newVal = entry.value;
+      if (oldVal != newVal) {
+        alteracoes.add({
+          'campo': campo,
+          'de': oldVal,
+          'para': newVal,
+        });
+      }
+    }
+
+    if (alteracoes.isEmpty) return;
+
+    final nome = alteracoes.length == 1
+        ? '${fieldNames[alteracoes.first['campo']]}: ${alteracoes.first['de']} \u2192 ${alteracoes.first['para']}'
+        : 'Produção: ${alteracoes.length} campos atualizados';
+
+    final atividade = Atividade(
+      nome: nome,
+      descricao: jsonEncode({
+        'tipo': 'atualizacao_producao',
+        'versao': 1,
+        'alteracoes': alteracoes,
+      }),
+      privado: true,
+      created_at: DateTime.now(),
+      conta: authController.usuario.selected_conta!.conta,
+    );
+
+    try {
+      await GetIt.I<CadernoCampoRepository>().cadastrarAtividade(
+        atividade: atividade,
+        usuarioId: authController.usuario.id!,
+        listLoteId: [loteSelecionado.id!],
+      );
+    } catch (_) {
+      toastError(message: 'Erro ao registrar atividade de produção');
+    }
   }
 
   @action

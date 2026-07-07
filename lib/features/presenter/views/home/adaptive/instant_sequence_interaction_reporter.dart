@@ -12,12 +12,8 @@ class InstantSequenceInteractionReporter {
     return _report(InstantSequenceEventType.generatedAgendaActivitiesChecked);
   }
 
-  bool reportNutritionalAdjustmentExecuted() {
-    return _report(InstantSequenceEventType.nutritionalAdjustmentExecuted);
-  }
-
-  bool reportAutomaticAdjustmentRecordChecked() {
-    return _report(InstantSequenceEventType.automaticAdjustmentRecordChecked);
+  bool reportAdjustmentRecorded() {
+    return _report(InstantSequenceEventType.adjustmentRecorded);
   }
 
   bool reportAgendaActivitiesCompleted() {

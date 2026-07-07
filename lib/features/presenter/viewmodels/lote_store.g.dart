@@ -1275,6 +1275,18 @@ mixin _$LoteStore on LoteStoreBase, Store {
         .run(() => super.alterarProducaoLote());
   }
 
+  late final _$registrarAtividadeProducaoAsyncAction =
+      AsyncAction('LoteStoreBase.registrarAtividadeProducao', context: context);
+
+  @override
+  Future<void> registrarAtividadeProducao(
+      {required Map<String, int> oldValues,
+      required Map<String, int> newValues}) {
+    return _$registrarAtividadeProducaoAsyncAction.run(() => super
+        .registrarAtividadeProducao(
+            oldValues: oldValues, newValues: newValues));
+  }
+
   late final _$alterarDatasLoteAsyncAction =
       AsyncAction('LoteStoreBase.alterarDatasLote', context: context);
 
@@ -1460,6 +1472,28 @@ mixin _$LoteStore on LoteStoreBase, Store {
         name: 'LoteStoreBase.selecionarNovoLoteSetor');
     try {
       return super.selecionarNovoLoteSetor(setor);
+    } finally {
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void autoPreencherReservatorioDoSetor() {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.autoPreencherReservatorioDoSetor');
+    try {
+      return super.autoPreencherReservatorioDoSetor();
+    } finally {
+      _$LoteStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void resetarReservatorio() {
+    final _$actionInfo = _$LoteStoreBaseActionController.startAction(
+        name: 'LoteStoreBase.resetarReservatorio');
+    try {
+      return super.resetarReservatorio();
     } finally {
       _$LoteStoreBaseActionController.endAction(_$actionInfo);
     }

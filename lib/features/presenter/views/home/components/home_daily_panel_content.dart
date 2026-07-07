@@ -4,10 +4,8 @@ import 'package:osi_solucoes/core/services/metrics_tracking_service.dart';
 import 'package:osi_solucoes/core/utils/responsive_breakpoints.dart';
 import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_adaptive_home_view_data.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/adaptive/adaptive_focus_banner.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/adaptive/adaptive_reason_chip.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/adaptive/adaptive_recommended_action_tile.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/adaptive/activity_feed_card.dart';
-import 'package:osi_solucoes/features/presenter/views/home/components/adaptive/next_step_card.dart';
+import 'package:osi_solucoes/features/presenter/views/home/components/adaptive/instant_recommended_actions_panel.dart';
 
 import 'package:osi_solucoes/features/presenter/models/homeDashboard/home_dashboard_info_context_model.dart';
 
@@ -23,9 +21,9 @@ class HomeDailyPanelContent extends StatelessWidget {
   final bool hasError;
   final String errorMessage;
   final VoidCallback onRetry;
-  final VoidCallback? onOpenTodayTasks;
   final VoidCallback? onSwitchAccount;
   final VoidCallback? onLogout;
+  final VoidCallback? onSecretTriggered;
   final ValueChanged<RecommendedActionViewData> onRecommendedActionTap;
   final ValueChanged<HomeModuleShortcutViewData> onModuleTap;
 
@@ -45,9 +43,9 @@ class HomeDailyPanelContent extends StatelessWidget {
     required this.hasError,
     required this.errorMessage,
     required this.onRetry,
-    required this.onOpenTodayTasks,
     required this.onSwitchAccount,
     required this.onLogout,
+    this.onSecretTriggered,
     required this.onRecommendedActionTap,
     required this.onModuleTap,
     this.instantViewData,
@@ -114,9 +112,9 @@ class HomeDailyPanelContent extends StatelessWidget {
         // ── FIXO: Cabeçalho de saudação ──
         HomeDayHeader(
           data: viewData.header,
-          onOpenTodayTasks: onOpenTodayTasks,
           onSwitchAccount: onSwitchAccount,
           onLogout: onLogout,
+          onSecretTriggered: onSecretTriggered,
         ),
         const SizedBox(height: 14),
 
@@ -124,18 +122,6 @@ class HomeDailyPanelContent extends StatelessWidget {
         if (showInstantSkeleton)
           const InstantSectionSkeleton()
         else if (hasInstantData) ...[
-          if (instant!.nextStep != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: NextStepCard(
-                data: instant.nextStep!,
-                onCtaTap: () => _handleNextStepCta(instant.nextStep!.targetRoute),
-                onInfoTap: instant.nextStep!.infoExplanation != null
-                    ? () => _showInfoExplanation(context, instant.nextStep!.infoExplanation!)
-                    : null,
-              ),
-            ),
-
           if (instant.focusBanner != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
@@ -159,9 +145,15 @@ class HomeDailyPanelContent extends StatelessWidget {
             ),
         ],
 
-        // ── ATALHOS RELACIONADOS ──
-        if (hasInstantData && instant!.recommendedActions.isNotEmpty)
-          _buildInstantActions(instant.recommendedActions, instant.nextStep?.targetRoute)
+        // ── INSTANT: Painel unificado de ações recomendadas ──
+        if (hasInstantData &&
+            (instant.nextStep != null || instant.recommendedActions.isNotEmpty))
+          InstantRecommendedActionsPanel(
+            nextStep: instant.nextStep,
+            recommendedActions: instant.recommendedActions,
+            reasonSummary: instant.reasonSummary,
+            onActionTap: (route) => _handleAdaptiveNavigation(route),
+          )
         else if (!hasInstantData && viewData.actions.isNotEmpty && !showInstantSkeleton && !isLoading && adaptiveMode != 'INSTANT')
           RecommendedActionsSection(
             actions: viewData.actions,
@@ -169,16 +161,10 @@ class HomeDailyPanelContent extends StatelessWidget {
             onActionTap: onRecommendedActionTap,
           ),
 
-        if (hasInstantData && instant!.recommendedActions.isNotEmpty ||
+        if (hasInstantData &&
+                (instant.nextStep != null || instant.recommendedActions.isNotEmpty) ||
             !hasInstantData && viewData.actions.isNotEmpty && !showInstantSkeleton && !isLoading && adaptiveMode != 'INSTANT')
           const SizedBox(height: 14),
-
-        // ── Reason chip (INSTANT, discreto) ──
-        if (hasInstantData && instant!.reasonSummary != null)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 14),
-            child: AdaptiveReasonChip(reason: instant.reasonSummary!),
-          ),
 
         // ── INFO CONTEXT CARD ──
         Builder(
@@ -221,52 +207,9 @@ class HomeDailyPanelContent extends StatelessWidget {
     );
   }
 
-  /// Exibe os atalhos recomendados em modo INSTANT.
-  /// Mostra todos os atalhos retornados pelo backend — o nextStep
-  /// já é o destaque principal com justificativa acima.
-  Widget _buildInstantActions(
-    List<AdaptiveRecommendedActionViewData> actions,
-    String? nextStepRoute,
-  ) {
-    if (actions.isEmpty) return const SizedBox.shrink();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: Text(
-            nextStepRoute != null ? 'Relacionados' : 'Ações recomendadas',
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: Colors.black87,
-            ),
-          ),
-        ),
-        ...actions.map((action) => Padding(
-              padding: const EdgeInsets.only(bottom: 6),
-              child: AdaptiveRecommendedActionTile(
-                action: action,
-                onTap: () => _handleAdaptiveNavigation(action.targetRoute),
-              ),
-            )),
-      ],
-    );
-  }
-
   // ── Navegação e tracking ──
 
   void _handleAdaptiveNavigation(String targetRoute) {
-    MetricsTrackingService.instance.trackNextStepClicked(
-      targetRoute: targetRoute,
-      mode: adaptiveMode,
-      sessionId: currentSessionId,
-    );
-    Get.toNamed(targetRoute);
-  }
-
-  void _handleNextStepCta(String targetRoute) {
     MetricsTrackingService.instance.trackNextStepClicked(
       targetRoute: targetRoute,
       mode: adaptiveMode,
@@ -287,23 +230,4 @@ class HomeDailyPanelContent extends StatelessWidget {
     Get.toNamed(infoData.ctaRoute!);
   }
 
-  void _showInfoExplanation(BuildContext context, String explanation) {
-    MetricsTrackingService.instance.trackInfoIconOpened(
-      componentId: 'next_step',
-      mode: adaptiveMode,
-      sessionId: currentSessionId,
-    );
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        content: Text(explanation),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Entendi'),
-          ),
-        ],
-      ),
-    );
-  }
 }

@@ -277,7 +277,11 @@ abstract class AgendaStoreBase with Store {
                 GetIt.I<InstantSequenceInteractionReporter>()
                     .reportAgendaActivitiesCompleted();
         if (!changed) {
-          await GetIt.I<HomeStore>().refreshHomeAfterAgendaMutation();
+          final homeStore = GetIt.I<HomeStore>();
+          homeStore.pendingActivityTitle = data.titulo;
+          homeStore.pendingActivityDescription = data.descricao;
+          homeStore.pendingActivityInteractionType = 'completed';
+          await homeStore.refreshHomeAfterAgendaMutation();
         }
       },
     );
@@ -301,7 +305,11 @@ abstract class AgendaStoreBase with Store {
       (data) async {
         await buscarAtividades();
         toastSuccess(message: 'Atividade deletada com sucesso!');
-        await GetIt.I<HomeStore>().refreshHomeAfterAgendaMutation();
+        final homeStore = GetIt.I<HomeStore>();
+        homeStore.pendingActivityTitle = null;
+        homeStore.pendingActivityDescription = null;
+        homeStore.pendingActivityInteractionType = 'deleted';
+        await homeStore.refreshHomeAfterAgendaMutation();
       },
     );
 
@@ -375,7 +383,11 @@ abstract class AgendaStoreBase with Store {
       (data) async {
         toastSuccess(message: 'Atividade atualizada com sucesso!');
         await buscarAtividades();
-        await GetIt.I<HomeStore>().refreshHomeAfterAgendaMutation();
+        final homeStore = GetIt.I<HomeStore>();
+        homeStore.pendingActivityTitle = data.titulo;
+        homeStore.pendingActivityDescription = data.descricao;
+        homeStore.pendingActivityInteractionType = 'edited';
+        await homeStore.refreshHomeAfterAgendaMutation();
       },
     );
 
@@ -407,7 +419,11 @@ abstract class AgendaStoreBase with Store {
       (data) async {
         toastSuccess(message: 'Atividade cadastrada com sucesso!');
         await buscarAtividades();
-        await GetIt.I<HomeStore>().refreshHomeAfterAgendaMutation();
+        final homeStore = GetIt.I<HomeStore>();
+        homeStore.pendingActivityTitle = tituloController.text;
+        homeStore.pendingActivityDescription = descricaoController.text;
+        homeStore.pendingActivityInteractionType = 'created';
+        await homeStore.refreshHomeAfterAgendaMutation();
       },
     );
 

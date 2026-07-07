@@ -14,6 +14,7 @@ import 'package:sizer/sizer.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'core/inject/inject.dart';
+import 'core/utils/route_observer.dart';
 import 'features/presenter/routes/app_pages.dart';
 
 void main() async {
@@ -91,6 +92,7 @@ class AppWidget extends StatelessWidget {
           ),
           initialRoute: Routes.splashPage,
           getPages: AppPages.routes,
+          navigatorObservers: [routeObserver],
           routingCallback: NavigationAnalytics.onGetRouting,
           builder: (context, child) {
             return ToastListener(

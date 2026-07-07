@@ -1,8 +1,7 @@
 enum InstantSequenceEventType {
   lotWithProtocolCreated,
   generatedAgendaActivitiesChecked,
-  nutritionalAdjustmentExecuted,
-  automaticAdjustmentRecordChecked,
+  adjustmentRecorded,
   agendaActivitiesCompleted,
   finalHomeStateChecked,
 }
@@ -13,10 +12,7 @@ extension InstantSequenceEventTypeName on InstantSequenceEventType {
           'lotWithProtocolCreated',
         InstantSequenceEventType.generatedAgendaActivitiesChecked =>
           'generatedAgendaActivitiesChecked',
-        InstantSequenceEventType.nutritionalAdjustmentExecuted =>
-          'nutritionalAdjustmentExecuted',
-        InstantSequenceEventType.automaticAdjustmentRecordChecked =>
-          'automaticAdjustmentRecordChecked',
+        InstantSequenceEventType.adjustmentRecorded => 'adjustmentRecorded',
         InstantSequenceEventType.agendaActivitiesCompleted =>
           'agendaActivitiesCompleted',
         InstantSequenceEventType.finalHomeStateChecked =>
@@ -27,8 +23,7 @@ extension InstantSequenceEventTypeName on InstantSequenceEventType {
 class InstantSequenceSignalsSnapshot {
   final bool lotWithProtocolCreated;
   final bool generatedAgendaActivitiesChecked;
-  final bool nutritionalAdjustmentExecuted;
-  final bool automaticAdjustmentRecordChecked;
+  final bool adjustmentRecorded;
   final bool agendaActivitiesCompleted;
   final bool finalHomeStateChecked;
   final InstantSequenceEventType? lastRelevantEvent;
@@ -37,8 +32,7 @@ class InstantSequenceSignalsSnapshot {
   const InstantSequenceSignalsSnapshot({
     required this.lotWithProtocolCreated,
     required this.generatedAgendaActivitiesChecked,
-    required this.nutritionalAdjustmentExecuted,
-    required this.automaticAdjustmentRecordChecked,
+    required this.adjustmentRecorded,
     required this.agendaActivitiesCompleted,
     required this.finalHomeStateChecked,
     required this.lastRelevantEvent,
@@ -48,8 +42,7 @@ class InstantSequenceSignalsSnapshot {
   const InstantSequenceSignalsSnapshot.empty()
       : lotWithProtocolCreated = false,
         generatedAgendaActivitiesChecked = false,
-        nutritionalAdjustmentExecuted = false,
-        automaticAdjustmentRecordChecked = false,
+        adjustmentRecorded = false,
         agendaActivitiesCompleted = false,
         finalHomeStateChecked = false,
         lastRelevantEvent = null,
@@ -70,13 +63,8 @@ class InstantSequenceSignalsSnapshot {
           lastRelevantEvent: eventType,
           changedAt: changedAt,
         ),
-      InstantSequenceEventType.nutritionalAdjustmentExecuted => copyWith(
-          nutritionalAdjustmentExecuted: true,
-          lastRelevantEvent: eventType,
-          changedAt: changedAt,
-        ),
-      InstantSequenceEventType.automaticAdjustmentRecordChecked => copyWith(
-          automaticAdjustmentRecordChecked: true,
+      InstantSequenceEventType.adjustmentRecorded => copyWith(
+          adjustmentRecorded: true,
           lastRelevantEvent: eventType,
           changedAt: changedAt,
         ),
@@ -96,8 +84,7 @@ class InstantSequenceSignalsSnapshot {
   InstantSequenceSignalsSnapshot copyWith({
     bool? lotWithProtocolCreated,
     bool? generatedAgendaActivitiesChecked,
-    bool? nutritionalAdjustmentExecuted,
-    bool? automaticAdjustmentRecordChecked,
+    bool? adjustmentRecorded,
     bool? agendaActivitiesCompleted,
     bool? finalHomeStateChecked,
     InstantSequenceEventType? lastRelevantEvent,
@@ -108,10 +95,7 @@ class InstantSequenceSignalsSnapshot {
           lotWithProtocolCreated ?? this.lotWithProtocolCreated,
       generatedAgendaActivitiesChecked: generatedAgendaActivitiesChecked ??
           this.generatedAgendaActivitiesChecked,
-      nutritionalAdjustmentExecuted:
-          nutritionalAdjustmentExecuted ?? this.nutritionalAdjustmentExecuted,
-      automaticAdjustmentRecordChecked: automaticAdjustmentRecordChecked ??
-          this.automaticAdjustmentRecordChecked,
+      adjustmentRecorded: adjustmentRecorded ?? this.adjustmentRecorded,
       agendaActivitiesCompleted:
           agendaActivitiesCompleted ?? this.agendaActivitiesCompleted,
       finalHomeStateChecked:
@@ -124,15 +108,13 @@ class InstantSequenceSignalsSnapshot {
   bool get hasAllPreviousSignalsForFinalHomeCheck =>
       lotWithProtocolCreated &&
       generatedAgendaActivitiesChecked &&
-      nutritionalAdjustmentExecuted &&
-      automaticAdjustmentRecordChecked &&
+      adjustmentRecorded &&
       agendaActivitiesCompleted;
 
   Map<String, dynamic> toJson() => {
         'lotWithProtocolCreated': lotWithProtocolCreated,
         'generatedAgendaActivitiesChecked': generatedAgendaActivitiesChecked,
-        'nutritionalAdjustmentExecuted': nutritionalAdjustmentExecuted,
-        'automaticAdjustmentRecordChecked': automaticAdjustmentRecordChecked,
+        'adjustmentRecorded': adjustmentRecorded,
         'agendaActivitiesCompleted': agendaActivitiesCompleted,
         'finalHomeStateChecked': finalHomeStateChecked,
         if (lastRelevantEvent != null)
@@ -146,9 +128,7 @@ class InstantSequenceSignalsSnapshot {
         other.lotWithProtocolCreated == lotWithProtocolCreated &&
         other.generatedAgendaActivitiesChecked ==
             generatedAgendaActivitiesChecked &&
-        other.nutritionalAdjustmentExecuted == nutritionalAdjustmentExecuted &&
-        other.automaticAdjustmentRecordChecked ==
-            automaticAdjustmentRecordChecked &&
+        other.adjustmentRecorded == adjustmentRecorded &&
         other.agendaActivitiesCompleted == agendaActivitiesCompleted &&
         other.finalHomeStateChecked == finalHomeStateChecked &&
         other.lastRelevantEvent == lastRelevantEvent &&
@@ -159,8 +139,7 @@ class InstantSequenceSignalsSnapshot {
   int get hashCode => Object.hash(
         lotWithProtocolCreated,
         generatedAgendaActivitiesChecked,
-        nutritionalAdjustmentExecuted,
-        automaticAdjustmentRecordChecked,
+        adjustmentRecorded,
         agendaActivitiesCompleted,
         finalHomeStateChecked,
         lastRelevantEvent,
@@ -205,10 +184,8 @@ class InstantSequenceSignalsStore {
         _snapshot.lotWithProtocolCreated,
       InstantSequenceEventType.generatedAgendaActivitiesChecked =>
         _snapshot.generatedAgendaActivitiesChecked,
-      InstantSequenceEventType.nutritionalAdjustmentExecuted =>
-        _snapshot.nutritionalAdjustmentExecuted,
-      InstantSequenceEventType.automaticAdjustmentRecordChecked =>
-        _snapshot.automaticAdjustmentRecordChecked,
+      InstantSequenceEventType.adjustmentRecorded =>
+        _snapshot.adjustmentRecorded,
       InstantSequenceEventType.agendaActivitiesCompleted =>
         _snapshot.agendaActivitiesCompleted,
       InstantSequenceEventType.finalHomeStateChecked =>
