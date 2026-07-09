@@ -78,29 +78,27 @@ class ProtocoloDatasource implements IProtocoloDatasource {
     const String readRepositories = r'''
       query Protocolos($contaId: Int!) {
         protocolos(where: {
-          conta: {
-            id: {
-              equals: $contaId
-            }
-          },
           deleted_at: {
             equals: null
-          }
+          },
+          OR: [
+            {
+              fk_conta_id: {
+                equals: $contaId
+              }
+            },
+            {
+              fk_conta_id: {
+                equals: null
+              }
+            }
+          ]
         }) {
           id
           nome
           cultura {
             id
             nome
-          }
-          lotes {
-            id
-            nome
-            deleted_at
-            cultura {
-              id
-              nome
-            }
           }
           sistema_cultivo
           implantacao

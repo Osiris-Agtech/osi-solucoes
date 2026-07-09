@@ -51,6 +51,7 @@ import '../views/relatorios/produtividade_setor/relatorio_produtividade_setor_pa
 import '../views/relatorios/desempenho_equipe/relatorio_desempenho_equipe_page.dart';
 import '../views/relatorios/agenda_tarefas/relatorio_agenda_tarefas_page.dart';
 import '../views/adaptive_admin/adaptive_admin_page.dart';
+import '../views/adaptive_admin/instant_component_gallery_page.dart';
 import '../views/adaptive_admin/metrics_dashboard_page.dart';
 
 class AppPages {
@@ -346,6 +347,11 @@ class AppPages {
     GetPage(
       name: Routes.metricsDashboardPage,
       page: () => const MetricsDashboardPage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.instantComponentGalleryPage,
+      page: () => const InstantComponentGalleryPage(),
       transition: Transition.rightToLeft,
     ),
   ];

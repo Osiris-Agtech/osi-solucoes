@@ -12,6 +12,7 @@ import 'package:search_cep/search_cep.dart';
 
 import '../../../core/services/local_storage.dart';
 import '../../data/repositories/cadastro/cadastro_repository.dart';
+import '../../data/repositories/login/login_repository.dart';
 
 part 'cadastro_store.g.dart';
 
@@ -21,6 +22,7 @@ abstract class CadastroStoreBase with Store {
   // late CadastroRepository repository = Modular.get<CadastroRepository>();
   // late AppController appController = Modular.get();
   CadastroRepository repository = GetIt.I<CadastroRepository>();
+  LoginRepository loginRepository = GetIt.I<LoginRepository>();
   AuthController authController = GetIt.I<AuthController>();
 
   @observable
@@ -158,7 +160,6 @@ abstract class CadastroStoreBase with Store {
 
   @action
   Future<String> cadastraUser() async {
-    String strReturn = "";
     var usuario = await repository.cadastraConta(
       nome: nome.text,
       sobrenome: sobrenome.text,
@@ -176,15 +177,43 @@ abstract class CadastroStoreBase with Store {
       cnpjConta: cnpjConta.text,
     );
 
-    usuario.fold(
-      (l) => strReturn = "cadastroInvalido".i18n(),
-      (r) {
-        authController.setUser(r);
-        authController.usuario.selected_conta = r.contas?[0];
-        LocalStorage().storageUser(r);
-        strReturn = "sucesso";
+    return usuario.fold(
+      (l) async => "cadastroInvalido".i18n(),
+      (r) async {
+        final authenticationResult = await loginRepository.login(
+          email: email.text.trim(),
+          senha: senha.text,
+        );
+
+        return authenticationResult.fold(
+          (l) async => l.message,
+          (authentication) async {
+            final authenticatedUser = authentication.usuario;
+            final token = authentication.token;
+
+            if (authenticatedUser == null || token == null || token.isEmpty) {
+              return "loginInvalido".i18n();
+            }
+
+            if (authenticatedUser.contas != null &&
+                authenticatedUser.contas!.isNotEmpty) {
+              authenticatedUser.selected_conta = authenticatedUser.contas![0];
+            }
+
+            final localStorage = LocalStorage();
+            await localStorage.storageToken(token);
+            final storedToken = await localStorage.getToken();
+
+            if (storedToken == null || storedToken.isEmpty) {
+              return "loginInvalido".i18n();
+            }
+
+            await localStorage.storageUser(authenticatedUser);
+            authController.setUser(authenticatedUser);
+            return "sucesso";
+          },
+        );
       },
     );
-    return strReturn;
   }
 }

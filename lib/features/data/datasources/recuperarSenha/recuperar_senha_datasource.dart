@@ -113,7 +113,6 @@ class RecuperarSenhaDatasource implements IRecuperarSenhaDatasource {
             id
             email
             nome
-            senha
           }
         }
       ''';

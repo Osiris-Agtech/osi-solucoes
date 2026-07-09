@@ -5,7 +5,6 @@ import 'package:osi_solucoes/core/services/adaptive_user_service.dart';
 import 'package:osi_solucoes/core/services/navigation_analytics.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 
-/// Modelo interno que combina info do usuário com sua config de adaptação.
 class _UserWithConfig {
   final UserInfo user;
   final String? mode;
@@ -19,17 +18,9 @@ class _UserWithConfig {
     this.testGroup,
   });
 
-  /// `true` se o usuário tem configuração adaptativa ativa.
   bool get hasConfig => mode != null && mode!.isNotEmpty;
 }
 
-/// Tela secreta de administração dos modos adaptativos.
-///
-/// Acesso: long-press no título da página de Ajustes (ou 5 toques rápidos).
-///
-/// Busca a lista de usuários do backend ISIS (GraphQL) e cruza com
-/// as configurações de adaptação da Cloud Function, permitindo
-/// gerenciar modos de forma visual e rápida.
 class AdaptiveAdminPage extends StatefulWidget {
   const AdaptiveAdminPage({super.key});
 
@@ -38,17 +29,14 @@ class AdaptiveAdminPage extends StatefulWidget {
 }
 
 class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
-  // Dados
   List<UserInfo> _allUsers = [];
-  Map<String, Map<String, dynamic>> _configsMap = {}; // userId -> config
+  Map<String, Map<String, dynamic>> _configsMap = {};
   bool _loading = true;
   String? _error;
 
-  // Busca
   final _searchCtrl = TextEditingController();
   String _searchQuery = '';
 
-  // Filtros de modo
   final Set<String> _activeModeFilters = {'ALL'};
 
   @override
@@ -63,7 +51,6 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
     super.dispose();
   }
 
-  /// Carrega usuários do ISIS + configs da Cloud Function.
   Future<void> _loadData() async {
     setState(() {
       _loading = true;
@@ -71,7 +58,6 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
     });
 
     try {
-      // Busca em paralelo, isolando erros individualmente
       final usersFuture = AdaptiveUserService.listAllUsers()
           .catchError((e) {
             debugPrint('Erro ao buscar usuários do ISIS: $e');
@@ -89,7 +75,6 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
       _allUsers = futures[0] as List<UserInfo>;
       final configs = futures[1] as List<Map<String, dynamic>>;
 
-      // Indexa configs por userId
       _configsMap = {
         for (final config in configs)
           (config['userId'] as String).toString(): config,
@@ -102,7 +87,6 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
     }
   }
 
-  /// Lista mesclada (usuários + configs) com filtros aplicados.
   List<_UserWithConfig> get _filteredUsers {
     var users = _allUsers.map((user) {
       final userId = user.id.toString();
@@ -115,7 +99,6 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
       );
     }).toList();
 
-    // Filtro por busca
     final query = _searchQuery.toLowerCase().trim();
     if (query.isNotEmpty) {
       users = users.where((u) {
@@ -128,7 +111,6 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
       }).toList();
     }
 
-    // Filtro por modo
     if (!_activeModeFilters.contains('ALL')) {
       users = users
           .where((u) => u.hasConfig && _activeModeFilters.contains(u.mode))
@@ -142,8 +124,6 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
     String userId,
     String mode,
   ) async {
-    // APENAS modo INSTANT precisa de sessionId
-    // GRADUAL e STATIC não criam sessão
     final sessionId = mode == 'INSTANT'
         ? 'session_${userId}_${DateTime.now().millisecondsSinceEpoch}'
         : null;
@@ -155,7 +135,6 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
         sessionId: sessionId,
       );
 
-      // APENAS inicia sessão de rastreamento se for INSTANT
       if (mode == 'INSTANT' && sessionId != null) {
         await NavigationAnalytics.startTestSession(sessionId);
         if (!mounted) return;
@@ -164,7 +143,7 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
         if (!mounted) return;
         _showSuccess('Usuário $userId → $mode (sem sessão)');
       }
-      
+
       await _loadData();
     } catch (e) {
       if (!mounted) return;
@@ -173,11 +152,10 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
   }
 
   Future<void> _endSession(String userId) async {
-    // Verifica se o usuário está em modo INSTANT antes de encerrar sessão
     final userIdStr = userId.toString();
     final config = _configsMap[userIdStr];
     final currentMode = config?['mode'] as String?;
-    
+
     if (currentMode != 'INSTANT') {
       _showError('Usuário não está em modo INSTANT (modo atual: $currentMode)');
       return;
@@ -388,6 +366,11 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
         title: const Text('🧪 Modos Adaptativos'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.widgets_rounded),
+            onPressed: () => Get.toNamed(Routes.instantComponentGalleryPage),
+            tooltip: 'Componentes Instant',
+          ),
+          IconButton(
             icon: const Icon(Icons.bar_chart),
             onPressed: () => Get.toNamed(Routes.metricsDashboardPage),
             tooltip: 'Métricas de Adaptação',
@@ -434,11 +417,17 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
                     ],
                   ),
                 )
-              : Column(
+              : ListView(
+                  padding: const EdgeInsets.only(bottom: 40),
                   children: [
-                    // Barra de busca
+                    // ── Buscar ──
+                    _AdminSectionHeader(
+                      emoji: '🔍',
+                      title: 'Buscar',
+                      description: 'Localize usuários por nome, email ou ID',
+                    ),
                     Padding(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                       child: TextField(
                         controller: _searchCtrl,
                         decoration: InputDecoration(
@@ -468,10 +457,8 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
                         },
                       ),
                     ),
-
-                    // Chips de filtro por modo
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
@@ -485,142 +472,130 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
                       ),
                     ),
 
-                    const SizedBox(height: 8),
-
-                    // Lista de usuários
-                    Expanded(
-                      child: filteredUsers.isEmpty
-                          ? Center(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Text('🔍',
-                                      style: TextStyle(fontSize: 48)),
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    _searchQuery.isNotEmpty
-                                        ? 'Nenhum resultado para "$_searchQuery"'
-                                        : 'Nenhum usuário encontrado',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : ListView.separated(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8),
-                              itemCount: filteredUsers.length,
-                              separatorBuilder: (_, __) =>
-                                  const Divider(height: 1),
-                              itemBuilder: (ctx, i) {
-                                final userWithConfig =
-                                    filteredUsers[i];
-                                final user = userWithConfig.user;
-                                final mode = userWithConfig.mode;
-                                final testGroup =
-                                    userWithConfig.testGroup;
-                                final sessionId =
-                                    userWithConfig.sessionId;
-
-                                return ListTile(
-                                  leading: CircleAvatar(
-                                    backgroundColor: mode != null
-                                        ? _modeColor(mode)
-                                            .withValues(alpha: 0.15)
-                                        : Colors.blue
-                                            .withValues(alpha: 0.1),
-                                    child: Text(
-                                      mode != null
-                                          ? _modeIcon(mode)
-                                          : '👤',
-                                      style: const TextStyle(
-                                          fontSize: 20),
-                                    ),
-                                  ),
-                                  title: Text(
-                                    user.displayName,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  subtitle: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'ID: ${user.id}',
-                                        style: const TextStyle(
-                                            fontSize: 12),
-                                      ),
-                                      if (mode != null)
-                                        Text(
-                                          '$_modeIcon(mode) $mode',
-                                          style: TextStyle(
-                                            color: _modeColor(mode),
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      if (testGroup != null &&
-                                          testGroup.isNotEmpty)
-                                        Text(
-                                          'Grupo: $testGroup',
-                                          style: const TextStyle(
-                                              fontSize: 12),
-                                        ),
-                                      if (sessionId != null &&
-                                          sessionId.isNotEmpty)
-                                        Text(
-                                          'Sessão: $sessionId',
-                                          maxLines: 1,
-                                          overflow:
-                                              TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                              fontSize: 11),
-                                        ),
-                                    ],
-                                  ),
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(
-                                          mode != null
-                                              ? Icons.edit
-                                              : Icons.add_circle_outline,
-                                          color: mode != null
-                                              ? _modeColor(mode)
-                                              : Colors.blue,
-                                        ),
-                                        onPressed: () =>
-                                            _showModePicker(
-                                                userWithConfig),
-                                        tooltip: mode != null
-                                            ? 'Alterar modo'
-                                            : 'Configurar modo',
-                                      ),
-                                      // Botão de encerrar sessão APENAS para modo INSTANT
-                                      if (mode == 'INSTANT')
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.stop_circle,
-                                            color: Colors.redAccent,
-                                          ),
-                                          onPressed: () => _endSession(
-                                              user.id.toString()),
-                                          tooltip: 'Encerrar sessão INSTANT',
-                                        ),
-                                    ],
-                                  ),
-                                  onTap: () =>
-                                      _showModePicker(userWithConfig),
-                                );
-                              },
-                            ),
+                    // ── Usuários ──
+                    _AdminSectionHeader(
+                      emoji: '👥',
+                      title: 'Usuários',
+                      description: '${_allUsers.length} usuários · $totalConfigured configurados',
                     ),
+
+                    if (filteredUsers.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 32),
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text('🔍',
+                                  style: TextStyle(fontSize: 48)),
+                              const SizedBox(height: 16),
+                              Text(
+                                _searchQuery.isNotEmpty
+                                    ? 'Nenhum resultado para "$_searchQuery"'
+                                    : 'Nenhum usuário encontrado',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    else
+                      ...filteredUsers.map((userWithConfig) =>
+                          _buildUserTile(userWithConfig)),
                   ],
                 ),
+    );
+  }
+
+  Widget _buildUserTile(_UserWithConfig userWithConfig) {
+    final user = userWithConfig.user;
+    final mode = userWithConfig.mode;
+    final testGroup = userWithConfig.testGroup;
+    final sessionId = userWithConfig.sessionId;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 2),
+              blurRadius: 8,
+              color: Colors.black.withValues(alpha: 0.06),
+            ),
+          ],
+        ),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: mode != null
+                ? _modeColor(mode).withValues(alpha: 0.15)
+                : Colors.blue.withValues(alpha: 0.1),
+            child: Text(
+              mode != null ? _modeIcon(mode) : '👤',
+              style: const TextStyle(fontSize: 20),
+            ),
+          ),
+          title: Text(
+            user.displayName,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'ID: ${user.id}',
+                style: const TextStyle(fontSize: 12),
+              ),
+              if (mode != null)
+                Text(
+                  '$_modeIcon(mode) $mode',
+                  style: TextStyle(
+                    color: _modeColor(mode),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              if (testGroup != null && testGroup.isNotEmpty)
+                Text(
+                  'Grupo: $testGroup',
+                  style: const TextStyle(fontSize: 12),
+                ),
+              if (sessionId != null && sessionId.isNotEmpty)
+                Text(
+                  'Sessão: $sessionId',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 11),
+                ),
+            ],
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: Icon(
+                  mode != null ? Icons.edit : Icons.add_circle_outline,
+                  color: mode != null ? _modeColor(mode) : Colors.blue,
+                ),
+                onPressed: () => _showModePicker(userWithConfig),
+                tooltip: mode != null ? 'Alterar modo' : 'Configurar modo',
+              ),
+              if (mode == 'INSTANT')
+                IconButton(
+                  icon: const Icon(Icons.stop_circle, color: Colors.redAccent),
+                  onPressed: () => _endSession(user.id.toString()),
+                  tooltip: 'Encerrar sessão INSTANT',
+                ),
+            ],
+          ),
+          onTap: () => _showModePicker(userWithConfig),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+        ),
+      ),
     );
   }
 
@@ -649,6 +624,47 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
             }
           });
         },
+      ),
+    );
+  }
+}
+
+class _AdminSectionHeader extends StatelessWidget {
+  final String emoji;
+  final String title;
+  final String description;
+
+  const _AdminSectionHeader({
+    required this.emoji,
+    required this.title,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '$emoji  $title',
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            description,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(color: Colors.grey[600]),
+          ),
+          const SizedBox(height: 8),
+          Divider(color: Colors.grey[300]),
+        ],
       ),
     );
   }

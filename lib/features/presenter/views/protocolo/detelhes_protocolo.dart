@@ -5,7 +5,11 @@ import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/protocolo_store.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/components/detalhes_page/production_cycle/protocol_cycle_preview.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/components/detalhes_page/production_cycle/protocol_linked_lots_section.dart';
+import 'package:osi_solucoes/features/presenter/views/protocolo/components/detalhes_page/production_cycle/protocol_operational_summary.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_primary_button.dart';
 
 class DetalhesProtocolo extends StatefulWidget {
   const DetalhesProtocolo({super.key});
@@ -17,13 +21,24 @@ class DetalhesProtocolo extends StatefulWidget {
 class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
   ProtocoloStore store = GetIt.I<ProtocoloStore>();
   final ScrollController _scrollController = ScrollController();
-  CarouselController carouselController = CarouselController();
+
+  @override
+  void initState() {
+    store.prepararListaDetalhesFase();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Constants.kSecondBackgroundColor,
         body: PrimaryScrollController(
           controller: _scrollController,
           child: Scrollbar(
@@ -86,228 +101,39 @@ class _DetalhesProtocoloState extends State<DetalhesProtocolo> {
                 SliverList(
                   delegate: SliverChildListDelegate(
                     [
-                      const Padding(
-                        padding: EdgeInsets.only(
-                          left: 24.0,
-                          bottom: 16,
-                        ),
-                        child: Text(
-                          'Informações',
-                          style: TextStyle(
-                            color: Constants.kButtonGrey,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 24.0,
-                          right: 30,
-                        ),
-                        child: Column(
+                      Observer(builder: (_) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Expanded(
-                                  child: Text('Cultura'),
-                                ),
-                                Text(
-                                  store.protocoloSelecionado?.cultura?.nome ??
-                                      '---',
-                                  style: const TextStyle(
-                                    color: Constants.kText2,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
+                            const SizedBox(height: 16),
+                            ProtocolOperationalSummary(
+                              protocolo: store.protocoloSelecionado,
+                              fases: store.listaFaseDetalhes,
                             ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Expanded(
-                                  child: Text('Sistema de Cultivo'),
+                            const SizedBox(height: 16),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: AppPrimaryButton(
+                                label: 'Ver ciclo de produção',
+                                icon: Icons.timeline_outlined,
+                                onPressed: () => Get.toNamed(
+                                  Routes.detalhesAtividadesProtocolo,
                                 ),
-                                Text(
-                                  store.protocoloSelecionado?.sistema_cultivo ??
-                                      "---",
-                                  style: const TextStyle(
-                                    color: Constants.kText2,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                            const SizedBox(
-                              height: 16,
+                            const SizedBox(height: 8),
+                            ProtocolCyclePreview(
+                              fases: store.listaFaseDetalhes,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Expanded(
-                                  child: Text('Forma de Implantação (Inicio)'),
-                                ),
-                                Text(
-                                  store.protocoloSelecionado?.implantacao ??
-                                      "---",
-                                  style: const TextStyle(
-                                    color: Constants.kText2,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
+                            const SizedBox(height: 8),
+                            ProtocolLinkedLotsSection(
+                              lotes: store.protocoloSelecionado?.lotes ?? [],
                             ),
+                            const SizedBox(height: 24),
                           ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      const Divider(),
-                      InkWell(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        child: ListTile(
-                          dense: true,
-                          horizontalTitleGap: 12,
-                          leading: const Padding(
-                            padding: EdgeInsets.only(left: 8.0),
-                            child: Icon(
-                              Icons.checklist,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ),
-                          title: const Padding(
-                            padding: EdgeInsets.only(right: 8),
-                            child: Text(
-                              'Atividades',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ),
-                          subtitle: const Text(
-                              "Atividades planejadas para o cultivo"),
-                          trailing: const Icon(
-                            Icons.chevron_right_rounded,
-                            color: Constants.kPrimaryColor,
-                          ),
-                          onTap: () {
-                            Get.toNamed(Routes.detalhesAtividadesProtocolo);
-                          },
-                        ),
-                      ),
-                      const Divider(),
-                      const SizedBox(height: 16),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 24.0),
-                        child: Text(
-                          'Cultivos Vinculados',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Constants.kButtonGrey,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 8.0,
-                        ),
-                        child: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 200,
-                            minWidth: double.infinity,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Constants.kCardColor,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Observer(builder: (_) {
-                            if ((store.protocoloSelecionado?.lotes ?? [])
-                                .isEmpty) {
-                              return const Padding(
-                                padding: EdgeInsets.all(24.0),
-                                child: Center(
-                                  child: Text(
-                                    "Não contém lotes vinculados a este reservatório",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              );
-                            }
-                            return ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount:
-                                  (store.protocoloSelecionado?.lotes ?? [])
-                                      .length,
-                              separatorBuilder: (context, index) => Container(
-                                height: 1,
-                                width: double.infinity,
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                color: Constants.kBackgroundColor,
-                              ),
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        top: index == 0 ? 8.0 : 0.0,
-                                        bottom: index ==
-                                                (store.protocoloSelecionado
-                                                            ?.lotes.length ??
-                                                        0) -
-                                                    1
-                                            ? 8.0
-                                            : 0.0,
-                                      ),
-                                      child: ListTile(
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 24),
-                                        title: Text(
-                                          store.protocoloSelecionado
-                                                  ?.lotes[index].nome ??
-                                              '---',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: Constants
-                                                .kContentColorLightTheme
-                                                .withValues(alpha: .8),
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        subtitle: Text(
-                                          'Cultura: ${store.protocoloSelecionado?.lotes[index].nome ?? 'Sem Cultura'}',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Constants
-                                                .kContentColorLightTheme
-                                                .withValues(alpha: .8),
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }),
-                        ),
-                      ),
+                        );
+                      }),
                     ],
                   ),
                 ),

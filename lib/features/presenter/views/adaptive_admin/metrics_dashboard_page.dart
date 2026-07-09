@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/services/metrics_service.dart';
 import 'package:osi_solucoes/core/utils/responsive_breakpoints.dart';
-import 'package:osi_solucoes/core/constants/constants.dart';
 
 class MetricsDashboardPage extends StatefulWidget {
   const MetricsDashboardPage({super.key});
@@ -54,11 +53,8 @@ class _MetricsDashboardPageState extends State<MetricsDashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.kSecondBackgroundColor,
       appBar: AppBar(
-        title: const Text('Métricas de Adaptação'),
-        backgroundColor: Constants.kPrimaryColor,
-        foregroundColor: Colors.white,
+        title: const Text('📊 Métricas de Adaptação'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -78,21 +74,13 @@ class _MetricsDashboardPageState extends State<MetricsDashboardPage> {
   Widget _buildError() {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.error_outline, size: 64, color: Colors.red),
+          const Icon(Icons.error_outline, size: 48, color: Colors.red),
           const SizedBox(height: 16),
-          Text('Erro ao carregar métricas:',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.red[700])),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Text(_error!,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14)),
+          Text(
+            'Erro: $_error',
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           ElevatedButton.icon(
@@ -108,162 +96,108 @@ class _MetricsDashboardPageState extends State<MetricsDashboardPage> {
   Widget _buildContent() {
     final isMobile = ResponsiveBreakpoints.isMobile(context);
 
-    return CustomScrollView(
-      slivers: [
-        // Cards globais
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.all(isMobile ? 16 : 32),
+    final byMode = _globalMetrics['byMode'] as Map<String, dynamic>? ?? {};
+    final filteredUsers = _selectedModeFilter == 'ALL'
+        ? _usersMetrics
+        : _usersMetrics
+            .where((u) => u['mode'] == _selectedModeFilter)
+            .toList();
+
+    return ListView(
+      padding: const EdgeInsets.only(bottom: 40),
+      children: [
+        // ── Visão Geral ──
+        _MetricSectionHeader(
+          emoji: '📊',
+          title: 'Visão Geral',
+          description:
+              '${_globalMetrics['totalUsers'] ?? 0} usuários · ${_globalMetrics['totalSessions'] ?? 0} sessões',
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          child: GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: isMobile ? 2 : 3,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: isMobile ? 1.5 : 2,
+            children: [
+              _buildMetricCard(
+                icon: Icons.touch_app,
+                label: 'Acceptance Rate',
+                value: MetricsService.formatRate(
+                    _globalMetrics['globalAcceptanceRate']),
+                color: Colors.green,
+              ),
+              _buildMetricCard(
+                icon: Icons.swap_horiz,
+                label: 'Pass-Through Rate',
+                value: MetricsService.formatRate(
+                    _globalMetrics['globalPassThroughRate']),
+                color: Colors.orange,
+              ),
+              _buildMetricCard(
+                icon: Icons.timer,
+                label: 'Avg Time-to-Task',
+                value: MetricsService.formatTime(
+                    _globalMetrics['globalAvgTimeToTask']),
+                color: Colors.blue,
+              ),
+            ],
+          ),
+        ),
+
+        // ── Comparação por Modo ──
+        if (byMode.isNotEmpty) ...[
+          _MetricSectionHeader(
+            emoji: '📈',
+            title: 'Comparação por Modo',
+            description: 'Desempenho por modo adaptativo',
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Visão Geral',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '${_globalMetrics['totalUsers'] ?? 0} usuários · ${_globalMetrics['totalSessions'] ?? 0} sessões',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: isMobile ? 2 : 3,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: isMobile ? 1.5 : 2,
-                  children: [
-                    _buildMetricCard(
-                      icon: Icons.touch_app,
-                      label: 'Acceptance Rate',
-                      value: MetricsService.formatRate(
-                          _globalMetrics['globalAcceptanceRate']),
-                      color: Colors.green,
-                    ),
-                    _buildMetricCard(
-                      icon: Icons.swap_horiz,
-                      label: 'Pass-Through Rate',
-                      value: MetricsService.formatRate(
-                          _globalMetrics['globalPassThroughRate']),
-                      color: Colors.orange,
-                    ),
-                    _buildMetricCard(
-                      icon: Icons.timer,
-                      label: 'Avg Time-to-Task',
-                      value: MetricsService.formatTime(
-                          _globalMetrics['globalAvgTimeToTask']),
-                      color: Colors.blue,
-                    ),
-                  ],
-                ),
-              ],
+              children: _buildModeCards(byMode),
             ),
           ),
+        ],
+
+        // ── Por Usuário ──
+        _MetricSectionHeader(
+          emoji: '👤',
+          title: 'Por Usuário',
+          description:
+              '${_usersMetrics.length} usuários com métricas individuais',
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Wrap(
+            spacing: 8,
+            children: ['ALL', 'GRADUAL', 'INSTANT', 'STATIC']
+                .map((mode) => ChoiceChip(
+                      label: Text(mode),
+                      selected: _selectedModeFilter == mode,
+                      onSelected: (_) {
+                        setState(() => _selectedModeFilter = mode);
+                      },
+                    ))
+                .toList(),
+          ),
         ),
 
-        // Comparação por modo
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 16 : 32, vertical: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Comparação por Modo',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                ..._buildModeCards(),
-              ],
+        if (filteredUsers.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32),
+            child: Center(
+              child: Text(
+                'Nenhum usuário encontrado',
+                style: TextStyle(color: Colors.grey[600]),
+              ),
             ),
-          ),
-        ),
-
-        // Lista de usuários
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(isMobile ? 16 : 32, 16, isMobile ? 16 : 32, 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Por Usuário',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black87,
-                  ),
-                ),
-                Text(
-                  '${_usersMetrics.length} usuários',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        // Filtro por modo
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 32, vertical: 8),
-            child: Wrap(
-              spacing: 8,
-              children: ['ALL', 'GRADUAL', 'INSTANT', 'STATIC']
-                  .map((mode) => ChoiceChip(
-                        label: Text(mode),
-                        selected: _selectedModeFilter == mode,
-                        onSelected: (_) {
-                          setState(() => _selectedModeFilter = mode);
-                        },
-                      ))
-                  .toList(),
-            ),
-          ),
-        ),
-
-        // Lista
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final filteredUsers = _selectedModeFilter == 'ALL'
-                  ? _usersMetrics
-                  : _usersMetrics
-                      .where((u) => u['mode'] == _selectedModeFilter)
-                      .toList();
-
-              if (index >= filteredUsers.length) return null;
-              final user = filteredUsers[index];
-              return _buildUserTile(user);
-            },
-            childCount: _selectedModeFilter == 'ALL'
-                ? _usersMetrics.length
-                : _usersMetrics
-                    .where((u) => u['mode'] == _selectedModeFilter)
-                    .length,
-          ),
-        ),
-
-        const SliverToBoxAdapter(
-          child: SizedBox(height: 32),
-        ),
+          )
+        else
+          ...filteredUsers.map((user) => _buildUserTile(user)),
       ],
     );
   }
@@ -274,42 +208,48 @@ class _MetricsDashboardPageState extends State<MetricsDashboardPage> {
     required String value,
     required Color color,
   }) {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: color, size: 24),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 2),
+            blurRadius: 8,
+            color: Colors.black.withValues(alpha: 0.06),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: color, size: 24),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
             ),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[600],
             ),
-          ],
-        ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }
 
-  List<Widget> _buildModeCards() {
-    final byMode = _globalMetrics['byMode'] as Map<String, dynamic>? ?? {};
-
+  List<Widget> _buildModeCards(Map<String, dynamic> byMode) {
     const modeLabels = {
       'GRADUAL': 'Gradual (BigQuery 30d)',
       'INSTANT': 'Instantâneo (Sessão)',
@@ -327,10 +267,21 @@ class _MetricsDashboardPageState extends State<MetricsDashboardPage> {
       final data = entry.value as Map<String, dynamic>;
       final color = modeColors[mode] ?? Colors.grey;
 
-      return Card(
-        margin: const EdgeInsets.only(bottom: 8),
-        child: Padding(
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Container(
           padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(0, 2),
+                blurRadius: 8,
+                color: Colors.black.withValues(alpha: 0.06),
+              ),
+            ],
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -377,7 +328,7 @@ class _MetricsDashboardPageState extends State<MetricsDashboardPage> {
                       Colors.orange),
                   _buildInlineStat(
                       'Time-to-Task',
-                      MetricsService.formatTime(data['avgTimeToTask']),
+                      MetricsService.formatRate(data['avgTimeToTask']),
                       Colors.blue),
                 ],
               ),
@@ -416,25 +367,81 @@ class _MetricsDashboardPageState extends State<MetricsDashboardPage> {
     final mode = user['mode'] ?? 'GRADUAL';
     final sessions = user['sessionsCount'] ?? 0;
 
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Constants.kPrimaryColor.withValues(alpha: 0.1),
-        child: Text(
-          userId.substring(0, userId.length > 2 ? 2 : userId.length),
-          style: TextStyle(
-            color: Constants.kPrimaryColor,
-            fontWeight: FontWeight.w700,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 2),
+              blurRadius: 8,
+              color: Colors.black.withValues(alpha: 0.06),
+            ),
+          ],
+        ),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Colors.green.withValues(alpha: 0.1),
+            child: Text(
+              userId.substring(0, userId.length > 2 ? 2 : userId.length),
+              style: const TextStyle(
+                color: Colors.green,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           ),
+          title: Text('Usuário $userId'),
+          subtitle: Text(
+            'Modo: $mode · $sessions sessões · Acceptance: ${MetricsService.formatRate(user['acceptanceRate'])}',
+          ),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () {},
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
         ),
       ),
-      title: Text('Usuário $userId'),
-      subtitle: Text(
-        'Modo: $mode · $sessions sessões · Acceptance: ${MetricsService.formatRate(user['acceptanceRate'])}',
+    );
+  }
+}
+
+class _MetricSectionHeader extends StatelessWidget {
+  final String emoji;
+  final String title;
+  final String description;
+
+  const _MetricSectionHeader({
+    required this.emoji,
+    required this.title,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '$emoji  $title',
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            description,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(color: Colors.grey[600]),
+          ),
+          const SizedBox(height: 8),
+          Divider(color: Colors.grey[300]),
+        ],
       ),
-      trailing: const Icon(Icons.chevron_right),
-      onTap: () {
-        // Futuramente: navegar para UserMetricsDetailPage
-      },
     );
   }
 }

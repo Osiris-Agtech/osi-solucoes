@@ -47,6 +47,7 @@ abstract class Routes {
   static const relatorioAgendaTarefasPage = '/relatorioAgendaTarefasPage';
   static const adaptiveAdminPage = '/adaptiveAdminPage';
   static const metricsDashboardPage = '/metricsDashboardPage';
+  static const instantComponentGalleryPage = '/instantComponentGalleryPage';
 
   // Rotas simplificadas para teste
   static const cadastroSimplificado = '/cadastroSimplificado';
