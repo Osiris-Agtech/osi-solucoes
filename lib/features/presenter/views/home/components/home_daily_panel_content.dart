@@ -22,8 +22,6 @@ class HomeDailyPanelContent extends StatelessWidget {
   final bool hasError;
   final String errorMessage;
   final VoidCallback onRetry;
-  final VoidCallback? onSwitchAccount;
-  final VoidCallback? onLogout;
   final VoidCallback? onSecretTriggered;
   final ValueChanged<RecommendedActionViewData> onRecommendedActionTap;
   final ValueChanged<HomeModuleShortcutViewData> onModuleTap;
@@ -45,8 +43,6 @@ class HomeDailyPanelContent extends StatelessWidget {
     required this.hasError,
     required this.errorMessage,
     required this.onRetry,
-    required this.onSwitchAccount,
-    required this.onLogout,
     this.onSecretTriggered,
     required this.onRecommendedActionTap,
     required this.onModuleTap,
@@ -70,7 +66,7 @@ class HomeDailyPanelContent extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Padding(
         padding:
-            EdgeInsets.fromLTRB(horizontalPadding, 20, horizontalPadding, 40),
+            EdgeInsets.fromLTRB(horizontalPadding, 68, horizontalPadding, 40),
         child: Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: maxContentWidth),
@@ -114,8 +110,6 @@ class HomeDailyPanelContent extends StatelessWidget {
         // ── FIXO: Cabeçalho de saudação ──
         HomeDayHeader(
           data: viewData.header,
-          onSwitchAccount: onSwitchAccount,
-          onLogout: onLogout,
           onSecretTriggered: onSecretTriggered,
         ),
         const SizedBox(height: 14),
@@ -202,6 +196,9 @@ class HomeDailyPanelContent extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 14),
                 child: HomeInfoCard(
                   data: infoData,
+                  onTap: infoData.type == HomeInfoType.basicTip
+                      ? null
+                      : () => _handleCardTap(infoData),
                   onCtaTap: infoData.ctaRoute != null
                       ? () => _handleInfoCardCta(infoData)
                       : null,
@@ -241,5 +238,31 @@ class HomeDailyPanelContent extends StatelessWidget {
       sessionId: currentSessionId,
     );
     Get.toNamed(infoData.ctaRoute!);
+  }
+
+  void _handleCardTap(HomeInfoViewData infoData) {
+    final route = _cardRouteForType(infoData.type);
+    if (route == null) return;
+
+    MetricsTrackingService.instance.trackInfoCardClicked(
+      infoType: infoData.type.name,
+      targetRoute: route,
+      mode: adaptiveMode,
+      sessionId: currentSessionId,
+    );
+    Get.toNamed(route);
+  }
+
+  String? _cardRouteForType(HomeInfoType type) {
+    switch (type) {
+      case HomeInfoType.todayCultivation:
+        return '/agendaPage';
+      case HomeInfoType.reservoirReport:
+        return '/reservatoriosPage';
+      case HomeInfoType.fieldNotesSummary:
+        return '/cadernoCampoPage';
+      case HomeInfoType.basicTip:
+        return null;
+    }
   }
 }

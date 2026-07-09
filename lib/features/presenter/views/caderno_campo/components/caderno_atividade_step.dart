@@ -20,16 +20,13 @@ class CadernoAtividadeStep extends StatelessWidget {
             title: 'Atividade',
             description: 'Dê um título para a atividade.',
             isRequired: true,
-            child: Observer(builder: (_) {
-              return TextFormField(
-                initialValue: store.novoAtividadeName.text,
-                textCapitalization: TextCapitalization.words,
-                decoration: const InputDecoration(
-                  hintText: 'Título da Atividade',
-                ),
-                onChanged: (String value) => store.alterarAtividadeNome(value),
-              );
-            }),
+            child: TextFormField(
+              controller: store.novoAtividadeName,
+              textCapitalization: TextCapitalization.words,
+              decoration: const InputDecoration(
+                hintText: 'Título da Atividade',
+              ),
+            ),
           ),
           const SizedBox(height: 16),
           AppFormSection(
@@ -100,15 +97,13 @@ class CadernoAtividadeStep extends StatelessWidget {
           const SizedBox(height: 16),
           AppFormSection(
             title: 'Descrição da Atividade (opcional)',
-            child: Observer(builder: (_) {
-              return TextFormField(
-                controller: store.novaDescricao,
-                maxLines: 5,
-                decoration: const InputDecoration(
-                  hintText: 'Descreva a atividade realizada...',
-                ),
-              );
-            }),
+            child: TextFormField(
+              controller: store.novaDescricao,
+              maxLines: 5,
+              decoration: const InputDecoration(
+                hintText: 'Descreva a atividade realizada...',
+              ),
+            ),
           ),
         ],
       ),

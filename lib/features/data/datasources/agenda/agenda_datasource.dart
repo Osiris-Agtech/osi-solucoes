@@ -300,15 +300,24 @@ class AgendaDatasource implements IAgendaDatasource {
     const String readRepositories = r'''
         query Lotes($contaId: Int!) {
           lotes(where: {
-            setor: {
-              area: {
-                conta: {
-                  id: {
-                    equals: $contaId
+            AND: [
+              {
+                setor: {
+                  area: {
+                    conta: {
+                      id: {
+                        equals: $contaId
+                      }
+                    }
                   }
                 }
-              }
-            }
+              },
+              {
+                deleted_at: {
+                  equals: null
+                }
+              },
+            ],
           }, 
           orderBy: [
             {

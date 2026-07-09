@@ -1,4 +1,5 @@
 import 'package:osi_solucoes/core/utils/atividade_descricao_codec.dart';
+import 'package:osi_solucoes/core/utils/date_only_display_formatter.dart';
 import 'package:osi_solucoes/features/presenter/models/homeDashboard/home_dashboard_info_context_model.dart';
 import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_adaptive_home_view_data.dart';
 import 'home_info_view_data.dart';
@@ -40,7 +41,7 @@ class HomeInfoMapper {
             (today.nextTasks == null || today.nextTasks!.isEmpty)) {
           return null;
         }
-        return _mapTodayCultivation(today, recommendation);
+        return _mapTodayCultivation(today, infoContext?.dayProgress, recommendation);
 
       case 'reservoir_report':
         final reservoir = infoContext?.reservoirReport;
@@ -49,10 +50,27 @@ class HomeInfoMapper {
         return _mapReservoirReport(reservoir, recommendation);
 
       case 'day_progress':
+        // Redirect: day_progress data is injected as completion chip
+        // inside today_cultivation card instead of rendering a separate card.
+        final today = infoContext?.todayCultivation;
         final progress = infoContext?.dayProgress;
-        if (progress == null) return null;
-        if ((progress.totalTasksToday ?? 0) == 0) return null;
-        return _mapDayProgress(progress, recommendation);
+        if (today != null &&
+            ((today.tasksToday ?? 0) > 0 ||
+                (today.overdueTasks ?? 0) > 0 ||
+                (today.activeLots ?? 0) > 0 ||
+                (today.nextTasks != null && today.nextTasks!.isNotEmpty) ||
+                (today.alerts != null && today.alerts!.isNotEmpty))) {
+          return _mapTodayCultivation(today, progress, recommendation);
+        }
+        // Fallback: build minimal todayCultivation from dayProgress alone
+        if (progress != null && (progress.totalTasksToday ?? 0) > 0) {
+          final minimalToday = HomeTodayCultivationInfo(
+            tasksToday: progress.totalTasksToday,
+            overdueTasks: progress.overdueTasks,
+          );
+          return _mapTodayCultivation(minimalToday, progress, recommendation);
+        }
+        return null;
 
       case 'field_notes_summary':
         final notes = infoContext?.fieldNotesSummary;
@@ -71,19 +89,15 @@ class HomeInfoMapper {
   static HomeInfoViewData? _resolveFallback(HomeInfoContext? infoContext) {
     if (infoContext == null) return null;
 
-    // Try day_progress first (most actionable)
-    final progress = infoContext.dayProgress;
-    if (progress != null && (progress.totalTasksToday ?? 0) > 0) {
-      return _mapDayProgress(progress, null);
-    }
-
-    // Try today_cultivation
+    // Try today_cultivation first (now includes completion progress)
     final today = infoContext.todayCultivation;
     if (today != null &&
         ((today.tasksToday ?? 0) > 0 ||
             (today.overdueTasks ?? 0) > 0 ||
-            (today.activeLots ?? 0) > 0)) {
-      return _mapTodayCultivation(today, null);
+            (today.activeLots ?? 0) > 0 ||
+            (today.nextTasks != null && today.nextTasks!.isNotEmpty) ||
+            (today.alerts != null && today.alerts!.isNotEmpty))) {
+      return _mapTodayCultivation(today, infoContext.dayProgress, null);
     }
 
     // Try reservoir_report
@@ -103,9 +117,21 @@ class HomeInfoMapper {
 
   static HomeInfoViewData _mapTodayCultivation(
     HomeTodayCultivationInfo today,
+    HomeDayProgressInfo? progress,
     InfoRecommendationViewData? rec,
   ) {
     final metrics = <HomeInfoMetric>[
+      // Completion chip injected from dayProgress data (if available)
+      if (progress != null &&
+          (progress.totalTasksToday ?? 0) > 0 &&
+          (progress.completedTasksToday ?? 0) >= 0)
+        HomeInfoMetric(
+          label: 'Concluídas',
+          value:
+              '${progress.completedTasksToday ?? 0}/${progress.totalTasksToday ?? 0}',
+          tone: _completionTone(
+              progress.completedTasksToday ?? 0, progress.totalTasksToday ?? 0),
+        ),
       if ((today.tasksToday ?? 0) > 0)
         HomeInfoMetric(
           label: 'Tarefas hoje',
@@ -139,7 +165,7 @@ class HomeInfoMapper {
           title: task.title ?? 'Tarefa',
           subtitle: task.description,
           lotName: task.lotName,
-          date: task.date,
+          date: DateOnlyDisplayFormatter.formatShortBrazilian(task.date),
           tone: task.overdue == true
               ? HomeInfoItemTone.danger
               : HomeInfoItemTone.neutral,
@@ -151,7 +177,7 @@ class HomeInfoMapper {
         items.add(HomeInfoListItem(
           title: alert.message ?? 'Alerta',
           lotName: alert.lotName,
-          date: alert.date,
+          date: DateOnlyDisplayFormatter.formatShortBrazilian(alert.date),
           tone: _alertTone(alert.severity),
         ));
       }
@@ -160,10 +186,9 @@ class HomeInfoMapper {
     return HomeInfoViewData(
       type: HomeInfoType.todayCultivation,
       title: rec?.title ?? 'Hoje no cultivo',
+      subtitle: 'Atividades criadas pelo protocolo para acompanhar na agenda.',
       metrics: metrics,
       items: items,
-      ctaLabel: 'Ver na agenda',
-      ctaRoute: rec?.ctaRoute ?? '/agendaPage',
     );
   }
 
@@ -220,54 +245,6 @@ class HomeInfoMapper {
       items: items,
       ctaLabel: 'Ver reservatórios',
       ctaRoute: rec?.ctaRoute ?? '/reservatoriosPage',
-    );
-  }
-
-  static HomeInfoViewData _mapDayProgress(
-    HomeDayProgressInfo progress,
-    InfoRecommendationViewData? rec,
-  ) {
-    final metrics = <HomeInfoMetric>[
-      HomeInfoMetric(
-        label: progress.completionLabel ?? 'Tarefas hoje',
-        value:
-            '${progress.completedTasksToday ?? 0}/${progress.totalTasksToday ?? 0}',
-        tone: HomeInfoMetricTone.positive,
-      ),
-      if ((progress.pendingTasksToday ?? 0) > 0)
-        HomeInfoMetric(
-          label: 'Pendentes',
-          value: '${progress.pendingTasksToday}',
-          tone: HomeInfoMetricTone.warning,
-        ),
-      if ((progress.overdueTasks ?? 0) > 0)
-        HomeInfoMetric(
-          label: 'Atrasadas',
-          value: '${progress.overdueTasks}',
-          tone: HomeInfoMetricTone.danger,
-        ),
-    ];
-
-    final items = <HomeInfoListItem>[];
-    if (progress.nextTask != null) {
-      items.add(HomeInfoListItem(
-        title: progress.nextTask!.title ?? 'Próxima tarefa',
-        subtitle: progress.nextTask!.description,
-        lotName: progress.nextTask!.lotName,
-        date: progress.nextTask!.date,
-        tone: progress.nextTask!.overdue == true
-            ? HomeInfoItemTone.danger
-            : HomeInfoItemTone.neutral,
-      ));
-    }
-
-    return HomeInfoViewData(
-      type: HomeInfoType.dayProgress,
-      title: rec?.title ?? 'Progresso do dia',
-      metrics: metrics,
-      items: items,
-      ctaLabel: 'Ver agenda',
-      ctaRoute: rec?.ctaRoute ?? '/agendaPage',
     );
   }
 
@@ -343,5 +320,13 @@ class HomeInfoMapper {
       return HomeInfoItemTone.warning;
     }
     return HomeInfoItemTone.neutral;
+  }
+
+  static HomeInfoMetricTone _completionTone(int completed, int total) {
+    if (total == 0) return HomeInfoMetricTone.neutral;
+    final ratio = completed / total;
+    if (ratio >= 0.8) return HomeInfoMetricTone.positive;
+    if (ratio > 0) return HomeInfoMetricTone.warning;
+    return HomeInfoMetricTone.neutral;
   }
 }

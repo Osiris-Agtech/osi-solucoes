@@ -113,7 +113,7 @@ class _ModuleTile extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Constants.kCardColor,
+              color: module.color.withValues(alpha: 0.06),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Row(

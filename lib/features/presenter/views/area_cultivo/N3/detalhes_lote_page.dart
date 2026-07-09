@@ -11,6 +11,8 @@ import 'package:osi_solucoes/features/presenter/views/agenda/agenda_page.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_panel_card.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_delete_dialog.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/depth_badge.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/hierarchical_breadcrumb.dart';
 
 import 'components/detalhes_page/horizontal_lista.dart';
 import 'components/detalhes_page/producao_section.dart';
@@ -106,54 +108,78 @@ class _DetalhesLotePageState extends State<DetalhesLotePage> {
   AppPageHeaderSliver sliverHeader() {
     return AppPageHeaderSliver(
       title: store.loteSelecionado.nome ?? 'Detalhes do Lote',
-      subtitle:
-          '${store.loteSelecionado.setor?.area?.nome ?? '-'} / ${store.loteSelecionado.setor?.nome ?? '-'}',
+      subtitleWidget: HierarchicalBreadcrumb(segments: [
+        BreadcrumbSegment(
+          label: 'Áreas',
+          iconBuilder: (color) => SvgPicture.asset('assets/icons/cultivo_icon.svg',
+              height: 16, width: 16,
+              colorFilter: ColorFilter.mode(color, BlendMode.srcIn)),
+          onTap: () => Get.until((route) => route.settings.name == '/areaCultivoPage'),
+        ),
+        BreadcrumbSegment(
+          label: store.loteSelecionado.setor?.area?.nome ?? '…',
+          iconBuilder: (color) => SvgPicture.asset('assets/icons/hexagon_icon.svg',
+              height: 16, width: 16,
+              colorFilter: ColorFilter.mode(color, BlendMode.srcIn)),
+          onTap: () => Get.until((route) => route.settings.name == '/setorPage'),
+        ),
+        BreadcrumbSegment(
+          label: store.loteSelecionado.setor?.nome ?? '…',
+          iconBuilder: (color) => Icon(Icons.eco, size: 16, color: color),
+          onTap: () => Get.until((route) => route.settings.name == '/lotePage'),
+        ),
+        BreadcrumbSegment(
+          label: store.loteSelecionado.nome ?? '…',
+        ),
+      ]),
       onBack: () => Get.back(),
-      actions: widget.enableEditing
-          ? [
-              PopupMenuButton<void>(
-                icon: SvgPicture.asset(
-                  "assets/icons/settings_icon.svg",
-                  colorFilter: ColorFilter.mode(
-                    Constants.kButtonGrey,
-                    BlendMode.srcIn,
-                  ),
-                  height: 20,
-                ),
-                itemBuilder: (context) => <PopupMenuEntry<void>>[
-                  PopupMenuItem<void>(
-                    child: Row(
-                      children: const [
-                        Icon(Icons.edit_outlined, size: 18),
-                        SizedBox(width: 8),
-                        Text('Editar lote'),
-                      ],
-                    ),
-                    onTap: () async {
-                      store.setLoteEditing(store.loteSelecionado);
-                      Get.toNamed(Routes.cadastrarLotePage);
-                    },
-                  ),
-                  const PopupMenuDivider(),
-                  PopupMenuItem<void>(
-                    child: Row(
-                      children: [
-                        Icon(Icons.delete_outline,
-                            size: 18, color: Constants.kErrorColor),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Deletar lote',
-                          style: TextStyle(color: Constants.kErrorColor),
-                        ),
-                      ],
-                    ),
-                    onTap: () => _confirmarDelecao(context),
-                  ),
-                ],
+      actions: [
+        const DepthBadge(label: 'Detalhe'),
+        if (widget.enableEditing) ...[
+          const SizedBox(width: 8),
+          PopupMenuButton<void>(
+            icon: SvgPicture.asset(
+              "assets/icons/settings_icon.svg",
+              colorFilter: ColorFilter.mode(
+                Constants.kButtonGrey,
+                BlendMode.srcIn,
               ),
-              const SizedBox(width: 8),
-            ]
-          : [],
+              height: 20,
+            ),
+            itemBuilder: (context) => <PopupMenuEntry<void>>[
+              PopupMenuItem<void>(
+                child: Row(
+                  children: const [
+                    Icon(Icons.edit_outlined, size: 18),
+                    SizedBox(width: 8),
+                    Text('Editar lote'),
+                  ],
+                ),
+                onTap: () async {
+                  store.setLoteEditing(store.loteSelecionado);
+                  Get.toNamed(Routes.cadastrarLotePage);
+                },
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem<void>(
+                child: Row(
+                  children: [
+                    Icon(Icons.delete_outline,
+                        size: 18, color: Constants.kErrorColor),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Deletar lote',
+                      style: TextStyle(color: Constants.kErrorColor),
+                    ),
+                  ],
+                ),
+                onTap: () => _confirmarDelecao(context),
+              ),
+            ],
+          ),
+          const SizedBox(width: 8),
+        ],
+      ],
     );
   }
 

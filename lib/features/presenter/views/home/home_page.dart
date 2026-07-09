@@ -196,6 +196,7 @@ class HomePageState extends State<HomePage> with RouteAware {
 
   Future<void> _refreshInstantOnReturn() async {
     print('🏠 [HOME_PAGE] Refresh INSTANT ao retornar para Home');
+    store.prepareInstantRefresh();
     try {
       await store.carregarHome();
       if (store.isInstantMode) {
@@ -634,10 +635,6 @@ class HomePageState extends State<HomePage> with RouteAware {
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: [
-                  const SliverPersistentHeader(
-                    pinned: true,
-                    delegate: MyHeaderDelegate(),
-                  ),
                   _buildDailyPanelSliver(),
                 ],
               ),
@@ -653,17 +650,37 @@ class HomePageState extends State<HomePage> with RouteAware {
                 ),
               ),
             ),
-          if (useDrawerOverlay && !store.isCollapsed)
+            if (useDrawerOverlay && !store.isCollapsed)
+              Positioned(
+                top: 0,
+                bottom: 0,
+                left: 0,
+                child: AnimatedContainer(
+                  duration: duration,
+                  width: size.width * 0.85,
+                  child: _buildDrawerContent(context, size),
+                ),
+              ),
+          if (store.isCollapsed)
+            // Ícone de menu fixo no canto esquerdo (por cima do conteúdo)
             Positioned(
-              top: 0,
-              bottom: 0,
-              left: 0,
-              child: AnimatedContainer(
-                duration: duration,
-                width: size.width * 0.85,
-                child: _buildDrawerContent(context, size),
+            top: MediaQuery.of(context).padding.top + 8,
+            left: 0,
+            child: IconButton(
+              onPressed: () => store.setIsCollaped(),
+              icon: const Icon(Icons.menu_rounded),
+              iconSize: 24,
+              color: Colors.black87,
+              tooltip: 'Abrir menu',
+              style: IconButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                shape: const RoundedRectangleBorder(),
+                padding: const EdgeInsets.all(12),
+                minimumSize: const Size(48, 48),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
             ),
+          ),
         ],
       );
     });
@@ -705,8 +722,6 @@ class HomePageState extends State<HomePage> with RouteAware {
       hasError: store.hasError,
       errorMessage: store.errorMessage,
       onRetry: store.carregarHome,
-      onSwitchAccount: _openAccountSwitcher,
-      onLogout: _confirmLogout,
       onSecretTriggered: _openAdaptiveAdmin,
       onRecommendedActionTap: _openRecommendedAction,
       onModuleTap: _openModuleShortcut,
@@ -717,38 +732,7 @@ class HomePageState extends State<HomePage> with RouteAware {
     );
   }
 
-  void _openAccountSwitcher() {
-    Get.to(
-      () => MultiAccountsPage(
-        isLoggedIn: true,
-        user: store.authController.usuario,
-      ),
-    );
-  }
 
-  Future<void> _confirmLogout() async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Sair da conta'),
-        content: const Text('Tem certeza que deseja sair da sua conta?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: const Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: const Text('Sair'),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmed != true) return;
-    await LocalStorage().deleteUser();
-    Get.offAll(() => const SplashPage());
-  }
 
   void _openAdaptiveAdmin() {
     Get.toNamed(Routes.adaptiveAdminPage);
@@ -3250,53 +3234,4 @@ class _SparklinePainter extends CustomPainter {
   }
 }
 
-class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
-  const MyHeaderDelegate();
 
-  static const double _headerExtent = 72;
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    HomeStore store = GetIt.I<HomeStore>();
-    return Container(
-      color: Constants.kSecondBackgroundColor,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: IconButton(
-            onPressed: () => store.setIsCollaped(),
-            tooltip: 'Abrir menu',
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints.tightFor(width: 48, height: 48),
-            style: IconButton.styleFrom(
-              backgroundColor: Constants.kBackgroundColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            icon: const Icon(
-              Icons.menu_rounded,
-              color: Colors.black87,
-              size: 22,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  double get maxExtent => _headerExtent;
-
-  @override
-  double get minExtent => _headerExtent;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      false;
-}

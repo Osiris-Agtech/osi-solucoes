@@ -14,8 +14,11 @@ import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/views/area_cultivo/N3/components/finalizar_page/bottomSheet.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/app_badge.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/depth_badge.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/hierarchical_breadcrumb.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_delete_dialog.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
@@ -102,6 +105,14 @@ class _LotePageState extends State<LotePage> {
                             subtitle: '# ${loteStore.searchLote[index].id}',
                             description:
                                 'Cultura: ${loteStore.searchLote[index].cultura?.nome ?? ""}',
+                            metadata: [
+                              AppBadge(
+                                label: loteStore.searchLote[index].ativo == true ? 'Ativo' : 'Inativo',
+                                tone: loteStore.searchLote[index].ativo == true
+                                    ? AppBadgeTone.success
+                                    : AppBadgeTone.neutral,
+                              ),
+                            ],
                             onTap: () {
                               loteStore
                                   .selecionarLote(loteStore.searchLote[index]);
@@ -158,10 +169,31 @@ class _N3PageHeaderState extends State<_N3PageHeader> {
     return Observer(builder: (_) {
       return AppPageHeaderSliver(
         title: widget.setorN2.nome ?? '',
-        subtitle: 'Lista de lotes cadastrados',
+        subtitleWidget: HierarchicalBreadcrumb(segments: [
+          BreadcrumbSegment(
+            label: 'Áreas',
+            iconBuilder: (color) => SvgPicture.asset('assets/icons/cultivo_icon.svg',
+                height: 16, width: 16,
+                colorFilter: ColorFilter.mode(color, BlendMode.srcIn)),
+            onTap: () => Get.until((route) => route.settings.name == '/areaCultivoPage'),
+          ),
+          BreadcrumbSegment(
+            label: widget.setorN2.area?.nome ?? '…',
+            iconBuilder: (color) => SvgPicture.asset('assets/icons/hexagon_icon.svg',
+                height: 16, width: 16,
+                colorFilter: ColorFilter.mode(color, BlendMode.srcIn)),
+            onTap: () => Get.until((route) => route.settings.name == '/setorPage'),
+          ),
+          BreadcrumbSegment(
+            label: widget.setorN2.nome ?? '',
+            iconBuilder: (color) => Icon(Icons.eco, size: 16, color: color),
+          ),
+        ]),
         onBack: () => Get.back(),
         pinned: true,
         actions: [
+          const DepthBadge(label: 'N3 · Lote'),
+          const SizedBox(width: 8),
           IconButton(
             onPressed: () {
               loteStore.setDotIndicator(0);
@@ -432,3 +464,4 @@ class _N3FilterArea extends StatelessWidget {
     );
   }
 }
+

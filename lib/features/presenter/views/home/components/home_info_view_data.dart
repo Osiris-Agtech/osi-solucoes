@@ -1,7 +1,6 @@
 enum HomeInfoType {
   todayCultivation,
   reservoirReport,
-  dayProgress,
   fieldNotesSummary,
   basicTip,
 }

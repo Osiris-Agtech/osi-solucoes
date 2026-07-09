@@ -3,277 +3,11 @@ import 'package:osi_solucoes/features/presenter/models/homeDashboard/home_dashbo
 import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_info_cards_state_mapper.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_next_activity.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_operational_context_dtos.dart';
+import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_operational_context_helpers.dart';
 import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequence_signals_store.dart';
-
-class OperationalContext {
-  final DateTime generatedAt;
-  final DashboardOperationalState dashboardState;
-  final AgendaOperationalState agendaState;
-  final FieldNotebookOperationalState fieldNotebookState;
-  final ProductionOperationalState productionState;
-  final AlertOperationalState alertState;
-  final TestSequenceSignals testSequenceSignals;
-  final ReservoirOperationalState reservoirState;
-  final InfoContextOperationalState infoContextState;
-
-  const OperationalContext({
-    required this.generatedAt,
-    required this.dashboardState,
-    required this.agendaState,
-    required this.fieldNotebookState,
-    required this.productionState,
-    required this.alertState,
-    required this.testSequenceSignals,
-    required this.reservoirState,
-    required this.infoContextState,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'generatedAt': generatedAt.toIso8601String(),
-        'dashboardState': dashboardState.toJson(),
-        'agendaState': agendaState.toJson(),
-        'fieldNotebookState': fieldNotebookState.toJson(),
-        'productionState': productionState.toJson(),
-        'alertState': alertState.toJson(),
-        'testSequenceSignals': testSequenceSignals.toJson(),
-        'reservoirState': reservoirState.toJson(),
-        'infoContextState': infoContextState.toJson(),
-      };
-}
-
-class NextActivity {
-  final String? type;
-  final String? status;
-  final String? dueLabel;
-
-  const NextActivity({this.type, this.status, this.dueLabel});
-
-  Map<String, dynamic> toJson() => {
-        'type': type,
-        'status': status,
-        'dueLabel': dueLabel,
-      };
-}
-
-class DashboardOperationalState {
-  final bool hasActiveLots;
-  final int activeLotsCount;
-  final int finishedLotsCount;
-  final bool hasProtocolLinkedToLatestLot;
-  final bool hasUpcomingHarvests;
-
-  const DashboardOperationalState({
-    required this.hasActiveLots,
-    required this.activeLotsCount,
-    required this.finishedLotsCount,
-    required this.hasProtocolLinkedToLatestLot,
-    required this.hasUpcomingHarvests,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'hasActiveLots': hasActiveLots,
-        'activeLotsCount': activeLotsCount,
-        'finishedLotsCount': finishedLotsCount,
-        'hasProtocolLinkedToLatestLot': hasProtocolLinkedToLatestLot,
-        'hasUpcomingHarvests': hasUpcomingHarvests,
-      };
-}
-
-class AgendaOperationalState {
-  final int pendingActivitiesTodayCount;
-  final int overdueActivitiesCount;
-  final bool hasGeneratedActivities;
-  final int completedActivitiesTodayCount;
-  final NextActivity nextActivity;
-  final String? lastInteractionType;
-  final String? lastActivityTitle;
-  final String? lastActivityDescription;
-
-  const AgendaOperationalState({
-    required this.pendingActivitiesTodayCount,
-    required this.overdueActivitiesCount,
-    required this.hasGeneratedActivities,
-    required this.completedActivitiesTodayCount,
-    required this.nextActivity,
-    this.lastInteractionType,
-    this.lastActivityTitle,
-    this.lastActivityDescription,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'pendingActivitiesTodayCount': pendingActivitiesTodayCount,
-        'overdueActivitiesCount': overdueActivitiesCount,
-        'hasGeneratedActivities': hasGeneratedActivities,
-        'completedActivitiesTodayCount': completedActivitiesTodayCount,
-        'nextActivity': nextActivity.toJson(),
-        if (lastInteractionType != null)
-          'lastInteractionType': lastInteractionType,
-        if (lastActivityTitle != null) 'lastActivityTitle': lastActivityTitle,
-        if (lastActivityDescription != null)
-          'lastActivityDescription': lastActivityDescription,
-      };
-}
-
-class ReservoirOperationalState {
-  final bool hasReservoirs;
-  final int totalCount;
-  final int lowLevelCount;
-  final int criticalLevelCount;
-  final String currentLevel;
-
-  const ReservoirOperationalState({
-    required this.hasReservoirs,
-    required this.totalCount,
-    this.lowLevelCount = 0,
-    this.criticalLevelCount = 0,
-    this.currentLevel = 'unknown',
-  });
-
-  Map<String, dynamic> toJson() => {
-        'hasReservoirs': hasReservoirs,
-        'totalCount': totalCount,
-        'lowLevelCount': lowLevelCount,
-        'criticalLevelCount': criticalLevelCount,
-        'currentLevel': currentLevel,
-      };
-}
-
-class FieldNotebookOperationalState {
-  final bool hasRecentNutritionAdjustmentRecord;
-  final bool hasRecentFieldNotes;
-  final int uncheckedNotesCount;
-  final String? latestRecordType;
-
-  const FieldNotebookOperationalState({
-    required this.hasRecentNutritionAdjustmentRecord,
-    this.hasRecentFieldNotes = false,
-    this.uncheckedNotesCount = 0,
-    this.latestRecordType,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'hasRecentNutritionAdjustmentRecord':
-            hasRecentNutritionAdjustmentRecord,
-        'hasRecentFieldNotes': hasRecentFieldNotes,
-        'uncheckedNotesCount': uncheckedNotesCount,
-        if (latestRecordType != null) 'latestRecordType': latestRecordType,
-      };
-}
-
-class InfoContextOperationalState {
-  final String? lastShownType;
-  final String? lastShownCategory;
-  final int dismissedTodayCount;
-  final bool hasSeenInfoToday;
-
-  const InfoContextOperationalState({
-    this.lastShownType,
-    this.lastShownCategory,
-    this.dismissedTodayCount = 0,
-    this.hasSeenInfoToday = false,
-  });
-
-  Map<String, dynamic> toJson() => {
-        if (lastShownType != null) 'lastShownType': lastShownType,
-        if (lastShownCategory != null) 'lastShownCategory': lastShownCategory,
-        'dismissedTodayCount': dismissedTodayCount,
-        'hasSeenInfoToday': hasSeenInfoToday,
-      };
-}
-
-class ProductionOperationalState {
-  final bool hasProductionData;
-  final int harvestedPlantsLast30d;
-  final int producedPackagesLast30d;
-
-  const ProductionOperationalState({
-    required this.hasProductionData,
-    required this.harvestedPlantsLast30d,
-    required this.producedPackagesLast30d,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'hasProductionData': hasProductionData,
-        'harvestedPlantsLast30d': harvestedPlantsLast30d,
-        'producedPackagesLast30d': producedPackagesLast30d,
-      };
-}
-
-class AlertOperationalState {
-  final bool hasCriticalAlerts;
-  final int criticalCount;
-  final String? highestSeverity;
-  final List<String> types;
-
-  const AlertOperationalState({
-    required this.hasCriticalAlerts,
-    required this.criticalCount,
-    this.highestSeverity,
-    required this.types,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'hasCriticalAlerts': hasCriticalAlerts,
-        'criticalCount': criticalCount,
-        if (highestSeverity != null) 'highestSeverity': highestSeverity,
-        'types': types,
-      };
-}
-
-class TestSequenceSignals {
-  final bool lotWithProtocolCreated;
-  final bool generatedAgendaActivitiesChecked;
-  final bool adjustmentRecorded;
-  final bool agendaActivitiesCompleted;
-  final bool finalHomeStateChecked;
-  final InstantSequenceEventType? lastRelevantEvent;
-  final DateTime? changedAt;
-
-  const TestSequenceSignals({
-    required this.lotWithProtocolCreated,
-    required this.generatedAgendaActivitiesChecked,
-    required this.adjustmentRecorded,
-    required this.agendaActivitiesCompleted,
-    required this.finalHomeStateChecked,
-    this.lastRelevantEvent,
-    this.changedAt,
-  });
-
-  factory TestSequenceSignals.fromSnapshot(
-    InstantSequenceSignalsSnapshot snapshot,
-  ) {
-    return TestSequenceSignals(
-      lotWithProtocolCreated: snapshot.lotWithProtocolCreated,
-      generatedAgendaActivitiesChecked:
-          snapshot.generatedAgendaActivitiesChecked,
-      adjustmentRecorded: snapshot.adjustmentRecorded,
-      agendaActivitiesCompleted: snapshot.agendaActivitiesCompleted,
-      finalHomeStateChecked: snapshot.finalHomeStateChecked,
-      lastRelevantEvent: snapshot.lastRelevantEvent,
-      changedAt: snapshot.changedAt,
-    );
-  }
-
-  const TestSequenceSignals.empty()
-      : lotWithProtocolCreated = false,
-        generatedAgendaActivitiesChecked = false,
-        adjustmentRecorded = false,
-        agendaActivitiesCompleted = false,
-        finalHomeStateChecked = false,
-        lastRelevantEvent = null,
-        changedAt = null;
-
-  Map<String, dynamic> toJson() => {
-        'lotWithProtocolCreated': lotWithProtocolCreated,
-        'generatedActivitiesSeen': generatedAgendaActivitiesChecked,
-        'adjustmentRecorded': adjustmentRecorded,
-        'agendaActivitiesCompleted': agendaActivitiesCompleted,
-        'finalHomeChecked': finalHomeStateChecked,
-        if (lastRelevantEvent != null)
-          'lastRelevantEvent': lastRelevantEvent!.payloadName,
-        if (changedAt != null) 'changedAt': changedAt!.toIso8601String(),
-      };
-}
 
 class InstantOperationalContextMapper {
   /// Maps store state to OperationalContext.
@@ -304,24 +38,11 @@ class InstantOperationalContextMapper {
     final overdue = tarefas?.atrasadas ?? 0;
     final hasGeneratedActivities = (tarefas?.pendentesHoje ?? 0) > 0 ||
         (tarefas?.porVencimento?.hoje ?? 0) > 0;
-    const completedActivitiesToday = 0;
-
-    // Infer nextActivity from first pending task
-    String? nextActivityType;
-    String? nextActivityStatus;
-    String? nextActivityDueLabel;
-    final latestTasks = tarefas?.ultimasTarefas ?? [];
-    if (latestTasks.isNotEmpty) {
-      final firstTask = latestTasks.first;
-      final title = (firstTask.titulo ?? '').toLowerCase();
-      if (title.contains('ajuste') || title.contains('nutri')) {
-        nextActivityType = 'nutritional_adjustment';
-      } else if (title.contains('agenda') || title.contains('tarefa')) {
-        nextActivityType = 'task_review';
-      }
-      nextActivityStatus = firstTask.vencida == true ? 'overdue' : 'pending';
-      nextActivityDueLabel = firstTask.data;
-    }
+    final completedActivitiesToday =
+        infoContext?.dayProgress?.completedTasksToday ?? 0;
+    final nextActivity =
+        InstantOperationalContextHelpers.nextActivity(dashboard) ??
+            const NextActivity();
 
     // Info context derived state
     final reservoirReport = infoContext?.reservoirReport;
@@ -329,8 +50,6 @@ class InstantOperationalContextMapper {
     final fieldNotesSummary = infoContext?.fieldNotesSummary;
     final totalRecentNotes = fieldNotesSummary?.totalRecentNotes ?? 0;
     // Start with simple values - no persistence yet
-    const String? lastShownType = null;
-    const String? lastShownCategory = null;
 
     // Field notebook state
     final hasRecentNutritionAdjustment =
@@ -339,7 +58,9 @@ class InstantOperationalContextMapper {
             ) ??
             false;
 
-    const String? latestRecordType = null;
+    final fieldNotebookExtra =
+        InstantOperationalContextHelpers.fieldNotebookState(dashboard);
+    final latestRecordType = fieldNotebookExtra['latestRecordType'] as String?;
 
     // Production state
     final totalPlants = producao?.totalPlantasColhidas ?? 0;
@@ -378,8 +99,13 @@ class InstantOperationalContextMapper {
 
     // Consume pending activity context from HomeStore
     final pendingInteractionType = homeStore.pendingActivityInteractionType;
-    final pendingTitle = homeStore.pendingActivityTitle;
-    final pendingDescription = homeStore.pendingActivityDescription;
+    final pendingTitle = InstantOperationalContextHelpers.cleanText(
+      homeStore.pendingActivityTitle,
+    );
+    final pendingDescription = InstantOperationalContextHelpers.cleanText(
+      homeStore.pendingActivityDescription,
+      180,
+    );
     homeStore.consumePendingActivityContext();
 
     return OperationalContext(
@@ -390,37 +116,45 @@ class InstantOperationalContextMapper {
         finishedLotsCount: finishedLots,
         hasProtocolLinkedToLatestLot: hasProtocol,
         hasUpcomingHarvests: hasUpcomingHarvests,
+        extra: InstantOperationalContextHelpers.dashboardState(dashboard),
       ),
       agendaState: AgendaOperationalState(
         pendingActivitiesTodayCount: pendingToday,
         overdueActivitiesCount: overdue,
         hasGeneratedActivities: hasGeneratedActivities,
         completedActivitiesTodayCount: completedActivitiesToday,
-        nextActivity: NextActivity(
-          type: nextActivityType,
-          status: nextActivityStatus,
-          dueLabel: nextActivityDueLabel,
-        ),
+        nextActivity: nextActivity,
         lastInteractionType: pendingInteractionType,
         lastActivityTitle: pendingTitle,
         lastActivityDescription: pendingDescription,
+        extra: InstantOperationalContextHelpers.agendaState(
+          dashboard,
+          nextActivity,
+        ),
       ),
       fieldNotebookState: FieldNotebookOperationalState(
         hasRecentNutritionAdjustmentRecord: hasRecentNutritionAdjustment,
         hasRecentFieldNotes: totalRecentNotes > 0,
         uncheckedNotesCount: 0,
         latestRecordType: latestRecordType,
+        extra: fieldNotebookExtra,
       ),
       productionState: ProductionOperationalState(
         hasProductionData: hasProduction,
         harvestedPlantsLast30d: totalPlants,
         producedPackagesLast30d: totalPackages,
+        extra: InstantOperationalContextHelpers.productionState(dashboard),
       ),
+      cultivationState:
+          InstantOperationalContextHelpers.cultivationState(dashboard),
+      teamState: InstantOperationalContextHelpers.teamState(dashboard),
       alertState: AlertOperationalState(
         hasCriticalAlerts: hasCriticalAlerts,
         criticalCount: criticalCount,
         highestSeverity: highestSeverity,
         types: types.toList()..sort(),
+        items:
+            InstantOperationalContextHelpers.alertItems(criticalAgendaAlerts),
       ),
       testSequenceSignals: TestSequenceSignals(
         lotWithProtocolCreated: sequenceSignals.lotWithProtocolCreated,
@@ -438,13 +172,9 @@ class InstantOperationalContextMapper {
         lowLevelCount: 0,
         criticalLevelCount: 0,
         currentLevel: 'unknown',
+        extra: InstantOperationalContextHelpers.reservoirState(dashboard),
       ),
-      infoContextState: InfoContextOperationalState(
-        lastShownType: lastShownType,
-        lastShownCategory: lastShownCategory,
-        dismissedTodayCount: 0,
-        hasSeenInfoToday: false,
-      ),
+      infoCardsState: InstantInfoCardsStateMapper.map(infoContext),
     );
   }
 

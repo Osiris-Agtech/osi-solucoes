@@ -51,18 +51,16 @@ abstract class CadernoCampoStoreBase with Store {
   List<bool> expandedCard = [];
 
   @observable
-  TextEditingController searchAtividade = TextEditingController();
+  String searchAtividade = '';
+
+  @action
+  void setSearchAtividade(String value) => searchAtividade = value;
 
   @observable
-  TextEditingController searchLote = TextEditingController();
+  String searchLote = '';
 
   @action
-  TextEditingController setSearchAtividade(String value) =>
-      searchAtividade = TextEditingController(text: value);
-
-  @action
-  TextEditingController setSearchLote(String value) =>
-      searchLote = TextEditingController(text: value);
+  void setSearchLote(String value) => searchLote = value;
 
   @action
   Area selecionarDropButtonArea(Area area) => dropButtonArea = area;
@@ -96,7 +94,7 @@ abstract class CadernoCampoStoreBase with Store {
 
     lotes.fold(
       (err) {
-        //toastError(message: err.message);
+        notifyToast(ToastMessage(message: err.message, type: ToastType.error));
         loteList = [];
       },
       (data) async {
@@ -121,7 +119,7 @@ abstract class CadernoCampoStoreBase with Store {
 
     lote.fold(
       (err) {
-        //toastError(message: err.message);
+        notifyToast(ToastMessage(message: err.message, type: ToastType.error));
       },
       (data) async {
         loteSelecionado = data;
@@ -168,7 +166,7 @@ abstract class CadernoCampoStoreBase with Store {
 
     lotes.fold(
       (err) {
-        //toastError(message: err.message);
+        notifyToast(ToastMessage(message: err.message, type: ToastType.error));
         loteList = [];
       },
       (data) async {
@@ -191,7 +189,7 @@ abstract class CadernoCampoStoreBase with Store {
 
     lotes.fold(
       (err) {
-        //toastError(message: err.message);
+        notifyToast(ToastMessage(message: err.message, type: ToastType.error));
         loteList = [];
       },
       (data) async {
@@ -215,7 +213,7 @@ abstract class CadernoCampoStoreBase with Store {
 
     areaListResult.fold(
       (err) {
-        // toastError(message: err.message);
+        notifyToast(ToastMessage(message: err.message, type: ToastType.error));
       },
       (data) async {
         areaList = List.from(data);
@@ -238,8 +236,8 @@ abstract class CadernoCampoStoreBase with Store {
     dropButtonArea = Area();
     loteSelecionado = Lote();
     expandedCard.clear();
-    searchAtividade.clear();
-    searchLote.clear();
+    searchAtividade = '';
+    searchLote = '';
   }
 
   @computed
@@ -249,20 +247,21 @@ abstract class CadernoCampoStoreBase with Store {
       if (!mostrarRegistrosSistema && (element.atividade?.privado == true)) {
         return false;
       }
-      if (searchAtividade.text.isEmpty) return true;
+      if (searchAtividade.isEmpty) return true;
       return (element.atividade?.nome ?? '')
           .toLowerCase()
-          .contains(searchAtividade.text.toLowerCase());
+          .contains(searchAtividade.toLowerCase());
     }).toList();
     return list;
   }
 
   @computed
   List<Lote> get getLotesFilter => loteList.where((element) {
-        if (searchLote.text.isEmpty) return true;
-        return (element.nome ?? '')
-            .toLowerCase()
-            .contains(searchLote.text.toLowerCase());
+        if (searchLote.isEmpty) return true;
+        final query = searchLote.toLowerCase();
+        return (element.nome ?? '').toLowerCase().contains(query) ||
+            (element.cultura?.nome ?? '').toLowerCase().contains(query) ||
+            (element.id?.toString() ?? '').contains(query);
       }).toList();
 
   // #################### START CADASTRO CADERNO DE CAMPO #######################
@@ -297,17 +296,15 @@ abstract class CadernoCampoStoreBase with Store {
   @observable
   Usuario? selectedUsuario;
 
-  @observable
-  TextEditingController novoAtividadeName = TextEditingController(text: '');
+  TextEditingController novoAtividadeName = TextEditingController();
 
   @observable
   TextEditingController novoAutorName = TextEditingController();
 
-  @observable
-  TextEditingController novaDescricao = TextEditingController(text: '');
+  TextEditingController novaDescricao = TextEditingController();
 
   @observable
-  TextEditingController searchLotePage = TextEditingController(text: '');
+  String searchLotePage = '';
 
   @observable
   DateTime dateRegistro = DateTime.now();
@@ -330,9 +327,7 @@ abstract class CadernoCampoStoreBase with Store {
       value.minute);
 
   @action
-  void setSeachLotePage(String value) {
-    searchLotePage = TextEditingController(text: value);
-  }
+  void setSeachLotePage(String value) => searchLotePage = value;
 
   @action
   void selectUser(Usuario? usuario) {
@@ -365,11 +360,6 @@ abstract class CadernoCampoStoreBase with Store {
   @action
   void setIsCadastroLoteLoading(bool value) {
     isCadastroLoteLoading = value;
-  }
-
-  @action
-  void alterarAtividadeNome(String name) {
-    novoAtividadeName = TextEditingController(text: name);
   }
 
   @action
@@ -433,8 +423,8 @@ abstract class CadernoCampoStoreBase with Store {
   @action
   bool validarCadastro() {
     bool validate = novoAtividadeName.text.isNotEmpty &&
-        novaDescricao.text.isNotEmpty &&
-        selectedUsuario != null;
+        selectedUsuario != null &&
+        selectedLotes.isNotEmpty;
 
     mostrarErroFormulario = !validate;
     return validate;
@@ -474,7 +464,7 @@ abstract class CadernoCampoStoreBase with Store {
 
     atividadeResult.fold(
       (err) {
-        toastError(message: err.message);
+        notifyToast(ToastMessage(message: err.message, type: ToastType.error));
       },
       (data) async {
         Get.close(2);
@@ -562,17 +552,17 @@ abstract class CadernoCampoStoreBase with Store {
     novoAtividadeName.clear();
     novoAutorName.clear();
     novaDescricao.clear();
-    searchLotePage.clear();
+    searchLotePage = '';
     dateRegistro = DateTime.now();
     loteCadastro = Lote();
   }
 
   @computed
   List<LoteByFilter> get getLotesGroup => lotesGroup.where((element) {
-        if (searchLotePage.text.isEmpty) return true;
+        if (searchLotePage.isEmpty) return true;
         return element.key
             .toLowerCase()
-            .contains(searchLotePage.text.toLowerCase());
+            .contains(searchLotePage.toLowerCase());
       }).toList();
 
   @computed

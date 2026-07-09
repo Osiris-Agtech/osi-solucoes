@@ -28,6 +28,28 @@ class CadernoLoteStep extends StatelessWidget {
                 const SizedBox(height: 12),
                 _groupFilter(context),
                 const SizedBox(height: 12),
+                Observer(builder: (_) {
+                  final selectedCount = store.selectedLotes.length;
+                  if (selectedCount == 0) return const SizedBox.shrink();
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      children: [
+                        Icon(Icons.check_circle,
+                            size: 16, color: Constants.kPrimaryColor),
+                        const SizedBox(width: 6),
+                        Text(
+                          '$selectedCount lote${selectedCount == 1 ? '' : 's'} selecionado${selectedCount == 1 ? '' : 's'}',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Constants.kPrimaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
                 _loteList(context),
               ],
             ),
@@ -38,17 +60,15 @@ class CadernoLoteStep extends StatelessWidget {
   }
 
   Widget _searchBar(BuildContext context) {
-    return Observer(builder: (_) {
-      return TextFormField(
-        initialValue: store.searchLotePage.text,
-        decoration: const InputDecoration(
-          prefixIcon: Icon(Icons.search_rounded),
-          hintText: 'Pesquisar por',
-          hintStyle: TextStyle(fontSize: 18, color: Constants.kGreyText),
-        ),
-        onChanged: (String value) => store.setSeachLotePage(value),
-      );
-    });
+    return TextFormField(
+      initialValue: store.searchLotePage,
+      decoration: const InputDecoration(
+        prefixIcon: Icon(Icons.search_rounded),
+        hintText: 'Pesquisar por',
+        hintStyle: TextStyle(fontSize: 18, color: Constants.kGreyText),
+      ),
+      onChanged: (String value) => store.setSeachLotePage(value),
+    );
   }
 
   Widget _groupFilter(BuildContext context) {

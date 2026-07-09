@@ -97,7 +97,7 @@ class ProtocoloStep extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
-              '${protocolo.lotes.length} lote${protocolo.lotes.length == 1 ? '' : 's'}',
+              '${protocolo.lotes.where((l) => l.deleted_at == null).length} lote${protocolo.lotes.where((l) => l.deleted_at == null).length == 1 ? '' : 's'}',
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,

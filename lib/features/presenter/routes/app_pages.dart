@@ -35,6 +35,8 @@ import '../views/ajuste/resultadoajuste_page.dart';
 import '../views/area_cultivo/N1/area_cultivo_page.dart';
 import '../views/cadastro/cadastro_page.dart';
 import '../views/cadastro/confirmseguranca_page.dart';
+import '../views/cadastro_simplificado/cadastro_simplificado_page.dart';
+import '../views/recuperar_senha_simplificado/recuperar_senha_simplificado_page.dart';
 import '../views/caderno_campo/caderno_campo_page.dart';
 import '../views/home/home_page.dart';
 import '../views/login/login_page.dart';
@@ -294,6 +296,16 @@ class AppPages {
     GetPage(
       name: Routes.novaSenha,
       page: () => const NovaSenhaPage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.cadastroSimplificado,
+      page: () => const CadastroSimplificadoPage(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.recuperarSenhaSimplificado,
+      page: () => const RecuperarSenhaSimplificadoPage(),
       transition: Transition.rightToLeft,
     ),
     GetPage(

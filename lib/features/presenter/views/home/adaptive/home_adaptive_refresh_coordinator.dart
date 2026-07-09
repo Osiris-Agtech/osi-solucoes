@@ -49,6 +49,7 @@ class HomeAdaptiveRefreshCoordinator {
       final homeStore = getIt<HomeStore>();
       if (!homeStore.isInstantMode) return;
 
+      homeStore.prepareInstantRefresh();
       await homeStore.carregarHome();
       if (!homeStore.isInstantMode) return;
 

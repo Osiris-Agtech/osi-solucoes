@@ -259,19 +259,26 @@ abstract class AgendaStoreBase with Store {
 
   @action
   Future<void> marcarAtividadeComoFeita(int id) async {
-    Get.back();
     showEditPage = false;
-    state = AgendaState.loading;
+    final previousList = List<Agenda>.from(atividadeList);
+
+    final updatedList = atividadeList.map((a) {
+      if (a.id == id) {
+        a.finalizado = true;
+      }
+      return a;
+    }).toList();
+    atividadeList = updatedList;
 
     var atividade = await agendaRepository.marcarComoFeito(id);
 
     atividade.fold(
       (err) {
+        atividadeList = previousList;
         toastError(message: err.message);
       },
       (data) async {
         toastSuccess(message: 'Atividade marcada como feita!');
-        await buscarAtividades();
         final changed =
             GetIt.I.isRegistered<InstantSequenceInteractionReporter>() &&
                 GetIt.I<InstantSequenceInteractionReporter>()
@@ -286,7 +293,6 @@ abstract class AgendaStoreBase with Store {
       },
     );
 
-    state = AgendaState.loaded;
     return;
   }
 

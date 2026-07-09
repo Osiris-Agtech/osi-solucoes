@@ -17,7 +17,7 @@ import '../../widgets/get_bottom_sheet.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_dropdown.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
-import 'components/detalhes_bottomSheet.dart';
+import 'components/editar_atividade_sheet.dart';
 
 class AgendaPage extends StatefulWidget {
   final String title;
@@ -63,8 +63,7 @@ class AgendaPageState extends State<AgendaPage> {
             heroTag: 'nova_atividade',
             onPressed: () {
               store.limparDadosDaAtividade();
-              store.setShowEditPage(true);
-              getBottomSheet(const DetalhesBottomSheet());
+              getBottomSheet(const EditarAtividadeSheet());
             },
           ),
           body: PrimaryScrollController(
@@ -84,90 +83,96 @@ class AgendaPageState extends State<AgendaPage> {
                         left: 24.0,
                         right: 24.0,
                       ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            children: [
-                              const Expanded(
-                                child: Text(
-                                  'Atividades',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Expanded(
+                                  child: Text(
+                                    'Atividades',
+                                    style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 150,
-                                  child: Observer(builder: (_) {
-                                    return AppDropdown<AgendaFilter>(
-                                      value: store.filter,
-                                      hintText: 'Filtro',
-                                      items: AgendaFilter.values
-                                          .map((AgendaFilter filtro) {
-                                        return DropdownMenuItem<AgendaFilter>(
-                                          value: filtro,
-                                          child: Text(
-                                              (filtro == AgendaFilter.todos
-                                                      ? 'Exibir '
-                                                      : '') +
-                                                  filtro.name),
-                                        );
-                                      }).toList(),
-                                      onChanged: store.setFiltro,
-                                    );
-                                  }),
-                              ),
-                            ],
-                          ),
-                          Observer(builder: (_) {
-                            if (store.filter == AgendaFilter.todos) {
-                              return const SizedBox.shrink();
-                            }
-
-                            if (store.filter == AgendaFilter.lote) {
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: AppDropdown<Lote>(
-                                  value: store.filtroLote,
-                                  hintText: 'Selecionar Lote',
-                                  items: store.lotesConta.map((Lote lote) {
-                                    return DropdownMenuItem<Lote>(
-                                      value: lote,
-                                      child: Text(
-                                          '${lote.nome} - ${lote.setor?.nome ?? ''}'),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            Observer(builder: (_) {
+                              return SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: AgendaFilter.values.map((AgendaFilter filtro) {
+                                    final isSelected = store.filter == filtro;
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 8),
+                                      child: FilterChip(
+                                        label: Text(
+                                          filtro == AgendaFilter.todos ? 'Todos' :
+                                          filtro == AgendaFilter.lote ? 'Por Lote' : 'Por Responsável',
+                                          style: TextStyle(
+                                            color: isSelected ? Colors.white : Constants.kText2,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                        selected: isSelected,
+                                        onSelected: (_) => store.setFiltro(filtro),
+                                        selectedColor: Constants.kPrimaryColor,
+                                        backgroundColor: Constants.kCardColor,
+                                        checkmarkColor: Colors.white,
+                                        side: BorderSide.none,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                                      ),
                                     );
                                   }).toList(),
-                                  onChanged: store.setFiltroLote,
                                 ),
                               );
-                            }
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: AppDropdown<Usuario>(
-                                value: store.filtroResponsavel,
-                                hintText: 'Selecionar Responsável',
-                                items:
-                                    store.usuariosConta.map((Usuario usuario) {
-                                  return DropdownMenuItem<Usuario>(
-                                    value: usuario,
-                                    child: Text(
-                                        '${usuario.nome} (${usuario.selected_conta?.cargo?.cargo})'),
-                                  );
-                                }).toList(),
-                                onChanged: store.setFiltroResponsavel,
-                              ),
-                            );
-                          }),
-                        ],
-                      ),
+                            }),
+                            Observer(builder: (_) {
+                              if (store.filter == AgendaFilter.todos) return const SizedBox.shrink();
+
+                              if (store.filter == AgendaFilter.lote) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: AppDropdown<Lote>(
+                                    value: store.filtroLote,
+                                    hintText: 'Selecionar Lote',
+                                    items: store.lotesConta.map((Lote lote) {
+                                      return DropdownMenuItem<Lote>(
+                                        value: lote,
+                                        child: Text('${lote.nome} - ${lote.setor?.nome ?? ''}'),
+                                      );
+                                    }).toList(),
+                                    onChanged: store.setFiltroLote,
+                                  ),
+                                );
+                              }
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: AppDropdown<Usuario>(
+                                  value: store.filtroResponsavel,
+                                  hintText: 'Selecionar Responsável',
+                                  items: store.usuariosConta.map((Usuario usuario) {
+                                    return DropdownMenuItem<Usuario>(
+                                      value: usuario,
+                                      child: Text('${usuario.nome} (${usuario.selected_conta?.cargo?.cargo})'),
+                                    );
+                                  }).toList(),
+                                  onChanged: store.setFiltroResponsavel,
+                                ),
+                              );
+                            }),
+                          ],
+                        ),
                     ),
                   ),
                   Observer(builder: (_) {
                     if (store.state == AgendaState.loading) {
-                      return _loadingList();
+                      return _skeletonList();
                     }
 
                     if (store.filter == AgendaFilter.lote) {
@@ -210,68 +215,86 @@ class AgendaPageState extends State<AgendaPage> {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Observer(builder: (context) {
-          return TableCalendar(
-            selectedDayPredicate: (day) => isSameDay(store.selectedDay, day),
-            onDaySelected: (selectedDay, focusedDay) {
-              store.onDaySelected(selectedDay);
-              store.setInitialStateForFilter();
-            },
-            locale: 'pt_BR',
-            firstDay: DateTime.now().subtract(const Duration(days: 10 * 365)),
-            lastDay: DateTime.now().add(const Duration(days: 10 * 365)),
-            focusedDay: store.selectedDay ??
-                DateTime.now(), // Use o focusedDay do store
-            daysOfWeekHeight: 24,
-            availableCalendarFormats: const {CalendarFormat.month: 'Month'},
-            headerStyle: HeaderStyle(
-              titleCentered: true,
-              titleTextFormatter: (date, locale) {
-                String s = DateFormat.yMMMM(locale).format(date);
-                return s[0].toUpperCase() + s.substring(1);
-              },
-              titleTextStyle: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Constants.kPrimaryColor,
-              ),
-              leftChevronIcon: const Icon(
-                Icons.chevron_left,
-                color: Constants.kPrimaryColor,
-              ),
-              rightChevronIcon: const Icon(Icons.chevron_right,
-                  color: Constants.kPrimaryColor),
-            ),
-            daysOfWeekStyle: DaysOfWeekStyle(
-              dowTextFormatter: (date, locale) =>
-                  DateFormat.E(locale).format(date)[0].toUpperCase(),
-            ),
-            calendarStyle: const CalendarStyle(
-              todayDecoration: BoxDecoration(
-                color: Constants.kGreyLight,
-                shape: BoxShape.circle,
-              ),
-              selectedDecoration: BoxDecoration(
-                color: Constants.kPrimaryColor,
-                shape: BoxShape.circle,
-              ),
-            ),
-            eventLoader: store.getEventsForDay,
-            calendarBuilders: CalendarBuilders(
-              singleMarkerBuilder: (context, date, event) {
-                return Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
+        child: Column(
+          children: [
+            Observer(builder: (context) {
+              return TableCalendar(
+                selectedDayPredicate: (day) => isSameDay(store.selectedDay, day),
+                onDaySelected: (selectedDay, focusedDay) {
+                  store.onDaySelected(selectedDay);
+                  store.setInitialStateForFilter();
+                },
+                locale: 'pt_BR',
+                firstDay: DateTime.now().subtract(const Duration(days: 10 * 365)),
+                lastDay: DateTime.now().add(const Duration(days: 10 * 365)),
+                focusedDay: store.selectedDay ??
+                    DateTime.now(), // Use o focusedDay do store
+                daysOfWeekHeight: 24,
+                availableCalendarFormats: const {CalendarFormat.month: 'Month'},
+                headerStyle: HeaderStyle(
+                  titleCentered: true,
+                  titleTextFormatter: (date, locale) {
+                    String s = DateFormat.yMMMM(locale).format(date);
+                    return s[0].toUpperCase() + s.substring(1);
+                  },
+                  titleTextStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                     color: Constants.kPrimaryColor,
                   ),
-                  width: 7.0,
-                  height: 7.0,
-                  margin: const EdgeInsets.symmetric(horizontal: 1.5),
-                );
-              },
+                  leftChevronIcon: const Icon(
+                    Icons.chevron_left,
+                    color: Constants.kPrimaryColor,
+                  ),
+                  rightChevronIcon: const Icon(Icons.chevron_right,
+                      color: Constants.kPrimaryColor),
+                ),
+                daysOfWeekStyle: DaysOfWeekStyle(
+                  dowTextFormatter: (date, locale) =>
+                      DateFormat.E(locale).format(date)[0].toUpperCase(),
+                ),
+                calendarStyle: const CalendarStyle(
+                  todayDecoration: BoxDecoration(
+                    color: Constants.kGreyLight,
+                    shape: BoxShape.circle,
+                  ),
+                  selectedDecoration: BoxDecoration(
+                    color: Constants.kPrimaryColor,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                eventLoader: store.getEventsForDay,
+                calendarBuilders: CalendarBuilders(
+                  singleMarkerBuilder: (context, date, event) {
+                    return Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Constants.kPrimaryColor,
+                      ),
+                      width: 7.0,
+                      height: 7.0,
+                      margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                    );
+                  },
+                ),
+              );
+            }),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: () {
+                  store.onDaySelected(DateTime.now());
+                },
+                icon: const Icon(Icons.today, size: 18),
+                label: const Text('Hoje'),
+                style: TextButton.styleFrom(
+                  foregroundColor: Constants.kPrimaryColor,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                ),
+              ),
             ),
-          );
-        }),
+          ],
+        ),
       ),
     );
   }
@@ -293,12 +316,37 @@ class AgendaPageState extends State<AgendaPage> {
             ? Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 100.0),
-                  child: AppStatePanel(
-                    stateKind: AppStateKind.empty,
-                    title: 'Nenhuma atividade para esta data',
-                    message:
-                        'Não há atividades cadastradas para o dia selecionado.',
-                    isCompact: true,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppStatePanel(
+                        stateKind: AppStateKind.empty,
+                        title: 'Nenhuma atividade para esta data',
+                        message:
+                            'Não há atividades cadastradas para o dia selecionado.',
+                        isCompact: true,
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          store.limparDadosDaAtividade();
+                          getBottomSheet(const EditarAtividadeSheet());
+                        },
+                        icon: const Icon(Icons.add, size: 20),
+                        label: const Text('Criar atividade'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Constants.kPrimaryColor,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 12,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               )
@@ -329,21 +377,160 @@ class AgendaPageState extends State<AgendaPage> {
             topRight: Radius.circular(10),
           ),
         ),
-        child: AppStatePanel(
-          stateKind: AppStateKind.empty,
-          title: title,
-          message: message,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 48),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AppStatePanel(
+                stateKind: AppStateKind.empty,
+                title: title,
+                message: message,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: () {
+                  store.limparDadosDaAtividade();
+                  getBottomSheet(const EditarAtividadeSheet());
+                },
+                icon: const Icon(Icons.add, size: 20),
+                label: const Text('Criar atividade'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Constants.kPrimaryColor,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  SliverToBoxAdapter _loadingList() {
-    return const SliverToBoxAdapter(
-      child: AppStatePanel(
-        stateKind: AppStateKind.loading,
-        title: 'Carregando agenda...',
+  SliverToBoxAdapter _skeletonList() {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: List.generate(4, (index) => _SkeletonItem()),
+        ),
       ),
+    );
+  }
+}
+
+class _SkeletonItem extends StatefulWidget {
+  @override
+  State<_SkeletonItem> createState() => _SkeletonItemState();
+}
+
+class _SkeletonItemState extends State<_SkeletonItem>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat(reverse: true);
+    _animation = Tween<double>(begin: 0.3, end: 0.7).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 12, offset: const Offset(0, 2))],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 180,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Constants.kGreyLight.withValues(alpha: _animation.value),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 17.5,
+                            backgroundColor: Constants.kGreyLight.withValues(alpha: _animation.value),
+                          ),
+                          const SizedBox(width: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 120,
+                                height: 14,
+                                decoration: BoxDecoration(
+                                  color: Constants.kGreyLight.withValues(alpha: _animation.value),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              Container(
+                                width: 80,
+                                height: 12,
+                                decoration: BoxDecoration(
+                                  color: Constants.kGreyLight.withValues(alpha: _animation.value),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        width: 100,
+                        height: 14,
+                        decoration: BoxDecoration(
+                          color: Constants.kGreyLight.withValues(alpha: _animation.value),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

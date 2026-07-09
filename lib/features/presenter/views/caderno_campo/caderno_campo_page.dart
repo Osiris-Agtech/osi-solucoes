@@ -30,7 +30,6 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
   CadernoCampoStore store = GetIt.I<CadernoCampoStore>();
 
   final dropDownKey = GlobalKey<DropdownSearchState<String>>();
-  final formKey = GlobalKey<FormState>();
   final key = GlobalKey<FormState>();
 
   @override
@@ -42,7 +41,6 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
 
   @override
   void dispose() {
-    formKey.currentState?.dispose();
     key.currentState?.dispose();
     store.limparLotes();
     super.dispose();
@@ -65,156 +63,150 @@ class CadernoCampoPageState extends State<CadernoCampoPage> {
             },
             bottom: 18,
           ),
-          body: Form(
-            key: formKey,
-            child: CustomScrollView(
-              primary: false,
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                _CadernoCampoHeader(store: store),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 60,
-                    child: Row(
-                      children: [
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                          child: Observer(builder: (_) {
-                            return AppDropdown<Area>(
-                              value: store.dropButtonArea.id != null
-                                  ? store.dropButtonArea
-                                  : null,
-                              hintText: 'Por Área',
-                              items: store.areaList.map((Area area) {
-                                return DropdownMenuItem<Area>(
-                                  value: area,
-                                  child: Text(area.nome ?? '-'),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                if (value != null) {
-                                  key.currentState?.reset();
-                                  store.selecionarDropButtonSetor(
-                                      Setor()); // Resetar a seleção do setor
-                                  store.selecionarDropButtonArea(value);
-                                  store.buscarLotesByArea();
-                                }
-                              },
-                            );
-                          }),
-                        ),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        Expanded(
-                          child: Observer(builder: (_) {
-                            return AppDropdown<Setor>(
-                              value: store.dropButtonSetor.id != null
-                                  ? store.dropButtonSetor
-                                  : null,
-                              hintText: 'No Setor',
-                              items: (store.dropButtonArea.setores ?? [])
-                                  .map((Setor setor) {
-                                return DropdownMenuItem<Setor>(
-                                  value: setor,
-                                  child: Text(setor.nome!),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                if (value != null) {
-                                  store.selecionarDropButtonSetor(value);
-                                  store.buscarLotesBySetor();
-                                }
-                              },
-                            );
-                          }),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                      ],
-                    ),
+          body: CustomScrollView(
+            primary: false,
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              _CadernoCampoHeader(store: store),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 72,
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                        child: Observer(builder: (_) {
+                          return AppDropdown<Area>(
+                            value: store.dropButtonArea.id != null
+                                ? store.dropButtonArea
+                                : null,
+                            hintText: 'Por Área',
+                            items: store.areaList.map((Area area) {
+                              return DropdownMenuItem<Area>(
+                                value: area,
+                                child: Text(area.nome ?? '-'),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              if (value != null) {
+                                key.currentState?.reset();
+                                store.selecionarDropButtonSetor(
+                                    Setor()); // Resetar a seleção do setor
+                                store.selecionarDropButtonArea(value);
+                                store.buscarLotesByArea();
+                              }
+                            },
+                          );
+                        }),
+                      ),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Expanded(
+                        child: Observer(builder: (_) {
+                          return AppDropdown<Setor>(
+                            value: store.dropButtonSetor.id != null
+                                ? store.dropButtonSetor
+                                : null,
+                            hintText: 'No Setor',
+                            items: (store.dropButtonArea.setores ?? [])
+                                .map((Setor setor) {
+                              return DropdownMenuItem<Setor>(
+                                value: setor,
+                                child: Text(setor.nome!),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              if (value != null) {
+                                store.selecionarDropButtonSetor(value);
+                                store.buscarLotesBySetor();
+                              }
+                            },
+                          );
+                        }),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                    ],
                   ),
                 ),
-                Observer(builder: (_) {
-                  if (store.isLoteListLoading) {
-                    return SliverToBoxAdapter(
-                      child: AppStatePanel(
-                        stateKind: AppStateKind.loading,
-                        title: 'Carregando lotes...',
-                      ),
-                    );
-                  }
-                  if (store.loteList.isEmpty) {
-                    return SliverToBoxAdapter(
-                      child: AppStatePanel(
-                        stateKind: AppStateKind.empty,
-                        title: 'Nenhum lote cadastrado',
-                        message:
-                            'Cadastre um lote no caderno de campo para começar.',
-                      ),
-                    );
-                  }
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                              left: 16.0, right: 16.0, top: 10.0),
-                          child: AppEntityCard(
-                            leading: const Icon(Icons.eco,
-                                color: Color(0xFF26C165), size: 26),
-                            title: store.getLotesFilter[index].nome ?? '',
-                            subtitle:
-                                '# ${store.getLotesFilter[index].id}',
-                            description:
-                                'Cultura: ${store.getLotesFilter[index].cultura?.nome ?? ""}',
-                            metadata: [
-                              if (store.getLotesFilter[index]
-                                      .registro_data !=
-                                  null)
-                                Text(
-                                  'Registro: ${DateFormat("dd/MM/y", "pt_br").format(store.getLotesFilter[index].registro_data!)}',
-                                  style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Constants.kGreyText2),
-                                ),
-                              if (store.getLotesFilter[index]
-                                      .colheita_data !=
-                                  null)
-                                Text(
-                                  'Colheita: ${DateFormat("dd/MM/y", "pt_br").format(store.getLotesFilter[index].colheita_data!)}',
-                                  style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Constants.kGreyText2),
-                                ),
-                            ],
-                            onTap: () {
-                              store.setLoteSelecionado(
-                                  store.getLotesFilter[index]);
-                              Get.toNamed(
-                                Routes.detalhesCadernoCampoPage,
-                                arguments: NavigationResourceArgs(
-                                  resourceId: store
-                                      .getLotesFilter[index].id
-                                      ?.toString(),
-                                  resourceType: 'caderno_campo',
-                                  resourceName: store
-                                      .getLotesFilter[index].nome,
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      childCount: store.getLotesFilter.length,
+              ),
+              Observer(builder: (_) {
+                if (store.isLoteListLoading) {
+                  return SliverToBoxAdapter(
+                    child: AppStatePanel(
+                      stateKind: AppStateKind.loading,
+                      title: 'Carregando lotes...',
                     ),
                   );
-                }),
-              ],
-            ),
+                }
+                if (store.loteList.isEmpty) {
+                  return SliverToBoxAdapter(
+                    child: AppStatePanel(
+                      stateKind: AppStateKind.empty,
+                      title: 'Nenhum lote cadastrado',
+                      message:
+                          'Cadastre um lote no caderno de campo para começar.',
+                      actionLabel: 'Criar lote',
+                      onAction: () {
+                        Get.toNamed(Routes.cadastroCadernoCampoPage);
+                      },
+                    ),
+                  );
+                }
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16.0, right: 16.0, top: 10.0),
+                        child: AppEntityCard(
+                          leading: const Icon(Icons.menu_book,
+                              color: Color(0xFF26C165), size: 26),
+                          title: store.getLotesFilter[index].nome ?? '',
+                          subtitle: store.getLotesFilter[index].cultura?.nome ?? 'Sem cultura',
+                          description:
+                              'ID: ${store.getLotesFilter[index].id} · ${store.getLotesFilter[index].cultura?.nome ?? "Sem cultura"}',
+                          metadata: [
+                            if (store.getLotesFilter[index].registro_data !=
+                                null)
+                              Text(
+                                'Registro: ${DateFormat("dd/MM/y", "pt_br").format(store.getLotesFilter[index].registro_data!)}',
+                                style: const TextStyle(
+                                    fontSize: 12, color: Constants.kGreyText2),
+                              ),
+                            if (store.getLotesFilter[index].colheita_data !=
+                                null)
+                              Text(
+                                'Colheita: ${DateFormat("dd/MM/y", "pt_br").format(store.getLotesFilter[index].colheita_data!)}',
+                                style: const TextStyle(
+                                    fontSize: 12, color: Constants.kGreyText2),
+                              ),
+                          ],
+                          onTap: () {
+                            store.setLoteSelecionado(
+                                store.getLotesFilter[index]);
+                            Get.toNamed(
+                              Routes.detalhesCadernoCampoPage,
+                              arguments: NavigationResourceArgs(
+                                resourceId:
+                                    store.getLotesFilter[index].id?.toString(),
+                                resourceType: 'caderno_campo',
+                                resourceName: store.getLotesFilter[index].nome,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    childCount: store.getLotesFilter.length,
+                  ),
+                );
+              }),
+            ],
           ),
         ),
       ),
@@ -232,7 +224,7 @@ class _CadernoCampoHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppPageHeaderSliver(
       title: 'Caderno de Campo',
-      subtitle: 'Lista de cadernos de campo',
+      subtitle: '${store.loteList.length} caderno${store.loteList.length == 1 ? "" : "s"}',
       onBack: () => Get.back(),
       expandedHeight: 180,
       bottom: PreferredSize(
@@ -248,5 +240,3 @@ class _CadernoCampoHeader extends StatelessWidget {
     );
   }
 }
-
-

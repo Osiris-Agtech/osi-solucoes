@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/home_panel_shared.dart';
+import 'home_today_cultivation_info_content.dart';
 import 'home_info_view_data.dart';
 
 class HomeInfoCard extends StatelessWidget {
   final HomeInfoViewData data;
   final VoidCallback? onCtaTap;
+  final VoidCallback? onTap;
   final bool isLoading;
 
   const HomeInfoCard({
     super.key,
     required this.data,
     this.onCtaTap,
+    this.onTap,
     this.isLoading = false,
   });
 
@@ -22,17 +25,23 @@ class HomeInfoCard extends StatelessWidget {
     }
 
     return HomePanelCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHeader(),
-          const SizedBox(height: 14),
-          _buildContent(),
-          if (data.type != HomeInfoType.basicTip && data.ctaLabel != null && onCtaTap != null) ...[
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(),
             const SizedBox(height: 14),
-            _buildCta(),
+            _buildContent(),
+            if (data.type != HomeInfoType.basicTip &&
+                data.ctaLabel != null &&
+                onCtaTap != null) ...[
+              const SizedBox(height: 14),
+              _buildCta(),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -40,7 +49,7 @@ class HomeInfoCard extends StatelessWidget {
   Widget _buildHeader() {
     return Row(
       children: [
-        Icon(_iconForType(data.type), size: 20, color: Constants.kPrimaryColor),
+        Icon(_iconForType(data.type), size: 20, color: _colorForType(data.type)),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
@@ -57,6 +66,10 @@ class HomeInfoCard extends StatelessWidget {
   }
 
   Widget _buildContent() {
+    if (data.type == HomeInfoType.todayCultivation) {
+      return HomeTodayCultivationInfoContent(data: data);
+    }
+
     // basic_tip: just show the tip text
     if (data.type == HomeInfoType.basicTip && data.tipText != null) {
       return Container(
@@ -69,7 +82,8 @@ class HomeInfoCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.lightbulb_outline, size: 18, color: Constants.kPrimaryColor),
+            Icon(Icons.lightbulb_outline,
+                size: 18, color: Constants.kPrimaryColor),
             const SizedBox(width: 10),
             Expanded(
               child: Text(
@@ -113,9 +127,9 @@ class HomeInfoCard extends StatelessWidget {
         // Items
         if (data.items.isNotEmpty) ...[
           ...data.items.map((item) => Padding(
-            padding: const EdgeInsets.only(bottom: 6),
-            child: _InfoListItem(item: item),
-          )),
+                padding: const EdgeInsets.only(bottom: 6),
+                child: _InfoListItem(item: item),
+              )),
         ],
       ],
     );
@@ -184,12 +198,23 @@ class HomeInfoCard extends StatelessWidget {
         return Icons.eco_rounded;
       case HomeInfoType.reservoirReport:
         return Icons.water_drop_rounded;
-      case HomeInfoType.dayProgress:
-        return Icons.task_alt_rounded;
       case HomeInfoType.fieldNotesSummary:
         return Icons.menu_book_rounded;
       case HomeInfoType.basicTip:
         return Icons.lightbulb_outline;
+    }
+  }
+
+  Color _colorForType(HomeInfoType type) {
+    switch (type) {
+      case HomeInfoType.todayCultivation:
+        return Constants.kPrimaryColor;
+      case HomeInfoType.reservoirReport:
+        return const Color(0xFF2563EB);
+      case HomeInfoType.fieldNotesSummary:
+        return const Color(0xFFD97706);
+      case HomeInfoType.basicTip:
+        return Constants.kGreyText;
     }
   }
 }
@@ -297,7 +322,9 @@ class _InfoListItem extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
-                if (item.lotName != null || item.date != null || item.userName != null) ...[
+                if (item.lotName != null ||
+                    item.date != null ||
+                    item.userName != null) ...[
                   const SizedBox(height: 2),
                   Text(
                     [

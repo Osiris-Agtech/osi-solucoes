@@ -37,15 +37,24 @@ class CadernoCampoDatasource implements ICadernoCampoDatasource {
     const String readRepositories = r'''
         query Lotes($contaId: Int!) {
           lotes(where: {
-            setor: {
-              area: {
-                conta: {
-                  id: {
-                    equals: $contaId
+            AND: [
+              {
+                setor: {
+                  area: {
+                    conta: {
+                      id: {
+                        equals: $contaId
+                      }
+                    }
                   }
                 }
-              }
-            }
+              },
+              {
+                deleted_at: {
+                  equals: null
+                }
+              },
+            ],
           }) {
             id
             nome
@@ -108,11 +117,20 @@ class CadernoCampoDatasource implements ICadernoCampoDatasource {
     const String readRepositories = r'''
         query Lotes($setorId: Int!) {
           lotes(where: {
-            setor: {
-              id: {
-                equals: $setorId
-              }
-            }
+            AND: [
+              {
+                setor: {
+                  id: {
+                    equals: $setorId
+                  }
+                }
+              },
+              {
+                deleted_at: {
+                  equals: null
+                }
+              },
+            ],
           }) {
             id
             nome
@@ -175,13 +193,22 @@ class CadernoCampoDatasource implements ICadernoCampoDatasource {
     const String readRepositories = r'''
         query Lotes($areaId: Int!) {
           lotes(where: {
-            setor: {
-              area: {
-                id: {
-                  equals: $areaId
+            AND: [
+              {
+                setor: {
+                  area: {
+                    id: {
+                      equals: $areaId
+                    }
+                  }
                 }
-              }
-            }
+              },
+              {
+                deleted_at: {
+                  equals: null
+                }
+              },
+            ],
           }) {
             id
             nome

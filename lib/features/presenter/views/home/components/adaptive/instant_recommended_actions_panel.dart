@@ -182,26 +182,7 @@ class _RecommendedTile extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      if (entry.data.confidence > 0.7)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color:
-                                Constants.kPrimaryColor.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(99),
-                          ),
-                          child: Text(
-                            '${(entry.data.confidence * 100).round()}%',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ),
-                        ),
+
                     ],
                   ),
                   if (entry.isNextStep && entry.isProminent)

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:flutter/material.dart';
-import 'package:osi_solucoes/features/presenter/views/cadastro/cadastro_page.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
 import 'package:osi_solucoes/features/presenter/views/login/multi_account_page.dart';
 import '../../viewmodels/login_store.dart';
@@ -67,7 +66,7 @@ class LoginPageState extends State<LoginPage> {
                 Center(
                   child: AuthSecondaryAction(
                     label: 'textTextButton'.i18n(),
-                    onPressed: () => Get.toNamed(Routes.recuperarSenha),
+                    onPressed: () => Get.toNamed(Routes.recuperarSenhaSimplificado),
                   ),
                 ),
                 const Divider(height: 28),
@@ -77,10 +76,7 @@ class LoginPageState extends State<LoginPage> {
                     label: 'textTextButton2'.i18n(),
                     icon: Icons.chevron_right,
                     onPressed: () {
-                      Get.to(
-                        () => const CadastroPage(),
-                        transition: Transition.rightToLeft,
-                      );
+                      Get.toNamed(Routes.cadastroSimplificado);
                     },
                   ),
                 ),

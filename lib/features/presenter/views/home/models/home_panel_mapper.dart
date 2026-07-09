@@ -622,9 +622,11 @@ class HomePanelMapper {
   }
 
   static String _greeting(String? name) {
+    final hour = DateTime.now().hour;
+    final period = hour < 12 ? 'Bom dia' : (hour < 18 ? 'Boa tarde' : 'Boa noite');
     final cleanName = name?.trim();
-    if (cleanName == null || cleanName.isEmpty) return 'Olá';
-    return 'Olá, $cleanName';
+    if (cleanName == null || cleanName.isEmpty) return period;
+    return '$period, $cleanName';
   }
 
   static String _safeText(String? value, String fallback) {

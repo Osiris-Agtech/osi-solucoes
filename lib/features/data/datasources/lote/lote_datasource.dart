@@ -96,6 +96,11 @@ class LoteDatasource implements ILoteDatasource {
                   lte: $endDate
                 }
               },
+              {
+                deleted_at: {
+                  equals: null
+                }
+              },
             ],
           }, orderBy: [
             {
@@ -104,6 +109,7 @@ class LoteDatasource implements ILoteDatasource {
           ]) {
             id
             nome
+            ativo
             cultura {
               id
               nome
@@ -135,6 +141,11 @@ class LoteDatasource implements ILoteDatasource {
                   equals: true
                 }
               },
+              {
+                deleted_at: {
+                  equals: null
+                }
+              },
             ],
           }, orderBy: [
             {
@@ -143,6 +154,7 @@ class LoteDatasource implements ILoteDatasource {
           ]) {
             id
             nome
+            ativo
             cultura {
               id
               nome
@@ -482,7 +494,7 @@ class LoteDatasource implements ILoteDatasource {
     GraphQLClient client = GraphQLAPI().getGraphQLClient();
 
     const String readRepositories = r'''
-        mutation CreateOneLote($nome: String!, $contaId: Int!, $setorId: Int!, $culturaId: Int!, $protocoloId: Int, $reservatorioId: Int, $registroData: DateTime!, $semeaduraData: DateTime, $transplantioData: DateTime, $colheitaData: DateTime) {
+        mutation CreateOneLote($nome: String!, $contaId: Int!, $setorId: Int!, $culturaId: Int!, $protocoloId: Int, $reservatorioId: Int, $registroData: DateTime!, $semeaduraData: DateTime, $transplantioData: DateTime, $colheitaData: DateTime, $ativo: Boolean) {
           createOneLote(
             nome: $nome,
             registroData: $registroData,
@@ -494,6 +506,7 @@ class LoteDatasource implements ILoteDatasource {
             protocoloId: $protocoloId,
             reservatorioId: $reservatorioId,
             contaId: $contaId,
+            ativo: $ativo,
           ) {
             id
             nome
@@ -535,6 +548,7 @@ class LoteDatasource implements ILoteDatasource {
         "contaId": contaId,
         "setorId": lote.setor!.id,
         "culturaId": lote.cultura!.id,
+        "ativo": true,
         "protocoloId": lote.protocolo?.id,
         "reservatorioId": lote.reservatorio?.id,
         "registroData": lote.registro_data != null
@@ -938,6 +952,11 @@ class LoteDatasource implements ILoteDatasource {
               {
                 ativo: {
                   equals: false
+                }
+              },
+              {
+                deleted_at: {
+                  equals: null
                 }
               },
             ],

@@ -15,6 +15,8 @@ import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/hierarchical_breadcrumb.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/depth_badge.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_delete_dialog.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 import 'package:osi_solucoes/features/presenter/widgets/floating_actino_button.dart';
@@ -81,25 +83,39 @@ class SetorPageState extends State<SetorPage> {
                       ),
                     );
                   }
-                  return SliverList(
+                  return SliverGrid(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                      childAspectRatio: 1.3,
+                    ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         return Padding(
-                          padding: const EdgeInsets.only(
-                              left: 16.0, right: 16.0, top: 10.0),
+                          padding: const EdgeInsets.only(top: 10.0),
                           child: AppEntityCard(
-                            leading: Image.asset(
-                              "assets/icons/hydroponic1_icon.png",
+                            leading: SvgPicture.asset(
+                              "assets/icons/hexagon_icon.svg",
                               height: 26,
+                              colorFilter: ColorFilter.mode(
+                                Constants.kSecondaryColor,
+                                BlendMode.srcIn,
+                              ),
                             ),
                             title: store.searchSetor[index].nome ?? '',
                             subtitle: '# ${store.searchSetor[index].id}',
                             metadata: [
+                              _SectorLoteDots(
+                                activeCount: store.searchSetor[index].lotes?.where((l) => l.ativo == true).length ?? 0,
+                                totalCount: store.searchSetor[index].lotes?.length ?? 0,
+                                maxDots: 5,
+                              ),
                               Text(
                                 'Lotes: ${store.searchSetor[index].lotes?.where((l) => l.ativo == true).length ?? 0}',
                                 style: const TextStyle(
                                   fontSize: 14,
-                                  color: Constants.kPrimaryColor,
+                                  color: Constants.kSecondaryColor,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -148,10 +164,26 @@ class _N2PageHeaderState extends State<_N2PageHeader> {
     return Observer(builder: (_) {
       return AppPageHeaderSliver(
         title: widget.areaN1.nome ?? '',
-        subtitle: 'Lista de setores cadastrados',
+        subtitleWidget: HierarchicalBreadcrumb(segments: [
+          BreadcrumbSegment(
+            label: 'Áreas',
+            iconBuilder: (color) => SvgPicture.asset('assets/icons/cultivo_icon.svg',
+                height: 16, width: 16,
+                colorFilter: ColorFilter.mode(color, BlendMode.srcIn)),
+            onTap: () => Get.back(),
+          ),
+          BreadcrumbSegment(
+            label: widget.areaN1.nome ?? '',
+            iconBuilder: (color) => SvgPicture.asset('assets/icons/hexagon_icon.svg',
+                height: 16, width: 16,
+                colorFilter: ColorFilter.mode(color, BlendMode.srcIn)),
+          ),
+        ]),
         onBack: () => Get.back(),
         pinned: true,
         actions: [
+          const DepthBadge(label: 'N2 · Setor'),
+          const SizedBox(width: 8),
           PopupMenuButton<void>(
             icon: SvgPicture.asset(
               "assets/icons/settings_icon.svg",
@@ -407,3 +439,67 @@ class _N2FilterArea extends StatelessWidget {
     );
   }
 }
+
+class _SectorLoteDots extends StatelessWidget {
+  final int activeCount;
+  final int totalCount;
+  final int maxDots;
+
+  const _SectorLoteDots({
+    required this.activeCount,
+    required this.totalCount,
+    this.maxDots = 5,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final showOverflow = totalCount > maxDots;
+    // Reserve the last slot for the +N overflow badge when there are more lots than dots.
+    final dotSlots = showOverflow ? maxDots - 1 : totalCount;
+    final activeDots = activeCount > dotSlots ? dotSlots : activeCount;
+    final inactiveDots = dotSlots - activeDots;
+    final remainingActive = activeCount - activeDots;
+    final remainingTotal = totalCount - dotSlots;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ...List.generate(activeDots, (_) => _dot(Constants.kPrimaryColor)),
+        ...List.generate(inactiveDots, (_) => _dot(Constants.kGreyLight)),
+        if (showOverflow && remainingActive > 0)
+          Text(
+            '+$remainingActive',
+            style: const TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              color: Constants.kPrimaryColor,
+            ),
+          )
+        else if (showOverflow)
+          Text(
+            '+$remainingTotal',
+            style: const TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              color: Constants.kGreyLight,
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _dot(Color color) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 4),
+      child: Container(
+        width: 8,
+        height: 8,
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+        ),
+      ),
+    );
+  }
+}
+

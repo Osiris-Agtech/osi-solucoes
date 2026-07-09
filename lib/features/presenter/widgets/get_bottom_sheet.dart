@@ -6,6 +6,7 @@ void getBottomSheet(Widget child) {
   Get.bottomSheet(
     child,
     isScrollControlled: true,
+    enableDrag: true,
     backgroundColor: Constants.kSecondBackgroundColor,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(

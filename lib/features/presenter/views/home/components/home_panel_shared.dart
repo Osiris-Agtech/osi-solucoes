@@ -52,7 +52,7 @@ class HomeSectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
         children: [
-          Icon(icon, color: Constants.kPrimaryColor, size: 22),
+          Icon(icon, color: Constants.kGreyText, size: 22),
           const SizedBox(width: 8),
           Expanded(
             child: Column(

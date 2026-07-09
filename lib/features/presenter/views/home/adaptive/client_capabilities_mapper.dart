@@ -36,6 +36,8 @@ class ClientCapabilitiesMapper {
         'AdaptiveFocusBanner',
         'AdaptiveReasonChip',
         'AdaptiveRecommendedActionTile',
+        'AdaptiveHighlightFrame',
+        'ActivityFeedCard',
         'HomeInfoCard',
       ],
       supportedInfoTypes: [

@@ -56,25 +56,7 @@ class AdaptiveRecommendedActionTile extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      if (action.confidence > 0.7)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Constants.kPrimaryColor.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(99),
-                          ),
-                          child: Text(
-                            '${(action.confidence * 100).round()}%',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                              color: Constants.kPrimaryColor,
-                            ),
-                          ),
-                        ),
+
                     ],
                   ),
                   const SizedBox(height: 2),

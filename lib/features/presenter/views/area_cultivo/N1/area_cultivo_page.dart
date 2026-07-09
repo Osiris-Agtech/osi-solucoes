@@ -14,6 +14,8 @@ import 'package:osi_solucoes/features/presenter/widgets/common/app_entity_card.d
 import 'package:osi_solucoes/features/presenter/widgets/common/app_icon_tile.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_page_header_sliver.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_search_bar.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/depth_badge.dart';
+import 'package:osi_solucoes/features/presenter/widgets/common/hierarchical_breadcrumb.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_state_panel.dart';
 
 class AreaCultivoPage extends StatefulWidget {
@@ -57,21 +59,32 @@ class AreaCultivoPageState extends State<AreaCultivoPage> {
               slivers: [
                 AppPageHeaderSliver(
                   title: 'Áreas de Cultivo',
-                  subtitle: 'Lista de áreas cadastradas',
+                  subtitleWidget: HierarchicalBreadcrumb(segments: [
+                    BreadcrumbSegment(label: 'Todas as áreas'),
+                  ]),
                   onBack: () => Get.back(),
+                  pinned: true,
+                  actions: [
+                    const DepthBadge(label: 'N1 · Área'),
+                  ],
                   expandedHeight: 180,
                   bottom: PreferredSize(
-                    preferredSize: const Size(double.infinity, 60),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: AppSearchBar(
-                        hintText: 'Buscar área...',
-                        onChanged: store.setSearchAreaText,
-                      ),
+                    preferredSize: const Size(double.infinity, 110),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                          child: AppSearchBar(
+                            hintText: 'Buscar área...',
+                            onChanged: store.setSearchAreaText,
+                          ),
+                        ),
+                        _AreaCultivoHeader(store: store),
+                      ],
                     ),
                   ),
                 ),
-                _AreaCultivoHeader(store: store),
                 Observer(builder: (_) {
                   if (store.isAreaLoading) {
                     return const SliverToBoxAdapter(
@@ -165,53 +178,53 @@ class _AreaCultivoHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(
-          children: [
-            Expanded(
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: store.dropDownValue,
-                  isExpanded: true,
-                  icon: const Icon(Icons.expand_more, color: Constants.kPrimaryColor),
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Constants.kText2,
-                  ),
-                  onChanged: (String? newValue) async {
-                    if (newValue == store.dropDownValue) {
-                      store.changeOrder();
-                    } else {
-                      store.setSearchAreaText('');
-                    }
-                    store.setDropDown(newValue!);
-                    await store.buscarArea();
-                  },
-                  items: ['Nome', 'Data'].map((v) {
-                    return DropdownMenuItem(value: v, child: Text(v));
-                  }).toList(),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: store.dropDownValue,
+                isExpanded: true,
+                icon: const Icon(Icons.expand_more, color: Constants.kPrimaryColor),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Constants.kText2,
                 ),
+                onChanged: (String? newValue) async {
+                  if (newValue == store.dropDownValue) {
+                    store.changeOrder();
+                  } else {
+                    store.setSearchAreaText('');
+                  }
+                  store.setDropDown(newValue!);
+                  await store.buscarArea();
+                },
+                items: ['Nome', 'Data'].map((v) {
+                  return DropdownMenuItem(value: v, child: Text(v));
+                }).toList(),
               ),
             ),
-            IconButton(
-              icon: Icon(
-                store.order == 'asc'
-                    ? Icons.arrow_upward_rounded
-                    : Icons.arrow_downward_rounded,
-                size: 20,
-                color: Constants.kPrimaryColor,
-              ),
-              onPressed: () async {
-                store.changeOrder();
-                await store.buscarArea();
-              },
+          ),
+          IconButton(
+            icon: Icon(
+              store.order == 'asc'
+                  ? Icons.arrow_upward_rounded
+                  : Icons.arrow_downward_rounded,
+              size: 20,
+              color: Constants.kPrimaryColor,
             ),
-          ],
-        ),
+            onPressed: () async {
+              store.changeOrder();
+              await store.buscarArea();
+            },
+          ),
+        ],
       ),
     );
   }
 }
+
+

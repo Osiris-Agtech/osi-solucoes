@@ -93,11 +93,15 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                 if (atividadesFiltradas.isEmpty) {
                   if (store.loteSelecionado.lotes_atividades == null ||
                       store.loteSelecionado.lotes_atividades!.isEmpty) {
-                    return const SliverToBoxAdapter(
+                    return SliverToBoxAdapter(
                       child: AppStatePanel(
                         stateKind: AppStateKind.empty,
                         title: 'Nenhuma atividade encontrada',
                         message: 'Não há atividades cadastradas neste lote.',
+                        actionLabel: 'Nova atividade',
+                        onAction: () {
+                          Get.toNamed(Routes.cadastroCadernoCampoPage);
+                        },
                       ),
                     );
                   }
@@ -115,10 +119,23 @@ class DetalhesCadernoCampoPageState extends State<DetalhesCadernoCampoPage> {
                     (context, index) {
                       final item = atividadesFiltradas[index];
                       final isExpanded = _expandedIndices.contains(index);
-                      return _ActivityCard(
+                      final showDateHeader = index == 0 ||
+                          !_isSameDay(
+                            item.atividade?.created_at,
+                            atividadesFiltradas[index - 1]
+                                .atividade?.created_at,
+                          );
+                      final isLast =
+                          index == atividadesFiltradas.length - 1;
+                      final isSystem = item.atividade?.privado == true;
+
+                      return _TimelineEntry(
                         item: item,
                         isExpanded: isExpanded,
                         onToggle: () => _toggleExpand(index),
+                        showDateHeader: showDateHeader,
+                        isLast: isLast,
+                        isSystem: isSystem,
                       );
                     },
                     childCount: atividadesFiltradas.length,
@@ -176,12 +193,11 @@ class _ActivityCard extends StatelessWidget {
                               Expanded(
                                 child: Text(
                                   atividade?.nome ?? 'Não informado',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 18,
-                                    color: Constants.kContentColorLightTheme,
-                                    fontStyle: FontStyle.italic,
-                                  ),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                      color: Constants.kContentColorLightTheme,
+                                    ),
                                 ),
                               ),
                               if (item.atividade?.privado == true) ...[
@@ -197,7 +213,7 @@ class _ActivityCard extends StatelessWidget {
                                   child: const Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Icon(Icons.auto_awesome,
+                                      Icon(Icons.smart_toy,
                                           size: 12,
                                           color: Constants.kGreyMedium),
                                       SizedBox(width: 3),
@@ -215,11 +231,9 @@ class _ActivityCard extends StatelessWidget {
                               ],
                               const SizedBox(width: 8),
                               Text(
-                                DateFormat("dd MMM y", 'pt_br')
-                                        .format(atividade?.created_at ??
-                                            DateTime.now())
-                                        .capitalize ??
-                                    '',
+                                DateFormat("HH:mm", 'pt_br')
+                                    .format(atividade?.created_at ??
+                                        DateTime.now()),
                                 style: const TextStyle(
                                   color: Constants.kGreyText,
                                   fontSize: 12,
@@ -294,6 +308,105 @@ class _ActivityCard extends StatelessWidget {
   }
 }
 
+/// Helper to check if two DateTime values fall on the same calendar day.
+bool _isSameDay(DateTime? a, DateTime? b) {
+  if (a == null || b == null) return false;
+  return a.year == b.year && a.month == b.month && a.day == b.day;
+}
+
+class _TimelineEntry extends StatelessWidget {
+  final LotesAtividades item;
+  final bool isExpanded;
+  final VoidCallback onToggle;
+  final bool showDateHeader;
+  final bool isLast;
+  final bool isSystem;
+
+  const _TimelineEntry({
+    required this.item,
+    required this.isExpanded,
+    required this.onToggle,
+    required this.showDateHeader,
+    required this.isLast,
+    required this.isSystem,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final atividade = item.atividade;
+    final data = atividade?.created_at;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (showDateHeader && data != null)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+            child: Row(
+              children: [
+                const SizedBox(width: 16),
+                Text(
+                  DateFormat("dd 'de' MMMM 'de' yyyy", 'pt_br')
+                      .format(data)
+                      .toString()
+                      .capitalize ?? '',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: Constants.kGreyMedium,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                width: 32,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 4),
+                    Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: isSystem
+                            ? Constants.kGreyLight
+                            : Constants.kPrimaryColor,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    if (!isLast)
+                      Expanded(
+                        child: Container(
+                          width: 2,
+                          color: Constants.kGreyLight.withValues(alpha: 0.5),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: _ActivityCard(
+                    item: item,
+                    isExpanded: isExpanded,
+                    onToggle: onToggle,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _DetalhesCadernoHeader extends StatelessWidget {
   final CadernoCampoStore store;
 
@@ -323,12 +436,14 @@ class _DetalhesCadernoHeader extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 child: Row(
                   children: [
-                    Icon(Icons.auto_awesome,
-                        size: 14, color: Constants.kGreyMedium),
+Icon(Icons.smart_toy,
+    size: 14, color: Constants.kGreyMedium),
                     const SizedBox(width: 6),
-                    const Text(
-                      'Registros do sistema',
-                      style: TextStyle(
+                    Text(
+                      store.mostrarRegistrosSistema
+                          ? 'Mostrando registros do sistema'
+                          : 'Ocultando registros do sistema',
+                      style: const TextStyle(
                         fontSize: 12,
                         color: Constants.kGreyMedium,
                       ),

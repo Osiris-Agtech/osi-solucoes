@@ -96,6 +96,7 @@ class ProtocoloDatasource implements IProtocoloDatasource {
           lotes {
             id
             nome
+            deleted_at
             cultura {
               id
               nome
@@ -119,7 +120,7 @@ class ProtocoloDatasource implements IProtocoloDatasource {
         }
       }
     ''';
-
+ 
     final QueryOptions? options;
 
     options = QueryOptions(

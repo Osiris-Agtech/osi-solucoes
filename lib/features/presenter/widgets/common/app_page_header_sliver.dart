@@ -18,6 +18,7 @@ class AppPageHeaderSliver extends StatelessWidget {
 
   final String title;
   final String? subtitle;
+  final Widget? subtitleWidget;
   final Widget? leading;
   final VoidCallback? onBack;
   final List<Widget> actions;
@@ -33,6 +34,7 @@ class AppPageHeaderSliver extends StatelessWidget {
     super.key,
     required this.title,
     this.subtitle,
+    this.subtitleWidget,
     this.leading,
     this.onBack,
     this.actions = const [],
@@ -96,6 +98,7 @@ class AppPageHeaderSliver extends StatelessWidget {
                       child: _HeaderText(
                         title: title,
                         subtitle: subtitle,
+                        subtitleWidget: subtitleWidget,
                         titleMaxLines: titleMaxLines,
                         subtitleMaxLines: subtitleMaxLines,
                       ),
@@ -148,9 +151,14 @@ class AppPageHeaderSliver extends StatelessWidget {
     // Clamp to at least 1 — a zero/negative maxLines would hide the text,
     // which is never the intent when a title is provided.
     final titleLines = titleMaxLines < 1 ? 1 : titleMaxLines;
-    final subtitleLines = subtitleMaxLines < 1 ? 1 : subtitleMaxLines;
+    final hasSubtitle = subtitle != null || subtitleWidget != null;
+    // Use subtitleMaxLines for the string path; subtitleWidget controls its
+    // own height so we use a single-line estimate.
+    final subtitleLineCount = subtitleWidget != null
+        ? 1
+        : (subtitleMaxLines < 1 ? 1 : subtitleMaxLines);
     final textHeight = (_titleLineHeight * titleLines) +
-        (subtitle == null ? 0 : 2 + (_subtitleLineHeight * subtitleLines));
+        (hasSubtitle ? 2 + _subtitleLineHeight * subtitleLineCount : 0);
 
     return textHeight > _navigationButtonSize
         ? textHeight
@@ -196,12 +204,14 @@ class _BackButton extends StatelessWidget {
 class _HeaderText extends StatelessWidget {
   final String title;
   final String? subtitle;
+  final Widget? subtitleWidget;
   final int titleMaxLines;
   final int subtitleMaxLines;
 
   const _HeaderText({
     required this.title,
     required this.subtitle,
+    this.subtitleWidget,
     required this.titleMaxLines,
     required this.subtitleMaxLines,
   });
@@ -222,7 +232,10 @@ class _HeaderText extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        if (subtitle != null) ...[
+        if (subtitleWidget != null) ...[
+          const SizedBox(height: 2),
+          subtitleWidget!,
+        ] else if (subtitle != null) ...[
           const SizedBox(height: 2),
           Text(
             subtitle!,

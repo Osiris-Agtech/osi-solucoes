@@ -41,7 +41,7 @@ Padding protocoloItem({
         ),
         _ProtocolMetadata(
           label: 'Lotes Vinculados:',
-          value: '${store.getProtocoloGroup[index].lotes.length} Lotes',
+          value: '${store.getProtocoloGroup[index].lotes.where((l) => l.deleted_at == null).length} Lotes',
         ),
       ],
       onTap: () {

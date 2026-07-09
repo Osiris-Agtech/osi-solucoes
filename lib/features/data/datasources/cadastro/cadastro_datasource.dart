@@ -57,7 +57,6 @@ class CadastroConta implements ICadastroConta {
           id
           nome
           email
-          senha
           pessoa {
             nome
             sobrenome

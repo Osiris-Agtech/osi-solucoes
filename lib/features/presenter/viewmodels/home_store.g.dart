@@ -464,6 +464,17 @@ mixin _$HomeStore on HomeStoreBase, Store {
   }
 
   @override
+  void prepareInstantRefresh() {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.prepareInstantRefresh');
+    try {
+      return super.prepareInstantRefresh();
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isNotified: ${isNotified},

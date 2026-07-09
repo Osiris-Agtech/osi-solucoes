@@ -103,6 +103,23 @@ mixin _$CadernoCampoStore on CadernoCampoStoreBase, Store {
     });
   }
 
+  late final _$mostrarRegistrosSistemaAtom = Atom(
+      name: 'CadernoCampoStoreBase.mostrarRegistrosSistema', context: context);
+
+  @override
+  bool get mostrarRegistrosSistema {
+    _$mostrarRegistrosSistemaAtom.reportRead();
+    return super.mostrarRegistrosSistema;
+  }
+
+  @override
+  set mostrarRegistrosSistema(bool value) {
+    _$mostrarRegistrosSistemaAtom
+        .reportWrite(value, super.mostrarRegistrosSistema, () {
+      super.mostrarRegistrosSistema = value;
+    });
+  }
+
   late final _$setorSelecionadoAtom =
       Atom(name: 'CadernoCampoStoreBase.setorSelecionado', context: context);
 
@@ -187,13 +204,13 @@ mixin _$CadernoCampoStore on CadernoCampoStoreBase, Store {
       Atom(name: 'CadernoCampoStoreBase.searchAtividade', context: context);
 
   @override
-  TextEditingController get searchAtividade {
+  String get searchAtividade {
     _$searchAtividadeAtom.reportRead();
     return super.searchAtividade;
   }
 
   @override
-  set searchAtividade(TextEditingController value) {
+  set searchAtividade(String value) {
     _$searchAtividadeAtom.reportWrite(value, super.searchAtividade, () {
       super.searchAtividade = value;
     });
@@ -203,13 +220,13 @@ mixin _$CadernoCampoStore on CadernoCampoStoreBase, Store {
       Atom(name: 'CadernoCampoStoreBase.searchLote', context: context);
 
   @override
-  TextEditingController get searchLote {
+  String get searchLote {
     _$searchLoteAtom.reportRead();
     return super.searchLote;
   }
 
   @override
-  set searchLote(TextEditingController value) {
+  set searchLote(String value) {
     _$searchLoteAtom.reportWrite(value, super.searchLote, () {
       super.searchLote = value;
     });
@@ -378,22 +395,6 @@ mixin _$CadernoCampoStore on CadernoCampoStoreBase, Store {
     });
   }
 
-  late final _$novoAtividadeNameAtom =
-      Atom(name: 'CadernoCampoStoreBase.novoAtividadeName', context: context);
-
-  @override
-  TextEditingController get novoAtividadeName {
-    _$novoAtividadeNameAtom.reportRead();
-    return super.novoAtividadeName;
-  }
-
-  @override
-  set novoAtividadeName(TextEditingController value) {
-    _$novoAtividadeNameAtom.reportWrite(value, super.novoAtividadeName, () {
-      super.novoAtividadeName = value;
-    });
-  }
-
   late final _$novoAutorNameAtom =
       Atom(name: 'CadernoCampoStoreBase.novoAutorName', context: context);
 
@@ -410,33 +411,17 @@ mixin _$CadernoCampoStore on CadernoCampoStoreBase, Store {
     });
   }
 
-  late final _$novaDescricaoAtom =
-      Atom(name: 'CadernoCampoStoreBase.novaDescricao', context: context);
-
-  @override
-  TextEditingController get novaDescricao {
-    _$novaDescricaoAtom.reportRead();
-    return super.novaDescricao;
-  }
-
-  @override
-  set novaDescricao(TextEditingController value) {
-    _$novaDescricaoAtom.reportWrite(value, super.novaDescricao, () {
-      super.novaDescricao = value;
-    });
-  }
-
   late final _$searchLotePageAtom =
       Atom(name: 'CadernoCampoStoreBase.searchLotePage', context: context);
 
   @override
-  TextEditingController get searchLotePage {
+  String get searchLotePage {
     _$searchLotePageAtom.reportRead();
     return super.searchLotePage;
   }
 
   @override
-  set searchLotePage(TextEditingController value) {
+  set searchLotePage(String value) {
     _$searchLotePageAtom.reportWrite(value, super.searchLotePage, () {
       super.searchLotePage = value;
     });
@@ -547,7 +532,7 @@ mixin _$CadernoCampoStore on CadernoCampoStoreBase, Store {
       ActionController(name: 'CadernoCampoStoreBase', context: context);
 
   @override
-  TextEditingController setSearchAtividade(String value) {
+  void setSearchAtividade(String value) {
     final _$actionInfo = _$CadernoCampoStoreBaseActionController.startAction(
         name: 'CadernoCampoStoreBase.setSearchAtividade');
     try {
@@ -558,7 +543,7 @@ mixin _$CadernoCampoStore on CadernoCampoStoreBase, Store {
   }
 
   @override
-  TextEditingController setSearchLote(String value) {
+  void setSearchLote(String value) {
     final _$actionInfo = _$CadernoCampoStoreBaseActionController.startAction(
         name: 'CadernoCampoStoreBase.setSearchLote');
     try {
@@ -607,6 +592,17 @@ mixin _$CadernoCampoStore on CadernoCampoStoreBase, Store {
         name: 'CadernoCampoStoreBase.setExpandedCard');
     try {
       return super.setExpandedCard(index);
+    } finally {
+      _$CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void toggleMostrarRegistrosSistema() {
+    final _$actionInfo = _$CadernoCampoStoreBaseActionController.startAction(
+        name: 'CadernoCampoStoreBase.toggleMostrarRegistrosSistema');
+    try {
+      return super.toggleMostrarRegistrosSistema();
     } finally {
       _$CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -723,17 +719,6 @@ mixin _$CadernoCampoStore on CadernoCampoStoreBase, Store {
   }
 
   @override
-  void alterarAtividadeNome(String name) {
-    final _$actionInfo = _$CadernoCampoStoreBaseActionController.startAction(
-        name: 'CadernoCampoStoreBase.alterarAtividadeNome');
-    try {
-      return super.alterarAtividadeNome(name);
-    } finally {
-      _$CadernoCampoStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void selectLotesGroup(int index, bool value) {
     final _$actionInfo = _$CadernoCampoStoreBaseActionController.startAction(
         name: 'CadernoCampoStoreBase.selectLotesGroup');
@@ -795,6 +780,7 @@ loteList: ${loteList},
 areaList: ${areaList},
 isLoteListLoading: ${isLoteListLoading},
 isAreaLoading: ${isAreaLoading},
+mostrarRegistrosSistema: ${mostrarRegistrosSistema},
 setorSelecionado: ${setorSelecionado},
 dropButtonSetor: ${dropButtonSetor},
 dropButtonArea: ${dropButtonArea},
@@ -812,9 +798,7 @@ selectedGroup: ${selectedGroup},
 lotesGroup: ${lotesGroup},
 usuariosConta: ${usuariosConta},
 selectedUsuario: ${selectedUsuario},
-novoAtividadeName: ${novoAtividadeName},
 novoAutorName: ${novoAutorName},
-novaDescricao: ${novaDescricao},
 searchLotePage: ${searchLotePage},
 dateRegistro: ${dateRegistro},
 loteCadastro: ${loteCadastro},

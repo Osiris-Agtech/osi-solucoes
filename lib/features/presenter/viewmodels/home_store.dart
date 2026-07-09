@@ -317,6 +317,14 @@ abstract class HomeStoreBase with Store {
   }
 
   @action
+  void prepareInstantRefresh() {
+    if (!isInstantMode) return;
+    isLoadingInstantAdaptation = true;
+    hasInstantError = false;
+    instantViewData = null;
+  }
+
+  @action
   Future<void> loadInstantAdaptiveInterface() async {
     print('🏠 [HOME_STORE] Carregando interface adaptativa INSTANT...');
 
@@ -546,6 +554,7 @@ abstract class HomeStoreBase with Store {
   }
 
   Future<void> refreshHomeAfterAgendaMutation() async {
+    prepareInstantRefresh();
     await carregarHome();
 
     if (!isInstantMode) return;
