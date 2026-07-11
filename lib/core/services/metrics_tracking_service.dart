@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
@@ -13,6 +14,7 @@ class MetricsTrackingService {
   FirebaseAnalytics? _analytics;
   bool _firstProductiveNavTracked = false;
   DateTime? _sessionStartTimestamp;
+  Map<String, dynamic>? _experimentConfig;
 
   FirebaseAnalytics? get _analyticsInstance {
     try {
@@ -30,6 +32,48 @@ class MetricsTrackingService {
       return (authController.usuario.id)?.toString();
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<void> _ensureExperimentConfig() async {
+    if (_experimentConfig != null) return;
+    try {
+      final userId = _getUserId();
+      if (userId == null) return;
+      final doc = await FirebaseFirestore.instance
+          .collection('userAdaptiveConfig')
+          .doc(userId)
+          .get();
+      if (doc.exists) _experimentConfig = doc.data();
+    } catch (_) {
+      // Silent — experiment data is optional for metrics
+    }
+  }
+
+  /// Fire-and-forget write to the instantMetrics Firestore collection.
+  Future<void> _writeInstantMetric({
+    required String event,
+    required Map<String, dynamic> extra,
+  }) async {
+    try {
+      await _ensureExperimentConfig();
+      final userId = _getUserId() ?? 'anonymous';
+      final data = <String, dynamic>{
+        'event': event,
+        'userId': userId,
+        'experimentId': _experimentConfig?['experimentId'],
+        'testGroup': _experimentConfig?['testGroup'],
+        'participantId': _experimentConfig?['participantId'],
+        'period': _experimentConfig?['period'],
+        ...extra,
+        'createdAt': FieldValue.serverTimestamp(),
+      };
+      data.removeWhere((key, value) => value == null);
+      await FirebaseFirestore.instance
+          .collection('instantMetrics')
+          .add(data);
+    } catch (e) {
+      print('❌ [METRICS] Erro ao registrar métrica instantânea: $e');
     }
   }
 
@@ -88,6 +132,15 @@ class MetricsTrackingService {
     } catch (e) {
       print('❌ [METRICS] Erro ao registrar shortcut_clicked: $e');
     }
+
+    await _writeInstantMetric(
+      event: 'shortcut_clicked',
+      extra: {
+        'route': route,
+        'mode': mode,
+        'sessionId': sessionId,
+      },
+    );
   }
 
   /// M2: Registra que dashboard foi exibido na home
@@ -175,6 +228,14 @@ class MetricsTrackingService {
     } catch (e) {
       print('❌ [METRICS] Erro ao registrar adaptive_session_start: $e');
     }
+
+    await _writeInstantMetric(
+      event: 'session_start',
+      extra: {
+        'mode': mode,
+        'sessionId': sessionId,
+      },
+    );
   }
 
   /// M3: Registra primeira navegação produtiva (time-to-task proxy)
@@ -216,6 +277,7 @@ class MetricsTrackingService {
   void resetTrackingState() {
     _firstProductiveNavTracked = false;
     _sessionStartTimestamp = null;
+    _experimentConfig = null;
   }
 
   /// M4: Instant adaptation applied
@@ -244,6 +306,17 @@ class MetricsTrackingService {
     } catch (e) {
       print('❌ [METRICS] Erro ao registrar instant_adaptation_applied: $e');
     }
+
+    await _writeInstantMetric(
+      event: 'adaptation_applied',
+      extra: {
+        'mode': mode,
+        'sessionId': sessionId,
+        'components': renderedComponents,
+        'componentCount': renderedComponents.length,
+        'usedFallback': usedFallback,
+      },
+    );
   }
 
   /// M4: Next step shown
@@ -267,6 +340,15 @@ class MetricsTrackingService {
     } catch (e) {
       print('❌ [METRICS] Erro ao registrar next_step_shown: $e');
     }
+
+    await _writeInstantMetric(
+      event: 'next_step_shown',
+      extra: {
+        'nextStepId': nextStepId,
+        'mode': mode,
+        'sessionId': sessionId,
+      },
+    );
   }
 
   /// M4: Next step clicked
@@ -290,6 +372,15 @@ class MetricsTrackingService {
     } catch (e) {
       print('❌ [METRICS] Erro ao registrar next_step_clicked: $e');
     }
+
+    await _writeInstantMetric(
+      event: 'next_step_clicked',
+      extra: {
+        'targetRoute': targetRoute,
+        'mode': mode,
+        'sessionId': sessionId,
+      },
+    );
   }
 
   /// M4: Section highlight shown
@@ -430,6 +521,16 @@ class MetricsTrackingService {
     } catch (e) {
       print('❌ [METRICS] Erro ao registrar info_card_shown: $e');
     }
+
+    await _writeInstantMetric(
+      event: 'info_card_shown',
+      extra: {
+        'infoType': infoType,
+        'source': source,
+        'mode': mode,
+        'sessionId': sessionId,
+      },
+    );
   }
 
   /// Info Card: clicked
@@ -457,5 +558,15 @@ class MetricsTrackingService {
     } catch (e) {
       print('❌ [METRICS] Erro ao registrar info_card_clicked: $e');
     }
+
+    await _writeInstantMetric(
+      event: 'info_card_clicked',
+      extra: {
+        'infoType': infoType,
+        'targetRoute': targetRoute,
+        'mode': mode,
+        'sessionId': sessionId,
+      },
+    );
   }
 }

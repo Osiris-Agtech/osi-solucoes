@@ -20,11 +20,8 @@ class ClientCapabilities {
   Map<String, dynamic> toJson() => {
         'supportedComponents': supportedComponents,
         'supportedInfoTypes': supportedInfoTypes,
-        'supportsInfoIconExplanation': supportsInfoIconExplanation,
-        'supportsHighlightFrame': supportsHighlightFrame,
         'maxShortcuts': maxShortcuts,
         'maxSectionAdaptations': maxSectionAdaptations,
-        'forbiddenComponents': forbiddenComponents,
       };
 }
 
@@ -38,6 +35,7 @@ class ClientCapabilitiesMapper {
         'AdaptiveRecommendedActionTile',
         'AdaptiveHighlightFrame',
         'ActivityFeedCard',
+        'OperationalOnboardingCard',
         'HomeInfoCard',
       ],
       supportedInfoTypes: [

@@ -12,6 +12,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
 
 import '../../data/repositories/lote/lote_repository.dart';
 import '../models/acao/acao_model.dart';
+import 'package:osi_solucoes/core/services/user_action_trace.dart';
 
 part 'protocolo_store.g.dart';
 
@@ -373,6 +374,12 @@ abstract class ProtocoloStoreBase with Store {
               .toList(growable: false);
           toastSuccess(message: 'Protocolo deletado com sucesso!');
           isDeleted = true;
+          GetIt.I<UserActionTrace>().record(UserAction(
+            entityType: 'protocol',
+            action: 'deleted',
+            entityId: protocolo.id,
+            entityName: protocolo.nome,
+          ));
           return;
         }
 
@@ -467,6 +474,12 @@ abstract class ProtocoloStoreBase with Store {
         Get.back();
         GetIt.I<HomeStore>().carregarHome();
         toastSuccess(message: "Protocolo cadastrado com sucesso!");
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'protocol',
+          action: 'created',
+          entityId: data.id,
+          entityName: data.nome,
+        ));
       },
     );
     isProtocoloListLoading = false;
@@ -1143,6 +1156,12 @@ abstract class ProtocoloStoreBase with Store {
         Get.back();
         toastSuccess(message: "Alterado com sucesso");
         buscarProtocolos();
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'protocol',
+          action: 'edited',
+          entityId: protocoloSelecionado?.id,
+          entityName: novoNomeProtocoloDetalhes ?? protocoloSelecionado?.nome,
+        ));
       },
     );
     isProtocoloListLoading = false;

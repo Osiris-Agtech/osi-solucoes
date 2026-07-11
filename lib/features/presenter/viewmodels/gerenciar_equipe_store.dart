@@ -14,6 +14,7 @@ import "package:collection/collection.dart";
 
 import '../../../core/utils/toast.dart';
 import '../../../core/errors/failure.dart';
+import 'package:osi_solucoes/core/services/user_action_trace.dart';
 
 part 'gerenciar_equipe_store.g.dart';
 
@@ -231,6 +232,12 @@ abstract class GerenciarEquipeBase with Store {
         clearDatalhes();
         Get.close(2);
         Get.toNamed(Routes.gerenciarEquipePage);
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'team_member',
+          action: 'edited',
+          entityId: data.id,
+          entityName: data.nome,
+        ));
       },
     );
 
@@ -262,6 +269,12 @@ abstract class GerenciarEquipeBase with Store {
       (status) async {
         if (status == 'REMOVIDO') {
           toastSuccess(message: 'Usuário descadastrado da conta com sucesso');
+          GetIt.I<UserActionTrace>().record(UserAction(
+            entityType: 'team_member',
+            action: 'deleted',
+            entityId: usuarioSelecionado.id,
+            entityName: usuarioSelecionado.nome,
+          ));
         } else if (status == 'VINCULO_INEXISTENTE') {
           toastSuccess(message: 'Usuário já não está vinculado a esta conta');
         } else {
@@ -383,6 +396,12 @@ abstract class GerenciarEquipeBase with Store {
         clearCadastro();
 
         Get.close(1);
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'team_member',
+          action: 'created',
+          entityId: data.id,
+          entityName: data.nome,
+        ));
       },
     );
 

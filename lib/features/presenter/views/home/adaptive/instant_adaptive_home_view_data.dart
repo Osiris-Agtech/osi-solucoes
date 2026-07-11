@@ -5,6 +5,7 @@ class InstantAdaptiveHomeViewData {
   final List<AdaptiveRecommendedActionViewData> recommendedActions;
   final List<ActivityFeedItemViewData> activityFeedItems;
   final InfoRecommendationViewData? infoRecommendation;
+  final OperationalOnboardingViewData? operationalOnboarding;
   final String? reasonSummary;
   final bool fallbackUsed;
 
@@ -15,6 +16,7 @@ class InstantAdaptiveHomeViewData {
     this.recommendedActions = const [],
     this.activityFeedItems = const [],
     this.infoRecommendation,
+    this.operationalOnboarding,
     this.reasonSummary,
     this.fallbackUsed = false,
   });
@@ -25,7 +27,8 @@ class InstantAdaptiveHomeViewData {
       sectionAdaptations.isEmpty &&
       recommendedActions.isEmpty &&
       activityFeedItems.isEmpty &&
-      infoRecommendation == null;
+      infoRecommendation == null &&
+      operationalOnboarding == null;
 }
 
 class NextStepViewData {
@@ -61,6 +64,26 @@ class ContextualOnboardingViewData {
     required this.ctaLabel,
     required this.targetRoute,
     required this.illustrationHint,
+  });
+}
+
+class OperationalOnboardingViewData {
+  final String title;
+  final String message;
+  final List<String> steps;
+  final String ctaLabel;
+  final String targetRoute;
+  final String? reason;
+  final num? priority;
+
+  const OperationalOnboardingViewData({
+    required this.title,
+    required this.message,
+    required this.steps,
+    required this.ctaLabel,
+    required this.targetRoute,
+    this.reason,
+    this.priority,
   });
 }
 

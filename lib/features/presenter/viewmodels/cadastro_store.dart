@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:localization/localization.dart';
 import 'package:mobx/mobx.dart';
+import 'package:osi_solucoes/core/services/adaptive_experiment_service.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:search_cep/search_cep.dart';
 
@@ -24,6 +25,8 @@ abstract class CadastroStoreBase with Store {
   CadastroRepository repository = GetIt.I<CadastroRepository>();
   LoginRepository loginRepository = GetIt.I<LoginRepository>();
   AuthController authController = GetIt.I<AuthController>();
+  AdaptiveExperimentService adaptiveExperimentService =
+      AdaptiveExperimentService();
 
   @observable
   TextEditingController nome = TextEditingController();
@@ -208,6 +211,11 @@ abstract class CadastroStoreBase with Store {
               return "loginInvalido".i18n();
             }
 
+            await _tryAutoAssignExperiment(
+              userId: authenticatedUser.id.toString(),
+              isisToken: token,
+            );
+
             await localStorage.storageUser(authenticatedUser);
             authController.setUser(authenticatedUser);
             return "sucesso";
@@ -215,5 +223,26 @@ abstract class CadastroStoreBase with Store {
         );
       },
     );
+  }
+
+  Future<void> _tryAutoAssignExperiment({
+    required String userId,
+    required String isisToken,
+  }) async {
+    try {
+      final result = await adaptiveExperimentService.autoAssignAfterLogin(
+        userId: userId,
+        isisToken: isisToken,
+      );
+
+      if (!result.assigned && !result.skippedNoActiveExperiment) {
+        debugPrint(
+          'Autoatribuição experimental não aplicada para $userId: ${result.reason ?? 'sem reason'}',
+        );
+      }
+    } catch (e, stackTrace) {
+      debugPrint('Erro tolerado na autoatribuição experimental: $e');
+      debugPrint('StackTrace: $stackTrace');
+    }
   }
 }

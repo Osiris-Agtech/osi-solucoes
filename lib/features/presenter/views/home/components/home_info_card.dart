@@ -24,6 +24,10 @@ class HomeInfoCard extends StatelessWidget {
       return _buildSkeleton();
     }
 
+    if (data.type == HomeInfoType.operationalOnboarding) {
+      return _buildOperationalOnboardingCard();
+    }
+
     return HomePanelCard(
       child: InkWell(
         onTap: onTap,
@@ -49,7 +53,8 @@ class HomeInfoCard extends StatelessWidget {
   Widget _buildHeader() {
     return Row(
       children: [
-        Icon(_iconForType(data.type), size: 20, color: _colorForType(data.type)),
+        Icon(_iconForType(data.type),
+            size: 20, color: _colorForType(data.type)),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
@@ -62,6 +67,90 @@ class HomeInfoCard extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildOperationalOnboardingCard() {
+    final shouldRenderCta =
+        data.ctaLabel?.trim().isNotEmpty == true && onCtaTap != null;
+
+    return HomePanelCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: Constants.kPrimaryColor.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: const Icon(
+                  Icons.route_outlined,
+                  color: Constants.kPrimaryColor,
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(data.title, style: homeTitleStyle(15)),
+                    if (data.subtitle != null) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        data.subtitle!,
+                        style: homeBodyStyle(Colors.black54),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (data.items.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            Column(
+              children: data.items
+                  .map(
+                    (item) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: _OperationalOnboardingStep(label: item.title),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ],
+          if (shouldRenderCta) ...[
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: onCtaTap,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Constants.kPrimaryColor,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+                child: Text(
+                  data.ctaLabel!,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 
@@ -200,6 +289,8 @@ class HomeInfoCard extends StatelessWidget {
         return Icons.water_drop_rounded;
       case HomeInfoType.fieldNotesSummary:
         return Icons.menu_book_rounded;
+      case HomeInfoType.operationalOnboarding:
+        return Icons.route_outlined;
       case HomeInfoType.basicTip:
         return Icons.lightbulb_outline;
     }
@@ -213,6 +304,8 @@ class HomeInfoCard extends StatelessWidget {
         return const Color(0xFF2563EB);
       case HomeInfoType.fieldNotesSummary:
         return const Color(0xFFD97706);
+      case HomeInfoType.operationalOnboarding:
+        return Constants.kPrimaryColor;
       case HomeInfoType.basicTip:
         return Constants.kGreyText;
     }
@@ -354,5 +447,40 @@ class _InfoListItem extends StatelessWidget {
       case HomeInfoItemTone.neutral:
         return const Color(0xFF4B5563);
     }
+  }
+}
+
+class _OperationalOnboardingStep extends StatelessWidget {
+  final String label;
+
+  const _OperationalOnboardingStep({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 22,
+          height: 22,
+          decoration: BoxDecoration(
+            color: Constants.kPrimaryColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(99),
+          ),
+          child: const Icon(
+            Icons.check_rounded,
+            size: 15,
+            color: Constants.kPrimaryColor,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            label,
+            style: homeBodyStyle(Constants.kGreyText),
+          ),
+        ),
+      ],
+    );
   }
 }

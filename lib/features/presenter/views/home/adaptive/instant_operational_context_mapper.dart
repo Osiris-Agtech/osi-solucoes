@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/core/services/user_action_trace.dart';
 import 'package:osi_solucoes/features/presenter/models/homeDashboard/home_dashboard_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
@@ -58,6 +59,8 @@ class InstantOperationalContextMapper {
             ) ??
             false;
 
+    final experimentActive = homeStore.isInstantMode;
+
     final fieldNotebookExtra =
         InstantOperationalContextHelpers.fieldNotebookState(dashboard);
     final latestRecordType = fieldNotebookExtra['latestRecordType'] as String?;
@@ -97,16 +100,18 @@ class InstantOperationalContextMapper {
       }
     }
 
-    // Consume pending activity context from HomeStore
-    final pendingInteractionType = homeStore.pendingActivityInteractionType;
-    final pendingTitle = InstantOperationalContextHelpers.cleanText(
-      homeStore.pendingActivityTitle,
-    );
-    final pendingDescription = InstantOperationalContextHelpers.cleanText(
-      homeStore.pendingActivityDescription,
-      180,
-    );
-    homeStore.consumePendingActivityContext();
+    // Consume user action trace
+    final trace = GetIt.I<UserActionTrace>();
+    final recentActions = trace.consume();
+
+    // Derive last agenda interaction from trace, if any
+    String? lastInteractionType;
+    for (final action in recentActions) {
+      if (action['entityType'] == 'agenda_activity') {
+        lastInteractionType = action['action'] as String?;
+        break;
+      }
+    }
 
     return OperationalContext(
       generatedAt: DateTime.now(),
@@ -124,13 +129,12 @@ class InstantOperationalContextMapper {
         hasGeneratedActivities: hasGeneratedActivities,
         completedActivitiesTodayCount: completedActivitiesToday,
         nextActivity: nextActivity,
-        lastInteractionType: pendingInteractionType,
-        lastActivityTitle: pendingTitle,
-        lastActivityDescription: pendingDescription,
+        lastInteractionType: lastInteractionType,
         extra: InstantOperationalContextHelpers.agendaState(
           dashboard,
           nextActivity,
         ),
+        hasProtocolTasks: hasProtocol,
       ),
       fieldNotebookState: FieldNotebookOperationalState(
         hasRecentNutritionAdjustmentRecord: hasRecentNutritionAdjustment,
@@ -165,6 +169,7 @@ class InstantOperationalContextMapper {
         finalHomeStateChecked: sequenceSignals.finalHomeStateChecked,
         lastRelevantEvent: sequenceSignals.lastRelevantEvent,
         changedAt: sequenceSignals.changedAt,
+        experimentActive: experimentActive,
       ),
       reservoirState: ReservoirOperationalState(
         hasReservoirs: totalReservoirs > 0,
@@ -175,6 +180,7 @@ class InstantOperationalContextMapper {
         extra: InstantOperationalContextHelpers.reservoirState(dashboard),
       ),
       infoCardsState: InstantInfoCardsStateMapper.map(infoContext),
+      recentUserActions: recentActions,
     );
   }
 

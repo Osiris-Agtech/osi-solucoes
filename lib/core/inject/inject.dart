@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
+import 'package:osi_solucoes/core/services/user_action_trace.dart';
 import 'package:osi_solucoes/features/data/datasources/agenda/agenda_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/ajuste/ajuste_datasource.dart';
 import 'package:osi_solucoes/features/data/datasources/cadernoCampo/caderno_campo_datasource.dart';
@@ -77,6 +78,7 @@ Future<void> initInject() async {
   sl.registerLazySingleton<Connectivity>(() => Connectivity());
   sl.registerLazySingleton<ConnectivityService>(
       () => ConnectivityServiceImpl(connectivity: sl()));
+  sl.registerLazySingleton<UserActionTrace>(() => UserActionTrace());
 
   //datasource
   sl.registerLazySingleton<ICadastroConta>(() => CadastroConta());

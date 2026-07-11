@@ -11,7 +11,7 @@ Tela que renderiza todos os componentes dinâmicos do sistema **instant** com da
 | R1 | Botão "📦 Componentes Instant" no AppBar da `AdaptiveAdminPage` | Aparece ao lado do botão "Métricas" |
 | R2 | Ao clicar, navega para `InstantComponentGalleryPage` | Rota `/instantComponentGalleryPage` |
 | R3 | A página exibe todos os componentes instant com dados hardcoded | Cada seção tem header descritivo + componente renderizado |
-| R4 | Componentes exibidos: FocusBanner, ActivityFeed, RecommendedActionsPanel, ContextualOnboardingCard, todas as variações de InfoCard | Nenhum componente quebra na renderização |
+| R4 | Componentes exibidos: FocusBanner, ActivityFeed, RecommendedActionsPanel, ContextualOnboardingCard, OperationalOnboardingCard, todas as variações de InfoCard | Nenhum componente quebra na renderização |
 | R5 | Cada seção tem um título e descrição do data model | Fácil entender o que cada componente representa |
 
 ## Arquivos envolvidos

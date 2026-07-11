@@ -132,23 +132,6 @@ abstract class HomeStoreBase with Store {
   @observable
   bool hasInstantError = false;
 
-  // Transient holders for activity context enrichment
-  @observable
-  String? pendingActivityTitle;
-
-  @observable
-  String? pendingActivityDescription;
-
-  @observable
-  String? pendingActivityInteractionType;
-
-  @action
-  void consumePendingActivityContext() {
-    pendingActivityTitle = null;
-    pendingActivityDescription = null;
-    pendingActivityInteractionType = null;
-  }
-
   /// Inicializa a ordem dos cards com o recomendado em primeiro
   void initializeCardOrder() {
     const allCards = ['lotes', 'tarefas', 'producao', 'saude'];
@@ -159,7 +142,7 @@ abstract class HomeStoreBase with Store {
 
   /// Busca a configuração adaptativa do usuário no Firestore
   /// Retorna um mapa com mode e sessionId, ou null se não houver config
-  Future<Map<String, dynamic>?> _fetchUserAdaptiveConfig() async {
+  Future<Map<String, dynamic>?> fetchUserAdaptiveConfig() async {
     try {
       // Verifica se Firebase está inicializado
       Firebase.app();
@@ -228,7 +211,7 @@ abstract class HomeStoreBase with Store {
     try {
       // PASSO 1: Buscar configuração do usuário no Firestore
       // Isso garante que teremos mode e sessionId para modo INSTANT
-      final userConfig = await _fetchUserAdaptiveConfig();
+      final userConfig = await fetchUserAdaptiveConfig();
       final mode = userConfig?['mode'];
       final sessionId = userConfig?['sessionId'];
 
@@ -325,16 +308,22 @@ abstract class HomeStoreBase with Store {
   }
 
   @action
-  Future<void> loadInstantAdaptiveInterface() async {
+  Future<void> loadInstantAdaptiveInterface({
+    String? mode,
+    String? sessionId,
+  }) async {
     print('🏠 [HOME_STORE] Carregando interface adaptativa INSTANT...');
+
+    // Aceita mode/sessionId como override (útil na inicialização)
+    if (mode != null) adaptiveMode = mode;
+    if (sessionId != null) currentSessionId = sessionId;
 
     // Only run in INSTANT mode
     if (!isInstantMode) {
       print(' └─ ⏭ Modo não é INSTANT, pulando');
-      // Garantia dupla: limpa dados de sessão INSTANT anterior
-      // (a limpeza principal ocorre em loadAdaptiveInterface)
       instantViewData = null;
       hasInstantError = false;
+      isLoadingInstantAdaptation = false;
       return;
     }
 
@@ -342,9 +331,11 @@ abstract class HomeStoreBase with Store {
       print(' └─ ⏭ Sem sessionId, pulando');
       instantViewData = null;
       hasInstantError = false;
+      isLoadingInstantAdaptation = false;
       return;
     }
 
+    hasResolvedAdaptiveInterface = false;
     isLoadingInstantAdaptation = true;
     hasInstantError = false;
     // Limpa dados INSTANT anteriores para que o skeleton apareça
@@ -376,10 +367,21 @@ abstract class HomeStoreBase with Store {
           hasInstantError = true;
         },
         (response) {
-          // 3. Store the parsed view data
+          // 3. Propagate base response fields (shortcuts, dashboard, etc.)
+          recommendedShortcuts = _ensureMinimumShortcuts(response.shortcuts);
+          adaptiveDashboard = response.dashboard;
+          adaptiveCardType = response.cardType;
+          adaptiveDashboardSource = response.source;
+          adaptiveSource = response.source;
+          adaptiveVisualPriority = response.visualPriority;
+          adaptiveReason = response.reason;
+          dashboardConfidence = response.dashboardConfidence;
+          adaptiveMode = response.mode;
+
+          // 4. Store the parsed INSTANT view data
           instantViewData = response.instantViewData;
 
-          // 4. Track adaptation applied
+          // 5. Track adaptation applied
           final viewData = response.instantViewData;
           MetricsTrackingService.instance.trackInstantAdaptationApplied(
             mode: adaptiveMode,
@@ -389,6 +391,8 @@ abstract class HomeStoreBase with Store {
           );
 
           print('✅ [HOME_STORE] Interface INSTANT carregada:');
+          print(
+              ' └─ Dashboard: ${adaptiveDashboard ?? 'null'} (${(dashboardConfidence * 100).toStringAsFixed(1)}%)');
           print(
               ' └─ NextStep: ${viewData?.nextStep != null ? "presente" : "ausente"}');
           print(
@@ -407,6 +411,7 @@ abstract class HomeStoreBase with Store {
       instantViewData = null;
       hasInstantError = true;
     } finally {
+      hasResolvedAdaptiveInterface = true;
       isLoadingInstantAdaptation = false;
       print('🏠 [HOME_STORE] Carregamento INSTANT finalizado');
     }
@@ -507,6 +512,10 @@ abstract class HomeStoreBase with Store {
     }
     if (viewData.activityFeedItems.isNotEmpty) {
       components.add('ActivityFeedCard');
+    }
+    if (viewData.infoRecommendation != null ||
+        viewData.operationalOnboarding != null) {
+      components.add('HomeInfoCard');
     }
     return components;
   }

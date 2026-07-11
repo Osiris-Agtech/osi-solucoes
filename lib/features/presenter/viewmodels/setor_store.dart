@@ -12,6 +12,7 @@ import 'package:osi_solucoes/features/presenter/viewmodels/area_cultivo_store.da
 import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
+import 'package:osi_solucoes/core/services/user_action_trace.dart';
 
 part 'setor_store.g.dart';
 
@@ -227,6 +228,11 @@ abstract class SetorStoreBase with Store {
         buscarSetores();
         limparTudo();
         Get.close(1);
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'sector',
+          action: 'deleted',
+          entityId: setorId,
+        ));
       },
     );
 
@@ -260,6 +266,12 @@ abstract class SetorStoreBase with Store {
         GetIt.I<HomeStore>().carregarHome();
         limparTudo();
         Get.close(1);
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'sector',
+          action: 'created',
+          entityId: data.id,
+          entityName: data.nome,
+        ));
       },
     );
 
@@ -290,6 +302,12 @@ abstract class SetorStoreBase with Store {
         Get.close(2);
         loteStore.setSetorSelecionado(data);
         Get.toNamed(Routes.lotePage);
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'sector',
+          action: 'edited',
+          entityId: data.id,
+          entityName: data.nome,
+        ));
       },
     );
 

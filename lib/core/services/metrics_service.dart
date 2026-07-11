@@ -130,9 +130,9 @@ class MetricsService {
   }
 
   /// Formata tempo em ms para legível (ex: 45000 → "45s")
-  static String formatTime(int? ms) {
+  static String formatTime(num? ms) {
     if (ms == null || ms < 0) return 'N/A';
-    final seconds = ms ~/ 1000;
+    final seconds = ms!.toInt() ~/ 1000;
     if (seconds < 60) return '${seconds}s';
     final minutes = seconds ~/ 60;
     final remainingSecs = seconds % 60;

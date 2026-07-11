@@ -26,12 +26,19 @@ class AppStepWizard extends StatefulWidget {
   /// this parameter is reserved for future customization.
   final String submitLabel;
 
+  /// Whether the final submit button should show a loading/disabled state.
+  ///
+  /// Use this to prevent duplicate submissions while an async save
+  /// operation is in progress. Defaults to false.
+  final bool isLoading;
+
   const AppStepWizard({
     super.key,
     required this.steps,
     required this.onSubmit,
     required this.stepLabels,
     this.submitLabel = 'Salvar',
+    this.isLoading = false,
   });
 
   @override
@@ -96,7 +103,7 @@ class _AppStepWizardState extends State<AppStepWizard> {
           canGoBack: !_isFirstStep,
           canGoForward: true,
           isLastStep: _isLastStep,
-          isLoading: false,
+          isLoading: widget.isLoading,
           onBack: _onBack,
           onNext: _onNext,
           onSubmit: widget.onSubmit,

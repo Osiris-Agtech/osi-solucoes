@@ -13,6 +13,7 @@ import 'package:search_cep/search_cep.dart';
 import '../../../core/utils/toast.dart';
 import '../models/area/area_model.dart';
 import '../models/localizacao/localizacao_model.dart';
+import 'package:osi_solucoes/core/services/user_action_trace.dart';
 
 part 'area_cultivo_store.g.dart';
 
@@ -255,6 +256,11 @@ abstract class AreaCultivoStoreBase with Store {
         buscarArea();
         GetIt.I<HomeStore>().carregarHome();
         Get.close(1);
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'cultivation_area',
+          action: 'deleted',
+          entityId: areaId,
+        ));
       },
     );
 
@@ -287,6 +293,12 @@ abstract class AreaCultivoStoreBase with Store {
         GetIt.I<HomeStore>().carregarHome();
         limparTudo();
         Get.close(1);
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'cultivation_area',
+          action: 'created',
+          entityId: data.id,
+          entityName: data.nome,
+        ));
       },
     );
 
@@ -320,6 +332,12 @@ abstract class AreaCultivoStoreBase with Store {
         Get.close(2);
         setorStore.setAreaSelecionada(data);
         Get.toNamed(Routes.setorPage);
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'cultivation_area',
+          action: 'edited',
+          entityId: data.id,
+          entityName: data.nome,
+        ));
       },
     );
 

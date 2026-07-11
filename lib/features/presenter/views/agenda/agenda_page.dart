@@ -83,91 +83,104 @@ class AgendaPageState extends State<AgendaPage> {
                         left: 24.0,
                         right: 24.0,
                       ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                const Expanded(
-                                  child: Text(
-                                    'Atividades',
-                                    style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-                                  ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Expanded(
+                                child: Text(
+                                  'Atividades',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            Observer(builder: (_) {
-                              return SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: AgendaFilter.values.map((AgendaFilter filtro) {
-                                    final isSelected = store.filter == filtro;
-                                    return Padding(
-                                      padding: const EdgeInsets.only(right: 8),
-                                      child: FilterChip(
-                                        label: Text(
-                                          filtro == AgendaFilter.todos ? 'Todos' :
-                                          filtro == AgendaFilter.lote ? 'Por Lote' : 'Por Responsável',
-                                          style: TextStyle(
-                                            color: isSelected ? Colors.white : Constants.kText2,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 13,
-                                          ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Observer(builder: (_) {
+                            return SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: AgendaFilter.values
+                                    .map((AgendaFilter filtro) {
+                                  final isSelected = store.filter == filtro;
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: FilterChip(
+                                      label: Text(
+                                        filtro.name,
+                                        style: TextStyle(
+                                          color: isSelected
+                                              ? Colors.white
+                                              : Constants.kText2,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 13,
                                         ),
-                                        selected: isSelected,
-                                        onSelected: (_) => store.setFiltro(filtro),
-                                        selectedColor: Constants.kPrimaryColor,
-                                        backgroundColor: Constants.kCardColor,
-                                        checkmarkColor: Colors.white,
-                                        side: BorderSide.none,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(20),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(horizontal: 4),
                                       ),
-                                    );
-                                  }).toList(),
-                                ),
-                              );
-                            }),
-                            Observer(builder: (_) {
-                              if (store.filter == AgendaFilter.todos) return const SizedBox.shrink();
+                                      selected: isSelected,
+                                      onSelected: (_) =>
+                                          store.setFiltro(filtro),
+                                      selectedColor: Constants.kPrimaryColor,
+                                      backgroundColor: Constants.kCardColor,
+                                      checkmarkColor: Colors.white,
+                                      side: BorderSide.none,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            );
+                          }),
+                          Observer(builder: (_) {
+                            if (store.filter == AgendaFilter.todos ||
+                                store.filter == AgendaFilter.hoje) {
+                              return const SizedBox.shrink();
+                            }
 
-                              if (store.filter == AgendaFilter.lote) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: AppDropdown<Lote>(
-                                    value: store.filtroLote,
-                                    hintText: 'Selecionar Lote',
-                                    items: store.lotesConta.map((Lote lote) {
-                                      return DropdownMenuItem<Lote>(
-                                        value: lote,
-                                        child: Text('${lote.nome} - ${lote.setor?.nome ?? ''}'),
-                                      );
-                                    }).toList(),
-                                    onChanged: store.setFiltroLote,
-                                  ),
-                                );
-                              }
+                            if (store.filter == AgendaFilter.lote) {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 8.0),
-                                child: AppDropdown<Usuario>(
-                                  value: store.filtroResponsavel,
-                                  hintText: 'Selecionar Responsável',
-                                  items: store.usuariosConta.map((Usuario usuario) {
-                                    return DropdownMenuItem<Usuario>(
-                                      value: usuario,
-                                      child: Text('${usuario.nome} (${usuario.selected_conta?.cargo?.cargo})'),
+                                child: AppDropdown<Lote>(
+                                  value: store.filtroLote,
+                                  hintText: 'Selecionar Lote',
+                                  items: store.lotesConta.map((Lote lote) {
+                                    return DropdownMenuItem<Lote>(
+                                      value: lote,
+                                      child: Text(
+                                          '${lote.nome} - ${lote.setor?.nome ?? ''}'),
                                     );
                                   }).toList(),
-                                  onChanged: store.setFiltroResponsavel,
+                                  onChanged: store.setFiltroLote,
                                 ),
                               );
-                            }),
-                          ],
-                        ),
+                            }
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: AppDropdown<Usuario>(
+                                value: store.filtroResponsavel,
+                                hintText: 'Selecionar Responsável',
+                                items:
+                                    store.usuariosConta.map((Usuario usuario) {
+                                  return DropdownMenuItem<Usuario>(
+                                    value: usuario,
+                                    child: Text(
+                                        '${usuario.nome} (${usuario.selected_conta?.cargo?.cargo})'),
+                                  );
+                                }).toList(),
+                                onChanged: store.setFiltroResponsavel,
+                              ),
+                            );
+                          }),
+                        ],
+                      ),
                     ),
                   ),
                   Observer(builder: (_) {
@@ -182,6 +195,10 @@ class AgendaPageState extends State<AgendaPage> {
                           'Não há atividades para este lote.',
                         );
                       }
+                      return _showList();
+                    }
+
+                    if (store.filter == AgendaFilter.hoje) {
                       return _showList();
                     }
 
@@ -219,13 +236,15 @@ class AgendaPageState extends State<AgendaPage> {
           children: [
             Observer(builder: (context) {
               return TableCalendar(
-                selectedDayPredicate: (day) => isSameDay(store.selectedDay, day),
+                selectedDayPredicate: (day) =>
+                    isSameDay(store.selectedDay, day),
                 onDaySelected: (selectedDay, focusedDay) {
                   store.onDaySelected(selectedDay);
                   store.setInitialStateForFilter();
                 },
                 locale: 'pt_BR',
-                firstDay: DateTime.now().subtract(const Duration(days: 10 * 365)),
+                firstDay:
+                    DateTime.now().subtract(const Duration(days: 10 * 365)),
                 lastDay: DateTime.now().add(const Duration(days: 10 * 365)),
                 focusedDay: store.selectedDay ??
                     DateTime.now(), // Use o focusedDay do store
@@ -321,9 +340,12 @@ class AgendaPageState extends State<AgendaPage> {
                     children: [
                       AppStatePanel(
                         stateKind: AppStateKind.empty,
-                        title: 'Nenhuma atividade para esta data',
-                        message:
-                            'Não há atividades cadastradas para o dia selecionado.',
+                        title: store.filter == AgendaFilter.hoje
+                            ? 'Nenhuma atividade para hoje'
+                            : 'Nenhuma atividade para esta data',
+                        message: store.filter == AgendaFilter.hoje
+                            ? 'Não há atividades cadastradas para hoje.'
+                            : 'Não há atividades cadastradas para o dia selecionado.',
                         isCompact: true,
                       ),
                       const SizedBox(height: 16),
@@ -466,7 +488,12 @@ class _SkeletonItemState extends State<_SkeletonItem>
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 12, offset: const Offset(0, 2))],
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.06),
+                    blurRadius: 12,
+                    offset: const Offset(0, 2))
+              ],
             ),
             child: Row(
               children: [
@@ -478,7 +505,8 @@ class _SkeletonItemState extends State<_SkeletonItem>
                         width: 180,
                         height: 20,
                         decoration: BoxDecoration(
-                          color: Constants.kGreyLight.withValues(alpha: _animation.value),
+                          color: Constants.kGreyLight
+                              .withValues(alpha: _animation.value),
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -487,7 +515,8 @@ class _SkeletonItemState extends State<_SkeletonItem>
                         children: [
                           CircleAvatar(
                             radius: 17.5,
-                            backgroundColor: Constants.kGreyLight.withValues(alpha: _animation.value),
+                            backgroundColor: Constants.kGreyLight
+                                .withValues(alpha: _animation.value),
                           ),
                           const SizedBox(width: 12),
                           Column(
@@ -497,7 +526,8 @@ class _SkeletonItemState extends State<_SkeletonItem>
                                 width: 120,
                                 height: 14,
                                 decoration: BoxDecoration(
-                                  color: Constants.kGreyLight.withValues(alpha: _animation.value),
+                                  color: Constants.kGreyLight
+                                      .withValues(alpha: _animation.value),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                               ),
@@ -506,7 +536,8 @@ class _SkeletonItemState extends State<_SkeletonItem>
                                 width: 80,
                                 height: 12,
                                 decoration: BoxDecoration(
-                                  color: Constants.kGreyLight.withValues(alpha: _animation.value),
+                                  color: Constants.kGreyLight
+                                      .withValues(alpha: _animation.value),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                               ),
@@ -519,7 +550,8 @@ class _SkeletonItemState extends State<_SkeletonItem>
                         width: 100,
                         height: 14,
                         decoration: BoxDecoration(
-                          color: Constants.kGreyLight.withValues(alpha: _animation.value),
+                          color: Constants.kGreyLight
+                              .withValues(alpha: _animation.value),
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),

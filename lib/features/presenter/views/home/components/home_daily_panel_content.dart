@@ -101,8 +101,10 @@ class HomeDailyPanelContent extends StatelessWidget {
     // ── Conteúdo base sempre visível a partir daqui ──
     final instant = instantViewData;
     final hasInstantData = instant != null;
-    final showInstantSkeleton =
-        adaptiveMode == 'INSTANT' && !hasInstantData && !hasInstantError;
+    final showInstantSkeleton = adaptiveMode == 'INSTANT' &&
+        isLoadingInstantAdaptation &&
+        !hasInstantData &&
+        !hasInstantError;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,6 +180,7 @@ class HomeDailyPanelContent extends StatelessWidget {
             builder: (context) {
               final infoData = HomeInfoMapper.resolve(
                 infoContext: infoContext,
+                operationalOnboarding: instant?.operationalOnboarding,
                 infoRecommendation: instant?.infoRecommendation,
                 adaptiveMode: adaptiveMode,
               );
@@ -196,9 +199,9 @@ class HomeDailyPanelContent extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 14),
                 child: HomeInfoCard(
                   data: infoData,
-                  onTap: infoData.type == HomeInfoType.basicTip
-                      ? null
-                      : () => _handleCardTap(infoData),
+                  onTap: _canHandleCardTap(infoData.type)
+                      ? () => _handleCardTap(infoData)
+                      : null,
                   onCtaTap: infoData.ctaRoute != null
                       ? () => _handleInfoCardCta(infoData)
                       : null,
@@ -253,6 +256,18 @@ class HomeDailyPanelContent extends StatelessWidget {
     Get.toNamed(route);
   }
 
+  bool _canHandleCardTap(HomeInfoType type) {
+    switch (type) {
+      case HomeInfoType.todayCultivation:
+      case HomeInfoType.reservoirReport:
+      case HomeInfoType.fieldNotesSummary:
+        return true;
+      case HomeInfoType.operationalOnboarding:
+      case HomeInfoType.basicTip:
+        return false;
+    }
+  }
+
   String? _cardRouteForType(HomeInfoType type) {
     switch (type) {
       case HomeInfoType.todayCultivation:
@@ -261,6 +276,7 @@ class HomeDailyPanelContent extends StatelessWidget {
         return '/reservatoriosPage';
       case HomeInfoType.fieldNotesSummary:
         return '/cadernoCampoPage';
+      case HomeInfoType.operationalOnboarding:
       case HomeInfoType.basicTip:
         return null;
     }

@@ -8,9 +8,14 @@ import 'home_info_data_source.dart';
 class HomeInfoMapper {
   static HomeInfoViewData resolve({
     required HomeInfoContext? infoContext,
+    required OperationalOnboardingViewData? operationalOnboarding,
     required InfoRecommendationViewData? infoRecommendation,
     required String adaptiveMode,
   }) {
+    if (adaptiveMode == 'INSTANT' && operationalOnboarding != null) {
+      return _mapOperationalOnboarding(operationalOnboarding);
+    }
+
     // INSTANT mode: follow recommendation
     if (adaptiveMode == 'INSTANT' && infoRecommendation != null) {
       final result =
@@ -113,6 +118,21 @@ class HomeInfoMapper {
     }
 
     return null;
+  }
+
+  static HomeInfoViewData _mapOperationalOnboarding(
+    OperationalOnboardingViewData onboarding,
+  ) {
+    return HomeInfoViewData(
+      type: HomeInfoType.operationalOnboarding,
+      title: onboarding.title,
+      subtitle: onboarding.message,
+      items: onboarding.steps
+          .map((step) => HomeInfoListItem(title: step))
+          .toList(),
+      ctaLabel: onboarding.ctaLabel,
+      ctaRoute: onboarding.targetRoute,
+    );
   }
 
   static HomeInfoViewData _mapTodayCultivation(

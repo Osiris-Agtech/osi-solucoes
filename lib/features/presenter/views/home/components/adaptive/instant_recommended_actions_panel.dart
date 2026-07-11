@@ -86,30 +86,16 @@ class InstantRecommendedActionsPanel extends StatelessWidget {
   List<_ItemEntry> _buildItems() {
     final items = <_ItemEntry>[];
 
-    if (nextStep != null) {
+    // Opção E: shortcuts são a fonte única.
+    // recommendedActions[0] vira o NextStepCard.
+    // nextStep é mantido apenas para tracking (stepId, isProminent).
+    const maxItems = 6;
+    for (var i = 0; i < recommendedActions.length && items.length < maxItems; i++) {
       items.add(_ItemEntry(
-        isNextStep: true,
-        isProminent: nextStep!.isProminent,
-        data: AdaptiveRecommendedActionViewData(
-          label: nextStep!.title,
-          description: nextStep!.description,
-          targetRoute: nextStep!.targetRoute,
-          confidence: 1.0,
-          resourceId: nextStep!.resourceId,
-          reason: null,
-        ),
+        isNextStep: i == 0,
+        isProminent: i == 0 ? (nextStep?.isProminent ?? false) : false,
+        data: recommendedActions[i],
       ));
-    }
-
-    final remainingCount = 6 - items.length;
-    if (remainingCount > 0) {
-      for (var i = 0; i < recommendedActions.length && i < remainingCount; i++) {
-        items.add(_ItemEntry(
-          isNextStep: false,
-          isProminent: false,
-          data: recommendedActions[i],
-        ));
-      }
     }
 
     return items;

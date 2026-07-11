@@ -15,6 +15,7 @@ import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequ
 import 'package:osi_solucoes/features/presenter/models/reservatorio/reservatorio_model.dart';
 import 'package:osi_solucoes/features/presenter/models/setor/setor_model.dart';
 import 'package:osi_solucoes/features/presenter/models/solucaoFertilizanteConcentrada/solucaoFertilizanteConcentrada_model.dart';
+import 'package:osi_solucoes/core/services/user_action_trace.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
 
@@ -213,6 +214,11 @@ abstract class LoteStoreBase with Store {
       },
       (_) {
         toastSuccess(message: 'Lote deletado com sucesso');
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'lot',
+          action: 'deleted',
+          entityId: loteId,
+        ));
         limparTudo();
         Get.close(1);
         setorStore.buscarSetores();
@@ -750,6 +756,7 @@ abstract class LoteStoreBase with Store {
 
   @action
   Future<void> registrarLote() async {
+    if (isNovoLoteLoading) return;
     SetorStore setorStore = GetIt.I<SetorStore>();
 
     isNovoLoteLoading = true;
@@ -794,6 +801,12 @@ abstract class LoteStoreBase with Store {
         if (setorSelecionado.id != null) {
           buscarLotes();
         }
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'lot',
+          action: 'created',
+          entityId: data.id,
+          entityName: data.nome,
+        ));
       },
     );
 
@@ -853,6 +866,7 @@ abstract class LoteStoreBase with Store {
 
   @action
   Future<void> alterarLote() async {
+    if (isNovoLoteLoading) return;
     LoteRepository loteRepository = GetIt.I<LoteRepository>();
     isNovoLoteLoading = true;
 
@@ -875,6 +889,12 @@ abstract class LoteStoreBase with Store {
       },
       (data) async {
         toastSuccess(message: "Alterado com sucesso");
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'lot',
+          action: 'edited',
+          entityId: novoLote.id,
+          entityName: novoLote.nome,
+        ));
         final hasAssociatedProtocol = data.protocolo?.id != null ||
             novoLote.protocolo?.id != null ||
             protocoloVinculado?.id != null;

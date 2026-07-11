@@ -62,15 +62,19 @@ class AdaptiveInterfaceService {
       if (mode != null) print(' └─ Mode: $mode');
       if (sessionId != null) print(' └─ Session ID: $sessionId');
 
-      // Chama a Cloud Function
-      final callable = functions.httpsCallable('getAdaptiveInterface');
-      final startTime = DateTime.now();
-      final result = await callable.call({
+      final payload = {
         'hour': currentHour,
         'userId': userId,
         if (mode != null) 'mode': mode,
         if (sessionId != null) 'sessionId': sessionId,
-      });
+      };
+
+      print('📤 [ADAPTIVE] Payload enviado: $payload');
+
+      // Chama a Cloud Function
+      final callable = functions.httpsCallable('getAdaptiveInterface');
+      final startTime = DateTime.now();
+      final result = await callable.call(payload);
       final duration = DateTime.now().difference(startTime);
 
       print(
@@ -78,11 +82,7 @@ class AdaptiveInterfaceService {
 
       final data = _normalizeCallableData(result.data);
 
-      print('📦 [ADAPTIVE] Dados recebidos:');
-      print(' └─ Dashboard: ${data['dashboard'] ?? 'null'}');
-      print(' └─ Confidence: ${data['confidence'] ?? 0.0}');
-      print(' └─ Shortcuts: ${_asList(data['shortcuts']).length} itens');
-      print(' └─ Mode: ${data['mode'] ?? 'GRADUAL'}');
+      print('📦 [ADAPTIVE] Payload recebido: $data');
 
       // Extrai informações do dashboard (suporta campos novos e legados)
       final dashboardName = _asString(data['dashboard']);
@@ -260,17 +260,23 @@ class AdaptiveInterfaceService {
       final currentHour = now.hour;
       final userId = _getUserId();
 
-      final callable = functions.httpsCallable('getAdaptiveInterface');
-      final result = await callable.call({
+      final payload = {
         'hour': currentHour,
         'userId': userId,
         'mode': mode,
         'sessionId': sessionId,
         'operationalContext': operationalContext,
         'clientCapabilities': clientCapabilities,
-      });
+      };
+
+      print('📤 [ADAPTIVE-INSTANT] Payload enviado: $payload');
+
+      final callable = functions.httpsCallable('getAdaptiveInterface');
+      final result = await callable.call(payload);
 
       final data = _normalizeCallableData(result.data);
+
+      print('📦 [ADAPTIVE-INSTANT] Payload recebido: $data');
 
       // Parse base response (reuse existing parsing logic)
       final dashboardName = _asString(data['dashboard']);

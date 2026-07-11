@@ -15,6 +15,7 @@ import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoN
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import "package:collection/collection.dart";
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
+import 'package:osi_solucoes/core/services/user_action_trace.dart';
 
 part 'solucao_store.g.dart';
 
@@ -111,6 +112,11 @@ abstract class SolucaoStoreBase with Store {
         toastSuccess(message: 'Solução deletada com sucesso');
         await buscarSolucoes();
         Get.close(1);
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'nutritional_solution',
+          action: 'deleted',
+          entityId: snutritivaId,
+        ));
       },
     );
 
@@ -658,6 +664,12 @@ abstract class SolucaoStoreBase with Store {
         Get.close(2);
         clearAll();
         if (!isShortcut) buscarSolucoes();
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'nutritional_solution',
+          action: 'created',
+          entityId: data.id,
+          entityName: data.nome,
+        ));
       },
     );
 

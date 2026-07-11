@@ -14,6 +14,7 @@ class OperationalContext {
   final Map<String, dynamic> cultivationState;
   final Map<String, dynamic> teamState;
   final Map<String, dynamic> infoCardsState;
+  final List<Map<String, dynamic>> recentUserActions;
 
   const OperationalContext({
     required this.generatedAt,
@@ -27,10 +28,10 @@ class OperationalContext {
     required this.cultivationState,
     required this.teamState,
     required this.infoCardsState,
+    this.recentUserActions = const [],
   });
 
   Map<String, dynamic> toJson() => {
-        'generatedAt': InstantOperationalContextHelpers.utcIso(generatedAt),
         'dashboardState': dashboardState.toJson(),
         'agendaState': agendaState.toJson(),
         'fieldNotebookState': fieldNotebookState.toJson(),
@@ -38,9 +39,9 @@ class OperationalContext {
         'cultivationState': cultivationState,
         'teamState': teamState,
         'alertState': alertState.toJson(),
-        'testSequenceSignals': testSequenceSignals.toJson(),
         'reservoirState': reservoirState.toJson(),
-        'infoCardsState': infoCardsState,
+        if (recentUserActions.isNotEmpty)
+          'recentUserActions': recentUserActions,
       };
 }
 
@@ -62,10 +63,7 @@ class DashboardOperationalState {
   });
 
   Map<String, dynamic> toJson() => {
-        ...extra,
         'hasActiveLots': hasActiveLots,
-        'activeLotsCount': activeLotsCount,
-        'finishedLotsCount': finishedLotsCount,
         'hasProtocolLinkedToLatestLot': hasProtocolLinkedToLatestLot,
         'hasUpcomingHarvests': hasUpcomingHarvests,
       };
@@ -81,6 +79,7 @@ class AgendaOperationalState {
   final String? lastActivityTitle;
   final String? lastActivityDescription;
   final Map<String, dynamic> extra;
+  final bool hasProtocolTasks;
 
   const AgendaOperationalState({
     required this.pendingActivitiesTodayCount,
@@ -92,20 +91,20 @@ class AgendaOperationalState {
     this.lastActivityTitle,
     this.lastActivityDescription,
     this.extra = const {},
+    this.hasProtocolTasks = false,
   });
 
   Map<String, dynamic> toJson() => {
-        ...extra,
-        'pendingActivitiesTodayCount': pendingActivitiesTodayCount,
-        'overdueActivitiesCount': overdueActivitiesCount,
         'hasGeneratedActivities': hasGeneratedActivities,
-        'completedActivitiesTodayCount': completedActivitiesTodayCount,
-        'nextActivity': nextActivity.toJson(),
-        if (lastInteractionType != null)
-          'lastInteractionType': lastInteractionType,
-        if (lastActivityTitle != null) 'lastActivityTitle': lastActivityTitle,
-        if (lastActivityDescription != null)
-          'lastActivityDescription': lastActivityDescription,
+        'pendingToday': pendingActivitiesTodayCount,
+        'overdueCount': overdueActivitiesCount,
+        'hasOverdue': overdueActivitiesCount > 0,
+        'nextActivityType': nextActivity.type,
+        'nextActivityStatus': nextActivity.status,
+        'nextActivityDueLabel': nextActivity.dueLabel,
+        'nextActivityOverdue': nextActivity.overdue ?? false,
+        'hasProtocolTasks': hasProtocolTasks,
+        'lastAgendaInteraction': lastInteractionType,
       };
 }
 
@@ -127,11 +126,11 @@ class ReservoirOperationalState {
   });
 
   Map<String, dynamic> toJson() => {
-        ...extra,
         'hasReservoirs': hasReservoirs,
-        'totalCount': totalCount,
-        'lowLevelCount': lowLevelCount,
         'criticalLevelCount': criticalLevelCount,
+        'lowLevelCount': lowLevelCount,
+        'withSolutionCount': extra['withSolutionCount'] ?? 0,
+        'withoutSolutionCount': extra['withoutSolutionCount'] ?? 0,
         'currentLevel': currentLevel,
       };
 }
@@ -152,12 +151,10 @@ class FieldNotebookOperationalState {
   });
 
   Map<String, dynamic> toJson() => {
-        ...extra,
-        'hasRecentNutritionAdjustmentRecord':
-            hasRecentNutritionAdjustmentRecord,
-        'hasRecentFieldNotes': hasRecentFieldNotes,
-        'uncheckedNotesCount': uncheckedNotesCount,
-        if (latestRecordType != null) 'latestRecordType': latestRecordType,
+        'hasRecentNotes': hasRecentFieldNotes,
+        'hasNutritionAdjustmentRecord': hasRecentNutritionAdjustmentRecord,
+        'totalRecentNotes': extra['totalRecentNotes'] ?? 0,
+        'hasSowingNote': extra['sowingNotePresent'] ?? false,
       };
 }
 
@@ -175,10 +172,10 @@ class ProductionOperationalState {
   });
 
   Map<String, dynamic> toJson() => {
-        ...extra,
         'hasProductionData': hasProductionData,
         'harvestedPlantsLast30d': harvestedPlantsLast30d,
         'producedPackagesLast30d': producedPackagesLast30d,
+        'upcomingHarvestLots': extra['upcomingHarvestLots'] ?? 0,
       };
 }
 
@@ -200,9 +197,6 @@ class AlertOperationalState {
   Map<String, dynamic> toJson() => {
         'hasCriticalAlerts': hasCriticalAlerts,
         'criticalCount': criticalCount,
-        if (highestSeverity != null) 'highestSeverity': highestSeverity,
-        'types': types,
-        'items': items,
       };
 }
 
@@ -214,6 +208,7 @@ class TestSequenceSignals {
   final bool finalHomeStateChecked;
   final InstantSequenceEventType? lastRelevantEvent;
   final DateTime? changedAt;
+  final bool experimentActive;
 
   const TestSequenceSignals({
     required this.lotWithProtocolCreated,
@@ -223,11 +218,13 @@ class TestSequenceSignals {
     required this.finalHomeStateChecked,
     this.lastRelevantEvent,
     this.changedAt,
+    this.experimentActive = false,
   });
 
   factory TestSequenceSignals.fromSnapshot(
-    InstantSequenceSignalsSnapshot snapshot,
-  ) {
+    InstantSequenceSignalsSnapshot snapshot, {
+    bool experimentActive = false,
+  }) {
     return TestSequenceSignals(
       lotWithProtocolCreated: snapshot.lotWithProtocolCreated,
       generatedAgendaActivitiesChecked:
@@ -237,6 +234,7 @@ class TestSequenceSignals {
       finalHomeStateChecked: snapshot.finalHomeStateChecked,
       lastRelevantEvent: snapshot.lastRelevantEvent,
       changedAt: snapshot.changedAt,
+      experimentActive: experimentActive,
     );
   }
 
@@ -247,7 +245,8 @@ class TestSequenceSignals {
         agendaActivitiesCompleted = false,
         finalHomeStateChecked = false,
         lastRelevantEvent = null,
-        changedAt = null;
+        changedAt = null,
+        experimentActive = false;
 
   Map<String, dynamic> toJson() => {
         'lotWithProtocolCreated': lotWithProtocolCreated,
@@ -255,6 +254,7 @@ class TestSequenceSignals {
         'adjustmentRecorded': adjustmentRecorded,
         'agendaActivitiesCompleted': agendaActivitiesCompleted,
         'finalHomeChecked': finalHomeStateChecked,
+        if (experimentActive) 'experimentActive': true,
         if (lastRelevantEvent != null)
           'lastRelevantEvent': lastRelevantEvent!.payloadName,
         if (changedAt != null)

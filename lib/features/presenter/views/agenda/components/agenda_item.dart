@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
 import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/agenda_store.dart';
+import 'package:osi_solucoes/features/presenter/views/agenda/components/agenda_today_badge.dart';
 import 'package:osi_solucoes/features/presenter/views/agenda/components/detalhes_bottomSheet.dart';
 import 'package:osi_solucoes/features/presenter/widgets/common/app_panel_card.dart';
 import 'package:osi_solucoes/features/presenter/views/agenda/components/editar_atividade_sheet.dart';
@@ -18,8 +19,16 @@ Widget agendaItem({
   required bool isLast,
   VoidCallback? onTap,
 }) {
+  final now = DateTime.now();
   final isDone = agenda.finalizado ?? false;
-  final isOverdue = !isDone && (agenda.alerta == true || (agenda.data != null && agenda.data!.isBefore(DateTime.now())));
+  final isOverdue = !isDone &&
+      (agenda.alerta == true ||
+          (agenda.data != null && agenda.data!.isBefore(now)));
+  final isDueToday = !isDone &&
+      agenda.data != null &&
+      _isSameLocalCalendarDay(agenda.data!, now);
+  final showTodayHighlight = isDueToday && !isOverdue;
+
   return Slidable(
     endActionPane: ActionPane(
       motion: const ScrollMotion(),
@@ -41,16 +50,28 @@ Widget agendaItem({
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: const Text('Deletar Atividade', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                content: const Text('Deseja deletar esta atividade?', style: TextStyle(color: Constants.kGreyText, fontWeight: FontWeight.w500)),
+                title: const Text('Deletar Atividade',
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold)),
+                content: const Text('Deseja deletar esta atividade?',
+                    style: TextStyle(
+                        color: Constants.kGreyText,
+                        fontWeight: FontWeight.w500)),
                 actions: [
                   TextButton(
-                    onPressed: () { Get.back(); store.deletarAtividade(agenda.id!); },
-                    child: const Text('Sim', style: TextStyle(fontWeight: FontWeight.bold)),
+                    onPressed: () {
+                      Get.back();
+                      store.deletarAtividade(agenda.id!);
+                    },
+                    child: const Text('Sim',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                   TextButton(
-                    onPressed: () { Get.back(); },
-                    child: const Text('Não', style: TextStyle(fontWeight: FontWeight.bold)),
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: const Text('Não',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),
@@ -80,6 +101,9 @@ Widget agendaItem({
               getBottomSheet(DetalhesBottomSheet(agenda: agenda));
             },
         child: AppPanelCard(
+          backgroundColor: showTodayHighlight
+              ? Constants.kPrimaryColor.withValues(alpha: 0.06)
+              : Colors.white,
           padding: const EdgeInsets.symmetric(
             horizontal: 24.0,
             vertical: 16.0,
@@ -111,12 +135,14 @@ Widget agendaItem({
                           if (isOverdue)
                             const Padding(
                               padding: EdgeInsets.only(left: 8.0),
-                              child: Icon(Icons.warning_amber_rounded, color: Constants.kWarninngColor, size: 20),
+                              child: Icon(Icons.warning_amber_rounded,
+                                  color: Constants.kWarninngColor, size: 20),
                             ),
                           if (isDone)
                             const Padding(
                               padding: EdgeInsets.only(left: 8.0),
-                              child: Icon(Icons.check_circle, color: Constants.kPrimaryColor, size: 16),
+                              child: Icon(Icons.check_circle,
+                                  color: Constants.kPrimaryColor, size: 16),
                             ),
                         ],
                       ),
@@ -203,7 +229,11 @@ Widget agendaItem({
                               color: Constants.kGreyMedium,
                               fontWeight: FontWeight.w600,
                             ),
-                          )
+                          ),
+                          if (showTodayHighlight) ...[
+                            const SizedBox(width: 8),
+                            const AgendaTodayBadge(),
+                          ],
                         ],
                       ),
                     ],
@@ -217,7 +247,8 @@ Widget agendaItem({
                       // Status: apenas indicador visual, sem clique
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Icon(Icons.check_circle, color: Constants.kPrimaryColor, size: 30),
+                        child: Icon(Icons.check_circle,
+                            color: Constants.kPrimaryColor, size: 30),
                       )
                     else
                       // Ação: tooltip + gesto + label
@@ -226,17 +257,22 @@ Widget agendaItem({
                         preferBelow: true,
                         triggerMode: TooltipTriggerMode.tap,
                         child: GestureDetector(
-                          onTap: () => store.marcarAtividadeComoFeita(agenda.id!),
+                          onTap: () =>
+                              store.marcarAtividadeComoFeita(agenda.id!),
                           child: const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Icon(Icons.check_circle_outline, color: Constants.kPrimaryColor, size: 30),
+                            child: Icon(Icons.check_circle_outline,
+                                color: Constants.kPrimaryColor, size: 30),
                           ),
                         ),
                       ),
                     if (!isDone)
                       const Text(
                         'Concluir',
-                        style: TextStyle(fontSize: 11, color: Constants.kGreyMedium, fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: Constants.kGreyMedium,
+                            fontWeight: FontWeight.w500),
                       ),
                   ],
                 ),
@@ -252,4 +288,10 @@ Widget agendaItem({
       ),
     ),
   );
+}
+
+bool _isSameLocalCalendarDay(DateTime value, DateTime reference) {
+  return value.year == reference.year &&
+      value.month == reference.month &&
+      value.day == reference.day;
 }

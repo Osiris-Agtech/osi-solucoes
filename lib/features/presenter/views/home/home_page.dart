@@ -67,16 +67,32 @@ class HomePageState extends State<HomePage> with RouteAware {
       print('🏠 [HOME_PAGE] Carregando dados...');
       try {
         await store.carregarHome();
-        await store.loadAdaptiveInterface();
-        print(
-            '🏠 [HOME_PAGE] Interface adaptativa carregada, aplicando dashboard...');
-        // Ajustar dashboard quando a interface adaptativa for carregada
-        _applyAdaptiveDashboard();
-        // Carrega interface adaptativa enriquecida para modo INSTANT
-        if (store.isInstantMode) {
-          await store.loadInstantAdaptiveInterface();
+
+        // Lê config do Firestore para decidir o fluxo adaptativo
+        final config = await store.fetchUserAdaptiveConfig();
+        final mode = config?['mode'] as String?;
+        final sessionId = config?['sessionId'] as String?;
+
+        if (mode == 'INSTANT' && sessionId != null) {
+          // ── Fluxo INSTANT: chamada única com contexto operacional ──
+          // Pula loadAdaptiveInterface (que seria 1ª chamada sem contexto).
+          // loadInstantAdaptiveInterface já preenche shortcuts, dashboard, instantViewData.
+          // O skeleton INSTANT aparece porque adaptiveMode = 'INSTANT' e instantViewData = null.
+          print('🏠 [HOME_PAGE] Modo INSTANT: chamada única com contexto...');
+          await store.loadInstantAdaptiveInterface(
+            mode: mode,
+            sessionId: sessionId,
+          );
+          _applyAdaptiveDashboard();
           _reportFinalHomeStateCheckedIfNeeded();
+        } else {
+          // ── Fluxo GRADUAL / STATIC ──
+          await store.loadAdaptiveInterface();
+          print(
+              '🏠 [HOME_PAGE] Interface adaptativa carregada, aplicando dashboard...');
+          _applyAdaptiveDashboard();
         }
+
         // Inicializa o PageController após carregar a ordem dos cards
         _initializePageController();
         // Metrics tracking: registra início de sessão após carregar modo
@@ -707,8 +723,11 @@ class HomePageState extends State<HomePage> with RouteAware {
     );
 
     final hasBaseDashboard = store.dashboard != null;
-    final shouldShowSkeleton =
-        !hasBaseDashboard || !store.hasResolvedAdaptiveInterface;
+    final isInstantIncrementalLoading = store.isInstantMode &&
+        hasBaseDashboard &&
+        store.isLoadingInstantAdaptation;
+    final shouldShowSkeleton = !hasBaseDashboard ||
+        (!store.hasResolvedAdaptiveInterface && !isInstantIncrementalLoading);
 
     final hasBlockingError = store.hasError && store.dashboard == null;
     final isPanelLoading = !hasBlockingError &&
@@ -731,8 +750,6 @@ class HomePageState extends State<HomePage> with RouteAware {
       infoContext: store.dashboard?.infoContext,
     );
   }
-
-
 
   void _openAdaptiveAdmin() {
     Get.toNamed(Routes.adaptiveAdminPage);
@@ -3233,5 +3250,3 @@ class _SparklinePainter extends CustomPainter {
     return oldDelegate.values != values || oldDelegate.labels != labels;
   }
 }
-
-

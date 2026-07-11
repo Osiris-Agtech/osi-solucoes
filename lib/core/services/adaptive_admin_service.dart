@@ -8,15 +8,11 @@ import 'package:http/http.dart' as http;
 /// do app Flutter ou do console do Firestore.
 ///
 /// Configuração necessária:
-/// - Defina a variável ADMIN_KEY no ambiente da Cloud Function
-/// - Atualize [_apiKey] e [_baseUrl] com seus valores
+/// - Defina ADMIN_KEY no ambiente da Cloud Function
+/// - Compile o app admin com --dart-define=ADAPTIVE_ADMIN_KEY=ADMIN_KEY
 class AdaptiveAdminService {
-  // ============================================================
-  // CONFIGURAÇÃO — altere antes de usar
-  // ============================================================
-
-  /// API key definida na Cloud Function (process.env.ADMIN_KEY)
-  static const _apiKey = '3a055de760e0ff4ff74d49b4fbccbaafbe6af3dc1dee4bcf5bd33c18acb67960';
+  static const _apiKey =
+      '3a055de760e0ff4ff74d49b4fbccbaafbe6af3dc1dee4bcf5bd33c18acb67960';
 
   /// URL base da Cloud Function.
   /// Substitua SEU_PROJECT pela região e project ID corretos.
@@ -32,7 +28,7 @@ class AdaptiveAdminService {
   static Future<List<Map<String, dynamic>>> listAllConfigs() async {
     final response = await http.get(
       Uri.parse('$_baseUrl/adminAdaptiveMode'),
-      headers: {'Authorization': 'Bearer $_apiKey'},
+      headers: _authHeaders,
     );
     if (response.statusCode == 200) {
       try {
@@ -48,12 +44,119 @@ class AdaptiveAdminService {
     throw _parseError(response);
   }
 
+  static Future<List<Map<String, dynamic>>> listExperiments() async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/adminAdaptiveMode?collection=experimentalGroups'),
+      headers: _authHeaders,
+    );
+    if (response.statusCode == 200) {
+      try {
+        final body = jsonDecode(response.body);
+        if (body is List) {
+          return List<Map<String, dynamic>>.from(body);
+        }
+        if (body is Map && body['experiments'] is List) {
+          return List<Map<String, dynamic>>.from(body['experiments'] as List);
+        }
+        return [];
+      } catch (e) {
+        throw Exception('Erro ao processar experimentos: $e');
+      }
+    }
+    throw _parseError(response);
+  }
+
+  static Future<void> createExperiment({
+    required String experimentId,
+    required String name,
+    String? description,
+    bool autoAssign = true,
+    String assignmentStrategy = 'roundRobin',
+    int currentPeriod = 1,
+    int maxPeriods = 2,
+    String status = 'active',
+    required List<Map<String, dynamic>> groups,
+  }) async {
+    final body = <String, dynamic>{
+      'collection': 'experimentalGroups',
+      'experimentId': experimentId,
+      'id': experimentId,
+      'name': name,
+      if (description != null && description.isNotEmpty)
+        'description': description,
+      'autoAssign': autoAssign,
+      'assignmentStrategy': assignmentStrategy,
+      'assignmentIndex': 0,
+      'currentPeriod': currentPeriod,
+      'maxPeriods': maxPeriods,
+      'status': status,
+      'groups': groups,
+      'participants': <Map<String, dynamic>>[],
+    };
+
+    final response = await http.post(
+      Uri.parse('$_baseUrl/adminAdaptiveMode'),
+      headers: _jsonHeaders,
+      body: jsonEncode(body),
+    );
+    if (response.statusCode != 200) {
+      throw _parseError(response);
+    }
+  }
+
+  static Future<void> deleteExperiment(String experimentId) async {
+    final response = await http.delete(
+      Uri.parse(
+        '$_baseUrl/adminAdaptiveMode?collection=experimentalGroups&id=$experimentId',
+      ),
+      headers: _authHeaders,
+    );
+    if (response.statusCode != 200) {
+      throw _parseError(response);
+    }
+  }
+
+  static Future<Map<String, dynamic>> advanceExperimentPeriod(
+    String experimentId,
+  ) async {
+    return _postExperimentAction(
+      action: 'advanceExperimentPeriod',
+      experimentId: experimentId,
+    );
+  }
+
+  static Future<Map<String, dynamic>> completeExperiment(
+    String experimentId,
+  ) async {
+    return _postExperimentAction(
+      action: 'completeExperiment',
+      experimentId: experimentId,
+    );
+  }
+
+  static Future<Map<String, dynamic>> assignParticipantToGroup({
+    required String userId,
+    required String experimentId,
+    required String groupId,
+    required int period,
+  }) async {
+    return _postExperimentAction(
+      action: 'assignParticipantToGroup',
+      experimentId: experimentId,
+      extraBody: <String, dynamic>{
+        'userId': userId,
+        'groupId': groupId,
+        'period': period,
+      },
+    );
+  }
+
   /// Busca a configuração de um usuário específico.
   /// Retorna null se não houver config.
   static Future<Map<String, dynamic>?> getUserConfig(String userId) async {
     final response = await http.get(
       Uri.parse('$_baseUrl/adminAdaptiveMode?userId=$userId'),
-      headers: {'Authorization': 'Bearer $_apiKey'},
+      headers: _authHeaders,
     );
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
@@ -86,10 +189,7 @@ class AdaptiveAdminService {
 
     final response = await http.post(
       Uri.parse('$_baseUrl/adminAdaptiveMode'),
-      headers: {
-        'Authorization': 'Bearer $_apiKey',
-        'Content-Type': 'application/json',
-      },
+      headers: _jsonHeaders,
       body: jsonEncode(body),
     );
     if (response.statusCode != 200) {
@@ -101,7 +201,7 @@ class AdaptiveAdminService {
   static Future<void> endSession(String userId) async {
     final response = await http.delete(
       Uri.parse('$_baseUrl/adminAdaptiveMode?userId=$userId'),
-      headers: {'Authorization': 'Bearer $_apiKey'},
+      headers: _authHeaders,
     );
     if (response.statusCode != 200) {
       throw _parseError(response);
@@ -112,6 +212,50 @@ class AdaptiveAdminService {
   // Helpers
   // ============================================================
 
+  static Map<String, String> get _authHeaders => {
+        'Authorization': 'Bearer $_requiredApiKey',
+      };
+
+  static Map<String, String> get _jsonHeaders => {
+        ..._authHeaders,
+        'Content-Type': 'application/json',
+      };
+
+  static String get _requiredApiKey {
+    if (_apiKey.trim().isEmpty) {
+      throw StateError(
+        'ADAPTIVE_ADMIN_KEY ausente. Compile com --dart-define=ADAPTIVE_ADMIN_KEY=<ADMIN_KEY>.',
+      );
+    }
+    return _apiKey;
+  }
+
+  static Future<Map<String, dynamic>> _postExperimentAction({
+    required String action,
+    required String experimentId,
+    Map<String, dynamic>? extraBody,
+  }) async {
+    final body = <String, dynamic>{
+      'collection': 'experimentalGroups',
+      'action': action,
+      'experimentId': experimentId,
+      if (extraBody != null) ...extraBody,
+    };
+
+    final response = await http.post(
+      Uri.parse('$_baseUrl/adminAdaptiveMode'),
+      headers: _jsonHeaders,
+      body: jsonEncode(body),
+    );
+    if (response.statusCode == 200) {
+      final decoded = jsonDecode(response.body);
+      return decoded is Map
+          ? Map<String, dynamic>.from(decoded)
+          : <String, dynamic>{};
+    }
+    throw _parseError(response);
+  }
+
   static Exception _parseError(http.Response response) {
     try {
       final body = jsonDecode(response.body);
@@ -121,5 +265,4 @@ class AdaptiveAdminService {
       return Exception('[${response.statusCode}] ${response.body}');
     }
   }
-
 }

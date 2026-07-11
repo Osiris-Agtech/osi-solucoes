@@ -4,22 +4,8 @@ import 'package:osi_solucoes/core/services/adaptive_admin_service.dart';
 import 'package:osi_solucoes/core/services/adaptive_user_service.dart';
 import 'package:osi_solucoes/core/services/navigation_analytics.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
-
-class _UserWithConfig {
-  final UserInfo user;
-  final String? mode;
-  final String? sessionId;
-  final String? testGroup;
-
-  _UserWithConfig({
-    required this.user,
-    this.mode,
-    this.sessionId,
-    this.testGroup,
-  });
-
-  bool get hasConfig => mode != null && mode!.isNotEmpty;
-}
+import 'package:osi_solucoes/features/presenter/views/adaptive_admin/adaptive_admin_experiments_section.dart';
+import 'package:osi_solucoes/features/presenter/views/adaptive_admin/adaptive_admin_support.dart';
 
 class AdaptiveAdminPage extends StatefulWidget {
   const AdaptiveAdminPage({super.key});
@@ -31,6 +17,7 @@ class AdaptiveAdminPage extends StatefulWidget {
 class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
   List<UserInfo> _allUsers = [];
   Map<String, Map<String, dynamic>> _configsMap = {};
+  List<Map<String, dynamic>> _experiments = [];
   bool _loading = true;
   String? _error;
 
@@ -38,6 +25,8 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
   String _searchQuery = '';
 
   final Set<String> _activeModeFilters = {'ALL'};
+  String _experimentFilter = 'ALL';
+  String _groupFilter = 'ALL';
 
   @override
   void initState() {
@@ -58,26 +47,43 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
     });
 
     try {
-      final usersFuture = AdaptiveUserService.listAllUsers()
-          .catchError((e) {
-            debugPrint('Erro ao buscar usuários do ISIS: $e');
-            return <UserInfo>[];
-          });
+      final usersFuture = AdaptiveUserService.listAllUsers().catchError((e) {
+        debugPrint('Erro ao buscar usuários do ISIS: $e');
+        return <UserInfo>[];
+      });
 
-      final configsFuture = AdaptiveAdminService.listAllConfigs()
-          .catchError((e) {
-            debugPrint('Erro ao buscar configs da Cloud Function: $e');
-            return <Map<String, dynamic>>[];
-          });
+      final configsFuture =
+          AdaptiveAdminService.listAllConfigs().catchError((e) {
+        debugPrint('Erro ao buscar configs da Cloud Function: $e');
+        return <Map<String, dynamic>>[];
+      });
 
-      final futures = await Future.wait([usersFuture, configsFuture]);
+      final experimentsFuture =
+          AdaptiveAdminService.listExperiments().catchError((e) {
+        debugPrint('Erro ao buscar experimentos: $e');
+        return <Map<String, dynamic>>[];
+      });
+
+      final futures = await Future.wait([
+        usersFuture,
+        configsFuture,
+        experimentsFuture,
+      ]);
 
       _allUsers = futures[0] as List<UserInfo>;
       final configs = futures[1] as List<Map<String, dynamic>>;
+      _experiments = futures[2] as List<Map<String, dynamic>>;
+
+      final experimentIds =
+          _experiments.map(_experimentId).whereType<String>().toSet();
+      if (_experimentFilter != 'ALL' &&
+          !experimentIds.contains(_experimentFilter)) {
+        _experimentFilter = 'ALL';
+      }
 
       _configsMap = {
         for (final config in configs)
-          (config['userId'] as String).toString(): config,
+          if (config['userId'] != null) config['userId'].toString(): config,
       };
     } catch (e) {
       debugPrint('Erro inesperado ao carregar dados: $e');
@@ -87,15 +93,13 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
     }
   }
 
-  List<_UserWithConfig> get _filteredUsers {
+  List<UserWithConfig> get _filteredUsers {
     var users = _allUsers.map((user) {
       final userId = user.id.toString();
       final config = _configsMap[userId] ?? {};
-      return _UserWithConfig(
+      return UserWithConfig(
         user: user,
-        mode: config['mode'] as String?,
-        sessionId: config['sessionId'] as String?,
-        testGroup: config['testGroup'] as String?,
+        config: config,
       );
     }).toList();
 
@@ -115,6 +119,14 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
       users = users
           .where((u) => u.hasConfig && _activeModeFilters.contains(u.mode))
           .toList();
+    }
+
+    if (_experimentFilter != 'ALL') {
+      users = users.where((u) => u.experimentId == _experimentFilter).toList();
+    }
+
+    if (_groupFilter != 'ALL') {
+      users = users.where((u) => u.testGroup == _groupFilter).toList();
     }
 
     return users;
@@ -179,7 +191,186 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
     }
   }
 
-  void _showModePicker(_UserWithConfig userWithConfig) {
+  Future<void> _createBasicExperiment() async {
+    final now = DateTime.now();
+    final month = now.month.toString().padLeft(2, '0');
+    final day = now.day.toString().padLeft(2, '0');
+    final experimentId =
+        'experimento_${now.year}$month${day}_${now.millisecondsSinceEpoch}';
+
+    try {
+      await AdaptiveAdminService.createExperiment(
+        experimentId: experimentId,
+        name: 'Experimento A/B ${now.day}/${now.month}/${now.year}',
+        description: 'Experimento contrabalanceado criado pelo app admin',
+        groups: const [
+          {
+            'groupId': 'group_a',
+            'name': 'Grupo A — STATIC primeiro',
+            'conditions': [
+              {'period': 1, 'mode': 'STATIC', 'label': 'Controle'},
+              {'period': 2, 'mode': 'INSTANT', 'label': 'Experimental'},
+            ],
+          },
+          {
+            'groupId': 'group_b',
+            'name': 'Grupo B — INSTANT primeiro',
+            'conditions': [
+              {'period': 1, 'mode': 'INSTANT', 'label': 'Experimental'},
+              {'period': 2, 'mode': 'STATIC', 'label': 'Controle'},
+            ],
+          },
+        ],
+      );
+      if (!mounted) return;
+      _showSuccess('Experimento criado: $experimentId');
+      await _loadData();
+    } catch (e) {
+      if (!mounted) return;
+      _showError(e.toString());
+    }
+  }
+
+  Future<void> _advanceExperiment(Map<String, dynamic> experiment) async {
+    final id = _experimentId(experiment);
+    if (id == null) return;
+
+    final confirmed = await _confirmDialog(
+      'Avançar período',
+      'Avançar o experimento $id para o próximo período? Esta ação é unidirecional.',
+    );
+    if (!confirmed) return;
+
+    try {
+      final result = await AdaptiveAdminService.advanceExperimentPeriod(id);
+      if (!mounted) return;
+      _showSuccess('Período avançado: ${result.isEmpty ? id : result}');
+      await _loadData();
+    } catch (e) {
+      if (!mounted) return;
+      _showError(e.toString());
+    }
+  }
+
+  Future<void> _completeExperiment(Map<String, dynamic> experiment) async {
+    final id = _experimentId(experiment);
+    if (id == null) return;
+
+    final confirmed = await _confirmDialog(
+      'Encerrar experimento',
+      'Encerrar $id? Novos usuários não serão autoatribuídos a este experimento.',
+    );
+    if (!confirmed) return;
+
+    try {
+      await AdaptiveAdminService.completeExperiment(id);
+      if (!mounted) return;
+      _showSuccess('Experimento encerrado: $id');
+      await _loadData();
+    } catch (e) {
+      if (!mounted) return;
+      _showError(e.toString());
+    }
+  }
+
+  Future<void> _deleteExperiment(Map<String, dynamic> experiment) async {
+    final id = _experimentId(experiment);
+    if (id == null) return;
+
+    final confirmed = await _confirmDialog(
+      'Excluir experimento',
+      'Excluir o documento $id? As configs históricas de usuários não serão apagadas pelo app.',
+    );
+    if (!confirmed) return;
+
+    try {
+      await AdaptiveAdminService.deleteExperiment(id);
+      if (!mounted) return;
+      _showSuccess('Experimento excluído: $id');
+      await _loadData();
+    } catch (e) {
+      if (!mounted) return;
+      _showError(e.toString());
+    }
+  }
+
+  Future<void> _assignUserToGroup(UserWithConfig userWithConfig) async {
+    final experimentId = userWithConfig.experimentId ?? _activeExperimentId;
+    if (experimentId == null) {
+      _showError('Nenhum experimento ativo encontrado para ajuste');
+      return;
+    }
+
+    final selectedGroup = await showDialog<String>(
+      context: context,
+      builder: (ctx) => SimpleDialog(
+        title: const Text('Trocar grupo experimental'),
+        children: [
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(ctx, 'group_a'),
+            child: const Text('Grupo A'),
+          ),
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(ctx, 'group_b'),
+            child: const Text('Grupo B'),
+          ),
+        ],
+      ),
+    );
+    if (selectedGroup == null) return;
+
+    final period = _currentPeriodForExperiment(experimentId);
+    if (period == null) {
+      _showError('Experimento $experimentId não possui currentPeriod válido');
+      return;
+    }
+
+    try {
+      await AdaptiveAdminService.assignParticipantToGroup(
+        userId: userWithConfig.user.id.toString(),
+        experimentId: experimentId,
+        groupId: selectedGroup,
+        period: period,
+      );
+      if (!mounted) return;
+      _showSuccess(
+        'Usuário ${userWithConfig.user.id} movido para $selectedGroup',
+      );
+      await _loadData();
+    } catch (e) {
+      if (!mounted) return;
+      _showError(e.toString());
+    }
+  }
+
+  String? get _activeExperimentId {
+    for (final experiment in _experiments) {
+      final status = experiment['status']?.toString();
+      if (status == null || status == 'active') {
+        return _experimentId(experiment);
+      }
+    }
+    return null;
+  }
+
+  int? _currentPeriodForExperiment(String experimentId) {
+    for (final experiment in _experiments) {
+      if (_experimentId(experiment) != experimentId) continue;
+      final currentPeriod = experiment['currentPeriod'];
+      if (currentPeriod is int && currentPeriod > 0) return currentPeriod;
+      final parsed = int.tryParse(currentPeriod?.toString() ?? '');
+      return parsed != null && parsed > 0 ? parsed : null;
+    }
+    return null;
+  }
+
+  String? _experimentId(Map<String, dynamic> experiment) {
+    final value = experiment['id'] ?? experiment['experimentId'];
+    final text = value?.toString().trim();
+    return text == null || text.isEmpty ? null : text;
+  }
+
+  void _showModePicker(UserWithConfig userWithConfig) {
     showModalBottomSheet(
       context: context,
       builder: (ctx) {
@@ -220,8 +411,8 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      backgroundColor:
-                          _modeColor(userWithConfig.mode!).withValues(alpha: 0.1),
+                      backgroundColor: _modeColor(userWithConfig.mode!)
+                          .withValues(alpha: 0.1),
                     ),
                   ),
                 ),
@@ -268,7 +459,7 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
   }
 
   Widget _modeOptionTile(
-      _UserWithConfig userWithConfig, String mode, String label, Color color) {
+      UserWithConfig userWithConfig, String mode, String label, Color color) {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: color.withValues(alpha: 0.15),
@@ -388,6 +579,11 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
             ),
           ),
           IconButton(
+            icon: const Icon(Icons.add_business),
+            onPressed: _createBasicExperiment,
+            tooltip: 'Criar experimento A/B',
+          ),
+          IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: _loadData,
             tooltip: 'Atualizar',
@@ -420,14 +616,23 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
               : ListView(
                   padding: const EdgeInsets.only(bottom: 40),
                   children: [
+                    AdaptiveAdminExperimentsSection(
+                      experiments: _experiments,
+                      onCreateExperiment: _createBasicExperiment,
+                      onAdvanceExperiment: _advanceExperiment,
+                      onCompleteExperiment: _completeExperiment,
+                      onDeleteExperiment: _deleteExperiment,
+                    ),
+
                     // ── Buscar ──
-                    _AdminSectionHeader(
+                    AdminSectionHeader(
                       emoji: '🔍',
                       title: 'Buscar',
                       description: 'Localize usuários por nome, email ou ID',
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
                       child: TextField(
                         controller: _searchCtrl,
                         decoration: InputDecoration(
@@ -458,7 +663,8 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
@@ -471,12 +677,59 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
+                      child: Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          DropdownButton<String>(
+                            value: _experimentFilter,
+                            items: [
+                              const DropdownMenuItem(
+                                value: 'ALL',
+                                child: Text('Todos experimentos'),
+                              ),
+                              ..._experiments.map((experiment) {
+                                final id =
+                                    _experimentId(experiment) ?? 'sem_id';
+                                return DropdownMenuItem(
+                                  value: id,
+                                  child: Text(id),
+                                );
+                              }),
+                            ],
+                            onChanged: (value) {
+                              if (value == null) return;
+                              setState(() => _experimentFilter = value);
+                            },
+                          ),
+                          DropdownButton<String>(
+                            value: _groupFilter,
+                            items: const [
+                              DropdownMenuItem(
+                                  value: 'ALL', child: Text('Todos grupos')),
+                              DropdownMenuItem(
+                                  value: 'group_a', child: Text('Grupo A')),
+                              DropdownMenuItem(
+                                  value: 'group_b', child: Text('Grupo B')),
+                            ],
+                            onChanged: (value) {
+                              if (value == null) return;
+                              setState(() => _groupFilter = value);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
 
                     // ── Usuários ──
-                    _AdminSectionHeader(
+                    AdminSectionHeader(
                       emoji: '👥',
                       title: 'Usuários',
-                      description: '${_allUsers.length} usuários · $totalConfigured configurados',
+                      description:
+                          '${_allUsers.length} usuários · $totalConfigured configurados',
                     ),
 
                     if (filteredUsers.isEmpty)
@@ -486,8 +739,7 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Text('🔍',
-                                  style: TextStyle(fontSize: 48)),
+                              const Text('🔍', style: TextStyle(fontSize: 48)),
                               const SizedBox(height: 16),
                               Text(
                                 _searchQuery.isNotEmpty
@@ -503,18 +755,22 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
                         ),
                       )
                     else
-                      ...filteredUsers.map((userWithConfig) =>
-                          _buildUserTile(userWithConfig)),
+                      ...filteredUsers.map(
+                          (userWithConfig) => _buildUserTile(userWithConfig)),
                   ],
                 ),
     );
   }
 
-  Widget _buildUserTile(_UserWithConfig userWithConfig) {
+  Widget _buildUserTile(UserWithConfig userWithConfig) {
     final user = userWithConfig.user;
     final mode = userWithConfig.mode;
     final testGroup = userWithConfig.testGroup;
     final sessionId = userWithConfig.sessionId;
+    final experimentId = userWithConfig.experimentId;
+    final participantId = userWithConfig.participantId;
+    final period = userWithConfig.period;
+    final condition = userWithConfig.condition;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -553,7 +809,7 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
               ),
               if (mode != null)
                 Text(
-                  '$_modeIcon(mode) $mode',
+                  '${_modeIcon(mode)} $mode',
                   style: TextStyle(
                     color: _modeColor(mode),
                     fontWeight: FontWeight.w500,
@@ -562,6 +818,18 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
               if (testGroup != null && testGroup.isNotEmpty)
                 Text(
                   'Grupo: $testGroup',
+                  style: const TextStyle(fontSize: 12),
+                ),
+              if (experimentId != null && experimentId.isNotEmpty)
+                Text(
+                  'Experimento: $experimentId',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              if (participantId != null || period != null || condition != null)
+                Text(
+                  'Participante: ${participantId ?? '-'} · P${period ?? '-'} · ${condition ?? '-'}',
                   style: const TextStyle(fontSize: 12),
                 ),
               if (sessionId != null && sessionId.isNotEmpty)
@@ -576,6 +844,11 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              IconButton(
+                icon: const Icon(Icons.swap_horiz, color: Colors.deepPurple),
+                onPressed: () => _assignUserToGroup(userWithConfig),
+                tooltip: 'Trocar grupo experimental',
+              ),
               IconButton(
                 icon: Icon(
                   mode != null ? Icons.edit : Icons.add_circle_outline,
@@ -624,47 +897,6 @@ class _AdaptiveAdminPageState extends State<AdaptiveAdminPage> {
             }
           });
         },
-      ),
-    );
-  }
-}
-
-class _AdminSectionHeader extends StatelessWidget {
-  final String emoji;
-  final String title;
-  final String description;
-
-  const _AdminSectionHeader({
-    required this.emoji,
-    required this.title,
-    required this.description,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '$emoji  $title',
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            description,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(color: Colors.grey[600]),
-          ),
-          const SizedBox(height: 8),
-          Divider(color: Colors.grey[300]),
-        ],
       ),
     );
   }

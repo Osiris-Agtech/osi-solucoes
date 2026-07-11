@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
@@ -47,31 +48,34 @@ class _CadastrarLotePageState extends State<CadastrarLotePage> {
         Get.close(1);
         store.limparTudo();
       },
-      child: AppStepWizard(
-        steps: [
-          SetorStep(store: store, formKey: formKey),
-          ReservatorioStep(store: store),
-          LoteStep(store: store),
-          CulturaStep(store: store),
-          ProtocoloStep(store: store, protocoloStore: protocoloStore),
-        ],
-        onSubmit: () {
-          if (store.validarRegistro()) {
-            if (store.isEditing) {
-              store.alterarLote();
-            } else {
-              store.registrarLote();
+      child: Observer(builder: (_) {
+        return AppStepWizard(
+          isLoading: store.isNovoLoteLoading,
+          steps: [
+            SetorStep(store: store, formKey: formKey),
+            ReservatorioStep(store: store),
+            LoteStep(store: store),
+            CulturaStep(store: store),
+            ProtocoloStep(store: store, protocoloStore: protocoloStore),
+          ],
+          onSubmit: () {
+            if (store.validarRegistro()) {
+              if (store.isEditing) {
+                store.alterarLote();
+              } else {
+                store.registrarLote();
+              }
             }
-          }
-        },
-        stepLabels: const [
-          'Setor',
-          'Reservatório',
-          'Lote',
-          'Cultura',
-          'Protocolo',
-        ],
-      ),
+          },
+          stepLabels: const [
+            'Setor',
+            'Reservatório',
+            'Lote',
+            'Cultura',
+            'Protocolo',
+          ],
+        );
+      }),
     );
   }
 }

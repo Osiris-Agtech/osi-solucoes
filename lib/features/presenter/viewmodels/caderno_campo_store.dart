@@ -14,6 +14,7 @@ import 'package:osi_solucoes/features/presenter/models/usuario/usuario_model.dar
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:osi_solucoes/features/presenter/views/home/adaptive/instant_sequence_interaction_reporter.dart';
 import "package:collection/collection.dart";
+import 'package:osi_solucoes/core/services/user_action_trace.dart';
 
 part 'caderno_campo_store.g.dart';
 
@@ -470,6 +471,12 @@ abstract class CadernoCampoStoreBase with Store {
         Get.close(2);
         await buscarLotesByConta();
         if (loteSelecionado.id != null) buscarAtividades();
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'field_note',
+          action: 'created',
+          entityId: data.id,
+          entityName: data.nome,
+        ));
       },
     );
     isNovoRegistroLoading = false;

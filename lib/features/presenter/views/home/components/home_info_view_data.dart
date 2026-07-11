@@ -2,6 +2,7 @@ enum HomeInfoType {
   todayCultivation,
   reservoirReport,
   fieldNotesSummary,
+  operationalOnboarding,
   basicTip,
 }
 

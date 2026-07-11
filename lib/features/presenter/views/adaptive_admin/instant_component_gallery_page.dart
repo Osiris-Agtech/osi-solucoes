@@ -4,6 +4,7 @@ import 'package:osi_solucoes/features/presenter/views/home/components/adaptive/a
 import 'package:osi_solucoes/features/presenter/views/home/components/adaptive/activity_feed_card.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/adaptive/instant_recommended_actions_panel.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/adaptive/contextual_onboarding_card.dart';
+import 'package:osi_solucoes/features/presenter/views/home/components/adaptive/operational_onboarding_card.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/home_info_card.dart';
 import 'package:osi_solucoes/features/presenter/views/home/components/home_info_view_data.dart';
 
@@ -14,8 +15,7 @@ import 'package:osi_solucoes/features/presenter/views/home/components/home_info_
 final _now = DateTime.now();
 
 const _focusBannerData = AdaptiveFocusBannerViewData(
-  message:
-      'Você tem 3 tarefas atrasadas no Setor A. Que tal revisar a agenda?',
+  message: 'Você tem 3 tarefas atrasadas no Setor A. Que tal revisar a agenda?',
   targetRoute: '/agendaPage',
   ctaLabel: 'Ver agenda',
 );
@@ -88,6 +88,12 @@ const _onboardingData = ContextualOnboardingViewData(
   illustrationHint: 'chart',
 );
 
+const _operationalOnboardingSteps = [
+  'Crie um lote',
+  'Vincule um protocolo de cultivo',
+  'Acompanhe as atividades pela Agenda',
+];
+
 const _todayCultivationData = HomeInfoViewData(
   type: HomeInfoType.todayCultivation,
   title: 'Hoje no cultivo',
@@ -128,13 +134,9 @@ const _reservoirReportData = HomeInfoViewData(
     HomeInfoMetric(
         label: 'Reservatórios', value: '6', tone: HomeInfoMetricTone.neutral),
     HomeInfoMetric(
-        label: 'Com solução',
-        value: '4',
-        tone: HomeInfoMetricTone.positive),
+        label: 'Com solução', value: '4', tone: HomeInfoMetricTone.positive),
     HomeInfoMetric(
-        label: 'Sem solução',
-        value: '2',
-        tone: HomeInfoMetricTone.warning),
+        label: 'Sem solução', value: '2', tone: HomeInfoMetricTone.warning),
     HomeInfoMetric(
         label: 'Lotes vinculados',
         value: '8',
@@ -220,7 +222,8 @@ class InstantComponentGalleryPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: AdaptiveFocusBanner(
               data: _focusBannerData,
-              onCtaTap: () => _showSnackBar(context, 'CTA: ${_focusBannerData.ctaLabel} → ${_focusBannerData.targetRoute}'),
+              onCtaTap: () => _showSnackBar(context,
+                  'CTA: ${_focusBannerData.ctaLabel} → ${_focusBannerData.targetRoute}'),
             ),
           ),
 
@@ -274,7 +277,29 @@ class InstantComponentGalleryPage extends StatelessWidget {
             ),
           ),
 
-          // ---- Section 5: InfoCard — Today Cultivation ----
+          // ---- Section 5: Onboarding Operacional ----
+          _SectionHeader(
+            emoji: '🌱',
+            title: 'Onboarding Operacional',
+            description:
+                'Card de orientação inicial — guia o usuário nos primeiros passos do cultivo',
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            child: OperationalOnboardingCard(
+              title: 'Como começar',
+              message:
+                  'Crie seu primeiro lote com protocolo para iniciar o acompanhamento automático do cultivo.',
+              steps: _operationalOnboardingSteps,
+              ctaLabel: 'Criar primeiro lote',
+              onCtaTap: () => _showSnackBar(
+                context,
+                'CTA: Criar primeiro lote → /lotePage',
+              ),
+            ),
+          ),
+
+          // ---- Section 6: InfoCard — Today Cultivation ----
           _SectionHeader(
             emoji: '🌱',
             title: 'InfoCard — Today Cultivation',
@@ -289,7 +314,7 @@ class InstantComponentGalleryPage extends StatelessWidget {
             ),
           ),
 
-          // ---- Section 6: InfoCard — Reservoir Report ----
+          // ---- Section 7: InfoCard — Reservoir Report ----
           _SectionHeader(
             emoji: '💧',
             title: 'InfoCard — Reservoir Report',
@@ -307,7 +332,7 @@ class InstantComponentGalleryPage extends StatelessWidget {
             ),
           ),
 
-          // ---- Section 7: InfoCard — Field Notes Summary ----
+          // ---- Section 8: InfoCard — Field Notes Summary ----
           _SectionHeader(
             emoji: '📝',
             title: 'InfoCard — Field Notes Summary',
@@ -325,7 +350,7 @@ class InstantComponentGalleryPage extends StatelessWidget {
             ),
           ),
 
-          // ---- Section 8: InfoCard — Basic Tip ----
+          // ---- Section 9: InfoCard — Basic Tip ----
           _SectionHeader(
             emoji: '💡',
             title: 'InfoCard — Basic Tip',

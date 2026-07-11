@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
+import 'package:osi_solucoes/core/services/user_action_trace.dart';
 import 'package:osi_solucoes/core/utils/toast.dart';
 import 'package:osi_solucoes/features/data/repositories/agenda/agenda_repository.dart';
 import 'package:osi_solucoes/features/presenter/models/agenda/agenda_model.dart';
@@ -173,6 +174,12 @@ abstract class AgendaStoreBase with Store {
     filter = value ?? AgendaFilter.todos;
     filtroLote = null;
     filtroResponsavel = null;
+
+    if (filter == AgendaFilter.hoje) {
+      selectedDay = DateTime.now();
+    } else if (filter == AgendaFilter.todos) {
+      selectedDay = null;
+    }
   }
 
   @action
@@ -196,10 +203,7 @@ abstract class AgendaStoreBase with Store {
   @action
   List<Agenda> getEventsForDay(DateTime day) {
     List<Agenda> list = atividadeList
-        .where((element) =>
-            element.data?.year == day.year &&
-            element.data?.month == day.month &&
-            element.data?.day == day.day)
+        .where((element) => _isSameLocalCalendarDay(element.data, day))
         .toList();
     return list;
   }
@@ -207,6 +211,8 @@ abstract class AgendaStoreBase with Store {
   @computed
   List<Agenda> get listaParaSerUsada {
     switch (filter) {
+      case AgendaFilter.hoje:
+        return _atividadesDeHoje();
       case AgendaFilter.todos:
         if (selectedDay != null) return filteredAtividades;
         return atividadeList;
@@ -240,11 +246,26 @@ abstract class AgendaStoreBase with Store {
   @computed
   List<Agenda> get filteredAtividades {
     return atividadeList
-        .where((atividade) =>
-            atividade.data?.year == selectedDay?.year &&
-            atividade.data?.month == selectedDay?.month &&
-            atividade.data?.day == selectedDay?.day)
+        .where(
+            (atividade) => _isSameLocalCalendarDay(atividade.data, selectedDay))
         .toList();
+  }
+
+  List<Agenda> _atividadesDeHoje() {
+    final today = DateTime.now();
+    return atividadeList
+        .where((atividade) => _isSameLocalCalendarDay(atividade.data, today))
+        .toList();
+  }
+
+  bool _isSameLocalCalendarDay(DateTime? date, DateTime? otherDate) {
+    if (date == null || otherDate == null) {
+      return false;
+    }
+
+    return date.year == otherDate.year &&
+        date.month == otherDate.month &&
+        date.day == otherDate.day;
   }
 
   @action
@@ -284,11 +305,12 @@ abstract class AgendaStoreBase with Store {
                 GetIt.I<InstantSequenceInteractionReporter>()
                     .reportAgendaActivitiesCompleted();
         if (!changed) {
-          final homeStore = GetIt.I<HomeStore>();
-          homeStore.pendingActivityTitle = data.titulo;
-          homeStore.pendingActivityDescription = data.descricao;
-          homeStore.pendingActivityInteractionType = 'completed';
-          await homeStore.refreshHomeAfterAgendaMutation();
+          GetIt.I<UserActionTrace>().record(UserAction(
+            entityType: 'agenda_activity',
+            action: 'completed',
+            entityName: data.titulo,
+          ));
+          await GetIt.I<HomeStore>().refreshHomeAfterAgendaMutation();
         }
       },
     );
@@ -311,11 +333,11 @@ abstract class AgendaStoreBase with Store {
       (data) async {
         await buscarAtividades();
         toastSuccess(message: 'Atividade deletada com sucesso!');
-        final homeStore = GetIt.I<HomeStore>();
-        homeStore.pendingActivityTitle = null;
-        homeStore.pendingActivityDescription = null;
-        homeStore.pendingActivityInteractionType = 'deleted';
-        await homeStore.refreshHomeAfterAgendaMutation();
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'agenda_activity',
+          action: 'deleted',
+        ));
+        await GetIt.I<HomeStore>().refreshHomeAfterAgendaMutation();
       },
     );
 
@@ -389,11 +411,12 @@ abstract class AgendaStoreBase with Store {
       (data) async {
         toastSuccess(message: 'Atividade atualizada com sucesso!');
         await buscarAtividades();
-        final homeStore = GetIt.I<HomeStore>();
-        homeStore.pendingActivityTitle = data.titulo;
-        homeStore.pendingActivityDescription = data.descricao;
-        homeStore.pendingActivityInteractionType = 'edited';
-        await homeStore.refreshHomeAfterAgendaMutation();
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'agenda_activity',
+          action: 'edited',
+          entityName: data.titulo,
+        ));
+        await GetIt.I<HomeStore>().refreshHomeAfterAgendaMutation();
       },
     );
 
@@ -425,11 +448,12 @@ abstract class AgendaStoreBase with Store {
       (data) async {
         toastSuccess(message: 'Atividade cadastrada com sucesso!');
         await buscarAtividades();
-        final homeStore = GetIt.I<HomeStore>();
-        homeStore.pendingActivityTitle = tituloController.text;
-        homeStore.pendingActivityDescription = descricaoController.text;
-        homeStore.pendingActivityInteractionType = 'created';
-        await homeStore.refreshHomeAfterAgendaMutation();
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'agenda_activity',
+          action: 'created',
+          entityName: tituloController.text,
+        ));
+        await GetIt.I<HomeStore>().refreshHomeAfterAgendaMutation();
       },
     );
 

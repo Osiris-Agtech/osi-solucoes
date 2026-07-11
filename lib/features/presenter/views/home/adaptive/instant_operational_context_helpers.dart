@@ -147,31 +147,10 @@ class InstantOperationalContextHelpers {
 
   static Map<String, dynamic> cultivationState(HomeDashboard? dashboard) {
     final cultures = dashboard?.culturas ?? [];
-    final dominant = cultures.isEmpty
-        ? null
-        : cultures.reduce(
-            (a, b) => (a.quantidade ?? 0) >= (b.quantidade ?? 0) ? a : b);
+    final species = dashboard?.resumo?.especiesEmAndamento ?? [];
     return {
-      'cultures': cultures
-          .take(_listLimit)
-          .map((culture) => _withoutNulls({
-                'name': _clean(culture.nome),
-                'quantity': culture.quantidade,
-                'color': _clean(culture.cor),
-              }))
-          .toList(),
-      if (dominant != null) 'dominantCulture': _clean(dominant.nome),
-      if (dominant != null)
-        'dominantCultureDetails': _withoutNulls({
-          'name': _clean(dominant.nome),
-          'quantity': dominant.quantidade,
-          'color': _clean(dominant.cor),
-        }),
-      'speciesInProgress': (dashboard?.resumo?.especiesEmAndamento ?? [])
-          .take(_listLimit)
-          .map((item) => _clean(item.nome))
-          .whereType<String>()
-          .toList(),
+      'culturesCount': cultures.length,
+      'speciesInProgressCount': species.length,
     };
   }
 
@@ -179,7 +158,6 @@ class InstantOperationalContextHelpers {
     final equipe = dashboard?.equipe;
     return _withoutNulls({
       'activeMembers': equipe?.membrosAtivos ?? 0,
-      'averageCompletionRate': equipe?.taxaConclusaoMedia ?? 0,
       'onTimeActivities': equipe?.atividadesNoPrazo ?? 0,
       'overdueActivities': equipe?.atividadesVencidas ?? 0,
     });

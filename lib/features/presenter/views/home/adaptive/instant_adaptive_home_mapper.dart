@@ -16,6 +16,8 @@ class InstantAdaptiveHomeMapper {
             _parseRecommendedActions(data['shortcuts']),
         activityFeedItems: _parseActivityFeed(data['activityFeedItems']),
         infoRecommendation: _parseInfoRecommendation(data['infoRecommendation']),
+        operationalOnboarding:
+            _parseOperationalOnboarding(data['operationalOnboarding']),
         reasonSummary: _parseReasonSummary(data),
         fallbackUsed: false,
       );
@@ -203,8 +205,71 @@ class InstantAdaptiveHomeMapper {
     );
   }
 
+  static OperationalOnboardingViewData? _parseOperationalOnboarding(
+      dynamic value) {
+    final map = _parseMap(value);
+    if (map == null) return null;
+
+    final title = _asTrimmedString(map['title']);
+    final message = _asTrimmedString(map['message']);
+    final ctaLabel = _asTrimmedString(map['ctaLabel']);
+    final targetRoute = _asTrimmedString(map['targetRoute']);
+
+    if (title == null ||
+        message == null ||
+        ctaLabel == null ||
+        targetRoute == null) {
+      return null;
+    }
+
+    // targetRoute must be an internal route starting with '/'
+    if (!targetRoute.startsWith('/')) return null;
+
+    // Parse steps: trim, remove empty, limit to 5 valid items
+    final steps = _parseOperationalOnboardingSteps(map['steps']);
+    if (steps == null) return null;
+
+    return OperationalOnboardingViewData(
+      title: title,
+      message: message,
+      steps: steps,
+      ctaLabel: ctaLabel,
+      targetRoute: targetRoute,
+      reason: _asTrimmedString(map['reason']),
+      priority: _asNum(map['priority']),
+    );
+  }
+
+  static List<String>? _parseOperationalOnboardingSteps(dynamic value) {
+    final list = _parseList(value);
+    if (list.isEmpty) return null;
+
+    final steps = list
+        .map((e) => e is String ? e.trim() : null)
+        .whereType<String>()
+        .where((s) => s.isNotEmpty)
+        .take(5)
+        .toList();
+
+    if (steps.isEmpty) return null;
+    return steps;
+  }
+
   static String? _asString(dynamic value) {
     if (value is String && value.isNotEmpty) return value;
+    return null;
+  }
+
+  static String? _asTrimmedString(dynamic value) {
+    if (value is String) {
+      final trimmed = value.trim();
+      if (trimmed.isNotEmpty) return trimmed;
+    }
+    return null;
+  }
+
+  static num? _asNum(dynamic value) {
+    if (value is num) return value;
     return null;
   }
 

@@ -5,6 +5,7 @@ enum AgendaState {
 }
 
 enum AgendaFilter {
+  hoje,
   todos,
   lote,
   responsavel,
@@ -13,12 +14,14 @@ enum AgendaFilter {
 extension AgendaFilterExtension on AgendaFilter {
   String get name {
     switch (this) {
+      case AgendaFilter.hoje:
+        return 'Hoje';
       case AgendaFilter.todos:
         return 'Todos';
       case AgendaFilter.lote:
-        return 'Lote';
+        return 'Por Lote';
       case AgendaFilter.responsavel:
-        return 'Responsável';
+        return 'Por Responsável';
     }
   }
 }

@@ -12,6 +12,7 @@ import 'package:osi_solucoes/features/presenter/models/solucaoNutritiva/solucaoN
 import 'package:osi_solucoes/features/presenter/viewmodels/auth_controller.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/setor_store.dart';
+import 'package:osi_solucoes/core/services/user_action_trace.dart';
 
 part 'reservatorios_store.g.dart';
 
@@ -399,6 +400,11 @@ abstract class ReservatoriosStoreBase with Store {
         toastSuccess(message: 'Reservatório deletado com sucesso');
         await buscarReservatorios();
         Get.close(1);
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'reservoir',
+          action: 'deleted',
+          entityId: reservatorioId,
+        ));
       },
     );
 
@@ -436,6 +442,12 @@ abstract class ReservatoriosStoreBase with Store {
         Get.close(1);
         GetIt.I<HomeStore>().carregarHome();
         toastSuccess(message: "Cadastrado com sucesso");
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'reservoir',
+          action: 'created',
+          entityId: data.id,
+          entityName: data.nome,
+        ));
       },
     );
 
@@ -477,6 +489,12 @@ abstract class ReservatoriosStoreBase with Store {
         buscarReservatorios();
         limparNovoReservatorio();
         Get.close(1);
+        GetIt.I<UserActionTrace>().record(UserAction(
+          entityType: 'reservoir',
+          action: 'edited',
+          entityId: data.id,
+          entityName: data.nome,
+        ));
       },
     );
 
