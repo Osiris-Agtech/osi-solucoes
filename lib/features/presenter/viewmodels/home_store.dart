@@ -75,6 +75,7 @@ abstract class HomeStoreBase with Store {
   String? adaptiveReason;
 
   bool get hasAdaptiveDashboardRecommendation =>
+      adaptiveMode != 'STATIC' &&
       adaptiveSource == 'adaptive' &&
       (adaptiveDashboard != null || adaptiveCardType != null);
 
@@ -212,8 +213,8 @@ abstract class HomeStoreBase with Store {
       // PASSO 1: Buscar configuração do usuário no Firestore
       // Isso garante que teremos mode e sessionId para modo INSTANT
       final userConfig = await fetchUserAdaptiveConfig();
-      final mode = userConfig?['mode'];
-      final sessionId = userConfig?['sessionId'];
+      final mode = userConfig?['mode'] as String?;
+      final sessionId = userConfig?['sessionId'] as String?;
 
       // Atualiza o sessionId no store para uso em métricas
       if (sessionId != null) {
@@ -222,6 +223,11 @@ abstract class HomeStoreBase with Store {
 
       print(
           '🏠 [HOME_STORE] Config carregada: mode=$mode, sessionId=${sessionId != null ? 'presente' : 'null'}');
+
+      if (_normalizeAdaptiveMode(mode) == 'STATIC') {
+        _applyStaticDefaultState(sessionId: sessionId);
+        return;
+      }
 
       // PASSO 2: Chamar a API com mode e sessionId (se disponíveis)
       final result = await _adaptiveService.getAdaptiveInterface(
@@ -297,6 +303,29 @@ abstract class HomeStoreBase with Store {
       isLoadingShortcuts = false;
       print('🏠 [HOME_STORE] Carregamento finalizado');
     }
+  }
+
+  String? _normalizeAdaptiveMode(String? mode) {
+    final normalizedMode = mode?.trim().toUpperCase();
+    if (normalizedMode == null || normalizedMode.isEmpty) return null;
+    return normalizedMode;
+  }
+
+  void _applyStaticDefaultState({String? sessionId}) {
+    adaptiveMode = 'STATIC';
+    currentSessionId = sessionId;
+    recommendedShortcuts = _getDefaultShortcuts();
+    adaptiveDashboard = null;
+    adaptiveCardType = null;
+    adaptiveDashboardSource = 'system';
+    adaptiveSource = 'system';
+    adaptiveVisualPriority = 'none';
+    adaptiveReason = null;
+    dashboardConfidence = 0.0;
+    instantViewData = null;
+    hasInstantError = false;
+    isLoadingInstantAdaptation = false;
+    initializeCardOrder();
   }
 
   @action
