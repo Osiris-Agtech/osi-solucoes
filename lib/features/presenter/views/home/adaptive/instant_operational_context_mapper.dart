@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/services/user_action_trace.dart';
 import 'package:osi_solucoes/features/presenter/models/homeDashboard/home_dashboard_model.dart';
+import 'package:osi_solucoes/features/presenter/models/lote/lote_model.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/home_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
@@ -30,7 +31,34 @@ class InstantOperationalContextMapper {
     // Dashboard state
     final activeLots = resumo?.lotesAtivos ?? 0;
     final finishedLots = resumo?.lotesFinalizados ?? 0;
-    final hasProtocol = loteStore.loteSelecionado.protocolo != null;
+    final selectedLotProtocolId = _isActiveLot(loteStore.loteSelecionado)
+        ? _protocolId(loteStore.loteSelecionado)
+        : null;
+    final dashboardActiveLotProtocolIds = resumo?.activeLotProtocolIds
+            ?.where((id) => id > 0)
+            .map((id) => id.toString())
+            .toSet()
+            .toList() ??
+        [];
+    final fallbackActiveLotProtocolIds = loteStore.loteList
+        .where(_isActiveLot)
+        .map(_protocolId)
+        .whereType<String>()
+        .toSet()
+        .toList();
+    final activeLotProtocolIds = {
+      ...dashboardActiveLotProtocolIds,
+      ...fallbackActiveLotProtocolIds,
+    }.toList();
+    final hasSelectedLotProtocol = selectedLotProtocolId != null;
+    final hasDashboardActiveLotProtocolEvidence =
+        resumo?.hasActiveLotWithProtocol == true ||
+            (resumo?.lotesAtivosComProtocolo ?? 0) > 0 ||
+            dashboardActiveLotProtocolIds.isNotEmpty;
+    final hasActiveLotProtocolEvidence =
+        hasDashboardActiveLotProtocolEvidence ||
+            fallbackActiveLotProtocolIds.isNotEmpty ||
+            sequenceSignals.lotWithProtocolCreated;
     final hasUpcomingHarvests = (resumo?.lotesComColheitaProxima ?? 0) > 0;
 
     // Agenda state
@@ -44,6 +72,7 @@ class InstantOperationalContextMapper {
     final nextActivity =
         InstantOperationalContextHelpers.nextActivity(dashboard) ??
             const NextActivity();
+    final hasProtocolTasks = nextActivity.type == 'protocol_activity';
 
     // Info context derived state
     final reservoirReport = infoContext?.reservoirReport;
@@ -119,7 +148,10 @@ class InstantOperationalContextMapper {
         hasActiveLots: activeLots > 0,
         activeLotsCount: activeLots,
         finishedLotsCount: finishedLots,
-        hasProtocolLinkedToLatestLot: hasProtocol,
+        hasProtocolLinkedToLatestLot: hasSelectedLotProtocol,
+        hasProtocolLinkedToActiveLot: hasActiveLotProtocolEvidence,
+        selectedLotProtocolId: selectedLotProtocolId,
+        activeLotProtocolIds: activeLotProtocolIds,
         hasUpcomingHarvests: hasUpcomingHarvests,
         extra: InstantOperationalContextHelpers.dashboardState(dashboard),
       ),
@@ -134,7 +166,7 @@ class InstantOperationalContextMapper {
           dashboard,
           nextActivity,
         ),
-        hasProtocolTasks: hasProtocol,
+        hasProtocolTasks: hasProtocolTasks,
       ),
       fieldNotebookState: FieldNotebookOperationalState(
         hasRecentNutritionAdjustmentRecord: hasRecentNutritionAdjustment,
@@ -206,6 +238,17 @@ class InstantOperationalContextMapper {
     final sessionId = homeStore.currentSessionId ?? 'unknown';
     final adaptiveMode = homeStore.adaptiveMode;
     return '$userId|$accountId|$sessionId|$adaptiveMode';
+  }
+
+  static bool _isActiveLot(Lote lote) {
+    return lote.ativo != false && lote.deleted_at == null;
+  }
+
+  static String? _protocolId(Lote lote) {
+    final id = lote.protocolo?.id;
+    if (id == null || id <= 0) return null;
+
+    return id.toString();
   }
 
   static bool _isCriticalAgendaAlert(HomeAlertaCritico alert) {

@@ -60,6 +60,15 @@ class HomeResumo {
   double? taxaConclusao;
 
   @JsonKey(required: false, disallowNullValue: false)
+  int? lotesAtivosComProtocolo;
+
+  @JsonKey(required: false, disallowNullValue: false)
+  bool? hasActiveLotWithProtocol;
+
+  @JsonKey(required: false, disallowNullValue: false)
+  List<int>? activeLotProtocolIds;
+
+  @JsonKey(required: false, disallowNullValue: false)
   List<HomeLoteStatus>? lotesPorStatus;
 
   @JsonKey(required: false, disallowNullValue: false)
@@ -73,6 +82,9 @@ class HomeResumo {
     this.lotesAtivos,
     this.lotesFinalizados,
     this.taxaConclusao,
+    this.lotesAtivosComProtocolo,
+    this.hasActiveLotWithProtocol,
+    this.activeLotProtocolIds,
     this.lotesPorStatus,
     this.lotesComColheitaProxima,
     this.especiesEmAndamento,
@@ -357,7 +369,8 @@ class HomeTarefaDetalhe {
   @JsonKey(required: false, disallowNullValue: false)
   bool? vencida;
 
-  HomeTarefaDetalhe({this.id, this.titulo, this.loteNome, this.data, this.vencida});
+  HomeTarefaDetalhe(
+      {this.id, this.titulo, this.loteNome, this.data, this.vencida});
 
   factory HomeTarefaDetalhe.fromJson(Map<String, dynamic> json) =>
       _$HomeTarefaDetalheFromJson(json);

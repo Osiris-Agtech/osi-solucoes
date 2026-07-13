@@ -22,13 +22,32 @@ class _ExpandedLoteCardState extends State<ExpandedLoteCard> {
       appBar: AppBar(
         backgroundColor: Constants.kBackgroundColor,
         elevation: 0,
-        title: const Text(
-          'Lista Completa',
-          style: TextStyle(
-            color: Constants.kGreyText,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: Observer(builder: (_) {
+          final group = store.getLotesGroup[widget.index];
+          final selection = _groupSelection();
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                group.key,
+                style: const TextStyle(
+                  color: Constants.kGreyText,
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                selection.description,
+                style: TextStyle(
+                  color: selection.color ?? Constants.kGreyText2,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          );
+        }),
         leading: const BackButton(
           color: Constants.kPrimaryColor,
         ),
@@ -45,38 +64,42 @@ class _ExpandedLoteCardState extends State<ExpandedLoteCard> {
               child: Row(
                 children: [
                   Observer(builder: (_) {
-                    if (!store.getLotesGroup[widget.index].selected) {
-                      return IconButton(
-                        padding: EdgeInsets.zero,
-                        alignment: Alignment.centerLeft,
-                        icon: const Icon(Icons.check_box_outline_blank_rounded),
-                        onPressed: () {
-                          store.selectLotesGroup(widget.index, true);
-                        },
-                      );
-                    }
+                    final selection = _groupSelection();
                     return IconButton(
                       padding: EdgeInsets.zero,
                       alignment: Alignment.centerLeft,
-                      icon: const Icon(
-                        Icons.check_box,
-                        color: Constants.kPrimaryColor,
+                      icon: Icon(selection.icon, color: selection.color),
+                      onPressed: () => store.selectLotesGroup(
+                        widget.index,
+                        !selection.isAll,
                       ),
-                      onPressed: () {
-                        store.selectLotesGroup(widget.index, false);
-                      },
                     );
                   }),
-                  Expanded(
-                    child: Text(
-                      store.getLotesGroup[widget.index].key,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Constants.kText2,
-                      ),
-                    ),
-                  ),
+                  Expanded(child: Observer(builder: (_) {
+                    final group = store.getLotesGroup[widget.index];
+                    final selection = _groupSelection();
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          group.key,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Constants.kText2,
+                          ),
+                        ),
+                        Text(
+                          selection.description,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: selection.color ?? Constants.kGreyText2,
+                          ),
+                        ),
+                      ],
+                    );
+                  })),
                   const SizedBox(width: 20),
                 ],
               ),
@@ -89,68 +112,7 @@ class _ExpandedLoteCardState extends State<ExpandedLoteCard> {
                 children: List.generate(
                     store.getLotesGroup[widget.index].lotesSelection.length,
                     (indexLote) {
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    color: Constants.kCardColor,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Observer(builder: (_) {
-                            if (!store.getLotesGroup[widget.index]
-                                .lotesSelection[indexLote].selected) {
-                              return IconButton(
-                                padding: EdgeInsets.zero,
-                                alignment: Alignment.centerLeft,
-                                icon: const Icon(
-                                    Icons.check_box_outline_blank_rounded),
-                                onPressed: () {
-                                  store.selectLotesSelection(
-                                      widget.index, indexLote, true);
-                                },
-                              );
-                            }
-                            return IconButton(
-                              padding: EdgeInsets.zero,
-                              alignment: Alignment.centerLeft,
-                              icon: const Icon(
-                                Icons.check_box,
-                                color: Constants.kPrimaryColor,
-                              ),
-                              onPressed: () {
-                                store.selectLotesSelection(
-                                    widget.index, indexLote, false);
-                              },
-                            );
-                          }),
-                          const SizedBox(width: 4),
-                          Text(
-                            store.getLotesGroup[widget.index]
-                                    .lotesSelection[indexLote].lote.nome ??
-                                'Não informado',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Constants.kText2,
-                            ),
-                          ),
-                          Text(
-                            '${store.getLotesGroup[widget.index].lotesSelection[indexLote].lote.setor?.nome ?? 'Setor não informado'} / ${store.getLotesGroup[widget.index].lotesSelection[indexLote].lote.reservatorio?.nome ?? 'Reservatório não informado'}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Constants.kGreyText2,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  return _loteCard(indexLote);
                 }),
               ),
             ),
@@ -158,5 +120,99 @@ class _ExpandedLoteCardState extends State<ExpandedLoteCard> {
         ),
       ),
     );
+  }
+
+  Widget _loteCard(int indexLote) {
+    return Observer(builder: (_) {
+      final loteSelection =
+          store.getLotesGroup[widget.index].lotesSelection[indexLote];
+      final borderColor = loteSelection.selected
+          ? Constants.kPrimaryColor
+          : Constants.kCardColor;
+      return Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          side: BorderSide(color: borderColor),
+        ),
+        color: Constants.kCardColor,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              IconButton(
+                padding: EdgeInsets.zero,
+                alignment: Alignment.centerLeft,
+                icon: Icon(
+                  loteSelection.selected
+                      ? Icons.check_box
+                      : Icons.check_box_outline_blank_rounded,
+                  color:
+                      loteSelection.selected ? Constants.kPrimaryColor : null,
+                ),
+                onPressed: () => store.selectLotesSelection(
+                  widget.index,
+                  indexLote,
+                  !loteSelection.selected,
+                ),
+              ),
+              const SizedBox(width: 4),
+              Text(
+                loteSelection.lote.nome ?? 'Não informado',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Constants.kText2,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                '${loteSelection.lote.setor?.nome ?? 'Setor não informado'} / ${loteSelection.lote.reservatorio?.nome ?? 'Reservatório não informado'}',
+                style:
+                    const TextStyle(fontSize: 14, color: Constants.kGreyText2),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  _ExpandedGroupSelection _groupSelection() {
+    final lotesSelection = store.getLotesGroup[widget.index].lotesSelection;
+    return _ExpandedGroupSelection(
+      selectedCount: lotesSelection.where((item) => item.selected).length,
+      totalCount: lotesSelection.length,
+    );
+  }
+}
+
+class _ExpandedGroupSelection {
+  final int selectedCount;
+  final int totalCount;
+
+  const _ExpandedGroupSelection({
+    required this.selectedCount,
+    required this.totalCount,
+  });
+
+  bool get isNone => selectedCount == 0;
+  bool get isAll => totalCount > 0 && selectedCount == totalCount;
+
+  IconData get icon {
+    if (isNone) return Icons.check_box_outline_blank_rounded;
+    if (isAll) return Icons.check_box;
+    return Icons.indeterminate_check_box;
+  }
+
+  Color? get color => isNone ? null : Constants.kPrimaryColor;
+
+  String get description {
+    final label = selectedCount == 1 ? 'selecionado' : 'selecionados';
+    return '$selectedCount de $totalCount $label';
   }
 }

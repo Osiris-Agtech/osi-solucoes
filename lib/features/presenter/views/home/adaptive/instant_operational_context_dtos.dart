@@ -32,6 +32,7 @@ class OperationalContext {
   });
 
   Map<String, dynamic> toJson() => {
+        'generatedAt': InstantOperationalContextHelpers.utcIso(generatedAt),
         'dashboardState': dashboardState.toJson(),
         'agendaState': agendaState.toJson(),
         'fieldNotebookState': fieldNotebookState.toJson(),
@@ -40,6 +41,7 @@ class OperationalContext {
         'teamState': teamState,
         'alertState': alertState.toJson(),
         'reservoirState': reservoirState.toJson(),
+        'testSequenceSignals': testSequenceSignals.toJson(),
         if (recentUserActions.isNotEmpty)
           'recentUserActions': recentUserActions,
       };
@@ -50,6 +52,9 @@ class DashboardOperationalState {
   final int activeLotsCount;
   final int finishedLotsCount;
   final bool hasProtocolLinkedToLatestLot;
+  final bool hasProtocolLinkedToActiveLot;
+  final String? selectedLotProtocolId;
+  final List<String> activeLotProtocolIds;
   final bool hasUpcomingHarvests;
   final Map<String, dynamic> extra;
 
@@ -58,13 +63,23 @@ class DashboardOperationalState {
     required this.activeLotsCount,
     required this.finishedLotsCount,
     required this.hasProtocolLinkedToLatestLot,
+    required this.hasProtocolLinkedToActiveLot,
+    this.selectedLotProtocolId,
+    this.activeLotProtocolIds = const [],
     required this.hasUpcomingHarvests,
     this.extra = const {},
   });
 
   Map<String, dynamic> toJson() => {
         'hasActiveLots': hasActiveLots,
+        'activeLotsCount': activeLotsCount,
+        'finishedLotsCount': finishedLotsCount,
         'hasProtocolLinkedToLatestLot': hasProtocolLinkedToLatestLot,
+        'hasProtocolLinkedToActiveLot': hasProtocolLinkedToActiveLot,
+        if (selectedLotProtocolId != null)
+          'selectedLotProtocolId': selectedLotProtocolId,
+        if (activeLotProtocolIds.isNotEmpty)
+          'activeLotProtocolIds': activeLotProtocolIds,
         'hasUpcomingHarvests': hasUpcomingHarvests,
       };
 }

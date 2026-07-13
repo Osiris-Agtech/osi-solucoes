@@ -25,6 +25,9 @@ class HomeDashboardDatasource implements IHomeDashboardDatasource {
             lotesAtivos
             lotesFinalizados
             taxaConclusao
+            lotesAtivosComProtocolo
+            hasActiveLotWithProtocol
+            activeLotProtocolIds
             lotesPorStatus {
               status
               quantidade
@@ -188,7 +191,8 @@ class HomeDashboardDatasource implements IHomeDashboardDatasource {
 
       if (result.hasException) {
         return Left(ErrorHomeDashboard(
-          message: 'Erro ao buscar dashboard: ${result.exception?.graphqlErrors.first.message ?? 'Erro desconhecido'}',
+          message:
+              'Erro ao buscar dashboard: ${result.exception?.graphqlErrors.first.message ?? 'Erro desconhecido'}',
         ));
       }
 

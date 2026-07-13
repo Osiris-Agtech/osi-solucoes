@@ -49,6 +49,12 @@ HomeResumo _$HomeResumoFromJson(Map<String, dynamic> json) => HomeResumo(
       lotesAtivos: (json['lotesAtivos'] as num?)?.toInt(),
       lotesFinalizados: (json['lotesFinalizados'] as num?)?.toInt(),
       taxaConclusao: (json['taxaConclusao'] as num?)?.toDouble(),
+      lotesAtivosComProtocolo:
+          (json['lotesAtivosComProtocolo'] as num?)?.toInt(),
+      hasActiveLotWithProtocol: json['hasActiveLotWithProtocol'] as bool?,
+      activeLotProtocolIds: (json['activeLotProtocolIds'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
       lotesPorStatus: (json['lotesPorStatus'] as List<dynamic>?)
           ?.map((e) => HomeLoteStatus.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -65,6 +71,9 @@ Map<String, dynamic> _$HomeResumoToJson(HomeResumo instance) =>
       'lotesAtivos': instance.lotesAtivos,
       'lotesFinalizados': instance.lotesFinalizados,
       'taxaConclusao': instance.taxaConclusao,
+      'lotesAtivosComProtocolo': instance.lotesAtivosComProtocolo,
+      'hasActiveLotWithProtocol': instance.hasActiveLotWithProtocol,
+      'activeLotProtocolIds': instance.activeLotProtocolIds,
       'lotesPorStatus': instance.lotesPorStatus,
       'lotesComColheitaProxima': instance.lotesComColheitaProxima,
       'especiesEmAndamento': instance.especiesEmAndamento,
