@@ -12,8 +12,13 @@ class CadernoAtividadeStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bottomKeyboardInset = MediaQuery.viewInsetsOf(context).bottom;
+    final bottomScrollPadding = bottomKeyboardInset + 96;
+
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      padding: EdgeInsets.only(bottom: bottomScrollPadding),
       child: Column(
         children: [
           AppFormSection(
@@ -100,6 +105,7 @@ class CadernoAtividadeStep extends StatelessWidget {
             child: TextFormField(
               controller: store.novaDescricao,
               maxLines: 5,
+              scrollPadding: EdgeInsets.only(bottom: bottomScrollPadding),
               decoration: const InputDecoration(
                 hintText: 'Descreva a atividade realizada...',
               ),

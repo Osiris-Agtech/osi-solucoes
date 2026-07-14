@@ -23,7 +23,9 @@ Widget agendaItem({
   final isDone = agenda.finalizado ?? false;
   final isOverdue = !isDone &&
       (agenda.alerta == true ||
-          (agenda.data != null && agenda.data!.isBefore(now)));
+          (agenda.data != null &&
+              !_isSameLocalCalendarDay(agenda.data!, now) &&
+              agenda.data!.isBefore(now)));
   final isDueToday = !isDone &&
       agenda.data != null &&
       _isSameLocalCalendarDay(agenda.data!, now);
@@ -104,6 +106,9 @@ Widget agendaItem({
           backgroundColor: showTodayHighlight
               ? Constants.kPrimaryColor.withValues(alpha: 0.06)
               : Colors.white,
+          border: showTodayHighlight
+              ? Border.all(color: Constants.kPrimaryColor, width: 1.5)
+              : null,
           padding: const EdgeInsets.symmetric(
             horizontal: 24.0,
             vertical: 16.0,

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:osi_solucoes/core/constants/constants.dart';
+import 'package:osi_solucoes/core/services/navigation_resource_args.dart';
 import 'package:osi_solucoes/features/presenter/routes/routes.dart';
+import 'package:osi_solucoes/features/presenter/viewmodels/caderno_campo_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/lote_store.dart';
 import 'package:osi_solucoes/features/presenter/viewmodels/reservatorios_store.dart';
 
@@ -65,31 +68,47 @@ SingleChildScrollView horizontalList(
             ],
           ),
         ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircleAvatar(
-              radius: 25,
-              backgroundColor: Constants.kCardColor,
-              child: SvgPicture.asset(
-                "assets/icons/caderno_campo_icon.svg",
-                height: 25,
-                width: 25,
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: () {
+            final cadernoStore = GetIt.I<CadernoCampoStore>();
+            cadernoStore.setLoteSelecionado(store.loteSelecionado);
+            Get.toNamed(
+              Routes.detalhesCadernoCampoPage,
+              arguments: NavigationResourceArgs(
+                resourceId: store.loteSelecionado.id?.toString(),
+                resourceType: 'caderno_campo',
+                resourceName: store.loteSelecionado.nome,
               ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            const Text(
-              'Caderno de\nCampo',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Constants.kGreyText,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+            );
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircleAvatar(
+                radius: 25,
+                backgroundColor: Constants.kCardColor,
+                child: SvgPicture.asset(
+                  "assets/icons/caderno_campo_icon.svg",
+                  height: 25,
+                  width: 25,
+                ),
               ),
-            ),
-          ],
+              const SizedBox(
+                height: 8,
+              ),
+              const Text(
+                'Caderno de\nCampo',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Constants.kGreyText,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
         ),
         const SizedBox(
           width: 24,

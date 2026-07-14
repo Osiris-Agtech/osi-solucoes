@@ -66,15 +66,14 @@ class AgendaPageState extends State<AgendaPage> {
               getBottomSheet(const EditarAtividadeSheet());
             },
           ),
-          body: PrimaryScrollController(
+          body: Scrollbar(
             controller: _scrollController,
-            child: Scrollbar(
-              radius: const Radius.circular(12),
-              child: CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  sliverAppBar(context),
-                  agenda(),
+            radius: const Radius.circular(12),
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                sliverAppBar(context),
+                agenda(),
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.only(
@@ -210,8 +209,7 @@ class AgendaPageState extends State<AgendaPage> {
                     }
                     return _showList();
                   }),
-                ],
-              ),
+              ],
             ),
           ),
         ),

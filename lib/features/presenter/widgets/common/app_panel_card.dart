@@ -6,6 +6,7 @@ class AppPanelCard extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final Color backgroundColor;
   final BorderRadiusGeometry borderRadius;
+  final BoxBorder? border;
   final double? maxWidth;
   final VoidCallback? onTap;
   final String? semanticLabel;
@@ -17,6 +18,7 @@ class AppPanelCard extends StatelessWidget {
     this.margin,
     this.backgroundColor = Colors.white,
     this.borderRadius = const BorderRadius.all(Radius.circular(16)),
+    this.border,
     this.maxWidth,
     this.onTap,
     this.semanticLabel,
@@ -24,26 +26,30 @@ class AppPanelCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget content = Material(
-      color: backgroundColor,
-      borderRadius: borderRadius,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: borderRadius.resolve(Directionality.of(context)),
-        child: Container(
-          width: double.infinity,
-          padding: padding,
-          decoration: BoxDecoration(
-            borderRadius: borderRadius,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.06),
-                blurRadius: 12,
-                offset: const Offset(0, 2),
-              ),
-            ],
+    Widget content = Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: border,
+        borderRadius: borderRadius,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: const Offset(0, 2),
           ),
-          child: child,
+        ],
+      ),
+      child: Material(
+        color: backgroundColor,
+        borderRadius: borderRadius,
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: borderRadius.resolve(Directionality.of(context)),
+          child: Padding(
+            padding: padding,
+            child: child,
+          ),
         ),
       ),
     );
